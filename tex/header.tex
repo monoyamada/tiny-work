@@ -1,0 +1,114 @@
+\usepackage{amsmath,amssymb,amscd}
+\usepackage[dvipdfm]{color}
+\usepackage[dvipdfm,dvips]{graphicx}
+\usepackage[obeyspaces]{url}
+\usepackage[all]{xy}
+\usepackage{multicol}
+\usepackage{stmaryrd}
+\usepackage{float}
+\usepackage{sty/thmbox}
+\usepackage{sty/cprog}
+\usepackage{sty/simplewick}
+\usepackage{sty/braket}
+\usepackage{sty/boxedminipage}
+\usepackage{sty/algorithm}
+\usepackage{sty/algorithmicx}
+\usepackage{sty/algpseudocode}
+%\usepackage{sty/multirow}
+\usepackage{sty/bigdelim}
+\usepackage[dvipdfm,
+  colorlinks=true,
+  bookmarks=true,
+  bookmarksnumbered=false,
+  bookmarkstype=toc]{hyperref}
+%
+%theorem
+%
+\newtheorem[S]{theorem}{定理}[section]
+\newtheorem[S]{proposition}{命題}[section]
+\newtheorem[S]{corollary}{系}[section]
+\newtheorem[S]{lemma}{補題}[section]
+\newtheorem[S]{definition}{Definition}[section]
+\newtheorem[S]{example}{Example}[section]
+\newtheorem[S]{conjecture}{予想}[section]
+\newtheorem[S]{problem}{問題}[section]
+\newtheorem[S]{observe}{観察}[section]
+\newtheorem[S]{formula}{公式}[section]
+\newtheorem[S]{todo}{課題}[section]
+\def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
+\def\endproof{{\large$\Box$}\endtrivlist}
+%
+%symbols
+%
+\newcommand{\zettai}[1]{\left|{#1}\right|}
+\newcommand{\kakko}[1]{\left({#1}\right)}
+\newcommand{\bakko}[1]{\left[{#1}\right]}
+\newcommand{\bou}{\;\vert\;}
+\newcommand{\myop}[1]{\operatorname{#1}}
+\newcommand{\mybf}[1]{{\mathbf{#1}}}
+\newcommand{\mycal}[1]{{\mathcal{#1}}}
+%
+%category
+%
+\newcommand{\homset}{\myop{hom}}
+\newcommand{\curry}{\myop{curring}}
+\newcommand{\myid}{{\myop{id}}}
+\newcommand{\mydi}{{\myop{di}}}
+\newcommand{\mycat}[1]{{\mathbf{#1}}}
+%
+%program
+%
+\newcommand{\hankukan}[2]{{#1}\lhd{#2}}
+\newcommand{\mysign}{\operatorname{sign}}
+%
+%arrows
+%The“number”0395 after \ext@arrow defines the position
+%relative to the extended error and is not a number but four parameters
+%for additional space in the math unit mu. mu is defined as the followings:
+%1st digit: space left
+%2nd digit: space right
+%3rd digit: space left and right
+%4th digit: space relativ to the tip of the “arrow”
+%
+\makeatletter
+\def\xmapstofill@{%
+	\arrowfill@{\mapstochar\relbar}\relbar\rightarrow%
+}
+\newcommand*\xmapsto[2][]{%
+	\ext@arrow 0395\xmapstofill@{#1}{#2}%
+}
+\def\xmapsfromfill@{%
+	\arrowfill@\leftarrow\relbar{\relbar\mapstochar}%
+}
+\newcommand*\xmapsfrom[2][]{%
+	\ext@arrow 0395\xmapsfromfill@{#1}{#2}%
+}
+\def\xMapstofill@{%
+	\arrowfill@{\mapstochar\Relbar}\Relbar\Rightarrow%
+}
+\newcommand*\xMapsto[2][]{%
+	\ext@arrow 0395\xMapstofill@{#1}{#2}%
+}
+\def\xMapsfromfill@{%
+	\arrowfill@\Leftarrow\Relbar{\Relbar\mapstochar}%
+}
+\newcommand*\xMapsfrom[2][]{%
+	\ext@arrow 0395\xMapsfromfill@{#1}{#2}%
+}
+\newcommand{\xRightarrow}[2][]{%
+\ext@arrow 0395{\Rightarrowfill@}{#1}{#2}%
+}
+\def\Rightarrowfill@{\arrowfill@\Relbar\Relbar\Rightarrow}
+\newcommand{\xLeftarrow}[2][]{%
+\ext@arrow 0395{\Leftarrowfill@}{#1}{#2}%
+}
+\def\Leftarrowfill@{\arrowfill@\Leftarrow\Relbar\Relbar}
+\newcommand{\xLongleftrightarrow}[2][]{%
+\ext@arrow 0395{\llrafill@}{#1}{#2}%
+}
+\def\llrafill@{\arrowfill@\Leftarrow\Relbar\Rightarrow}
+\makeatother
+\newcommand{\migi}[1]{\xrightarrow{#1}{}}
+\newcommand{\hidari}[1]{\xleftarrow{#1}{}}
+\newcommand{\Migi}[1]{\xRightarrow{#1}{}}
+\newcommand{\Hidari}[1]{\xLeftarrow{#1}{}}
