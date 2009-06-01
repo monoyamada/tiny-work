@@ -1,6 +1,6 @@
 \section{Programming}
 
-\subsection{Range representation of powerset}
+\subsection{Range representation of power set}
 We use the folloing symbols through this section:
 \begin{equation}\begin{split}
 	N_n &= \set{0, 1, \dots, n - 1} \\
@@ -16,20 +16,29 @@ We use the folloing symbols through this section:
 \end{split}\end{equation}
 
 We want to represent $P_n$ with $W_n$ for data compression.
-Bitarray is easest and direct way to represnt power-set in program.
+Bitarray is easest and direct way to represnt power set in program.
 But bitarray requires a lot of memory, the length of array is $\zettai{S}/64$
 to represent any subset of $S$.
 For example, bitarray requires the length $2^{21}/64=2^{6}=2^{15}=32768$ 
 of long-array to represent any subset of unicode-2.0.
-Thus we shall consider the way to represent power-set with range.
+Thus we shall consider the way to represent power set with range.
 
-Let $R_n$ be the followings:
+Let $R_n$ be the following set:
 \begin{equation}\begin{split}
-	R_n &= \set{w\in W_n\bou \zettai{w}\text{ is even and sorted}}
+	R_n &= \set{w\in W_n\bou \zettai{w}\text{ is even and ordered from smaller to bigger}}
 \end{split}\end{equation}
-. For example, $R_2$ is given by the followings:
+and $R_n^\circ\subseteq R_n$ be the following set:
 \begin{equation}\begin{split}
-	R_2 &= \set{\bakko{}, \bakko{0}, \bakko{1}, \bakko{01}}
+	R_n^\circ &= \set{w\in R_n\bou \zettai{w}=2}
+\end{split}\end{equation}
+. For example, $R_4$ is given by the followings:
+\begin{equation}\begin{split}
+	R_4 &= \set{\bakko{}
+		, \bakko{01}, \bakko{02}, \bakko{03}, \bakko{12}, \bakko{13}, \bakko{23}
+		, \bakko{0123}} \\
+	R_4^\circ &= \set{\bakko{}
+		, \bakko{01}, \bakko{02}, \bakko{03}, \bakko{12}, \bakko{13}, \bakko{23}
+		} \\
 \end{split}\end{equation}
 . We define the following maps:
 \begin{equation}\begin{split}
@@ -56,7 +65,7 @@ Let $R_n$ be the followings:
 			\end{cases} \\
 			&\text{where } \zettai{w_2} = 2 \text{ and } w = w_1 * w_2 \\
 \end{split}\end{equation}
-. And we define the map $\myop{asSet}$
+and define the map $\myop{asSet}$
 \begin{equation}\begin{split}
 	\myop{asSet}: R_{n+1} &\to P_n \\
 		w &\mapsto \begin{cases}
@@ -75,23 +84,34 @@ We define the map $\cup_R$ by the following commutative diagram:
 		R_{n+1} & P_n \ar[l]^{\myop{asSet}^{-1}} \\
 	}
 \end{split}\end{equation}
-. We know immediately the followings:
+. We can show for all $r_1,r_2\in R_n^\circ$ the followings:
 \begin{equation}\begin{split}
-	r_1.\cup_R r_2 &= \begin{cases}	
-		r_1*r_2 &\text{if }r_1.\myop{end}() < r_2.\myop{begin}() \\
-		r_2*r_1 &\text{else if }r_2.\myop{end}() < r_1.\myop{begin}() \\
-		\bakko{(r_1*r_2).\min()(r_1*r_2).\max()} &\text{else} \\
+	r_1.\cup_Rr_2 &= \begin{cases}	
+		r_1*r_2 &\text{if } r_1.\myop{end}() < r_2.\myop{begin}() \\
+		r_2*r_1 &\text{if }r_2.\myop{end}() < r_1.\myop{begin}() \\
+		r_1.\overline{\cup}_Rr_2 &\text{else} \\
 	\end{cases} \\
 \end{split}\end{equation}
-. Thus 
+, where
 \begin{equation}\begin{split}
-%	w.\cup_R \bakko{ab] &= \begin{cases}
-%		\bakko{ab} & \text{if }\zettai{w} = 0 \\
-%		w_1 * u * w_2 \text{otherwise} \\
-%	\end{cases}
-%	\text{where}& \\
+	\overline{\cup}_R: R_n \otimes R_n &\to R_n^\circ \\
+		w_1 \times w_2 &\mapsto \bakko{ab} \text{ where} \\
+	& a = \min(w_1.\myop{begin}(),w_2.\myop{begin}()) \\
+	& b = \max(w_1.\myop{end}(),w_2.\myop{end}()) \\
 \end{split}\end{equation}
-. Thus 
+. We can show for all $w\in R_n$ and $r\in R_n^\circ$ the followings:
+\begin{equation}\begin{split}
+	w.\cup_R r &= w_1 * (w_2.\overline{\cup}_R r) * w_3 \\
+\end{split}\end{equation}
+, where 
+\begin{equation}\begin{split}
+	w &= w_1 * w_2 * w_3 \\
+	\text{and } & w_1.\myop{end}() < r.\myop{begin}() \\
+	\text{and } & r.\myop{end}() < w_2.\myop{begin}() \text{ and} \\
+	\text{and } & r.\myop{begin}() \le w_2.\myop{end}() 
+	\text{ and } w_2.\myop{begin}() \le r.\myop{end}() \\
+\end{split}\end{equation}
+.
 \begin{cprog}
 w.cup = { [ab] |->
 	(w0, w1) = w.splitFirst();
@@ -141,8 +161,8 @@ w.cup = { [ab] |->
 
 \subsection{backup}
 
-We view power-set as semi-ring, 'or' as additive, 'and' as multiplicative
-operations. A power-set become a idempotent semi-ring in this view.
+We view power set as semi-ring, 'or' as additive, 'and' as multiplicative
+operations. A power set become a idempotent semi-ring in this view.
 
 We shall first define the term 'connected' to represent range.
 
