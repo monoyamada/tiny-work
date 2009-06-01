@@ -1,0 +1,10 @@
+register the github repository:
+	git remote add github git@github.com:monoyamada/tiny-work.git
+pull from the github repository:
+	git pull github master
+update local state:
+	git commit -a
+push to the github repository:
+	git push github master
+ssh-keygen
+	passphrase = as usual password
