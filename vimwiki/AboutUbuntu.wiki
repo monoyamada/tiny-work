@@ -1,0 +1,21 @@
+= パッケージ　=
+Ubuntuのパッケージ管理システムについて書いておく。
+
+== コマンド ==
+インストール::
+{{{
+sudo apt-get <packege-name>
+}}}
+
+== Eclipseのインストール　==
+Eclipseをシステムにインストールせずに、ユーザーディレクトリにインストールする。
+	#ダウンロード http://www.eclipse.org
+	#解凍 elipse-3.4
+
+	tar -zxvf eclipse-java-ganymede-SR2-linux-gtk.tar.gz
+	mv elipse eclipse-3.4
+
+	#編集 eclipse-3.4/eclipse.iniに追加
+
+	-vm 
+	/usr/lib/jvm/java-6-sun/bin

@@ -1,0 +1,5 @@
+=UNIXチップ=
+==検索==
+||ファイル名の検索||{{{find . -name 'hello.txt' -print}}}||
+||tarで圧縮||{{{tar -czvf <directory-name>.tar.gz <directory-name>}}}||
+||tarで解凍||{{{tar -xzvf <directory-name>.tar.gz}}}||

@@ -1,0 +1,31 @@
+= 事前条件 =
+.vimrcで次のように設定する。
+{{{
+set nocompatible
+filetype plugin on
+syntax on
+# i dont like folding
+let g:vimwiki_list = [{'folding': 0}]
+}}}
+
+= よく使うコマンド =
+||index.wikiを新しいタブで開く ||{{{\\wt}}} ||
+||リンク先のWikiに飛ぶ ||カーソルを合わせてEnter ||
+||シンタックスのヘルプ ||{{{:help vimwiki-syntax}}} ||
+||HTMLを生成する ||{{{:VimwikiAll2HTML}}} ||
+||作成中のページだけHTMLを生成する ||{{{:Vimwiki2HTML}}} ||
+
+= ディレクトリ構造 =
+Vimwikiはユーザーのホームディレクトリ直下に次のようなディレクトリを配置する。
+{{{
+ {HOME}                  ホームディレクトリ。
+  ├─ vimwiki/            デフォルトのVimwikiディレクトリ。
+  ｜    ├─ index.wiki    VimwikiのインデックスWikiファイル。
+  ｜    └─ *.wiki        他のWikiファイル。
+  ｜
+  └─ vimwiki_html/        HTMLファイルの出力先ディレクトリ。
+        ├─ index.html     index.
+        ├─ *.html        他のWikiページから生成されるHTMLファイル。
+        └─ style.css      デフォルトのスタイルシート。
+}}}
+*.htmlとstyle.cssはwikiをHTML化すると、対応するHTMLファイルが生成される。

@@ -1,0 +1,28 @@
+=日常=
+==単数/複数とThe==
+||嘘||単数||you told a lie.||
+
+==tion/sion==
+普通はtionで、例外的にsionになるように思われる。
+	* tion
+		* auction
+		* convention
+	* sion
+		* dimension
+		
+=プログラミングの言い回し=
+==括弧==
+||{{{{}}}}||parenthesis
+||{{{()}}}||curry bracket
+||{{{[]}}}||box bracket
+||{{{<>}}}||angle bracket
+
+=数学と物理の言い回し=
+==of/on/over==
+	* Let PA be a power set of a set A.
+	* Let FA be a free semigroup on a set S.
+==denote==
+次の文は同じ意味である。
+	* We denote the world by W.
+	* We denote by W the world.
+	* We denote W as the world.

@@ -1,0 +1,10 @@
+= Vimチップス =
+
+==コマンド==
+||カレントディレクトリ||{{{:set autochdir}}} ||
+
+==プラグイン==
+===コード補完===
+====SnippetsEmu====
+設定ファイル:: {{{~/.vim/after/ftplugin/<file-type>_snippets.vim}}}
+アクション:: {{{Tab}}}
