@@ -2,6 +2,7 @@
 	* [[AboutVimwik|Vimwikiについて]]
 	* [[VimTips|Vimについて]]
 	* [[UnixTips|Unixについて]]
+	* [[GitTips|Gitについて]]
 	* [[AboutUbuntu|Ubuntuについて]]
 	* [[English|英語のノート]]
 	* [[Engineering|工学のノート]]

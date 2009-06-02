@@ -1,10 +1,78 @@
 = Vimチップス =
+==設定==
+Vimが吐き出すファイル場所を指定する。
+{{{
+set backupdir=$HOME/.vimwork/backup
+set directory=$HOME/.vimwork/swap
+}}}
+括弧のマッチングの表示を抑制する。
+{{{
+let loaded_matchparen=1
+}}}
+折りたたみを抑制する。
+{{{
+set foldmethod=manual
+set foldlevel=1000
+}}}
+タブの入れ方を指定する。
+{{{
+set tabstop=2
+set shiftwidth=2
+set noautoindent
+set smartindent
+}}}
+検索の方法を指定する。
+{{{
+set incsearch
+set ignorecase
+set smartcase
+}}}
+背景色を設定する。
+{{{
+colorscheme koehler
+}}}
+行の折り返しを抑制する。
+{{{
+set nowrap
+}}}
 
 ==コマンド==
 ||カレントディレクトリ||{{{:set autochdir}}} ||
 
 ==プラグイン==
-===コード補完===
-====SnippetsEmu====
-設定ファイル:: {{{~/.vim/after/ftplugin/<file-type>_snippets.vim}}}
-アクション:: {{{Tab}}}
+===Vimwiki===
+ローカルWiki
+====vimrcの設定==== 
+{{{
+set nocompatible
+filetype plugin on
+syntax on
+}}}
+====index.wikiを開く====
+Visualモードで
+{{{
+[\][\][w][w]
+}}}
+====HTMLを出力====
+{{{$HOME/vimwiki-html}}}にHTMLを出力する。
+{{{
+:VimwikiAll2HTML
+}}}
+====Wiki内でリンクに飛ぶ====
+Visualモードでリンクにカーソルを持っていき{{{[Enter]}}}を押す。
+====Wikiのシンタックス====
+{{{
+:help vimwiki-syntax
+}}}
+
+===SnippetsEmu===
+コード補完
+====設定ファイル==== 
+{{{
+~/.vim/after/ftplugin/<file-type>_snippets.vim
+}}}
+====アクション====
+Insertモードで
+{{{
+<keyword>[Tab]
+}}}
