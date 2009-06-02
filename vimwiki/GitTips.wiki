@@ -1,5 +1,9 @@
 =Gitについて=
 よく使う命令を次にまとめる。
+||{{{git config --global user.name "<name>"}}} ||ユーザー名<name>を登録する。 ||
+|| ||リポジトリで公開される名前となる。 ||
+||{{{git config --global user.email <email-uri>}}} ||ユーザーのメールアドレス<email-uri>を登録する。 ||
+|| ||リポジトリで公開されるメールアドレスとなる。 ||
 ||{{{git remote add <name> <remote-uri>}}} ||<remote-uri>をリポジトリ<name>で登録する。 ||
 || ||<name>は何でもよい。 ||
 ||{{{git remote rm <name>}}} ||リポジトリ<name>の登録を抹消する。 ||
@@ -16,3 +20,9 @@ git commit .
 
 gitで無視するファイルは.gitignoreに書く。
 .gitignoreは各ディレクトリの下に置くことができる。
+
+.gitignoreの例
+{{{
+output/*
+sty/*.pdf
+}}}
