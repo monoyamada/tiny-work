@@ -1,19 +1,116 @@
 \section{Programming}
 
 \subsection{Range representation of power set}
-We use the folloing symbols through this section:
+We denote $N_n$ as the set $\set{0, 1, \dots, n-1}$ through this section.
+This representation of range is obeying the C-programming language convention.
+We denote the following functors for the set $X$:
+\begin{itemize}
+	\item $PX$ as the power set of $X$
+	\item $P_0X=PX-\set{\emptyset}$
+	\item $FX$ as the free monoid set of $X$
+	\item $F_0X=FX-\set{\text{idenitty element}}$
+\end{itemize}
+.
+
+The map $\cup_R$ is defined by the following commutative diagram:
+\begin{equation}\xymatrix{
+	RN_n\times RN_n \ar[r]^{\myop{set}\times\myop{set}} \ar@{.>}[d]^{\cup_R}
+		& PN_n\times PN_n \ar[d]^{\cup} \\
+	RN_n \ar@{<-}[r]^{\myop{set}^{-1}} & PN_n \\
+}\end{equation}
+. Assume that $w_1,w_2\in RN_n$ are decomposed as the followings:
+\begin{equation}\begin{split}
+	w_1 &= w_{11} * w_{12} \\
+	w_2 &= w_{21} * w_{22} \\
+\end{split}\end{equation}
+, and satisfy the following condition:
+\begin{equation}\begin{split}
+	\max(w_{11} \overline{\cup}_R w_{21}) < \min(w_{12} \overline{\cup}_R w_{22})
+\end{split}\end{equation}
+. Then the following equations are satisfied:
+\begin{equation}\begin{split}
+	w_1 \cup_R w_2 &= \kakko{w_{11} * w_{12}} \cup_R \kakko{w_{21} * w_{22}} \\
+		&= \kakko{w_{11} \cup_R w_{21}} * \kakko{w_{12} \cup_R w_{22}} \\
+\end{split}\end{equation}
+.
+
+\subsection{backup}
+We can define the map $\min/\max$ for the power set not including empty set $P_0N_n$ as usual.
+We would like to extend $\min/\max$ to the power set including empty set $PN_n$.
+The standard $\min$ might satisfy the following commutative diagram:
+\begin{equation}\xymatrix@C+18pt{
+	P_0N_n\times P_0N_n \ar[r]^{\min\times\min} \ar[d]^{-\cup-} & N_n\times N_n \ar[d]^{\min} \\
+	P_0N_n \ar[r]^{\min} & N_n \\
+}\end{equation}
+, and same as for $\max$.
+We extend $\min$ to the $PN_n$ with keeping the shape of this diagram.
+
+\begin{todo}[Told a lie]
+Let $\overline{N}_n = N_n\cup\set{-\infty, \infty}$ and define the following maps:
+\begin{equation}\begin{split}
+	\min: PN_n &\to \overline{N}_n \\
+		p &\mapsto \begin{cases}
+			-\infty &\text{iff }p = \emptyset \\
+			x &\text{else} \\
+		\end{cases} \\
+		&\text{where } x\in p \text{ and } x\le y \text { for all } y\in p \\
+	\max: PN_n &\to \overline{N}_n \\
+		p &\mapsto \begin{cases}
+			\infty &\text{iff }p = \emptyset \\
+			x &\text{else} \\
+		\end{cases} \\
+		&\text{where } x\in p \text{ and } y\le x \text { for all } y\in p \\
+\end{split}\end{equation}
+. The following diagram be commutative with this definition of $\min$:
+\begin{equation}\xymatrix@C+18pt{
+	PN_n\times PN_n \ar[r]^{\min\times\min} \ar[d]^{-\cup-} & \overline{N}_n\times \overline{N}_n \ar[d]^{\min} \\
+	PN_n \ar[r]^{\min} & \overline{N}_n \\
+}\end{equation}
+, and same as for $\max$.
+The above statement is a lie, because
+\begin{equation}\begin{split}
+	\min(\set{}\cup\set{0}) = 0 \not= -\infty = \min(-\infty, 0)
+\end{split}\end{equation}
+.
+\end{todo}
+
+\subsection{backup}
+We use the following symbols through this section:
 \begin{equation}\begin{split}
 	N_n &= \set{0, 1, \dots, n - 1} \\
-	P_n &= \text{power set of }N_n \\
-	W_n &= \text{free-monoid on }N_n \\ 
+	\overline{N}_n &= N_n \cup \set{\infty} \\
+	W_n &= \text{free monoid on }\overline{N}_n \\ 
 \end{split}\end{equation}
-, and use the following maps as usual:
+, and denote the power set of set $X$	by $PX$.
+
+We define the following maps:
+\begin{equation}\begin{split}
+	\min_N: PN_n &\to \overline{N}_n \\
+		p &\mapsto \begin{cases}
+			\infty & \text{if } p = \emptyset \\
+			x & \text{else} \\
+			\end{cases} \\
+		& \text{where} \\
+		& x\in p \text{ and } x\le y \text{ for all } y \in p \\
+	\max_N: PN_n &\to \overline{N}_n \\
+		p &\mapsto \begin{cases}
+			\infty & \text{if } p = \emptyset \\
+			x & \text{else} \\
+			\end{cases} \\
+		& \text{where} \\
+		& x\in p \text{ and } y\le x \text{ for all } y \in p \\
+\end{split}\end{equation}
+.
+
+We shall denote a word $w\in W_n$ with characters surrounding by box bracket, like $\bakko{246\infty}$.
+
 \begin{equation}\begin{split}
 	\min: P_n\backslash\set{\emptyset} &\to N_n \\ 
 		p &\mapsto x \text{ satisfies }x\le y \text{ for all }y\in p \\ 
 	\max: P_n\backslash\set{\emptyset} &\to N_n \\ 
 		p &\mapsto x \text{ satisfies }y\le x \text{ for all }y\in p \\ 
 \end{split}\end{equation}
+.
 
 We want to represent $P_n$ with $W_n$ for data compression.
 Bitarray is easest and direct way to represnt power set in program.
@@ -27,7 +124,7 @@ Let $R_n$ be the following set:
 \begin{equation}\begin{split}
 	R_n &= \set{w\in W_n\bou \zettai{w}\text{ is even and ordered from smaller to bigger}}
 \end{split}\end{equation}
-and $R_n^\circ\subseteq R_n$ be the following set:
+, and $R_n^\circ\subseteq R_n$ be the following set:
 \begin{equation}\begin{split}
 	R_n^\circ &= \set{w\in R_n\bou \zettai{w}=2}
 \end{split}\end{equation}
@@ -40,7 +137,10 @@ and $R_n^\circ\subseteq R_n$ be the following set:
 		, \bakko{01}, \bakko{02}, \bakko{03}, \bakko{12}, \bakko{13}, \bakko{23}
 		} \\
 \end{split}\end{equation}
-. We define the following maps:
+. Note that is not closed under the 
+
+\subsection{backup}
+We define the following maps:
 \begin{equation}\begin{split}
 	\myop{begin}: R_n &\to N_n \\
 		w &\mapsto \begin{cases}
