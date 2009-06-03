@@ -34,6 +34,33 @@ The map $\cup_R$ is defined by the following commutative diagram:
 \end{split}\end{equation}
 . This deformation provides the way to calculate $\cup_R$.
 
+\begin{equation}\begin{split}
+\xymatrix{
+	PN_{n+1} \ar@<1ex>[d]^{\pi}
+		& FN_{n+1} \ar@<1ex>[l]^{\myop{set}} \ar@<1ex>[d]^{\pi} \\
+	PN_n \ar@{.>}[r]^{\myop{set}^{-1}} \ar[ur]_{\myop{rep}} \ar@<1ex>[d]^{\pi} \ar[u]^{\iota}
+		& RN_n \ar@<1ex>[l]^{\myop{set}} \ar@<1ex>[d]^{\pi} \ar[u]^{\iota} \\
+	P^cN_n \ar[r]^{\myop{set}^{-1}} \ar[u]^{\iota} 
+		& R^cN_n \ar@<1ex>[l]^{\myop{set}} \ar[u]^{\iota} \\
+} &\quad \xymatrix{
+	FN_{n+1}\times FN_{n+1} \ar@{<-}[r]^{\iota\times \iota} \ar[d]^{*} 
+		& RN_n\times_R RN_n \ar@{.>}[d]^{*} \\
+	FN_{n+1} \ar[r]^{\pi} & RN_n \\
+}
+\end{split}\end{equation}
+\begin{equation}\begin{split}
+	\pi\iota &= \myop{id} \\
+	\myop{set}\pi\myop{rep} &= \myop{id} \\
+\end{split}\end{equation}
+$\pi$ is a partial map.
+
+\begin{equation}\begin{split}
+	\min: PN_n-\set{\emptyset} &\to N_n \\
+		p &\mapsto x \text{ such that } x\in p \text{ and } x\le y \text{ for all } y\in p \\
+	\min: FN_n-\bakko{} &\to N_n \\
+		w &\mapsto \min\myop{set} w \\
+\end{split}\end{equation}
+
 \subsection{backup}
 We can define the map $\min/\max$ for the power set not including empty set $P_0N_n$ as usual.
 We would like to extend $\min/\max$ to the power set including empty set $PN_n$.

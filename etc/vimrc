@@ -1,0 +1,43 @@
+"
+" this file should be read after default vimrc, and override vim configuration.
+"
+"
+" CTL+...
+"
+source $VIMRUNTIME/mswin.vim
+"
+" look and feel
+"
+colorscheme koehler 
+"
+"
+"
+set backupdir=$HOME/.vimwork/backup
+set directory=$HOME/.vimwork/swap
+"
+"
+"
+set noshowmatch
+let loaded_matchparen=1
+"
+"
+"
+set foldmethod=manual
+set foldlevel=1000
+"
+"
+"
+set tabstop=2
+set shiftwidth=2
+set noautoindent
+set smartindent
+"
+"
+"
+set incsearch
+set ignorecase
+set smartcase
+"
+"
+"
+set nowrap
