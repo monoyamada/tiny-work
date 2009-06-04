@@ -1,4 +1,97 @@
 \section{Programming}
+We use the following dot notations to denoet the image of the map 
+$f:A\times B\times C\times\cdots\to X$:
+\begin{equation}\begin{split}
+	f(a, b, c, \dots) &\Leftrightarrow a.f(b, c,\dots) \\
+		&\Leftrightarrow (a,b).f(c,\dots) \\
+\end{split}\end{equation}
+. Especially, when the map has binary operand $f:A\times B\to X$,
+we omit the braket as follows:
+\begin{equation}\begin{split}
+	f(a, b) &\Leftrightarrow a.f(b) \\
+		&\Leftrightarrow a.fb \\
+		&\Leftrightarrow (a,b).f()
+\end{split}\end{equation}
+. For example, plus operations are written as follows:
+\begin{equation}\begin{split}
+	+(a, b) &\Leftrightarrow a .+ b \\
+	+(a, b, c) &\Leftrightarrow a .+ b .+ c \\
+\end{split}\end{equation}
+. The dot notation is not standard mathmatical notation, 
+but it is convenient considering product. For example, associativity
+of multiplication $m:X\times X\to X$ is written in the mid-position notation
+as the followings:
+\begin{equation}\begin{split}
+	(a.m b).m c &= a.m (b.m c) \\
+\end{split}\end{equation}
+. On the otherhand, samething is written without elments 
+in the pre-position notation as the followings:
+\begin{equation}\begin{split}
+	m(m\times \myid) &= m(m\times \myid) \\
+\end{split}\end{equation}
+. The dot notation is convention to translate between pre-position notation
+and mid-postion notation.
+
+\subsection{Sorting}
+We denote $\mybf{N}$ as a set of natural numbers $\set{0,1,2,\dots}$.
+
+Let $X$ be a set, $PX$ be a power-set of $X$, $FX$ be a free-monoid of $X$.
+We define the map $\myop{asSet}$ as folloings:
+\begin{equation}\begin{split}
+	\myop{asSet}: FX &\to PX \\
+		\bakko{x_1x_2\cdots x_n} &\mapsto \set{x_1}\cup\set{x_2}\cup\cdots\cup\set{x_n} \\
+\end{split}\end{equation}
+. 
+The map $\myop{asSet}$ is a homeo w.r.t. string concatenation $*$ 
+and set-union $\cup$:
+\begin{equation}\xymatrix@C+20pt{
+	FX\times FX \ar[r]^{\myop{asSet}\times \myop{asSet}} \ar[d]^{*} & PX\times PX \ar[d]^{\cup} \\
+	FX \ar[r]^{\myop{asSet}} & PX \\
+}\end{equation}
+.
+We denote $\exp(FX,PX)$ as the set of maps $f$ these satisfy the 
+following commutative diagram:
+\begin{equation}\xymatrix@C+20pt{
+	PX\times PX \ar[r]^{f\times f} \ar[d]^{\cup} & FX\times FX \ar[d]^{*} \\
+	PX \ar[r]^{f} & FX \\
+}\end{equation}
+. All $f\in\exp(FX,PX)$ is a homeo, 
+because $(f0_P)*(f0_P)=f(0_P\cup0_P)$ impies $(f0_P)*(f0_P)=f0_P$
+, then $f0_P=1_F$ owing to $FX$ be a free.
+
+We define the product $P\mybf{N}\times<P\mybf{N}$ as follows:
+\begin{equation}\begin{split}
+	P\mybf{N}\times<P\mybf{N} &= \set{(a,b)\in P\mybf{N}\times P\mybf{N}\bou \cdots} \\
+	\cdots &= x_a<x_b \text{ for all }x_a\in a \text{ and } x_b\in b \\
+\end{split}\end{equation}
+. Let consider the map $\varphi$ that satisfies the following commutativ diagram:
+\begin{equation}\label{eq:order-product}\xymatrix{
+	P\mybf{N}\times<P\mybf{N} \ar[r]^{\varphi\times\varphi} \ar[d]^{\cup} 
+	& F\mybf{N}\times F\mybf{N} \ar[d]^{*} \\
+	P\mybf{N} \ar[r]^{\varphi} & F\mybf{N} \\
+}\end{equation}
+. This commutative diagram implies $\varphi0_P=1_F$,
+because $(\varphi0_P)*(\varphi0_P)=\varphi(0_P\cup0_P)$
+impies $(\varphi0_P)*(\varphi0_P)=\varphi0_P$.
+Then $\varphi0_P=1_F$, because $F\mybf{N}$ is a free.
+Therefore the map $\varphi$ is determined satisfies this commutative diagram
+
+The commutative diagram \eqref{eq:order-product} gives the essence of
+quick-sort. Let $\varphi$ be the map satisfies
+\begin{itemize}
+\item the commutative diagram \eqref{eq:order-product} and
+\item $\varphi\set{a}=\bakko{a}$ for all $a\in\mybf{N}$.
+\end{itemize}
+.
+\begin{todo}
+$\varphi$ is looked like $1:1$.
+\end{todo}
+and $\delta$ be the map of the followings:
+\begin{equation}\begin{split}
+	\delta: P\mybf{N} &\to P\mybf{N}\times<P\mybf{N} \\
+	\cup\delta &= \myid \\
+\end{split}\end{equation}
+.
 
 \subsection{Range representation of power set}
 We denote $N_n$ as the set $\set{0, 1, \dots, n-1}$ through this section.
