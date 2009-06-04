@@ -1,5 +1,12 @@
 = Vimチップス =
-==設定==
+
+== 設定 ==
+デフォルトの設定をする。
+{{{
+set nocompatible
+filetype plugin on
+syntax on
+}}}
 Vimが吐き出すファイル場所を指定する。
 {{{
 set backupdir=$HOME/.vimwork/backup
@@ -36,43 +43,78 @@ colorscheme koehler
 set nowrap
 }}}
 
-==コマンド==
+== コマンド ==
 ||カレントディレクトリ||{{{:set autochdir}}} ||
 
-==プラグイン==
-===Vimwiki===
+== プラグイン ==
+=== Vimwiki ===
 ローカルWiki
-====vimrcの設定==== 
+
+==== vimrcの設定 ==== 
 {{{
-set nocompatible
-filetype plugin on
-syntax on
+let g:vimwiki_list=[{'path':'<wiki-directory-name>/', 'path_html':'<html-directory-name>/'}]
 }}}
-====index.wikiを開く====
-Visualモードで
+
+==== ヘルプ ====
 {{{
-[\][\][w][w]
+:help vimwiki
 }}}
-====HTMLを出力====
-{{{$HOME/vimwiki-html}}}にHTMLを出力する。
-{{{
-:VimwikiAll2HTML
-}}}
-====Wiki内でリンクに飛ぶ====
-Visualモードでリンクにカーソルを持っていき{{{[Enter]}}}を押す。
-====Wikiのシンタックス====
+
+==== Wikiのシンタックス ====
 {{{
 :help vimwiki-syntax
 }}}
 
-===SnippetsEmu===
+==== index.wikiを開く ====
+Visualモードで
+{{{
+[\][\][w][w]
+}}}
+
+==== HTMLを出力 ====
+{{{$HOME/vimwiki-html}}}にHTMLを出力する。
+{{{
+:VimwikiAll2HTML
+}}}
+
+==== Wiki内でリンクに飛ぶ ====
+Visualモードでリンクにカーソルを持っていき{{{[Enter]}}}を押す。
+
+=== SnippetsEmu ===
 コード補完
-====設定ファイル==== 
+
+==== vimrcの設定 ==== 
+{{{
+"補完するキーの定義
+"デフォルトはタブ
+"let g:snippetsEmu_key="<C-B>"
+}}}
+
+==== 設定ファイル ==== 
+Unix
+{{{
+$VIMRUNTIME/after/ftplugin/<file-type>_snippets.vim
+}}}
+Kaoriya
 {{{
 ~/.vim/after/ftplugin/<file-type>_snippets.vim
 }}}
-====アクション====
+
+==== ヘルプ ====
+{{{
+:help snippets_emu
+}}}
+
+==== アクション ====
 Insertモードで
 {{{
 <keyword>[Tab]
 }}}
+
+== リンク ==
+Vimの配布元
+	http:www.vim.org
+
+名無しのvim使い
+	http://nanasi.jp/
+

@@ -3,6 +3,6 @@
 	* [[VimTips|Vimについて]]
 	* [[UnixTips|Unixについて]]
 	* [[GitTips|Gitについて]]
-	* [[AboutUbuntu|Ubuntuについて]]
-	* [[English|英語のノート]]
-	* [[Engineering|工学のノート]]
+	* [[UbuntuTips|Ubuntuについて]]
+	* [[English]]について
+	* [[Engineering]]について
