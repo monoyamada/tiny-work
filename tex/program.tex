@@ -1,48 +1,227 @@
 \section{Programming}
-We use the following dot notations to denoet the image of the map 
+We use the following dot notations to denoet as the image of the map 
 $f:A\times B\times C\times\cdots\to X$:
 \begin{equation}\begin{split}
-	f(a, b, c, \dots) &\Leftrightarrow a.f(b, c,\dots) \\
-		&\Leftrightarrow (a,b).f(c,\dots) \\
+	f(a, b, c, \dots) &\Leftrightarrow (a.f)(b, c,\dots) \\
+		&\Leftrightarrow a.f(b, c,\dots) \\
+		&\Leftrightarrow \kakko{\kakko{a,b}.f}(c,\dots) \\
+		&\Leftrightarrow \kakko{a,b}.f(c,\dots) \\
 \end{split}\end{equation}
-. Especially, when the map has binary operand $f:A\times B\to X$,
+. This notation represents the map which is called curring in the programming
+world. The curring is given by the followings:
+\begin{equation}\begin{split}
+	\myop{curry}: \set{X\times Y\to Z} &\simeq \set{X\to \set{Y\to Z}} \\
+		f &\mapsto \myop{curry}f \text{ such that} \\
+		& \kakko{\kakko{\myop{curry}f} x}y = f(x, y) \text{ for all }x\in X \text{ and } y\in Y \\
+\end{split}\end{equation}
+, and we denote $x.f:=(\myop{curry}f)x$.
+Furthermore, when the map has unary operand $f:A\to B$,
 we omit the braket as follows:
 \begin{equation}\begin{split}
+	f(a) &\Leftrightarrow fa \\
+		&\Leftrightarrow a.f() \\
 	f(a, b) &\Leftrightarrow a.f(b) \\
 		&\Leftrightarrow a.fb \\
 		&\Leftrightarrow (a,b).f()
 \end{split}\end{equation}
-. For example, plus operations are written as follows:
+. For example, the plus operation is written as follows:
 \begin{equation}\begin{split}
 	+(a, b) &\Leftrightarrow a .+ b \\
 	+(a, b, c) &\Leftrightarrow a .+ b .+ c \\
 \end{split}\end{equation}
 . The dot notation is not standard mathmatical notation, 
-but it is convenient considering product. For example, associativity
-of multiplication $m:X\times X\to X$ is written in the mid-position notation
-as the followings:
+but it is convenient to handle product.
+For example, associativity of multiplication $m:X\times X\to X$ is written 
+in the mid-position notation as the followings:
 \begin{equation}\begin{split}
 	(a.m b).m c &= a.m (b.m c) \\
 \end{split}\end{equation}
-. On the otherhand, samething is written without elments 
-in the pre-position notation as the followings:
+. On the otherhand, samething can be written in the pre-position notation 
+without referring elements explicitly as the followings:
 \begin{equation}\begin{split}
 	m(m\times \myid) &= m(m\times \myid) \\
 \end{split}\end{equation}
 . The dot notation is convention to translate between pre-position notation
-and mid-postion notation.
+and mid-postion notation with using same symbol.
 
-\subsection{Sorting}
 We denote $\mybf{N}$ as a set of natural numbers $\set{0,1,2,\dots}$.
 
+\subsection{Bag}
+\begin{definition}[Bag]
+Let $X$ is a finite set.
+The set of the map $X\to \mybf{N}$ is called bag of $X$.
+\end{definition}
+
+Let $X$ is a finite set, $BX$ is a bag of $X$.
+Let $+$ is the standard addition of $\mybf{N}$,
+, $m$ be the standard multiplication of $\mybf{N}$.
+We define the map $+_B$ and $m_B$ by the following commutative diagram:
+\begin{equation}\xymatrix{
+	X\times X \ar[r]^{(f, g)}
+	& \mybf{N}\times \mybf{N} \ar[d]^{\square}
+	\\
+	X \ar@{.>}[r]^{\square_B(f, g)} \ar[u]^{\delta}
+	& \mybf{N} 
+	\\
+}\end{equation}
+, where $\square=\set{+,m}$ and $\delta$ is a co-multiplication $\delta x=(x,x)$. 
+
+$+_B$ and $m_B$ are associative, because the following diagram is commutative
+for all $f,g,h\in BX$:
+\begin{equation}\xymatrix{
+	& X \ar[r]^{\square_B\kakko{f,\square_B\kakko{g, h}}} \ar[d]_{\delta} 
+	& \mybf{N}
+	\\
+	& X\times X \ar[r]^{\kakko{f,\square_B\kakko{g, h}}} \ar[d]_{(\myid,\delta)}
+	& \mybf{N}\times \mybf{N} \ar[u]_{\square}
+	\\
+	X \ar@(u,l)[ruu]^{\myid} \ar@(d,l)[rdd]_{\myid}
+	& X\times X\times X \ar[r]^{(f, g, h)}
+	& \mybf{N}\times \mybf{N}\times \mybf{N} \ar[d]^{(\square, \myid)} \ar[u]_{(\myid, \square)}
+	& \mybf{N} \ar@(u,r)[luu]_{\myid} \ar@(d,r)[ldd]^{\myid}
+	\\
+	& X\times X \ar[r]^{\kakko{\square_B\kakko{f, g},h}} \ar[u]^{(\delta,\myid)}
+	& \mybf{N}\times \mybf{N} \ar[d]^{\square}
+	\\
+	& X \ar[r]^{\square_B\kakko{\square_B\kakko{f, g},h}} \ar[u]^{\delta}
+	& \mybf{N} 
+	\\
+}\end{equation}
+. This commutative diagram says the followings plain formula:
+\begin{equation}\begin{split}
+	(f.\square_Bg).\square h = f.\square_B(g.\square_Bh) \\
+\end{split}\end{equation}
+.
+
+$+_B$ and $m_B$ is distributive, because the following diagram is commutative
+for all $f,g,h\in BX$:
+\begin{equation}\xymatrix@C+24pt{
+	& X \ar[r]^{+_B\kakko{m_B\kakko{f,g}, m_B\kakko{f,h}}} \ar[d]_{\delta}
+	& \mybf{N}
+	\\
+	& X\times X \ar[r]^{\kakko{m_B\kakko{f,g}, m_B\kakko{f,h}}} \ar[d]_{(\delta,\delta)}
+	& \mybf{N}\times \mybf{N} \ar[u]_{+}
+	\\
+	& X^{\times4} \ar[r]^{\kakko{f,g,f,h}} \ar[d]_{(\myid,\sigma,\myid)}
+	& \mybf{N}^{\times4} \ar[u]_{(m,m)}
+	\\
+	& X^{\times4} \ar[r]^{\kakko{f,f,g,h}} \ar[d]_{(\pi_1,\myid,\myid)}
+	& \mybf{N}^{\times4} \ar[u]_{(\myid,\sigma,\myid)}
+	\\
+	X \ar@(u,l)[ruuuu]^{\myid} \ar@(d,l)[rdd]_{\myid}
+	& X\times X\times X \ar[r]^{\kakko{f,g,h}}
+	& \mybf{N}\times \mybf{N}\times \mybf{N} \ar[u]_{(\delta,\myid,\myid)} \ar[d]^{(\myid,+)}
+	& \mybf{N} \ar@(u,r)[luuuu]_{\myid} \ar@(d,r)[ldd]^{\myid}
+	\\
+	& X\times X \ar[r]^{\kakko{f,+_B\kakko{g,h}}} \ar[u]^{(\myid,\delta)}
+	& \mybf{N}\times \mybf{N} \ar[d]^{m}
+	\\
+	& X \ar[r]^{m_B\kakko{f,+_B\kakko{g,h}}} \ar[u]^{\delta}
+	& \mybf{N}
+	\\
+}\end{equation}
+. Where $\sigma$ is the swap, $\pi_1$ is the projection:
+\begin{equation}\begin{split}
+	\sigma: X_1\times X_2 &\to X_2\times X_1 \\
+		(x_1,x_2) &\mapsto (x_2,x_1) \\
+	\pi_1: X\times X_1 &\to X_2 \\
+		(x_1,x_2) &\mapsto x_1 \\
+\end{split}\end{equation}
+. This commutative diagram says the followings plain formula:
+\begin{equation}\begin{split}
+	f.m_B(g.+_Bh) = (f.m_Bg)+_B(f.m_Bh) \\
+\end{split}\end{equation}
+.
+
+The follwing maps $0_B\in BX$ and $1_B\in BX$ are identities of $+_B$ and $m_B$
+, respectively:
+\begin{equation}\begin{split}
+	0_Bx &= 0 \text{ for all }x\in X \\
+	1_Bx &= 1 \text{ for all }x\in X \\
+\end{split}\end{equation}
+.
+
+The above argument can be summerized in the form of proposition.
+
+\begin{proposition}[Bag is a semi-ring]
+Let $X$ is a finite set, $BX$ is a bag of $X$.
+And let $+_B$ and $m_B$ are induced maps $BX\times BX\to BX$ 
+from $+$ and $m$ of $\mybf{N}$, respectively.
+$BX=(BX,+_B,0_B,m_B,1_B)$ is a semi-ring.
+\end{proposition}
+
+Furthermore, the map $\iota$:
+\begin{equation}\begin{split}
+	\iota: \mybf{N} &\to BX \\
+		k &\mapsto \iota k \text{ such that} 
+			(\iota k)x = k \text{ for all }x\in X \\
+\end{split}\end{equation}
+is a ring-homeo.
+$0_B$ and $1_B$ are given by $\iota 0$ and $\iota 1$, respectively.
+Therefore $BX$ can be view as semi-module over $\myop{N}$ by the following 
+identification:
+\begin{equation}\begin{split}
+	k.m_Bf := (\iota k).m_Bf \text{ for all }k\in \myop{N} \text{ and }f\in BX
+\end{split}\end{equation}
+. We can summarize this identification and the previous proposition.
+
+\begin{proposition}[Bag is a semi-algebra]
+Let $X$ is a finite set, $BX$ is a bag of $X$.
+And let $+_B$ and $m_B$ are induced maps $BX\times BX\to BX$ 
+from the ring structure $+$ and $m$ of $\mybf{N}$, respectively.
+$BX=(BX,+_B,0_B,m_B,1_B)$ is a semi-algebra over $\myop{N}$.
+\end{proposition}
+
+Owing to $BX$ is a semi-module, the tensor product $BX\otimes BX$ can be 
+defined uniquely. And owing to $X$ is finite, we can define dual basis
+of $X$ in the $BX$. Let the map $\kappa$ is the followings:
+\begin{equation}\begin{split}
+	\kappa: X &\to BX \\
+		x &\mapsto \kappa x \text{ such that }(\kappa x)y = \begin{cases}
+			1 & \text{iff } x = y \\
+			0 & \text{otherwise} \\
+			\end{cases} \text{ for all } y\in X \\
+\end{split}\end{equation}
+. $BX$ is spanned by $\kappa X$ as the followings:
+\begin{equation}\begin{split}
+	f = \sum_{x\in X}(fx).m_B(\kappa x) \text{ for all }f\in BX \\
+\end{split}\end{equation}
+. Where summation is taken by $+_B$.
+Any element of the set $\set{X^{\times2}\to \mybf{N}^{\times2}}$
+is written by $\kappa X$ in the same way. The following equation is satisfied
+for all $f\in \set{X^{\times2}\to \mybf{N}^{\times2}}$:
+\begin{equation}\begin{split}
+	f &= \sum_{(x,y)\in X^{\times2}}\kakko{f\kakko{x,y}}.m_B\kakko{\kakko{\kappa x}\otimes\kakko{\kappa y}}
+\end{split}\end{equation}
+.
+
+\begin{proposition}[BX is everything]
+Let $X$ is a finite set, $BX$ is a bag of $X$.
+Let $BX=(BX,+_B,0_B,m_B,1_B)$ is a semi-algebra over $\myop{N}$
+incuced by the ring structure of $\myop{N}$.
+The following isomorphism is satisfied:
+\begin{equation}\begin{split}
+	BX\otimes BX \simeq \set{X^{\times2}\to \mybf{N}^{\times2}} \\
+\end{split}\end{equation}
+.
+\end{proposition}
+
+\begin{proposition}[A set of symmetrized words is a bag] 
+Let $X$ be a finite set, $FX=(FX,*,1_F)$ be a free-monoid of $X$
+, $BX$ be a bag of $X$. Let $\sim$ be the following relation:
+\begin{equation}\begin{split}
+	w_1.m_Fw_2 \sim w_2.m_Fw_1 \text{ for all }w_1,w_2\in FX
+\end{split}\end{equation}
+\end{proposition}
+
+\subsection{Sorting}
 Let $X$ be a set, $PX$ be a power-set of $X$, $FX$ be a free-monoid of $X$.
 We define the map $\myop{asSet}$ as folloings:
 \begin{equation}\begin{split}
 	\myop{asSet}: FX &\to PX \\
 		\bakko{x_1x_2\cdots x_n} &\mapsto \set{x_1}\cup\set{x_2}\cup\cdots\cup\set{x_n} \\
 \end{split}\end{equation}
-. 
-The map $\myop{asSet}$ is a homeo w.r.t. string concatenation $*$ 
+. The map $\myop{asSet}$ is a homeo w.r.t. string concatenation $*$ 
 and set-union $\cup$:
 \begin{equation}\xymatrix@C+20pt{
 	FX\times FX \ar[r]^{\myop{asSet}\times \myop{asSet}} \ar[d]^{*} & PX\times PX \ar[d]^{\cup} \\
