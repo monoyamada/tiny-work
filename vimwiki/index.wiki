@@ -7,3 +7,4 @@
 	* [[TexTips|Texについて]]
 	* [[English]]について
 	* [[Engineering]]について
+	* [[Note|ノート]]
