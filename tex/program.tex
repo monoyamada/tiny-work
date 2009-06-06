@@ -150,18 +150,18 @@ from $+$ and $m$ of $\mybf{N}$, respectively.
 $BX=(BX,+_B,0_B,m_B,1_B)$ is a semi-ring.
 \end{proposition}
 
-Furthermore, the map $\iota$:
+Furthermore, the map $\kappa$:
 \begin{equation}\begin{split}
-	\iota: \mybf{N} &\to BX \\
-		k &\mapsto \iota k \text{ such that} 
-			(\iota k)x = k \text{ for all }x\in X \\
+	\kappa: \mybf{N} &\to BX \\
+		k &\mapsto \kappa k \text{ such that} 
+			(\kappa k)x = k \text{ for all }x\in X \\
 \end{split}\end{equation}
 is a ring-homeo.
-$0_B$ and $1_B$ are given by $\iota 0$ and $\iota 1$, respectively.
+$0_B$ and $1_B$ are given by $\kappa 0$ and $\kappa 1$, respectively.
 Therefore $BX$ can be view as semi-module over $\myop{N}$ by the following 
 identification:
 \begin{equation}\begin{split}
-	k.m_Bf := (\iota k).m_Bf \text{ for all }k\in \myop{N} \text{ and }f\in BX
+	k.m_Bf := (\kappa k).m_Bf \text{ for all }k\in \myop{N} \text{ and }f\in BX
 \end{split}\end{equation}
 . We can summarize this identification and the previous proposition.
 
@@ -172,47 +172,77 @@ from the ring structure $+$ and $m$ of $\mybf{N}$, respectively.
 $BX=(BX,+_B,0_B,m_B,1_B)$ is a semi-algebra over $\myop{N}$.
 \end{proposition}
 
+Sometimes, we only take acount the multiplication $m_B$ as the scalar 
+multiplication $m_B:\myop{N}\times BX\to BX$.
+
+\begin{proposition}[Bag is a semi-module]
+Let $X$ is a finite set, $BX$ is a bag of $X$.
+And let $+_B$ and $m_B$ are induced maps $BX\times BX\to BX$ 
+from the ring structure $+$ and $m$ of $\mybf{N}$, respectively.
+$BX=(BX,+_B,0_B,m_B)$ is a semi-module over $\myop{N}$, where
+$m_B$ is a scalor muliplication.
+\end{proposition}
+
 Owing to $BX$ is a semi-module, the tensor product $BX\otimes BX$ can be 
 defined uniquely. And owing to $X$ is finite, we can define dual basis
-of $X$ in the $BX$. Let the map $\kappa$ is the followings:
+of $X$ in the $BX$. Let the map $\iota_B$ is the followings:
 \begin{equation}\begin{split}
-	\kappa: X &\to BX \\
-		x &\mapsto \kappa x \text{ such that }(\kappa x)y = \begin{cases}
+	\iota_B: X &\to BX \\
+		x &\mapsto \iota_B x \text{ such that }(\iota_B x)y = \begin{cases}
 			1 & \text{iff } x = y \\
 			0 & \text{otherwise} \\
 			\end{cases} \text{ for all } y\in X \\
 \end{split}\end{equation}
-. $BX$ is spanned by $\kappa X$ as the followings:
+. $BX$ is spanned by $\iota_B X$ as the followings:
 \begin{equation}\begin{split}
-	f = \sum_{x\in X}(fx).m_B(\kappa x) \text{ for all }f\in BX \\
+	f = \sum_{x\in X}(fx).m_B(\iota_B x) \text{ for all }f\in BX \\
 \end{split}\end{equation}
-. Where summation is taken by $+_B$.
-Any element of the set $\set{X^{\times2}\to \mybf{N}^{\times2}}$
-is written by $\kappa X$ in the same way. The following equation is satisfied
-for all $f\in \set{X^{\times2}\to \mybf{N}^{\times2}}$:
+. Where summation is taken by $+_B$. 
+$\set{X^{\times2}\to \mybf{N}^{\otimes2}}$ is spanned by $\iota_B X\otimes \iota_B X$ also as the followings:
 \begin{equation}\begin{split}
-	f &= \sum_{(x,y)\in X^{\times2}}\kakko{f\kakko{x,y}}.m_B\kakko{\kakko{\kappa x}\otimes\kakko{\kappa y}}
+	f &= \sum_{(x,y)\in X^{\times2}}\kakko{f\kakko{x,y}}.m_B\kakko{\kakko{\iota_B x}\otimes\kakko{\iota_B y}} \\
+	& \quad\text{for all } f\in \set{X^{\times2}\to \mybf{N}^{\otimes2}}
 \end{split}\end{equation}
-.
+. 
+Then the relation between $BX\otimes BX$ and $\set{X^{\times2}\to\mybf{N}^{\otimes2}}$ 
+is not $BX\otimes BX\subset\set{X^{\times2}\to\mybf{N}^{\otimes2}}$
+but $BX\otimes BX=\set{X^{\times2}\to\mybf{N}^{\otimes2}}$.
 
-\begin{proposition}[BX is everything]
-Let $X$ is a finite set, $BX$ is a bag of $X$.
-Let $BX=(BX,+_B,0_B,m_B,1_B)$ is a semi-algebra over $\myop{N}$
-incuced by the ring structure of $\myop{N}$.
+\begin{proposition}[Bag has no more than tensor]
+Let $X$ be a finite set, $BX=(BX,+_B,0_B)$ be a semi-module over $\myop{N}$.
 The following isomorphism is satisfied:
 \begin{equation}\begin{split}
-	BX\otimes BX \simeq \set{X^{\times2}\to \mybf{N}^{\times2}} \\
+	BX\otimes BX \simeq \set{X^{\times2}\to \mybf{N}^{\otimes2}} \\
+\end{split}\end{equation}
+. In other word, the following isomorphism is satisfied:
+\begin{equation}\begin{split}
+	\set{{X}\to \mybf{N}}^{\otimes2} \simeq \set{X^{\times2}\to \mybf{N}^{\otimes2}} \\
 \end{split}\end{equation}
 .
 \end{proposition}
 
-\begin{proposition}[A set of symmetrized words is a bag] 
-Let $X$ be a finite set, $FX=(FX,*,1_F)$ be a free-monoid of $X$
-, $BX$ be a bag of $X$. Let $\sim$ be the following relation:
+Let $FX=(FX,*,1_F)$ be a free-monoid of $X$, $BX=(BX,+_B,0_B)$ be a semi-module over $\myop{N}$.
+Owing to the universality of free-module,
+there exists a unique homeo $\varphi$ that satisfies the following commutative diagram:
+\begin{equation}\xymatrix{
+	X \ar[r]^{\iota_F} \ar[rd]^{\iota_B} & FX \ar@{.>}[d]^{\varphi} \\
+	& BX \\
+}\end{equation}
+. Where $\iota_F$ is a singleton map $\iota_F x=\bakko{x}$.
+Since $+_B$ is abelian, $\varphi(w_1w_2)=\varphi(w_2w_1)$ for all $w_1,w_2\in FX$. Thus we might can say that 'a set of symmetrized words is a bag'.
+
+\subsection{Shuffle product}
+Let $X$ is a set, $FX=(FX, m, 1_F)$ is a free-monoid of $X$.
+We denote a word of $FX$ with brackets as $\bakko{abc}$ when using characters 
+$\set{a,b,c}$ explicitly. The identity $1_F$ for $m$ is denoted also
+$\bakko{}$. 
+We denote $F_RX$ as a module over the ring $R$ with 
+
+Let $R$ be a ring. 
+We define the map $+$ as followings:
 \begin{equation}\begin{split}
-	w_1.m_Fw_2 \sim w_2.m_Fw_1 \text{ for all }w_1,w_2\in FX
+	+: FX\times  &\to FX \\
 \end{split}\end{equation}
-\end{proposition}
 
 \subsection{Sorting}
 Let $X$ be a set, $PX$ be a power-set of $X$, $FX$ be a free-monoid of $X$.
@@ -310,18 +340,18 @@ The map $\cup_R$ is defined by the following commutative diagram:
 \xymatrix{
 	PN_{n+1} \ar@<1ex>[d]^{\pi}
 		& FN_{n+1} \ar@<1ex>[l]^{\myop{set}} \ar@<1ex>[d]^{\pi} \\
-	PN_n \ar@{.>}[r]^{\myop{set}^{-1}} \ar[ur]_{\myop{rep}} \ar@<1ex>[d]^{\pi} \ar[u]^{\iota}
-		& RN_n \ar@<1ex>[l]^{\myop{set}} \ar@<1ex>[d]^{\pi} \ar[u]^{\iota} \\
-	P^cN_n \ar[r]^{\myop{set}^{-1}} \ar[u]^{\iota} 
-		& R^cN_n \ar@<1ex>[l]^{\myop{set}} \ar[u]^{\iota} \\
+	PN_n \ar@{.>}[r]^{\myop{set}^{-1}} \ar[ur]_{\myop{rep}} \ar@<1ex>[d]^{\pi} \ar[u]^{\kappa}
+		& RN_n \ar@<1ex>[l]^{\myop{set}} \ar@<1ex>[d]^{\pi} \ar[u]^{\kappa} \\
+	P^cN_n \ar[r]^{\myop{set}^{-1}} \ar[u]^{\kappa} 
+		& R^cN_n \ar@<1ex>[l]^{\myop{set}} \ar[u]^{\kappa} \\
 } &\quad \xymatrix{
-	FN_{n+1}\times FN_{n+1} \ar@{<-}[r]^{\iota\times \iota} \ar[d]^{*} 
+	FN_{n+1}\times FN_{n+1} \ar@{<-}[r]^{\kappa\times \kappa} \ar[d]^{*} 
 		& RN_n\times_R RN_n \ar@{.>}[d]^{*} \\
 	FN_{n+1} \ar[r]^{\pi} & RN_n \\
 }
 \end{split}\end{equation}
 \begin{equation}\begin{split}
-	\pi\iota &= \myop{id} \\
+	\pi\kappa &= \myop{id} \\
 	\myop{set}\pi\myop{rep} &= \myop{id} \\
 \end{split}\end{equation}
 $\pi$ is a partial map.

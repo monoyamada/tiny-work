@@ -1,10 +1,10 @@
 = 目次 =
-	* [[AboutVimwik|Vimwikiについて]]
-	* [[VimTips|Vimについて]]
-	* [[UnixTips|Unixについて]]
-	* [[GitTips|Gitについて]]
-	* [[UbuntuTips|Ubuntuについて]]
-	* [[TexTips|Texについて]]
-	* [[English]]について
-	* [[Engineering]]について
-	* [[Note|ノート]]
+	* [[AboutVimwik|Vimwikiについて ]]
+	* [[VimTips|Vimについて ]]
+	* [[UnixTips|Unixについて ]]
+	* [[GitTips|Gitについて ]]
+	* [[UbuntuTips|Ubuntuについて ]]
+	* [[TexTips|Texについて ]]
+	* [[English|英語 ]]
+	* [[Engineering|工学 ]]
+	* [[Note|ノート ]]
