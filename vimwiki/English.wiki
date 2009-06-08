@@ -19,6 +19,7 @@
 == 例外 ==
 ||dimension ||普通ならdimentionとなるところ。||
 ||referring ||普通ならはreferingとなるところ。||
+||Let K be a field ||Let K is a fieldと言いそうなところ||
 
 = プログラミングの言い回し =
 == 括弧 ==
