@@ -6,5 +6,6 @@ if [ $# -lt 1 ]; then
 fi
 out_dir="output"
 opts="-draftmod -halt-on-error"
+opts="-encoding=utf8 -draftmod -halt-on-error"
 opt_dir="-output-directory=$out_dir"
 latex $opts $opt_dir $1

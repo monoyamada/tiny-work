@@ -1,0 +1,65 @@
+\section{Memo}\label{sec:memorandom}
+
+\begin{itemize}
+	\item Consider the map $\myop{ord}$
+	\begin{equation}\begin{split}
+		\myop{ord}: F\mybf{Z} &\to \mybf{B} \\
+		\bakko{a_1a_2\cdots a_n} &\mapsto a_1\le a_2\le\cdots\le a_n \text{ for all }2\le n \\
+	\end{split}\end{equation}
+	Where $\mybf{B}$ is a boolean $\set{0,1}$.
+	\item $\myop{ord}$ is not homeo with word concatenation, because 
+	$\myop{ord}\bakko{abcd}$ cannot be written with the combination of 
+	$\myop{ord}\bakko{ab}$ and $\myop{ord}\bakko{cd}$.
+	\item looking for multiplication which $\myop{ord}$ is homeo with.
+	\item We know the shuffle product $\sqcup$.\footnote{
+		We couldnt find suitable symbol for the shuffle product.
+	}
+	Let $F_{\mybf{B}}\mybf{Z}$ be a free-semimodule $\set{F\mybf{Z}\to\mybf{B}}$.
+	We denote $+$ for locgical 'or', empty word for logical 'and'.
+	We define $\myop{ord}$ to satisfy homeo with $+$.
+	\begin{equation}\begin{split}
+		\myop{ord}(w_1+w_2) &= (\myop{ord}w_1)+(\myop{ord}w_2) \text{ for all }w_1,w_2\in F\mybf{Z} \\
+	\end{split}\end{equation}
+	The condition homeo with $+$ implies $\myop{ord}0=0$.
+	We can show the following equation by explicit calculation:
+	\begin{equation}\begin{split}
+		\myop{ord}(\bakko{ab}\sqcup\bakko{cd}) 
+			&= (\myop{ord}\bakko{ab})\wedge(\myop{ord}\bakko{cd}) \text{ for all }a,b,c,d\in \mybf{Z} \\
+	\end{split}\end{equation}
+	. We can show the following equation:
+	\begin{equation}\begin{split}
+		\myop{ord}(w_1\sqcup w_2) &= (\myop{ord}w\1)\wedge(\myop{ord}w_2) \\
+			& \text{ for all }w_1,w_2\in \mybf{Z}\text{ and }\zettai{w_1}!=1 \text{ and }\zettai{w_2} \\
+	\end{split}\end{equation}
+	. 
+	The condition homeo with $\sqcup$ and $\wedge $implies $\myop{ord}\bakko{}=1$.
+	And also implies the followings:
+	\begin{equation}\begin{split}
+		1 = \myop{ord}\sqcup(\bakko{a},\bakko{b}) 
+			= (\myop{ord}\bakko{a}) \wedge (\myop{ord}\bakko{a})
+	\end{split}\end{equation}
+	. $\myop{ord}\bakko{a}=1$ is sufficient condition for $\myop{ord}$ being
+	homeo, though we dont know whether this condition is nessary condition.
+	\item We conclude that the map $\myop{ord}$ satisfies the following 
+	commutative diagram:
+	\begin{equation}\xymatrix@C+24pt{
+		F_{\mybf{B}}\mybf{Z}\otimes F_{\mybf{B}}\mybf{Z} \ar[r]^{\myop{ord}\times\myop{ord}} \ar[d]^{\square_F}
+		& \mybf{B}\otimes \mybf{B} \ar[d]^{\square}
+		\\
+		F_{\mybf{B}}\mybf{Z} \ar[r]^{\myop{ord}}
+		& \mybf{B} 
+		\\
+	}\end{equation}
+	. Where $\square_F=+/m$ and $\square=+/\wedge$
+\end{itemize}
+
+\begin{todo}[decomposition]
+We need decompose a word to enumerate ordering condition.
+For example, we would like deform like that:
+\begin{equation}\begin{split}
+	\myop{ord}\bakko{abc} 
+		&= \wedge(\myop{ord}, \myop{ord})(\bakko{ab}, \bakko{bc}) \\
+		&= \myop{ord}\sqcup(\bakko{ab}, \bakko{bc}) \\
+\end{split}\end{equation}
+How to justify with associative or co-associative operations?
+\end{todo}

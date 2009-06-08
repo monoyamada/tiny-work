@@ -8,9 +8,13 @@
 ||respectively ||Let x, y and z be 2, 3 and 5, respectively. ||
 ||the above ||The above is the gist of his article. ||
 || ||以上が彼の論旨である。 ||
+||the custom ||The custom is wear clothes when going out. ||
+|| ||慣習として外にいる時は服を着る。 ||
 
 == 単数/複数とThe ==
-||嘘||単数||you told a lie.||
+||嘘||you told a lie. ||
+||服||put on a formal dress. ||
+||礼服に着替える ||
 
 == 例外 ==
 ||dimension ||普通ならdimentionとなるところ。||
