@@ -35,6 +35,13 @@ colorscheme koehler
 {{{
 set nowrap
 }}}
+Vimwikiを設定する。
+{{{
+set nocompatible
+filetype plugin on
+syntax on
+let g:vimwiki_list=[{'path':'~/<wiki-directory>/', 'path_html':'~/<html-directory>/'}]
+}}}
 
 ==コマンド==
 ||カレントディレクトリ||{{{:set autochdir}}} ||
@@ -47,6 +54,7 @@ set nowrap
 set nocompatible
 filetype plugin on
 syntax on
+let g:vimwiki_list=[{'path':'~/<wiki-directory>/', 'path_html':'~/<html-directory>/'}]
 }}}
 ====index.wikiを開く====
 Visualモードで

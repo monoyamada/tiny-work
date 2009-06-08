@@ -26,3 +26,15 @@ gitで無視するファイルは.gitignoreに書く。
 output/*
 sty/*.pdf
 }}}
+
+==Githubについて==
+SSHの取り扱いがWindowsとUbuntu9では異なる。
+Windowsの場合は
+{{{
+ssh-keygen -t rsa
+}}}
+でよいが、Ubuntuの場合は
+{{{
+ssh-keygen -t dsa
+}}}
+として、公開鍵を作成する必要があるようだ。
