@@ -66,12 +66,6 @@ let g:vimwiki_list=[{'path':'~/<wiki-directory>/', 'path_html':'~/<html-director
 
 ==== vimrcの設定 ==== 
 {{{
-<<<<<<< HEAD:vimwiki/VimTips.wiki
-set nocompatible
-filetype plugin on
-syntax on
-let g:vimwiki_list=[{'path':'~/<wiki-directory>/', 'path_html':'~/<html-directory>/'}]
-=======
 let g:vimwiki_list=[{'path':'<wiki-directory-name>/', 'path_html':'<html-directory-name>/'}]
 }}}
 
@@ -83,7 +77,6 @@ let g:vimwiki_list=[{'path':'<wiki-directory-name>/', 'path_html':'<html-directo
 ==== Wikiのシンタックス ====
 {{{
 :help vimwiki-syntax
->>>>>>> 1dbeaa1b37bce3abb459151628e832552b6a19e6:vimwiki/VimTips.wiki
 }}}
 
 ==== index.wikiを開く ====
