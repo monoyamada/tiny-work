@@ -25,14 +25,14 @@ let loaded_matchparen=1
 set foldmethod=manual
 set foldlevel=1000
 "
-"
+" tab
 "
 set tabstop=2
 set shiftwidth=2
 set noautoindent
 set smartindent
 "
-"
+" search
 "
 set incsearch
 set ignorecase
@@ -41,3 +41,7 @@ set smartcase
 "
 "
 set nowrap
+"
+" Vimwiki directory
+"
+let g:vimwiki_list=[{'path':'<wiki-directory-name>/', 'path_html':'<html-directory-name>/'}]
