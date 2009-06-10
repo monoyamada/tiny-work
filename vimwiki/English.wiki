@@ -11,6 +11,9 @@
 ||the custom ||The custom is wear clothes when going out. ||
 || ||慣習として外にいる時は服を着る。 ||
 
+== 単語 ==
+||蛍光 ||fluorescent ||
+
 == 単数/複数とThe ==
 ||嘘||you told a lie. ||
 ||服||put on a formal dress. ||

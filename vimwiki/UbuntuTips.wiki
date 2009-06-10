@@ -26,3 +26,10 @@ WindowsやOSXのデフォルトのものに比べて格段に遅い。
 通常使っているエディタがVimということから、Vimの問題かも知れない。 
 *Vimの問題だった。*
 ~~WindowsやOSX並の速度にあげる対策はないものだろうか。 SCIMやAnthyとは何ぞやということを調べることが先かも。~~
+
+== OpenCV 1.1.0のインストール ==
+{{{
+configure --prefix=$HOME/ext/ --with-ffmpeg --without-gstreamer --without-xine --without-quicktime
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$HOME/ext/lib/pkgconfig
+run build_all.sh
+}}}

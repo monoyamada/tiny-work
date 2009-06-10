@@ -1,6 +1,10 @@
 = UNIXチップ =
 == 検索 ==
-||ファイル名の検索||{{{find . -name 'hello.txt' -print}}}||
+||ファイル名の検索 ||{{{find . -name 'hello.txt' -print}}} ||
+||grep ディレクトリの再帰||{{{grep <pattern> -r <directory>}}} ||
+||grep 大文字小文字の無視||{{{grep -i <pattern>}}} ||
+
+== ファイルの作成 ==
 ||tarで圧縮||{{{tar -czvf <directory-name>.tar.gz <directory-name>}}}||
 ||tarで解凍||{{{tar -xzvf <directory-name>.tar.gz}}}||
 
