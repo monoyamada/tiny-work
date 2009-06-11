@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/project/200604-soars/svn/!svn/ver/7083/trunk/shirakata.study/java/study/function
+END
+AbIterator.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/AbIterator.java
+END
+Permutation.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/Permutation.java
+END
+IfBooleanBinaryFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/project/200604-soars/svn/!svn/ver/6807/trunk/shirakata.study/java/study/function/IfBooleanBinaryFunction.java
+END
+AbNumberBinaryFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/AbNumberBinaryFunction.java
+END
+Combinadic.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/Combinadic.java
+END
+IfBooleanFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/IfBooleanFunction.java
+END
+AbNumberFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/project/200604-soars/svn/!svn/ver/6721/trunk/shirakata.study/java/study/function/AbNumberFunction.java
+END
+AbBooleanBinaryFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/AbBooleanBinaryFunction.java
+END
+AbBooleanFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/project/200604-soars/svn/!svn/ver/6721/trunk/shirakata.study/java/study/function/AbBooleanFunction.java
+END
+IfNumberBinaryFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/project/200604-soars/svn/!svn/ver/6721/trunk/shirakata.study/java/study/function/IfNumberBinaryFunction.java
+END
+IfNumberFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/IfNumberFunction.java
+END
+AbBinaryFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/project/200604-soars/svn/!svn/ver/6721/trunk/shirakata.study/java/study/function/AbBinaryFunction.java
+END
+Equality.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/project/200604-soars/svn/!svn/ver/6705/trunk/shirakata.study/java/study/function/Equality.java
+END
+AbFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/project/200604-soars/svn/!svn/ver/6807/trunk/shirakata.study/java/study/function/AbFunction.java
+END
+Tupple2.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/project/200604-soars/svn/!svn/ver/6807/trunk/shirakata.study/java/study/function/Tupple2.java
+END
+AbIntegerBinaryFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/AbIntegerBinaryFunction.java
+END
+IfBinaryFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/project/200604-soars/svn/!svn/ver/6721/trunk/shirakata.study/java/study/function/IfBinaryFunction.java
+END
+IfFunction.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/IfFunction.java
+END
+ComparableOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/project/200604-soars/svn/!svn/ver/6721/trunk/shirakata.study/java/study/function/ComparableOrder.java
+END
+IfMutableMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/project/200604-soars/svn/!svn/ver/6807/trunk/shirakata.study/java/study/function/IfMutableMap.java
+END
+LexicographicalOrder.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/project/200604-soars/svn/!svn/ver/6732/trunk/shirakata.study/java/study/function/LexicographicalOrder.java
+END
