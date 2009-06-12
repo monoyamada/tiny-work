@@ -6,5 +6,6 @@
 	* [[UbuntuTips|Ubuntuについて ]]
 	* [[TexTips|Texについて ]]
 	* [[English|英語 ]]
+	* [[Programming|プログラミング ]]
 	* [[Engineering|工学 ]]
 	* [[Note|ノート ]]

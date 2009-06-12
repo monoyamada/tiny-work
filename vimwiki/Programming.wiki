@@ -1,0 +1,23 @@
+= プログラミング =
+== ML ==
+ターミナルの起動
+{{{
+	> ocaml
+}}}
+ターミナルの終了
+{{{
+	##quit;;
+}}}
+最初の#はOcaml-ターミナルのプロンプトで、'#quit;;'を打ち込む。
+
+書式
+||ML ||ラムダ ||
+||let x = a in b ||(\lambda_x(b), a) ||
+
+== CDuce ==
+書式
+||CDuce ||ラムダ ||
+||let x = "hello " in let y = "world" in x @ y ||(\lambda_x(\lambda_y(x @ y), "world"), "hello ") ||
+|| ||@は単語の連結 ||
+||let (x, y) = ("hello ", "world") in x @ y ||(\lambda_x(\lambda_y(x @ y), "world"), "hello ") ||
+|| ||直積のサポート ||

@@ -1,6 +1,9 @@
 = UNIXチップ =
 == 検索 ==
 ||ファイル名の検索 ||{{{find . -name 'hello.txt' -print}}} ||
+||ファイル名の検索 - 深さ2まで ||{{{find . -maxdepth 2 -name 'hello.txt' -print}}} ||
+||マッチしたファイル名の表示 ||{{{find . -name '.svn' -printf 'hello ' -print0 -printf ' bye\n'}}} ||
+|| ||'hello <directory-name>/.svn bye'を出力する ||
 ||grep ディレクトリの再帰||{{{grep <pattern> -r <directory>}}} ||
 ||grep 大文字小文字の無視||{{{grep -i <pattern>}}} ||
 
