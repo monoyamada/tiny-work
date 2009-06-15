@@ -2,7 +2,7 @@
 
 \subsection{Convension in this section}
 We denote $\mybf{N}$ as a set of natural numbers $\set{0,1,2,\dots}$.
-We denote $\mybf{B}$ as a set $\set{0,1}$ with boolean algbra.
+We denote $\mybf{B}$ as a set $\set{0,1}$ with boolean algebra.
 
 We use the following dot notations to denoet as the image of the map 
 $f:A\times B\times C\times\cdots\to X$:
@@ -48,6 +48,78 @@ without referring elements explicitly as the followings:
 \end{split}\end{equation}
 . The dot notation is convention to translate between pre-position notation
 and mid-postion notation with using same symbol.
+
+\subsection{Convolution}
+\newcommand{\rmapr}{M\mybf{R}}
+\newcommand{\loner}{L\mybf{R}}
+\newcommand{\intallr}[1]{\int_{{#1}\in\mybf{R}}}
+Let $\rmapr$ be a set of all maps from $\mybf{R}$ to $\mybf{R}$.
+We can define the structure of ring on $\rmapr$ from the target space 
+ring structure $(\mybf{R},+,0,*,1)$.
+\begin{equation}\begin{split}
+	(f.+g)x &= (fx).+ (gx) \\
+	(f.*g)x &= (fx).* (gx) \\
+\end{split}\end{equation}
+We denote $\loner\subset\rmapr$ as the space of the followings:
+\begin{equation}\begin{split}
+	\loner &= \set{f\in\rmapr\bou \int_{x\in\mybf{R}}\zettai{fx} < \infty}
+\end{split}\end{equation}
+. 
+The $\loner$ is closed under $+$ and $*$.
+\begin{equation}\begin{split}
+	\intallr{x}(f.+g)x &= \kakko{\intallr{x}fx}.+ \kakko{\intallr{x}gx} \\
+		&\le \kakko{\intallr{x}\zettai{fx}}.+ \kakko{\intallr{x}\zettai{gx}} \\
+		& < \infty \\
+	\intallr{x}(f.*g)x &= \kakko{\intallr{x}\kakko{fx}\kakko{gx}} \\
+		&\le \kakko{\intallr{x}\zettai{fx}}.* \kakko{\intallr{x}\zettai{gx}} \\
+		& < \infty \\
+\end{split}\end{equation}
+Where we use the following inequality to derive the second inequality.
+\begin{equation}\begin{split}
+	(a.*b).+(c.*d) 
+		&\le \zettai{a.*b}.+\zettai{c.*d} \\
+		&\le \kakko{\zettai{a}.+\zettai{c}}.*\kakko{\zettai{b}.+\zettai{d}} \\
+		&\text{for all }a,b,c,d\in\mybf{R} \\
+\end{split}\end{equation}
+Note that all non-zero constant maps are not elements of $\loner$,
+especially $1\not\in\loner$. 
+Therefore, $*$ dose not have identity $1$ in the $\loner$.
+
+We define another multiplication beside $*$.
+\begin{definition}[Convolution]
+We define the map $\sqcap$ as the followings:
+\begin{equation}\begin{split}
+	\sqcap: \rmapr\times\rmapr &\to \rmapr \\
+	(f,g) &\mapsto (f.\sqcap g) \text{ such that} \\
+	& (f.\sqcap g)x = \int_{y\in\mybf{R}}\kakko{f\kakko{x.-y}}\kakko{gy} \\
+\end{split}\end{equation}
+. The map $\sqcap$ is called convolution.
+\end{definition}
+The convolution satisfies the folllowing properties:
+\begin{itemize}
+\item distritutive $f.\sqcap(g.+ h) = (f.\sqcap g).+ (f.\sqcap h)$
+\item associative $(f.\sqcap g).\sqcap h = f.\sqcap(g.\sqcap h)$
+	\begin{proof}
+		by changing variable of integration.
+		\begin{equation*}\begin{split}
+			\intallr{z}\kakko{\kakko{f.\sqcup g}\kakko{x.-z}}.*\kakko{hz}
+				&= \intallr{y}\intallr{z}\kakko{f\kakko{x.-y.-z}}.*\kakko{gy}.*\kakko{hz} \\
+				&= \intallr{y}\intallr{z}\kakko{f\kakko{x.-y}}.*\kakko{g\kakko{y.-z}}.*\kakko{hz} \\
+				&= \intallr{y}\kakko{f\kakko{x.-y}}.*\kakko{\kakko{g\sqcup h}y} \\
+		\end{split}\end{equation*}
+	\end{proof}
+\item commutative $f\sqcap g = g\sqcap f$
+	\begin{proof}
+		by changing variable of integration.
+		\begin{equation*}\begin{split}
+			\intallr{y}\kakko{f\kakko{x.-y}}.*\kakko{gy}
+			&= \intallr{y}\kakko{fy}.*\kakko{g\kakko{x.-y}} \\
+		\end{split}\end{equation*}
+	\end{proof}
+\end{itemize}
+.
+The $\loner$ is closed also under $\sqcup$, and $\sqcup$ also dose not
+have identity in the $\loner$.
 
 \subsection{Words}
 \begin{definition}[Free-monoid]
