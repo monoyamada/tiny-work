@@ -42,3 +42,6 @@
 	* We denote the world by W.
 	* We denote by W the world.
 	* We denote W as the world.
+
+== 単語 ==
+||convolution ||畳み込み ||

@@ -99,7 +99,7 @@ Where $h$ is the boxcar function:
 		\end{cases} \\
 \end{split}\end{equation}
 . 
-This definition of boxcar function may differ from the standard definition.
+This definition of the boxcar function may differ from the standard definition.
 
 We define another multiplication beside $*$.
 \begin{definition}[Convolution]
@@ -171,7 +171,36 @@ Finally, we get the followings:
 			2.*\min(r_1,r_2) & \text{case } \zettai{x} \le  \zettai{r_1.-r_2} \\
 			\end{cases} \\
 \end{split}\end{equation}
+. 
+
+\begin{observe}[Quantom deformation]
+Let be $\mu$ a gaussin function:
+\begin{equation}\begin{split}
+	\mu:\mybf{R}\times\mybf{R} &\to \mybf{R} \\
+		(t,x) &\mapsto \kakko{\frac{1}{2 \pi t}}^{\frac{1}{2}}\exp\kakko{-\frac{x^2}{2t}} \\
+\end{split}\end{equation}
+. We define the multiplication $\sqcap_t$ as the followings:
+\begin{equation}\begin{split}\label{eq:t.conv}
+	\sqcap_t: \rmapr\times\rmapr &\to \rmapr \\
+	(f,g) &\mapsto (f.\sqcap_t g) \text{ such that} \\
+	& (f.\sqcap g)x = \int_{y\in\mybf{R}}\kakko{f\kakko{x.-y}}\kakko{gy} \\
+\end{split}\end{equation}
+. The multiplications $*$ and $\sqcap$ are connected by $\sqcap_t$:
+\begin{equation}\begin{split}\label{eq:conv.deform}
+	f.*g &= \lim_{t\to0}(f.\sqcap_tg) \\
+	f.\sqcap g &= \lim_{t\to\infty}(f.\sqcap_tg) \\
+\end{split}\end{equation}
 .
+\begin{itemize}
+\item Are \eqref{eq:conv.deform} true?
+\item Dose \eqref{eq:t.conv} satisfies the leibnitz rule for differential?
+\begin{equation}\begin{split}
+	d(f.\sqcap_tg) &= \kakko{\kakko{df}.\sqcap_tg}.+\kakko{f.\sqcap_t\kakko{dg}}
+\end{split}\end{equation}
+\item Can we calculate \eqref{eq:t.conv} for general $t$?
+\item Can we generalize \eqref{eq:t.conv} to gauge theory?
+\end{itemize}
+\end{observe}
 
 \subsection{Words}
 \begin{definition}[Free-monoid]

@@ -26,7 +26,7 @@ exec "Snippet items \\begin{itemize}<CR><Tab>\\item ".st.et."<CR>\\end{itemize}"
 " environments
 "
 exec "Snippet def \\begin{definition}<CR>".st.et."<CR>\\end{definition}"
-exec "Snippet obs \\begin{observation}<CR>".st.et."<CR>\\end{observation}"
+exec "Snippet obs \\begin{observe}<CR>".st.et."<CR>\\end{observe}"
 exec "Snippet todo \\begin{todo}<CR>".st.et."<CR>\\end{todo}"
 exec "Snippet prop \\begin{proposition}<CR>".st.et."<CR>\\end{proposition}"
 exec "Snippet proof \\begin{proof}<CR>".st.et."<CR>\\end{proof}"
