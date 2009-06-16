@@ -46,15 +46,18 @@ if (F) {
 }
 
 test.convolution <- function() {
-	x <-         c(-2, -1, -0.5, -0.5, -0.25, -0.25, 0, 0.25, 0.25, 0.5, 0.5, 1, 2);
-	f.y <- 1.0 * c( 0,  0,    0,    1,     1,     1, 1,    1,    1,   1,   0, 0, 0);
-	g.y <- 0.6 * c( 0,  0,    0,    0,     0,     1, 1,    1,    0,   0,   0, 0, 0);
-	c.x <- divide.seq(x, 10);
-	c.y <- pmax(0, 1 - abs(c.x));
-	plot(x, f.y, type="l", lty=1, main="f(h,r,x)=h*(|x|<=r)", xlab="x", ylab="y");
-	lines(x, g.y, type="l", lty=2);
-	lines(c.x, c.y, type="l", lty=3);
-	legend(0.3 * max(x), 0.9 * max(f.y, g.y), c("y=f(1, 1/2)", "y=f(3/5, 1/4)", "y=f(1,1/2)*f(3/5,1/4)"), lty=c(1,2,3));
+	x <-   c(-2, -1, -0.5, -0.5, -0.25, -0.25, 0, 0.25, 0.25, 0.5, 0.5, 1, 2);
+	f.y <- c( 0,  0,    0,    1,     1,     1, 1,    1,    1,   1,   0, 0, 0);
+	g.y <- c( 0,  0,    0,    0,     0,     1, 1,    1,    0,   0,   0, 0, 0);
+	fg.x <- divide.seq(x, 2);
+	fg.y <- (abs(fg.x)<(1/2+1/4))*(pmin(1/2-fg.x, 1/4) + pmin(1/2+fg.x, 1/4));
+	lty <- c(1,1,3);
+	col <- c("red", "blue", "black");
+	plot(x, f.y, type="l", lty=lty[1], col=col[1]
+		, main="h(r,x)=|x|<=r", xlab="x", ylab="y");
+	lines(x, g.y, type="l", lty=lty[2], col=col[2]);
+	lines(fg.x, fg.y, type="l", lty=lty[3], col=col[3]);
+	legend(0.3 * max(x), 0.9 * max(f.y, g.y), c("y=h(1/2)", "y=h(1/4)", "y=h(1/2)*h(1/4)"), lty=lty, col=col);
 }
 
 test.convolution();

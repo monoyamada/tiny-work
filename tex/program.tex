@@ -64,8 +64,7 @@ We denote $\loner\subset\rmapr$ as the space of the followings:
 \begin{equation}\begin{split}
 	\loner &= \set{f\in\rmapr\bou \int_{x\in\mybf{R}}\zettai{fx} < \infty}
 \end{split}\end{equation}
-. 
-The $\loner$ is closed under $+$ and $*$.
+. The $\loner$ is closed under $+$ and $*$.
 \begin{equation}\begin{split}
 	\intallr{x}(f.+g)x &= \kakko{\intallr{x}fx}.+ \kakko{\intallr{x}gx} \\
 		&\le \kakko{\intallr{x}\zettai{fx}}.+ \kakko{\intallr{x}\zettai{gx}} \\
@@ -84,6 +83,23 @@ Where we use the following inequality to derive the second inequality.
 Note that all non-zero constant maps are not elements of $\loner$,
 especially $1\not\in\loner$. 
 Therefore, $*$ dose not have identity $1$ in the $\loner$.
+The lack of identity is owing to non-compactness of base manifold.
+If we consider the space $\loner_\Lambda$:
+\begin{equation}\begin{split}
+	\loner_\Lambda = \set{f\in\loner\bou fx=0 \text{ for all }\Lambda<\zettai{x}}
+\end{split}\end{equation}
+. All constant maps $\set{c.*h(\Lambda,x)}_{c\in\myop{R}}$ are elements of 
+$\loner_\Lambda$, and $h(\Lambda,x)$ is an identity of $*$.
+Where $h$ is the boxcar function:
+\begin{equation}\begin{split}\label{eq:boxcar}
+	h: \myop{R}\times\myop{R} &\to \myop{R} \\
+	(r, x) &\mapsto \begin{cases}
+		1 & \text{iff }\zettai{x}<r \\
+		0 & \text{otherwise} \\
+		\end{cases} \\
+\end{split}\end{equation}
+. 
+This definition of boxcar function may differ from the standard definition.
 
 We define another multiplication beside $*$.
 \begin{definition}[Convolution]
@@ -102,10 +118,10 @@ The convolution satisfies the folllowing properties:
 	\begin{proof}
 		by changing variable of integration.
 		\begin{equation*}\begin{split}
-			\intallr{z}\kakko{\kakko{f.\sqcup g}\kakko{x.-z}}.*\kakko{hz}
+			\intallr{z}\kakko{\kakko{f.\sqcap g}\kakko{x.-z}}.*\kakko{hz}
 				&= \intallr{y}\intallr{z}\kakko{f\kakko{x.-y.-z}}.*\kakko{gy}.*\kakko{hz} \\
 				&= \intallr{y}\intallr{z}\kakko{f\kakko{x.-y}}.*\kakko{g\kakko{y.-z}}.*\kakko{hz} \\
-				&= \intallr{y}\kakko{f\kakko{x.-y}}.*\kakko{\kakko{g\sqcup h}y} \\
+				&= \intallr{y}\kakko{f\kakko{x.-y}}.*\kakko{\kakko{g\sqcap h}y} \\
 		\end{split}\end{equation*}
 	\end{proof}
 \item commutative $f\sqcap g = g\sqcap f$
@@ -118,8 +134,44 @@ The convolution satisfies the folllowing properties:
 	\end{proof}
 \end{itemize}
 .
-The $\loner$ is closed also under $\sqcup$, and $\sqcup$ also dose not
+The $\loner$ is closed also under $\sqcap$, and $\sqcap$ also dose not
 have identity in the $\loner$.
+
+Let calculate $\sqcap$ for boxcar functions\eqref{eq:boxcar}.
+\begin{equation}\begin{split}
+	\kakko{h_{r_1}.\sqcap h_{r_2}}x 
+		&= \intallr{y}\kakko{h_{r_1}\kakko{x.-y}}.*\kakko{h_{r_2}y} \\
+		&= \intallr{y}\kakko{-r_1.+x\le y\le r_1.+x}\text{ and }\kakko{-r_2\le y\le r_2} \\
+\end{split}\end{equation}
+The integration is given by the intersection of the ranges
+$-r_1.x\le r_1.+x$ and $-r_2\le r_2$, the intersection is given by the
+shuffle product of these ranges.
+\begin{equation}\begin{split}
+	&\intallr{y}\kakko{-r_1.+x\le y\le r_1.+x}\text{ and }\kakko{-r_2\le y\le r_2} \\
+	&=\begin{cases}
+		-r_1.+x\le r_1.+x\le -r_2\le r_2 &\implies 0 \\
+		-r_2\le r_2\le -r_1.+x\le r_1.+x &\implies 0 \\
+		-r_1.+x\le -r_2\le r_1.+x\le r_2 &\implies r_1.+r_2.+x \\
+		-r_2\le -r_1.+x\le r_2\le r_1.+x &\implies r_1.+r_2.-x \\
+		-r_1.+x\le -r_2\le r_2\le r_1.+x &\implies 2.*r_2 \\
+		-r_2\le -r_1.+x\le r_1.+x\le r_2 &\implies 2.*r_1 \\
+		\end{cases} \\
+	&=\begin{cases}
+		r_1.+r_2 \le  \zettai{x} &\implies 0 \\
+		\zettai{r_1.-r_2} \le \zettai{x} \le r_1.+r_2 &\implies r_1.+r_2.-x \\
+		\zettai{x} \le  \zettai{r_1.-r_2} &\implies 2.*\min(r_1,r_2) \\
+		\end{cases} \\
+\end{split}\end{equation}
+Finally, we get the followings:
+\begin{equation}\begin{split}
+	\kakko{h_{r_1}.\sqcap h_{r_2}}x 
+		&=\begin{cases}
+			0 & \text{case } r_1.+r_2 \le \zettai{x} \\
+			r_1.+r_2.-x & \text{case } \zettai{r_1.-r_2} \le \zettai{x} \le r_1.+r_2 \\
+			2.*\min(r_1,r_2) & \text{case } \zettai{x} \le  \zettai{r_1.-r_2} \\
+			\end{cases} \\
+\end{split}\end{equation}
+.
 
 \subsection{Words}
 \begin{definition}[Free-monoid]
