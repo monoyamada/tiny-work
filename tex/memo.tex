@@ -1,5 +1,160 @@
 \section{Memo}\label{sec:memorandom}
 
+\subsection{Convolution}
+\newcommand{\rmapr}{M\mybf{R}}
+\newcommand{\loner}{L\mybf{R}}
+\newcommand{\intallr}[1]{\int_{{#1}\in\mybf{R}}}
+We use the standard notation to represent the image of map. 
+For example we denote $g(x)f(x)$ instead of $*(f,g)(x,x)$.
+
+Let $\rmapr$ be a set of all maps from $\mybf{R}$ to $\mybf{R}$.
+We can define the structure of ring on $\rmapr$ from the target space 
+ring structure $(\mybf{R},+,0,*,1)$.
+\begin{equation}\begin{split}
+	(f+g)x &= f(x)+g(x) \\
+	(f*g)x &= f(x)*g(x) \\
+\end{split}\end{equation}
+We denote $\loner\subset\rmapr$ as the space of the followings:
+\begin{equation}\begin{split}
+	\loner &= \set{f\in\rmapr\bou \int_{x\in\mybf{R}}\zettai{f(x)} < \infty}
+\end{split}\end{equation}
+. The $\loner$ is closed under $+$ and $*$.
+\begin{equation}\begin{split}
+	\intallr{x}(f+g)(x) &= \kakko{\intallr{x}f(x)}+ \kakko{\intallr{x}g(x)} \\
+		&\le \kakko{\intallr{x}\zettai{f(x)}}+ \kakko{\intallr{x}\zettai{g(x)}} \\
+		& < \infty \\
+	\intallr{x}(f*g)x &= \kakko{\intallr{x}f(x)g(x)} \\
+		&\le \kakko{\intallr{x}\zettai{f(x)}}* \kakko{\intallr{x}\zettai{g(x)}} \\
+		& < \infty \\
+\end{split}\end{equation}
+Where we use the following inequality to derive the second inequality.
+\begin{equation}\begin{split}
+	(a*b)+(c*d) 
+		&\le \zettai{a*b}+\zettai{c*d} \\
+		&\le \kakko{\zettai{a}+\zettai{c}}*\kakko{\zettai{b}+\zettai{d}} \\
+		&\text{for all }a,b,c,d\in\mybf{R} \\
+\end{split}\end{equation}
+Note that all non-zero constant maps are not elements of $\loner$,
+especially $1\not\in\loner$. 
+Therefore, $*$ dose not have identity $1$ in the $\loner$.
+The lack of identity is owing to non-compactness of base manifold.
+If we consider the space $\loner_\Lambda$:
+\begin{equation}\begin{split}
+	\loner_\Lambda = \set{f\in\loner\bou f(x)=0 \text{ for all }\Lambda<\zettai{x}}
+\end{split}\end{equation}
+. All constant maps $\set{c*h(\Lambda,x)}_{c\in\myop{R}}$ are elements of 
+$\loner_\Lambda$, and $h(\Lambda,x)$ is an identity of $*$.
+Where $h$ is the boxcar function:
+\begin{equation}\begin{split}\label{eq:boxcar}
+	h: \myop{R}\times\myop{R} &\to \myop{R} \\
+	(r, x) &\mapsto \begin{cases}
+		1 & \text{iff }\zettai{x}<r \\
+		0 & \text{otherwise} \\
+		\end{cases} \\
+\end{split}\end{equation}
+. 
+This definition of the boxcar function may differ from the standard definition.
+
+We define another multiplication beside $*$.
+\begin{definition}[Convolution]
+We define the map $\sqcap$ as the followings:
+\begin{equation}\begin{split}
+	\sqcap: \rmapr\times\rmapr &\to \rmapr \\
+	(f,g) &\mapsto (f\sqcap g) \text{ such that} \\
+	& (f\sqcap g)(x) = \int_{y\in\mybf{R}}f(x-y)g(y) \\
+\end{split}\end{equation}
+. The map $\sqcap$ is called convolution.
+\end{definition}
+The convolution satisfies the folllowing properties:
+\begin{itemize}
+\item distritutive $f\sqcap(g+ h) = (f\sqcap g)+ (f\sqcap h)$
+\item associative $(f\sqcap g)\sqcap h = f\sqcap(g\sqcap h)$
+	\begin{proof}
+		by changing variable of integration.
+		\begin{equation*}\begin{split}
+			\intallr{z}\kakko{f\sqcap g}\kakko{x-z}*\kakko{hz}
+				&= \intallr{y}\intallr{z}f(x-y-z)*g(y)*h(z) \\
+				&= \intallr{y}\intallr{z}f(x-y)*g(y-z)*h(z) \\
+				&= \intallr{y}f(x-y)*(g\sqcap h)(y) \\
+		\end{split}\end{equation*}
+	\end{proof}
+\item commutative $f\sqcap g = g\sqcap f$
+	\begin{proof}
+		by changing variable of integration.
+		\begin{equation*}\begin{split}
+			\intallr{y}f(x-y)*g(y) &= \intallr{y}f(y)*g(x-y) \\
+		\end{split}\end{equation*}
+	\end{proof}
+\end{itemize}
+.
+The $\loner$ is closed also under $\sqcap$, and $\sqcap$ also dose not
+have identity in the $\loner$.
+
+Let examine $\sqcap$ for boxcar functions\eqref{eq:boxcar}.
+\begin{equation}\begin{split}
+	\kakko{h_{r_1}\sqcap h_{r_2}}x 
+		&= \intallr{y}h_{r_1}(x-y)*h_{r_2}(y) \\
+		&= \intallr{y}\kakko{-r_1+x\le y\le r_1+x}\text{ and }\kakko{-r_2\le y\le r_2} \\
+\end{split}\end{equation}
+The integration is given by the intersection of the ranges
+$-r_1.x\le r_1+x$ and $-r_2\le r_2$, the intersection is given by the
+shuffle product of these ranges.
+\begin{equation}\begin{split}
+	&\intallr{y}\kakko{-r_1+x\le y\le r_1+x}\text{ and }\kakko{-r_2\le y\le r_2} \\
+	&=\begin{cases}
+		-r_1+x\le r_1+x\le -r_2\le r_2 &\implies 0 \\
+		-r_2\le r_2\le -r_1+x\le r_1+x &\implies 0 \\
+		-r_1+x\le -r_2\le r_1+x\le r_2 &\implies r_1+r_2+x \\
+		-r_2\le -r_1+x\le r_2\le r_1+x &\implies r_1+r_2-x \\
+		-r_1+x\le -r_2\le r_2\le r_1+x &\implies 2*r_2 \\
+		-r_2\le -r_1+x\le r_1+x\le r_2 &\implies 2*r_1 \\
+		\end{cases} \\
+	&=\begin{cases}
+		r_1+r_2 \le  \zettai{x} &\implies 0 \\
+		\zettai{r_1-r_2} \le \zettai{x} \le r_1+r_2 &\implies r_1+r_2-x \\
+		\zettai{x} \le  \zettai{r_1-r_2} &\implies 2*\min(r_1,r_2) \\
+		\end{cases} \\
+\end{split}\end{equation}
+Finally, we get the followings:
+\begin{equation}\begin{split}
+	\kakko{h_{r_1}\sqcap h_{r_2}}x 
+		&=\begin{cases}
+			0 & \text{case } r_1+r_2 \le \zettai{x} \\
+			r_1+r_2-x & \text{case } \zettai{r_1-r_2} \le \zettai{x} \le r_1+r_2 \\
+			2*\min(r_1,r_2) & \text{case } \zettai{x} \le  \zettai{r_1-r_2} \\
+			\end{cases} \\
+\end{split}\end{equation}
+. 
+
+\begin{observe}[Quantom deformation]
+Let be $\mu$ a gaussin function:
+\begin{equation}\begin{split}
+	\mu:\mybf{R}\times\mybf{R} &\to \mybf{R} \\
+		(t,x) &\mapsto \kakko{\frac{1}{2 \pi t}}^{\frac{1}{2}}\exp\kakko{-\frac{x^2}{2t}} \\
+\end{split}\end{equation}
+. We define the multiplication $\sqcap_t$ as the followings:
+\begin{equation}\begin{split}\label{eq:t.conv}
+	\sqcap_t: \rmapr\times\rmapr &\to \rmapr \\
+	(f,g) &\mapsto (f\sqcap_t g) \text{ such that} \\
+	& (f\sqcap_tg)(x) = \int_{y\in\mybf{R}}\mu(t,y)*f(x-y)*g(y) \\
+\end{split}\end{equation}
+. The multiplication $\sqcap$ is connected by $\sqcap_t$:
+\begin{equation}\begin{split}\label{eq:conv.deform}
+	f\sqcap g &= \lim_{t\to\infty}(f\sqcap_tg) \\
+\end{split}\end{equation}
+.
+\begin{itemize}
+\item Are \eqref{eq:conv.deform} true?
+\item Dose \eqref{eq:t.conv} satisfies the leibnitz rule for differential?
+\begin{equation}\begin{split}
+	d(f\sqcap_tg) &= \kakko{\kakko{df}\sqcap_tg}+\kakko{f\sqcap_t\kakko{dg}}
+\end{split}\end{equation}
+\item Can we calculate \eqref{eq:t.conv} for general $t$?
+\item Can we generalize \eqref{eq:t.conv} to gauge theory?
+\end{itemize}
+\end{observe}
+
+\subsection{Order and Word}\label{sub:forget}
 \begin{itemize}
 	\item Consider the map $\myop{ord}$
 	\begin{equation}\begin{split}
