@@ -1,3 +1,36 @@
+gaussian <- function(t, x) {
+	(2*pi*t)^(1/2)*exp(-x^2/t/2);
+}
+
+dx1.gaussian <- function(t, x) {
+	-(2*pi*t)^(1/2)*x/t*exp(-x^2/t/2);
+}
+
+dx2.gaussian <- function(t, x) {
+	(2*pi*t)^(1/2)*((x/t)^2-1/t)*exp(-x^2/t/2);
+}
+
+dx.gaussian <- dx1.gaussian 
+
+test.gaussian <- function() {
+	old.par <- par(mfrow=c(2,3));
+	on.exit(par(old.par));
+	xs <- (-200:200) / 20;
+	t <- 1;
+	plot(xs, gaussian(t, xs), type="l");
+	plot(xs, dx1.gaussian(t, xs), type="l");
+	plot(xs, dx2.gaussian(t, xs), type="l");
+	#plot(xs, gaussian(t, 0) + (1/2)*xs^2*dx2.gaussian(t, 0), type="l");
+	t <- 10;
+	plot(xs, gaussian(t, xs), type="l");
+	plot(xs, dx1.gaussian(t, xs), type="l");
+	plot(xs, dx2.gaussian(t, xs), type="l");
+	#plot(xs, gaussian(t, 0) + (1/2)*xs^2*dx2.gaussian(t, 0), type="l");
+}
+
+if (T) {
+	test.gaussian();
+}
 
 if (F) {
 	#sample of approx
@@ -61,7 +94,9 @@ test.convolution <- function() {
 	legend(0.3 * max(x), 0.9 * max(f.y, g.y), c("y=h(1/2)", "y=h(1/4)", "y=h(1/2)*h(1/4)"), lty=lty, col=col);
 }
 
-test.convolution();
+if (F) {
+	test.convolution();
+}
 
 string.trim <- function(x) {
 	usage <- "x must be a character or null";
