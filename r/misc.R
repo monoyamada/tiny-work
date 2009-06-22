@@ -12,6 +12,64 @@ dx2.gaussian <- function(t, x) {
 
 dx.gaussian <- dx1.gaussian 
 
+boxcar <- function(radius, x) {
+	(-radius <= x) & (x < radius);
+}
+
+boxcar.convolve <- function(r1, r2, x) {
+	ind.0 <- which(r1 + r2 <= abs(x));
+	ind.1 <- which(abs(r1 - r2) <= abs(x) & abs(x) < r1 + r2);
+	ind.2 <- which(abs(x) < abs(r1 - r2));
+	x[ind.0] <- 0;
+	x[ind.1] <- r1 + r2 - abs(x[ind.1]);
+	x[ind.2] <- 2 * min(r1, r2);
+	x;
+}
+
+test.boxcar <- function() {
+	old.par <- par(mfrow=c(1,1));
+	on.exit(par(old.par));
+	xs <- (-200:200) / 100;
+	col <- c("red", "blue", "black");
+	lty = c(1, 1, 3);
+	r1 <- 1.0;
+	r2 <- 0.3;
+	plot(xs, boxcar(r1, xs), type="l", col=col[1], lty=lty[1]);
+	lines(xs, boxcar(r2, xs), type="l", col=col[2], lty=lty[2]);
+	lines(xs, boxcar.convolve(r1, r2, xs), type="l", col=col[3], lty=lty[3]);
+}
+
+test.boxcar.1 <- function() {
+	old.par <- par(mfrow=c(1,1));
+	on.exit(par(old.par));
+	xs <- (-2000:2000) / 100;
+	r1 <- 1.0;
+	r2 <- 0.3;
+	ts <- 1:10000 / 100;
+	ys <- sapply(ts, function(t) {
+		f2 <- integrate(lower=0, upper=r1+r2, function(x) {
+			exp(boxcar.convolve(r1, r2, x) / t);
+		});
+		exp(- (r1 + r2) / t) * f2$value;
+	});
+	ys.1.1 <- sapply(ts, function(t) {
+		t(exp(-(abs(r1 - r2))/t) - exp(- (r1 + r2) / t));
+	});
+	ys.1.2 <- sapply(ts, function(t) {
+		abs(r1 - r2) * exp(- (r1 + r2 - 2 * min(r1, r2)) / t);
+	});
+	col <- c("red", "black", "green", "blue");
+	lty = c(1, 1, 3, 3);
+	plot(ts, ys / 2, ylim=range(ys / 2, ys.1.1, ys.1.2), type="l", col=col[1], lty=lty[1]);
+	#lines(ts, ys.1.1 + ys.1.2, type="l", col=col[2], lty=lty[2]);
+	#lines(ts, ys.1.1, type="l", col=col[3], lty=lty[3]);
+	lines(ts, ys.1.2, type="l", col=col[4], lty=lty[4]);
+}
+
+if (T) {
+	test.boxcar.1();
+}
+
 test.gaussian <- function() {
 	old.par <- par(mfrow=c(2,3));
 	on.exit(par(old.par));
@@ -28,7 +86,7 @@ test.gaussian <- function() {
 	#plot(xs, gaussian(t, 0) + (1/2)*xs^2*dx2.gaussian(t, 0), type="l");
 }
 
-if (T) {
+if (F) {
 	test.gaussian();
 }
 

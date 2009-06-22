@@ -1,13 +1,69 @@
 \section{Memo}\label{sec:memorandom}
-
-\subsection{Convolution}
-\newcommand{\rmapr}{M\mybf{R}}
+\newcommand{\rmapr}{M_{\mybf{R}}\mybf{R}}
+\newcommand{\nmapr}{M_{\mybf{R}}\mybf{N}}
+\newcommand{\zmapr}{M_{\mybf{R}}\mybf{Z}}
 \newcommand{\loner}{L\mybf{R}}
 \newcommand{\intallr}[1]{\int_{{#1}\in\mybf{R}}}
+
+\subsection{Measure}
+Let consider the following probability density.
+\begin{equation}\begin{split}
+	\Gamma(t,f,g) &\propto \intallr{a}\exp\kakko{-\frac{d(a, f,g)}{2t}} \\
+	d(a,f,g) &= \intallr{x}\kakko{f\kakko{x+a}-g\kakko{x}}^2 \\
+\end{split}\end{equation}
+\begin{equation}\begin{split}
+	d(a,f,g) &= \beta(0,f,f) + \beta(0,g,g) - 2\beta(a,f,g) \\
+	\beta(a,f,g) &= \intallr{x}f(x+a)g(x) \\
+\end{split}\end{equation}
+Let examine $\beta$ for the boxcar functions. We define the boxcar function
+as the followings.
+\begin{equation}\begin{split}
+	h_r(x) &= \begin{cases}
+		1 & \text{iff} -r\le x< r \\
+		0 & \text{else} \\
+		\end{cases}\\
+\end{split}\end{equation}
+Then we get the followiings.
+\begin{equation}\begin{split}
+	\beta(a,h_r,h_s) &= \intallr{x}(-r\le x+a< r)\text{ and }(-s\le x< s) \\
+		&= \begin{cases}
+			0 & \text{case } r+s\le\zettai{a} \\
+			r+s-\zettai{a} & \text{case } \zettai{r-s}\le\zettai{a}\le r+s \\
+			2\min(r,s) & \text{case } \zettai{a}\le\zettai{r-s} \\
+		\end{cases}\\
+\end{split}\end{equation}
+, then
+\begin{equation}\begin{split}
+	d(a,h_r,h_s) &= 2(r+s) - 2\beta(a,h_r,h_s) \\
+\end{split}\end{equation}
+, then
+\begin{equation}\begin{split}
+	\Gamma(t,h_r,h_s) &\propto \exp\kakko{-\frac{r+s}{t}}\intallr{a}\exp\kakko{\frac{\beta\kakko{a,h_r,h_s}}{t}} \\
+\end{split}\end{equation}
+, then
+\begin{equation}\begin{split}
+	\Gamma(t,h_r,h_s) 
+	&\propto \exp\kakko{-\frac{r+s}{t}}\intallr{a}\exp\kakko{\frac{\beta\kakko{a,h_r,h_s}}{t}} \\
+	&= 2\exp\kakko{-\frac{r+s}{t}}\int_{a=0}^{\infty}\exp\kakko{\frac{\beta\kakko{a,h_r,h_s}}{t}} \\
+	&= 2\exp\kakko{-\frac{r+s}{t}} \int_{a=r+s}^\infty \\
+		&\;+ 2\exp\kakko{-\frac{r+s}{t}} \int_{a=\zettai{r-s}}^{r+s} \exp\kakko{\frac{r+s-\zettai{a}}{t}} \\
+		&\;+ 2\exp\kakko{-\frac{r+s}{t}} \int_{a=0}^{\zettai{r-s}}\exp\kakko{\frac{2\min(r,s)}{t}} \\
+	&= 2\exp\kakko{-\frac{r+s}{t}}\kakko{\Lambda - \kakko{r+s}} \\
+		&\;+ 2t\kakko{\exp\kakko{-\frac{\zettai{r-s}}{t}}-\exp\kakko{-\frac{r+s}{t}}} \\
+		&\;+ 2\exp\kakko{-\frac{r+s-2\min(r,s)}{t}}\zettai{r-s} \\
+\end{split}\end{equation}
+\begin{todo}
+The above calculation may differ factor 2 from correct calculation. 
+\begin{equation}\begin{split}
+	\text{correct} &= 2\text{calculation}
+\end{split}\end{equation}
+\end{todo}
+
+\subsection{Convolution}
 We use the standard notation to represent the image of map. 
 For example we denote $g(x)f(x)$ instead of $*(f,g)(x,x)$.
 
-Let $\rmapr$ be a set of all maps from $\mybf{R}$ to $\mybf{R}$.
+Let $\rmapr$ be the set of all maps from $\mybf{R}$ to $\mybf{R}$.
 We can define the structure of ring on $\rmapr$ from the target space 
 ring structure $(\mybf{R},+,0,*,1)$.
 \begin{equation}\begin{split}
@@ -48,7 +104,7 @@ Where $h$ is the boxcar function:
 \begin{equation}\begin{split}\label{eq:boxcar}
 	h: \myop{R}\times\myop{R} &\to \myop{R} \\
 	(r, x) &\mapsto \begin{cases}
-		1 & \text{iff }\zettai{x}<r \\
+		1 & \text{iff }-r\le x<r \\
 		0 & \text{otherwise} \\
 		\end{cases} \\
 \end{split}\end{equation}
