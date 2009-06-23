@@ -40,34 +40,70 @@ test.boxcar <- function() {
 }
 
 test.boxcar.1 <- function() {
-	old.par <- par(mfrow=c(1,1));
-	on.exit(par(old.par));
 	xs <- (-2000:2000) / 100;
 	r1 <- 1.0;
 	r2 <- 0.3;
 	ts <- 1:10000 / 100;
-	ys <- sapply(ts, function(t) {
+	ys0 <- sapply(ts, function(t) {
 		f2 <- integrate(lower=0, upper=r1+r2, function(x) {
-			exp(boxcar.convolve(r1, r2, x) / t);
+			d <- 2 * (r1 + r2) - 2 * boxcar.convolve(r1, r2, x);
+			exp(-d / 2 / t);
 		});
-		exp(- (r1 + r2) / t) * f2$value;
+		f2$value;
 	});
-	ys.1.1 <- sapply(ts, function(t) {
-		t(exp(-(abs(r1 - r2))/t) - exp(- (r1 + r2) / t));
+	ys.1 <- sapply(ts, function(t) {
+		t * (exp(-abs(r1 - r2) / t) - exp(-(r1 + r2) / t));
 	});
-	ys.1.2 <- sapply(ts, function(t) {
-		abs(r1 - r2) * exp(- (r1 + r2 - 2 * min(r1, r2)) / t);
+	ys.2 <- sapply(ts, function(t) {
+		abs(r1 - r2) * exp(-abs(r1 - r2) / t);
 	});
+	ys <- ys.1 + ys.2;
+
+	old.par <- par(mfrow=c(5,1));
+	on.exit(par(old.par));
+
 	col <- c("red", "black", "green", "blue");
 	lty = c(1, 1, 3, 3);
-	plot(ts, ys / 2, ylim=range(ys / 2, ys.1.1, ys.1.2), type="l", col=col[1], lty=lty[1]);
-	#lines(ts, ys.1.1 + ys.1.2, type="l", col=col[2], lty=lty[2]);
+	plot(ts, ys0, ylim=range(ys, ys.1, ys.2, ys), log="x"
+		, type="l", col=col[1], lty=lty[1]);
+	lines(ts, ys, type="l", col=col[2], lty=lty[2]);
 	#lines(ts, ys.1.1, type="l", col=col[3], lty=lty[3]);
-	lines(ts, ys.1.2, type="l", col=col[4], lty=lty[4]);
+	#lines(ts, ys.1.2, type="l", col=col[4], lty=lty[4]);
+
+	ys.g <- ys / ts^(1/2);
+	plot(ts, ys.g, log="x", type="l");
+
+	ys.p <- ys.g * exp(-ts);
+	plot(ts, ys.p, log="x", type="l");
+
+	alp <- function(x, t) {
+		t.sqrt <- sqrt(t);
+		(x / t.sqrt + t.sqrt) * exp(- x / t);
+	}
+
+	ys.a <- alp(abs(r1-r2), ts) - alp(r1+r2, ts);
+	plot(ts, ys.a, log="x", type="l");
+
+	ys.b <- ys.a * exp(-ts);
+	plot(ts, ys.b, log="x", type="l");
+}
+
+if (F) {
+	test.boxcar.1();
+}
+
+test.misc.1 <- function() {
+	fnc <- function(x, y) {
+		(x / sqrt(y) + sqrt(y)) * exp(-(x / y + y));
+	}
+	xs <- 0:500 / 100;
+	ys <- 1:500 / 100;
+	zs <- outer(xs, ys, fnc);
+	persp(xs, ys, zs, theta=30, phi=30, expand=0.5, col=rainbow(50), border=NA);
 }
 
 if (T) {
-	test.boxcar.1();
+	test.misc.1();
 }
 
 test.gaussian <- function() {

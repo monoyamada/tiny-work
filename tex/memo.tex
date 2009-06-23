@@ -6,24 +6,26 @@
 \newcommand{\intallr}[1]{\int_{{#1}\in\mybf{R}}}
 
 \subsection{Measure}
-Let consider the following probability density.
-\begin{equation}\begin{split}
-	\Gamma(t,f,g) &\propto \intallr{a}\exp\kakko{-\frac{d(a, f,g)}{2t}} \\
+Let consider the following gaussian function.
+\begin{equation}\begin{split}\label{eq:f.gauss}
+	\gamma(t,f,g) &= \frac{1}{\sqrt{2\pi t}}\intallr{a}\exp\kakko{-\frac{d(a, f,g)}{2t}} \\
 	d(a,f,g) &= \intallr{x}\kakko{f\kakko{x+a}-g\kakko{x}}^2 \\
-\end{split}\end{equation}
-\begin{equation}\begin{split}
-	d(a,f,g) &= \beta(0,f,f) + \beta(0,g,g) - 2\beta(a,f,g) \\
+		&= \beta(0,f,f) + \beta(0,g,g) - 2\beta(a,f,g) \\
 	\beta(a,f,g) &= \intallr{x}f(x+a)g(x) \\
 \end{split}\end{equation}
-Let examine $\beta$ for the boxcar functions. We define the boxcar function
-as the followings.
+Of course, the function $\gamma(t,f,g)$ is not probability density w.r.t. the variable $f$.
+We shall consider the mesure in the later.
+Let examine $\gamma$ for the boxcar functions.
+We define the boxcar function as the followings.\footnote {
+	This definition of the boxcar function may differ from the standard definition.
+}
 \begin{equation}\begin{split}
 	h_r(x) &= \begin{cases}
 		1 & \text{iff} -r\le x< r \\
 		0 & \text{else} \\
 		\end{cases}\\
 \end{split}\end{equation}
-Then we get the followiings.
+We get the followiings for the boxcar functions $h_r$ and $h_s$.
 \begin{equation}\begin{split}
 	\beta(a,h_r,h_s) &= \intallr{x}(-r\le x+a< r)\text{ and }(-s\le x< s) \\
 		&= \begin{cases}
@@ -35,28 +37,53 @@ Then we get the followiings.
 , then
 \begin{equation}\begin{split}
 	d(a,h_r,h_s) &= 2(r+s) - 2\beta(a,h_r,h_s) \\
+		&= \begin{cases}
+			2(r+s) & \text{case } r+s\le\zettai{a} \\
+			2\zettai{a} & \text{case } \zettai{r-s}\le\zettai{a}\le r+s \\
+			2\zettai{r-s} & \text{case } \zettai{a}\le\zettai{r-s} \\
+			\end{cases}
 \end{split}\end{equation}
-, then
+, then owing to symmetricity $d(a,\dots)=d(-a,\dots)$
 \begin{equation}\begin{split}
-	\Gamma(t,h_r,h_s) &\propto \exp\kakko{-\frac{r+s}{t}}\intallr{a}\exp\kakko{\frac{\beta\kakko{a,h_r,h_s}}{t}} \\
+	\gamma(t,h_r,h_s) 
+		&= \sqrt{\frac{2}{\pi t}}\int_{a=0}^{\infty}\exp\kakko{-\frac{d(a,h_r,h_s)}{2t}} \\ 
+	\sqrt{\frac{\pi t}{2}}\gamma(t,h_r,h_s) 
+		&= \int_{a=0}^{\infty}\exp\kakko{-\frac{d(a,h_r,h_s)}{2t}} \\ 
+		&= \int_{a=0}^{\zettai{r-s}}\exp\kakko{-\frac{\zettai{r-s}}{t}}
+			+ \int_{a=\zettai{r-s}}^{r+s}\exp\kakko{-\frac{a}{t}}
+			+ \int_{a=r+s}^{\Lambda} \exp\kakko{-\frac{r+s}{t}} \\
+		&= \zettai{r-s}\exp\kakko{-\frac{\zettai{r-s}}{t}} \\
+			&\quad + t\kakko{\exp\kakko{-\frac{\zettai{r-s}}{t}} - \exp\kakko{-\frac{r+s}{t}}} \\
+			&\quad + \kakko{\Lambda - \kakko{r+s}} \exp\kakko{-\frac{r+s}{t}} \\
 \end{split}\end{equation}
-, then
+, where $\Lambda$ is cutoff paramter of translation group $\mybf{R}$.
+This result can be summarized as the followings.
 \begin{equation}\begin{split}
-	\Gamma(t,h_r,h_s) 
-	&\propto \exp\kakko{-\frac{r+s}{t}}\intallr{a}\exp\kakko{\frac{\beta\kakko{a,h_r,h_s}}{t}} \\
-	&= 2\exp\kakko{-\frac{r+s}{t}}\int_{a=0}^{\infty}\exp\kakko{\frac{\beta\kakko{a,h_r,h_s}}{t}} \\
-	&= 2\exp\kakko{-\frac{r+s}{t}} \int_{a=r+s}^\infty \\
-		&\;+ 2\exp\kakko{-\frac{r+s}{t}} \int_{a=\zettai{r-s}}^{r+s} \exp\kakko{\frac{r+s-\zettai{a}}{t}} \\
-		&\;+ 2\exp\kakko{-\frac{r+s}{t}} \int_{a=0}^{\zettai{r-s}}\exp\kakko{\frac{2\min(r,s)}{t}} \\
-	&= 2\exp\kakko{-\frac{r+s}{t}}\kakko{\Lambda - \kakko{r+s}} \\
-		&\;+ 2t\kakko{\exp\kakko{-\frac{\zettai{r-s}}{t}}-\exp\kakko{-\frac{r+s}{t}}} \\
-		&\;+ 2\exp\kakko{-\frac{r+s-2\min(r,s)}{t}}\zettai{r-s} \\
+	\sqrt{\frac{\pi}{2}}\gamma(t,h_r,h_s) 
+		&= \alpha_1(\zettai{r-s}, t) - \alpha_1(r+s, t) + \frac{\Lambda}{\sqrt{t}}\exp\kakko{-\frac{r+s}{t}} \\
+	\alpha_1(x, t) &= \kakko{\frac{x}{\sqrt{t}} + \sqrt{t}}\exp\kakko{-\frac{x}{t}} \\
 \end{split}\end{equation}
-\begin{todo}
-The above calculation may differ factor 2 from correct calculation. 
+The variable $t$ in the formula \eqref{eq:f.gauss}  is a variance of normal
+distribution. Since we do not know the apriori variance, we sum all variances
+with the following formula.
 \begin{equation}\begin{split}
-	\text{correct} &= 2\text{calculation}
+	\varphi(s,f,g) &= \int_{t=0}^{\infty}\gamma(t,f,g)\eta(s,t) \\
+	\eta(s,t) &= s\exp(-st) \\
 \end{split}\end{equation}
+If $\gamma(t,f,g)$ is normalized for all $t$, e.g.
+\begin{equation}\begin{split}
+	1 &= \int_{f\in\set{\rmapr}}\mu(f)\gamma(t,f,g) \\
+\end{split}\end{equation}
+, $\varphi(s,f,g)$ is also normalized.
+Anyway, $\varphi(s,h_r,h_s)$ can be written as the followings.
+\begin{equation}\begin{split}
+	\varphi(t_0,h_r,h_s) &= \sqrt{\frac{2}{\pi}}\int_{t=0}^{t_0}f(t_0,t,h_r,h_s) \\
+	f(t_0,t,h_r,h_s) &= \alpha_2(\zettai{r-s},t_0,t) - \alpha_2(r+s,t_0,t) + \frac{\Lambda}{\sqrt{t}}\exp\kakko{-\kakko{\frac{r+s}{t}+t_0t}} \\
+	\alpha_2(x,s,t) &= \kakko{\frac{x}{\sqrt{t}} + \sqrt{t}}\exp\kakko{-\kakko{\frac{x}{t}+st}} \\
+\end{split}\end{equation}
+\begin{todo}[symmetry]
+The function $\alpha_2$ in the above formula is seemed to have symmetry w.r.t.
+$x$ and $t$ when $s=1$. Check it.
 \end{todo}
 
 \subsection{Convolution}
