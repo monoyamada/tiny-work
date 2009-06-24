@@ -5,7 +5,56 @@
 \newcommand{\loner}{L\mybf{R}}
 \newcommand{\intallr}[1]{\int_{{#1}\in\mybf{R}}}
 
-\subsection{Measure}
+\subsection{Try and Error}
+We denote the followings:
+\begin{itemize}
+\item $I_R$ as the interval $\set{x\in\mybf{R}\bou \zettai{x}< R}$,
+\item $F_R$ as the set of maps $\set{I_R\to \mybf{R}}$,
+\item $G$ as a Lie group on $\mybf{R}$,
+\item $\beta$ as the map
+\begin{equation}\begin{split}
+	\beta:G\times F_R\times F_R &\to \mybf{R} \\
+		(g,f_1,f_2) &\mapsto \int_{x\in g(I_R)\cap I_R} (f_1\circ g)(x)f_2(x) \\
+\end{split}\end{equation}
+\end{itemize}
+. The map $\beta$ is quasi-symmetric $\beta(g,f_1,f_2)=\beta(g^{-1},f_2,f_1)$.
+\begin{proof}
+We get the following equation by changing integration variable.
+\begin{equation}\begin{split}
+	\beta(g,f_1,f_2) &= \int_{x\in g(I_R)\cap I_R} (f_1\circ g)(x)f_2(x) \\
+		&= \int_{y\in I_R)\cap g^{-1}(I_R)} f_1(y)(f_2\circ g^{-1})(y) \\
+		&= \beta(g^{-1},f_2,f_1) \\
+\end{split}\end{equation}
+\end{proof}
+We define the map $\beta_G$ as the followings:
+\begin{equation}\begin{split}
+	\beta:F_R\times F_R &\to \mybf{R} \\
+		(f_1,f_2) &\mapsto \int_{g\in G} \beta(g,f_1,f_2) \\
+\end{split}\end{equation}
+. The amp $\beta_G$ is symmetric $\beta_G(f_1,f_2)=\beta_G(f_2,f_1)$.
+
+Let examine in the case of $G$ being the translation on $\mybf{R}$.
+Let $g_a:x\mapsto x+a$. The integration region is given as the followings:
+\begin{equation}\begin{split}
+	g_a((I_R)\cap I_R &= \set{x\in\mybf{R}\bou \zettai{x+a}< R \text{ and } \zettai{x}< R} \\
+	&= \begin{cases}
+		\emptyset & \text{case } 2R\le \zettai{a} \\
+		\bakko{-R, R-a} & \text{case } 0\le a\le 2R \\
+		\bakko{-R-a, R} & \text{case } -2R\le a\le 0 \\
+		\end{cases} \\
+\end{split}\end{equation}
+. Then 
+\begin{equation}\begin{split}
+	\beta(g_a,f_1,f_2) &= \begin{cases}
+		0 & \text{case } 2R\le \zettai{a} \\
+		\int_{x=-R}^{R-a}f_1(x+a)f_2(x) & \text{case } 0\le a\le 2R \\
+		\int_{x=-R-a}^{R}f_1(x+a)f_2(x) & \text{case } -2R\le a\le 0 \\
+		\end{cases} \\
+	\beta_G(f_1,f_2) &= \kakko{\int_{a=0}^{2R}\int_{x=-R}^{R-a}+\int_{a=-2R}^{0}\int_{x=-R-a}^{R}}f_1(x+a)f_2(x) \\
+	&= \int_{x=-R}^{R}\int_{a=-R-x}^{R-x}f_1(x+a)f_2(x) \\
+\end{split}\end{equation}
+
+\subsection{Backup}
 Let consider the following gaussian function.
 \begin{equation}\begin{split}\label{eq:f.gauss}
 	\gamma(t,f,g) &= \frac{1}{\sqrt{2\pi t}}\intallr{a}\exp\kakko{-\frac{d(a, f,g)}{2t}} \\
