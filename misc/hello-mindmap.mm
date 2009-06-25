@@ -27,6 +27,10 @@
 </node>
 <node CREATED="1245915373220" ID="Freemind_Link_982092478" MODIFIED="1245915377931" TEXT="&#x30d5;&#x30a1;&#x30c3;&#x30b7;&#x30e7;&#x30f3;">
 <node CREATED="1245917213756" ID="Freemind_Link_450570569" MODIFIED="1245917246844" TEXT="&#x30d3;&#x30b8;&#x30cd;&#x30b9;&#x3067;&#x306f;&#x91cd;&#x8981;"/>
+<node CREATED="1245922665814" ID="Freemind_Link_1468801025" MODIFIED="1245922682235" TEXT="&#x8cc7;&#x6e90;&#x306e;&#x96c6;&#x4e2d;">
+<node CREATED="1245922701633" ID="Freemind_Link_595650952" MODIFIED="1245922720868" TEXT="&#x751f;&#x7523;&#x6027;&#x306e;&#x5411;&#x4e0a;"/>
+<node CREATED="1245922723153" ID="Freemind_Link_432501217" MODIFIED="1245922752762" TEXT="&#x4f55;&#x3092;&#x751f;&#x7523;&#x3059;&#x308b;&#x304b;&#x304c;&#x91cd;&#x8981;"/>
+</node>
 </node>
 </node>
 <node CREATED="1245915121697" ID="Freemind_Link_1834368664" MODIFIED="1245915145035" POSITION="right" TEXT="atmark&#x3067;&#x306e;&#x8aac;&#x660e;">
@@ -58,6 +62,7 @@
 <node CREATED="1245916914405" ID="Freemind_Link_1788475690" MODIFIED="1245916954404" TEXT="&#x5358;&#x8a9e;&#x306e;&#x610f;&#x5473;&#x3092;&#x77e5;&#x308b;&#x5fc5;&#x8981;&#x304c;&#x306a;&#x3044;"/>
 <node CREATED="1245916971353" ID="Freemind_Link_1365684457" MODIFIED="1245917032188" TEXT="&#x5c02;&#x9580;&#x5bb6;&#x306b;&#x4efb;&#x305b;&#x308b;"/>
 <node CREATED="1245917077826" ID="Freemind_Link_1018585023" MODIFIED="1245917087186" TEXT="&#x5358;&#x8a9e;&#x304b;&#x3089;&#x5c02;&#x9580;&#x5bb6;&#x3092;&#x691c;&#x7d22;"/>
+<node CREATED="1245922782862" ID="Freemind_Link_1854894204" MODIFIED="1245922842860" TEXT="&#x4eba;&#x306e;&#x30cd;&#x30c3;&#x30c8;&#x30ef;&#x30fc;&#x30af;"/>
 </node>
 </node>
 </node>
