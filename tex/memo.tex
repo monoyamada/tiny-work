@@ -5,6 +5,35 @@
 \newcommand{\loner}{L\mybf{R}}
 \newcommand{\intallr}[1]{\int_{{#1}\in\mybf{R}}}
 
+\subsection{Note for the scale space theory}
+This section is a note for the article of the scale space theory at wikipedia
+\url{http://en.wikipedia.org/wiki/Scale-space|Scale space}.
+
+\begin{definition}[Scale space axiom]
+We denote $F$ as $F=\set{\mybf{R}\to\mybf{R}}$.
+The map $g\in\set{\mybf{R}\times F\to F}$ is called begin satisfied 
+scale-space axiom, if $g$ is satisfied the following properties:
+\begin{itemize}
+\item linearlity
+\begin{equation}\begin{split}
+	g(t,f_1+f_2) &= g(t,f_1)+g(t,f_2) \\
+	g(t,af) &= ag(t,f) \\
+\end{split}\end{equation}
+\item translation invariant
+Let $\gamma_a$ for all $a\in\mybf{R}$ be the followings:
+\begin{equation}\begin{split}
+	\gamma_a: F &\to F \\
+		f &\mapsto \gamma_a(f) \text{ such that } \gamma_a(f)(x) = f(x+a) \\ 
+\end{split}\end{equation}
+. $g$ satisfies the followings commutative diagram for all $a\in\mybf{R}$:
+\begin{equation}\xymatrix{
+	F \ar[r]^{\gamma_a} \ar[d]^{g} & F \ar[d]^{g} \\
+	F \ar[r]^{\gamma_a} & F \\
+}\end{equation}
+.
+\end{itemize}
+\end{definition}
+
 \subsection{Try and Error}
 We denote the followings:
 \begin{itemize}
