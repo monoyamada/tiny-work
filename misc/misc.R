@@ -1,30 +1,111 @@
-gaussian <- function(t, x) {
-	(2*pi*t)^(1/2)*exp(-x^2/t/2);
+source("utils.R");
+
+test.approx.1 <- function() {
+	integral <- function(xs, ys) {
+		n <- length(xs);
+		dx <- xs[-1] - xs[-n];
+		ys <- ys[-1] + ys[-n];
+		sum(dx * ys) / 2;
+	}
+	approx <- function(xs, ys, ns) {
+		cbind(c(xs[1]), c(integrate));
+	}
+
+	xs <- -100:100 / 10;
+	xs.d <- xs[-1] - xs[-length(xs)];
+	xs.d <- c(xs.d, mean(xs.d));
+	shift <- 2;
+	t.1 <- 1;
+	t.2 <- 2;
+	fnc <- function(x) {
+		y.1 <- gaussian(t.1, x + shift);
+		y.2 <- gaussian(t.2, x - shift);
+		y.1 + y.2;
+	}
+	dx1.fnc <-  function(x) {
+		y.1 <- dx1.gaussian(t.1, x + shift);
+		y.2 <- dx1.gaussian(t.2, x - shift);
+		y.1 + y.2;
+	}
+	dx2.fnc <-  function(x) {
+		y.1 <- dx2.gaussian(t.1, x + shift);
+		y.2 <- dx2.gaussian(t.2, x - shift);
+		y.1 + y.2;
+	}
+	peaks <- function(xs) {
+		xn <- length(xs);
+		dx1 <- c(xs[-1], 0) - xs;
+		dx2 <- xs - c(0, xs[-xn]);
+		which(dx1 * dx2 < 0);
+	}
+
+	old.par <- par(mfrow=c(3,3));
+	on.exit(par(old.par));
+	{
+		ys <- fnc(xs);
+		plot(xs, ys, type="l");
+
+		ys.c <- sapply(xs, function(x) {
+			sum(gaussian(1, x - xs) * ys * xs.d);
+		});
+		plot(xs, ys.c, type="l");
+
+		ys.c <- sapply(xs, function(x) {
+			sum(gaussian(2, x - xs) * ys * xs.d);
+		});
+		plot(xs, ys.c, type="l");
+	}
+	{
+		plot.critical <- function(ys) {
+			ind <- peaks(ys);
+			for (i in ind) {
+				x <- xs[i];
+				lines(c(x, x), c(0, ys[i]), lty=3);
+			}
+		}
+
+		ys <- dx2.fnc(xs) * fnc(xs);
+		plot(xs, ys, type="l");
+		plot.critical(ys);
+
+		ys.c <- sapply(xs, function(x) {
+			sum(gaussian(1, x - xs) * ys * xs.d);
+		});
+		plot(xs, ys.c, type="l");
+		plot.critical(ys.c);
+
+		ys.c <- sapply(xs, function(x) {
+			sum(gaussian(10, x - xs) * ys * xs.d);
+		});
+		plot(xs, ys.c, type="l");
+		plot.critical(ys.c);
+	}
+	{
+		plot.approx <- function(ys, ys.c) {
+			xn <- length(xs);
+			ind <- peaks(ys.c);
+			if (1 < ind[1]) {
+				ind <- c(1, ind);
+			}
+			if (ind[length(ind)] < xn) {
+				ind <- c(ind, xn);
+			}
+			lines(xs[ind], ys[ind], lty=3);
+		}
+
+		ys <- fnc(xs);
+		plot(xs, ys, type="n");
+		ys.c <- dx2.fnc(xs) * ys;
+		ys.c <- sapply(xs, function(x) {
+			sum(gaussian(1, x - xs) * ys.c * xs.d);
+		});
+		plot.approx(ys, ys.c);
+	}
 }
 
-dx1.gaussian <- function(t, x) {
-	-(2*pi*t)^(1/2)*x/t*exp(-x^2/t/2);
-}
-
-dx2.gaussian <- function(t, x) {
-	(2*pi*t)^(1/2)*((x/t)^2-1/t)*exp(-x^2/t/2);
-}
-
-dx.gaussian <- dx1.gaussian 
-
-boxcar <- function(radius, x) {
-	(-radius <= x) & (x < radius);
-}
-
-boxcar.convolve <- function(r1, r2, x) {
-	ind.0 <- which(r1 + r2 <= abs(x));
-	ind.1 <- which(abs(r1 - r2) <= abs(x) & abs(x) < r1 + r2);
-	ind.2 <- which(abs(x) < abs(r1 - r2));
-	x[ind.0] <- 0;
-	x[ind.1] <- r1 + r2 - abs(x[ind.1]);
-	x[ind.2] <- 2 * min(r1, r2);
-	x;
-}
+if (T) {
+	test.approx.1();
+}	
 
 test.boxcar <- function() {
 	old.par <- par(mfrow=c(1,1));
@@ -102,7 +183,7 @@ test.misc.1 <- function() {
 	persp(xs, ys, zs, theta=30, phi=30, expand=0.5, col=rainbow(50), border=NA);
 }
 
-if (T) {
+if (F) {
 	test.misc.1();
 }
 
