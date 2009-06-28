@@ -1,5 +1,62 @@
 source("utils.R");
 
+test.adiabatic <- function() {
+	xs.i <- -100:100;
+	xs.n <- length(xs.i);
+	xs <- xs.i / 10;
+	xs.d <- xs[-1] - xs[-xs.n];
+	xs.d <- c(xs.d, mean(xs.d));
+	shift <- 2;
+	t.1 <- 1;
+	t.2 <- 2;
+	fnc <- function(x) {
+		y.1 <- gaussian(t.1, x + shift);
+		y.2 <- gaussian(t.2, x - shift);
+		y <- y.1 + y.2;
+		abs(y + (0.5 * y + 0.1) * runif(xs.n));
+	}
+	ys <- fnc(xs);
+	ps <- c(1, 2, 4);
+	ts <- c(0, 0.1, 0.5, 1);
+	old.par <- par(mfrow=c(length(ps), length(ts)));
+	on.exit(par(old.par));
+	for (p in ps) {
+		zs <- ys^p;
+		for (t in ts) {
+			if (0 < t) {
+				f <- gaussian(t, xs);
+				zs <- generic.convolve(f, zs * xs.d, min(xs.i), max(xs.i));
+				zs <- rev(zs);
+			}
+			plot(xs, zs, type="l", main=paste("t=", t, ", p=", p, sep=""));
+		}
+	}
+}
+
+if (T) {
+	test.adiabatic();
+}
+
+test.convolve <- function() {
+	radius <- 1;
+	xs.i <- -400:400;
+	xs <- xs.i / 100;
+	xn <- length(xs.i);
+	ys <- boxcar(radius, xs);
+	dxs <- c(xs[-1], xs[length(xs)]) - xs;
+	old.par <- par(mfrow=c(3,3));
+	on.exit(par(old.par));
+	ys.0 <- ys;
+	for (i in 1:9) {
+		plot(xs, ys, type="l");
+		ys <- generic.convolve(ys.0, ys * dxs, min(xs.i), max(xs.i));
+	}
+}
+
+if (F) {
+	test.convolve();
+}
+
 test.approx.1 <- function() {
 	integral <- function(xs, ys) {
 		n <- length(xs);
@@ -103,7 +160,7 @@ test.approx.1 <- function() {
 	}
 }
 
-if (T) {
+if (F) {
 	test.approx.1();
 }	
 

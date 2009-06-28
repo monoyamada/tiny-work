@@ -47,3 +47,22 @@ boxcar.convolve <- function(r1, r2, x) {
 	x[ind.2] <- 2 * min(r1, r2);
 	x;
 }
+#
+#  \sum_j ys1[j] * ys2[i-j]
+#
+generic.convolve <- function(ys1, ys2, min, max) {
+	n <- length(ys1);
+	rys2 <- rev(ys2);
+	sapply(min:max, function(i) {
+		v <- 0;
+		if (i < 0) {
+			r <- 1:(n + i);
+			sum(ys1[r-i] * rys2[r]);
+		} else if (i == 0) {
+			sum(ys1 * rys2);
+		} else {
+			r <- 1:(n - i);
+			sum(ys1[r] * rys2[r+i]);
+		}
+	});
+}
