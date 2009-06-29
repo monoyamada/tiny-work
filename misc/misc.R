@@ -1,5 +1,93 @@
 source("utils.R");
 
+split.value <- function(xs, value) {
+	sign3 <- function(x) {
+		if (x == 0) {
+			0;
+		} else if (0 < x) {
+			1;
+		} else {
+			-1;
+		}
+	}
+	make.matrix <- function(index, value) {
+		cbind(index=index, value=value);
+	}
+	x.n <- length(xs);
+	x.i <- rep(NA, x.n);
+	n <- 1;
+	last <- NA;
+	for (i in 1:x.n) {
+		sgn <- sign3(xs[i] - value);
+		if (is.na(last) || sgn != last) {
+			x.i[n] <- i;
+			n <- n + 1;
+		}
+		last <- sgn;
+	}
+	x.i[n] <- x.n + 1;
+	x.i <- x.i[1:n];
+	x.v <- sapply(1:n, function(i) {
+		if (i == n) {
+			NA;
+		} else {
+			mean(xs[x.i[i]:(x.i[i+1] - 1)]) - value;
+		}
+	});
+	make.matrix(x.i, x.v);
+}
+
+test.mean <- function() {
+	xs.i <- -100:100;
+	xs.n <- length(xs.i);
+	xs <- xs.i / 10;
+	xs.d <- xs[-1] - xs[-xs.n];
+	xs.d <- c(xs.d, mean(xs.d));
+	shift <- 2;
+	t.1 <- 1;
+	t.2 <- 2;
+	fnc <- function(x) {
+		y.1 <- gaussian(t.1, x + shift);
+		y.2 <- gaussian(t.2, x - shift);
+		y <- y.1 + y.2;
+		abs(y + (0.5 * y + 0.1) * runif(xs.n));
+	}
+	decode <- function(ys, xy) {
+		x.n <- nrow(xy);
+		for (i in 1:(x.n - 1)) {
+			first <- xy[i, 1];
+			last <- xy[i + 1, 1] - 1;
+			y.d <- xy[i, 2];
+			for (k in first:last) {
+				ys[k] <- ys[k] + y.d;
+			}
+		}
+		ys;
+	}
+
+	ys <- fnc(xs);
+
+	old.par <- par(mfrow=c(3, 1));
+	on.exit(par(old.par));
+
+	plot(xs, ys, type="l");
+
+	ys.new <- rep(mean(ys), length(ys));
+	plot(xs, ys, type="p");
+	lines(xs, ys.new);
+
+	xy <- split.value(ys, mean(ys));
+	ys.last <- ys.new;
+	ys.new <- decode(ys.last, xy);
+	plot(xs, ys, type="p");
+	lines(xs, ys.last, lty=3);
+	lines(xs, ys.new);
+}
+
+if (T) {
+	test.mean();
+}
+
 test.adiabatic <- function() {
 	xs.i <- -100:100;
 	xs.n <- length(xs.i);
@@ -16,6 +104,10 @@ test.adiabatic <- function() {
 		abs(y + (0.5 * y + 0.1) * runif(xs.n));
 	}
 	ys <- fnc(xs);
+	if (F) {
+		xys <- as.data.frame(cbind(x=xs, y=ys));
+		write.csv(xys, file="gaussian-2.csv", quote=F, row.names=F, col.names=T);
+	}
 	ps <- c(1, 2, 4);
 	ts <- c(0, 0.1, 0.5, 1);
 	old.par <- par(mfrow=c(length(ps), length(ts)));
@@ -33,7 +125,7 @@ test.adiabatic <- function() {
 	}
 }
 
-if (T) {
+if (F) {
 	test.adiabatic();
 }
 
