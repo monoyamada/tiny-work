@@ -1,8 +1,7 @@
-package study.struct;
+package study.function;
 
 import java.util.Iterator;
 
-import study.function.AbFunction;
 import study.lang.Messages;
 
 public abstract class AbArray<Value> extends AbFunction<Number, Value>

@@ -1,6 +1,5 @@
 package study.function;
 
-import study.struct.AbArray;
 
 public class Tupple2<Value0, Value1> extends AbArray<Object> {
 	public final Value0 value0;

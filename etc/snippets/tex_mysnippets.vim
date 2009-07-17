@@ -19,10 +19,6 @@ exec "Snippet sec2 \\subsection{".st."name".et."}\\label{sec:".st."name:substitu
 exec "Snippet sec3 \\subsubsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
 exec "Snippet sec4 \\subsubsubsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
 "
-" lists
-"
-exec "Snippet items \\begin{itemize}<CR><Tab>\\item ".st.et."<CR>\\end{itemize}"
-"
 " environments
 "
 exec "Snippet def \\begin{definition}<CR>".st.et."<CR>\\end{definition}"
@@ -32,7 +28,6 @@ exec "Snippet prop \\begin{proposition}<CR>".st.et."<CR>\\end{proposition}"
 exec "Snippet proof \\begin{proof}<CR>".st.et."<CR>\\end{proof}"
 exec "Snippet eqs \\begin{equation}\\begin{split}<CR><Tab>".st.et."<CR>\\end{split}\\end{equation}"
 exec "Snippet graph \\begin{equation}\\xymatrix{<CR>".st.et."<CR>}\\end{equation}"
-"
-" routine
-"
-exec "Snippet def-map \\begin{equation}\\begin{split}<CR><Tab>".st.et.":&\to<CR><Tab>&\\mapsto<CR>\\end{split}\\end{equation}"
+exec "Snippet def.map \\begin{equation}\\begin{split}<CR><Tab>".st.et.":&\to<CR><Tab>&\\mapsto<CR>\\end{split}\\end{equation}"
+exec "Snippet item \\begin{itemize}<CR><Tab>\\item ".st.et."<CR>\\end{itemize}"
+exec "Snippet table \\begin{table}[!htbp]<CR><Tab>\\begin{center}\\begin{tabular}{cc}\\hline<CR>& & \\\\ \\hline<CR>\\end{tabular}\\end{center}<CR>\\caption{}<CR>\\end{table}"

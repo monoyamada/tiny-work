@@ -1,6 +1,5 @@
-package study.struct;
+package study.function;
 
-import study.function.AbIterator;
 
 public interface IfArray<Value> extends Iterable<Value> {
 	public int getSize();

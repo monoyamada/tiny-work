@@ -1,0 +1,34 @@
+\section{\LaTeX チップス}
+
+\subsection{表}
+\begin{table}[htbp]
+	\begin{center}\begin{tabular}{|l|c|r|} \hline
+		あ & い & う \\ \hline
+	\end{tabular}\end{center}
+	\caption{テスト}
+\end{table}
+
+\subsection{基準線の上下}
+\begin{tabular}{lll} \hline
+a & \Huge A & \raisebox{10pt}[0pt][0pt]{\Huge A} \\ \hline
+\end{tabular}
+
+\subsection{記号の上下に文字}
+$$
+	\overset{\mathrm{def}}{=}
+$$
+$$
+	\underset{\mathrm{def}}{=}
+$$
+
+\subsection{数式の説明}
+$$
+	e_m^{\otimes n} = \underbrace{e_m\otimes e_m\otimes \cdots\otimes e_m}_{n\text{個}} \\
+$$
+
+\subsection{矢印を曲げる}
+$$
+	\xymatrix {
+		\bullet \ar@{-}@(dr, ur) 
+	}
+$$

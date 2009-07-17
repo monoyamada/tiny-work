@@ -1,6 +1,5 @@
 package study.function;
 
-import study.struct.IfMap;
 
 public abstract class AbFunction<Source, Target> implements
 		IfFunction<Source, Target>, IfMap<Source, Target> {

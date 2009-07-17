@@ -1,7 +1,7 @@
 package study.lang;
 
 import study.function.Equality;
-import study.struct.IfPredicate;
+import study.function.IfPredicate;
 
 public class ObjectHelper {
 	public static final IfPredicate<Object, Object> DEFAULT_EQUALITY = new Equality();

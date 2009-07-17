@@ -8,9 +8,9 @@ import java.util.Map;
 
 import study.function.Combinadic;
 import study.function.ComparableOrder;
+import study.function.IfPredicate;
 import study.function.LexicographicalOrder;
 import study.function.Permutation;
-import study.struct.IfPredicate;
 
 public class ArrayHelper {
 	public static final long[] EMPTY_LONG_ARRAY = {};

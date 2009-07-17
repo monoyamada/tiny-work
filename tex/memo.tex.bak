@@ -8,9 +8,34 @@
 \subsection{CSV file format}
 Let consider the following BNF, Backus Nauer Format:
 \begin{equation}\begin{split}\label{eq:csv.bnf}
-	\bnfword{L} &= \bnfletter{S}^*\bnfword{F}\kakko{1+\bnfletter{C}\bnfword{L}} \\
+	\bnftoken{L} &= 1 + \bnftoken{F}\kakko{\bnftoken{C}\bnftoken{F}}^* \\
+	\bnftoken{F} &= \bnftoken{S}^*\kakko{\bnftoken{QF} + \bnftoken{SF}}\bnftoken{S}^* \\
+	\bnftoken{QF} &= \bnftoken{QB}\bnftoken{QL}^*\bnftoken{QE} \\
+	\bnftoken{QL} &= \bnftoken{L}+\bnftoken{C}+\bnftoken{ES}\kakko{\bnftoken{QB}+\bnftoken{QE}} \\
+	\bnftoken{SF} &= 1 + \bnftoken{SB}\bnftoken{SL}^* \\
+	\bnftoken{SB} &= \neg\kakko{\bnftoken{QB}+\bnftoken{C}} \\
+	\bnftoken{SL} &= \neg\bnftoken{C} \\
 	\end{split}\end{equation}
-, 
+, where $\bnftoken{S}, \bnftoken{C}, \bnftoken{QB}, \bnftoken{QE}, \bnftoken{ES}$ are given
+, and we denote the symbols as the followings:
+\begin{table}[!htbp]
+	\begin{center}\begin{tabular}{cl}\hline
+	Symbol & Annotation \\ \hline
+	$\bnftoken{L}$ & line \\
+	$\bnftoken{F}$ & field \\
+	$\bnftoken{QF}$ & quoted field \\
+	$\bnftoken{QL}$ & letter in a quoted field \\
+	$\bnftoken{SF}$ & non-quoted field \\
+	$\bnftoken{SB}$ & starting word in a non-quoted field \\
+	$\bnftoken{SL}$ & ascendant word in a non-quoted field \\
+	$\bnftoken{C}$ & word to separate fields \\
+	$\bnftoken{QB}$ & starting word of quotation \\
+	$\bnftoken{QE}$ & ending word of quotation \\
+	$\bnftoken{ES}$ & escaping word for quotation \\
+	\end{tabular}\end{center}
+	\caption{Symbols in \eqref{eq:csv.bnf}}
+	\end{table}
+.
 
 \subsection{Segment approximation}
 We consider the case which both source and target spaces are 1-dimension.

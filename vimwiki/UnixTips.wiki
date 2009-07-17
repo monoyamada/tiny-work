@@ -11,6 +11,11 @@
 ||tarで圧縮||{{{tar -czvf <directory-name>.tar.gz <directory-name>}}}||
 ||tarで解凍||{{{tar -xzvf <directory-name>.tar.gz}}}||
 
+== プロセスの終了 ==
+{{{
+pkill -f platex
+}}}
+
 == bash ==
 
 === パラメータ ===
@@ -35,4 +40,11 @@ else
 fi
 }}}
 {{{
+}}}
+
+=== ファイル一覧 ===
+{{{
+find . -maxdepth 2 -name '*.html' | while read html; do
+	echo $html
+done
 }}}

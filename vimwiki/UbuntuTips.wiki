@@ -32,7 +32,16 @@ Eclipseをシステムにインストールせずに、ユーザーディレク�
 	-vm 
 	/usr/lib/jvm/java-6-sun/bin
 
+	#アクセス権の編集
+
+	$HOME/.java.policy
+	grant codeBase "file:$ECLIPSE_HOME/plugins/*" {
+		permission java.security.AllPermission;
+	};
+
+
 == デフォルトの日本語変換が遅い ==
+java primitive generics compiler
 日本語変換SCIM+Anthyの動作が遅い。 
 WindowsやOSXのデフォルトのものに比べて格段に遅い。
 通常使っているエディタがVimということから、Vimの問題かも知れない。 

@@ -1,4 +1,4 @@
-package study.struct;
+package study.function;
 
 public interface IfPopable<Value>  {
 	public boolean isEmpty();
