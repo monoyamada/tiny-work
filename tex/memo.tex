@@ -5,6 +5,107 @@
 \newcommand{\loner}{L\mybf{R}}
 \newcommand{\intallr}[1]{\int_{{#1}\in\mybf{R}}}
 
+\newcommand{\sgraph}{\entrymodifiers={++[o][F-]}\xymatrix@R=1pt@C-1pc}
+
+\subsection{Subset construction}
+We denote the subset construction in the following forms:
+\begin{equation}\begin{split}
+	\varphi\alpha &= \sgraph {
+		-\infty \ar[r] & \alpha \ar[r] & \infty \\
+	} \\
+\end{split}\end{equation}
+. $\varphi$ satisfies the followings:
+\begin{equation}\begin{split}
+	\varphi(\alpha + \beta) &= \kakko{\sgraph {
+		-\infty \ar[r] & \alpha \ar[r] & \infty \\
+	}} + \kakko{\sgraph {
+		-\infty \ar[r] & \beta \ar[r] & \infty \\
+	}} \\
+	&= \sgraph {
+		& \alpha \ar[dr] & \\
+		-\infty \ar[ur]\ar[dr] & & \infty \\
+		& \beta \ar[ur] & \\
+	} \\
+	\varphi(\alpha * \beta) &= \kakko{\sgraph {
+		-\infty \ar[r] & \alpha \ar[r] & \infty \\
+	}} * \kakko{\sgraph {
+		-\infty \ar[r] & \beta \ar[r] & \infty \\
+	}} \\
+	&= \sgraph {
+		-\infty \ar[r] & \alpha \ar[r] & \beta \ar[r] & \infty \\
+	} \\
+	\varphi(\alpha^*) &= \kakko{\sgraph {
+		-\infty \ar[r] & \alpha \ar[r] & \infty \\
+	}}^* \\
+	&= \sgraph {
+		-\infty \ar[r] & \alpha \ar[r] \ar@(ur,ul) & \infty \\
+	} \\
+	\varphi\bakko{a} &= \sgraph {
+		-\infty \ar[r] & \bakko{a} \ar[r] & \infty \\
+	} \\
+	\varphi1 &= \sgraph { -\infty \ar[r] & \infty } \\
+	\varphi0 &= 0 \\
+\end{split}\end{equation}
+. 
+
+\subsection{Backup}
+We denote $\mybf{B}$ as the Boolean in this section.
+Let $S$ be a finite set,
+$\mybf{B}S$ be a semi-module over the boolean with basis $S$.
+A tensor product of $\mybf{B}S$ is called Kleen algebra of $S$,
+and we denote $K_{\mybf{B}}S$.
+
+\begin{definition}[Brzozowski derivative]
+Let $S$ be a finite set and $KS=(KS, +, 0, \cdot, 1)$ be a Kleene algebra of $S$.
+Brzozowski derivate $\Delta_B:KS\to KS\otimes KS$ is defined recursively.
+For all $\alpha,\beta\in KS$
+\begin{equation}\begin{split}
+	\Delta_B(\alpha + \beta) &=  \Delta_B(\alpha) + \Delta_B(\beta) \\
+	\Delta_B(\alpha \beta) &= \Delta_B(\alpha) \beta + \delta_B(\alpha) \Delta_B(\beta)\\
+\end{split}\end{equation}
+, and for all $a\in S$
+\begin{equation}\begin{split}
+	\Delta_B(a) &=  a\otimes 1 \\
+	\Delta_B(0) &=  0 \\
+	\Delta_B(1) &=  0 \\
+\end{split}\end{equation}
+. Where $\delta_B:KS\to \myop{boolean}$ is define as the followings:
+\begin{equation}\begin{split}
+	\delta_B(\alpha) &= \begin{cases}
+		1 & \text{iff there exists } \beta\in KS \text{ sucth that } \alpha = 1 + \beta \\
+		0 & \text{otherwise} \\
+		\end{cases} \\
+\end{split}\end{equation}
+.
+\end{definition}
+
+The followings are examples of the Brzozowski derivative:
+\begin{equation}\begin{split}
+	\Delta_B(ab) &= a\otimes b \\
+	\Delta_B(abc) &= a\otimes bc \\
+	\Delta_B(a^*) &= a\otimes a^* \\
+	\Delta_B(\alpha^2) &= \Delta_B(\alpha) \alpha + \delta_B(\alpha) \Delta_B(\alpha) \\
+	\Delta_B(\alpha^*) &= \Delta_B(\alpha) \alpha^* \\
+\end{split}\end{equation}
+.
+
+The subset construction of automaton theory can be defined in terms of 
+Brzozowski derivative.
+
+\begin{definition}[Subset construction]
+Let $S$ be a finite set, $KS=(KS, +, 0, \cdot, 1)$ be the Kleene algebra of $S$,
+$\Delta_B$ be the Brzozowski derivative on $KS$.
+Let $K^2S$ be a free semi-module of $KS$ over the $\myop{boolean}$,
+$K^2S=\myop{boolean}+KS+KS\otimes KS +\cdots$.
+The subset construction $\Gamma_B$ is the following map:
+\begin{equation}\begin{split}
+	\Gamma_B: KS &\to K^2S \\
+		\Gamma_B &= \myid + \Delta_B + \Delta_B^2 + \cdots \\
+		\Delta_B^{n+1} &= \kakko{\underbrace{\myid\otimes \cdots \otimes \myid}_{n\text{ times}} \otimes \Delta_B} \circ \Delta_B^n \\
+\end{split}\end{equation}
+.
+\end{definition}
+
 \subsection{CSV file format}
 Let consider the following BNF, Backus Nauer Format:
 \begin{equation}\begin{split}\label{eq:csv.bnf}

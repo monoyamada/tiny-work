@@ -1,5 +1,5 @@
 package study.function;
 
-public interface IfPredicate<First, Second> {
-	public boolean evaluateBoolean(First first, Second second) throws Exception;
+public interface IfPredicate<Source> {
+	public boolean evaluateBoolean(Source source) throws Exception;
 }

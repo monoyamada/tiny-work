@@ -8,7 +8,7 @@ import java.util.Map;
 
 import study.function.Combinadic;
 import study.function.ComparableOrder;
-import study.function.IfPredicate;
+import study.function.IfBinaryPredicate;
 import study.function.LexicographicalOrder;
 import study.function.Permutation;
 
@@ -28,12 +28,12 @@ public class ArrayHelper {
 		return (T[]) Array.newInstance(array.getClass().getComponentType(), size);
 	}
 	@SuppressWarnings("unchecked")
-	public static<T> T[] newArray(Class<T> type, int size) {
+	public static <T> T[] newArray(Class<T> type, int size) {
 		return (T[]) Array.newInstance(type, size);
 	}
 	@SuppressWarnings("unchecked")
-	public static<T> T[][] newArray(Class<T> type, int size0, int size1) {
-		return (T[][]) Array.newInstance(type, new int[]{size0, size1});
+	public static <T> T[][] newArray(Class<T> type, int size0, int size1) {
+		return (T[][]) Array.newInstance(type, new int[] { size0, size1 });
 	}
 	public static Object newArrayN(Class<?> type, int... sizes) {
 		return Array.newInstance(type, sizes);
@@ -68,7 +68,7 @@ public class ArrayHelper {
 				ObjectHelper.DEFAULT_EQUALITY);
 	}
 	public static <T0, T1> boolean equals(T0[] array0, int begin0, T1[] array1,
-			int begin1, int size, IfPredicate<? super T0, ? super T1> equality) {
+			int begin1, int size, IfBinaryPredicate<? super T0, ? super T1> equality) {
 		if (equality == null) {
 			equality = ObjectHelper.DEFAULT_EQUALITY;
 		}
@@ -99,6 +99,19 @@ public class ArrayHelper {
 		final T[] newArray = ArrayHelper.newArray(array, size);
 		System.arraycopy(array, begin, newArray, 0, size);
 		return newArray;
+	}
+
+	public static int[] addAll(int[] x, int[] y) {
+		assert x!=null&&y!=null;
+		if(x.length<1){
+			return y;
+		}else if(y.length<1){
+			return x;
+		}
+		final int[] z = new int[x.length+y.length];
+		System.arraycopy(x, 0, z, 0, x.length);
+		System.arraycopy(y, 0, z, x.length, y.length);
+		return z;
 	}
 	public static <T> void addAll(Collection<? super T> output, T[] array) {
 		for (int i = 0, n = array == null ? 0 : array.length; i < n; ++i) {
@@ -318,5 +331,16 @@ public class ArrayHelper {
 			}
 		}
 		return -1;
+	}
+	public static long[] ensureSize(long[] array, int size) {
+		final int oldSize = array != null ? array.length : 0;
+		if (size <= oldSize) {
+			return array;
+		}
+		final long[] newArray = new long[size];
+		if (array != null && 0 < array.length) {
+			System.arraycopy(array, 0, newArray, 0, array.length);
+		}
+		return newArray;
 	}
 }
