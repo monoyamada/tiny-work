@@ -5,7 +5,6 @@ import java.util.BitSet;
 import java.util.List;
 
 import study.lang.ArrayHelper;
-import study.lang.StringHelper;
 import study.monoid.KlSemiringFactory.IfNode;
 import study.monoid.KlSemiringFactory.Multiplies;
 import study.monoid.KlSemiringFactory.One;
@@ -14,7 +13,7 @@ import study.monoid.KlSemiringFactory.Stars;
 import study.monoid.KlSemiringFactory.Symbol;
 import study.monoid.KlSemiringFactory.Zero;
 
-public class KlSemiringGraph {
+public class CopyOfKlSemiringGraph {
 	public static final int BEGIN_NODE = 0;
 	public static final int END_NODE = BEGIN_NODE + 1;
 	public static final int SYMBOL_NODE = END_NODE + 1;
@@ -24,122 +23,110 @@ public class KlSemiringGraph {
 	public static class GraphNode extends EmptyTreeNode<GraphNode> {
 		public static final GraphNode[] EMPTY_ARRAY = {};
 
-		private final GraphData graphData;
-		private final GraphNode[] nodeArray;
-		private final int nodeIndex;
-
-		protected GraphNode(GraphData graphData, GraphNode[] nodeArray,
-				int nodeIndex) {
-			this.graphData = graphData;
-			this.nodeArray = nodeArray;
-			this.nodeIndex = nodeIndex;
+		protected static void toStringNextIndexArray(StringBuilder output,
+				GraphNode node) {
+			final GraphNode[] nexts = node.getChildArray();
+			output.append('[');
+			for (int i = 0, n = nexts.length; i < n; ++i) {
+				if (i != 0) {
+					output.append(", ");
+				}
+				output.append(nexts[i].getIndex());
+			}
+			output.append(']');
 		}
 		public String toString() {
-			final GraphData data = this.getGraphData();
-			final int index = this.getNodeIndex();
-			final int[] nexts = data.getNexts(index);
 			final StringBuilder buffer = new StringBuilder();
-			buffer.append(this.getNodeIndex());
+			buffer.append(this.getIndex());
 			buffer.append(':');
 			buffer.append(this.getValue());
-			buffer.append('[');
-			StringHelper.join(buffer, nexts, ", ");
-			buffer.append(']');
+			GraphNode.toStringNextIndexArray(buffer, this);
 			return buffer.toString();
 		}
-		/**
-		 * @return the graphData
-		 */
-		protected GraphData getGraphData() {
-			return this.graphData;
-		}
-		/**
-		 * @return the nodeArray
-		 */
-		protected GraphNode[] getNodeArray() {
-			return this.nodeArray;
-		}
 		public int getNodeType() {
-			switch (this.nodeIndex) {
-			case KlSemiringGraph.BEGIN_NODE:
-			case KlSemiringGraph.END_NODE:
-				return this.nodeIndex;
-			default:
-				return KlSemiringGraph.SYMBOL_NODE;
-			}
+			return CopyOfKlSemiringGraph.END_NODE;
 		}
-		public int getNodeIndex() {
-			return this.nodeIndex;
+		public int getIndex() {
+			return CopyOfKlSemiringGraph.END_NODE;
 		}
 		public String getValue() {
-			switch (this.getNodeIndex()) {
-			case KlSemiringGraph.BEGIN_NODE:
-				return KlSemiringGraph.BEGIN_NODE_SYMBOL;
-			case KlSemiringGraph.END_NODE:
-				return KlSemiringGraph.END_NODE_SYMBOL;
-			default:
-				return this.getGraphData().getSymbol(this.getNodeIndex());
-			}
+			return CopyOfKlSemiringGraph.END_NODE_SYMBOL;
 		}
-		protected int[] getNexts() {
-			return this.getGraphData().getNexts(this.getNodeIndex());
+		public GraphNode[] getChildArray() {
+			return GraphNode.EMPTY_ARRAY;
+		}
+	}
+
+	public static class EndNode extends GraphNode {
+	}
+
+	public static class BeginNode extends GraphNode {
+		private final GraphNode[] childs;
+
+		public BeginNode() {
+			this.childs = GraphNode.EMPTY_ARRAY;
+		}
+		public BeginNode(GraphNode[] childs) {
+			this.childs = childs;
+		}
+		@Override
+		public int getNodeType() {
+			return CopyOfKlSemiringGraph.BEGIN_NODE;
+		}
+		@Override
+		public int getIndex() {
+			return CopyOfKlSemiringGraph.BEGIN_NODE;
+		}
+		@Override
+		public String getValue() {
+			return CopyOfKlSemiringGraph.BEGIN_NODE_SYMBOL;
+		}
+		@Override
+		public GraphNode[] getChildArray() {
+			return this.childs;
 		}
 		@Override
 		public int getChildSize() {
-			return this.getNexts().length;
+			return this.getChildArray().length;
 		}
 		@Override
 		protected GraphNode doGetChild(int index) {
-			final GraphNode[] nodes = this.getNodeArray();
-			GraphNode node = nodes[this.getNexts()[index]];
-			if (node == null) {
-				node = this.newNode(index);
-			}
-			return node;
+			return this.getChildArray()[index];
 		}
-		protected GraphNode newNode(int index) {
-			return new GraphNode(this.getGraphData(), this.getNodeArray(), index);
+	}
+
+	public static class SymbolNode extends BeginNode {
+		private final int index;
+		private final String value;
+
+		public SymbolNode(int index, String value) {
+			this.index = index;
+			this.value = value;
+		}
+		public SymbolNode(int index, String value, GraphNode[] childs) {
+			super(childs);
+			this.index = index;
+			this.value = value;
+		}
+		/**
+		 * @return the index
+		 */
+		public int getIndex() {
+			return this.index;
+		}
+		/**
+		 * @return the value
+		 */
+		public String getValue() {
+			return this.value;
+		}
+		public int getNodeType() {
+			return CopyOfKlSemiringGraph.SYMBOL_NODE;
 		}
 	}
 
 	protected static class GraphData {
-		private final String[] symbols;
-		private final int[][] nexts;
-
-		protected GraphData(String[] symbols, int[][] nexts) {
-			this.symbols = symbols;
-			this.nexts = nexts;
-		}
-		/**
-		 * @return the symbols
-		 */
-		public String[] getSymbols() {
-			return this.symbols;
-		}
-		public String getSymbol(int index) {
-			return this.symbols[index];
-		}
-		/**
-		 * @return the nexts
-		 */
-		public int[][] getNexts() {
-			return this.nexts;
-		}
-		public int[] getNexts(int index) {
-			return this.nexts[index];
-		}
-		public GraphNode[] getGraphNodes() {
-			final int n = this.getSymbols().length;
-			final GraphNode[] array = new GraphNode[n];
-			for (int i = 0; i < n; ++i) {
-				array[i] = new GraphNode(this, array, i);
-			}
-			return array;
-		}
-	}
-
-	protected static class GraphData_0 {
-		private List<String> symbols;
+		private List<String> nodes;
 		private List<int[]> nexts;
 		private BitSet nextEnds;
 		private int[] begins;
@@ -147,28 +134,27 @@ public class KlSemiringGraph {
 		public boolean zero;
 		public boolean geOne;
 
-		protected GraphData_0() {
+		public GraphData() {
 		}
-		protected GraphData_0(List<String> nodes, List<int[]> nexts, BitSet nextEnds) {
+		protected GraphData(List<String> nodes, List<int[]> nexts, BitSet nextEnds) {
 			assert nodes != null && nexts != null && nextEnds != null;
-			this.symbols = nodes;
+			this.nodes = nodes;
 			this.nexts = nexts;
 			this.nextEnds = nextEnds;
 		}
-		public GraphData_0 newData() {
-			return new GraphData_0(this.getSymbols(), this.getNexts(), this
-					.getNextEnds());
+		public GraphData newData() {
+			return new GraphData(this.getNodes(), this.getNexts(), this.getNextEnds());
 		}
 		/**
 		 * @return the nodes
 		 */
-		public List<String> getSymbols() {
-			if (this.symbols == null) {
-				this.symbols = this.newSymbols();
+		public List<String> getNodes() {
+			if (this.nodes == null) {
+				this.nodes = this.newNodes();
 			}
-			return this.symbols;
+			return this.nodes;
 		}
-		protected List<String> newSymbols() {
+		protected List<String> newNodes() {
 			return new ArrayList<String>();
 		}
 		/**
@@ -229,39 +215,81 @@ public class KlSemiringGraph {
 		}
 	}
 
+	/**
+	 * Builds NFA from the given {@link GraphData}.
+	 *
+	 * @author shirakata
+	 *
+	 */
+	protected static class GraphBuilder {
+		public GraphNode[] getGraphNodes(GraphData data) {
+			assert data != null;
+			final List<String> nodes = data.getNodes();
+			final int nSymbol = nodes.size();
+			final GraphNode beginNode = this.newBeginNode(data);
+			final GraphNode endNode = this.newEndNode();
+			final GraphNode[] output = new GraphNode[nSymbol];
+			output[CopyOfKlSemiringGraph.BEGIN_NODE] = beginNode;
+			output[CopyOfKlSemiringGraph.END_NODE] = endNode;
+			for (int i = CopyOfKlSemiringGraph.SYMBOL_NODE; i < nSymbol; ++i) {
+				output[i] = this.newSymbolNode(data, i);
+			}
+			for (int i = CopyOfKlSemiringGraph.SYMBOL_NODE; i < nSymbol; ++i) {
+				final GraphNode node = output[i];
+				final int[] nexts = data.getNexts().get(i);
+				for (int ii = 0, nn = nexts.length; ii < nn; ++ii) {
+					node.getChildArray()[ii] = output[nexts[ii]];
+				}
+				if (data.getNextEnds().get(i)) {
+					node.getChildArray()[nexts.length] = endNode;
+				}
+			}
+			final int[] nexts = data.getBegins();
+			for (int i = 0, n = nexts.length; i < n; ++i) {
+				beginNode.getChildArray()[i] = output[nexts[i]];
+			}
+			if (data.geOne) {
+				beginNode.getChildArray()[nexts.length] = endNode;
+			}
+			return output;
+		}
+		protected GraphNode newSymbolNode(GraphData data, int index) {
+			final List<String> values = data.getNodes();
+			final int[] nexts = data.getNexts().get(index);
+			final boolean end = data.getNextEnds().get(index);
+			final GraphNode[] nodes = end ? new GraphNode[nexts.length + 1]
+					: new GraphNode[nexts.length];
+			return new SymbolNode(index, values.get(index), nodes);
+		}
+		protected GraphNode newBeginNode(GraphData data) {
+			final int[] nexts = data.getBegins();
+			final GraphNode[] nodes = data.geOne ? new GraphNode[nexts.length + 1]
+					: new GraphNode[nexts.length];
+			return new BeginNode(nodes);
+		}
+		protected GraphNode newEndNode() {
+			return new EndNode();
+		}
+	}
+
 	protected GraphData newGraphData(IfNode node) {
 		assert node != null;
-		final GraphData_0 data = new GraphData_0();
-		this.addSymbol(data, KlSemiringGraph.BEGIN_NODE_SYMBOL);
-		this.addSymbol(data, KlSemiringGraph.END_NODE_SYMBOL);
+		final GraphData data = new GraphData();
+		{
+			final int index = this.addSymbol(data, CopyOfKlSemiringGraph.BEGIN_NODE_SYMBOL);
+			data.getNextEnds().set(index, true);
+			data.getNextEnds().set(CopyOfKlSemiringGraph.BEGIN_NODE);
+		}
+		{
+			final int index = this.addSymbol(data, CopyOfKlSemiringGraph.END_NODE_SYMBOL);
+			data.getNextEnds().set(index, true);
+		}
+		data.geOne = true;
+		data.zero = false;
 		this.getGraphData(data, node);
-
-		final List<String> list = data.getSymbols();
-		final List<int[]> nexts = data.getNexts();
-		final int[] begins = data.getBegins();
-		final BitSet ends = data.getNextEnds();
-		final int n = list.size();
-
-		final String[] newSymbols = list.toArray(ArrayHelper.EMPTY_STRING_ARRAY);
-		final int[][] newNexts = new int[n][];
-		for (int i = 0; i < n; ++i) {
-			final int[] inds = nexts.get(i);
-			if (ends.get(i)) {
-				newNexts[i] = ArrayHelper.add(inds, KlSemiringGraph.END_NODE);
-			} else {
-				newNexts[i] = inds;
-			}
-		}
-		if (data.zero) {
-		} else if (data.geOne) {
-			newNexts[KlSemiringGraph.BEGIN_NODE] = ArrayHelper.add(begins,
-					KlSemiringGraph.END_NODE);
-		} else {
-			newNexts[KlSemiringGraph.BEGIN_NODE] = begins;
-		}
-		return new GraphData(newSymbols, newNexts);
+		return data;
 	}
-	protected void getGraphData(GraphData_0 data, IfNode node) {
+	protected void getGraphData(GraphData data, IfNode node) {
 		switch (node.getNodeType()) {
 		case KlSemiringFactory.ZERO:
 			this.getGraphDataZero(data, (Zero) node);
@@ -285,10 +313,10 @@ public class KlSemiringGraph {
 			throw new IllegalArgumentException("uknown node=" + node);
 		}
 	}
-	protected void getGraphDataPlus(GraphData_0 data, Plus node) {
-		final GraphData_0 newData0 = data.newData();
+	protected void getGraphDataPlus(GraphData data, Plus node) {
+		final GraphData newData0 = data.newData();
 		this.getGraphData(newData0, node.getChild0());
-		final GraphData_0 newData1 = data.newData();
+		final GraphData newData1 = data.newData();
 		this.getGraphData(newData1, node.getChild1());
 		if (newData0.zero || newData1.zero) {
 			data.zero = true;
@@ -312,10 +340,10 @@ public class KlSemiringGraph {
 		data.setEnds(this.addAll(end0, end1));
 		data.geOne = newData0.geOne || newData1.geOne;
 	}
-	protected void getGraphDataMultiplies(GraphData_0 data, Multiplies node) {
-		final GraphData_0 newData0 = data.newData();
+	protected void getGraphDataMultiplies(GraphData data, Multiplies node) {
+		final GraphData newData0 = data.newData();
 		this.getGraphData(newData0, node.getChild0());
-		final GraphData_0 newData1 = data.newData();
+		final GraphData newData1 = data.newData();
 		this.getGraphData(newData1, node.getChild1());
 		if (newData0.zero || newData1.zero) {
 			data.zero = true;
@@ -357,8 +385,8 @@ public class KlSemiringGraph {
 		}
 		data.getNexts();
 	}
-	protected void getGraphDataStars(GraphData_0 data, Stars node) {
-		final GraphData_0 newData = data.newData();
+	protected void getGraphDataStars(GraphData data, Stars node) {
+		final GraphData newData = data.newData();
 		this.getGraphData(newData, node.getChild());
 		data.setBegins(newData.getBegins());
 		data.setEnds(newData.getEnds());
@@ -371,7 +399,7 @@ public class KlSemiringGraph {
 			nexts.set(end, this.addAll(nexts.get(end), begins));
 		}
 	}
-	protected void getGraphDataSymbol(GraphData_0 data, Symbol node) {
+	protected void getGraphDataSymbol(GraphData data, Symbol node) {
 		final int index = this.addSymbol(data, node.getValue());
 		final int[] indices = { index };
 		data.setBegins(indices);
@@ -380,19 +408,19 @@ public class KlSemiringGraph {
 		data.geOne = false;
 		data.zero = false;
 	}
-	protected int addSymbol(GraphData_0 data, String value) {
-		final int index = data.getSymbols().size();
-		data.getSymbols().add(value);
+	protected int addSymbol(GraphData data, String value) {
+		final int index = data.getNodes().size();
+		data.getNodes().add(value);
 		data.getNexts().add(ArrayHelper.EMPTY_INT_ARRAY);
 		return index;
 	}
-	protected void getGraphDataOne(GraphData_0 data, One node) {
+	protected void getGraphDataOne(GraphData data, One node) {
 		data.setBegins(null);
 		data.setEnds(null);
 		data.geOne = true;
 		data.zero = false;
 	}
-	protected void getGraphDataZero(GraphData_0 data, Zero node) {
+	protected void getGraphDataZero(GraphData data, Zero node) {
 		data.setBegins(null);
 		data.setEnds(null);
 		data.geOne = false;

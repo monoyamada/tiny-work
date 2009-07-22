@@ -7,7 +7,6 @@ import study.lang.Debug;
 import study.lang.ObjectHelper;
 import study.monoid.KlSemiringFactory.IfNode;
 import study.monoid.KlSemiringFactory.Symbol;
-import study.monoid.KlSemiringGraph.GraphBuilder;
 import study.monoid.KlSemiringGraph.GraphData;
 import study.monoid.KlSemiringGraph.GraphNode;
 
@@ -26,10 +25,9 @@ public class KlSemiringTest extends TestCase {
 			return this.parser.parse(this, expr);
 		}
 		public GraphNode[] makeGraph(IfNode node) {
-			final KlSemiringGraph builder0 = new KlSemiringGraph();
-			final GraphData data = builder0.newGraphData(node);
-			final GraphBuilder builder1 = new GraphBuilder();
-			return builder1.getGraphNodes(data);
+			final KlSemiringGraph builder = new KlSemiringGraph();
+			final GraphData data = builder.newGraphData(node);
+			return data.getGraphNodes();
 		}
 	}
 
@@ -40,6 +38,7 @@ public class KlSemiringTest extends TestCase {
 	public void testParser() {
 		final Factory factory = new Factory();
 		if (true) {
+			Debug.log().info(factory.parse(""));
 			Debug.log().info(factory.parse("a+a"));
 			Debug.log().info(factory.parse("a+b"));
 			Debug.log().info(factory.parse("(a+b)"));
@@ -49,15 +48,30 @@ public class KlSemiringTest extends TestCase {
 			Debug.log().info(factory.parse("(a+b)^2"));
 		}
 	}
+	protected static void info(GraphNode[] nodes){
+		for (int i = 0, n = nodes.length; i < n; ++i) {
+			Debug.log().info(nodes[i]);
+		}
+	}
 	public void testGraph() throws Exception {
 		final Factory factory = new Factory();
+		{
+			final IfNode one = factory.parse("");
+			Debug.log().info(one);
+			final GraphNode[] gone = factory.makeGraph(one);
+			info(gone);
+		}
+		{
+			final IfNode ab = factory.parse("a.b");
+			Debug.log().info(ab);
+			final GraphNode[] gab = factory.makeGraph(ab);
+			info(gab);
+		}
 		{
 			final IfNode aba = factory.parse("(a . b)^* . a^?");
 			Debug.log().info(aba);
 			final GraphNode[] gaba = factory.makeGraph(aba);
-			for (int i = 0, n = gaba.length; i < n; ++i) {
-				Debug.log().info(gaba[i]);
-			}
+			info(gaba);
 		}
 		{
 			// final IfNode Ea = factory.parse("Em + Em * plus * Ea");
@@ -70,14 +84,10 @@ public class KlSemiringTest extends TestCase {
 					.parse("digit^+ + zeroMore + oneMore + zoroOrOne");
 			Debug.log().info(Es);
 			final GraphNode[] gEs = factory.makeGraph(Es);
-			for (int i = 0, n = gEs.length; i < n; ++i) {
-				Debug.log().info(gEs[i]);
-			}
+			info(gEs);
 			Debug.log().info(En);
 			final GraphNode[] gEn = factory.makeGraph(En);
-			for (int i = 0, n = gEn.length; i < n; ++i) {
-				Debug.log().info(gEn[i]);
-			}
+			info(gEn);
 		}
 	}
 	protected IfFunction<IfNode, IfNode> replaceSymbol(final String value,

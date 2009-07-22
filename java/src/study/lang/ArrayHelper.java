@@ -101,14 +101,36 @@ public class ArrayHelper {
 		return newArray;
 	}
 
+	public static int[] add(int[] array, int value) {
+		assert array != null;
+		final int n = array.length;
+		switch (n) {
+		case 0:
+			return new int[] { value };
+		case 1:
+			return new int[] { array[0], value };
+		case 2:
+			return new int[] { array[0], array[1], value };
+		case 3:
+			return new int[] { array[0], array[1], array[2], value };
+		case 4:
+			return new int[] { array[0], array[1], array[2], array[3], value };
+		default:
+			break;
+		}
+		final int[] newArray = new int[n + 1];
+		System.arraycopy(array, 0, newArray, 0, n);
+		newArray[n] = value;
+		return newArray;
+	}
 	public static int[] addAll(int[] x, int[] y) {
-		assert x!=null&&y!=null;
-		if(x.length<1){
+		assert x != null && y != null;
+		if (x.length < 1) {
 			return y;
-		}else if(y.length<1){
+		} else if (y.length < 1) {
 			return x;
 		}
-		final int[] z = new int[x.length+y.length];
+		final int[] z = new int[x.length + y.length];
 		System.arraycopy(x, 0, z, 0, x.length);
 		System.arraycopy(y, 0, z, x.length, y.length);
 		return z;
