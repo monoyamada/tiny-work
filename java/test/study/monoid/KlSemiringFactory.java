@@ -10,32 +10,8 @@ public class KlSemiringFactory {
 	public static final int PLUS = STARS + 1;
 	public static final int MULTIPLIES = PLUS + 1;
 	public static final int SYMBOL = MULTIPLIES + 1;
-	public static final String TO_STRING_POWERS = "^";
-	public static final String TO_STRING_PLUS = "+";
-	public static final String TO_STRING_MULTIPLIES = ".";
-	public static final String TO_STRING_STARS = "*";
-	public static final String TO_STRING_ZERO = "0";
-	public static final String TO_STRING_ONE = "1";
-	public static final String TO_STRING_OPEN = "(";
-	public static final String TO_STRING_CLOSE = ")";
-	private static int[] operatorOrders;
+	public static final int END = SYMBOL + 1;
 
-	protected static int[] getOperatorOrders() {
-		if(KlSemiringFactory.operatorOrders==null){
-			KlSemiringFactory.operatorOrders=KlSemiringFactory.newOperatorOrders();
-		}
-		return KlSemiringFactory.operatorOrders;
-	}
-	protected static int[] newOperatorOrders() {
-		final int[] orders = new int[SYMBOL+1];
-		orders[ZERO] = 0;
-		orders[ONE] = 0;
-		orders[SYMBOL] = 0;
-		orders[STARS] = 100;
-		orders[MULTIPLIES] = 200;
-		orders[PLUS] = 300;
-		return orders;
-	}
 	public static interface IfNode extends IfKleeneSemiring<IfNode>,
 			IfTreeNode<IfNode> {
 		public int getNodeType();
@@ -50,11 +26,6 @@ public class KlSemiringFactory {
 	}
 
 	protected class Zero extends EmptyTreeNode<IfNode> implements IfNode {
-		public String toString() {
-			final StringBuilder buffer = new StringBuilder();
-			KlSemiringFactory.this.toString(buffer, null, this);
-			return buffer.toString();
-		}
 		@Override
 		public int getNodeType() {
 			return KlSemiringFactory.ZERO;
@@ -183,6 +154,9 @@ public class KlSemiringFactory {
 
 		protected Symbol(String value) {
 			this.value = value;
+		}
+		public String toString() {
+			return this.getValue();
 		}
 		public String getValue() {
 			return this.value;
@@ -469,55 +443,5 @@ public class KlSemiringFactory {
 	}
 	protected IfNode newMultiplies(IfNode x, IfNode y) {
 		return new Multiplies(x, y);
-	}
-	protected void toString(StringBuilder output, IfNode parent, IfNode node) {
-		assert output != null;
-		if (node == null) {
-			return;
-		}
-		boolean brace = parent!=null;
-		if(brace){
-			final int[] orders = KlSemiringFactory.getOperatorOrders();
-			brace = orders[parent.getNodeType()] < orders[node.getNodeType()];
-		}
-		if (brace) {
-			output.append(KlSemiringFactory.TO_STRING_OPEN);
-		}
-		switch (node.getNodeType()) {
-		case KlSemiringFactory.ZERO:
-			output.append(KlSemiringFactory.TO_STRING_ZERO);
-			break;
-		case KlSemiringFactory.ONE:
-			output.append(KlSemiringFactory.TO_STRING_ONE);
-			break;
-		case KlSemiringFactory.STARS:
-			this.toString(output, node, node.getChild(0));
-			output.append(KlSemiringFactory.TO_STRING_POWERS
-					+ KlSemiringFactory.TO_STRING_STARS);
-			break;
-		case KlSemiringFactory.PLUS:
-			this.toString(output, node, node.getChild(0));
-			output.append(KlSemiringFactory.TO_STRING_PLUS);
-			this.toString(output, node, node.getChild(1));
-			break;
-		case KlSemiringFactory.MULTIPLIES:
-			this.toString(output, node, node.getChild(0));
-			output.append(KlSemiringFactory.TO_STRING_MULTIPLIES);
-			this.toString(output, node, node.getChild(1));
-			break;
-		case KlSemiringFactory.SYMBOL:
-			final Symbol x = (Symbol) node;
-			output.append(x.getValue());
-			break;
-		default:
-			output.append(node);
-			break;
-		}
-		if (brace) {
-			output.append(KlSemiringFactory.TO_STRING_CLOSE);
-		}
-	}
-	protected String toStringWrapSpaces(String text) {
-		return ' ' + text + ' ';
 	}
 }

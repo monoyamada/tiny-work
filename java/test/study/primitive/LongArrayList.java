@@ -41,7 +41,7 @@ public class LongArrayList extends AbLongList {
 		this.size = size;
 	}
 	@Override
-	protected long doGet(int index) {
+	protected long doGetLong(int index) {
 		return this.array[index];
 	}
 	@Override

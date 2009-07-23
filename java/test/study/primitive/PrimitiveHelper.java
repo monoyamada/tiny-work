@@ -4,13 +4,14 @@ public class PrimitiveHelper {
 	public static class LongArrayIterator extends AbNumberIterator {
 		private final IfLongArray container;
 		private int index;
+
 		public LongArrayIterator(IfLongArray container) {
-			assert container!=null;
+			assert container != null;
 			this.container = container;
 		}
 		@Override
 		public boolean hasNext() {
-			return this.index<this.container.size();
+			return this.index < this.container.size();
 		}
 		@Override
 		public double nextDouble() {
@@ -18,7 +19,7 @@ public class PrimitiveHelper {
 		}
 		@Override
 		public long nextLong() {
-			return this.container.get(this.index++);
+			return this.container.getLong(this.index++);
 		}
 		@Override
 		public Number next() {

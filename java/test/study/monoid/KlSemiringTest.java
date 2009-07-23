@@ -1,16 +1,17 @@
 package study.monoid;
 
 import junit.framework.TestCase;
-import study.function.AbFunction;
-import study.function.IfFunction;
 import study.lang.Debug;
-import study.lang.ObjectHelper;
 import study.monoid.KlSemiringFactory.IfNode;
-import study.monoid.KlSemiringFactory.Symbol;
+import study.monoid.KlSemiringGraph.DfaBuilder;
+import study.monoid.KlSemiringGraph.DfaNode;
 import study.monoid.KlSemiringGraph.GraphData;
-import study.monoid.KlSemiringGraph.GraphNode;
+import study.monoid.KlSemiringGraph.NfaBuilder;
+import study.monoid.KlSemiringGraph.NfaNode;
 
 public class KlSemiringTest extends TestCase {
+	static final KlSemiringFormatter FORMATTER = new DfaFormatter();
+
 	protected static class Factory extends KlSemiringFactory {
 		class Parser extends KlSemiringParser {
 			@Override
@@ -24,11 +25,33 @@ public class KlSemiringTest extends TestCase {
 		public IfNode parse(String expr) {
 			return this.parser.parse(this, expr);
 		}
-		public GraphNode[] makeGraph(IfNode node) {
+		public NfaNode[] makeGraph(IfNode node) {
 			final KlSemiringGraph builder = new KlSemiringGraph();
 			final GraphData data = builder.newGraphData(node);
-			return data.getGraphNodes();
+			return new NfaBuilder(data).getNodes();
 		}
+	}
+
+	protected static void infoNode(Object node) {
+		if (node instanceof IfNode) {
+			Debug.log().info(FORMATTER.format((IfNode) node));
+		} else {
+			Debug.log().info(node);
+		}
+	}
+	protected static void infoArray(Object[] nodes) {
+		for (int i = 0, n = nodes != null ? nodes.length : 0; i < n; ++i) {
+			infoNode(nodes[i]);
+		}
+	}
+	private static IfNode[] toExpression(DfaNode[] nodes) {
+		final DfaExpressionBuilder builder = new DfaExpressionBuilder();
+		final IfNode[] array = new IfNode[nodes.length];
+		for (int i = 0, n = nodes.length; i < n; ++i) {
+			final DfaNode node = nodes[i];
+			array[i] = builder.getExpression(node);
+		}
+		return array;
 	}
 
 	protected void setUp() throws Exception {
@@ -38,72 +61,96 @@ public class KlSemiringTest extends TestCase {
 	public void testParser() {
 		final Factory factory = new Factory();
 		if (true) {
-			Debug.log().info(factory.parse(""));
-			Debug.log().info(factory.parse("a+a"));
-			Debug.log().info(factory.parse("a+b"));
-			Debug.log().info(factory.parse("(a+b)"));
-			Debug.log().info(factory.parse("(a+b).(c+d)"));
-			Debug.log().info(factory.parse("(a+b)^?"));
-			Debug.log().info(factory.parse("(a+b)^*"));
-			Debug.log().info(factory.parse("(a+b)^2"));
+			infoNode(factory.parse(""));
+			infoNode(factory.parse("a+a"));
+			infoNode(factory.parse("a+b"));
+			infoNode(factory.parse("(a+b)"));
+			infoNode(factory.parse("(a+b).(c+d)"));
+			infoNode(factory.parse("(a+b)^?"));
+			infoNode(factory.parse("(a+b)^*"));
+			infoNode(factory.parse("(a+b)^2"));
 		}
 	}
-	protected static void info(GraphNode[] nodes){
-		for (int i = 0, n = nodes.length; i < n; ++i) {
-			Debug.log().info(nodes[i]);
-		}
-	}
-	public void testGraph() throws Exception {
+	public void testNfa() throws Exception {
 		final Factory factory = new Factory();
 		{
-			final IfNode one = factory.parse("");
-			Debug.log().info(one);
-			final GraphNode[] gone = factory.makeGraph(one);
-			info(gone);
+			final IfNode expr = factory.parse("");
+			infoNode(expr);
+			final NfaNode[] nodes = factory.makeGraph(expr);
+			infoArray(nodes);
 		}
 		{
-			final IfNode ab = factory.parse("a.b");
-			Debug.log().info(ab);
-			final GraphNode[] gab = factory.makeGraph(ab);
-			info(gab);
+			final IfNode expr = factory.parse("a.b");
+			infoNode(expr);
+			final NfaNode[] nodes = factory.makeGraph(expr);
+			infoArray(nodes);
 		}
 		{
-			final IfNode aba = factory.parse("(a . b)^* . a^?");
-			Debug.log().info(aba);
-			final GraphNode[] gaba = factory.makeGraph(aba);
-			info(gaba);
-		}
-		{
-			// final IfNode Ea = factory.parse("Em + Em * plus * Ea");
-			// final IfNode Em = factory.parse("Ep + Ep * multiplies * Em");
-			// final IfNode Ep = factory.parse("Et + Et * powers * En");
-			// final IfNode Et = factory.parse("Es + open * Ea * close");
-			final IfNode Es = factory
-					.parse("(alphabet + special) . (alphabet + special + digit)^*");
-			final IfNode En = factory
-					.parse("digit^+ + zeroMore + oneMore + zoroOrOne");
-			Debug.log().info(Es);
-			final GraphNode[] gEs = factory.makeGraph(Es);
-			info(gEs);
-			Debug.log().info(En);
-			final GraphNode[] gEn = factory.makeGraph(En);
-			info(gEn);
+			final IfNode expr = factory.parse("(a . b)^* . a^?");
+			infoNode(expr);
+			final NfaNode[] nodes = factory.makeGraph(expr);
+			infoArray(nodes);
 		}
 	}
-	protected IfFunction<IfNode, IfNode> replaceSymbol(final String value,
-			final IfNode node) {
-		return new AbFunction<IfNode, IfNode>() {
-			@Override
-			public IfNode evaluate(IfNode source) throws Exception {
-				if (source.getNodeType() == KlSemiringFactory.SYMBOL) {
-					final Symbol symbol = (Symbol) source;
-					if (ObjectHelper.equals(symbol.getValue(), value)) {
-						return node;
-					}
-				}
-				return source;
-			}
-
-		};
+	public void testDfa() throws Exception {
+		final Factory factory = new Factory();
+		{
+			final IfNode expr = factory.parse("(a . b) + (a . c)");
+			infoNode(expr);
+			final KlSemiringGraph builder = new KlSemiringGraph();
+			final GraphData data = builder.newGraphData(expr);
+			final DfaNode[] nodes = new DfaBuilder(data).getNodes();
+			infoArray(nodes);
+		}
+		{
+			final IfNode expr = factory
+					.parse("(alphabet + special) . (alphabet + special + digit)^*");
+			infoNode(expr);
+			final KlSemiringGraph builder = new KlSemiringGraph();
+			final GraphData data = builder.newGraphData(expr);
+			final DfaNode[] nodes = new DfaBuilder(data).getNodes();
+			infoArray(nodes);
+		}
+		{
+			final IfNode expr = factory
+					.parse("digit^+ + zeroMore + oneMore + zoroOrOne");
+			infoNode(expr);
+			final KlSemiringGraph builder = new KlSemiringGraph();
+			final GraphData data = builder.newGraphData(expr);
+			final DfaNode[] nodes = new DfaBuilder(data).getNodes();
+			infoArray(nodes);
+		}
+	}
+	public void testMinDfa() throws Exception {
+		final Factory factory = new Factory();
+		{
+			final IfNode expr = factory.parse("(a . b) + (a . c)");
+			infoNode(expr);
+			final KlSemiringGraph builder = new KlSemiringGraph();
+			final GraphData data = builder.newGraphData(expr);
+			final DfaNode[] nodes = new DfaBuilder(data).reduceStates();
+			final IfNode[] exprs = toExpression(nodes);
+			infoArray(exprs);
+		}
+		{
+			final IfNode expr = factory
+					.parse("(alphabet + special) . (alphabet + special + digit)^*");
+			infoNode(expr);
+			final KlSemiringGraph builder = new KlSemiringGraph();
+			final GraphData data = builder.newGraphData(expr);
+			final DfaNode[] nodes = new DfaBuilder(data).reduceStates();
+			final IfNode[] exprs = toExpression(nodes);
+			infoArray(exprs);
+		}
+		{
+			final IfNode expr = factory
+					.parse("digit^+ + zeroMore + oneMore + zoroOrOne");
+			infoNode(expr);
+			final KlSemiringGraph builder = new KlSemiringGraph();
+			final GraphData data = builder.newGraphData(expr);
+			final DfaNode[] nodes = new DfaBuilder(data).reduceStates();
+			final IfNode[] exprs = toExpression(nodes);
+			infoArray(exprs);
+		}
 	}
 }

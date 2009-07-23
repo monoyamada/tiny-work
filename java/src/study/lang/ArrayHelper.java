@@ -123,6 +123,29 @@ public class ArrayHelper {
 		newArray[n] = value;
 		return newArray;
 	}
+	public static int[] add(int value, int[] array) {
+		assert array != null;
+		final int n = array.length;
+		switch (n) {
+		case 0:
+			return new int[] { value };
+		case 1:
+			return new int[] { value, array[0] };
+		case 2:
+			return new int[] { value, array[0], array[1] };
+		case 3:
+			return new int[] { value, array[0], array[1], array[2] };
+		case 4:
+			return new int[] { value, array[0], array[1], array[2], array[3] };
+		default:
+			break;
+		}
+		final int[] newArray = new int[n + 1];
+		System.arraycopy(array, 0, newArray, 1, n);
+		newArray[0] = value;
+		return newArray;
+	}
+
 	public static int[] addAll(int[] x, int[] y) {
 		assert x != null && y != null;
 		if (x.length < 1) {
@@ -140,11 +163,24 @@ public class ArrayHelper {
 			output.add(array[i]);
 		}
 	}
+
 	public static <Key, Value> void putAll(Map<? super Key, Value> output,
 			Key[] array, Value value) {
 		for (int i = 0, n = array == null ? 0 : array.length; i < n; ++i) {
 			output.put(array[i], value);
 		}
+	}
+
+	public static int[] sub(int[] array, int begin, int end) {
+		final int n = end - begin;
+		if (n < 1) {
+			return ArrayHelper.EMPTY_INT_ARRAY;
+		} else if (n == array.length) {
+			return array.clone();
+		}
+		final int[] newArray = new int[n];
+		System.arraycopy(array, begin, newArray, 0, n);
+		return newArray;
 	}
 
 	public static void swap(Object[] array, int i, int k) {
@@ -335,10 +371,47 @@ public class ArrayHelper {
 	 * @param value
 	 * @return
 	 */
+	public static int indexOf(int[] array, int value) {
+		switch (array.length) {
+		case 0:
+			return -1;
+		case 1:
+			return array[0] == value ? 0 : -1;
+		case 2:
+			return array[0] == value ? 0 : array[1] == value ? 1 : -1;
+		case 3:
+			return array[0] == value ? 0 : array[1] == value ? 1
+					: array[2] == value ? 2 : -1;
+		case 4:
+			return array[0] == value ? 0 : array[1] == value ? 1
+					: array[2] == value ? 2 : array[3] == value ? 3 : -1;
+		default:
+			return ArrayHelper.indexOf(array, 0, array.length, value);
+		}
+	}
+	/**
+	 * @param array
+	 * @param begin
+	 * @param end
+	 * @param value
+	 * @return
+	 */
+	public static int indexOf(int[] array, int begin, int end, int value) {
+		for (; begin < end; ++begin) {
+			if (array[begin] == value) {
+				return begin;
+			}
+		}
+		return -1;
+	}
+	/**
+	 * @param array
+	 * @param value
+	 * @return
+	 */
 	public static int indexOf(Object[] array, Object value) {
 		return ArrayHelper.indexOf(array, 0, array.length, value);
 	}
-
 	/**
 	 * @param array
 	 * @param begin
@@ -354,6 +427,7 @@ public class ArrayHelper {
 		}
 		return -1;
 	}
+
 	public static long[] ensureSize(long[] array, int size) {
 		final int oldSize = array != null ? array.length : 0;
 		if (size <= oldSize) {

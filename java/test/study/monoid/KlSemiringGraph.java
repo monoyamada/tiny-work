@@ -1,9 +1,18 @@
 package study.monoid;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
+
+import study.function.LexicographicalOrder;
 import study.lang.ArrayHelper;
 import study.lang.StringHelper;
 import study.monoid.KlSemiringFactory.IfNode;
@@ -18,46 +27,79 @@ public class KlSemiringGraph {
 	public static final int BEGIN_NODE = 0;
 	public static final int END_NODE = BEGIN_NODE + 1;
 	public static final int SYMBOL_NODE = END_NODE + 1;
-	public static final String BEGIN_NODE_SYMBOL = "Begin";
-	public static final String END_NODE_SYMBOL = "End";
+	public static final String BEGIN_NODE_SYMBOL = "{";
+	public static final String END_NODE_SYMBOL = "}";
+	public static final int[][] EMPTY_INT2_ARRAY = { {} };
+	public static final String NODE_EXPRESSION_PREFIX = "$";
 
-	public static class GraphNode extends EmptyTreeNode<GraphNode> {
-		public static final GraphNode[] EMPTY_ARRAY = {};
+	protected static void toString(StringBuilder output, int[] array) {
+		output.append('[');
+		StringHelper.join(output, array, ", ");
+		output.append(']');
+	}
+	protected static void toString(StringBuilder output, Object[] array) {
+		output.append('[');
+		StringHelper.join(output, array, ", ");
+		output.append(']');
+	}
 
-		private final GraphData graphData;
-		private final GraphNode[] nodeArray;
+	protected static class GraphData {
+		private final String[] symbols;
+		private final int[][] nexts;
+
+		protected GraphData(GraphData other) {
+			this(other.symbols, other.nexts);
+		}
+		protected GraphData(String[] symbols, int[][] nexts) {
+			this.symbols = symbols;
+			this.nexts = nexts;
+		}
+		/**
+		 * @return the symbols
+		 */
+		public String[] getSymbols() {
+			return this.symbols;
+		}
+		public String getSymbol(int nodeIndex) {
+			return this.symbols[nodeIndex];
+		}
+		/**
+		 * @return the nexts
+		 */
+		public int[][] getNexts() {
+			return this.nexts;
+		}
+		public int[] getNexts(int nodeIndex) {
+			return this.nexts[nodeIndex];
+		}
+	}
+
+	public static class NfaNode extends EmptyTreeNode<NfaNode> {
+		public static final NfaNode[] EMPTY_ARRAY = {};
+
+		private final NfaBuilder builder;
 		private final int nodeIndex;
 
-		protected GraphNode(GraphData graphData, GraphNode[] nodeArray,
-				int nodeIndex) {
-			this.graphData = graphData;
-			this.nodeArray = nodeArray;
+		protected NfaNode(NfaBuilder builder, int nodeIndex) {
+			this.builder = builder;
 			this.nodeIndex = nodeIndex;
 		}
 		public String toString() {
-			final GraphData data = this.getGraphData();
+			final NfaBuilder builder = this.getBuilder();
 			final int index = this.getNodeIndex();
-			final int[] nexts = data.getNexts(index);
+			final int[] nexts = builder.getNexts(index);
 			final StringBuilder buffer = new StringBuilder();
-			buffer.append(this.getNodeIndex());
+			buffer.append(index);
 			buffer.append(':');
 			buffer.append(this.getValue());
-			buffer.append('[');
-			StringHelper.join(buffer, nexts, ", ");
-			buffer.append(']');
+			KlSemiringGraph.toString(buffer, nexts);
 			return buffer.toString();
 		}
 		/**
 		 * @return the graphData
 		 */
-		protected GraphData getGraphData() {
-			return this.graphData;
-		}
-		/**
-		 * @return the nodeArray
-		 */
-		protected GraphNode[] getNodeArray() {
-			return this.nodeArray;
+		protected NfaBuilder getBuilder() {
+			return this.builder;
 		}
 		public int getNodeType() {
 			switch (this.nodeIndex) {
@@ -72,67 +114,512 @@ public class KlSemiringGraph {
 			return this.nodeIndex;
 		}
 		public String getValue() {
-			switch (this.getNodeIndex()) {
-			case KlSemiringGraph.BEGIN_NODE:
-				return KlSemiringGraph.BEGIN_NODE_SYMBOL;
-			case KlSemiringGraph.END_NODE:
-				return KlSemiringGraph.END_NODE_SYMBOL;
-			default:
-				return this.getGraphData().getSymbol(this.getNodeIndex());
-			}
+			return this.getBuilder().getSymbol(this.getNodeIndex());
 		}
 		protected int[] getNexts() {
-			return this.getGraphData().getNexts(this.getNodeIndex());
+			return this.getBuilder().getNexts(this.getNodeIndex());
 		}
 		@Override
 		public int getChildSize() {
 			return this.getNexts().length;
 		}
 		@Override
-		protected GraphNode doGetChild(int index) {
-			final GraphNode[] nodes = this.getNodeArray();
-			GraphNode node = nodes[this.getNexts()[index]];
-			if (node == null) {
-				node = this.newNode(index);
-			}
-			return node;
-		}
-		protected GraphNode newNode(int index) {
-			return new GraphNode(this.getGraphData(), this.getNodeArray(), index);
+		protected NfaNode doGetChild(int index) {
+			return this.getBuilder().getNode(this.getNexts()[index]);
 		}
 	}
 
-	protected static class GraphData {
-		private final String[] symbols;
-		private final int[][] nexts;
+	protected static class NfaBuilder extends GraphData {
+		private NfaNode[] nodeArray;
 
-		protected GraphData(String[] symbols, int[][] nexts) {
-			this.symbols = symbols;
-			this.nexts = nexts;
+		public NfaBuilder(GraphData other) {
+			super(other);
+		}
+		protected NfaNode[] getNodeArray() {
+			if (this.nodeArray == null) {
+				this.nodeArray = this.newNodeArray();
+			}
+			return this.nodeArray;
+		}
+		protected NfaNode[] newNodeArray() {
+			return new NfaNode[this.getSymbols().length];
+		}
+		public int getNodeSize() {
+			return this.getNodeArray().length;
 		}
 		/**
-		 * @return the symbols
+		 * Creates graph with lazy.
+		 *
+		 * @return
 		 */
-		public String[] getSymbols() {
-			return this.symbols;
-		}
-		public String getSymbol(int index) {
-			return this.symbols[index];
+		public NfaNode getBeginNode() {
+			return this.getNode(KlSemiringGraph.BEGIN_NODE);
 		}
 		/**
-		 * @return the nexts
+		 * Create graph with lazy.
+		 *
+		 * @param nodeIndex
+		 * @return
 		 */
-		public int[][] getNexts() {
-			return this.nexts;
+		public NfaNode getNode(int nodeIndex) {
+			final NfaNode[] array = this.getNodeArray();
+			NfaNode node = array[nodeIndex];
+			if (node == null) {
+				node = this.newNode(nodeIndex);
+				array[nodeIndex] = node;
+			}
+			return node;
 		}
-		public int[] getNexts(int index) {
-			return this.nexts[index];
+		/**
+		 * Creates entire graph.
+		 *
+		 * @return
+		 */
+		public NfaNode[] getNodes() {
+			final NfaNode[] array = this.getNodeArray();
+			for (int i = 0, n = array.length; i < n; ++i) {
+				if (array[i] == null) {
+					array[i] = this.newNode(i);
+				}
+			}
+			return array;
 		}
-		public GraphNode[] getGraphNodes() {
-			final int n = this.getSymbols().length;
-			final GraphNode[] array = new GraphNode[n];
+		protected NfaNode newNode(int nodeIndex) {
+			return new NfaNode(this, nodeIndex);
+		}
+	}
+
+	protected static class DfaNext {
+		public static final DfaNext[] EMPTY_ARRAY = {};
+		public static final int SIMPLE_NEXT = 0;
+		private final int symbolIndex;
+		private final DfaNode node;
+
+		protected DfaNext(DfaNode node, int symbolIndex) {
+			this.node = node;
+			this.symbolIndex = symbolIndex;
+		}
+		public int getNextType() {
+			return DfaNext.SIMPLE_NEXT;
+		}
+		/**
+		 * @return the next
+		 */
+		public DfaNode getNode() {
+			return this.node;
+		}
+		public int getNodeIndex() {
+			return this.getNode().getNodeIndex();
+		}
+		/**
+		 * @return the symbolIndex
+		 */
+		protected int getSymbolIndex() {
+			return this.symbolIndex;
+		}
+		public String getSymbol(DfaBuilder builder) {
+			return builder.getSymbolSet()[this.getSymbolIndex()];
+		}
+		protected void toString(StringBuilder output, DfaBuilder builder) {
+			output.append(this.getSymbol(builder));
+			output.append(':');
+			output.append(this.getNode().getNodeIndex());
+		}
+	}
+
+	public static class DfaNode extends EmptyTreeNode<DfaNode> {
+		private static final DfaNode[] EMPTY_ARRAY = {};
+		private final DfaBuilder builder;
+		private final int nodeIndex;
+		private final int[] state;
+		private DfaNext[] nextArray;
+
+		protected DfaNode(DfaBuilder builder, int nodeIndex, int[] state) {
+			this.builder = builder;
+			this.nodeIndex = nodeIndex;
+			this.state = state;
+		}
+		public String toString() {
+			final StringBuilder buffer = new StringBuilder();
+			this.toString(buffer);
+			return buffer.toString();
+		}
+		protected void toString(StringBuilder output) {
+			final DfaBuilder builder = this.getBuilder();
+			final int[] state = this.getState();
+			final DfaNext[] nexts = this.getNextArray();
+			output.append(this.getNodeIndex());
+			output.append('[');
+			for (int i = 0, n = state.length; i < n; ++i) {
+				if (i != 0) {
+					output.append(", ");
+				}
+				output.append(builder.getSymbol(state[i]));
+			}
+			output.append(']');
+			output.append('[');
+			for (int i = 0, n = nexts.length; i < n; ++i) {
+				if (i != 0) {
+					output.append(", ");
+				}
+				nexts[i].toString(output, builder);
+			}
+			output.append(']');
+		}
+		/**
+		 * @return the builder
+		 */
+		protected DfaBuilder getBuilder() {
+			return this.builder;
+		}
+		/**
+		 * @return the nodeIndex
+		 */
+		public int getNodeIndex() {
+			return this.nodeIndex;
+		}
+		/**
+		 * @return the state
+		 */
+		protected int[] getState() {
+			return this.state;
+		}
+		@Override
+		public int getChildSize() {
+			return this.getNextArray().length;
+		}
+		@Override
+		protected DfaNode doGetChild(int index) {
+			return this.getNextArray()[index].getNode();
+		}
+		/**
+		 * @return the nextArray
+		 */
+		protected DfaNext[] getNextArray() {
+			if (this.nextArray == null) {
+				this.nextArray = this.newNextArray();
+			}
+			return this.nextArray;
+		}
+		protected DfaNext[] newNextArray() {
+			final DfaBuilder builder = this.getBuilder();
+			final int[] state = this.getState();
+			final int[] symbols = builder.getAuxArray1(state.length);
+			final int[][] states = builder.getAuxArray2(state.length);
+			int count = 0;
+			for (int i = 0, n = state.length; i < n; ++i) {
+				final int node = state[i];
+				final int[] nexts = builder.getNexts(node);
+				for (int ii = 0, nn = nexts.length; ii < nn; ++ii) {
+					final int next = nexts[ii];
+					final int symbol = builder.getSymbolIndex(next);
+					final int ind = ArrayHelper.indexOf(symbols, 0, count, symbol);
+					if (ind < 0) {
+						symbols[count] = symbol;
+						states[count] = new int[] { next };
+						++count;
+					} else {
+						states[ind] = ArrayHelper.add(states[ind], next);
+					}
+				}
+			}
+
+			if (count < 1) {
+				return DfaNext.EMPTY_ARRAY;
+			}
+
+			final DfaNext[] array = new DfaNext[count];
+			for (int i = 0; i < count; ++i) {
+				final int[] next = states[i];
+				if (1 < next.length) {
+					Arrays.sort(next);
+				}
+				final DfaNode node = builder.getNode(next, true);
+				array[i] = builder.newNext(node, symbols[i]);
+			}
+			return array;
+		}
+	}
+
+	protected static class DfaBuilder extends GraphData {
+		private int[] symbolIndexArray;
+		private String[] symbolSet;
+		private Map<int[], DfaNode> stateMap;
+		private DfaNode beginNode;
+		private DfaNode endNode;
+		private int[] auxArray1;
+		private int[][] auxArray2;
+		private DfaNode[] nodes;
+		private Comparator<? super int[]> stateOrder;
+
+		protected DfaBuilder(GraphData other) {
+			super(other);
+		}
+		protected int getSymbolIndex(int nodeIndex) {
+			return this.getSymbolIndexArray()[nodeIndex];
+		}
+		protected int[] getSymbolIndexArray() {
+			if (this.symbolIndexArray == null) {
+				this.constructSymbolSet();
+			}
+			return this.symbolIndexArray;
+		}
+		/**
+		 * @param symbolIndexArray
+		 *          the symbolIndexArray to set
+		 */
+		protected void setSymbolIndexArray(int[] symbolIndexArray) {
+			this.symbolIndexArray = symbolIndexArray;
+		}
+		/**
+		 * @return the symbolSet
+		 */
+		protected String[] getSymbolSet() {
+			if (this.symbolSet == null) {
+				this.constructSymbolSet();
+			}
+			return this.symbolSet;
+		}
+		/**
+		 * @param symbolSet
+		 *          the symbolSet to set
+		 */
+		protected void setSymbolSet(String[] symbolSet) {
+			this.symbolSet = symbolSet;
+		}
+		protected void constructSymbolSet() {
+			final String[] symbols = this.getSymbols();
+			final int[] array = new int[symbols.length];
+			final Map<String, Number> symbolMap = new TreeMap<String, Number>();
+			int count = 0;
+			ArrayHelper.putAll(symbolMap, symbols, null);
+			for (Iterator<Entry<String, Number>> p = symbolMap.entrySet().iterator(); p
+					.hasNext();) {
+				final Entry<String, Number> ent = p.next();
+				ent.setValue(Integer.valueOf(count++));
+			}
+			for (int i = 0, n = symbols.length; i < n; ++i) {
+				array[i] = symbolMap.get(symbols[i]).intValue();
+			}
+			this.setSymbolIndexArray(array);
+			this.setSymbolSet(symbolMap.keySet().toArray(
+					ArrayHelper.EMPTY_STRING_ARRAY));
+		}
+		protected Map<int[], DfaNode> getStateMap() {
+			if (this.stateMap == null) {
+				this.stateMap = this.newStateMap();
+			}
+			return this.stateMap;
+		}
+		protected Map<int[], DfaNode> newStateMap() {
+			return new TreeMap<int[], DfaNode>(this.getStateOrder());
+		}
+		protected Comparator<? super int[]> getStateOrder() {
+			if (this.stateOrder == null) {
+				this.stateOrder = this.newStateOrder();
+			}
+			return this.stateOrder;
+		}
+		protected Comparator<? super int[]> newStateOrder() {
+			return new Comparator<int[]>() {
+				@Override
+				public int compare(int[] o1, int[] o2) {
+					return LexicographicalOrder.compare(o1, o2);
+				}
+			};
+		}
+		protected DfaNode getNode(int[] next, boolean anyway) {
+			final Map<int[], DfaNode> map = this.getStateMap();
+			DfaNode node = map.get(next);
+			if (node == null && true) {
+				node = this.newNode(map.size(), next);
+				map.put(next, node);
+			}
+			return node;
+		}
+		protected DfaNode newNode(int nodeIndex, int[] state) {
+			return new DfaNode(this, nodeIndex, state);
+		}
+		public DfaNode[] getNodes() {
+			if (this.nodes == null) {
+				this.nodes = this.newNodes();
+			}
+			return this.nodes;
+		}
+		/**
+		 * Creates entire graph.
+		 *
+		 * @return
+		 */
+		protected DfaNode[] newNodes() {
+			final TreeMap<int[], DfaNode> stack = new TreeMap<int[], DfaNode>(this
+					.getStateOrder());
+			final TreeMap<int[], DfaNode> done = new TreeMap<int[], DfaNode>(this
+					.getStateOrder());
+			DfaNode node = this.getBeginNode();
+			stack.put(node.getState(), node);
+			while (0 < stack.size()) {
+				final Entry<int[], DfaNode> ent = stack.firstEntry();
+				node = ent.getValue();
+				stack.remove(ent.getKey());
+				final DfaNext[] nexts = node.getNextArray();
+				for (int i = 0, n = nexts.length; i < n; ++i) {
+					final DfaNode next = nexts[i].getNode();
+					if (done.get(next.getState()) == null) {
+						stack.put(next.getState(), next);
+					}
+				}
+				done.put(node.getState(), node);
+			}
+			return done.values().toArray(DfaNode.EMPTY_ARRAY);
+		}
+		/**
+		 * Creates graph with lazy.
+		 *
+		 * @return
+		 */
+		public DfaNode getBeginNode() {
+			if (this.beginNode == null) {
+				this.constructTerminalNodes();
+			}
+			return this.beginNode;
+		}
+		/**
+		 * @param beginNode
+		 *          the beginNode to set
+		 */
+		protected void setBeginNode(DfaNode beginNode) {
+			this.beginNode = beginNode;
+		}
+		/**
+		 * @return the endNode
+		 */
+		protected DfaNode getEndNode() {
+			if (this.endNode == null) {
+				this.constructTerminalNodes();
+			}
+			return this.endNode;
+		}
+		/**
+		 * @param endNode
+		 *          the endNode to set
+		 */
+		protected void setEndNode(DfaNode endNode) {
+			this.endNode = endNode;
+		}
+		protected void constructTerminalNodes() {
+			{
+				final int index = KlSemiringGraph.BEGIN_NODE;
+				final int[] state = new int[] { index };
+				final DfaNode node = this.getNode(state, true);
+				this.setBeginNode(node);
+			}
+			{
+				final int index = KlSemiringGraph.END_NODE;
+				final int[] state = new int[] { index };
+				final DfaNode node = this.getNode(state, true);
+				this.setEndNode(node);
+			}
+		}
+		protected int[] getAuxArray1(int length) {
+			if (this.auxArray1 == null || this.auxArray1.length < length) {
+				this.auxArray1 = new int[this.getCapacity(length)];
+			}
+			return this.auxArray1;
+		}
+		protected int[][] getAuxArray2(int length) {
+			if (this.auxArray2 == null || this.auxArray2.length < length) {
+				this.auxArray2 = new int[this.getCapacity(length)][];
+			}
+			return this.auxArray2;
+		}
+		protected int getCapacity(int size) {
+			int capacity = (size * 3) / 2 + 1;
+			if (capacity < size) {
+				capacity = size;
+			}
+			if (capacity < size + 1) {
+				capacity = size + 1;
+			}
+			if (capacity < 4) {
+				capacity = 4;
+			}
+			return capacity;
+		}
+		protected DfaNode[] reduceStates() {
+			final DfaNode[] nodes = this.getNodes();
+			final Map<int[], DfaNode> nextMap = new TreeMap<int[], DfaNode>(this
+					.getStateOrder());
+			Map<DfaNode, DfaNode> nodeMap = null;
+			for (int i = 0, n = nodes.length; i < n; ++i) {
+				final DfaNode node = nodes[i];
+				final DfaNext[] nexts = node.getNextArray();
+				final int[] clique = this.getNodeIndexArray(nexts);
+				final DfaNode rep = nextMap.get(clique);
+				if (rep == null) {
+					nextMap.put(clique, node);
+				} else {
+					if (nodeMap == null) {
+						nodeMap = new HashMap<DfaNode, DfaNode>();
+					}
+					nodeMap.put(node, rep);
+				}
+			}
+			if (nodeMap == null) {
+				return nodes;
+			}
+			final DfaNode[] newNodes = new DfaNode[nodes.length - nodeMap.size()];
+			for (int i = 0, cnt = 0, n = nodes.length; i < n; ++i) {
+				final DfaNode node = nodes[i];
+				if (nodeMap.containsKey(node)) {
+					continue;
+				}
+				final DfaNext[] nexts = node.getNextArray();
+				for (int ii = 0, nn = nexts.length; ii < nn; ++ii) {
+					final DfaNode newNode = nodeMap.get(nexts[ii].getNode());
+					if (newNode != null) {
+						nexts[ii] = this.newNext(newNode, nexts[ii].getSymbolIndex());
+					}
+				}
+				newNodes[cnt++] = node;
+			}
+			return newNodes;
+		}
+		protected DfaNext newNext(DfaNode node, int symbolIndex) {
+			return new DfaNext(node, symbolIndex);
+		}
+		protected int[] getNodeIndexArray(DfaNext[] nexts) {
+			final int n = nexts != null ? nexts.length : 0;
+			int index = 0;
+			switch (n) {
+			case 0:
+				return ArrayHelper.EMPTY_INT_ARRAY;
+			case 1:
+				return new int[] { nexts[0].getNode().getNodeIndex() };
+			case 2:
+				index = nexts[0].getNodeIndex();
+				final int i1 = nexts[1].getNodeIndex();
+				if (index == i1) {
+					return new int[] { index };
+				} else if (index < i1) {
+					return new int[] { index, i1 };
+				} else {
+					return new int[] { i1, index };
+				}
+			default:
+				break;
+			}
+			final int[] array = new int[n];
+			int count = 0;
 			for (int i = 0; i < n; ++i) {
-				array[i] = new GraphNode(this, array, i);
+				index = nexts[i].getNodeIndex();
+				if (0 <= ArrayHelper.indexOf(array, 0, count, index)) {
+					continue;
+				}
+				array[count++] = index;
+			}
+			if (1 < count) {
+				Arrays.sort(array);
 			}
 			return array;
 		}
@@ -247,7 +734,7 @@ public class KlSemiringGraph {
 		for (int i = 0; i < n; ++i) {
 			final int[] inds = nexts.get(i);
 			if (ends.get(i)) {
-				newNexts[i] = ArrayHelper.add(inds, KlSemiringGraph.END_NODE);
+				newNexts[i] = ArrayHelper.add(KlSemiringGraph.END_NODE, inds);
 			} else {
 				newNexts[i] = inds;
 			}
