@@ -30,4 +30,5 @@ exec "Snippet eqs \\begin{equation}\\begin{split}<CR><Tab>".st.et."<CR>\\end{spl
 exec "Snippet graph \\begin{equation}\\xymatrix{<CR>".st.et."<CR>}\\end{equation}"
 exec "Snippet def.map \\begin{equation}\\begin{split}<CR><Tab>".st.et.":&\to<CR><Tab>&\\mapsto<CR>\\end{split}\\end{equation}"
 exec "Snippet item \\begin{itemize}<CR><Tab>\\item ".st.et."<CR>\\end{itemize}"
-exec "Snippet table \\begin{table}[!htbp]<CR><Tab>\\begin{center}\\begin{tabular}{cc}\\hline<CR>& & \\\\ \\hline<CR>\\end{tabular}\\end{center}<CR>\\caption{}<CR>\\end{table}"
+exec "Snippet table \\begin{table}[!htbp]<CR><Tab>\\begin{center}\\begin{tabular}{cc}\\hline<CR>& \\\\ \\hline<CR>\\end{tabular}\\end{center}<CR>\\caption{}<CR>\\end{table}"
+exec "Snippet figure \\begin{figure}[htbp]<CR><Tab>\\begin{center}<CR>\\hincludegraphics[width=1.0\\textwidth]{figure.png}<CR>\\end{center}<CR>\\caption{}\\label{}<CR>\\end{figure}"
