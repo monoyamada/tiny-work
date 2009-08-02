@@ -7,6 +7,146 @@
 
 \newcommand{\sgraph}{\entrymodifiers={++[o][F-]}\xymatrix@R=1pt@C-1pc}
 
+\subsection{KMP method (Kunuth-Morris-Pratt method)}
+KMP is the algorithm that find occurence of a word within an another word.
+We shall observe some examples before introducing KMP algorithm.
+
+\begin{observe}
+Let consider the problem to find matching part of the pattern word 'ABCD' 
+in the input word 'ABxCD...'. At the first try, we find that 'AB' matches
+and 'C' dose not match with from the begining of input string.
+\begin{equation}\label{eq:kpm-first}\begin{array}{ccc|cccc}
+	A&B&x&C&D&\cdots \\
+	A&B&C&D \\
+\end{array}\end{equation}
+Then we can try to find matching from the position of 'C' of the input word
+at next try: 
+\begin{equation}\label{eq:kpm-next}\begin{array}{cccc|ccc}
+	A&B&x&C&D&\cdots\\
+	&&&A&B&C&D \\
+\end{array}\end{equation}
+. We dont need to test the following cases:
+\begin{equation}\begin{array}{cc|ccccc}
+	A&B&x&C&D&\cdots\\
+	&A&B&C&D \\
+\end{array}\end{equation}
+\begin{equation}\begin{array}{ccc|cccc}
+	A&B&x&C&D&\cdots\\
+	&&A&B&C&D \\
+\end{array}\end{equation}
+, because we already know at the first try\eqref{eq:kpm-first} that 
+matching is never occured in the above cases.
+The state transtion of the pattern 'ABCD' is written as the follwings:
+\begin{equation}\begin{array}{rcrcrcr}
+	\bakko{ABCD} &=& A\bakko{BCD} &+& 0 &+& A^c \bakko{ABCD} \\
+	\bakko{BCD} &=& B\bakko{CD} &+& A\bakko{BCD} &+& (A+B)^c \bakko{ABCD} \\
+	\bakko{CD} &=& C\bakko{D} &+& A\bakko{BCD} &+& (A+C)^c \bakko{ABCD} \\
+	\bakko{D} &=& D\bakko{} &+& A\bakko{BCD} &+& (A+D)^c \bakko{ABCD} \\
+\end{array}\end{equation}
+. Where we denote as the followings:
+\begin{itemize}
+	\item $\bakko{a_1a_2\cdots}$ as a word
+	\item $+$ as the union of sets
+	\item $\cdot$ as the intersect of sets
+	\item $c$ as the complement of set
+\end{itemize}
+.
+\end{observe}
+
+\begin{observe}
+Let consider the problem to find matching part of the pattern word 'ABCDABD' 
+in the input word 'ABCDABCDABD...'.
+We find being matched until the second 'C' in the input word.
+\begin{equation}\begin{array}{ccccccc|ccccc}
+	A&B&C&D&A&B&C&D&A&B&D&\cdots \\
+	A&B&C&D&A&B&D \\
+\end{array}\end{equation}
+Then we find being matched from the second 'A' to the third 'D' in the
+input word.
+\begin{equation}\begin{array}{ccccccccccc|c}
+	A&B&C&D&A&B&C&D&A&B&D&\cdots \\
+	&&&&A&B&C&D&A&B&D \\
+\end{array}\end{equation}
+The state transtion of the pattern 'ABCDABD' is written as the follwings:
+\begin{equation}\begin{split}
+	\begin{array}{r}
+		\bakko{ABCDABD} \\
+		\bakko{BCDABD} \\
+		\bakko{CDABD} \\
+		\bakko{DABD} \\
+		\bakko{ABD} \\
+		\bakko{BD} \\
+		\bakko{D} \\
+		\bakko{} \\
+	\end{array} &\mapsto \kakko{\begin{array}{rrrrrrrrrr}
+		A^c  & A & 0 & 0 & 0 & 0 & 0 & 0 \\
+		(A+B)^c  & A & B & 0 & 0 & 0 & 0 & 0 \\
+		(A+C)^c  & A & 0 & C & 0 & 0 & 0 & 0 \\
+		(A+C+D)^c  & A & 0 & C & D & 0 & 0 & 0 \\
+		A^c  & 0 & 0 & 0 & 0 & A & 0 & 0 \\ 
+		(A+B)^c  & A & 0 & 0 & 0 & 0 & B & 0 \\
+		(A+C+D)^c  & A & 0 & C & 0 & 0 & 0 & D \\
+		0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
+	\end{array}} \begin{array}{r}
+		\bakko{ABCDABD} \\ 
+		\bakko{BCDABD} \\ 
+		\bakko{CDABD} \\ 
+		\bakko{DABD} \\
+		\bakko{ABD} \\
+		\bakko{BD} \\
+		\bakko{D} \\
+		\bakko{} \\
+	\end{array} \\
+\end{split}\end{equation}
+.
+\end{observe}
+
+\begin{observe}
+Let consider the problem to find matching part of the pattern word 'AABAABAAA'
+in some input word. The pattern word is indexed as the follwings:
+\begin{equation}\begin{array}{ccccccccc}
+	0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+	A & A & B & A & A & B & A & A & A \\
+\end{array}\end{equation}
+. Let examine next index of the case 8-th alphabet being not-matched.
+The sub patterns within the pattern words 'AABAABAAA' and 'AABAAB'
+are the followings:
+\begin{equation}\begin{split}
+	\contraction{}{A_0}{A_1B_2A_3}{A_4}
+	\contraction[2ex]{A_0A_1B_2}{A_3}{A_4B_5A_6}{A_7}
+	&A_0A_1B_2A_3A_4B_5A_6A_7\underline{A_8} \\
+	\contraction{}{A_0}{}{A_1}
+	\contraction{A_0A_1B_2}{A_3}{}{A_4}
+	&A_0A_1B_2A_3A_4\underline{B_5} \\
+\end{split}\end{equation}
+, then psuedo-code is written as the follwings:
+\begin{cprog}
+	/**
+	 * finds end indices that word_1 matches within word_0.
+	 */
+	next(word_0: S[], index_0: Index, word_1: S[], index_1: Index): Index {
+		if word_0.length() <= index_0 | word_1.length() <= index_1 {
+			return (index_0, index_1);
+		} else word_0(index_0) == word(index_1) {
+			return next(word_0, index_0 += 1, word_1, index_1 += 1);
+		} else index_1 == 0 {
+			return next(word_0, index_0 += 1, word_1, 0);
+		} else index_1 == 2 {
+			return next(word_0, index_0, word_1, 0);
+		} else index_1 == 5 {
+			//return next(word_0, index_0, word_1, 2);
+			return next(word_0, index_0, word_1, 0);
+		} else index_1 == 8 {
+			return next(word_0, index_0, word_1, 5);
+		} else {
+			...
+		}
+	}
+\end{cprog}
+. The backtracking is written in the above psued-code only 
+in the case of index\_1 being $\set{2,5,8}$. 
+\end{observe}
+
 \subsection{Subset construction}
 We denote the subset construction in the following forms:
 \begin{equation}\begin{split}

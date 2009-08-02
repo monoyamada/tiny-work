@@ -1,4 +1,15 @@
 = プログラミング =
+== 文字列のマッチング ==
+
+=== KMP (Kunuth-Morris-Pratt) ===
+{{{
+	ABCxDEF
+	ABCD
+	    ABCD
+}}}
+解説
+[[http://algorithms.blog55.fc2.com/|アルゴリズムのメモ]]
+
 == CSVの仕様 ==
 多分、CSVファイルの書式仕様について書かれた唯一のものだろう。
 [[rfc4180.txt|RFC4180]]

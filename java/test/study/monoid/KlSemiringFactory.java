@@ -6,13 +6,13 @@ import study.lang.Messages;
 public class KlSemiringFactory {
 	public static final int ZERO = 0;
 	public static final int ONE = ZERO + 1;
-	public static final int STARS = ONE + 1;
+	public static final int SYMBOL = ONE + 1;
+	public static final int STARS = SYMBOL + 1;
 	public static final int PLUS = STARS + 1;
 	public static final int MULTIPLIES = PLUS + 1;
-	public static final int SYMBOL = MULTIPLIES + 1;
 	public static final int END = SYMBOL + 1;
 
-	public static interface IfNode extends IfKleeneSemiring<IfNode>,
+	public static interface IfNode extends IfKlSemiring<IfNode>,
 			IfTreeNode<IfNode> {
 		public int getNodeType();
 		/**
