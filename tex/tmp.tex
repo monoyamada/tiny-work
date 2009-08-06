@@ -1,0 +1,45 @@
+\section{Temporary}
+Let $A$ be a finite set, $x_1$ be the word of $A$ 
+that it's subsetc construction is as the followings:
+\begin{equation}\begin{split}
+	x_1 &= a_1\rhd x_2 \\
+	x_2 &= a_2\rhd x_3 \\
+	&\vdots \\
+\end{split}\end{equation}
+, where $a_1,a_2,\dots\in A$  and $x_1,x_2,\dots\in FA$.
+We shall consider the word $y_1=\bakko{A^*}x_1$.
+The subset construction of $y_1$ is as the followings:
+\begin{equation}\begin{split}
+	y_1 &= \bakko{A^*}x_1 \\
+		&= a_1\rhd x_2 + A\rhd y_1 \\
+		&= a_1\rhd (x_2+y_1) + a_1^c\rhd y_1 \\
+		&= a_1\rhd y_2 + a_1^c\rhd y_1 \\
+	y_2 &= x_2 + y_1 \\
+		&= a_2\rhd x_3 + a_1\rhd y_2 + a_1^c\rhd y_1 \\
+		&= \begin{cases}
+			a_2\rhd (x_3+y_2) + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
+			a_2\rhd (x_3+y_1) + a_1\rhd y_2 + a_1^c\wedge a_2^c\rhd y_1 & \text{case }a_1\not=a_2 \\
+			\end{cases} \\
+		&= \begin{cases}
+			a_2\rhd (x_3+y_2) + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
+			a_2\rhd (x_3+y_1) + a_2^c\wedge y_1 & \text{case } a_1\not=a_2 \\
+			\end{cases} \\
+		&= \begin{cases}
+			a_2\rhd y_3 + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
+			a_2\rhd y_3 + a_2^c\wedge y_1 & \text{case } a_1\not=a_2 \\
+			\end{cases} \\
+		y_3 &= \begin{cases}
+			x_3+y_2 & \text{case } a_1=a_2 \\
+			x_3+y_1 & \text{case } a_1\not=a_2 \\
+			\end{cases} \\
+		&= \begin{cases}
+			a_3\rhd x_4 + a_2\rhd y_3 + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
+			a_3\rhd x_4 + a_1\rhd y_2 + a_1^c\rhd y_1 & \text{case } a_1\not=a_2 \\
+			\end{cases} \\
+		&= \begin{cases}
+			a_3\rhd (x_4 + y_3) + a_3^c\rhd y_1 & \text{case } a_1=a_2\wedge a_2=a_3 \\
+			a_3\rhd (x_4 + y_1) + a_3^c\wedge y_2 & \text{case } a_1=a_2\wedge a_2\not=a_3 \\
+			a_3\rhd (x_4 + y_2) + a_3^c\rhd y_1 & \text{case } a_1\not=a_2\wedge a_1=a_3 \\
+			a_3\rhd (x_4 + y_1) + a_3^c\wedge y_1 & \text{case } a_1\not=a_2\wedge a_1\not=a_3 \\
+			\end{cases} \\
+\end{split}\end{equation}

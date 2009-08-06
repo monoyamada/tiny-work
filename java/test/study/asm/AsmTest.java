@@ -9,6 +9,12 @@ import java.util.List;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+
 import study.io.FileHelper;
 import study.lang.Debug;
 

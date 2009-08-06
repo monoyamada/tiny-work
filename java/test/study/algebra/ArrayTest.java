@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
+
 import study.algebra.ArrayTestClasses.Identity;
 import study.algebra.ArrayTestClasses.IfArrayTransform;
 import study.algebra.ArrayTestClasses.PrefixCoMagma;
