@@ -9,3 +9,4 @@
 	* [[Programming|プログラミング ]]
 	* [[Engineering|工学 ]]
 	* [[Note|ノート ]]
+	* [[Resource|文献 ]]
