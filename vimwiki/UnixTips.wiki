@@ -39,7 +39,20 @@ else
 	exit
 fi
 }}}
+
+== 文字列の連結 ==
 {{{
+x="hello"
+y="world"
+echo $x$y
+}}}
+
+{{{
+$low_to_up = uc( "aaa" );
+my $low_to_up2 = "\Uab\Ecd"; # ダブルクォート文字列では、
+                             # \Lと\Eで囲むと小文字になる。
+print "aaa -> $low_to_up\n";
+print "abcd -> $low_to_up2\n";
 }}}
 
 === ファイル一覧 ===

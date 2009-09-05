@@ -16,9 +16,12 @@ import java.io.Writer;
 import study.lang.Debug;
 
 public class FileHelper {
+	public static final String UTF_8 = "UTF-8";
+
 	public static String getSystemEncoding() {
 		return System.getProperty("file.encoding");
 	}
+
 	public static String avoidNullEncoding(String encoding) {
 		if (encoding != null) {
 			return encoding;
