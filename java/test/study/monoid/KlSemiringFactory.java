@@ -1,6 +1,6 @@
 package study.monoid;
 
-import study.function.IfFunction;
+import study.function.Function;
 import study.lang.Messages;
 
 public class KlSemiringFactory {
@@ -22,7 +22,7 @@ public class KlSemiringFactory {
 		 * @return
 		 * @throws Exception
 		 */
-		public IfNode replaceNode(IfFunction<IfNode, IfNode> fnc) throws Exception;
+		public IfNode replaceNode(Function<IfNode, IfNode> fnc) throws Exception;
 	}
 
 	protected class Zero extends EmptyTreeNode<IfNode> implements IfNode {
@@ -96,7 +96,7 @@ public class KlSemiringFactory {
 			return KlSemiringFactory.this.newMultiplies(this, x);
 		}
 		@Override
-		public IfNode replaceNode(IfFunction<IfNode, IfNode> fnc) throws Exception {
+		public IfNode replaceNode(Function<IfNode, IfNode> fnc) throws Exception {
 			if (fnc == null) {
 				String msg = Messages
 						.getUnexpectedValue("replaceNode", "non-null", fnc);
@@ -104,7 +104,7 @@ public class KlSemiringFactory {
 			}
 			return this.doReplaceNode(fnc);
 		}
-		protected IfNode doReplaceNode(IfFunction<IfNode, IfNode> fnc)
+		protected IfNode doReplaceNode(Function<IfNode, IfNode> fnc)
 				throws Exception {
 			return fnc.evaluate(this);
 		}
@@ -143,7 +143,7 @@ public class KlSemiringFactory {
 		protected IfNode doPowers(int n) {
 			return this;
 		}
-		protected IfNode doReplaceNode(IfFunction<IfNode, IfNode> fnc)
+		protected IfNode doReplaceNode(Function<IfNode, IfNode> fnc)
 				throws Exception {
 			return fnc.evaluate(this);
 		}
@@ -211,7 +211,7 @@ public class KlSemiringFactory {
 			}
 			return node;
 		}
-		protected IfNode doReplaceNode(IfFunction<IfNode, IfNode> fnc)
+		protected IfNode doReplaceNode(Function<IfNode, IfNode> fnc)
 				throws Exception {
 			return fnc.evaluate(this);
 		}
@@ -282,7 +282,7 @@ public class KlSemiringFactory {
 				return this;
 			}
 		}
-		protected IfNode doReplaceNode(IfFunction<IfNode, IfNode> fnc)
+		protected IfNode doReplaceNode(Function<IfNode, IfNode> fnc)
 				throws Exception {
 			final IfNode newChild = fnc.evaluate(this.getChild());
 			if (newChild == this.getChild()) {
@@ -376,7 +376,7 @@ public class KlSemiringFactory {
 			}
 			return node;
 		}
-		protected IfNode doReplaceNode(IfFunction<IfNode, IfNode> fnc)
+		protected IfNode doReplaceNode(Function<IfNode, IfNode> fnc)
 				throws Exception {
 			final IfNode newChild0 = fnc.evaluate(this.getChild0());
 			final IfNode newChild1 = fnc.evaluate(this.getChild1());
@@ -395,7 +395,7 @@ public class KlSemiringFactory {
 		public int getNodeType() {
 			return KlSemiringFactory.MULTIPLIES;
 		}
-		protected IfNode doReplaceNode(IfFunction<IfNode, IfNode> fnc)
+		protected IfNode doReplaceNode(Function<IfNode, IfNode> fnc)
 				throws Exception {
 			final IfNode newChild0 = fnc.evaluate(this.getChild0());
 			final IfNode newChild1 = fnc.evaluate(this.getChild1());

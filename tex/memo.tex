@@ -7,8 +7,204 @@
 
 \newcommand{\sgraph}{\entrymodifiers={++[o][F-]}\xymatrix@R=1pt@C-1pc}
 
-\subsection{プログラミング言語}
+\subsection{音楽CDの売り上げ推移}
+\begin{itemize}
+	\item 熱心なファンが存在する
+	\item 熱心なファンはCDが発売されたら必ず買う
+	\item 熱心なファンはCDの発売を待ち焦がれている
+\end{itemize}
+次のようなモデルを考える。
+\begin{equation}\xymatrix{
+	\myop{fan} \ar[r]^k & \myop{bought} \\
+}\end{equation}
+\begin{equation}\begin{split}
+	\partial_tx &= -Kx \\
+	x &= \begin{pmatrix}
+		\myop{fan} \\
+		\myop{bought} \\
+		\end{pmatrix} \\
+	K &= kM \\
+	M &= \begin{pmatrix}
+		1 & 0 \\
+		- 1 & 0 \\
+		\end{pmatrix} \\
+	k &\ge 0 \\
+\end{split}\end{equation}
+$M$がべき等$M^2=M$だから、この微分方程式の解は次のようになる。
+\begin{equation}\begin{split}
+	x(t) &= e^{-Kt}x_0 \\
+		&= x_0 + (e^{-kt}-1)Mx_0 \\
+	\myop{fan}(t) &= e^{-kt}\myop{fan}_0 \\
+	\myop{bought}(t) &= \myop{bought}_0 + (1 - e^{-kt})\myop{fan}_0 \\
+\end{split}\end{equation}
+実際には、流れ係数は
+\begin{itemize}
+	\item 発売日、
+	\item 曜日、
+	\item 祝祭日やクリスマスなどの催事、
+	\item 販売促進のためのメディア出演、
+\end{itemize}
+などに依存するので、時間に関して定数とはいえない。
+したがって、一日単位で流れ係数が異なるとすると、一日単位で積分して、
+購買者数$\myop{bought}$は次のような差分方程式で表される。
+\begin{equation}\begin{split}
+	\myop{fan}_{n+1} &= a_{n+1}\myop{fan}_n \\
+	\myop{bought}_{n+1} &= \myop{bought}_n + (1 - a_{n+1})\myop{fan}_n \\
+	a_{n} &= e^{- k_n\delta} \\
+\end{split}\end{equation}
+ここで、$\delta$は一日の時間である。一日を単位とした場合は、$\delta=1$である。
+したがって、一日の売り上げ$\myop{sales}$は次のようになる。
+\begin{equation}\begin{split}
+	\myop{fan}_{n+1} &= a_{n+1}\myop{fan}_n \\
+	\myop{sales}_{n+1} &= \myop{bought}_{n+1} - \myop{bought}_n \\
+		&= (1 - a_{n+1})\myop{fan}_n \\
+\end{split}\end{equation}
+売り上げの結果から流れ係数を推定するのに便利な形に直すと次のようになる。
+\begin{equation}\begin{split}
+	a_{n+1} &= 1 - \frac{\myop{sales}_{n+1}}{\myop{fan}_n} \\
+		&= 1 - \frac{\myop{sales}_{n+1}}{\myop{fan}_0 - \sum_{k=1}^n\myop{sales}_k} \\
+		&= 1 - \frac{\myop{sales}_{n+1}}{\myop{fan}_0 + \myop{bought}_0 - \myop{bought}_n} \\
+\end{split}\end{equation}
 
+\subsection{モンテカルロ法}
+何故、モンテカルロ法は積分を近似するのだろうか。
+実数の区間$[a,b]$で定義された関数$f$に対するモンテカルロ法による
+近似は次のように書ける。
+\begin{equation}\begin{split}
+	\int_a^bdxf(x) \simeq \frac{b-a}{n}\sum_{i=1}^nf(x_i) \\
+\end{split}\end{equation}
+ここで、$\set{x_1,\dots,x_n}$はモンテカルロ法で生成された点列である。
+
+有限集合で考えてみる。
+$X$を有限集合、$PX$を$X$の分布全体のなす空間とする。
+\begin{equation}\begin{split}
+	PX &= \set{X\to \mybf{R}^{\zettai{X}}\bou\text{below}} \\
+	& p(x)\in [0,1] \text{ for all }p\in PX, x\in X \text{ and }\\
+	& \sum_{x\in X} p(x)=1 \\
+\end{split}\end{equation}
+最終分布$p\in PX$が与えられたする。
+任意の初期分布から出発して、最終分布$p$に達して定常分布になる
+遷移確率$T$を求めてみる。$p$への射影$\pi_p$は求める遷移確率$T$となる。
+\begin{equation}\begin{split}
+	\pi_p &= \tau p \\
+	\pi_p q &= p\myop{tr}(q) \text{ for all }q\in PX \\
+\end{split}\end{equation}
+
+三つの状態$X=\set{x_1,x_2,x_3}$の最終分布を$(p_1,p_2,p_3)\in PX$とする。
+
+確率ベクトルの空間$P$を考える。
+\begin{itemize}
+	\item 終状態$p_\infty\in P$が与えられる。
+	\item 任意の始状態$p_0\in P$に対して、
+	$p_\infty=T_\infty p_0$となる遷移行列$T_\infty$を求める。
+	遷移行列$T_\infty$はべき等$T_\infty^2=T_\infty$となる。
+	\item どうやって遷移確率$T_\infty$を求めるか。
+	\item $p_\infty$への射影が$T_\infty$となる。
+	$u^t=(1, 1, \dots , 1)$とすると、$T_\infty=T=p_\infty u^t$と書ける。
+	$T_\infty$には逆行列は存在しない。
+	なぜなら、$T_\infty=p_\infty u^t$だから、
+	\begin{equation}\begin{split}
+		T_\infty &= \begin{pmatrix}
+			p_\infty(1) & \cdots & p_\infty(1) \\
+			\vdots & \vdots & \vdots \\
+			p_\infty(n) & \cdots & p_\infty(n) \\
+			\end{pmatrix} \\
+	\end{split}\end{equation}
+	という形になり、各列が等しくなり行列式が$0$になる。
+\end{itemize}
+
+$\mybf{R}$上のベクトル空間$V$とその線形変換$M$に対して、
+成分毎の掛け算$\odot$を定義する。
+\begin{equation}\begin{split}
+	\odot: V\times V &\to V \\
+		\begin{pmatrix}x_1\\ \vdots\\ x_n\end{pmatrix}
+		\times \begin{pmatrix}y_1\\ \vdots\\ y_n\end{pmatrix}
+		&\mapsto \begin{pmatrix}x_1y_1\\ \vdots\\ x_ny_n\end{pmatrix} \\
+	\odot: M\times M &\to M \\
+	\begin{pmatrix}
+		x_{11} & & x_{1n} \\ 
+		\vdots & \vdots & \vdots \\ 
+		x_{n1} & & x_{nn} \\ 
+	\end{pmatrix}
+	\times \begin{pmatrix}
+		y_{11} & & y_{1n} \\ 
+		\vdots & \vdots & \vdots \\ 
+		y_{n1} & & y_{nn} \\ 
+	\end{pmatrix}
+	&\mapsto \begin{pmatrix}
+		x_{11}y_{11} & & x_{1n}y_{1n} \\ 
+		\vdots & \vdots & \vdots \\ 
+			x_{n1}y_{n1} & & x_{nn}y_{nn} \\ 
+		\end{pmatrix}
+\end{split}\end{equation}
+二項演算$\odot$は可換モノイドとなり、その単位元$1_\odot$は次のようになる。
+\begin{equation}\begin{split}
+	1_\odot &= \begin{pmatrix}
+		1 \\
+		1 \\
+		\vdots \\
+		1 \\
+		\end{pmatrix} \\
+	1_\odot &= \begin{pmatrix}
+		1 & 1 & \cdots & 1 \\
+		1 & 1 & \cdots & 1 \\
+		\vdots & \vdots & \vdots & \vdots \\
+		1 & 1 & \cdots & 1 \\
+		\end{pmatrix} \\
+\end{split}\end{equation}
+また、加法$+$との分配則を満たすので、組$(+,\odot)$は半環となる。
+$V$から$M$への写像$\tau$を次のように定義する。
+\begin{equation}\begin{split}
+	\tau: V &\to M \\
+		\begin{pmatrix}
+			x_1 \\ 
+			x_2 \\ 
+			\vdots \\ 
+			x_n \\
+		\end{pmatrix} &\mapsto 
+		\begin{pmatrix}
+			x_1 & x_1 & \dots & x_1 \\ 
+			x_2 & x_2 & \dots & x_2 \\ 
+			\vdots & \vdots & \vdots & \vdots \\ 
+			x_n & x_n & \dots & x_n \\ 
+		\end{pmatrix} 
+\end{split}\end{equation}
+写像$\tau$は$+$と$\odot$に対して準同型となり、
+半環$(V,+,\odot)$から半環$(M,+,\odot)$への半環準同型となる。
+列の和を定義する。
+
+行列のトレースにならって、$V$にもトレースを定義する。
+\begin{equation}\begin{split}
+	\myop{tr}: V &\to \mybf{R} \\
+		\begin{pmatrix}
+			x_1 \\ 
+			x_2 \\ 
+			\vdots \\ 
+			x_n \\
+		\end{pmatrix} &\mapsto x_1+x_2+\cdots+x_n \\
+\end{split}\end{equation}
+すると、任意の$v\in V$に対して$\myop{tr}(v)=\myop{tr}\kakko{\tau\kakko{v}}$
+が成り立つ。
+任意の$v,w\in V$に対して、$\tau(v)\tau(w)=\tau(v)\myop{tr}(w)$が、
+任意の$v,w\in V$に対して、$\tau(v)\tau(w)=\tau(v)\myop{tr}(w)$が、
+成り立つ。
+\begin{equation}\begin{split}
+		\begin{pmatrix}
+			x_1 & \dots & x_1 \\ 
+			\vdots & \vdots & \vdots \\ 
+			x_n & \dots & x_n \\ 
+		\end{pmatrix} \begin{pmatrix}
+			y_1 & \dots & y_1 \\ 
+			\vdots & \vdots & \vdots \\ 
+			y_n & \dots & y_n \\ 
+		\end{pmatrix} &= \begin{pmatrix}
+			x_1 & \dots & x_1 \\ 
+			\vdots & \vdots & \vdots \\ 
+			x_n & \dots & x_n \\ 
+		\end{pmatrix}(y_1+\cdots+y_n) \\
+\end{split}\end{equation}
+
+\subsection{プログラミング言語}
 \subsubsection{多重継承}
 コード量を減らすためにも多重継承の機能はあった方がよい。
 多重継承の利点と不利点は次のようになるだろう。

@@ -85,4 +85,13 @@ public class Debug {
 			throw new NullPointerException(msg);
 		}
 	}
+	public static void isTrue(boolean value) {
+		Debug.isTrue("parameter", value);
+	}
+	public static void isTrue(String what, Object value) {
+		if (value == null) {
+			String msg = Messages.getUnexpectedValue(what, "is true", null);
+			throw new NullPointerException(msg);
+		}
+	}
 }

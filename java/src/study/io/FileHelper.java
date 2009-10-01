@@ -11,9 +11,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
 
 import study.lang.Debug;
+import study.lang.Messages;
 
 public class FileHelper {
 	public static final String UTF_8 = "UTF-8";
@@ -26,11 +37,7 @@ public class FileHelper {
 		if (encoding != null) {
 			return encoding;
 		}
-		encoding = FileHelper.getSystemEncoding();
-		if (encoding != null) {
-			return encoding;
-		}
-		return "UTF8";
+		return FileHelper.UTF_8;
 	}
 
 	public static void close(Closeable value) {
@@ -40,6 +47,12 @@ public class FileHelper {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
+		}
+	}
+	public static void close(URLConnection value) {
+		if (value instanceof HttpURLConnection) {
+			final HttpURLConnection http = (HttpURLConnection) value;
+			http.disconnect();
 		}
 	}
 
@@ -69,6 +82,15 @@ public class FileHelper {
 		return new PrintWriter(writer);
 	}
 
+	public static Reader getReader(File file) throws IOException {
+		return FileHelper.getReader(file, null);
+	}
+	public static Reader getReader(File file, String encoding) throws IOException {
+		encoding = FileHelper.avoidNullEncoding(encoding);
+		final InputStream input = new FileInputStream(file);
+		return new InputStreamReader(input, encoding);
+	}
+
 	public static BufferedReader getBufferedReader(File file) throws IOException {
 		return FileHelper.getBufferedReader(file, null);
 	}
@@ -79,6 +101,7 @@ public class FileHelper {
 		final InputStreamReader reader = new InputStreamReader(input, encoding);
 		return new BufferedReader(reader);
 	}
+
 	public static void ensureDirectory(File directory) throws IOException {
 		Debug.isNotNull(directory);
 		if (directory.exists()) {
@@ -100,5 +123,166 @@ public class FileHelper {
 				throw new IOException(msg);
 			}
 		}
+	}
+
+	public static String readText(File file) throws IOException {
+		return FileHelper.readText(file, null);
+	}
+	public static String readText(File file, String encoding) throws IOException {
+		final StringBuilder buffer = new StringBuilder();
+		FileHelper.readText(buffer, file, encoding);
+		return buffer.toString();
+	}
+	public static void readText(Appendable output, File file, String encoding)
+			throws IOException {
+		Reader reader = null;
+		try {
+			reader = FileHelper.getReader(file, encoding);
+			FileHelper.readText(output, reader);
+		} finally {
+			FileHelper.close(reader);
+		}
+	}
+	public static String readText(InputStream input) throws IOException {
+		try {
+			return FileHelper.readText(input, null);
+		} catch (UnsupportedEncodingException ex) {
+			ex.printStackTrace();
+			throw new RuntimeException(ex);
+		}
+	}
+	public static String readText(InputStream input, String encoding)
+			throws IOException {
+		final StringBuilder buffer = new StringBuilder();
+		FileHelper.readText(buffer, input, encoding);
+		return buffer.toString();
+	}
+	public static void readText(Appendable output, InputStream input,
+			String encoding) throws IOException {
+		encoding = FileHelper.avoidNullEncoding(encoding);
+		InputStreamReader reader = null;
+		try {
+			reader = new InputStreamReader(input, encoding);
+			FileHelper.readText(output, reader);
+		} finally {
+			FileHelper.close(reader);
+		}
+	}
+	public static void readText(Appendable output, Reader reader)
+			throws IOException {
+		final CharBuffer buffer = CharBuffer.allocate(1024 * 64);
+		while (0 <= reader.read(buffer)) {
+			output.append(buffer.toString());
+			buffer.clear();
+		}
+	}
+
+	public static void writeText(File file, String text) throws IOException {
+		FileHelper.writeText(file, text, null);
+	}
+	public static void writeText(File file, String text, String encoding)
+			throws IOException {
+		FileHelper.writeText(file, text, encoding, false);
+	}
+	public static void writeText(File file, String text, String encoding,
+			boolean append) throws IOException {
+		Writer writer = null;
+		try {
+			writer = FileHelper.getWriter(file, encoding, append);
+			writer.write(text);
+			writer.flush();
+		} finally {
+			FileHelper.close(writer);
+		}
+	}
+
+	public static URL getURL(String url) throws URISyntaxException,
+			MalformedURLException {
+		final URI uri = new URI(url);
+		return uri.toURL();
+	}
+
+	public static boolean copyFile(File output, URI input,
+			boolean ignoreModifiedTime) throws MalformedURLException, IOException {
+		return FileHelper.copyFile(output, input.toURL(), ignoreModifiedTime);
+	}
+	/**
+	 * 
+	 * @param output
+	 *          not a directory.
+	 * @param input
+	 * @param ignoreModifiedTime
+	 * @return <code>true</code> iff copied.
+	 * @throws IOException
+	 */
+	public static boolean copyFile(File output, URL input,
+			boolean ignoreModifiedTime) throws IOException {
+		if (output.isDirectory()) {
+			throw new IOException(Messages.getUnexpectedValue(output
+					.getAbsolutePath(), "file", "directtory"));
+		}
+		URLConnection cnn = null;
+		InputStream in = null;
+		OutputStream out = null;
+		try {
+			cnn = input.openConnection();
+			if (!ignoreModifiedTime && output.exists()
+					&& cnn.getLastModified() < output.lastModified()) {
+				return false;
+			}
+			if (cnn instanceof HttpURLConnection) {
+				final HttpURLConnection x = (HttpURLConnection) cnn;
+				x.setRequestMethod("GET");
+			}
+			in = cnn.getInputStream();
+			out = new FileOutputStream(output);
+			byte[] buffer = new byte[1024 * 32];
+			int n = in.read(buffer);
+			while (0 <= n) {
+				out.write(buffer, 0, n);
+				out.flush();
+				n = in.read(buffer);
+			}
+			return true;
+		} finally {
+			FileHelper.close(out);
+			FileHelper.close(in);
+			FileHelper.close(cnn);
+		}
+	}
+
+	public static boolean copyFile(File outputFile, File inputFile,
+			boolean overwrite, boolean ignoreModfiedTime) throws IOException {
+		if (inputFile == null) {
+			throw new NullPointerException(Messages.getNull("input file"));
+		} else if (!inputFile.isFile()) {
+			throw new IllegalArgumentException(Messages.getUnexpectedValue(inputFile
+					.getAbsolutePath(), "file", "not file"));
+		} else if (outputFile == null) {
+			throw new NullPointerException(Messages.getNull("output file"));
+		} else if (inputFile.isDirectory()) {
+			throw new IllegalArgumentException(Messages.getUnexpectedValue(outputFile
+					.getAbsolutePath(), "is not directory", "directory"));
+		}
+
+		if (inputFile.equals(outputFile)) {
+			return true;
+		} else if (outputFile.isFile() && !overwrite) {
+			return false;
+		}
+
+		FileInputStream input = null;
+		FileOutputStream output = null;
+		try {
+			input = new FileInputStream(inputFile);
+			output = new FileOutputStream(outputFile);
+			final FileChannel in = input.getChannel();
+			final FileChannel out = output.getChannel();
+			in.transferTo(0, in.size(), out);
+		} finally {
+			FileHelper.close(input);
+			FileHelper.close(output);
+		}
+		return true;
 	}
 }

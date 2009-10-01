@@ -5,7 +5,7 @@ import java.util.Iterator;
 import study.lang.Messages;
 
 public abstract class AbArray<Value> extends AbFunction<Number, Value>
-		implements IfArray<Value> {
+		implements Array<Value> {
 	@Override
 	public Value getValue(Number key, Value defaultValue) {
 		if (key == null) {
