@@ -8,8 +8,9 @@ if [ $# -lt 1 ]; then
 fi
 
 out_dir="output"
-opts="-draftmod -halt-on-error"
-opts="-encoding=utf8 -draftmod -halt-on-error"
+#opts="-draftmod -halt-on-error"
+#opts="-encoding=utf8 -draftmod -halt-on-error"
+opts="-halt-on-error"
 if [ -d $out_dir ]; then
 	a=""
 else
