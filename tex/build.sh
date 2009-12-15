@@ -12,13 +12,6 @@ if [ ! -d $out_dir ]; then
 	mkdir $out_dir
 fi
 
-opts="-halt-on-error"
-opt_enc="-kanji=utf8"
-opt_dir="-output-directory=$out_dir"
-if [ $OS="Windows_NT" ]; then
-	opts="$opts $opt_enc $opt_dir"
-	platex $opts $opt_dir $1
-else
-	opts="$opts $opt_enc $opt_dir -draftmod"
-	latex $opts $opt_dir $1
-fi
+opts="-halt-on-error -kanji=utf8 -output-directory=$out_dir"
+platex $opts $opt_dir $1
+dvipdfmx -o $out_dir/$1.pdf $out_dir/$1.dvi

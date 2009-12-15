@@ -7,6 +7,29 @@
 
 \newcommand{\sgraph}{\entrymodifiers={++[o][F-]}\xymatrix@R=1pt@C-1pc}
 
+\subsection{プログラミング言語での型の圏}
+\begin{itemize}
+	\item 型と呼ばれるものを対象、
+	\item 関数と呼ばれるものを射
+\end{itemize}
+とする圏を考える。つまり、言語の機能として、関数の合成を提供する。
+\begin{equation}\begin{split}
+	& \myop{real} \xrightarrow{\myop{floor}} \myop{integer} \xrightarrow{\myop{is\_positive}} \myop{boolean} \\
+	& \Downarrow \\
+	& \myop{real} \xrightarrow{\myop{is\_positive}\circ\myop{floor}} \myop{boolean} \\
+\end{split}\end{equation}
+さらに直積圏
+\begin{equation}\begin{split}
+	& \myop{boolean} \xrightarrow{\myop{as\_integer}} \myop{integer} \\
+	& \myop{boolean} \xrightarrow{\myop{as\_real}} \myop{real} \\
+	& \Downarrow \\
+	& \delta: x \to (x, x) \text{ for all object } x \\
+	& \pi_1: (x, y) \to x \text{ for all object } x, y \\
+	& \pi_2: (x, y) \to y \text{ for all object } x, y \\
+	& \myop{boolean} \xrightarrow{(\myop{as\_integer}, \myop{as\_real})\circ\delta} (\myop{integer}, \myop{real}) \\
+\end{split}\end{equation}
+を考える。つまり、言語の機能として、構造体を提供する。
+
 \subsection{音楽CDの売り上げ推移}
 \begin{itemize}
 	\item 熱心なファンが存在する
