@@ -17,29 +17,70 @@ The subset construction of $y_1$ is as the followings:
 	y_2 &= x_2 + y_1 \\
 		&= a_2\rhd x_3 + a_1\rhd y_2 + a_1^c\rhd y_1 \\
 		&= \begin{cases}
-			a_2\rhd (x_3+y_2) + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
-			a_2\rhd (x_3+y_1) + a_1\rhd y_2 + a_1^c\wedge a_2^c\rhd y_1 & \text{case }a_1\not=a_2 \\
+			a_1=a_2 \implies & a_2\rhd (x_3+y_2) + a_2^c\rhd y_1 \\
+			a_1\not=a_2 \implies & a_2\rhd (x_3+y_1) + a_1\rhd y_2 + a_1^c\wedge a_2^c\rhd y_1 \\
 			\end{cases} \\
 		&= \begin{cases}
-			a_2\rhd (x_3+y_2) + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
-			a_2\rhd (x_3+y_1) + a_2^c\wedge y_1 & \text{case } a_1\not=a_2 \\
+			a_1=a_2 \implies & a_2\rhd (x_3+y_2) + a_2^c\rhd y_1 \\
+			a_1\not=a_2 \implies & a_2\rhd (x_3+y_1) + a_2^c\wedge(a_1\rhd y_2 + a_1^c\rhd y_1) \\
 			\end{cases} \\
 		&= \begin{cases}
-			a_2\rhd y_3 + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
-			a_2\rhd y_3 + a_2^c\wedge y_1 & \text{case } a_1\not=a_2 \\
+			a_1=a_2 \implies & a_2\rhd y_3 + a_2^c\rhd y_1 \\
+			a_1\not=a_2 \implies & a_2\rhd y_3 + a_2^c\wedge y_1 \\
 			\end{cases} \\
-		y_3 &= \begin{cases}
-			x_3+y_2 & \text{case } a_1=a_2 \\
-			x_3+y_1 & \text{case } a_1\not=a_2 \\
-			\end{cases} \\
-		&= \begin{cases}
-			a_3\rhd x_4 + a_2\rhd y_3 + a_2^c\rhd y_1 & \text{case } a_1=a_2 \\
-			a_3\rhd x_4 + a_1\rhd y_2 + a_1^c\rhd y_1 & \text{case } a_1\not=a_2 \\
+	y_3 &= \begin{cases}
+			a_1=a_2 \implies & x_3+y_2 \\
+			a_1\not=a_2 \implies & x_3+y_1 \\
 			\end{cases} \\
 		&= \begin{cases}
-			a_3\rhd (x_4 + y_3) + a_3^c\rhd y_1 & \text{case } a_1=a_2\wedge a_2=a_3 \\
-			a_3\rhd (x_4 + y_1) + a_3^c\wedge y_2 & \text{case } a_1=a_2\wedge a_2\not=a_3 \\
-			a_3\rhd (x_4 + y_2) + a_3^c\rhd y_1 & \text{case } a_1\not=a_2\wedge a_1=a_3 \\
-			a_3\rhd (x_4 + y_1) + a_3^c\wedge y_1 & \text{case } a_1\not=a_2\wedge a_1\not=a_3 \\
+			a_1=a_2 \implies & a_3\rhd x_4 + a_2\rhd y_3 + a_2^c\rhd y_1 \\
+			a_1\not=a_2 \implies & a_3\rhd x_4 + a_1\rhd y_2 + a_1^c\rhd y_1 \\
+			\end{cases} \\
+		&= \begin{cases}
+			a_1=a_2\wedge a_2=a_3 \implies & a_3\rhd (x_4 + y_3) + a_3^c\rhd y_1 \\
+			a_1=a_2\wedge a_2\not=a_3 \implies & a_3\rhd (x_4 + y_1) + a_3^c\wedge(a_2\rhd y_3 + a_2^c\rhd y_1) \\
+			a_1\not=a_2\wedge a_1=a_3 \implies & a_3\rhd (x_4 + y_2) + a_3^c\rhd y_1 \\
+			a_1\not=a_2\wedge a_1\not=a_3 \implies & a_3\rhd (x_4 + y_1) + a_3^c\wedge(a_1\rhd y_2 + a_1^c\rhd y_1) \\
+			\end{cases} \\
+		&= \begin{cases}
+			a_1=a_2\wedge a_2=a_3 \implies & a_3\rhd y_4 + a_3^c\rhd y_1 \\
+			a_1=a_2\wedge a_2\not=a_3 \implies & a_3\rhd y_4 + a_3^c\wedge y_2 \\
+			a_1\not=a_2\wedge a_1=a_3 \implies & a_3\rhd y_4 + a_3^c\rhd y_1 \\
+			a_1\not=a_2\wedge a_1\not=a_3 \implies & a_3\rhd y_4 + a_3^c\wedge y_1 \\
+			\end{cases} \\
+	y_4 &= \begin{cases}
+			a_1=a_2\wedge a_2=a_3 \implies & x_4+y_3 \\
+			a_1\not=a_2\wedge a_1=a_3 \implies & x_4+y_2 \\
+			a_1\not=a_3 \implies & x_4+y_1 \\
 			\end{cases} \\
 \end{split}\end{equation}
+induction for $2\le m$
+\begin{equation}\begin{split}
+	\tau m &\in \set{1,2,\dots,m-1} \\
+	y_m &= x_m + y_{\tau m} \\
+		&= \begin{cases}
+			a_m\rhd y_{m+1} + a_m^c\rhd y_1 & \text{iff }a_m=a_{\tau m} \\
+			a_m\rhd y_{m+1} + a_m^c\wedge y_{\tau m} & \text{else} \\
+			\end{cases} \\
+\end{split}\end{equation}
+, then
+\begin{equation}\begin{split}
+	y_m &= x_m + y_{\tau m} \\
+		&= \begin{cases}
+			a_{\tau m}=a_{\tau^2 m}\implies & a_m\rhd x_{m+1} + a_{\tau m}\rhd y_{\tau m+1} + a_{\tau m}^c\rhd y_{1} \\
+			a_{\tau m}\not=a_{\tau^2 m}\implies & a_m\rhd x_{m+1} + a_{\tau m}\rhd y_{\tau m+1} + a_{\tau m}^c\wedge y_{\tau^2 m} \\
+			\end{cases} \\
+		&= \begin{cases}
+			a_{\tau m}=a_{\tau^2 m}\wedge a_m=a_{\tau m}\implies & a_m\rhd (x_{m+1} + y_{\tau m+1}) + a_m^c\rhd y_{1} \\
+			a_{\tau m}=a_{\tau^2 m}\wedge a_m\not=a_{\tau m}\implies & a_m\rhd (x_{m+1} + y_{1}) + a_m^c\wedge y_{\tau m} \\
+			a_{\tau m}\not=a_{\tau^2 m}\wedge a_m=a_{\tau m}\implies & a_m\rhd (x_{m+1} + y_{\tau m+1}) + a_m^c\rhd y_{\tau^2 m} \\
+			a_{\tau m}=a_{\tau^2 m}\wedge a_m\not=a_{\tau m}\implies & a_m\rhd (x_{m+1} + y_{\tau^2 m}) + a_m^c\wedge y_{\tau m} \\
+			\end{cases} \\
+		&\Downarrow \\
+	\tau(m+1) &= \begin{cases}
+		a_m=a_{\tau m}\implies & \tau m + 1 \\
+		a_{\tau m}=a_{\tau^2 m}\wedge a_m\not=a_{\tau m}\implies & 1 \\
+		a_{\tau m}\not=a_{\tau^2 m}\wedge a_m\not=a_{\tau m}\implies & \tau^2 m \\
+		\end{cases} \\
+\end{split}\end{equation}
+

@@ -1,0 +1,21 @@
+= Rについて	=
+== 表の結合 ==
+{{{
+data1<-data.frame(id1 = 1:10, x = rnorm(length(1:10)));
+data2<-data.frame(id2 = seq(1, 20, by = 2), y = rnorm(length(seq(1, 20, by = 2)))); 
+
+# INNER JOIN 
+inner.join<-merge(data1, data2, by.x = "id1", by.y = "id2"); 
+
+# LEFT JOIN 
+left.join<-merge(data1, data2, by.x = "id1", by.y = "id2", all.x = TRUE); 
+
+# RIGHT JOIN 
+right.join<-merge(data1, data2, by.x = "id1", by.y = "id2", all.y = TRUE); 
+
+# FULL JOIN 
+full.join<-merge(data1, data2, by.x = "id1", by.y = "id2", all = TRUE); 
+
+# CARTESIAN PRODUCT 
+cartesian<-merge(data1, data2);
+}}}

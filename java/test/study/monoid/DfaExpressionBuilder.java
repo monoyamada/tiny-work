@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 import study.monoid.KlSemiringGraph.DfaNext;
 import study.monoid.KlSemiringGraph.DfaNode;
-import study.primitive.IfLongList;
+import study.primitive.LongList;
 import study.primitive.LongArrayList;
 
 class DfaExpressionBuilder extends KlSemiringFactory {
@@ -81,29 +81,29 @@ class DfaExpressionBuilder extends KlSemiringFactory {
 		if (n < 1) {
 			return lhs;
 		}
-		final Map<DfaNode, IfLongList> rhsMap = new HashMap<DfaNode, IfLongList>();
+		final Map<DfaNode, LongList> rhsMap = new HashMap<DfaNode, LongList>();
 		for (int i = 0; i < n; ++i) {
 			final DfaNext next = nexts[i];
 			final DfaNode x = next.getNode();
-			IfLongList symbols = rhsMap.get(x);
+			LongList symbols = rhsMap.get(x);
 			if (symbols == null) {
 				symbols = new LongArrayList(1);
 				rhsMap.put(x, symbols);
 			}
 			final int symbol = next.getSymbolIndex();
 			if (symbols.getFirstIndex(symbol) < 0) {
-				symbols.addBack(symbol);
+				symbols.addLast(symbol);
 			}
 		}
 		IfNode rhs = null;
 		final String[] symbols = node.getBuilder().getSymbolSet();
-		for (Iterator<Entry<DfaNode, IfLongList>> p = rhsMap.entrySet()
+		for (Iterator<Entry<DfaNode, LongList>> p = rhsMap.entrySet()
 				.iterator(); p.hasNext();) {
-			final Entry<DfaNode, IfLongList> ent = p.next();
-			final IfLongList ks = ent.getValue();
+			final Entry<DfaNode, LongList> ent = p.next();
+			final LongList ks = ent.getValue();
 			final Variable x = this.getVariable(ent.getKey(), true);
 			IfNode k = this.getSymbol(symbols[(int) ks.getLong(0)]);
-			for (int ii = 1, nn = ks.size(); ii < nn; ++ii) {
+			for (int ii = 1, nn = ks.getSize(); ii < nn; ++ii) {
 				final IfNode kk = this.getSymbol(symbols[(int) ks.getLong(ii)]);
 				k = kk.plus(k);
 			}

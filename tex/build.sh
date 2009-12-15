@@ -8,14 +8,10 @@ if [ $# -lt 1 ]; then
 fi
 
 out_dir="output"
-#opts="-draftmod -halt-on-error"
-#opts="-encoding=utf8 -draftmod -halt-on-error"
-opts="-halt-on-error"
-if [ -d $out_dir ]; then
-	a=""
-else
+if [ ! -d $out_dir ]; then
 	mkdir $out_dir
 fi
 
-opt_dir="-output-directory=$out_dir"
-latex $opts $opt_dir $1
+opts="-halt-on-error -kanji=utf8 -output-directory=$out_dir"
+platex $opts $opt_dir $1
+dvipdfmx -o $out_dir/$1.pdf $out_dir/$1.dvi

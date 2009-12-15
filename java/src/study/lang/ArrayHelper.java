@@ -8,7 +8,7 @@ import java.util.Map;
 
 import study.function.Combinadic;
 import study.function.ComparableOrder;
-import study.function.IfBinaryPredicate;
+import study.function.BinaryPredicate;
 import study.function.LexicographicalOrder;
 import study.function.Permutation;
 
@@ -47,16 +47,16 @@ public class ArrayHelper {
 		return new LexicographicalOrder<X>(order);
 	}
 
-	public static Object[] addBack(Object[] array, Object x) {
+	public static <T> T[] addLast(T[] array, T x) {
 		final int n = array.length;
-		final Object[] newArray = ArrayHelper.newArray(array, n + 1);
+		final T[] newArray = ArrayHelper.newArray(array, n + 1);
 		System.arraycopy(array, 0, newArray, 0, n);
 		newArray[n] = x;
 		return newArray;
 	}
-	public static Object[] addFront(Object x, Object[] array) {
+	public static<T> T[] addFirst(T x, T[] array) {
 		final int n = array.length;
-		final Object[] newArray = ArrayHelper.newArray(array, n + 1);
+		final T[] newArray = ArrayHelper.newArray(array, n + 1);
 		System.arraycopy(array, 0, newArray, 1, n);
 		newArray[0] = x;
 		return newArray;
@@ -68,7 +68,7 @@ public class ArrayHelper {
 				ObjectHelper.DEFAULT_EQUALITY);
 	}
 	public static <T0, T1> boolean equals(T0[] array0, int begin0, T1[] array1,
-			int begin1, int size, IfBinaryPredicate<? super T0, ? super T1> equality) {
+			int begin1, int size, BinaryPredicate<? super T0, ? super T1> equality) {
 		if (equality == null) {
 			equality = ObjectHelper.DEFAULT_EQUALITY;
 		}
@@ -123,6 +123,17 @@ public class ArrayHelper {
 		newArray[n] = value;
 		return newArray;
 	}
+	@SuppressWarnings("unchecked")
+	public static <T> T[] add(T[] array, T value) {
+		assert array != null;
+		final int n = array.length;
+		final T[] newArray = (T[]) Array.newInstance(array.getClass()
+				.getComponentType(), n + 1);
+		System.arraycopy(array, 0, newArray, 0, n);
+		newArray[n] = value;
+		return newArray;
+	}
+
 	public static int[] add(int value, int[] array) {
 		assert array != null;
 		final int n = array.length;
@@ -179,6 +190,17 @@ public class ArrayHelper {
 			return array.clone();
 		}
 		final int[] newArray = new int[n];
+		System.arraycopy(array, begin, newArray, 0, n);
+		return newArray;
+	}
+	@SuppressWarnings("unchecked")
+	public static <T> T[] sub(T[] array, int begin, int end) {
+		final int n = end - begin;
+		if (n == array.length) {
+			return array.clone();
+		}
+		final T[] newArray = (T[]) Array.newInstance(array.getClass()
+				.getComponentType(), n);
 		System.arraycopy(array, begin, newArray, 0, n);
 		return newArray;
 	}
@@ -391,6 +413,30 @@ public class ArrayHelper {
 	}
 	/**
 	 * @param array
+	 * @param value
+	 * @return
+	 */
+	public static int indexOf(char[] array, char value) {
+		switch (array.length) {
+		case 0:
+			return -1;
+		case 1:
+			return array[0] == value ? 0 : -1;
+		case 2:
+			return array[0] == value ? 0 : array[1] == value ? 1 : -1;
+		case 3:
+			return array[0] == value ? 0 : array[1] == value ? 1
+					: array[2] == value ? 2 : -1;
+		case 4:
+			return array[0] == value ? 0 : array[1] == value ? 1
+					: array[2] == value ? 2 : array[3] == value ? 3 : -1;
+		default:
+			return ArrayHelper.indexOf(array, 0, array.length, value);
+		}
+	}
+
+	/**
+	 * @param array
 	 * @param begin
 	 * @param end
 	 * @param value
@@ -404,6 +450,22 @@ public class ArrayHelper {
 		}
 		return -1;
 	}
+	/**
+	 * @param array
+	 * @param begin
+	 * @param end
+	 * @param value
+	 * @return
+	 */
+	public static int indexOf(char[] array, int begin, int end, char value) {
+		for (; begin < end; ++begin) {
+			if (array[begin] == value) {
+				return begin;
+			}
+		}
+		return -1;
+	}
+
 	/**
 	 * @param array
 	 * @param value
@@ -438,5 +500,57 @@ public class ArrayHelper {
 			System.arraycopy(array, 0, newArray, 0, array.length);
 		}
 		return newArray;
+	}
+
+	/**
+	 * <code>
+	 * array[0] <= ... <= array[index - 1] < value <= array[index] <= ...  <= array[length - 1]
+	 * </code>
+	 * 
+	 * @param array
+	 *          sorted array with the order <=.
+	 * @param value
+	 * @return
+	 */
+	public static int getLowerBound(int[] array, int value) {
+		return getLowerBound(array, 0, array.length, value);
+	}
+	/**
+	 * <code>
+	 * array[begin] <= ... <= array[index - 1] < value <= array[index] <= ... <= array[end - 1]
+	 * </code>
+	 * 
+	 * @param array
+	 *          sorted array with the order <=.
+	 * @param value
+	 * @return
+	 */
+	public static int getLowerBound(int[] array, int begin, int end, int value) {
+		int d = end - begin;
+		switch (d) {
+		case 0:
+			return begin;
+		case 1:
+			return array[begin] < value ? begin + 1 : begin;
+		default:
+			if (false) {
+				final int m = begin + (d >> 1);
+				if (array[m] < value) {
+					return getLowerBound(array, m, end, value);
+				} else {
+					return getLowerBound(array, begin, m, value);
+				}
+			}
+			break;
+		}
+		for (int m = 0; 1 < d; d = end - begin) {
+			m = begin + (d >> 1);
+			if (array[m] < value) {
+				begin = m;
+			} else {
+				end = m;
+			}
+		}
+		return array[begin] < value ? end : begin;
 	}
 }

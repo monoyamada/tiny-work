@@ -21,6 +21,11 @@
   bookmarks=true,
   bookmarksnumbered=false,
   bookmarkstype=toc]{hyperref}
+\ifnum 42146=\euc"A4A2 
+  \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}% platex-utf8 でも OK
+\else
+  \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}%"
+\fi
 %
 %theorem
 %

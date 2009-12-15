@@ -1,10 +1,10 @@
 package study.lang;
 
 import study.function.Equality;
-import study.function.IfBinaryPredicate;
+import study.function.BinaryPredicate;
 
 public class ObjectHelper {
-	public static final IfBinaryPredicate<Object, Object> DEFAULT_EQUALITY = new Equality();
+	public static final BinaryPredicate<Object, Object> DEFAULT_EQUALITY = new Equality();
 
 	public static boolean equals(Object first, Object second) {
 		return first == second ? true : first == null || second == null ? false

@@ -1,6 +1,6 @@
 package study.algebra;
 
-import study.function.IfFunction;
+import study.function.Function;
 import study.lang.Messages;
 
 public class MagmaTestClasses {
@@ -10,7 +10,7 @@ public class MagmaTestClasses {
 	}
 
 	public static interface IfNodeTransform extends IfNode,
-			IfFunction<IfNode, IfNode> {
+			Function<IfNode, IfNode> {
 	}
 
 	public static class Node implements IfNode {
@@ -69,8 +69,8 @@ public class MagmaTestClasses {
 			return source;
 		}
 		@Override
-		public <X> IfFunction<X, ? extends IfNode> compose(
-				IfFunction<X, ? extends IfNode> source) {
+		public <X> Function<X, ? extends IfNode> compose(
+				Function<X, ? extends IfNode> source) {
 			return source;
 		}
 	}
