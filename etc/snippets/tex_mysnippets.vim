@@ -14,10 +14,10 @@ let cd = g:snip_elem_delim
 
 " default section snippets are clever, make more easy to remember
 "
-exec "Snippet sec1 \\section{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
-exec "Snippet sec2 \\subsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
-exec "Snippet sec3 \\subsubsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
-exec "Snippet sec4 \\subsubsubsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
+exec "Snippet h1 \\section{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
+exec "Snippet h2 \\subsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
+exec "Snippet h3 \\subsubsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
+exec "Snippet h4 \\subsubsubsection{".st."name".et."}\\label{sec:".st."name:substitute(@z,'.','\\l&','g')".et."}<CR>".st.et
 "
 " environments
 "
