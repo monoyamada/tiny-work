@@ -98,23 +98,31 @@ if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
 
-#favarite
-#.bash_profile is looked like not work
-#alias ls='ls -aF'
+#shirak
 alias ls='ls -CF'
 alias gterm='gnome-terminal'
-alias go.zaurus='cd $HOME/work/zaurus'
-alias go.github='cd $HOME/work/tiny-work'
-#
-#work
-#
-ZAURUS_HOME='$HOME/work/zaurus'
-#
-#as usual
-#
-export PS1='\w> '
-PATH=.:$ZAURUS_HOME/bitbake/bin:$PATH
+alias sourcerc='source $HOME/.bashrc'
+PS1='\w> '
 #
 #zaurus
 #
+export ZAURUS_HOME=$HOME/work/zaurus
+#export JAVA_HOME=/usr/lib/jvm/java-6-sun
+#export CLASSPATH=$JAVA_HOME/lib/tools.jar
+#not-work
+#export ECLIPSE_HOME=$HOME/usr/share/eclipse
+export LOCAL_PATH=$HOME/usr/bin:$HOME/usr/local/bin
 export BBPATH=$ZAURUS_HOME/build:$ZAURUS_HOME/openembedded
+#export PATH=.:$ZAURUS_HOME/bitbake/bin:$PATH:$HOME/bin
+#export PATH=.:$ZAURUS_HOME/openembedded/bitbake/bin:$PATH:$HOME/bin
+#PATH=$ZAURUS_HOME/bitbake/bin:$PATH:$HOME/bin:$LOCAL_PATH:$JAVA_HOME/bin
+PATH=$ZAURUS_HOME/bitbake/bin:$PATH:$HOME/bin:$LOCAL_PATH
+alias go.zaurus='cd $ZAURUS_HOME'
+#
+#tiny-work
+#
+export TINY_HOME=$HOME/work/tiny-work
+export TINY_REPOSITORY=github
+alias go.github='cd $TINY_HOME'
+alias github.pull='git pull $TINY_REPOSITORY master'
+alias github.push='git push $TINY_REPOSITORY master'
