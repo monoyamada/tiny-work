@@ -1,0 +1,200 @@
+\section{パーサー}\label{s1:パーサー} %{ 
+\subsection{方針}\label{s2:方針} %{ 
+%s2:方針}
+
+\subsection{集合からモノイドへの写像}\label{s2:集合からモノイドへの写像} %{ 
+$A=(A,\Delta_A)$を余半群、$B=(B,m_B,1_B)$をモノイド、$B^A$を$A$から$B$への
+写像全体とする。$B^A$に二項演算$m_B^*$を次の可換図が成り立つように定義する。
+\begin{equation}\xymatrix{ %{
+	A \times A \ar[d]^{f \times g} & A \ar[l]_{\Delta_A} \ar@{.>}[d]^{m_B^*(f \times g)} \\
+	B \times B \ar[r]^{m_B} & B \\
+}\end{equation} %}
+すると、$\Delta_A$と$m_B$の結合性から、任意の$f,g,h\in B^A$に対して、
+次の可換図が成り立ち、二項演算$m_B^*$は結合的になることがわかる。
+\begin{equation}\label{eq:誘導された二項演算の結合性}\xymatrix@C+1ex{
+		& A \ar[d]_{\Delta_A} \ar[r]^{m_B^*(m_B^*(f\times g)\times h)}
+		& B \ar@(r,u)[rdd]^{\myid} 
+		\\
+		& A\times A \ar[d]_{\Delta_A\times \myid} \ar[r]^{m_B^*(f\times g)\times h}
+		& B\times B \ar[u]^{m_B}
+		\\
+	A \ar@(u,l)[ruu]^{\myid} \ar@(d,l)[rdd]_{\myid} 
+		& A\times A\times A \ar[r]^{f\times g\times h}
+		& B\times B\times B \ar[u]_{m_B\times \myid} \ar[d]^{\myid\times m_B}
+		& B 
+		\\
+		& A\times A \ar[u]^{\myid\times \Delta_A} \ar[r]^{f\times m_B^*(g\times h)}
+		& B\times B \ar[d]^{m_B}
+		\\
+		& A \ar[u]^{\Delta_A} \ar[r]^{m_B^*(f\times m_B^*(g\times h))}
+		& B \ar@(r,d)[ruu]_{\myid}
+		\\
+}\end{equation}
+よって、二項演算$m_B^*$は積となる。定数写像を埋め込み$i_B$によって定義する。
+\begin{equation}\label{eq:constant-map}\begin{split} %{
+	i_B: B &\to B^A \\
+		b &\mapsto i_Bb \text{ such that } (i_Bb)a = b \text{ for all }a\in A \\
+\end{split}\end{equation} %}
+埋め込み$i_B$は半群準同型になり、$i_B1_B$は積$m_B^*$の単位元となる。
+以上より、$(B^A,m_B^*,i_B1_B)$はモノイドとなる。
+
+ここで用いた余積$\Delta_0$は、任意の集合に対して定義できる。
+頻繁に使われるので名前がついている。
+
+余積$\Delta_0$を次のように定義する。
+\begin{equation}\begin{split} %{
+	\Delta_0:A &\to A \times A \\
+		a &\mapsto a \times a \\
+\end{split}\end{equation} %}
+
+\begin{definition}[群的余積]\label{def:群的余積} %{ 
+$A$を集合とする。次の余積$\Delta_0$を群的余積という。
+\begin{equation}\begin{split} %{
+	\Delta_0: A &\to A \times A \\
+		a &\mapsto a \times a \\
+\end{split}\end{equation} %}
+\end{definition} %def:群的余積}
+
+群的余積は任意の積と双対の関係になる。
+
+\begin{proposition}[群的余積の双対性]\label{pro:群的余積の双対性} %{ 
+$A=(A,m)$を半群、$\Delta_0$を群的余積とする。
+このとき、次の式が成り立つ。
+\begin{equation*}\begin{split} %{
+	m\Delta_0 = m_2(\Delta_0 \times \Delta_0)
+\end{split}\end{equation*} %}
+ここで、写像$m_2$を次のように定義した。
+\begin{equation*}\begin{split} %{
+	m_2: A^{\times4} &\to A^{\times2} \\
+		a_1 \times a_2 \times a_3 \times a_4 &\mapsto m(a_1 \times a_3) \times m(a_2 \times a_4) 
+\end{split}\end{equation*} %}
+さらに、$A$が単位元$1_A$を持つとき、次の写像$\epsilon_0$が$\Delta_0$の
+余単位射となる。
+\begin{equation*}\begin{split} %{
+	\epsilon_0: A &\to A \\
+		a &\mapsto 1_A \\
+\end{split}\end{equation*} %}
+\end{proposition} %pro:群的余積の双対性}
+\begin{proof} %{
+任意の$a_1,a_2\in A$に対して次の式が成り立つ。
+\begin{equation*}\begin{split} %{
+	\Delta_0m(a_1\times a_2) &= m(a_1\times a_2)\times m(a_1\times a_2) \\
+	m_2(\Delta_0\times \Delta_0)(a_1\times a_2) &= m_2(a_1\times a_1\times a_2\times a_2) \\
+		&= m(a_1\times a_2)\times m(a_1\times a_2) \\
+	& \Downarrow \\
+	\Delta_0m(a_1\times a_2) &= m_2(\Delta_0\times \Delta_0)(a_1\times a_2) \\
+\end{split}\end{equation*} %}
+したがって、命題の双対性が成り立つ。
+\end{proof} %}
+%s2:集合からモノイドへの写像}
+
+\subsection{集合から半環への写像}\label{s2:集合から半環への写像} %{ 
+$A=(A,\Delta_A)$を余半群、$B=(B,+_B,0_B,*_B,1_B)$を半環、$B^A$を$A$から$B$への
+写像全体とする。$+_B$と$*_B$は中置記法で用いることにする。
+群的余積$\Delta_0:A\to A\times A$を用いて、
+前節\ref{s2:集合からモノイドへの写像}の方法で$B^A$に定義した$+_B$に
+対応する積を$+_B^*$、$*_B$に対応する積を$*_B^*$と書く。
+また、$0_B$への定数写像を$0_B^*$、$1_B$への定数写像を$1_B^*$と書く。
+
+以下で、$B^A=(B^A,+_B^*,0_B^*,*_B^*,1_B^*)$は半環になることを示す。
+
+\begin{proposition}[分配性] %{ 
+$+_B^*$と$*_B^*$は分配性を満たす。
+\end{proposition} %}
+\begin{proof} %{
+写像$m_{B^2}$を次のように定義する。
+\begin{equation*}\begin{split} %{
+	m_{B^2}: B^{\times4} &\to B^{\times2} \\
+		b_1 \times b_2 \times b_3 \times b_4 &\mapsto (b_1 *_B b_3) \times b_2 *_B b_4) 
+\end{split}\end{equation*} %}
+すると、$+_B$と$*_B$の分配性は次の可換図で表される。
+\begin{equation}\xymatrix{ %{
+	B \ar@(r,u)[rdd]^{\myid} \\
+	B\times B \ar[u]_{*_B} \\
+	B\times B\times B \ar[u]_{\myid\times +_B} \ar[d]^{\Delta_0\times \myid\times \myid} & B \\
+	B\times B\times B\times B \ar[d]^{\myid\times \sigma\times \myid} \\
+	B\times B\times B\times B \ar[d]^{*_B\times *_B} \\
+	B\times B \ar[d]^{+_B} \\
+	B \ar@(r,d)[ruuuu]_{\myid} \\
+}\end{equation} %}
+この分配性の可換図を用いると、$\pi_1$を射影$\pi_1(a_1\times a_2)=a_1$として、
+任意の$f,g,h\in B^A$に対して、次の可換図が成り立つことがわかる。
+\begin{equation}\xymatrix@C+2ex{ %{
+	& A \ar[d]_{\Delta_A} \ar[r]^{f *_B^* (g +_B^* h)}
+	& B \ar@(r,u)[rdd]^{\myid} \\
+	& A\times A \ar[d]_{\myid\times \Delta_A} \ar[r]^{f\times (g +_B^* h)}
+	& B\times B \ar[u]_{*_B} \\
+	A \ar@(u,l)[ruu]^{\myid} \ar@(d,l)[rdddd]_{\myid}
+	& A\times A\times A \ar[r]^{f\times g\times h}
+	& B\times B\times B \ar[u]_{\myid\times +_B} \ar[d]^{\Delta_0\times \myid\times \myid}
+	& B \\
+	& A\times A\times A\times A \ar[u]^{\simeq} \ar[r]^{f\times f\times g\times h}
+	& B\times B\times B\times B \ar[d]^{\myid\times \sigma\times \myid} \\
+	& A\times A\times A\times A \ar[u]^{\myid\times \sigma\times \myid} \ar[r]^{f\times g\times f\times h}
+	& B\times B\times B\times B \ar[d]^{*_B\times *_B} \\
+	& A\times A \ar[u]^{\Delta_A\times \Delta_A} \ar[r]^{(f *_B^* g)\times (f *_B^* h)}
+	& B\times B \ar[d]^{+_B} \\
+	& A \ar[u]^{\Delta_A} \ar[r]^{(f *_B^* g) +_B^* (f *_B^* h)}
+	& B \ar@(r,d)[ruuuu]_{\myid} \\
+}\end{equation} %}
+$(f +_B^* g) *_B^* h)=(f *_B^* h) +_B^* (g *_B^* h)$も同様に示される。
+したがって、$+_B^*$と$*_B^*$は分配性を満たす。
+\end{proof} %}
+
+\begin{proposition}[ゼロ元] %{ 
+$0_B^*$はゼロ元となる。
+\begin{equation*}\begin{split} %{
+	0_B^* *_B^* f = 0^* = f *_B^* 0_B^* \text{ for all }f\in B^A \\
+\end{split}\end{equation*} %}
+\end{proposition} %pro:ゼロ元}
+\begin{proof} %{
+任意の$f\in B^A$と$a\in A$に対して次の式が成り立つ。
+\begin{equation*}\begin{split} %{
+	(0_B^* *_B^* f)a = 0_B *_B (fa) = 0_B = (fa) *_B^* 0_B = (f *_B^* 0_B)a
+\end{split}\end{equation*} %}
+$0_B = 0_B^* a$だから、命題が成り立つ。
+\end{proof} %}
+
+$+_B^*$と$*_B^*$の分配性と、$0_B^*$がゼロ元になることから、
+$(B^A,+_B^*,0_B^*,*_B^*,1_B^*)$は半環になる。
+
+前節の\eqref{eq:constant-map}と同様に定数写像$i_B$を次のように定義する。
+\begin{equation}\begin{split} %{
+	i_B: B &\to B^A \\
+		b &\mapsto i_Bb \text{ such that } (i_Bb)a = b \text{ for all }a\in A \\
+\end{split}\end{equation} %}
+$i_BB$は半環同型だから、$B$と$i_BB$を同一視して、$*_B^*$をスカラー積$\rhd_B$と
+みることで、$(B^A,+_B^*)$は$B$を係数とする半モジュールとみなすことができる。
+式で書くと、任意の$b\in B$と$f\in B^A$に対して、次のように定義することになる。
+\begin{equation*}\begin{split} %{
+	b\rhd_B f &= (i_Bb) *_B^* f \\
+	f\lhd_B b &= f *_B^* (i_Bb) \\
+\end{split}\end{equation*} %}
+また、埋め込み写像$i_A$を次のように定義する。
+\begin{equation}\begin{split} %{
+	i_A: A &\to B^A \\
+		a &\mapsto i_Aa \text{ such that } (i_Aa)a_1 = \begin{cases}
+			1_B, &\text{ iff }a = a_1 \\
+			0_B, &\text{ otherwise } \\
+		\end{cases}
+\end{split}\end{equation} %}
+すると、任意の$f\in A$は写像$i_A$を用いて次のように書ける。
+\begin{equation}\begin{split} %{
+	f = \sum_{a\in A} (fa)\rhd_B (i_Aa) = \sum_{a\in A} (i_Aa)\lhd_B (fa) \\
+\end{split}\end{equation} %}
+\begin{proof} %{
+任意の$f\in A$と$a\in A$に対して次のように書ける。
+\begin{equation*}\begin{split} %{
+	fa &= \sum_{a_1\in A} (fa_1) *_B \kakko{(i_Aa_1)a}
+		= \kakko{\sum_{a_1\in A} (fa_1)\rhd_B (i_Aa_1)}a \\
+		&= \sum_{a_1\in A} \kakko{(i_Aa_1)a} *_B (fa_1)
+		= \kakko{\sum_{a_1\in A} (i_Aa_1)\lhd_B (fa_1)}a \\
+\end{split}\end{equation*} %}
+\end{proof} %}
+\begin{equation}\begin{split} %{
+	\sum_{a\in A}+_B^*i_Aa = 1_B^* \\
+\end{split}\end{equation} %}
+$0_B\neq 1_B$ならば、$i_A$は集合同型となる。
+%s2:集合から半環への写像}
+
+%s1:パーサー}

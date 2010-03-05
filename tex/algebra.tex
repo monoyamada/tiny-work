@@ -1,0 +1,117 @@
+\section{代数}
+
+\subsection{半群}
+
+\begin{definition}[半群]
+集合$A$に対して二項演算$m$が定義されていて、結合律
+\begin{equation}\begin{split}
+	(\myid\times m)m = (m\times \myid)m
+\end{split}\end{equation}
+が成り立つ時、$(A,m)$を半群という。
+\end{definition}
+
+\begin{definition}[単位元]
+$A=(A,m)$を半群とする。
+次の式が成り立つ元$u_l\in A$を左単位元という。
+\begin{equation*}\begin{split}
+	m(u_l\times a) = a \quad\text{for all }a\in A
+\end{split}\end{equation*}
+次の式が成り立つ元$u_r\in A$を右単位元という。
+\begin{equation*}\begin{split}
+	m(a\times u_r) = a \quad\text{for all }a\in A
+\end{split}\end{equation*}
+次の式が成り立つ元$u\in A$を両単位元または単に単位元という。
+\begin{equation*}\begin{split}
+	m(u\times a) = a = m(a\times u_r) \quad\text{for all }a\in A
+\end{split}\end{equation*}
+\end{definition}
+
+\begin{proposition}[単位元の一意性]\label{prop:単位元の一意性}
+$A=(A,m)$を半群とする。
+\begin{enumerate}
+	\item $A$が左単位元と右単位元の両方を持つとすると、
+	左単位元と右単位元は一致して、両単位元となる。
+	\item $A$の両単位元が存在すれば一意に定まる。
+\end{enumerate}
+\begin{proof}
+	\begin{enumerate}
+		\item $u_l$を$A$の左単位元、$u_r$を$A$の右単位元とする。このとき、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			u_l = m(u_l\times u_r) = u_r
+		\end{split}\end{equation*}
+		\item $u_0,u_1$を$A$の両単位元とする。このとき、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			u_0 = m(u_0\times u_1) = u_1
+		\end{split}\end{equation*}
+	\end{enumerate}
+\end{proof}
+\end{proposition}
+
+\subsection{自由半群}\label{s2:自由半群} %{ 
+\begin{definition}[自由半群]\label{def:自由半群} %{ 
+$A$を集合、$A$の$n$次の直積を$A^n$とする。 $A^+=\cup_{k=1}^\infty A^n$とし、
+二項演算$m$を次のように定義する。
+\begin{equation*}\begin{split}
+	m: A^+ \times A^+ &\to A^+ \\
+		[a_1 a_2\cdots a_m] \times [b_1 b_2 \cdots b_n
+			&\mapsto [a_1 a_2\cdots a_m b_1 b_2 \cdots b_n]
+\end{split}\end{equation*}
+ここで、$A^m$の元をかぎ括弧の中に並べて表した。例えば、
+$a_1,a_2,\dots,a_m\in A$として、$[a_1 a_2\cdots a_m]\in A^m$
+というように$A^m$の元を表す。二項演算$m$は結合律を満たすから、
+$(A^+,m)$は半群となる。$(A^+,m)$を集合$A$上の自由半群という。
+また、結合律を満たす二項演算$m$を$A$の積という。
+\end{definition} %def:自由半群}
+
+この節では、集合$A$上の自由半群$A^+$の元を$A$の元を用いて表す場合、
+かぎ括弧内に$A$の元を並べて表すことにする。\ref{def:自由半群}
+また、文字数を$\zettai{-}$と書くことにする。
+\begin{equation}\begin{split}
+	\zettai{-}: A^+ &\to \mybf{N} \\
+		[a_1a_2\cdots a_m] &\mapsto m \\
+\end{split}\end{equation}
+
+\begin{proposition}[自由半群の普遍性]\label{pro:自由半群の普遍性} %{ 
+$A$を集合、$A^+$を$A$上の自由半群とする。
+このとき、任意の半群$G$および$A$から$G$への写像$f$に対して、
+任意の$a\in A$に対して、$fa=\bar{f}[a]$が成り立つ半群準同型
+$\bar{f}:A^+\to G$が唯一つ存在する。
+\end{proposition} %pro:自由半群の普遍性}
+
+\begin{proof}
+半群$A^+$の積を$m_A$、半群$G$の積を$m_G$と書く。写像$\bar{f}:A^+\to G$を
+次のように定義する。
+\begin{equation*}\begin{split}
+	\bar{f}w = \begin{cases}
+		fa, &\text{ iff }w = [a] \in A^1 \\
+		m_G(fa_1\times fa_2\times \cdots \times fa_m)
+			&\text{ else }w = [a_1\times a_2\times \cdots \times a_m] \\
+		\end{cases}
+\end{split}\end{equation*}
+
+任意の$a\in A$に対して、$fa=\bar{f}[a]$となる。また、
+\begin{equation*}\begin{split}
+	\bar{f}m_A([a_1] \times [a_2] \times \cdots \times [a_m])
+		&= m_G(\bar{f}[a_1]\times \bar{f}[a_2]\times \cdots \times \bar{f}[a_m]) 
+\end{split}\end{equation*}
+だから、写像$\bar{f}$は半群準同型となる。したがって、任意の$a\in A$
+に対して、$fa=\bar{f}[a]$となる半群準同型$\bar{f}$は存在する。
+
+また、$g:A^+\to G$を、任意の$a\in A$に対して、$fa=g[a]$となる半群準同型と
+すると、
+\begin{equation*}\begin{split}
+	g[a_1a_2\cdots a_m] &= m_B(g[a_1]\times g[a_2]\times \cdots \times g[a_m]) \\
+		&= m_B(fa_1\times fa_2\times \cdots \times fa_m) \\
+		&= m_B(\bar{f}[a_1]\times \bar{f}[a_2]\times \cdots \times \bar{f}[a_m]) \\
+		&= \bar{f}[a_1a_2\cdots a_m] \\
+\end{split}\end{equation*}
+となり、$g=\bar{f}$となることがわかる。
+\end{proof}
+%s2:自由半群}
+
+\subsection{モノイド}\label{s2:モノイド} %{ 
+\begin{definition}[モノイド]\label{def:モノイド} %{ 
+単位元を持つ半群をモノイドという。
+\end{definition} %def:モノイド}
+%s2:モノイド}
