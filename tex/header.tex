@@ -70,6 +70,12 @@
 \newcommand{\bnfword}[1]{\braket{\operatorname{#1}}}
 \newcommand{\bnfaction}[1]{\bakko{\operatorname{#1}}}
 %
+\usepackage{sty/accents}
+\makeatletter
+\def\widebar{\accentset{{\cc@style\underline{\mskip10mu}}}}
+\makeatother
+\renewcommand{\bar}[1]{\widebar{#1}}
+%
 %arrows
 %The“number”0395 after \ext@arrow defines the position
 %relative to the extended error and is not a number but four parameters

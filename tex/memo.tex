@@ -1,0 +1,159 @@
+\section{パーサーの方針}\label{s1:パーサーの方針} %{ 
+	最初の問題設定として、文字列が与えられたパターンに合致するかどうかを
+	判定する問題を考える。文字列の集合として、有限集合$A$から生成された
+	自由モノイド$A^*$を考える。$A^*$からブーリアン、自然数、複素数などの
+	可換半環$B$への写像全体$B^A$を考える。$B^A$には$B$の代数構造を反映した
+	代数構造を定めることができて、$B^A$は半環となる。
+	パターンを与えるということは$B^A$の元を一つ定めることになるだろう。
+	そして、任意の単語$w_1,w_2$に対して、$f(w_1*w_2)=(\Delta f)(w_1\times w_2)$
+	で$B^A$に余積$\Delta$を定めることができれば、最終的には一文字のマッチング
+	にまで帰着させることができる。
+	そして、$a\rhd f=(\Delta f)(a\times-)$で$A^*$の$B^A$への作用を定義すると、
+	モノイド$A$の$A\rhd f\subseteq A^B$への表現を得ることができる。
+	この表現が言語理論でのオートマトンと呼ばれているものになると思われる。
+	また、正規表現に対するBrzozowski微分$D$は、$\Delta f=1\otimes f + Df$
+	になるのではないかと思っている。
+
+	半単純リー環の場合、表現を用いた分類(A,B,...)がされている。
+	オートマトンでも半単純に相当する性質が定義できて、その分類ができればうれしい。
+%s1:パーサーの方針}
+
+\section{分配性}\label{s2:分配性} %{
+	分配性が成り立つような乗法の定義の仕方を考える。$A=(A,+,0)$を可換モノイドとする。
+	$A$から$A$への写像全体を$MA$と書く。$MA$は、写像の合成を積、恒等写像$1_{MA}$
+	を単位元とするモノイドになる。写像の合成の記号は省略する。さらに、次のようにして
+	$MA$に積$+$を定義することができる。
+	\begin{equation*}\begin{split} %{
+		(f+g)a &= fa + ga \\
+	\end{split}\end{equation*} %}
+	$a\in A$への恒等写像を$a^*$とする。特に、$0^*$は積$+$の単位元となる。
+	$MA$の中で半群準同型を満たす元の集まりを$HA$と書く。
+	\begin{equation*}\begin{split} %{
+		HA &= \set{f\in MA\bou f \text{ satisfies the below condition}} \\
+			& f(a_1+a_2) = fa_1 + fa_2 \text{ for all }a_1,a_2\in A \\
+	\end{split}\end{equation*} %}
+	$HA$は写像の合成と$+$で閉じている。
+	\begin{equation*}\begin{split} %{
+		fg(a_1+a_2) &= f(ga_1+ga_2) \\
+			&= fga_1 + fga_2 \\
+		(f+g)(a_1+a_2) &= f(a_1+a_2) + g(a_1+a_2)  = fa_1 + fa_2 + ga_1 + ga_2 \\
+			& = (f+g)a_1 + (f+g)a_2 \\
+	\end{split}\end{equation*} %}
+	さらに、$HA$は写像の合成と$+$で分配性を持つ。
+	\begin{equation*}\begin{split} %{
+		f(g+h)a &= fga + fha = (fg+fh)a \\
+		(f+g)ha &= fha + gha = (fh+gh)a \\
+	\end{split}\end{equation*} %}
+
+	以上の事柄をブーリアン$\mybf{B}=(\set{0,1},+,0)$で確かめてみる。
+	可換な積$+$は論理和で定義する。
+	\begin{equation*}\begin{split} %{
+		+: \mybf{B}\times \mybf{B} &\to \mybf{B} \\
+			b_1\times b_2 &\mapsto \begin{cases}
+				0, &\text{ iff } b_1 = b_2 = 0 \\
+				1, &\text{ otherwise } \\
+			\end{cases}
+	\end{split}\end{equation*} %}
+	からへの写像全体$M\mybf{B}$は$M\mybf{B}=\set{0^*,1^*,1_M,\neg}$となる。$0^*,1^*$
+	はそれぞれ$0,1$への定数写像、$1_M$は恒等写像、$\neg$は次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\neg0 &= 1 \\
+		\neg1 &= 0 \\
+	\end{split}\end{equation*} %}
+	$\neg$は次のとおり準同型とならない。
+	\begin{equation*}\begin{split} %{
+		\neg(0+1) = 0 \neq 1 = \neg0 + \neg1 \\
+	\end{split}\end{equation*} %}
+	$\neg$以外は準同型となるから、$M\mybf{B}$の中で準同型となるものの部分集合
+	$H\mybf{B}$は$H\mybf{B}=\set{0^*,1^*,1_M}$となる。$H\mybf{B}$の群表は次の
+	ようになる。
+	\begin{equation}\label{eq:論理和の分配的な双対空間}\begin{split} %{
+		\bordermatrix {
+			+ & 0^* & 1^* & 1_M \\
+			0^* & 0^* & 1^* & 1_M \\
+			1^* & 1^* & 1^* & 1^* \\
+			1_M & 1_M & 1^* & 1_M \\
+		} & \quad \bordermatrix {
+			\text{合成} & 0^* & 1^* & 1_M \\
+			0^* & 0^* & 0^* & 0^* \\
+			1^* & 1^* & 1^* & 1^* \\
+			1_M & 0^* & 1^* & 1_M \\
+		} \\
+	\end{split}\end{equation} %}
+	計算してみると、$H\mybf{B}$は分配性を持つことがわかる。以上より、上で述べた
+	ことが確かめられる。
+
+	式を見ると、部分集合$H_0\mybf{B}=\set{0^*,1_M}$は写像の合成と$+$について
+	閉じているのがわかる。さらに、$H_0\mybf{B}$では次の事柄が成り立っている。
+	\begin{itemize}
+		\item 写像の合成が可換になる。
+		\item 任意の$f\in H_0\mybf{B}$に対して、$0^*f=0^*=f0^*$が成り立つ。
+		\item $+$に関して、$\mybf{B}$と同型$\varphi$になる。
+		\begin{equation*}\begin{split} %{
+			\varphi: \mybf{B} &\to H_0\mybf{B} \\
+			\begin{pmatrix} 
+				0 \\
+				1 \\
+			\end{pmatrix}
+			&\mapsto \begin{pmatrix}
+				0^* \\
+				1_M \\
+			\end{pmatrix}
+		\end{split}\end{equation*} %}
+	\end{itemize}
+	$H\mybf{B}$は、$1^*0^*\neq0^*$なので、半環ではないが、$H_0\mybf{B}$は半環となる。
+	したがって、$+$に関する$\mybf{B}$と$H_0\mybf{B}$のモノイド同型によって、
+	$\mybf{B}$に乗法が定義される。
+
+	\begin{problem}[分配的になる積に対する条件]\label{prob:分配的になる積に対する条件} %{ 
+	$H\mybf{B}$にどのような条件を課すと$H_0\mybf{B}$が得られるのだろうか。
+	また、ここで観察した$\mybf{2}$の論理和の場合は、任意の可換半群から半環を
+	得ることに一般化できるだろうか。
+	\end{problem} %prob:分配的になる積に対する条件}
+
+	一般の場合に戻って問題を考えてみる。次の方法が考えられる。
+	\begin{itemize}
+		\item 逐次的な方法 \\
+		$\set{0^*,1_M}\subseteq HA$の群表は次のようになる。
+		\begin{equation}\begin{split} %{
+			\bordermatrix {
+				+ & 0^* & 1_M \\
+				0^* & 0^* & 1_M \\
+				1_M & 1_M & ? \\
+			} & \quad \bordermatrix {
+				\text{合成} & 0^* & 1_M \\
+				0^* & 0^* & 0^* \\
+				1_M & 0^* & 1_M \\
+			} \\
+		\end{split}\end{equation} %}
+		$1_M+1_M$のところが未定である。任意の$a\in A$に対して、$(1_M+1_M)a=a+a$である。
+		したがって、次の場合があり得る。
+		\begin{itemize}
+			\item $1_M+1_M=0^*$の場合は、任意の$a\in A$に対して、$0=a+a$となる。
+			ブール代数でのXORなどが相当する。
+			\item $1_M+1_M=1_M$の場合は、任意の$a\in A$に対して、$a=a+a$となる。
+			ブール代数でのORなどが相当する。
+			\item それ以外の場合は、$f_2=1_M+1_M\in HA$とおく。$f_2$は準同型となり、
+			$0$を固定点に持つ。$\set{0^*,1_M,f_2}\subseteq HA$の群表は次のようになる。
+			\begin{equation}\begin{split} %{
+				\bordermatrix {
+					+ & 0^* & 1_M & f_2 \\
+					0^* & 0^* & 1_M & 0^* \\
+					1_M & 1_M & f_2 & ? \\
+					f_2 & 0^* & ? & 1_M + ? \\
+				} & \quad \bordermatrix {
+					\text{合成} & 0^* & 1_M & f_2 \\
+					0^* & 0^* & 0^* & 0^* \\
+					1_M & 0^* & 1_M & f_2 \\
+					f_2 & 0^* & f_2 & 1_M + ? \\
+				} \\
+			\end{split}\end{equation} %}
+			$f_2+1_M$と$f_2f_2=f_2+f_2$のところが未定である。
+			こうやって、群表を埋めていった結果と$A$がモノイド同型になることを示せればよい。
+			この方法で、$A$が可算集合の場合には構成的に乗法が定義できるように思える。
+			\item 天下り的な方法 \\
+			$HA$のなかで$0$を固定点に持つ元全体$H_0A$は$+$と写像の合成に関して閉じているので、
+			半環となる。$A$と$H_0A$の$+$に関するモノイド同型が得られれば話が早い。
+		\end{itemize}
+	\end{itemize}
+%s2:分配性}

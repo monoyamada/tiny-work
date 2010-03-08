@@ -1,0 +1,328 @@
+\section{半群と余半群}\label{s1:半群と余半群} %{
+	半群と余半群を対比されるために、両方一緒に定義してみる。
+
+	\begin{definition}[半群と余半群]\label{def:半群と余半群} %{
+		$A$を集合とする。$A$の二項演算$m$が次の図が可換にするとき、$m$を$A$の積といい、
+		組$(A,m)$を半群という。
+		$A$の余二項演算$\Delta$が次の図が可換にするとき、$\Delta$を$A$の余積といい、
+		組$(A,\Delta)$を余半群という。
+		\begin{equation}\xymatrix{
+			A\times A\times A \ar[d]^{m\times \myid} \ar[r]^{\myid\times m} 
+			& A\times A \ar[d]^{m} \\
+			A\times A \ar[r]^{m} & A \\
+		} \quad \xymatrix{
+			A\times A\times A   
+			& A\times A \ar[l]_{\myid\times \Delta} \\
+			A\times A \ar[u]^{\myid\times \Delta} 
+			& A \ar[l]^{\Delta} \ar[u]_{\Delta} \\
+		}\end{equation}
+	\end{definition} %def:半群と余半群}
+
+	\begin{definition}[半群準同型と余半群準同型]\label{def:半群準同型と余半群準同型} %{ 
+		$A$を集合とする。$m_A$を$A$の積、$\Delta_A$を$A$の余積とする。
+		$B$を集合とする。$m_B$を$B$の積、$\Delta_B$を$B$の余積とする。
+		次の図を可換にする写像$f_m$を$A$から$B$への半群準同型、
+		次の図を可換にする写像$f_\Delta$を$B$から$A$への余半群準同型という。
+		\begin{equation}\xymatrix{
+			A\times A \ar[d]^{m_A} \ar[r]^{f_m\times f_m} & B\times B \ar[d]^{m_B} \\
+			A \ar[r]^{f_m} & B \\
+		} \quad \xymatrix{
+			A\times A & B\times B \ar[l]_{f_\Delta\times f_\Delta} \\
+			A \ar[u]_{\Delta_A} & B \ar[u]_{\Delta_B} \ar[l]_{f_\Delta} \\
+		}\end{equation}
+	\end{definition} %def:半群準同型と余半群準同型}
+
+	積と余積を直積に対する操作に拡張する。
+
+	\begin{definition}[成分ごとの積と余積]\label{def:成分ごとの積と余積} %{ 
+		$A$を集合とする。$m$を$A$の積、$\Delta$を$A$の余積とする。$n$を$1$以上の
+		自然数とする。次のように定義された$m_n$を$m$の成分ごとの積、$\Delta_n$を
+		$\Delta$の成分ごとの余積という。
+		\begin{equation}\begin{split} %{
+			m_n: A^{\times 2n} &\to A^{\times n} \\
+				a_1\times a_2\times \cdots\times a_{2n} &\mapsto m(a_1\times a_{n+1})\times m(a_2\times a_{n+2})\times \cdots\times m(a_n\times a_{2n}) \\
+			\Delta_n: A^{\times n} &\to A^{\times 2n} \\
+				a_1\times a_2\times \cdots\times a_n &\mapsto \Delta^{(1)}a_1\times \Delta^{(1)}a_2\times \cdots\times \Delta^{(1)}a_n\times \Delta^{(2)}a_1\times \Delta^{(2)}a_2\times \cdots\times \Delta^{(2)}a_n \\
+		\end{split}\end{equation} %}
+	\end{definition} %def:成分ごとの積と余積}
+
+	成分ごとの積と余積をベクトル的に書いてみると次のようになる。
+	\begin{equation*}\begin{split} %{
+		m_2: \begin{pmatrix}
+			a_1 \\
+			a_2 \\
+		\end{pmatrix}\times \begin{pmatrix}
+			a_3 \\
+			a_4 \\
+		\end{pmatrix} &\mapsto \begin{pmatrix}
+			m(a_1\times a_3) \\
+			m(a_2\times a_4) \\
+		\end{pmatrix} \\
+		\Delta_2: \begin{pmatrix}
+			a_1 \\
+			a_2 \\
+		\end{pmatrix} &\mapsto \begin{pmatrix}
+			\Delta^{(1)} a_1 \\
+			\Delta^{(1)} a_2 \\
+		\end{pmatrix} \times \begin{pmatrix}
+			\Delta^{(2)} a_1 \\
+			\Delta^{(2)} a_2 \\
+		\end{pmatrix}
+	\end{split}\end{equation*} %}
+	成分ごとの積と余積に対する結合性は次の可換図で表される。
+	\begin{equation}\xymatrix@C+2ex{
+		A^{\times n}\times A^{\times n}\times A^{\times n} \ar[d]^{m_n\times \myid^{\times n}} \ar[r]^(.6){\myid^{\times n}\times m_n} 
+		& A^{\times n}\times A^{\times n} \ar[d]^{m_n} \\
+		A^{\times n}\times A^{\times n} \ar[r]^{m_n} & A^{\times n} \\
+	} \quad \xymatrix@C+2ex{
+		A^{\times n}\times A^{\times n}\times A^{\times n}   
+		& A^{\times n}\times A^{\times n} \ar[l]_(.4){\myid^{\times n}\times \Delta_n} \\
+		A^{\times n}\times A^{\times n} \ar[u]^{\myid^{\times n}\times \Delta_n} 
+		& A^{\times n} \ar[l]^{\Delta_n} \ar[u]_{\Delta_n} \\
+	}\end{equation}
+
+	\begin{definition}[双半群]\label{def:双半群} %{ 
+		$A$を集合とする。$m$を$A$の積、$\Delta$を$A$の余積とする。
+		$1$以上の自然数$n$に対して、$m_n$を$m$の成分ごとの積とする。
+		$m$と$\Delta$が次の図を可換にするとき、$m$と$\Delta$は双対であるという。
+		また、このとき、組$(A,m,\Delta)$を双半群という。
+		\begin{equation}\label{eq:双対な余積}\xymatrix@C+2ex{
+			A\times A \ar[d]^{m_1} \ar[r]^{\Delta\times \Delta} & A\times A\times A\times A \ar[d]^{m_2} \\
+			A \ar[r]^{\Delta} & A\times A \\
+		}\end{equation}
+	\end{definition} %def:双半群}
+
+	$1$以上の自然数$n$に対して、$\Delta_n$を$\Delta$の成分ごとの積とすると、
+	次の可換図は式\eqref{eq:双対な余積}の可換図と同値であるので、この可換図で
+	積と余積の双対性を定義してもよい。
+	\begin{equation}\xymatrix@C+2ex{
+		A\times A \ar[d]^{m} \ar[r]^{\Delta_2} & A\times A\times A\times A \ar[d]^{m\times m} \\
+		A \ar[r]^{\Delta_1} & A\times A \\
+	}\end{equation}
+
+	\begin{definition}[群的な余積]\label{def:群的な余積} %{ 
+		余積$a\mapsto a\times a$を群的な余積という。
+	\end{definition} %def:群的な余積}
+
+	\begin{proposition}[群的な余積の双対性]\label{pro:群的な余積の双対性} %{ 
+		群的な余積は任意の積と双対になる。
+	\end{proposition} %pro:群的余積の双対性}
+	\begin{proof} %{
+		$A$を集合、$m$を$A$の積、$\Delta$を$A$の群的な余積とする。
+		任意の$a_1,a_2\in A$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\Delta m_1(a_1\times a_2) &= m_1(a_1\times a_2)\times m_1(a_1\times a_2) \\
+			m_2(\Delta\times \Delta)(a_1\times a_2) &= m_2(a_1\times a_1\times a_2\times a_2) \\
+				&= m_1(a_1\times a_2)\times m_1(a_1\times a_2) \\
+		\end{split}\end{equation*} %}
+		したがって、次の式が成り立ち、命題が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\Delta m_1(a_1\times a_2) &= m_2(\Delta\times \Delta)(a_1\times a_2) \\
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+
+	\begin{definition}[単位射]\label{def:単位射} %{ 
+		$A$を集合、$m$を$A$の積、$\Delta$を$A$の余積とする。
+		$\mybf{1}$を一つの元だけからなる集合とする。
+
+		写像$u_1$が次の図を可換にするとき、$u_1$を$m$の左単位射という。
+		写像$u_2$が次の図を可換にするとき、$u_2$を$m$の右単位射という。
+		$u_1=u_2$となるとき、両単位射または単に単位射という。
+
+		写像$\epsilon_1$が次の図を可換にするとき、$\epsilon_1$を$\Delta$の左余単位射という。
+		写像$\epsilon_2$が次の図を可換にするとき、$\epsilon_2$を$\Delta$の右余単位射という。
+		$\epsilon_1=\epsilon_2$となるとき、両余単位射または単に余単位射という。
+		\begin{equation}\xymatrix{
+			\mybf{1}\times A \ar[r]^{u_1\times \myid} \ar[dr]_{\pi_2}
+			& A\times A \ar[d]^{m} 
+			& A\times \mybf{1} \ar[l]_{\myid\times u_2} \ar[dl]^{\pi_1} \\
+			& A \\
+		} \quad \xymatrix{
+			\mybf{1}\times A \ar[r]^{\epsilon_1\times \myid}
+			& A\times A
+			& A\times \mybf{1} \ar[l]_{\myid\times \epsilon_2} \\
+			& A \ar[u]_{\Delta} \ar[ul]^{\iota_2} \ar[ur]_{\iota_1} \\
+		}\end{equation}
+		ここで、写像$\pi$と$\iota$は、$\mybf{1}=\set{e}$として、それぞれ次のように定義した。
+		\begin{equation}\begin{array}{cc} %{
+			\pi_1: x_1\times x_2 \mapsto x_1, & \iota_1: x \mapsto x\times e \\
+			\pi_2: x_1\times x_2 \mapsto x_2, & \iota_2: x \mapsto e\times x \\
+		\end{array}\end{equation} %}
+	\end{definition} %def:単位射}
+
+	余単位射はへの写像であり一意に定まり、余単位射をもつ余積は、群的な余積に限られる。
+	したがって、余単位射を定義することは意味がないが、積と余積を対比されるために
+	定義した。通常は、余積は、直積ではなくテンソル積に対して定義されるので、
+	余単位射を定義することは意味をもつ。
+
+	左単位射の像を左単位元、右単位射の像を右単位元、両単位射の像を両単位元という。
+
+	\begin{proposition}[単位元の一意性]\label{prop:単位元の一意性} %{
+		$A=(A,m)$を半群とする。
+		\begin{enumerate}
+			\item $A$が左単位元と右単位元の両方を持つとすると、
+			左単位元と右単位元は一致して、両単位元となる。
+			\item $A$の両単位元が存在すれば一意に定まる。
+		\end{enumerate}
+	\end{proposition} %}
+	\begin{proof}
+		\begin{enumerate}
+			\item $u_l$を$A$の左単位元、$u_r$を$A$の右単位元とする。このとき、
+			次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				u_l = m(u_l\times u_r) = u_r
+			\end{split}\end{equation*}
+			\item $u_0,u_1$を$A$の両単位元とする。このとき、次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				u_0 = m(u_0\times u_1) = u_1
+			\end{split}\end{equation*}
+		\end{enumerate}
+	\end{proof}
+%s1:半群と余半群}
+
+\section{自由半群}\label{s1:自由半群} %{
+	\begin{definition}[自由半群]\label{def:自由半群} %{ 
+		$A$を集合、$A$の$n$次の直積を$A^n$とする。 $A^+=\cup_{k=1}^\infty A^{\times k}$とし、
+		二項演算$m$を次のように定義する。
+		\begin{equation*}\begin{split}
+			m: A^+ \times A^+ &\to A^+ \\
+				[a_1 a_2\cdots a_m] \times [b_1 b_2 \cdots b_n
+					&\mapsto [a_1 a_2\cdots a_m b_1 b_2 \cdots b_n]
+		\end{split}\end{equation*}
+		ここで、$A^m$の元をかぎ括弧の中に並べて表した。例えば、$a_1,a_2,\dots,a_m\in A$
+		として、$[a_1 a_2\cdots a_m]\in A^{\times m}$というように$A^{\times m}$
+		の元を表す。二項演算$m$は結合律を満たすから、$(A^+,m)$は半群となる。
+		$(A^+,m)$を集合$A$上の自由半群という。
+	\end{definition} %def:自由半群}
+
+	慣習的に、自由半群$A^+$の元を$A^+$の単語、$A$の元を文字ともいう。
+
+	この節では、集合$A$上の自由半群$A^+$の元を$A$の元を用いて表す場合、\ref{def:自由半群}
+	のように、かぎ括弧内に$A$の元を並べて表すことにする。また、文字数を$\zettai{-}$
+	と書くことにする。$\zettai{\bakko{a_1a_2\cdots a_m}}\mapsto m$
+
+	\begin{proposition}[自由半群の普遍性]\label{pro:自由半群の普遍性} %{ 
+		$A$を集合、$A^+$を$A$上の自由半群とする。写像$i$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			i: A &\to A^+ \\
+				a &\mapsto [a] \\
+		\end{split}\end{equation} %}
+		$G$を半環とする。任意の写像$f$に対して次の図を可換にする半群準同型
+		$f_*$が唯一存在する。
+		\begin{equation}\xymatrix{
+			A \ar[r]^i \ar[rd]^{f} & A^+ \ar@{.>}[d]^{f_*} \\
+			& G \\
+		}\end{equation}
+	\end{proposition} %pro:自由半群の普遍性}
+	\begin{proof}
+		半群$A^+$の積を$m_A$、半群$G$の積を$m_G$と書く。
+		
+		写像$f_*:A^+\to G$を次のように定義する。
+		\begin{equation*}\begin{split}
+			f_*: w &\mapsto \begin{cases}
+				fa, &\text{ iff }w = [a] \in A^1 \\
+				m_G(fa_1\times fa_2\times \cdots \times fa_m)
+					&\text{ else }w = [a_1\times a_2\times \cdots \times a_m] \\
+				\end{cases}
+		\end{split}\end{equation*}
+		すると、任意の$a\in A$に対して$f_*ia=fa$となる。
+		\begin{equation*}\begin{split}
+			f_*m_A([a_1] \times [a_2] \times \cdots \times [a_m])
+				&= m_G(f_*[a_1]\times f_*[a_2]\times \cdots \times f_*[a_m]) 
+		\end{split}\end{equation*}
+		だから、写像$f_*$は半群準同型となる。したがって、$f_*i=f$となる
+		半群準同型$f_*$は存在する。
+
+		$f':A^+\to G$を、$f'i=f$となる半群準同型とすると、
+		\begin{equation*}\begin{split}
+			f'[a_1a_2\cdots a_m] &= m_B(f'[a_1]\times f'[a_2]\times \cdots \times f'[a_m]) \\
+				&= m_B(fa_1\times fa_2\times \cdots \times fa_m) \\
+				&= m_B(f_*[a_1]\times f_*[a_2]\times \cdots \times f_*[a_m]) \\
+				&= f_*[a_1a_2\cdots a_m] \\
+		\end{split}\end{equation*}
+		となり、$f'=f_*$となる。したがって、$f_*$の唯一性が証明される。
+	\end{proof}
+
+	この命題により、写像$A\to G$全体の集合$\hom(A,G)$と準同型$A^+\to G$全体
+	の集合$\hom(A^+,G)$が集合同型になることがわかる。
+	\begin{equation}\begin{split} %{
+		\varphi: \hom(A^+,G) &\simeq \hom(A,G) \\
+			g &\mapsto gi \\
+		\varphi^{-1}: \hom(A,G) &\simeq \hom(A^+,G) \\
+			f &\mapsto \varphi^{-1}f \text{ such that } \\
+			(\varphi^{-1}f)[a_1a_2\cdots a_m] &= \begin{cases}
+				fa_1, &\text{ iff } m=1 \\
+				m_G(fa_1\times fa_2\times \cdots\times fa_m), &\text{ otherwise } \\
+				\end{cases}
+	\end{split}\end{equation} %}
+%s1:自由半群}
+
+\section{モノイド}\label{s1:モノイド} %{
+	\begin{definition}[モノイド]\label{def:モノイド} %{
+		単位元を持つ半群をモノイドという。
+	\end{definition} %def:モノイド}
+%s1:モノイド}
+
+\section{半環}\label{s1:半環} %{
+	\begin{definition}[半環]\label{def:半環} %{
+		$A$を集合とする。
+		\begin{itemize}
+			\item $(A,+,0_A)$が可換モノイドで、
+			\item $(A,*,1_A)$がモノイドで、
+			\item 分配性が成り立ち、
+			\begin{equation*}\begin{split} %{
+				a_1*(a_2+a_3) &= a_1*a_2+a_1*a_2 \\
+				(a_1+a_2)*a_3 &= a_1*a_3+a_2*a_3 \\
+				& \text{ for all }a_1,a_2,a_3 \in A \\
+			\end{split}\end{equation*} %}
+			\item ゼロ性が成り立つ
+			\begin{equation*}\begin{split} %{
+				0_A*a = 0_A = a*0_A \text{ for all }a\in A \\
+			\end{split}\end{equation*} %}
+		\end{itemize}
+		とき、$(A,+,0_A,*,1_A)$を半環という。このとき、$+$を加法、$*$を乗法という。
+	\end{definition} %def:半環}
+
+	最後の条件は、環の場合は、分配性から導き出せる。
+	\begin{equation*}\begin{split} %{
+		a_1*0=a_1*(a_2-a_2)=a_1*a_2-a_1*a_2=0
+	\end{split}\end{equation*} %}
+	半環の場合は、加法に逆元があるとは限らないので、分配性とゼロ性の両方を定義に
+	含めておく必要がある。
+%s1:半環}
+
+\section{半モジュール}\label{s1:半モジュール} %{ 
+	\begin{definition}[半モジュール]\label{def:半モジュール} %{
+		$R=(R,+,0_R,*,1_R)$を半環、$M=(M,+,0_M)$を可換モノイドとする。
+		写像$\rhd$が次の性質を満たすとき、$M$を$R$上の左半モジュール、または
+		$R$を係数とする左半モジュールという。右半モジュールも同様に定義される。
+		\begin{itemize}
+			\item 結合性 \\
+			任意の$r_1,r_2\in R$と$m\in M$に対して、次の式が成り立つ。
+			\begin{equation}\begin{split} %{
+				(r_1*r_2)\rhd m = r_1\rhd (r_2\rhd m) \\
+			\end{split}\end{equation} %}
+			\item 双線形性 \\
+			任意の$r_1,r_2,r\in R$と$m_1,m_2,m\in M$に対して、次の式が成り立つ。
+			\begin{equation}\begin{split} %{
+				(r_1+r_2)\rhd m &= (r_1\rhd m)+(r_2\rhd m) \\
+				r\rhd (m_1+m_2) &= (r\rhd m_1)+(r\rhd m_2)
+			\end{split}\end{equation} %}
+			\item ゼロ性 \\
+			任意の$r\in R$と$m\in M$に対して、次の式が成り立つ。
+			\begin{equation}\begin{split} %{
+				0_R\rhd m = 0_M = r\rhd 0_M
+			\end{split}\end{equation} %}
+		\end{itemize}
+	\end{definition} %def:半モジュール}
+
+	半環の場合と同様で、モジュールの定義と異なり、半モジュールの定義には
+	ゼロ性が必要になる。
+%s1:半モジュール}
+
+\section{半代数}\label{s1:半代数} %{ 
+	\begin{definition}[半代数]\label{def:半代数} %{
+		$R$を半環、$M$を$R$係数の半モジュールとする。$M$の二項演算$m$が
+		次の性質を満たすとき、$(M,m)$を半代数という。
+	\end{definition} %def:半代数}
+%s1:半代数}
