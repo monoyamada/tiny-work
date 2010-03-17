@@ -1,3 +1,28 @@
+\section{双半群の使い方}\label{s1:双半群の使い方} %{
+	数学の重要な道具として準同型がある。準同型は、
+	\begin{itemize}
+		\item 準同型によって演算結果の対応関係がつけられて、
+		\item 準同型の合成は準同型になる
+	\end{itemize}
+	というものである。
+	\begin{equation*}\xymatrix{
+		A\times A \ar[d]^{m_A} \ar[r]^{f\times f} & B\times B \ar[d]^{m_B} \ar[r]^{g\times g} & C\times C \ar[d]^{m_C} \\
+		A \ar[r]^{f} & B \ar[r]^{g} & C \\
+	}\end{equation*}
+	この性質を満たすように準同型を拡張してみる。対角的な直積$f\times f$の
+	代わりに余積を用いて次のような可換図を考える。
+	\begin{equation*}\xymatrix{
+		A\times A \ar[d]^{m_A} \ar[r]^{\Delta f} & B\times B \ar[d]^{m_B} \ar[r]^{\Delta g} & C\times C \ar[d]^{m_C} \\
+		A \ar[r]^{f} & B \ar[r]^{g} & C \\
+	}\end{equation*}
+	写像の合成を$\circ$と書くと、合成が成り立つための条件は次のようになる。
+	\begin{equation*}\begin{split} %{
+		\Delta(g\circ f) &= (\Delta g)\circ(\Delta f) \\
+	\end{split}\end{equation*} %}
+	この式は、$\circ$を積、$\Delta$を余積とする双対の関係に他ならない。
+	$\Delta$を群的な余積とした場合が準同型となる。
+%s1:双半群の使い方}
+
 \section{パーサーの方針}\label{s1:パーサーの方針} %{ 
 	最初の問題設定として、文字列が与えられたパターンに合致するかどうかを
 	判定する問題を考える。文字列の集合として、有限集合$A$から生成された
@@ -54,36 +79,57 @@
 				1, &\text{ otherwise } \\
 			\end{cases}
 	\end{split}\end{equation*} %}
-	からへの写像全体$M\mybf{B}$は$M\mybf{B}=\set{0^*,1^*,1_M,\neg}$となる。$0^*,1^*$
-	はそれぞれ$0,1$への定数写像、$1_M$は恒等写像、$\neg$は次のように定義する。
+	からへの写像全体$M\mybf{B}$は$M\mybf{B}=\set{0^*,1^*,\myid,\neg}$となる。$0^*,1^*$
+	はそれぞれ$0,1$への定数写像、$\myid$は恒等写像、$\neg$は次のように定義する。
 	\begin{equation*}\begin{split} %{
-		\neg0 &= 1 \\
-		\neg1 &= 0 \\
+		\neg \begin{pmatrix}
+			0 \\
+			1 \\
+		\end{pmatrix} &= \begin{pmatrix}
+			1 \\
+			0 \\
+		\end{pmatrix} \\
+	\end{split}\end{equation*} %}
+	群表は次のようになる。
+	\begin{equation*}\begin{split} %{
+		\bordermatrix {
+			+ & 0^* & 1^* & \neg & \myid \\
+			0^* & 0^* & 1^* & \neg & \myid \\
+			1^* & 1^* & 1^* & 1^* & 1^* \\
+			\neg & \neg & 1^* & \neg & 1^* \\
+			\myid & \myid & 1^* & 1^* & \myid \\
+		} & \quad \bordermatrix {
+			\text{合成} & 0^* & 1^* & \neg & \myid \\
+			0^* & 0^* & 0^* & 0^* & 0^* \\
+			1^* & 1^* & 1^* & 1^* & 1^* \\
+			\neg & 1^* & 0^* & \myid & \neg \\
+			\myid & 0^* & 1^* & \neg & \myid \\
+		} \\
 	\end{split}\end{equation*} %}
 	$\neg$は次のとおり準同型とならない。
 	\begin{equation*}\begin{split} %{
 		\neg(0+1) = 0 \neq 1 = \neg0 + \neg1 \\
 	\end{split}\end{equation*} %}
 	$\neg$以外は準同型となるから、$M\mybf{B}$の中で準同型となるものの部分集合
-	$H\mybf{B}$は$H\mybf{B}=\set{0^*,1^*,1_M}$となる。$H\mybf{B}$の群表は次の
+	$H\mybf{B}$は$H\mybf{B}=\set{0^*,1^*,\myid}$となる。$H\mybf{B}$の群表は次の
 	ようになる。
 	\begin{equation}\label{eq:論理和の分配的な双対空間}\begin{split} %{
 		\bordermatrix {
-			+ & 0^* & 1^* & 1_M \\
-			0^* & 0^* & 1^* & 1_M \\
+			+ & 0^* & 1^* & \myid \\
+			0^* & 0^* & 1^* & \myid \\
 			1^* & 1^* & 1^* & 1^* \\
-			1_M & 1_M & 1^* & 1_M \\
+			\myid & \myid & 1^* & \myid \\
 		} & \quad \bordermatrix {
-			\text{合成} & 0^* & 1^* & 1_M \\
+			\text{合成} & 0^* & 1^* & \myid \\
 			0^* & 0^* & 0^* & 0^* \\
 			1^* & 1^* & 1^* & 1^* \\
-			1_M & 0^* & 1^* & 1_M \\
+			\myid & 0^* & 1^* & \myid \\
 		} \\
 	\end{split}\end{equation} %}
 	計算してみると、$H\mybf{B}$は分配性を持つことがわかる。以上より、上で述べた
 	ことが確かめられる。
 
-	式を見ると、部分集合$H_0\mybf{B}=\set{0^*,1_M}$は写像の合成と$+$について
+	式を見ると、部分集合$H_0\mybf{B}=\set{0^*,\myid}$は写像の合成と$+$について
 	閉じているのがわかる。さらに、$H_0\mybf{B}$では次の事柄が成り立っている。
 	\begin{itemize}
 		\item 写像の合成が可換になる。
@@ -97,7 +143,7 @@
 			\end{pmatrix}
 			&\mapsto \begin{pmatrix}
 				0^* \\
-				1_M \\
+				\myid \\
 			\end{pmatrix}
 		\end{split}\end{equation*} %}
 	\end{itemize}

@@ -108,16 +108,16 @@
 		群的な余積は任意の積と双対になる。
 	\end{proposition} %pro:群的余積の双対性}
 	\begin{proof} %{
-		$A$を集合、$m$を$A$の積、$\Delta$を$A$の群的な余積とする。
+		$A$を集合、$m$を$A$の積、$\mydu$を$A$の群的な余積とする。
 		任意の$a_1,a_2\in A$に対して次の式が成り立つ。
 		\begin{equation*}\begin{split} %{
-			\Delta m_1(a_1\times a_2) &= m_1(a_1\times a_2)\times m_1(a_1\times a_2) \\
-			m_2(\Delta\times \Delta)(a_1\times a_2) &= m_2(a_1\times a_1\times a_2\times a_2) \\
+			\mydu m_1(a_1\times a_2) &= m_1(a_1\times a_2)\times m_1(a_1\times a_2) \\
+			m_2(\mydu\times \mydu)(a_1\times a_2) &= m_2(a_1\times a_1\times a_2\times a_2) \\
 				&= m_1(a_1\times a_2)\times m_1(a_1\times a_2) \\
 		\end{split}\end{equation*} %}
 		したがって、次の式が成り立ち、命題が成り立つ。
 		\begin{equation*}\begin{split} %{
-			\Delta m_1(a_1\times a_2) &= m_2(\Delta\times \Delta)(a_1\times a_2) \\
+			\mydu m_1(a_1\times a_2) &= m_2(\mydu\times \mydu)(a_1\times a_2) \\
 		\end{split}\end{equation*} %}
 	\end{proof} %}
 
@@ -143,17 +143,18 @@
 			& A\times \mybf{1} \ar[l]_{\myid\times \epsilon_2} \\
 			& A \ar[u]_{\Delta} \ar[ul]^{\iota_2} \ar[ur]_{\iota_1} \\
 		}\end{equation}
-		ここで、写像$\pi$と$\iota$は、$\mybf{1}=\set{e}$として、それぞれ次のように定義した。
+		ここで、写像$\pi$と$\iota$は、$\mybf{1}=\set{e}$として、それぞれ
+		次のように定義した。
 		\begin{equation}\begin{array}{cc} %{
 			\pi_1: x_1\times x_2 \mapsto x_1, & \iota_1: x \mapsto x\times e \\
 			\pi_2: x_1\times x_2 \mapsto x_2, & \iota_2: x \mapsto e\times x \\
 		\end{array}\end{equation} %}
 	\end{definition} %def:単位射}
 
-	余単位射はへの写像であり一意に定まり、余単位射をもつ余積は、群的な余積に限られる。
-	したがって、余単位射を定義することは意味がないが、積と余積を対比されるために
-	定義した。通常は、余積は、直積ではなくテンソル積に対して定義されるので、
-	余単位射を定義することは意味をもつ。
+	余単位射はへの写像であり一意に定まり、余単位射をもつ余積は群的な余積に
+	限られる。したがって、余単位射を定義することは意味がないが、積と余積を
+	対比させるために定義した。通常は、余積は、直積ではなくテンソル積に対して
+	定義されるので、余単位射を定義することは意味をもつ。
 
 	左単位射の像を左単位元、右単位射の像を右単位元、両単位射の像を両単位元という。
 
@@ -207,7 +208,7 @@
 			i: A &\to A^+ \\
 				a &\mapsto [a] \\
 		\end{split}\end{equation} %}
-		$G$を半環とする。任意の写像$f$に対して次の図を可換にする半群準同型
+		$G$を半群とする。任意の写像$f$に対して次の図を可換にする半群準同型
 		$f_*$が唯一存在する。
 		\begin{equation}\xymatrix{
 			A \ar[r]^i \ar[rd]^{f} & A^+ \ar@{.>}[d]^{f_*} \\
@@ -255,6 +256,18 @@
 				m_G(fa_1\times fa_2\times \cdots\times fa_m), &\text{ otherwise } \\
 				\end{cases}
 	\end{split}\end{equation} %}
+
+	\begin{example}[文字列の長さ]\label{obs:文字列の長さ} %{
+		$\mybf{N}$を自然数、$A$を集合、$A^+$を$A$から生成された自由半群とする。
+		自然数の加法のみ考えたとき、定数写像$1^*a=1,\forall a\in A$の
+		同型対応は文字列の長さになる。
+		\begin{equation*}\begin{split} %{
+			\varphi: \hom(A^+,\mybf{N}) &\simeq \hom(A,\mybf{N}) \\
+			(\varphi^{-1}1^*)[a_1a_2\cdots a_m] &= (1^*a_1)+(1^*a_2)+\cdots+(1^*a_m) = m \\
+		\end{split}\end{equation*} %}
+		この例では、定数写像$1^*$が定数でない写像$\varphi^{-1}1^*$に対応している。
+	\end{example} %obs:文字列の長さ}
+
 %s1:自由半群}
 
 \section{モノイド}\label{s1:モノイド} %{
@@ -283,12 +296,15 @@
 		とき、$(A,+,0_A,*,1_A)$を半環という。このとき、$+$を加法、$*$を乗法という。
 	\end{definition} %def:半環}
 
-	最後の条件は、環の場合は、分配性から導き出せる。
+	乗法の単位元を仮定しないものを半環とし、乗法の単位元を持つものを単位半環
+	とする定義もある。ここでは、単位半環を単に半環と定義した。
+
+	最後の条件は、環の場合には分配性から導き出せる。
 	\begin{equation*}\begin{split} %{
 		a_1*0=a_1*(a_2-a_2)=a_1*a_2-a_1*a_2=0
 	\end{split}\end{equation*} %}
-	半環の場合は、加法に逆元があるとは限らないので、分配性とゼロ性の両方を定義に
-	含めておく必要がある。
+	半環の場合は、加法に逆元があるとは限らないので、分配性とゼロ性の両方を
+	定義に含めておく必要がある。
 %s1:半環}
 
 \section{半モジュール}\label{s1:半モジュール} %{ 
@@ -320,7 +336,7 @@
 	ゼロ性が必要になる。
 %s1:半モジュール}
 
-\section{半代数}\label{s1:半代数} %{ 
+\section{半代数}\label{s1:半代数} %{
 	\begin{definition}[半代数]\label{def:半代数} %{
 		$R$を半環、$M$を$R$係数の半モジュールとする。$M$の二項演算$m$が
 		次の性質を満たすとき、$(M,m)$を半代数という。

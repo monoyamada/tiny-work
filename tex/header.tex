@@ -16,11 +16,13 @@
 \usepackage{sty/algpseudocode}
 %\usepackage{sty/multirow}
 \usepackage{sty/bigdelim}
-\usepackage[dvipdfm,
-  colorlinks=true,
-  bookmarks=true,
-  bookmarksnumbered=false,
-  bookmarkstype=toc]{hyperref}
+\usepackage[dvipdfm %
+  , colorlinks=true %
+  , bookmarks=true %
+  , bookmarksnumbered=false %
+  , bookmarkstype=toc %
+  , pdfkeywords={TeX; dvipdfmx; hyperref; color;} %
+	]{hyperref}
 \ifnum 42146=\euc"A4A2 
   \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}% platex-utf8 でも OK
 \else
@@ -33,14 +35,13 @@
 \newtheorem[S]{proposition}{命題}[section]
 \newtheorem[S]{corollary}{系}[section]
 \newtheorem[S]{lemma}{補題}[section]
-\newtheorem[S]{definition}{Definition}[section]
-\newtheorem[S]{define}{Definition}[section]
-\newtheorem[S]{example}{Example}[section]
+\newtheorem[S]{definition}{定義}[section]
+\newtheorem[S]{example}{例}[section]
 \newtheorem[S]{conjecture}{予想}[section]
 \newtheorem[S]{problem}{問題}[section]
-\newtheorem[S]{observe}{Observation}[section]
+\newtheorem[S]{observe}{観察}[section]
 \newtheorem[S]{formula}{公式}[section]
-\newtheorem[S]{todo}{TODO}[section]
+\newtheorem[S]{todo}{課題}[section]
 \def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
 \def\endproof{{\large$\Box$}\endtrivlist}
 %
@@ -59,7 +60,7 @@
 \newcommand{\homset}{\myop{hom}}
 \newcommand{\curry}{\myop{curring}}
 \newcommand{\myid}{{\myop{id}}}
-\newcommand{\mydi}{{\myop{di}}}
+\newcommand{\mydu}{{\myop{du}}}
 \newcommand{\mycat}[1]{{\mathbf{#1}}}
 %
 %program
