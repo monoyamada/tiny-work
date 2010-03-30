@@ -1,0 +1,33 @@
+\section{圏}\label{s1:圏} %{
+	\begin{definition}[始対象と終対象]\label{def:始対象と終対象} %{
+		$\mycal{A}$を圏とする。$\mycal{A}$の対象$A_0$から$\mycal{A}$のすべての
+		対象への射が唯一つある時、$A_0$を$\mycal{A}$の始対象という。
+		$\mycal{A}$のすべての対象から$\mycal{A}$の対象$A_1$への射が唯一つある時、
+		$A_1$を$\mycal{A}$の終対象という。
+		始対象かつ終対象となる対象をゼロ対象またはヌル対象という。
+	\end{definition} %def:始対象と終対象}
+
+	始対象と終対象を絵で書くと次のようになる。
+	\begin{equation}\xymatrix{
+		\text{始対象} \ar[r] \ar[rd] & X_1 \\
+		& X_2 \\
+	}\quad\xymatrix{
+		X_1 \ar[r] & \text{終対象} \\
+		X_2 \ar[ur] \\
+	}\end{equation}
+
+	\begin{example}[始対象と終対象の例]\label{obs:始対象と終対象の例} %{
+		\begin{itemize}
+			\item 集合 \\
+			空集合が始対象、元が一つだけの集合が終対象となる。
+			終対象の方はわかるが、空集合からの射とはなんだろうか？
+			\item 半群 \\
+			空半群が始対象、自明な半群\ref{def:自明な半群}が終対象となる。
+			\item モノイド \\
+			自明なモノイド\ref{def:自明なモノイド}がゼロ対象となる。
+			\item 半環 \\
+			自明な半環を含む半環の圏では、
+			自明な半環\ref{def:自明な半環}がゼロ対象となる。
+		\end{itemize}
+	\end{example} %obs:始対象と終対象の例}
+%s1:圏}

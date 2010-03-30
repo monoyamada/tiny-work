@@ -1,3 +1,72 @@
+\section{DFAとキャンセル可能性}\label{s1:DFAとキャンセル可能性} %{
+	次のDFAを考える。
+	\begin{equation}\xymatrix{
+		& c \ar[rd]^c \\
+		ac+bc \ar[ru]^a \ar[rd]_b & & 1 \\
+		& c \ar[ru]_c \\
+	}\end{equation}
+	これを半群の言葉でみると、左キャンセル可能な表現と思える。
+	このDFAを最小化すると次のようになる。
+	\begin{equation}\xymatrix{
+		ac+bc \ar[r]^{a+b} & c \ar[r]^c & 1 \\
+	}\end{equation}
+	これを半群の言葉でみると、左右キャンセル可能な表現と思える。
+	最小化したDFAを次のように書き直してみる。
+	\begin{equation}\xymatrix{
+		(a+b)c \ar[r]^{a+b} & c \ar[r]^c & 1 \ar@(u,u)[ll]_{(a+b)c} \\
+	}\end{equation}
+	これは、有限なキャンセル可能な半群は群になることを示していると思える。
+	オートマトンの言葉と半群の言葉を表の形で対応させると次のようになりそうだ。
+	\begin{tabular}{cc}
+		オートマトン & 半群 \\ \hline
+		有限オートマトン & 半群の有限次元表現 \\
+		左DFA & 左キャンセル可能 $\implies$ 右単位元が存在 \\
+		左右DFA & 左右キャンセル可能 $\implies$ 左右単位元が存在 \\ \hline
+	\end{tabular}
+
+	この対応表が正しいならば、正規表現は有限オートマトンによる表現を持つから、
+	正規表現は群となる表現をもつことになる。
+	ただし、半群ではなく加法をもったモノイド半環の線形結合で表される。
+	図でいうと、$\set{1,a+b),c}$である。
+%s1:DFAとキャンセル可能性}
+
+\section{自然数から01へ}\label{s1:自然数から01へ} %{
+	自然数から$\mybf{2}$への加法を保つ射影を考える。
+	次の二つの射影が簡単に思いつく。
+	\begin{itemize}
+		\item OR-射影 \\
+		$0$を、$1$以上の自然数を$1$に射影する。
+		射影から誘導される加法はブーリアンのORとなる。
+		\item XOR-射影 \\
+		偶数を$0$、奇数を$1$に射影する。
+		射影から誘導される加法はブーリアンのXORとなる。
+	\end{itemize}
+%s1:自然数から01へ}
+
+\section{ゲーデル関数の例}\label{s1:ゲーデル関数の例} %{
+	例として、自然数$\mybf{N}$とその直積$\mybf{N}^2$との次の対応を考える。
+	\begin{equation*}\begin{split} %{
+		f:\mybf{N}^2 &\to \mybf{N} \\
+			m\times n &\mapsto \binom{m+n+1}{2}+n = \frac{(m+n+1)(m+n)}{2}+n \\
+	\end{split}\end{equation*} %}
+	\begin{equation*}\begin{split} %{
+		\bordermatrix {
+			  & 0 & 1 & 2 & 3 & \cdots \\
+			0 & 0 & 2 & 5 & 9 & \\
+			1 & 1 & 4 & 8 & 13 & \\
+			2 & 3 & 7 & 12 & 18 & \\
+			3 & 6 & 11 & 17 & 24 & \\
+			\vdots & & & & & \\
+		}
+	\end{split}\end{equation*} %}
+	\begin{cprog}
+		f<-function(m,n) (m+n)*(m+n+1)/2+n
+		x<-sapply(0:3,f,n=0:3);
+		t(x);
+	\end{cprog}
+	$f$は集合同型となる。
+%s1:ゲーデル関数の例}
+
 \section{双半群の使い方}\label{s1:双半群の使い方} %{
 	数学の重要な道具として準同型がある。準同型は、
 	\begin{itemize}

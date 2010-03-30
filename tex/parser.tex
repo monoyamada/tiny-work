@@ -1,50 +1,11 @@
 \section{概要と課題}\label{s1:概要と課題} %{
 	\begin{itemize}
-		\item 余半群から半群への写像 \\
-		畳み込みによって、写像空間に積の構造が定義されることを見る。
-		\begin{todo}[代数へ移動]\label{todo:代数へ移動} %{
-			積と余積を定義したころで、畳み込みを定義してしまう。
-		\end{todo} %todo:代数へ移動}
-		\item 集合から半環への写像
-		\begin{todo}[代数へ移動]\label{todo:代数へ移動} %{
-			半モジュールを定義したところで、自由半モジュールを定義して、
-			写像空間の畳み込みによる環構造が自由半モジュールと同型になることを
-			示す。
-			自由半モジュールの定義としては、最もわかりやすい半環の直積に対して、
-			成分毎の加法とスカラー積によるものを採用する。
-		\end{todo} %todo:代数へ移動}
-		\begin{itemize}
-			\item 環の構造 \\
-			写像空間に環の構造が定義されることを見る。
-			畳み込みによって、値域の加法と乗法がそのまま写像空間に
-			持ち込まれるのがわかるから、分配性を心配すればよい。
-			分配性は、定義域の余積が一般的な場合には成り立たない。
-			群的な余積の場合のみ成り立つ。
-			\item モジュールの構造 \\
-			写像空間に半モジュールの構造が定義されることを見る。
-			半環なら半モジュールであるが、定義域の元を基底とする半モジュール
-			となることを見る。この半モジュールは定義域を基底、値域を係数とする
-			自由半モジュールに他ならない。
-		\end{itemize}
-		\item モノイドから半環への写像
-		\begin{itemize}
-			\item 積の構造 \\
-			定義域からの転置写像によって、写像空間に積の構造を持ち込む。
-			写像空間はモノイド環となる。
-			一般に、完全性を破らない限り、定義域の代数構造は転置写像によって、
-			写像空間に持ち込むことができる。
-			\item 余積の構造 \\
-			定義域と値域の汎化準同型として、写像空間に余積の構造を持ち込む。
-			\item スカラー積 \\
-			汎化準同型から導かれた余積を使って、定義域の写像空間への作用を
-			定義する。縮約の方法によって、二つのスカラー積が定義される。
-			二つのスカラー積が一致するのはどのような場合か？
-			可換モノイドの場合か？
-			二つのスカラー積の線形結合もまたスカラー積となる。
-			\item モノイド環を係数とするモノイド環 \\
-			畳み込みを用いて、写像空間に双対なモノイド環を構成する。
-			写像空間は、モノイド環を係数とするモノイド環となる。
-		\end{itemize}
+		\item モノイド半環\\
+		群環にならい、モノイド半環を定義する。
+		モノイド半環とその転置を考える。内積から余積を導入して、
+		さらにスカラー積を導入する。
+		\item 一変数多項式の場合 \\
+		一文字から生成される自由モノイドから複素数への写像を考える。
 		\item 自由モノイドの場合
 		\begin{itemize}
 			\item Brozozowski微分\\
@@ -52,112 +13,11 @@
 			\item 置換微分\\
 			汎化準同型から導かれた作用から置換微分を導き出す。
 		\end{itemize}
-		\item 一変数多項式の場合 \\
-		一文字から生成される自由モノイドから複素数への写像を考える。
 		\item 積から余積の構成方法とその逆 \\
 		有限集合から生成されたモノイドに対して、余積の構成方法を調べること。
 		逆に有限集合から生成された余モノイドに対して、積の構成方法を調べること。
 	\end{itemize}
 %s1:概要と課題}
-
-\section{余半群からモノイドへの写像}\label{s1:集合からモノイドへの写像} %{
-	$A=(A,\Delta_A)$を余半群、$B=(B,m_B,1_B)$をモノイド、$B^A$を$A$から$B$への
-	写像全体とする。$B^A$に二項演算$m_B^*$を次の可換図が成り立つように定義する。
-	\begin{equation}\xymatrix{ %{
-		A \times A \ar[d]^{f \times g} & A \ar[l]_{\Delta_A} \ar@{.>}[d]^{m_B^*(f \times g)} \\
-		B \times B \ar[r]^{m_B} & B \\
-	}\end{equation} %}
-	すると、$\Delta_A$と$m_B$の結合性から、任意の$f,g,h\in B^A$に対して、
-	次の可換図が成り立ち、二項演算$m_B^*$は結合的になることがわかる。
-	\begin{equation}\label{eq:誘導された二項演算の結合性}\xymatrix@C+1ex{
-		& A \ar[d]_{\Delta_A} \ar[r]^{m_B^*(m_B^*(f\times g)\times h)}
-		& B \ar@(r,u)[rdd]^{\myid} 
-		\\
-		& A\times A \ar[d]_{\Delta_A\times \myid} \ar[r]^{m_B^*(f\times g)\times h}
-		& B\times B \ar[u]^{m_B}
-		\\
-	A \ar@(u,l)[ruu]^{\myid} \ar@(d,l)[rdd]_{\myid} 
-		& A\times A\times A \ar[r]^{f\times g\times h}
-		& B\times B\times B \ar[u]_{m_B\times \myid} \ar[d]^{\myid\times m_B}
-		& B 
-		\\
-		& A\times A \ar[u]^{\myid\times \Delta_A} \ar[r]^{f\times m_B^*(g\times h)}
-		& B\times B \ar[d]^{m_B}
-		\\
-		& A \ar[u]^{\Delta_A} \ar[r]^{m_B^*(f\times m_B^*(g\times h))}
-		& B \ar@(r,d)[ruu]_{\myid}
-		\\
-	}\end{equation}
-	よって、二項演算$m_B^*$は積となる。
-	
-	定数写像を埋め込み$i_B$によって定義する。
-	\begin{equation}\label{eq:constant-map}\begin{split} %{
-		i_B: B &\to B^A \\
-			b &\mapsto i_Bb \text{ such that } (i_Bb)a = b \text{ for all }a\in A \\
-	\end{split}\end{equation} %}
-	埋め込み$i_B$は半群同型になり、$i_B1_B$は積$m_B^*$の単位元となる。
-	以上より、$(B^A,m_B^*,i_B1_B)$はモノイドとなる。
-%s1:集合からモノイドへの写像}
-
-\section{集合から半環への写像}\label{s1:集合から半環への写像} %{
-	$A$を集合、$B=(B,+,0_B,*,1_B)$を可換半環、$B^A$を$A$から$B$への写像全体
-	とする。二項演算$+$と$*$は中置記法で書くことにする。$B^A$に二項演算
-	$+$と$*$を、任意の$f,g\in B^A$と任意の$a\in A$に対して、次の式で定める。
-	\begin{equation}\begin{split} %{
-		(f+g)a &= (fa)+(ga) \\
-		(f*g)a &= (fa)*(ga) \\
-	\end{split}\end{equation} %}
-	定数写像を埋め込み$i_B$によって定義する。
-	\begin{equation}\label{eq:constant-map}\begin{split} %{
-		i_B: B &\to B^A \\
-			b &\mapsto i_Bb \text{ such that } (i_Bb)a = b \text{ for all }a\in A \\
-	\end{split}\end{equation} %}
-	$i_B0_B$が$+$の単位元、$i_B1_B$が$*$の単位元となる。
-	さらに、分配性
-	\begin{equation*}\begin{split} %{
-		f*(g+h) &= (f*g)+(f*h) \\
-		(f+g)*h &= (f*h)+(g*h) \\
-	\end{split}\end{equation*} %}
-	とゼロ性
-	\begin{equation*}\begin{split} %{
-		(i_B0_B)*f = i_B0_B = f*(i_B0_B)
-	\end{split}\end{equation*} %}
-	が成り立つから$(B^A,+,i_B0_B,*,i_B1_B)$は半環になる。
-
-	前節のように、$A$の任意の余積から$B^A$に積$+,*$を定義した場合は、
-	分配性が保障されない。ここでは、群的な余積$a\mapsto a\times a$
-	を用いて分配性を保障している。
-
-	埋め込み$i_A$を次のように定義する。
-	\begin{equation}\label{eq:constant-map}\begin{split} %{
-		i_A: A &\to B^A \\
-			a &\mapsto i_Aa \text{ such that } (i_Aa)a_1 = \begin{cases}
-				i_B1_B, &\text{ iff }a=a_1 \\
-				i_B0_B, &\text{ otherwise } \\
-			\end{cases}
-	\end{split}\end{equation} %}
-	$0_B=1_B$でない限り、$i_A$は集合同型となる。
-	任意の$f\in B^A$は次のように書くことができる。
-	\begin{equation}\begin{split} %{
-		f &= \sum_{a\in A}(fa)*(i_Aa)
-	\end{split}\end{equation} %}
-	\footnote {
-		特に、$i_B1_B=sum_{a\in A}(i_Aa)$となる。
-	}
-	したがって、$\set{i_Bb}_{b\in B}$と$B$を同一視することで、$B^A$は
-	\begin{itemize}
-		\item スカラー積が$*$で定義され、
-		\item $\set{i_Aa}_{a\in A}$を基底とする
-	\end{itemize}
-	$B$係数の半モジュールとしてみることができる。さらに、$*$によって積
-	\begin{equation}\begin{split} %{
-		(i_Aa_1) * (i_Aa_2) = \begin{cases}
-			i_Aa_2, &\text{ iff }a_1 = a_2 \\
-			i_B0_B, &\text{ otherwise } \\
-		\end{cases}
-	\end{split}\end{equation} %}
-	が定義されるから、$B^A$は$*$を積とする半代数としてみることもできる。
-%s1:集合から半環への写像}
 
 \section{モノイドから半環への写像}\label{s1:モノイドから半環への写像} %{
 	この節では、写像の定義域をモノイドにして、写像空間にさらに代数の構造を

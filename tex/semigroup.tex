@@ -121,65 +121,336 @@
 		\end{split}\end{equation*} %}
 	\end{proof} %}
 
-	\begin{definition}[単位射]\label{def:単位射} %{ 
+	\begin{definition}[単位射と余単位射]\label{def:単位射と余単位射} %{
 		$A$を集合、$m$を$A$の積、$\Delta$を$A$の余積とする。
 		$\mybf{1}$を一つの元だけからなる集合とする。
-
-		写像$u_1$が次の図を可換にするとき、$u_1$を$m$の左単位射という。
-		写像$u_2$が次の図を可換にするとき、$u_2$を$m$の右単位射という。
-		$u_1=u_2$となるとき、両単位射または単に単位射という。
-
-		写像$\epsilon_1$が次の図を可換にするとき、$\epsilon_1$を$\Delta$の左余単位射という。
-		写像$\epsilon_2$が次の図を可換にするとき、$\epsilon_2$を$\Delta$の右余単位射という。
-		$\epsilon_1=\epsilon_2$となるとき、両余単位射または単に余単位射という。
+		写像$u_L$が次の図を可換にするとき、$u_L$を$m$の左単位射という。
+		写像$u_R$が次の図を可換にするとき、$u_R$を$m$の右単位射という。
+		$u_L=u_R$となるとき、両単位射または単に単位射という。
+		写像$\epsilon_L$が次の図を可換にするとき、$\epsilon_L$を$\Delta$の
+		左余単位射という。写像$\epsilon_R$が次の図を可換にするとき、
+		$\epsilon_R$を$\Delta$の右余単位射という。
+		$\epsilon_L=\epsilon_R$となるとき、両余単位射または単に余単位射という。
 		\begin{equation}\xymatrix{
-			\mybf{1}\times A \ar[r]^{u_1\times \myid} \ar[dr]_{\pi_2}
+			\mybf{1}\times A \ar[r]^{u_L\times \myid} \ar[dr]_{\pi_R}
 			& A\times A \ar[d]^{m} 
-			& A\times \mybf{1} \ar[l]_{\myid\times u_2} \ar[dl]^{\pi_1} \\
+			& A\times \mybf{1} \ar[l]_{\myid\times u_R} \ar[dl]^{\pi_L} \\
 			& A \\
 		} \quad \xymatrix{
-			\mybf{1}\times A \ar[r]^{\epsilon_1\times \myid}
+			\mybf{1}\times A \ar[r]^{\epsilon_L\times \myid}
 			& A\times A
-			& A\times \mybf{1} \ar[l]_{\myid\times \epsilon_2} \\
-			& A \ar[u]_{\Delta} \ar[ul]^{\iota_2} \ar[ur]_{\iota_1} \\
+			& A\times \mybf{1} \ar[l]_{\myid\times \epsilon_R} \\
+			& A \ar[u]_{\Delta} \ar[ul]^{\iota_R} \ar[ur]_{\iota_L} \\
 		}\end{equation}
-		ここで、写像$\pi$と$\iota$は、$\mybf{1}=\set{e}$として、それぞれ
+		ここで、写像$\pi$と$\iota$は、$\mybf{1}=\set{0}$として、それぞれ
 		次のように定義した。
 		\begin{equation}\begin{array}{cc} %{
-			\pi_1: x_1\times x_2 \mapsto x_1, & \iota_1: x \mapsto x\times e \\
-			\pi_2: x_1\times x_2 \mapsto x_2, & \iota_2: x \mapsto e\times x \\
+			\pi_L: x_1\times x_2 \mapsto x_1, & \iota_L: x \mapsto x\times 0 \\
+			\pi_R: x_1\times x_2 \mapsto x_2, & \iota_R: x \mapsto 0\times x \\
 		\end{array}\end{equation} %}
-	\end{definition} %def:単位射}
+	\end{definition} %def:単位射と余単位射}
 
-	余単位射はへの写像であり一意に定まり、余単位射をもつ余積は群的な余積に
-	限られる。したがって、余単位射を定義することは意味がないが、積と余積を
-	対比させるために定義した。通常は、余積は、直積ではなくテンソル積に対して
-	定義されるので、余単位射を定義することは意味をもつ。
-
-	左単位射の像を左単位元、右単位射の像を右単位元、両単位射の像を両単位元という。
-
-	\begin{proposition}[単位元の一意性]\label{prop:単位元の一意性} %{
-		$A=(A,m)$を半群とする。
+	\begin{proposition}[単位射の一意性]\label{prop:単位射の一意性} %{
 		\begin{enumerate}
-			\item $A$が左単位元と右単位元の両方を持つとすると、
-			左単位元と右単位元は一致して、両単位元となる。
-			\item $A$の両単位元が存在すれば一意に定まる。
+			\item 半群が左単位射と右単位射の両方を持つとすると、
+			左単位射と右単位元射が一致して、両単位射となる。
+			\item 半群の両単位射が存在すれば一意に定まる。
 		\end{enumerate}
-	\end{proposition} %}
-	\begin{proof}
+	\end{proposition} %prop:単位射の一意性}
+	\begin{proof} %{
+		$A=(A,m)$を半群、$\mybf{1}=\set{0}$とする。
 		\begin{enumerate}
-			\item $u_l$を$A$の左単位元、$u_r$を$A$の右単位元とする。このとき、
+			\item $u_L$を$A$の左単位射、$u_R$を$A$の右単位射とする。このとき、
 			次の式が成り立つ。
 			\begin{equation*}\begin{split}
-				u_l = m(u_l\times u_r) = u_r
+				u_L0 = m((u_L0)\times (u_R0)) = u_R0
 			\end{split}\end{equation*}
-			\item $u_0,u_1$を$A$の両単位元とする。このとき、次の式が成り立つ。
+			したがって、左単位射$u_L$と右単位元射$u_R$が一致して、両単位射となる。
+			\item $u_1,u_2$を$A$の両単位射とする。このとき、次の式が成り立つ。
 			\begin{equation*}\begin{split}
-				u_0 = m(u_0\times u_1) = u_1
+				u_10 = m((u_10)\times (u_20)) = u_20
 			\end{split}\end{equation*}
+			したがって、半群の両単位射が存在すれば一意に定まる。
 		\end{enumerate}
-	\end{proof}
+	\end{proof} %}
+
+	余単位射は$\mybf{1}$への写像であり一意に定まり、余単位射をもつ余積は
+	群的な余積に限られる。したがって、集合に対して余単位射を定義することは
+	あまり意味がないが、積と余積を対比させるために定義した。
+	通常、余積は単なる集合ではなく、加法を持つ環やモジュールに対して
+	定義される。その場合、余単位射を定義することは重要な意味をもつ。
 %s1:半群と余半群}
+
+\section{集合}\label{s1:集合} %{
+	\begin{definition}[写像の切断]\label{def:写像の切断} %{
+		$A$と$B$を集合とし、$f$を$A$から$B$への写像とする。
+		条件$fg=\myid$を満たす写像$g:(fB)\to A$を$f$の切断という。
+	\end{definition} %def:写像の切断}
+
+	ベクトル束で使われる用語を流用して切断を定義した。一般の写像の場合には、
+	切断とは言わないかもしれない。
+
+	\begin{definition}[同値類]\label{def:同値類} %{
+		$A$を同値関係$\sim$が定義された集合とする。$a\in A$と同値な元を集めた
+		$A$の部分集合を$a$を代表元とする剰余類という。
+		つまり、$[a]=\set{b\in A\bou a\sim b}$とすると、$[a]$を$a$を代表元
+		とする同値類という。
+	\end{definition} %def:同値類}
+
+	同値類は完全に一致するか、まったく異なるかのどちらかになる。
+	$a$と$b$を$\sim$同値関係の代表元とする。
+	$[a]\cup[b]\ne\emptyset \implies a\sim b \implies [a]=[b]$となる。
+
+	\begin{definition}[商集合]\label{def:商集合} %{
+		$A$を同値関係$\sim$が定義された集合とする。
+		$[a]$を$a\in A$を代表元とする同値類とする。
+		$A$の部分集合$A/\sim$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			[a_1]\cap [a_2] &= \emptyset \quad\text{for all }a_1,a_2\in A/\sim \\
+			\cup_{a\in A/\sim}[a] &= A \\
+		\end{split}\end{equation} %}
+		$A/\sim$を同値関係$\sim$による$A$の商集合という。
+	\end{definition} %def:商集合}
+
+	一般には、射影の切断は複数ある。射影の切断は同値類から代表元を選び出す
+	操作である。
+
+	\begin{proposition}[写像を保つ同値関係]\label{prop:写像を保つ同値関係} %{
+		$A,B$を集合、$f$を$A$から$B$への写像とする。
+		$\sim$を$A$の同値関係とし、その射影を$\pi$とする。
+		次の図を可換にする写像$f_\pi$
+		\begin{equation}\xymatrix{
+			A \ar[r]^{f} \ar[d]^{\pi} & B \\
+			A/\sim \ar@{.>}[ru]_{f_\pi} \\
+		}\end{equation}
+		が存在するための必要十分条件は次のようになる。
+		\begin{equation}\begin{split} %{
+			a_1\sim a_2 \implies fa_1 = fa_2 \quad\text{for all }a_1,a_2\in A
+		\end{split}\end{equation} %}
+		そして、この条件が満たされるとき、写像$f_\pi$は唯一つ定まる。
+		このとき、$\sim$を写像$f$を保つ同値関係という。
+	\end{proposition} %prop:写像を保つ同値関係}
+	\begin{proof} %{
+		\begin{itemize}
+			\item 必要性 \\
+			任意の$a_1,a_2\in A$に対して$a_1\sim a_2\iff \pi a_1=\pi a_2$
+			となるから、命題の条件が必要である。
+			\item 十分性
+			任意の$a_1,a_2\in A$に対して$a_1\sim a_2\implies fa_1=fa_2$
+			となれば、$\pi$の任意の切断$\sigma$を用いて、$f_\pi=f\sigma$
+			とすれば、命題の可換図が満たされる。
+			\item 唯一性
+			$g$と$h$を命題の可換図を満たす写像とすると、$g\pi=f=h\pi$が成り立つ。
+			一方、$\pi$は$\myop{onto}$だから、$g\pi=h\pi\iff g=h$となり、
+			命題の可換図を満たす写像は存在しても唯一つであることがわかる。
+		\end{itemize}
+	\end{proof} %}
+
+	ややこしいのだが、写像と射影の関係を図示すると次のようになる。
+	\begin{equation}\begin{split}
+	\text{写像を保つ同値関係} &\quad\text{保たない同値関係} \\
+	\xymatrix{
+		a_1 \ar@(r,u)[rd]^f \\
+		a_2 \ar[r]^f & b \\
+		a_3 \ar[ru]_f \\
+		[a] \ar@(r,d)@{.>}[ruu]_{f_\pi} \\
+	}&\quad\xymatrix {
+		a_1 \ar@(r,u)[rd]^f \\
+		a_2 \ar[r]^f & b_1 \\
+		a_3 \ar[r]^f & b_2 \\
+		[a] \ar@(r,r)@{.>}[ruu]_{f_1} \ar@{.>}[ru]^{f_2} \\
+	}\end{split}\end{equation}
+%s1:集合}
+
+\section{半群}\label{s1:半群} %{
+	最小の半群は唯一つの元からなる半群である。
+
+	\begin{definition}[自明な半群]\label{def:自明な半群} %{
+		唯一つの元からなる半群を自明な半群という。
+	\end{definition} %def:自明な半群}
+
+	半群の構造を保つ同値関係を定義する。
+
+	\begin{definition}[積を保つ同値関係]\label{def:積を保つ同値関係} %{
+		$A=(A,m)$を半群、$\sim$を$A$の同値関係、$A_{\pi}$をその商集合、
+		$\pi$を$A$から$A_{\pi}$への射影とする。
+		次の図を可換にする写像$m_{\pi}$が存在するとき、$\sim$を積$m$を保つ
+		同値関係という。
+		\begin{equation}\label{eq:積を保つ同値関係}\xymatrix{
+			A\times A \ar[r]^{m} \ar[d]^{\pi\times \pi} & A \ar[d]^{\pi} \\
+			A_{\pi}\times A_{\pi} \ar@{.>}[r]^{m_{\pi}} & A_{\pi} \\
+		}\end{equation}
+	\end{definition} %def:積を保つ同値関係}
+
+	積を保つ同値関係は次の事柄が成り立つ。
+
+	\begin{proposition}[積を保つ同値関係]\label{prop:積を保つ同値関係} %{
+		$A=(A,m)$を半群、$\sim$を$A$の同値関係とする。
+		同値関係$\sim$が積$m$を保つための必要十分条件は、
+		任意の$a,b\in A$に対して次の式が成り立つことである。
+		\begin{equation}\begin{split} %{
+			a_1\sim a \text{ and } b_1\sim b \implies m(a_1\times b_1)\sim m(a\times b)
+		\end{split}\end{equation} %}
+		そして、この条件が成り立つとき、可換図\eqref{eq:積を保つ同値関係}が
+		成り立つ写像$m_{\pi}$は唯一つ定まり積となる。
+	\end{proposition} %prop:積を保つ同値関係}
+	\begin{proof} %{
+		\begin{itemize}
+			\item 必要十分 \\
+			射影$\pi\times \pi$が写像$\pi m$を保つ必要十分条件が、命題の
+			必要十分条件である。そして、命題の条件が満たされるとき、
+			命題の図を可換にする写像$m_\pi$が唯一つ存在する。
+			（命題\ref{prop:写像を保つ同値関係}）
+			\item 結合性 \\
+			$m_{\pi}$を可換図\eqref{eq:積を保つ同値関係}が成り立つ写像とする。
+			このとき、次の可換図が成り立ち、$m_{\pi}$は積となる。
+			\begin{equation}\xymatrix@C+2pc{
+				& A \ar[r]^{\pi} \ar@(l,u)[ddl]_{\myid} & A_{\pi} \ar@(r,u)[ddr]^{\myid}\\
+				& A^{\times 2} \ar[r]^{\pi^{\times 2}} \ar[u]_{m} & A_{\pi}^{\times 2} \ar[u]_{m_{\sigma}} \\
+				A & A^{\times 3} \ar[r]^{\pi^{\times 3}} \ar[u]_{(\myid\times m)m} \ar[d]^{(m\times \myid)m}
+				& A_{\pi}^{\times 3} \ar[u]_{(\myid\times m_\pi)m_\pi} \ar[d]^{(m_\pi\times \myid)m_\pi}
+				& A_{\pi} \\
+				& A^{\times 2} \ar[r]^{\pi^{\times 2}} \ar[d]^{m} & A_{\pi}^{\times 2} \ar[d]^{m_{\sigma}} \\
+				& A \ar[r]^{\pi} \ar@(l,d)[uul]^{\myid} & A_{\pi} \ar@(r,d)[uur]_{\myid}\\
+			}\end{equation}
+		\end{itemize}
+	\end{proof} %}
+
+	\begin{example}[積を保つ例と保たない例]\label{eg:積を保つ例と保たない例} %{
+		\begin{itemize}
+			\item 保つ例 \\
+			自然数を偶数と奇数に分ける射影は足し算を保つ。
+			\begin{equation}\begin{split} %{
+				\pi: \mybf{N} &\to \mybf{2}=\set{0,1} \\
+					n &\mapsto \begin{cases}
+						0, &\text{ iff }n\text{ is even}\\
+						1, &\text{ otherwise } \\
+					\end{cases}
+			\end{split}\end{equation} %}
+			\begin{equation}\begin{split} %{
+				\text{偶} + \text{偶} &= \text{偶} \\
+				\text{偶} + \text{奇} &= \text{奇} \\
+				\text{奇} + \text{奇} &= \text{偶} \\
+			\end{split}\end{equation} %}
+			\item 保たない例 \\
+			自然数の$1$以上の閾値による射影は足し算を保たない。
+			\begin{equation}\begin{split} %{
+				\pi: \mybf{N} &\to \mybf{2}=\set{0,1} \\
+					n &\mapsto \begin{cases}
+						0, &\text{ iff }n\le 1 \\
+						1, &\text{ otherwise } \\
+					\end{cases}
+			\end{split}\end{equation} %}
+			\begin{equation}\xymatrix{
+				1\times 1 \ar[r]^{+} \ar[d]^{\pi\times \pi} & 2 \ar[r]^{\pi} & 1 \\
+				0\times 0 \\
+				0\times 1 \ar[r]^{+} \ar[u]_{\pi\times \pi} & 1 \ar[r]^{\pi} & 0 \\
+			}\end{equation}
+		\end{itemize}
+	\end{example}%}
+
+	\begin{definition}[キャンセル可能 (cancellative)]\label{def:キャンセル可能} %{
+		$A=(A,m_A)$を半群とする。任意の元$a_1,a_2,a_3\in A$に対して次の式が
+		成り立つ場合、$A$を左キャンセル可能という。
+		\begin{equation*}\begin{split} %{
+			m_A(a_1\times a_2) = m_A(a_1\times a_3) \implies a_2 = a_3 \\
+		\end{split}\end{equation*} %}
+		という。次の式が成り立つ場合、$A$を右キャンセル可能という。
+		\begin{equation*}\begin{split} %{
+			m_A(a_2\times a_1) = m_A(a_3\times a_1) \implies a_2 = a_3 \\
+		\end{split}\end{equation*} %}
+		という。左キャンセル可能かつ右キャンセル可能な場合、単にキャンセル可能
+		という。
+	\end{definition} %def:キャンセル可能}
+
+	\begin{proposition}[有限なキャンセル可能な半群]\label{prop:有限なキャンセル可能な半群} %{
+		有限かつ左キャンセル可能な半群は右単位元と右逆元を持つ。
+		同様に、有限かつ右キャンセル可能な半群は左単位元と左逆元を持つ。
+		したがって、有限かつ両キャンセル可能な半群は群になる。
+	\end{proposition} %prop:有限なキャンセル可能な半群}
+	\begin{proof} %{
+		$A=(A,m)$を有限かつ左キャンセル可能な半群とする。
+		$A$は左キャンセル可能だから、任意の$a\in A$に対して写像
+		$m(a\times-):A\to A$は$1:1$になる。また、$A$は有限だから$m(a\times-)$は
+		集合同型となる。したがって、$m(a\times b)=a$となる元$b\in A$が存在する。
+		$A$は左キャンセル可能だから、$b$は右単位元となる。この右単位元を$1_R$
+		と書く。同様に、$m(a\times c)=1_R$となる元$c\in A$が存在する。
+		$c$は$a$の右逆元に他ならない。
+
+		有限かつ右キャンセル可能な半群の場合も、同様に証明される。
+		また、両キャンセル可能な半群は、左単位元と右単位元を持つから両者は一致
+		した両単位元となり、すべての元が左逆元と右逆元を持つから両者は一致して
+		逆元となる。
+	\end{proof} %}
+
+	命題\ref{prop:有限なキャンセル可能な半群}の証明で使った自己写像での
+	$1:1$と$\myop{onto}$の関係については注意が必要である。有限集合に対する
+	自己写像の場合は、$1:1$と$\myop{onto}$は同値になる。一方、無限集合の
+	場合は同値ではない。例えば、自然数$f:\mybf{N}\to\mybf{N}$を$fn=n+1$
+	とすると、$f$は$1:1$だが、$0$の逆像がないので$\myop{onto}$ではない。
+
+	キャンセル可能ということは、等質性のように思われる。一般的な巡回半群
+	の場合、次の遷移図のようにワッカに尻尾がつく遷移が許される。
+	一方、キャンセル可能な巡回半群の場合、尻尾が許されずにワッカのみになる。
+	\begin{equation*}\begin{array}{cc} %{
+		\text{一般的な半群} & \text{キャンセル可能な半群}=\text{群} \\
+		\xymatrix {
+			1 \ar[r] & a \ar[r] & a^2 \ar[r] & a^3 \ar@(d,d)[ll] \\
+		} & \xymatrix {
+			1 \ar[r] & a \ar[r] & a^2 \ar[r] & a^3 \ar@(d,d)[lll] \\
+		} \\
+		\\
+	\end{array}\end{equation*} %}
+
+	\begin{example}[キャンセル不可能な半群]\label{eg:キャンセル不可能半群} %{
+		集合$\mybf{2}=\set{0,1}$にORで積$+$を定義するとべき等半群となる。
+		$1+0=0+1=1+1$となり、左右キャンセル不可能となる。
+		\begin{equation}\xymatrix{
+			0 \ar[r]^{+1} & 1 \ar@(r,u)_{+1} \\
+		}\end{equation}
+	\end{example} %eg:キャンセル不可能な半群}
+
+	キャンセル可能性を破るものとしてゼロ元の存在がある。
+
+	\begin{definition}[ゼロ元]\label{def:ゼロ元} %{
+		$A=(A,m)$を半群とする。
+		ある元$0_L$がすべての元$a\in A$に対して$0_La=0_L$となるとき、
+		$0_L$を$A$の左ゼロ元という。
+		ある元$0_R$がすべての元$a\in A$に対して$a0_R=0_R$となるとき、
+		$0_R$を$A$の右ゼロ元という。左ゼロ元かつ右ゼロ元となる元を両ゼロ元
+		または単にゼロ元という。
+	\end{definition} %def:ゼロ元}
+
+	\begin{proposition}[キャンセル可能性とゼロ性]\label{prop:キャンセル可能性とゼロ性} %{
+		左キャンセル可能な半群が左ゼロ元を持てば、その半群は自明な半群である。
+		同様に、右キャンセル可能な半群が右ゼロ元を持てば、その半群は自明な半群である。
+	\end{proposition} %prop:キャンセル可能性とゼロ性}
+	\begin{proof} %{
+		$A=(A,m)$をキャンセル可能な半群、$0_L$を$A$の左ゼロ元とする。
+		すべての$a_1,a_2\in A$に対して$0_La_1=0_L=0_La_2$となり、
+		左キャンセル可能性より$a_1=a_2$となり、$A$は自明な半群となる。
+		右ゼロ元と右キャンセル可能な場合も、同様に示される。
+	\end{proof} %}
+
+	したがって、ゼロ元をもつ半群の場合は、ゼロ元以外でキャンセル可能という
+	但し書きが必要になる。ゼロ元以外でキャンセル可能な半群の場合、
+	キャンセル可能の定義\ref{def:キャンセル可能}は次のように書き換えられる。
+
+	\begin{definition}[ゼロ元以外でキャンセル可能]\label{def:ゼロ元以外でキャンセル可能} %{
+		$A=(A,m_A)$をゼロ元$0_A$を持つ半群とする。
+		任意の元$a_1,a_2,a_3\in A$に対して次の式が成り立つ場合、
+		$A$をゼロ元以外で左キャンセル可能という。
+		\begin{equation*}\begin{split} %{
+			m_A(a_1\times a_2) = m_A(a_1\times a_3) \implies a=0_A\text{ or } a_2=a_3 \\
+		\end{split}\end{equation*} %}
+		という。次の式が成り立つ場合、$A$をゼロ元以外で右キャンセル可能という。
+		\begin{equation*}\begin{split} %{
+			m_A(a_2\times a_1) = m_A(a_3\times a_1) \implies a=0_A\text{ or } a_2=a_3 \\
+		\end{split}\end{equation*} %}
+		という。ゼロ元以外で左キャンセル可能かつ右キャンセル可能な場合、
+		単にゼロ元以外でキャンセル可能という。
+	\end{definition} %def:ゼロ元以外でキャンセル可能}
+%s1:半群}
 
 \section{自由半群}\label{s1:自由半群} %{
 	\begin{definition}[自由半群]\label{def:自由半群} %{ 
@@ -199,8 +470,7 @@
 	慣習的に、自由半群$A^+$の元を$A^+$の単語、$A$の元を文字ともいう。
 
 	この節では、集合$A$上の自由半群$A^+$の元を$A$の元を用いて表す場合、\ref{def:自由半群}
-	のように、かぎ括弧内に$A$の元を並べて表すことにする。また、文字数を$\zettai{-}$
-	と書くことにする。$\zettai{\bakko{a_1a_2\cdots a_m}}\mapsto m$
+	のように、かぎ括弧内に$A$の元を並べて表すことにする。
 
 	\begin{proposition}[自由半群の普遍性]\label{pro:自由半群の普遍性} %{ 
 		$A$を集合、$A^+$を$A$上の自由半群とする。写像$i$を次のように定義する。
@@ -208,7 +478,8 @@
 			i: A &\to A^+ \\
 				a &\mapsto [a] \\
 		\end{split}\end{equation} %}
-		$G$を半群とする。任意の写像$f$に対して次の図を可換にする半群準同型
+		$G$を半群とする。
+		$A$から$G$への任意の写像$f$に対して次の図を可換にする半群準同型
 		$f_*$が唯一存在する。
 		\begin{equation}\xymatrix{
 			A \ar[r]^i \ar[rd]^{f} & A^+ \ar@{.>}[d]^{f_*} \\
@@ -216,32 +487,34 @@
 		}\end{equation}
 	\end{proposition} %pro:自由半群の普遍性}
 	\begin{proof}
-		半群$A^+$の積を$m_A$、半群$G$の積を$m_G$と書く。
+		自由半群$A^+$の積を$m_A$、半群$G$の積を$m_G$と書く。
 		
-		写像$f_*:A^+\to G$を次のように定義する。
+		写像$f_*:A^+\to G$を、任意の$w\in A^*$に対して次のように定義する。
 		\begin{equation*}\begin{split}
 			f_*: w &\mapsto \begin{cases}
 				fa, &\text{ iff }w = [a] \in A^1 \\
 				m_G(fa_1\times fa_2\times \cdots \times fa_m)
-					&\text{ else }w = [a_1\times a_2\times \cdots \times a_m] \\
+					&\text{ else }w = [a_1a_2\cdots a_m] \\
 				\end{cases}
 		\end{split}\end{equation*}
 		すると、任意の$a\in A$に対して$f_*ia=fa$となる。
+		また、任意の$a_1,a_2,\dots,a_m\in A$に対して次の式が成り立つから、
+		写像$f_*$は半群準同型となる。
 		\begin{equation*}\begin{split}
 			f_*m_A([a_1] \times [a_2] \times \cdots \times [a_m])
 				&= m_G(f_*[a_1]\times f_*[a_2]\times \cdots \times f_*[a_m]) 
 		\end{split}\end{equation*}
-		だから、写像$f_*$は半群準同型となる。したがって、$f_*i=f$となる
-		半群準同型$f_*$は存在する。
+		したがって、$f_*i=f$となる半群準同型$f_*$は存在する。
 
 		$f':A^+\to G$を、$f'i=f$となる半群準同型とすると、
+		任意の$a_1,a_2,\dots,a_m\in A$に対して次の式が成り立ち、$f'=f_*$となる。
 		\begin{equation*}\begin{split}
 			f'[a_1a_2\cdots a_m] &= m_B(f'[a_1]\times f'[a_2]\times \cdots \times f'[a_m]) \\
 				&= m_B(fa_1\times fa_2\times \cdots \times fa_m) \\
 				&= m_B(f_*[a_1]\times f_*[a_2]\times \cdots \times f_*[a_m]) \\
 				&= f_*[a_1a_2\cdots a_m] \\
 		\end{split}\end{equation*}
-		となり、$f'=f_*$となる。したがって、$f_*$の唯一性が証明される。
+		したがって、$f_*$の唯一性が証明される。
 	\end{proof}
 
 	この命題により、写像$A\to G$全体の集合$\hom(A,G)$と準同型$A^+\to G$全体
@@ -259,21 +532,172 @@
 
 	\begin{example}[文字列の長さ]\label{obs:文字列の長さ} %{
 		$\mybf{N}$を自然数、$A$を集合、$A^+$を$A$から生成された自由半群とする。
-		自然数の加法のみ考えたとき、定数写像$1^*a=1,\forall a\in A$の
+		自然数の加法のみ考えたとき、定数写像$1_*a=1,\forall a\in A$の
 		同型対応は文字列の長さになる。
 		\begin{equation*}\begin{split} %{
 			\varphi: \hom(A^+,\mybf{N}) &\simeq \hom(A,\mybf{N}) \\
-			(\varphi^{-1}1^*)[a_1a_2\cdots a_m] &= (1^*a_1)+(1^*a_2)+\cdots+(1^*a_m) = m \\
+			(\varphi^{-1}1_*)[a_1a_2\cdots a_m] &= (1_*a_1)+(1_*a_2)+\cdots+(1^*a_m) = m \\
 		\end{split}\end{equation*} %}
-		この例では、定数写像$1^*$が定数でない写像$\varphi^{-1}1^*$に対応している。
+		この例では、定数写像$1_*$が定数でない写像$\varphi^{-1}1_*$に対応している。
 	\end{example} %obs:文字列の長さ}
-
 %s1:自由半群}
 
 \section{モノイド}\label{s1:モノイド} %{
 	\begin{definition}[モノイド]\label{def:モノイド} %{
 		単位元を持つ半群をモノイドという。
 	\end{definition} %def:モノイド}
+
+	\begin{definition}[モノイド準同型]\label{def:モノイド準同型} %{
+		$A$と$B$を半環とする。$A$から$B$への写像$f$が半環準同型となり、
+		$A$の単位元が$B$の単位元に写像されるとき、$f$をモノイド準同型という。
+	\end{definition} %def:モノイド準同型}
+
+	最小のモノイドは唯一つの元からなるモノイドである。
+
+	\begin{definition}[自明なモノイド]\label{def:自明なモノイド} %{
+		唯一つの元からなるモノイドを自明なモノイドという。
+	\end{definition} %def:自明なモノイド}
+
+	\begin{proposition}[ゼロ元かつ単位元を持つモノイド]\label{prop:ゼロ元かつ単位元を持つモノイド} %{
+		単位元かつゼロ元となる元を持つモノイドは自明なモノイドに限られる。
+	\end{proposition} %prop:ゼロ元かつ単位元を持つモノイド}
+	\begin{proof} %{
+		$A=(A,m,1_A)$をモノイドとする。$1_A$を単位元かつゼロ元となる元とする。
+		すると、任意の$a\in A$に対して$m(1_A\times a)=a=1_A$となる。
+		したがって、$A$は自明なモノイドとなる。
+	\end{proof} %}
+
+	\begin{definition}[自由モノイド]\label{def:自由モノイド} %{
+		自由半群に空文字を付け加えたものを自由モノイドという。
+		空文字が自由モノイドの単位元となる。
+	\end{definition} %def:自由モノイド}
+
+	\begin{proposition}[自由モノイドの普遍性]\label{pro:自由モノイドの普遍性} %{
+		$A$を集合、$A^*$を$A$上の自由モノイドとする。写像$i$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			i: A &\to A^+ \\
+				a &\mapsto [a] \\
+		\end{split}\end{equation} %}
+		$G$をモノイドとする。任意の写像$f$に対して次の図を可換にするモノイド準同型
+		$f_*$が唯一つ存在する。
+		\begin{equation}\xymatrix{
+			A \ar[r]^i \ar[rd]^{f} & A^* \ar@{.>}[d]^{f_*} \\
+			& G \\
+		}\end{equation}
+	\end{proposition} %pro:自由モノイドの普遍性}
+	\begin{proof}
+		$A^+\subseteq A^*$を$A^*$から単位元を除いたものとする。
+		命題\ref{pro:自由半群の普遍性}から、$A^+$から$G$への$f=f_+i$となる
+		半群準同型$f_+$が唯一つ存在することがわかる。したがって、$1_G$を
+		$A^*$の単位元、$1_G$を$G$の単位元として、次のように写像$f_*$を定義
+		すれば、$f_*$はモノイド準同型になり命題が証明される。
+		\begin{equation*}\begin{split} %{
+			f_*: A^*&\to G \\
+				w &\mapsto \begin{cases}
+					1_G, &\text{ iff }w=1_* \\
+					f_+w, &\text{ otherwise } \\
+				\end{cases}
+		\end{split}\end{equation*} %}
+	\end{proof}
+
+	\begin{definition}[形式和]\label{def:形式和} %{
+		$A$を集合、$WA=(A^*,*)$を$A$から生成された自由モノイドとする。
+		$A^+$の同値関係$\sim$を文字を並び替えたものする。$m$を$1$以上の自然数、
+		$S_m$を$m$次対称群とすると次のようになる。
+		\begin{equation}\begin{split} %{
+			[a_1a_2\cdots a_m] &\sim [a_{\sigma 1}a_{\sigma 2}\cdots a_{\sigma m}] \\
+			&\quad\text{for all }a_1,a_2,\dots,a_m\in A,\;\sigma\in S_m \\
+		\end{split}\end{equation} %}
+		$\sim$は積$m$を保つ同値関係だから、$A^*$から商集合$A^*/\sim$への写像を
+		$\pi$とすると、$A^*/\sim$に次のように積$+$が定義できる。
+		\begin{equation*}\begin{split} %{
+			(\pi w_1)+(\pi w_2) &= \pi(w_1*w_2) \quad\text{for all }w_1,w_2\in WA \\
+		\end{split}\end{equation*} %}
+		$(A^*/\sim,+)$を$A$を基底とする形式和という。
+	\end{definition} %def:形式和}
+
+	$A$を集合、$WA=(A^*,*)$を$A$から生成された自由モノイド、
+	$NA=(A^*/\myop{sym},+)$を$A$基底とする形式和とする。
+	$WA$から$NA$への射影を$\pi$とする。$NA$の単位元を$0_{NA}=\pi[]$とする。
+	$m$を$1$以上の自然数として、$NA$の元は、任意の$a_1,a_2,\dots,a_m\in A$
+	に対して、$\pi[a_1,a_2\cdots,a_m]=\pi[a_1]+\pi[a_2]+\cdots+\pi[a_m]$と
+	書ける。そして、任意の$a\in A$に対して次のように書く。
+	\begin{equation}\begin{split} %{
+		n\pi[a] &\sim \underbrace{\pi[a]+\pi[a]+\cdots+\pi[a]}_{n\text{個}}
+	\end{split}\end{equation} %}
+	さらに、次の同一視をする。
+	\begin{equation}\begin{split} %{
+		0\pi[a] &\sim 0_{NA}
+	\end{split}\end{equation} %}
+	すると、$NA$の任意の元$\vec{n}$は一意に$\vec{n}=\sum_{a\in A}n_a\pi[a]$
+	と書ける。特に、基底の自由性と呼ばれる次の条件が成り立つ。
+	\begin{equation*}\begin{split} %{
+		\vec{n} &= 0_{NA} \Leftrightarrow n_a=0 \quad\text{for all }a\in A \\
+	\end{split}\end{equation*} %}
+	そして、$\vec{m}=\sum_{a\in A}m_a\pi[a]$、$\vec{n}=\sum_{a\in A}n_a\pi[a]$
+	とすると、次のように、$NA$の積$+$は自然数の和$+$で書ける。
+	\begin{equation*}\begin{split} %{
+		\vec{m}+\vec{n} &= \sum_{a\in A}(m_a+n_a)\pi[a] \\
+	\end{split}\end{equation*} %}
+	通常、形式和はこのような、自然数を係数とするベクトル的な、書き方をする。
+
+	書き方わかるように、$A$から自然数への写像$f$を与えると、形式和の元
+	$\sum_{a\in A}(fa)\pi[a]$が一つ定まる。逆に、形式和の元
+	$\sum_{a\in A}n_a\pi[a]$を与えると、自然数から$A$への写像$fa=n_a$が
+	一つ定まる。したがって、$A$から自然数への写像全体のなす空間と形式和$NA$
+	は集合同型となる。
+	
+	以下では、集合$A$を基底とする形式和を$\sum_{a\in A}n_a[a]$と書く。
+	通常は、単に、自然数と基底を並べて書くだけだが、ここでは、
+	括弧をつけて形式和の基底ということを明示する。また、混乱のない限り
+	$[a]\sim 1[a]$という同一視を行う。
+
+	\begin{proposition}[形式和の普遍性]\label{prop:形式和の普遍性} %{
+		$A$を集合、$NA$を$A$を基底とする形式和とする。
+		写像$i$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			i: A &\to NA \\
+				a &\mapsto 1a \\
+		\end{split}\end{equation} %}
+		$G$を可換モノイドとする。
+		$A$から$G$への任意の写像$f$に対して次の図を可換にするモノイド準同型
+		$f_*$が唯一存在する。
+		\begin{equation}\xymatrix{
+			A \ar[r]^i \ar[rd]^{f} & A^+ \ar@{.>}[d]^{f_*} \\
+			& G \\
+		}\end{equation}
+	\end{proposition} %prop:形式和の普遍性}
+	\begin{proof} %{
+		形式和$NA$とモノイド$G$の積をともに$+$と書き、$G$の単位元を$0_G$と書く。
+		写像$^:G\times \mybf{N}$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			ng &= \begin{cases}
+				0_G, &\text{ iff } n=0 \\
+				\underbrace{g + g + \cdots + g}_{n\text{個}}, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation} %}
+		写像$f_*:WA\to G$を、任意の$\sum_{a\in A}n_a[a]\in NA$に対して
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			f_*: \sum_{a\in A}n_a[a] &= \sum_{a\in A}n_a(fa) \\
+		\end{split}\end{equation*}
+		すると、任意の$a\in A$に対して$f_*ia=fa$となるモノイド準同型が
+		得られる。したがって、$f_*i=f$となるモノイド準同型$f_*$は存在する。
+
+		$f':NA\to G$を、$f'i=f$となるモノイド準同型とすると、
+		写像$f_*:WA\to G$を、任意の$\sum_{a\in A}n_a[a]\in NA$に対して
+		次の式が成り立ち、$f'=f_*$となる。
+		\begin{equation*}\begin{split}
+			f'(\sum_{a\in A}n_aa) &= \sum_{a\in A}n_a(f'[a]) \\
+				&= \sum_{a\in A}n_a(fa) \\
+				&= \sum_{a\in A}n_a(f_*[a]) \\
+				&= f_*(\sum_{a\in A}n_a[a]) \\
+		\end{split}\end{equation*}
+		したがって、$f_*$の唯一性が証明される。
+	\end{proof} %}
+
+	単位元を除いた半群版の形式和を考えることもできるが、それが使われること
+	を見たことがない。
 %s1:モノイド}
 
 \section{半環}\label{s1:半環} %{
@@ -305,13 +729,42 @@
 	\end{split}\end{equation*} %}
 	半環の場合は、加法に逆元があるとは限らないので、分配性とゼロ性の両方を
 	定義に含めておく必要がある。
+
+	\begin{definition}[半環準同型]\label{def:半環準同型} %{
+		$A=(A,+,0_A,*,1_A)$と$B=B(B,+,0_B,*,1_B)$を半環とする。
+		$A$から$B$への写像$f$が加法と乗法についてそれぞれモノイド準同型と
+		なるとき、$f$を半環準同型という。
+	\end{definition} %def:半環準同型}
+
+	最小の半環は唯一つの元からなる半環である。
+
+	\begin{definition}[自明な半環]\label{def:自明な半環} %{
+		唯一つの元からなる半環を自明な半環という。
+	\end{definition} %def:自明な半環}
+
+	\begin{proposition}[ゼロ元かつ単位元を持つ半環]\label{prop:ゼロ元かつ単位元を持つ半環} %{
+		単位元かつゼロ元となる元を持つ半環は自明な半環に限られる。
+	\end{proposition} %prop:ゼロ元かつ単位元を持つ半環}
+	\begin{proof} %{
+		半環の乗法に関して、モノイドの場合の命題\ref{prop:ゼロ元かつ単位元を持つモノイド}
+		を適用すれば証明される。
+	\end{proof} %}
+
+	自明でない最小の半環は互いに異なる加法の単位元と乗法の単位元からなる
+	半環である。ただし、二元だけからなる半環でも、
+	\begin{itemize}
+		\item ORを加法、ANDを乗法にした半環
+		\item XORを加法、ANDを乗法にした半環
+	\end{itemize}
+	と唯一つには定まらない。
 %s1:半環}
 
-\section{半モジュール}\label{s1:半モジュール} %{ 
+\section{半モジュール}\label{s1:半モジュール} %{
 	\begin{definition}[半モジュール]\label{def:半モジュール} %{
 		$R=(R,+,0_R,*,1_R)$を半環、$M=(M,+,0_M)$を可換モノイドとする。
-		写像$\rhd$が次の性質を満たすとき、$M$を$R$上の左半モジュール、または
-		$R$を係数とする左半モジュールという。右半モジュールも同様に定義される。
+		写像$\rhd$が次の性質を満たすとき、$(M,+,\rhd)$を$R$上の左半モジュール、
+		または$R$を係数とする左半モジュールという。このとき、写像$\rhd$を
+		スカラー積という。右半モジュールも同様に定義される。
 		\begin{itemize}
 			\item 結合性 \\
 			任意の$r_1,r_2\in R$と$m\in M$に対して、次の式が成り立つ。
@@ -334,11 +787,762 @@
 
 	半環の場合と同様で、モジュールの定義と異なり、半モジュールの定義には
 	ゼロ性が必要になる。
+
+	\begin{definition}[半モジュール準同型]\label{def:半モジュール準同型} %{
+		$R=(R,+,0_R,*,1_R)$を半環、$A=(A,+,\rhd_A)$と$A=(B,+,\rhd_B)$
+		を$R$係数の半モジュールとする。$A$から$B$への写像$f$が次の条件を満たす
+		とき、$f$を半モジュール準同型という。
+		\begin{itemize}
+			\item 加法についてモノイド準同型である。
+			\item 任意の$r\in R$と$a\in A$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				f(r\rhd a) &= r\rhd (fa)
+			\end{split}\end{equation*} %}
+		\end{itemize}
+	\end{definition} %def:半モジュール準同型}
+
+	半モジュール準同型とは線形変換のことである。
+	半モジュール準同型では、基底の対応関係だけで写像が定まってしまう。
+
+	半環$R$を係数とする最小の半モジュールは$R$そのものである。
+
+	\begin{example}[半モジュールの例]\label{eg:半モジュールの例} %{
+		\begin{itemize}
+			\item ベクトル空間 \\
+			通常の複素数上に定義されたベクトル空間$\mybf{C}^n$は半モジュールとなる。
+			\item 剰余$\mybf{N}_p=\mybf{N}/p\mybf{N}$ \\
+			$p$を$2$以上の自然数として、任意の自然数は$m$は
+			$\mybf{N}_p=\mybf{N}/p\mybf{N}$の元を用いて次のように書ける。
+			\begin{equation*}\begin{split} %{
+				m &= m_1*1 + m_2*2 + \cdots + m_{p-1}*(p-1)
+			\end{split}\end{equation*} %}
+			また、次のようになるから、$\mybf{N}$は$\mybf{N}_p$を基底とする
+			半モジュールとして見ることができる。
+			\begin{equation*}\begin{split} %{
+				n &= n_1*1 + n_2*2 + \cdots + n_{p-1}*(p-1) \\
+				& \implies m*n = (m*n_1)*1 + (m*n_2)*2 + \cdots + (m*n_{p-1})*(p-1) \\
+				m &= m_1*1 + m_2*2 + \cdots + m_{p-1}*(p-1) \\
+				n &= n_1*1 + n_2*2 + \cdots + n_{p-1}*(p-1) \\
+				& \implies m+n = (m_1+n_1)*1 + (m_2+n_2)*2 + \cdots + (m_{p-1}+n_{p-1})*(p-1) \\
+			\end{split}\end{equation*} %}
+			ただし、書き方は一意には決まらない。例えば、$\mybf{N}_3$の場合、
+			$2=2*1+0+2$とも$2=0*1+1*2$とも書ける。
+		\end{itemize}
+	\end{example} %eg:半モジュールの例}
+
+	最小の半環$R$を係数とする半モジュールは、$R$のゼロ元だけからなる
+	半モジュールである。
+
+	\begin{definition}[自明な半モジュール]\label{def:自明な半モジュール} %{
+		$R$を半環とする。$R$のゼロ元だけからなる半モジュールを$R$係数の自明な
+		半モジュールという。
+	\end{definition} %def:自明な半モジュール}
 %s1:半モジュール}
 
-\section{半代数}\label{s1:半代数} %{
-	\begin{definition}[半代数]\label{def:半代数} %{
-		$R$を半環、$M$を$R$係数の半モジュールとする。$M$の二項演算$m$が
-		次の性質を満たすとき、$(M,m)$を半代数という。
-	\end{definition} %def:半代数}
-%s1:半代数}
+\section{自由半モジュール}\label{s1:自由半モジュール} %{
+	自由半モジュールを定義する前に、次の命題を証明しておく。
+
+	\begin{proposition}[係数の線形性]\label{prop:係数の線形性} %{
+		$A$を集合、$R=(R,+,0_R,*,1_R)$を半環とする。
+		$NRA=(NRA,+,0_{NRA})$を直積$R\times A$の形式和\ref{def:形式和}とする。
+		$NRA$の元を、基底に括弧をつけて、
+		$\sum_{r\in R,\;a\in A}n_{ra}[r\times a]$という形で書くことにする。
+		$NRA$に同値関係$\sim$を次のように定義する。
+		\begin{itemize}
+			\item 線形性
+			\begin{equation}\begin{split} %{
+				[(r_1+r_2)\times a] \sim [r_1\times a] + [r_2\times a]
+					\quad\text{for all }r_1,r_2\in R,\;a\in A
+			\end{split}\end{equation} %}
+			\item ゼロ性
+			\begin{equation}\begin{split} %{
+				[0_R\times a] \sim 0_{NRA}
+					\quad\text{for all }a\in A
+			\end{split}\end{equation} %}
+		\end{itemize}
+		同値関係$\sim$は積$+$を保つ。
+	\end{proposition} %prop:係数の線形性}
+	\begin{proof} %{
+		一般に、同値関係$\equiv$が積$m$を保つための必要十分条件は次の式が
+		成り立つことである。（命題\ref{prop:積を保つ同値関係}）
+		\begin{equation*}\begin{split} %{
+			x\equiv x_1,\;y\equiv y_1 \implies m(x\times y)\equiv m(x_1\times y_1)
+		\end{split}\end{equation*} %}
+		この条件が成り立つことを確かめればよい。
+		\begin{itemize}
+			\item 線形性 \\
+			$r,r_1,r_2\in R$を$r=r_1+r_2$、$s,s_1,s_2\in R$を$s=s_1+s_2$
+			となる任意の元とする。すると、次の式が成り立ち、
+			同値関係$\sim$の線形性の部分は積$+$を保つことがわかる。
+			\begin{equation*}\begin{split} %{
+				[r\times a] + [s\times a] &\sim [(r+s)\times a] \\
+					&\sim [r_1\times a] + [r_2\times a] + [s_1\times a] + [s_2\times a] 
+			\end{split}\end{equation*} %}
+			\item ゼロ性 \\
+			任意の$\set{n_a\in\mybf{N}}_{a\in A}$に対して、
+			$\sum_{a\in A}n_a[0\times a]\sim 0_{NRA}$なので、
+			同値関係$\sim$のゼロ性の部分は積$+$を保つことがわかる。
+		\end{itemize}
+	\end{proof} %}
+
+	この命題を用いて自由半モジュールを定義する。
+
+	\begin{definition}[自由半モジュール]\label{def:自由半モジュール} %{
+		$A$を集合、$R=(R,+,0_R,*,1_R)$を半環とする。
+		$NRA=(NRA,+,0_{NRA})$を直積$R\times A$の形式和\ref{def:形式和}とする。
+		$NRA$の元を、基底に括弧をつけて、
+		$\sum_{r\in R,\;a\in A}n_{ra}[r\times a]$という形で書くことにする。
+		$NRA$に同値関係$\sim$を次のように定義する。
+		\begin{itemize}
+			\item 線形性
+			\begin{equation}\begin{split} %{
+				[(r_1+r_2)\times a] \sim [r_1\times a] + [r_2\times a]
+					\quad\text{for all }r_1,r_2\in R,\;a\in A
+			\end{split}\end{equation} %}
+			\item ゼロ性
+			\begin{equation}\begin{split} %{
+				[0_R\times a] \sim 0_{NRA}
+					\quad\text{for all }a\in A
+			\end{split}\end{equation} %}
+		\end{itemize}
+		命題\ref{prop:係数の線形性}より、$\sim$は$NRA$の積$+$を保つ同値関係
+		である。この同値関係を使うと、$NRA$の元を次のように書くことができる。
+		\begin{equation*}\label{eq:形式和から自由半モジュールへ}\begin{split} %{
+			\sum_{r\in R,\;a\in A}n_{ra}[r\times a]
+				&\sim \sum_{r\in R,\;a\in A}[(n_{ra}*r)\times a]
+					= \sum_{a\in A}[r_a\times a] \\
+			\text{where } r_a &= \sum_{r\in R}n_{ra}*r=\begin{cases} %{
+				0_R, &\text{ iff } n_{ra}=0 \\
+				\underbrace{r+r+\cdots+r}_{n_{ra}\text{個}}, &\text{ otherwise } \\
+				\end{cases} %} \\
+		\end{split}\end{equation*} %}
+		商モノイドを$RA=NRA/\sim$とおく。
+		$RA$にスカラー積$\rhd$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			\rhd: R\times RA &\to RA \\
+				r\times \sum_{a\in A}[r_a\times a] &\mapsto \sum_{a\in A}[(r*r_a)\times a] \\
+		\end{split}\end{equation} %}
+		すると、$(RA,+,\rhd)$は左半モジュールとなる。
+		この左半モジュール$RA$を$A$を基底とする$R$係数の左半モジュールという。
+		右半モジュールも同様に定義される。
+	\end{definition} %def:自由半モジュール}
+
+	通常は直積の記号を省略して、$\sum_{a\in A}r_a[a]$のように書かれる。
+	ここでも、直積の記号を省略することにする。この書き方からわかるように、
+	集合$A$を基底とする$R$係数の自由半モジュールは、$A$から$R$への写像空間
+	と集合同型である。
+
+	半モジュールの場合の'自由'とは、基底が一次独立であることである。
+	単に半モジュールといった場合には、必ずしも基底が一次独立ではない。
+	(例\ref{eg:半モジュールの例}の剰余$\mybf{Z}_p=\mybf{Z}/p\mybf{Z}$)
+
+	定義\ref{def:自由半モジュール}の式\eqref{eq:形式和から自由半モジュールへ}
+	の中で、半環$R$から自然数への写像$n_r$の積分$\sum_{r\in R}n_{r}r$が
+	出てくる。この積分は、$R$が無限集合の場合、収束することが保障されない。
+	例えば、実数から自然数への写像として、小数点以下を切り捨てて絶対値を
+	とる写像を考えると、その実数全体での積分は発散する。したがって、
+	形式和を用いて無限集合係数の自由半モジュールを定義する場合、
+	形式和の部分空間に制限して、係数についての積分を有限に保つようにする必要
+	がある。
+
+	\begin{proposition}[自由半モジュールの普遍性]\label{prop:自由半モジュールの普遍性} %{
+		$A$を集合、$R=(R,+,0_R,*,1_R)$を半環、$RA$を$A$を基底とする
+		$R$係数自由半モジュールとする。写像$i$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			i: A &\to RA \\
+				a &\mapsto [a] \\
+		\end{split}\end{equation} %}
+		$M$を$R$係数半モジュールとする。
+		任意の写像$f$に対して次の図を可換にする半モジュール準同型$f_*$が
+		唯一存在する。
+		\begin{equation}\xymatrix{
+			A \ar[r]^i \ar[rd]^{f} & RA \ar@{.>}[d]^{f_*} \\
+			& M \\
+		}\end{equation}
+	\end{proposition} %prop:自由半モジュールの普遍性}
+	\begin{proof} %{
+		$f_*(\sum_{a\in A}r_aa)=\sum_{a\in A}r_a*(fa)$とすれば
+		可換図が成り立つから、$f$が存在することがわかる。
+		また、$g$を可換図を成り立たせる半モジュール準同型とすると、
+		任意の$\sum_{a}r_aa\in RA$に対して次の式が成り立つから、
+		$f_*$の唯一性もわかる。
+		\begin{equation*}\begin{split} %{
+			g(\sum_{a\in A}r_a[a]) 
+				= \sum_{a\in A}r_a*(g[a]) = \sum_{a\in A}r_a*(fa)
+				= f_*(\sum_{a\in A}r_a[a]) \\
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+
+	自明でない最小の自由半モジュールは、一つの元だけからなる集合$\mybf{1}$
+	を基底に持つ半モジュールである。$R$を半環とし、$R\mybf{1}$を$\mybf{1}$を
+	基底に持つ半モジュールとすると、$R$と$R\mybf{1}$は集合同型となる。
+
+	\begin{definition}[モノイド半環]\label{def:モノイド半環} %{
+		モノイドを基底とする半環係数の自由半モジュールをモノイド半環という。
+	\end{definition} %def:モノイド半環}
+%s1:自由半モジュール}
+
+\section{半モジュールのテンソル積}\label{s1:半モジュールのテンソル積} %{
+	半モジュールの場合、直積より強い構造を持ったテンソル積を考えることが多い。
+	特に、半モジュールの積はテンソル積を用いて定義される。
+	ここでは、非可換環を係数とするテンソル積を考える。
+	Wikipediaでは、右モジュールと左モジュールを用いてテンソル積を定義している
+	が、片側モジュールのみでは、二階のテンソル積までしか定義できないので、
+	ここでは、両側テンソルに対するテンソル積を定義する。
+
+	\begin{definition}[半モジュールのテンソル積]\label{def:半モジュールのテンソル積} %{
+		$R$を半環、$RA=(AR,+,0_A)$と$RB=(RB,+,0_B)$を係数$R$に持つ
+		両半モジュールとする。スカラー積の記号は省略する。
+		自由半モジュールの定義\ref{def:自由半モジュール}と同様に、
+		直積$RA\times RB$を基底とする形式和を$NRAB=(NRAB,+,0_{NRAB})$とする。
+		同値関係$\sim$を次のように定義する。
+		\begin{itemize}
+			\item 双線形性
+			\begin{equation}\begin{split} %{
+				[(a_1+a_2)\times b] &\sim [a_1\times b] + [a_2\times b] \quad\text{for all }a_1,a_2\in A,\;b\in B \\
+				[a\times (b_1+b_2)] &\sim [a\times b_1] + [a\times b_1] \quad\text{for all }a\in A,\;b_1,b_2\in B \\
+			\end{split}\end{equation} %}
+			\item ゼロ性
+			\begin{equation}\begin{split} %{
+				[0_A\times b] \sim 0_{NRAB} \sim [a\times 0_B] \quad\text{for all }a\in A,\;b\in B
+			\end{split}\end{equation} %}
+			\item スカラー積
+			\begin{equation}\begin{split} %{
+				[ar\times b] \sim [a\times rb] \quad\text{for all }a\in A,\;b\in B,\;r\in R
+			\end{split}\end{equation} %}
+		\end{itemize}
+		同値関係$\sim$は積$+$を保つ。$\sim$で商をとったものを
+		$RAB=(NRAB/\sim,+,0_{RAB})$とする。$RAB$にスカラー積$\rhd$と$\lhd$を
+		次のように定義する。
+		\begin{equation}\begin{split} %{
+			\rhd: R\times RAB &\to RAB \\
+				r\times \sum_{a\in A,\;b\in B}[a\times b]
+					&\mapsto \sum_{a\in A,\;b\in B}[(ra)\times b] \\
+			\lhd: RAB\times R &\to RAB \\
+				\sum_{a\in A,\;b\in B}[a\times b]\times r
+					&\mapsto \sum_{a\in A,\;b\in B}[a\times (br)] \\
+		\end{split}\end{equation} %}
+		すると、$(RAB,+,\rhd,\lhd)$は両半モジュールとなる。
+		この両半モジュールを$RA$と$RB$のテンソル積といい$RA\otimes RB$と書く。
+	\end{definition} %def:半モジュールのテンソル積}
+
+	係数$R$が可換な場合は、$ra=ar$より
+	$r\rhd[a\times b]=[(ra)\times b]=[(ar)\times b]=[a\times (rb)]$となり、
+	可換係数のテンソル積のスカラー積に一致する。
+%s1:半モジュールのテンソル積}
+
+\section{畳み込み}\label{s1:畳み込み} %{
+	写像空間に半群を定義する方法として、畳み込みがある。
+	この節では、 畳み込みによって半環への写像空間に加法と乗法を定義して、
+	半モジュールとして写像空間を調べることを目指す。
+
+	\subsection{畳み込みの定義}\label{s2:畳み込みの定義} %{
+		畳み込みを定義する。通常は、群的な余積を用いて畳み込みが定義されるが、
+		ここでは、一般の余積を用いて畳み込みを定義する。
+
+		\begin{definition}[畳み込み（convolution）]\label{def:畳み込み} %{
+			$A=(A,\Delta_A)$を余半群、$B=(B,m_B)$を半群、$B^A$を$A$から$B$への
+			写像全体なす集合とする。次の図を可換にするように定義された$B^A$の
+			二項演算$m$は積となり、$m$を畳み込みという。
+			\begin{equation}\xymatrix{ %{
+				A \times A \ar[d]^{f \times g} & A \ar[l]_{\Delta_A} \ar@{.>}[d]^{m(f \times g)} \\
+				B \times B \ar[r]^{m_B} & B \\
+			}\end{equation} %}
+		\end{definition} %def:畳み込み}
+		\begin{proof} %{
+			畳み込みが結合的になることを証明する。
+			$A=(A,\Delta_A)$を余半群、$B=(B,m_B)$を半群、$m:B^A\times B^A\to B^A$
+			を畳み込みとする。
+			$\Delta_A$の余結合性と$m_B$の結合性から、任意の$f,g,h\in B^A$に対して、
+			次の可換図が成り立ち、二項演算$m$は結合的になることがわかる。
+			\begin{equation*}\label{eq:誘導された二項演算の結合性}\xymatrix@C+1ex{
+				& A \ar[d]_{\Delta_A} \ar[r]^{m(m(f\times g)\times h)}
+				& B \ar@(r,u)[rdd]^{\myid} 
+				\\
+				& A\times A \ar[d]_{\Delta_A\times \myid} \ar[r]^{m(f\times g)\times h}
+				& B\times B \ar[u]_{m_B}
+				\\
+			A \ar@(u,l)[ruu]^{\myid} \ar@(d,l)[rdd]_{\myid} 
+				& A\times A\times A \ar[r]^{f\times g\times h}
+				& B\times B\times B \ar[u]_{m_B\times \myid} \ar[d]^{\myid\times m_B}
+				& B 
+				\\
+				& A\times A \ar[u]^{\myid\times \Delta_A} \ar[r]^{f\times m(g\times h)}
+				& B\times B \ar[d]^{m_B}
+				\\
+				& A \ar[u]^{\Delta_A} \ar[r]^{m(f\times m(g\times h))}
+				& B \ar@(r,d)[ruu]_{\myid}
+			\\
+			}\end{equation*}
+		\end{proof} %}
+
+		任意の集合に対して群的な余積は定義できるので、集合から半群への写像に
+		対しては常に畳み込みを定義できる。写像空間に代数構造を定義する汎用性の
+		高い方法である。
+		
+		定義域に余単位射、値域に単位射があった場合は、畳み込みは単位射を持つ。
+
+		\begin{proposition}[畳み込みの単位射]\label{prop:畳み込みの単位射} %{
+			$A=(A,\Delta_A,\epsilon_A)$を余モノイド、$B=(B,m_B,u_B)$をモノイド、
+			$B^A$を$A$から$B$への写像全体なす集合とする。
+			$\mybf{1}$を一つの元だけからなる集合として、次の図を可換にするように
+			定義された写像$u:\mybf{1}\to B^A$は、$B^A$の畳み込みの単位射となる。
+			\begin{equation}\xymatrix{
+				\mybf{1} \ar[d]^{\myid} & A \ar[l]_{\epsilon_A} \ar@{.>}[d]^{u\myid} \\
+				\mybf{1} \ar[r]^{u_B} & B \\
+			}\end{equation}
+		\end{proposition} %prop:畳み込みの単位射}
+		\begin{proof} %{
+			任意の$f$に対して次の可換図が成り立つから、$u$は左単位射になる。
+			\begin{equation}\xymatrix@C+2pc{
+				A \ar[d]^{\Delta_A} \ar[r]^{m(u\myid\times f)} & B \ar@(r,r)[dd]^{\simeq} \\
+				A\times A \ar[d]^{\epsilon_A\times \myid} \ar[r]^{u\myid\times f} & B\times B \ar[u]^{m_B} \\
+				\mybf{1}\times A \ar[r]^{\myid\times f} \ar@(l,l)[uu]^{\simeq} & \mybf{1}\times B \ar[u]^{u_B\times \myid} \\
+			}\end{equation}
+			$u$が右単位射になることも同様に示せるから、$u$は両単位射となる。
+		\end{proof} %}
+		
+		畳み込みに対する単位射は、定数写像の特別な場合としてみることができる。
+		$A=(A,\Delta_A)$を余半群、$B=(B,m_B)$を半群、$m:B^A\times B^A\to B^A$を
+		畳み込みとする。定数写像$i_B$を次のように定義する。
+		\begin{equation}\label{eq:定数写像}\begin{split} %{
+			i_B: B&\to B^A \\
+				b&\mapsto i_Bb \quad\text{such that }(i_Bb)a = b \quad\text{for all }a\in A \\
+		\end{split}\end{equation} %}
+		$i_B$は$1:1$の半群準同型になる。$B$に単位元$1_B$があった場合、$i_B1_B$が
+		畳み込みの単位元となる。
+
+		畳み込みの双対として、余畳み込みが定義できる。
+
+		\begin{definition}[余畳み込み（convolution）]\label{def:余畳み込み} %{
+			$A=(A,m_A)$を半群、$B=(B,\Delta_B)$を余半群、$B^A$を$A$から$B$への
+			写像全体なす集合とする。次の図を可換にするように定義された$B^A$の
+			余二項演算$\Delta$は余積となり、$\Delta$を余畳み込みという。
+			\begin{equation}\xymatrix{ %{
+				A \times A \ar@{.>}[d]^{\Delta f} \ar[r]^{m_A} & A \ar[d]^{f} \\
+				B \times B & B \ar[l]_{\Delta_B} \\
+			}\end{equation} %}
+		\end{definition} %def:余畳み込み}
+		\begin{proof} %{
+			$\Delta$が余結合性を持つことは、畳み込みの場合と同様に証明できる。
+			証明は省略する。
+		\end{proof} %}
+
+		\begin{proposition}[余畳み込みの単位射]\label{prop:余畳み込みの単位射} %{
+			$A=(A,m_A,u_A)$をモノイド、$B=(B,\Delta_B,\epsilon_B)$を余モノイド、
+			$B^A$を$A$から$B$への写像全体なす集合とする。
+			$\mybf{1}$を一つの元だけからなる集合として、次の図を可換にするように
+			定義された写像$\epsilon:B^A\to \mybf{1}$は、$B^A$の余畳み込みの余単位射となる。
+			\begin{equation}\xymatrix{
+				\mybf{1} \ar@{.>}[d]^{\myid=\epsilon f} \ar[r]^{u_A} & A \ar[d]^{f} \\
+				\mybf{1} & B \ar[l]^{\epsilon_B} \\
+			}\end{equation}
+		\end{proposition} %prop:余畳み込みの単位射}
+		\begin{proof} %{
+			$\epsilon$が余単位射となることは、畳み込みにおける単位射の場合と同様に
+			証明できる。証明は省略する。
+		\end{proof} %}
+
+		\begin{proposition}[畳み込みと余畳み込み]\label{prop:畳み込みと余畳み込み} %{
+			双半群から双半群への写像空間には、畳み込みと余畳み込みの両方が定義できる。
+			その畳み込みと余畳み込みが双半群となる。
+		\end{proposition} %prop:畳み込みと余畳み込み}
+		\begin{proof} %{
+			$A=(A,m_A,\Delta_A)$、$B=(B,m_B,\Delta_B)$を双半群とする。
+			$A$から$B$への写像全体のなす集合を$B^A$とし、$m$を畳み込み、$\Delta$を
+			余畳み込みとする。
+			\begin{equation*}\begin{split} %{
+				m(f\times g) &= m_B(f\times g)\Delta_A \\
+				\Delta f &= \Delta_B f m_A \\
+			\end{split}\end{equation*} %}
+			このとき、次の可換図が成り立つから、$(m,\Delta)$は双半群となる。
+			\begin{equation}\xymatrix@C+4pc{
+				& A^{\times 2} \ar[d]^{m_A} \ar[r]^{\Delta m(f\times g)} 
+				& B^{\times 2} \ar@(r,u)[rdd]^{\myid\times \myid} \\ 
+				& A \ar[d]^{\Delta_A} \ar[r]^{m(f\times g)} & B \ar[u]_{\Delta_B} \\ 
+				A^{\times 2} \ar@(u,r)[ruu]^{\myid\times \myid} \ar@(d,r)[rdd]_{\myid\times \myid}
+				& A^{\times 2} \ar[r]^{f\times g} 
+				& B^{\times 2} \ar[u]_{m_B} \ar[d]^{\Delta_B\times \Delta_B}
+				& B^{\times 2} \\
+				& A^{\times 4} \ar[u]_{m_A\times m_A} \ar[r]^{(\Delta\times \Delta)(f\times g)} & B^{\times 4} \ar[d]^{(m_B\times m_B)\sigma_{23}} \\
+				& A^{\times 2} \ar[u]_{\sigma_{23}(\Delta_A\times \Delta_A)} \ar[r]^{(m\times m)\sigma_{23}(\Delta\times \Delta)(f\times g)} 
+				& B^{\times 2} \ar@(r,d)[ruu]_{\myid\times \myid} \\
+			}\end{equation}
+			ここで、$\sigma_{ij}$を直積またはテンソル積の$i$番目の成分と$j$番目の成分
+			の置換とした。
+		\end{proof} %}
+	%s2:畳み込みの定義}
+
+	\subsection{半環への畳み込み}\label{s1:半環への畳み込み} %{
+		写像の値域を半環にした場合、畳み込みによって、写像空間が定義域を基底
+		とする値域係数の半モジュールになる。すると、写像空間の半モジュール
+		を用いて様々な'表現'を構成することができる。ここでは、
+		半環への写像空間が半モジュールになることを示す。
+
+		$A$を集合、$B=(B,+,0_B,*,1_B)$を自明でない半環、
+		$B^A$を$A$から$B$への写像空間とする。
+		二項演算$+$と$*$は中置記法で書くことにする。
+		畳み込みによって、$B^A$に積$+$と$*$を定義する。任意の$f,g\in B^A$と
+		$a\in A$に対して次のように定義する。
+		\begin{equation}\begin{split} %{
+			(f+g)a &= (fa)+(ga) \\
+			(f*g)a &= (fa)*(ga) \\
+		\end{split}\end{equation} %}
+		すると、任意の$f,g,h\in B^A$に対して次の分配性が成り立つ。
+		\begin{equation*}\begin{split} %{
+			f*(g+h) &= (f*g)+(f*h) \\
+			(f+g)*h &= (f*h)+(g*h) \\
+		\end{split}\end{equation*} %}
+
+		定数写像$i_B$を次のように定義する。
+		\begin{equation*}\begin{split} %{
+			i_B: B &\to B^A \\
+				b &\mapsto i_Bb \quad\text{such that }(i_Bb)a = b \quad\text{for all }a\in A \\
+		\end{split}\end{equation*} %}
+		$i_B0_B$が$+$の単位元、$i_B1_B$が$*$の単位元となる。
+		$i_B$は$1:1$の半環準同型となり、集合$i_BB=\set{i_Bb}_{b\in B}$は
+		部分半環となる。さらに、分配性
+		\begin{equation*}\begin{split} %{
+			f*(g+h) &= (f*g)+(f*h) \\
+			(f+g)*h &= (f*h)+(g*h) \\
+		\end{split}\end{equation*} %}
+		とゼロ性
+		\begin{equation*}\begin{split} %{
+			(i_B0_B)*f = i_B0_B = f*(i_B0_B)
+		\end{split}\end{equation*} %}
+		が成り立つから$(B^A,+,i_B0_B,*,i_B1_B)$は半環になる。
+
+		$A$の任意の余積から畳み込みによって$B^A$に積$+$と$*$を定義した場合は、
+		分配性が保障されない。ここでは、群的な余積を用いて分配性を保障している。
+
+		埋め込み$i_A$を次のように定義する。
+		\begin{equation}\begin{split} %{
+		i_A: A &\to B^A \\
+			a &\mapsto i_Aa \text{ such that } (i_Aa)a_1 = \begin{cases}
+				i_B1_B, &\text{ iff }a=a_1 \\
+				i_B0_B, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation} %}
+		$i_A$は集合同型となる。\footnote {
+			$B$が自明な半環の場合、$B^A$も一つの元のみからなる集合となる。
+		}
+		集合$i_AA=\set{i_Aa}_{a\in A}$に対する積$*$は次のようになる。
+		\begin{equation}\begin{split} %{
+			(i_Aa_1)*(i_Aa_2) &= \begin{cases}
+				i_Aa_2, &\text{ iff }a_1 = a_2 \\
+				i_B0_B, &\text{ otherwise } \\
+			\end{cases}\quad\text{for all }a_1,a_2\in A
+		\end{split}\end{equation} %}
+		また、$i_AA$と$i_BB$は乗法に関して互いに可換となる。
+		\begin{equation}\begin{split} %{
+			(i_Aa)*(i_Bb) = (i_Bb)*(i_Aa) \quad\text{for all }a\in A, b\in B
+		\end{split}\end{equation} %}
+		任意の$f\in B^A$は次のように書くことができる。
+		\begin{equation}\begin{split} %{
+			f &= \sum_{a\in A}(fa)*(i_Aa)
+		\end{split}\end{equation} %}
+		特に、次の式が成り立つ。
+		\begin{equation}\begin{split} %{
+			i_B1_B &= \sum_{a\in A}(i_Aa) \\
+		\end{split}\end{equation} %}
+
+		$i_BB$と$B$を同一視し、$i_AA$と$A$を同一視し、$*$をスカラー積とみることで、
+		半環$B^A$を、$A$を基底とする$B$係数の自由半モジュールとしてみることができる。
+		\begin{proof} %{
+			$BA$を$A$係数とし$A$から生成された自由半モジュールとする。
+			自由半モジュールの普遍性より、次の図を可換にする半モジュール準同型
+			$i_A^*$が唯一存在する。
+			\begin{equation}\xymatrix{
+				A \ar[r]^{i} \ar[dr]^{i_A} & BA \ar[d]^{i_A^*} \\
+				& B^A \\
+			} \quad i_A^*: \sum_{a\in A}b_a[a] \mapsto \sum_{a\in A}(i_Bb_a)*(i_Aa)
+			\end{equation}
+			\begin{itemize}
+				\item $1:1$ \\
+				$\vec{b}=\sum_{a\in A}b_a[a]$と$\vec{c}=\sum_{a\in A}c_a[a]$を
+				となる$i_A^*\vec{b}=i_A^*\vec{c}$となる$BA$の元とする。
+				すると、任意の$a\in A$に対して$i_Bb_a=i_Bc_a$となる。写像$i_B$は
+				$1:1$だから、$b_a=c_a$となる。したがって、$\vec{b}=\vec{c}$となる。
+				\item $\myop{onto}$ \\
+				任意の$f\in B^A$に対して、$\vec{f}=\sum_{a\in A}(fa)[a]$とすると、
+				$i_A^*\vec{f}=f$となる。
+			\end{itemize}
+		\end{proof} %}
+
+		$BA$を$A$係数とし$A$から生成された自由半モジュール$BA$に、成分毎の積$m$
+		\begin{equation}\begin{split} %{
+			m: a_1\otimes a_2 = \begin{cases}
+				a_2, &\text{ iff }a_1=a_2 \\
+				0_B, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation} %}
+		を定義したものが、畳み込みから得られる半環$B^A$になる。
+	%s2:半環への畳み込み}
+
+	\subsection{モノイドから半環への畳み込み}\label{s2:モノイドから半環への畳み込み} %{
+		前節\ref{s1:畳み込み}では、集合$A$から半環$R$への写像空間が、$A$を基底とする
+		$R$係数の自由半環となることを見た。この節では、値域がモノイドであった場合
+		について考える。
+
+		$A=(A,*,1_A)$をモノイド、$R=(R,+,0,m_R,1)$を自明でない半環、
+		$RA^t$を$A$から$R$への写像全体の作る自由半モジュールとする。
+		$R$の乗法の記号$m_R$は省略する。特に乗法を明示したいときのみ、
+		記号$m_R$を前置記法で用いることにする。$RA^t$の元を$f=\sum_{a\in A}f_aa^t$
+		のように書き、$RA^t$のへの作用を次のように定義する。
+		\begin{equation}\begin{split} %{
+			(f+g)a &= (fa) + (ga) \quad\text{for all }f,g\in RA,\;a\in A \\
+			(ra_1^t) &= \begin{cases} %{
+				r, &\text{ iff } a_1=a_2 \\
+				0, &\text{ otherwise } \\
+			\end{cases} \quad\text{for all }r\in R,\;a_1,a_2\in A %}
+		\end{split}\end{equation} %}
+		$a^t$は$a^t$の双対基底を表す。半環$R$は非可換であるが、双対基底$a^t$は$0$
+		または$1$にしか値をとらない写像なので、$R$の任意の元と可換になる。$a^tr=ra^t$
+
+		$A$から$RA^t$への写像を$-^t:a\mapsto a^t$とし転置と書く。
+		転置は$1:1$写像である。転置を用いて、次のように$RA^t$に積$*$を定義する。
+		\footnote {
+			転置による積は逆順にする方が自然な気がするが、ここではプログラミング
+			の正規表現やBNF記法と正順に対応がつくように積を定義しておく。
+		}
+		\begin{equation}\begin{split} %{
+			a_1^t*a_2^t = (a_1*a_2)^t \quad\text{for all }a_1,a_2\in A
+		\end{split}\end{equation} %}
+		$RA^t$に積$*$に関する単位元は$1_A^t$となる。
+		この$RA^t$の積$*$を転置による積ということにする。
+		転置による積によって、$RA^t$はモノイド半環となり、
+		転置は$A$から$RA$への$1:1$モノイド準同型となる。\footnote {
+			$R$が自明な半環の場合$R\simeq\mybf{1}$、転置は一点への写像になり、
+			$A$が自明なモノイド$A\simeq\mybf{1}$でない限り転置は$1:1$ではなくなる。
+			この節では、$R$が自明な半環の場合は除いて考える。
+		}
+
+		次の可換図によって$RA^t$に線形写像$\phi$を定義する。
+		\begin{equation}\label{eq:内積を保つ余積}\xymatrix{
+			A\times A \ar[d]^{*} \ar@{.>}[r]^{\phi f} & R\times R \ar[d]^{m_R} \\
+			A \ar[r]^{f} & R \\
+		}\end{equation}
+		この図を可換にする線形写像$\phi$があるかどうかを基底を用いて確かめてみる。
+		任意の$a\in A$に対して
+		$\phi a^t=\sum_{a_1,a_2\in A}\phi^a_{a_1a_2}a_1^t\otimes a_2^t$
+		とする。すると、任意の$a_1,a_2\in A$に対して、
+		$(\phi a^t)(a_1\times a_2)=\phi^a_{a_1a_2}1\times 1$
+		となる。したがって、$\phi^a_{a_1a_2}=a^t(a_1*a_2)$となって、
+		任意の$a\in A$に対して次のようになる。
+		\begin{equation*}\begin{split} %{
+			\phi a^t &= \sum_{a_1,a_2\in A}\kakko{a^t\kakko{a_1*a_2}}a_1^t\otimes a_2^t \\
+				&= \sum_{a_1,a_2\in A}\jump{a=a_1*a_2}a_1^t\otimes a_2^t \\
+		\end{split}\end{equation*} %}
+		ここで、$\jump{-}$は次のように定義されたディラックのデルタ関数である。
+		\begin{equation}\begin{split} %{
+			\jump{-}: \set{\myop{true},\myop{false}} &\to R \\
+				x &\mapsto \begin{cases} %{
+					1, &\text{ iff } x=\myop{true} \\
+					0, &\text{ otherwise } \\
+				\end{cases} %}
+		\end{split}\end{equation} %}
+		和の範囲指定が煩雑になるので、デルタ関数で和の範囲を明示する。
+		図を可換にする$\phi$が具体的に求まってしまった。
+		次に$\phi$の結合性を調べる。任意の$a\in A$に対して次のようになる。
+		\begin{equation}\begin{split} %{
+			(\phi\otimes\myid)\phi a 
+				&= \sum_{a_1,a_2,a_3,a_4\in A}\jump{a=a_1*a_2}\jump{a_1=a_3*a_4}a_3\times a_4\times a_2 \\
+			(\myid\otimes\phi)\phi a
+				&= \sum_{a_1,a_2,a_3,a_4\in A}\jump{a=a_1*a_2}\jump{a_2=a_3*a_4}a_1\times a_3\times a_4 \\
+		\end{split}\end{equation} %}
+		したがって、$(\phi\otimes\myid)\phi=(\myid\otimes\phi)\phi$となり、
+		$\phi$が余結合的になることがわかる。
+		以上より、図\eqref{eq:内積を保つ余積}を可換にする余積が求まってしまった。
+		ここで求めた余積$\phi$を改めて$\Delta$と書き、
+		内積を保つ余積ということにする。
+		\begin{equation}\begin{split} %{
+			\Delta: RA^t &\to RA^t\otimes RA^t \\
+				a^t &\mapsto \sum_{a_1,a_2\in A}\jump{a=a_1*a_2}a_1^t\otimes a_2^t
+				\quad\text{for all }a\in A \\
+		\end{split}\end{equation} %}
+		任意の$a\in A$に対して$a=a*1_A=1_A*a$だから
+		$\Delta a=a\otimes 1_A+1_A\otimes a+\cdots$となり、余積$\Delta$に対する
+		余単位射$\epsilon$は次のようになることがわかる。
+		\begin{equation}\begin{split} %{
+			\epsilon: RA^t &\to R \\
+				a^t &\mapsto \jump{a=1_A} \quad\text{for all }a\in A \\
+				f &\mapsto f1_A \quad\text{for all }f\in RA^t \\
+		\end{split}\end{equation} %}
+
+		写像空間$R^A$に畳み込みによって、半環の構造を持ち込み、半環の構造を利用して、
+		$R^A$に自由半モジュールの構造$RA^t$を定義した。
+		その際に使われた畳み込まれた乗法を、$RA^t$の積としてここで（再）定義する。
+		値域$R$の乗法$m_R$の構造を反映した積なので、畳み込まれた乗法に対しても
+		同じ記号$m_R$を用いる。
+
+		\begin{definition}[畳み込まれた乗法]\label{def:畳み込まれた乗法} %{
+			線形写像$m_R$を次のように定義する。
+			\begin{equation}\begin{split} %{
+				m_R: RA^t\times RA^t &\to RA^t \\
+					a_1^t\otimes a_2^t &\mapsto \jump{a1=a_2}a_2 \quad\text{for all }a_1,a_2\in A \\
+			\end{split}\end{equation} %}
+		\end{definition} %def:畳み込まれた乗法}
+
+		畳み込まれた乗法に関する単位元は$1_R$である。$A$の元を用いて書くと
+		$\sum_{a\in A}a^t$が畳み込まれた乗法の単位元となる。$A$が一つの文字$x$から
+		生成された自由モノイドの場合、$\sum_{n=0}^\infty x^{*n}=1_A+x+x*x+\cdots$
+		が畳み込まれた乗法の単位元となるが、これは$x$のKleeneスターと呼ばれる写像である。
+
+		畳み込まれた乗法と内積を保つ余積は双対になっている。
+
+		\begin{proposition}[内積を保つ余積の双対]\label{prop:内積を保つ余積の双対} %{
+			畳み込まれた乗法$m$と内積を保つ余積$\Delta$は双対になっている。
+		\end{proposition} %prop:}
+		\begin{proof} %{
+			$\sigma_{ij}$をテンソル積の$i$番目の成分と$j$番目の成分の置換として、
+			任意の$a_1,a_2\in A$に対して次の可換図が成り立つ。
+			\begin{equation}\xymatrix@C+1pc{
+				a_1^t\otimes a_2^t \ar[d]^{m_R} \ar[r]^(0.2){\Delta\otimes \Delta} 
+				& {\displaystyle\sum_{a_3,a_4,a_5,a_6\in A}}\jump{a_1=a_3*a_4}\jump{a_2=a_5*a_6}
+					a_3^t\otimes a_4^t\otimes a_5^t\otimes a_6^t \ar[d]^{(m_R\otimes m_R)\sigma_{23}} \\
+				\jump{a_1=a_2}a_2^t \ar[r]^{\Delta} 
+				& \jump{a_1=a_2}{\displaystyle \sum_{a_3,a_4\in A}}\jump{a_2=a_3*a_4}a_3^t\otimes a_4^t \\
+			}\end{equation}
+		\end{proof} %}
+
+		\begin{todo}[写像空間の積と余積]\label{todo:写像空間の積と余積} %{
+			内積を保つ余積が存在（多分唯一つ）し、畳み込みによる乗法と双対になっている
+			ことは出来すぎな気がする。もっと、基本的な構造があると考えるのが自然だろう。
+		\end{todo} %todo:写像空間の積と余積}
+
+		\begin{example}[ベクトル]\label{eg:ベクトル} %{
+			$\mybf{2}=\set{0,1}$とし、$\mybf{2}^2$に次の写像$\vee$を定義する。
+			\begin{equation*}\begin{split} %{
+				\vee: \mybf{2}\times \mybf{2} &\to \mybf{2} \\
+					(b_{11}\times b_{12}) \times (b_{11}\times b_{12}) 
+						&\mapsto (b_{11}\myop{or}b_{21})\times (b_{12}\myop{or}b_{22})
+			\end{split}\end{equation*} %}
+			ここで$\myop{or}$はOR-演算である。
+			$\vee$は可換べき等な積となり、その単位元は$e_0=0\times 0$となる。
+			$A=(\mybf{2},\vee,e_0)$はモノイドになる。
+			元$e_1=1\times 0$と$e_2=0\times 1$が$A$の生成系となり、
+			$A=\set{e_0,e_1,e_2,e_3=e_1\vee e_2}$と書ける。
+			内積を保つ余積は次のようになる。
+			\begin{equation*}\begin{split} %{
+				\Delta e_0^t &= e_0^t\otimes e_0^t \\
+				\Delta e_1^t &= e_1^t\otimes e_0^t + e_0^t\otimes e_1^t + e_1^t\otimes e_1^t \\
+				\Delta e_2^t &= e_2^t\otimes e_0^t + e_0^t\otimes e_2^t + e_2^t\otimes e_2^t \\
+				\Delta e_3^t &= e_3^t\otimes e_0^t + e_0^t\otimes e_3^t + e_3^t\otimes e_3^t + e_1^t\otimes e_2^t + e_2^t\otimes e_1^t \\
+			\end{split}\end{equation*} %}
+			$A$から複素数$\mybf{C}$への写像を考えると、
+			$v=\sum_{i=0}^3v_ie_i^t$の内積を保つ余積は次のようになる。
+			\begin{equation*}\begin{split} %{
+				\Delta v &= e_0^t\otimes v + v\otimes e_0^t 
+				- v_0e_0^t\otimes e_0^t + \sum_{i=1}^3 v_ie_i^t\otimes e_i^t \\
+			\end{split}\end{equation*} %}
+		\end{example} %eg:ベクトル}
+
+		\begin{observation}[文字列のパターンマッチング]\label{obs:文字列のパターンマッチング} %{
+			プログラミングで、指定されたパターンに入力文字列がマッチしているかを
+			判定する問題がある。例えば、指定された正規表現に入力文字列がマッチ
+			しているかどうかを判定する。
+			パターンの指定は、文字列全体のなす集合$A$からブーリアン$B$への
+			写像$f$を指定することになる。
+			先頭の文字からマッチングをテストしていくということは次の図を左から右へたどることになる。
+			\begin{equation}\xymatrix@C+2pc{
+				\ar[r]^{\myop{split}} & \ar[r]^{\myid\times \myop{split}} & \ar[r] & \cdots \\
+				A \ar[d]^{f} 
+					& A^{\times 2} \ar[l]_{\myop{append}} \ar[d]^{\Delta f}
+					& A^{\times 3} \ar[l]_{\myid\times \myop{append}} \ar[d]^{(\myid\times \Delta)\Delta f} & \cdots \ar[l] \\
+				B & B^{\times 2} \ar[l]_{\myop{and}} 
+					& B^{\times 3} \ar[l]_{\myid\times \myop{and}} & \cdots \ar[l] \\
+			}\end{equation}
+			内積を保つ余積がオートマトンの起源となる。
+		\end{observation} %obs:文字列のパターンマッチング}
+
+		\begin{observation}[Wickの定理]\label{obs:Wickの定理} %{
+			内積を保つ余積をFock空間に似せて書いてみると次のようになる。
+			\begin{equation*}\begin{split} %{
+				\obraket{a_1*a_2|f} &= \obraket{a_1|\Delta^{(1)}f}\obraket{a_2|\Delta^{(2)}f} \\
+			\end{split}\end{equation*} %}
+			これは、Fock空間でのWickの定理
+			\begin{equation*}\begin{split} %{
+				\braket{T(\phi_1\phi_2\phi_3\phi_4)}
+				=\braket{T(\phi_1\phi_2)}\braket{T(\phi_3\phi_4)}
+				+\braket{T(\phi_1\phi_3)}\braket{T(\phi_3\phi_4)}
+				+\braket{T(\phi_1\phi_4)}\braket{T(\phi_2\phi_3)}
+			\end{split}\end{equation*} %}
+			に似ている。この類似は、量子群の発端の一つが散乱行列の因子化にあるので、
+			単なる類似ではないだろう。
+		\end{observation} %obs:Wickの定理}
+
+		内積を保つ余積$\Delta$を用いると、$A$の$RA^t$への作用を定義することができる。
+		線形写像$\phi_L$と$\phi_R$を次のように定める。
+		\begin{equation}\label{eq:内積を保つ作用}\begin{split} %{
+			\phi_L: (A\times RA^t) &\to RA^t \\
+				a\times f &\mapsto \phi_L(a\times f) \text{ such that} \\
+				&\quad (\phi_L(a\times f))b=m_R(\Delta f)(a\times b)\quad\text{for all }b\in A \\
+			\phi_R: (A\times RA^t) &\to RA^t \\
+				f\times a &\mapsto \phi_R(a\times f) \text{ such that} \\
+				&\quad (\phi_R(a\times f))b=m_R(\Delta f)(b\times a)\quad\text{for all }b\in A \\
+		\end{split}\end{equation} %}
+		$A$の元を用いて$\phi_L$と$\phi_R$を書くと、任意の$a,b\in A$に対して次のようになる。
+		\begin{equation}\begin{split} %{
+			\phi_L(b\times a^t) &= \sum_{c\in A}\jump{a=b*c}c \\
+			\phi_R(b\times a^t) &= \sum_{c\in A}\jump{a=c*b}c \\
+		\end{split}\end{equation} %}
+		$\phi_L$と$\phi_R$の結合性は、任意の$a,b,c\in A$に対して次のようになる。
+		\begin{equation}\begin{split} %{
+			\phi_L(\myid\times \phi_L)(c\times b\times a^t) &= \phi_L((b*c)\times a^t) \\
+			\phi_R(\myid\times \phi_R)(c\times b\times a^t) &= \phi_R((c*b)\times a^t) \\
+			\phi_R(\myid\times \phi_L)(c\times b\times a^t) &= \sum_{x\in A}\jump{a=b*x*c}x \\
+			\phi_L(\myid\times \phi_R)(c\times b\times a^t) &= \sum_{x\in A}\jump{a=c*x*b}x \\
+		\end{split}\end{equation} %}
+		最初の2つの式は、写像$\rhd$と$\lhd$が逆順スカラー積となることを示している。
+		$\rhd$と$\lhd$の定義を入れ替えれば、正順のスカラー積として定義できるが、
+		直感的にわかりやすい逆順で定義した。$A$が自由モノイド$A=S^*$の場合、
+		$[s_1s_2\cdots s_m]\rhd f=[s_2\cdots s_m]\rhd([s_1]\rhd f)$は先頭の文字から
+		順に作用させていく、$f\lhd[s_1s_2\cdots s_m]=(f\lhd[s_m])\lhd[s_1s_2\cdots]$
+		は最後の文字から順に作用させていくイメージである。
+		$\rhd$と$\lhd$を内積を保つ作用ということにする。
+		
+		内積を保つ作用の定義\ref{eq:内積を保つ作用}から、
+		任意の$a\in A,\;r\in RA^t$に対して次の式が成り立つことに注意する。
+		\begin{equation}\begin{split} %{
+			\epsilon(a\rhd f) &= m_R\Delta f(a\times 1_A) = fa \\
+			\epsilon(f\lhd a) &= m_R\Delta f(1_A\times a) = fa \\
+		\end{split}\end{equation} %}
+
+		\begin{todo}[順序の変更]\label{todo:順序の変更} %{
+			転置の順序を反転させる。
+			現在の順序では、Fock空間に持っていくときにわかりにくいので、
+			次のように変更する。
+			\begin{equation}\begin{split} %{
+				a_1^t*a_2^t = (a_2*a_1)^t \quad\text{for all }a_1,a_2\in A
+			\end{split}\end{equation} %}
+		\end{todo} %todo:順序の変更}
+
+		\begin{todo}[この後の予定]\label{todo:この後の予定} %{
+			\begin{itemize}
+				\item 内積を保つ作用を拡張して、線形空間$RA$を定義する。
+				\begin{equation*}\begin{split} %{
+					(\sum_{a\in A}r_aa)\rhd f := \sum_{a\in A} r_a(a\rhd f)
+				\end{split}\end{equation*} %}
+				さらに、内積を保つ作用を拡張して、$A$と$RA^t$の元の間の積を定義する。
+				\begin{equation*}\begin{split} %{
+					(a_1*a_2^t)\rhd f &:= a_1\rhd (a_2^t*f) \\
+					(a_2^t*a_1)\rhd f &:= a_2^t(a_1\rhd f) \\
+				\end{split}\end{equation*} %}
+				そして、交換関係$\phi$が定義できるかどうかを調べる。
+				\begin{equation*}\begin{split} %{
+					(a_1*a_2^t)\rhd f = (a_2^t*a_1)\rhd f + \phi(a_1\times a_2^t)\rhd f \\
+				\end{split}\end{equation*} %}
+				交換関係が定義できることは自明でない。
+				積$*$が一般の場合には定義できないと思われる。
+				交換関係が定義できる積$*$を絞り込めるとうれしい。
+				\item 一文字から生成された自由モノイドを定義域とする場合について調べる。
+				内積を保つ作用が微分となることを確かめる。Runge-KuttaのButcherの方法
+				まで考察できればうれしい。
+				\item 有限生成の自由モノイドを定義域とする場合について調べる。
+				\item $Af$を集合$\set{a\rhd f}_{a\in A}$の線形結合で張られる$RA^t$の
+				部分空間とする。$Af$が有限次元となるとき、表現$\rho:RA\to \myop{End}(Af);
+				\;a\rhd (Af)=(\rho a)(Af)$が像$\phi A$が群になるかどうかを調べる。
+			\end{itemize}
+		\end{todo} %todo:この後の予定}
+	%s2:モノイドから半環への畳み込み}
+%s1:畳み込み}
