@@ -1,0 +1,183 @@
+\section{半群と余半群}\label{s1:半群と余半群} %{
+	半群と余半群を対比されるために、両方一緒に定義してみる。
+
+	\begin{definition}[半群と余半群]\label{def:半群と余半群} %{
+		$A$を集合とする。$A$の二項演算$m$が次の図が可換にするとき、$m$を$A$の積といい、
+		組$(A,m)$を半群という。
+		$A$の余二項演算$\Delta$が次の図が可換にするとき、$\Delta$を$A$の余積といい、
+		組$(A,\Delta)$を余半群という。
+		\begin{equation}\xymatrix{
+			A\times A\times A \ar[d]^{m\times \myid} \ar[r]^{\myid\times m} 
+			& A\times A \ar[d]^{m} \\
+			A\times A \ar[r]^{m} & A \\
+		} \quad \xymatrix{
+			A\times A\times A   
+			& A\times A \ar[l]_{\myid\times \Delta} \\
+			A\times A \ar[u]^{\myid\times \Delta} 
+			& A \ar[l]^{\Delta} \ar[u]_{\Delta} \\
+		}\end{equation}
+	\end{definition} %def:半群と余半群}
+
+	\begin{definition}[半群準同型と余半群準同型]\label{def:半群準同型と余半群準同型} %{ 
+		$A$を集合とする。$m_A$を$A$の積、$\Delta_A$を$A$の余積とする。
+		$B$を集合とする。$m_B$を$B$の積、$\Delta_B$を$B$の余積とする。
+		次の図を可換にする写像$f_m$を$A$から$B$への半群準同型、
+		次の図を可換にする写像$f_\Delta$を$B$から$A$への余半群準同型という。
+		\begin{equation}\xymatrix{
+			A\times A \ar[d]^{m_A} \ar[r]^{f_m\times f_m} & B\times B \ar[d]^{m_B} \\
+			A \ar[r]^{f_m} & B \\
+		} \quad \xymatrix{
+			A\times A & B\times B \ar[l]_{f_\Delta\times f_\Delta} \\
+			A \ar[u]_{\Delta_A} & B \ar[u]_{\Delta_B} \ar[l]_{f_\Delta} \\
+		}\end{equation}
+	\end{definition} %def:半群準同型と余半群準同型}
+
+	積と余積を直積に対する操作に拡張する。
+
+	\begin{definition}[成分ごとの積と余積]\label{def:成分ごとの積と余積} %{ 
+		$A$を集合とする。$m$を$A$の積、$\Delta$を$A$の余積とする。$n$を$1$以上の
+		自然数とする。次のように定義された$m_n$を$m$の成分ごとの積、$\Delta_n$を
+		$\Delta$の成分ごとの余積という。
+		\begin{equation}\begin{split} %{
+			m_n: A^{\times 2n} &\to A^{\times n} \\
+				a_1\times a_2\times \cdots\times a_{2n} &\mapsto m(a_1\times a_{n+1})\times m(a_2\times a_{n+2})\times \cdots\times m(a_n\times a_{2n}) \\
+			\Delta_n: A^{\times n} &\to A^{\times 2n} \\
+				a_1\times a_2\times \cdots\times a_n &\mapsto \Delta^{(1)}a_1\times \Delta^{(1)}a_2\times \cdots\times \Delta^{(1)}a_n\times \Delta^{(2)}a_1\times \Delta^{(2)}a_2\times \cdots\times \Delta^{(2)}a_n \\
+		\end{split}\end{equation} %}
+	\end{definition} %def:成分ごとの積と余積}
+
+	成分ごとの積と余積をベクトル的に書いてみると次のようになる。
+	\begin{equation*}\begin{split} %{
+		m_2: \begin{pmatrix}
+			a_1 \\
+			a_2 \\
+		\end{pmatrix}\times \begin{pmatrix}
+			a_3 \\
+			a_4 \\
+		\end{pmatrix} &\mapsto \begin{pmatrix}
+			m(a_1\times a_3) \\
+			m(a_2\times a_4) \\
+		\end{pmatrix} \\
+		\Delta_2: \begin{pmatrix}
+			a_1 \\
+			a_2 \\
+		\end{pmatrix} &\mapsto \begin{pmatrix}
+			\Delta^{(1)} a_1 \\
+			\Delta^{(1)} a_2 \\
+		\end{pmatrix} \times \begin{pmatrix}
+			\Delta^{(2)} a_1 \\
+			\Delta^{(2)} a_2 \\
+		\end{pmatrix}
+	\end{split}\end{equation*} %}
+	成分ごとの積と余積に対する結合性は次の可換図で表される。
+	\begin{equation}\xymatrix@C+2ex{
+		A^{\times n}\times A^{\times n}\times A^{\times n} \ar[d]^{m_n\times \myid^{\times n}} \ar[r]^(.6){\myid^{\times n}\times m_n} 
+		& A^{\times n}\times A^{\times n} \ar[d]^{m_n} \\
+		A^{\times n}\times A^{\times n} \ar[r]^{m_n} & A^{\times n} \\
+	} \quad \xymatrix@C+2ex{
+		A^{\times n}\times A^{\times n}\times A^{\times n}   
+		& A^{\times n}\times A^{\times n} \ar[l]_(.4){\myid^{\times n}\times \Delta_n} \\
+		A^{\times n}\times A^{\times n} \ar[u]^{\myid^{\times n}\times \Delta_n} 
+		& A^{\times n} \ar[l]^{\Delta_n} \ar[u]_{\Delta_n} \\
+	}\end{equation}
+
+	\begin{definition}[双半群]\label{def:双半群} %{ 
+		$A$を集合とする。$m$を$A$の積、$\Delta$を$A$の余積とする。
+		$1$以上の自然数$n$に対して、$m_n$を$m$の成分ごとの積とする。
+		$m$と$\Delta$が次の図を可換にするとき、$m$と$\Delta$は双対であるという。
+		また、このとき、組$(A,m,\Delta)$を双半群という。
+		\begin{equation}\label{eq:双対な余積}\xymatrix@C+2ex{
+			A\times A \ar[d]^{m_1} \ar[r]^{\Delta\times \Delta} & A\times A\times A\times A \ar[d]^{m_2} \\
+			A \ar[r]^{\Delta} & A\times A \\
+		}\end{equation}
+	\end{definition} %def:双半群}
+
+	$1$以上の自然数$n$に対して、$\Delta_n$を$\Delta$の成分ごとの積とすると、
+	次の可換図は式\eqref{eq:双対な余積}の可換図と同値であるので、この可換図で
+	積と余積の双対性を定義してもよい。
+	\begin{equation}\xymatrix@C+2ex{
+		A\times A \ar[d]^{m} \ar[r]^{\Delta_2} & A\times A\times A\times A \ar[d]^{m\times m} \\
+		A \ar[r]^{\Delta_1} & A\times A \\
+	}\end{equation}
+
+	\begin{definition}[群的な余積]\label{def:群的な余積} %{ 
+		余積$a\mapsto a\times a$を群的な余積という。
+	\end{definition} %def:群的な余積}
+
+	\begin{proposition}[群的な余積の双対性]\label{pro:群的な余積の双対性} %{ 
+		群的な余積は任意の積と双対になる。
+	\end{proposition} %pro:群的余積の双対性}
+	\begin{proof} %{
+		$A$を集合、$m$を$A$の積、$\mydu$を$A$の群的な余積とする。
+		任意の$a_1,a_2\in A$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\mydu m_1(a_1\times a_2) &= m_1(a_1\times a_2)\times m_1(a_1\times a_2) \\
+			m_2(\mydu\times \mydu)(a_1\times a_2) &= m_2(a_1\times a_1\times a_2\times a_2) \\
+				&= m_1(a_1\times a_2)\times m_1(a_1\times a_2) \\
+		\end{split}\end{equation*} %}
+		したがって、次の式が成り立ち、命題が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\mydu m_1(a_1\times a_2) &= m_2(\mydu\times \mydu)(a_1\times a_2) \\
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+
+	\begin{definition}[単位射と余単位射]\label{def:単位射と余単位射} %{
+		$A$を集合、$m$を$A$の積、$\Delta$を$A$の余積とする。
+		$\mybf{1}$を一つの元だけからなる集合とする。
+		写像$u_L$が次の図を可換にするとき、$u_L$を$m$の左単位射という。
+		写像$u_R$が次の図を可換にするとき、$u_R$を$m$の右単位射という。
+		$u_L=u_R$となるとき、両単位射または単に単位射という。
+		写像$\epsilon_L$が次の図を可換にするとき、$\epsilon_L$を$\Delta$の
+		左余単位射という。写像$\epsilon_R$が次の図を可換にするとき、
+		$\epsilon_R$を$\Delta$の右余単位射という。
+		$\epsilon_L=\epsilon_R$となるとき、両余単位射または単に余単位射という。
+		\begin{equation}\xymatrix{
+			\mybf{1}\times A \ar[r]^{u_L\times \myid} \ar[dr]_{\pi_R}
+			& A\times A \ar[d]^{m} 
+			& A\times \mybf{1} \ar[l]_{\myid\times u_R} \ar[dl]^{\pi_L} \\
+			& A \\
+		} \quad \xymatrix{
+			\mybf{1}\times A \ar[r]^{\epsilon_L\times \myid}
+			& A\times A
+			& A\times \mybf{1} \ar[l]_{\myid\times \epsilon_R} \\
+			& A \ar[u]_{\Delta} \ar[ul]^{\iota_R} \ar[ur]_{\iota_L} \\
+		}\end{equation}
+		ここで、写像$\pi$と$\iota$は、$\mybf{1}=\set{0}$として、それぞれ
+		次のように定義した。
+		\begin{equation}\begin{array}{cc} %{
+			\pi_L: x_1\times x_2 \mapsto x_1, & \iota_L: x \mapsto x\times 0 \\
+			\pi_R: x_1\times x_2 \mapsto x_2, & \iota_R: x \mapsto 0\times x \\
+		\end{array}\end{equation} %}
+	\end{definition} %def:単位射と余単位射}
+
+	\begin{proposition}[単位射の一意性]\label{prop:単位射の一意性} %{
+		\begin{enumerate}
+			\item 半群が左単位射と右単位射の両方を持つとすると、
+			左単位射と右単位元射が一致して、両単位射となる。
+			\item 半群の両単位射が存在すれば一意に定まる。
+		\end{enumerate}
+	\end{proposition} %prop:単位射の一意性}
+	\begin{proof} %{
+		$A=(A,m)$を半群、$\mybf{1}=\set{0}$とする。
+		\begin{enumerate}
+			\item $u_L$を$A$の左単位射、$u_R$を$A$の右単位射とする。このとき、
+			次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				u_L0 = m((u_L0)\times (u_R0)) = u_R0
+			\end{split}\end{equation*}
+			したがって、左単位射$u_L$と右単位元射$u_R$が一致して、両単位射となる。
+			\item $u_1,u_2$を$A$の両単位射とする。このとき、次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				u_10 = m((u_10)\times (u_20)) = u_20
+			\end{split}\end{equation*}
+			したがって、半群の両単位射が存在すれば一意に定まる。
+		\end{enumerate}
+	\end{proof} %}
+
+	余単位射は$\mybf{1}$への写像であり一意に定まり、余単位射をもつ余積は
+	群的な余積に限られる。したがって、集合に対して余単位射を定義することは
+	あまり意味がないが、積と余積を対比させるために定義した。
+	通常、余積は単なる集合ではなく、加法を持つ環やモジュールに対して
+	定義される。その場合、余単位射を定義することは重要な意味をもつ。
+%s1:半群と余半群}
+

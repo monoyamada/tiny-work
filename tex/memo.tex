@@ -1,3 +1,115 @@
+\section{Bialgebra Deformations of Certain Universal Enveloping Algebras}\label{s1:Bialgebra Deformations of Certain Universal Enveloping Algebras} %{
+	論文\cite{url:grossman:deform}に関するメモを書いておく。
+	すべてを理解していないので、断片的なメモになっている。
+
+	論文\cite{url:grossman:deform}の動機は常微分方程式の摂動による解法である。
+	$x:\mybf{C}\to \mybf{C}^n,\;F_x:\mybf{C}^n\to \mybf{C}^n$として、常微分方程式
+	\begin{equation}\begin{split} %{
+		\partial_tx = F_xx,\quad x0 = x_0 \\
+	\end{split}\end{equation} %}
+	の形式解は$\exp(tF_x)x|_{x=x_0}$と書ける。次の級数を計算できれば、任意の初期条件
+	に対して解を時刻の摂動として求めることができる。
+	\begin{equation}\begin{split} %{
+		\exp(tF_x)x &= x + tF_xx + \frac{t^2}{2}F_xF_xx + \cdots \\
+	\end{split}\end{equation} %}
+
+	\begin{itemize} %{
+		\item 数値計算の方法を見つける事は、代数の変形を見つけることである。
+		\item 時刻の導入 \\
+		体$k$係数モジュール$A$が与えられたとき、$A$を係数とする文字$t$の多項式
+		$A_t=A[t]$は$k$係数モジュールとなる。$A$が半環であれば、$A_t$は$A$係数
+		半モジュールとしてみることができるが、ここではそうみない。
+		\item テンソル積の完備化 \\
+		テンソル積$A_t\otimes_kA_t$に次の同値関係を入れたものを完備化された
+		テンソル積$A_t\widehat{\otimes}_kA_t$と定義している。
+		\begin{equation}\begin{split} %{
+			a_1t^{m+1}\otimes_ka_2^n &\sim a_1t^m\otimes_ka_2^{n+1} \\
+			a_1t^m\otimes_ka_2^{n+1} &\sim a_1t^(m+1)\otimes_ka_2^n \\
+			&\quad\text{for all }m,n\in\mybf{N},\;a_1,a_2\in A \\
+		\end{split}\end{equation} %}
+		\item べき乗系列 \\
+		$C_0=\set{c_0,c_1,c_2,\dots}$を余代数$C=(C,\Delta,\epsilon)$の部分集合
+		とする。$\Delta c_m=\sum_{p=0}^mc_p\otimes c_{m-p}$となるとき、$C_0$を
+		べき乗系列ということにする。
+		\item 素な元 \\
+		$A=(A,m,u,\Delta,\epsilon)$を双代数とする。元$a\in A$が
+		\begin{itemize} %{
+			\item $a=m(a_1\otimes  a_2)$となる二つの元は
+			$a_1\otimes a_2=a\otimes 1_A$ または$a_1\otimes a_2=1_A\otimes a$
+			に限られ、
+			\item $\Delta a=a\otimes 1_A+1\otimes a$となる
+		\end{itemize} %}
+		とき、$a$を素な元ということにする。
+		\item 群的な元 \\
+		$A=(A,m,u,\Delta,\epsilon)$を双代数とする。元$a\in A$が
+		$\Delta a=a\otimes a$かつ$\epsilon a=1$となるとき、$a$を群的な元と
+		言うことにする。
+		\item ほぼ素な元 \\
+		$A=(A,m,u,\Delta,\epsilon)$を双代数とする。$K,H\in A$を群的な元とする。
+		元$a\in A$が
+		\begin{itemize} %{
+			\item $a=m(a_1\otimes  a_2)$となる二つの元は
+			$a_1\otimes a_2=a\otimes 1_A$ または$a_1\otimes a_2=1_A\otimes a$
+			に限られ、
+			\item $\Delta a=a\otimes K+H\otimes a$となる
+		\end{itemize} %}
+		とき、$a$をほぼ素な元ということにする。素な元$\implies$ほぼ素な元になる。
+		\item 体の標数が$0$であれば、任意の$a\in A$に対して$\exp(a)$が定義できて、
+		$\exp(at)$は群的な元になる。
+	\end{itemize} %}
+
+	双代数における素な元は、Lie環論で使われる概念らしい。
+
+	\begin{definition}[双半代数における素な元]\label{def:双半代数における素な元} %{
+		$R$を半環、$A=(A,m,1_A,\Delta,\epsilon)$を$R$係数の双半代数とする。
+		元$a\in A$が$\Delta a=a\otimes 1_A+1_A\otimes a$となるとき、元$a$を
+		素な元という。
+	\end{definition} %def:双半代数における素な元}
+
+	$R$を半環、$A=(A,m,1_A,\Delta,\epsilon)$を$R$係数の双半代数とする。
+	積$m(a_1\otimes a_2)$を単に$a_1a_2$と書く。
+	$a\in A$を素な元とすると、$m$と$\Delta$は双対だから次のようになる。
+	\begin{equation}\begin{split} %{
+		\Delta a^m &= (a\otimes 1_A+1_A\otimes a)^m \\
+			&= \sum_{p=0}^m\binom{n}{p}a^p\otimes a^{m-p} \\
+	\end{split}\end{equation} %}
+	したがって、$\set{\frac{a^m}{m!}}_{m=0}^\infty$は$A$のべき乗系列となる。
+
+	素な元がLie環論で使われる理由は、素な元$a_1,a_2\in A$のLie括弧
+	$[a_1,a_2]\in A$もまた素な元になるためである。
+	\begin{equation}\begin{split} %{
+		\Delta[a_1,a_2] &= \Delta(a_1a_2-a_2a_1) \\
+			&= (\Delta a_1)(\Delta a_2) - (\Delta a_2)(\Delta a_1) \\
+			&= (a_1a_2\otimes 1_A + a_1\otimes a_2 + a_2\otimes a_1 + 1_A\otimes a_1a_2 ) \\
+			&\quad - (a_2a_1\otimes 1_A + a_1\otimes a_2 + a_2\otimes a_1 + 1_A\otimes a_2a_1 ) \\
+			&= [a_1,a_2]\otimes 1_A + 1_A\otimes [a_1,a_2] \\
+	\end{split}\end{equation} %}
+%s1:Bialgebra Deformations of Certain Universal Enveloping Algebras}
+
+\section{立体視}\label{s1:立体視} %{
+	立体視を実現させるための仕組みを列挙する。ここで、立体視とは、人間の左目と右目
+	に異なる絵を受像させることである。一番簡単な方法は、ヘッドマウントディスプレイ
+	を使って、右目用と左目用の絵を映し出すことである。シャッターグラスを用いた
+	方法は、ヘッドマウントディスプレイに近い方法である。
+	\begin{equation}\xymatrix{
+		\txt{左目用の絵} \ar[rrr] &&& \txt{左目用の絵} \\
+		\txt{右目用の絵} \ar[rrr] &&& \txt{右目用の絵} \\
+	}\end{equation}
+	その他の方法として、左目用と右目用の絵を合成して送信し、それを受信する側で
+	分離する方法がある。
+	\begin{equation}\xymatrix{
+		\txt{左目用の絵} \ar[rd] &&& \txt{左目用の絵} \\
+		& \txt{合成} \ar[r] & \txt{分離} \ar[ru] \ar[rd] \\
+		\txt{右目用の絵} \ar[ru] &&& \txt{右目用の絵} \\
+	}\end{equation}
+	絵を合成/分離する方法としては、光の偏向を利用した方法と光の波長を利用した方法
+	がある。どちらの方法も、絵を分離するために特殊なメガネを利用する。
+	光の偏向を利用する方法では、鉛直方向の偏向のみを通す物質を左目のレンズに、
+	水平方向の偏向のみを通す物質を右目のレンズに使うメガネを用いる。
+	光の波長を利用する方法では、赤色の光のみを通す物質を左目のレンズに、
+	青色の光のみを通す物質を右目のレンズに使うメガネを用いる。
+%s1:立体視}
+
 \section{DFAとキャンセル可能性}\label{s1:DFAとキャンセル可能性} %{
 	次のDFAを考える。
 	\begin{equation}\xymatrix{
