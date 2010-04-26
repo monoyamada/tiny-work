@@ -1,3 +1,657 @@
+\section{モノイド半環の自己線形写像}\label{s1:モノイド半環の自己線形写像} %{
+	$R=(R,+,0,m_R,1)$を可換半環、$R_x=R[[x]]$を$\set{x^n}_{n=0}^\infty$を基底
+	とする$R$係数半モジュールとする。
+	$R_x$の基底を任意の$n\in \mybf{N}$に対して括弧つきで$[n]=x^n$のように書く。
+
+	$R_x$に次の積$m_x$と余積$\Delta_x$を定義する。
+	\begin{equation}\label{eq:多項式の積と余積}\begin{split} %{
+		m_x([m]\otimes[n]) &= [m+n] \\
+		\Delta_x[m] &= \sum_{k=0}^m\binom{m}{k}[k]\otimes[m-k] \\
+	\end{split}\end{equation} %}
+	$m_x$と$\Delta_x$は双対となる。$m_x$に関する単位射は$u_x1=[0]$、
+	$\Delta_x$に関する余単位射は$\epsilon_x[m]=\jump{m=0}$となる。
+
+	$R_x$から$R$への線形写像全体を$R_x^t$とおく。任意の$p,m\in\mybf{N}$に
+	対して$[p]^t_*\in R_x^t$を$[p]^t_*[m]=\jump{p=m}$で定義する。すると、
+	$R_x^t$は$\set{[n]^t_*}_{n\in\mybf{N}}$を基底とする$R$係数半モジュールとなる。
+	$R_x^t$には畳み込みにより次の積$m_x^t$と余積$\Delta_x^t$が定義される。
+	\begin{equation}\begin{split} %{
+		m_x^t([p]^t_*\otimes [q]^t_*) &= \binom{p+q}{p}[p+q]^t_* \\
+		\Delta_x^t[p]^t_* &= \sum_{k=0}^p[k]^t_*\otimes[p-k]^t_* \\
+	\end{split}\end{equation} %}
+	この積$m_x^t$と余積$\Delta_x^t$の定義は、積$m_x$と余積$\Delta_x$の定義
+	\eqref{eq:多項式の積と余積}をスケール変換したものと同じ形になっている。
+	$[p]^t=p![p]^t_*$とすると、畳み込みによる積$m_x^t$と余積$\Delta_x^t$は
+	次のようになる。
+	\begin{equation}\begin{split} %{
+		m_x^t([p]^t\otimes [q]^t) &= [p+q]^t \\
+		\Delta_x^t[p]^t &= \sum_{k=0}^p\binom{p}{k}[k]^t\otimes[p-k]^t \\
+	\end{split}\end{equation} %}
+	$m_x^t$に関する単位射は$u_x^t1=[0]^t$、$\Delta_x^t$に関する余単位射は
+	$\epsilon_x^t[p]^t=\jump{p=0}$となる。$m_x^t$と$\Delta_x^t$は双対となる。
+
+	$MR_x=\homset(R_x,R_x)$を自己線形写像全体のつくる空間とする。
+	\begin{equation}\begin{split} %{
+		f(y_1+y_2) &= (fy_1) + (fy_2)\quad\text{for all }f\in MR_x,\;y_1,y_2\in R_x \\
+		f(ry) &= r(fy)\quad\text{for all }f\in MR_x,\;y\in R_x,\;r\in R \\
+	\end{split}\end{equation} %}
+	$MR_x$には次のように加法とスカラー積を定義することができる。
+	\begin{equation}\begin{split} %{
+		+: MR_x\times MR_x &\to MR_x \\
+			f\times g&\mapsto (f+g) \quad\text{such that }\\
+			&\quad (f+g)y=(fy)+(gy)\quad\text{for all }y\in R_x \\
+		\rhd_R: R\times MR_x &\to MR_x \\
+			r\times f &\mapsto (r\rhd_Rf) \quad\text{such that } \\
+			&\quad(r\rhd_Rf)y=r(fy)\quad\text{for all }y\in R_x \\
+		\lhd_R: MR_x\times R &\to MR_x \\
+			f\times r &\mapsto (f\rhd_Rr) \quad\text{such that } \\
+			&\quad(f\rhd_Rr)y=(fy)r\quad\text{for all }y\in R_x \\
+	\end{split}\end{equation} %}
+	したがって、$MR_x$は$R$を係数とする半モジュールとなる。
+	以下では、スカラー積$\rhd_R$と$\lhd_R$の記号は省略して書く。
+	テンソル積$R_x\otimes R_x^t$から$MR_x$への線形写像を$\mu$を次のように
+	定義する。
+	\begin{equation}\begin{split} %{
+		\mu: R_x\otimes R_x^t &\to MR_x \\
+			y_1\otimes y_2^t &\mapsto \mu(y_1\otimes y_2^t)\quad\text{such that } \\
+			&\quad \mu(y_1\otimes y_2^t)z = y_1(y_2^t z)\quad\text{for all }z\in R_x \\
+	\end{split}\end{equation} %}
+	以下では、任意の$f,g\in A$に対して、$fg^t=\mu(f\otimes g^t)$と書く。
+	任意の$f\in MR_x$は次のように書くことができる。
+	\begin{equation*}\begin{split} %{
+		f = \sum_{p=0}^\infty\frac{1}{p!}(f[p])[p]^t
+	\end{split}\end{equation*} %}
+	したがって、$\mu$は$R$半モジュール同型となる。
+	$MR_x$の基底として$\set{[p][q]^t}_{p,q\in\mybf{N}}$をとることができる。
+	見やすいように$\mybinom{p}{q}=[p][q]^t$と書くことにする。
+	任意の$p,q,m\in \mybf{N}$に対して次のようになる。
+	\begin{equation}\begin{split} %{
+		\mybinom{p}{q}[m] &= \jump{m=q}q![p] \\
+		\mybinom{p}{q} &= q![p][q]^t_* \\
+	\end{split}\end{equation} %}
+
+	$MR_x$の合成$\circ$もまた$MR_x$の元になる。
+	\begin{equation}\begin{split} %{
+		f\circ g\in MR_x \quad\text{for all }f,g\in MR_x \\
+	\end{split}\end{equation} %}
+	したがって、写像の合成$\circ$は恒等写像$1_\circ=\sum_{p\in \mybf{N}}\mybinom{p}{p}$を
+	単位元とする積となる。写像の合成を前置記号で$m_\circ$と書くことにする。
+	積$m_\circ$は、任意の$p_1,p_2,q_1,q_2\in \mybf{N}$に対して次のようになる。
+	\begin{equation}\begin{split} %{
+		m_\circ(\mybinom{p_1}{q_1}\otimes \mybinom{p_2}{q_2}) 
+		&= ([q_1]^t[p_2])\mybinom{p_1}{q_2} \\
+		&= \jump{q_1=p_2}q_2!\mybinom{p_1}{q_2} 
+	\end{split}\end{equation} %}
+	積$m_\circ$に関する生成系は次のものをとることができる。
+	\begin{equation}\begin{split} %{
+		\set{\mybinom{0}{1},\mybinom{0}{2},\dots,\mybinom{1}{0},\mybinom{2}{0},\dots}
+	\end{split}\end{equation} %}
+
+	写像の合成以外による積の他に、次の可換図で積$m_\mu:MR_x\otimes MR_x\to MR_x$
+	を定義することができる。
+	\begin{equation}\xymatrix{
+		R_x\otimes R_x^t\otimes R_x\otimes R_x^t \ar[r]^{\mu\times \mu} \ar[d]^{(m_x\otimes m_x^t)\sigma_{23}}
+		& MR_x\otimes MR_x \ar@{.>}[d]^{m_\mu} \\
+		R_x\otimes R_x^t \ar[r]^{\mu} & MR_x \\
+	}\end{equation}
+	積$m_\mu$は、任意の$p_1,p_2,q_1,q_2\in\mybf{N}$に対して次のようになる。
+	\begin{equation}\begin{split} %{
+		m_\mu(\mybinom{p_1}{q_1}\otimes\mybinom{p_2}{q_2}) = \mybinom{p_1+p_2}{q_1+q_2}
+	\end{split}\end{equation} %}
+	任意の$p_1,p_2,p_3,q_1,q_2,q_3\in\mybf{N}$に対して次のようになるから、
+	積$m_x$と積$m_x^t$の結合性から、写像$m_\mu$が結合的になることは確かめられる。
+	\begin{equation}\begin{split} %{
+		&(\myid\otimes m_\mu)m_\mu(\mybinom{p_1}{q_1}\otimes\mybinom{p_2}{q_2}\otimes\mybinom{p_3}{q_3}) \\
+		&\quad= ((\myid\otimes m_x)m_x[p_1p_2p_3]_\otimes)((\myid\otimes m_x^t)m_x^t[q_1q_2q_3]^t_\otimes) \\
+		&(m_\mu\otimes \myid)m_\mu(\mybinom{p_1}{q_1}\otimes\mybinom{p_2}{q_2}\otimes\mybinom{p_3}{q_3}) \\
+		&\quad= ((m_x\otimes \myid)m_x[p_1p_2p_3]_\otimes)((m_x^t\otimes \myid)m_x^t[q_1q_2q_3]^t_\otimes) \\
+	\end{split}\end{equation} %}
+	ここで、表記を簡略化するために、任意の$n\in\mybf{N}$および
+	$p_1,p_2,\dots,p_n\in\mybf{N}$次のようにおいた。
+	\begin{equation}\begin{split} %{
+		[p_1p_2\cdots p_n]_\otimes &= [p_1]\otimes[p_2]\otimes\cdots\otimes[p_n] \\
+		[p_1p_2\cdots p_n]^t_\otimes &= [p_1]^t\otimes[p_2]^t\otimes\cdots\otimes[p_n]^t \\
+	\end{split}\end{equation} %}
+	積$m_\mu$に関する単位射は$u_\mu1=\mybinom{0}{0}$となる。
+	積$m_\mu$に関する単位元を$1_\mu=\mybinom{0}{0}$ とおく。
+	積$m_\mu$に関する生成系は次のものをとることができる。
+	\begin{equation}\begin{split} %{
+		\set{\mybinom{0}{1},\mybinom{1}{0}}
+	\end{split}\end{equation} %}
+	余積$\Delta_\mu$を次の可換図で定義する。
+	\begin{equation}\xymatrix{
+		R_x\otimes R_x^t\otimes R_x\otimes R_x^t \ar[r]^{\mu\times \mu}
+		& MR_x\otimes MR_x \\
+		R_x\otimes R_x^t \ar[r]^{\mu} \ar[u]_{\sigma_{23}(\Delta_x\otimes \Delta_x^t)} & MR_x \ar@{.>}[u]_{\Delta_\mu} \\
+	}\end{equation}
+	余積$\Delta_\mu$は、任意の$p,q\in\mybf{N}$に対して次のようになる。
+	\begin{equation}\begin{split} %{
+		\Delta_\mu\mybinom{p}{q} = \sum_{k=0}^p\sum_{l=0}^q\binom{p}{k}\binom{q}{l}\mybinom{k}{l}\otimes \mybinom{p-k}{q-l} \\
+	\end{split}\end{equation} %}
+	任意の$p,q\in\mybf{N}$に対して次のようになるから、余積$\Delta_x$と
+	余積$\Delta_x^t$の余結合性から、写像$\Delta_\mu$が余結合的になることは
+	確かめられる。
+	\begin{equation}\begin{split} %{
+		(\myid\otimes \Delta_\mu)\Delta_\mu\mybinom{p}{q}
+		&= ((\myid\otimes \Delta_x)\Delta_x[p])((\myid\otimes \Delta_x^t)\Delta_x^t[q]^t_*) \\
+		(\Delta_\mu\otimes \myid)\Delta_\mu\mybinom{p}{q}
+		&= ((\Delta_x\otimes \myid)\Delta_x[p])((\Delta_x^t\otimes \myid)\Delta_x^t[q]^t_*) \\
+	\end{split}\end{equation} %}
+	余積$\Delta_\mu$に関する余単位射$\epsilon_\mu$は次のようになる。
+	\begin{equation}\begin{split} %{
+		\epsilon_\mu\mybinom{p}{q} = \jump{p=q=0} \quad\text{for all }p,q\in\mybf{N}
+	\end{split}\end{equation} %}
+	任意の$p_1,p_2,q_1,q_2\in\mybf{N}$に対して次の式が成り立つから、
+	積$m_x$と余積$\Delta_x$の双対性、積$m_x^t$と余積$\Delta_x^t$の双対性から、
+	積$m_\mu$と余積$\Delta_\mu$は互いに双対になる。
+	\begin{equation}\begin{split} %{
+		&\Delta_\mu m_\mu\kakko{\mybinom{p_1}{q_1}\otimes\mybinom{p_2}{q_2}} \\
+		&\quad = (\Delta_x m_x[p_1p_2])(\Delta_x^t m_x^t[q_1q_2]^t_*) \\
+		&(m_\mu\otimes m_\mu)\sigma_{23}(\Delta_\mu\otimes \Delta_\mu)\kakko{\mybinom{p_1}{q_1}\otimes\mybinom{p_2}{q_2}} \\
+		&\quad = ((m_x\otimes m_x)\sigma_{23}(\Delta_x\otimes \Delta_x)[p_1p_2])
+		((m_x^t\otimes m_x^t)\sigma_{23}(\Delta_x^t\otimes \Delta_x^t)[q_1q_2]^t_*)
+	\end{split}\end{equation} %}
+	任意の$p_1,p_2,q_1,q_2,m\in\mybf{N}$に対して次の可換図が成り立つ。
+	\begin{equation}\xymatrix{
+		\displaystyle\sum_{k=0}^m\binom{m}{k}[k]\otimes[m-k] 
+		\ar[d]^{\mybinom{p_1}{q_1}\otimes \mybinom{p_2}{q_2}}
+		& [m] \ar[l]_{\Delta_x} 
+		\ar[d]^{m_\mu(\mybinom{p_1}{q_1}\otimes \mybinom{p_2}{q_2})}
+		\\
+		\jump{m=q_1+q_2}m![p_1]\otimes[p_2] \ar[r]^{m_x}
+		& \jump{m=q_1+q_2}m![p_1+p_2]
+		\\
+	}\end{equation}
+	また、任意の$p,q,m,n\in\mybf{N}$に対して次の可換図が成り立つ。
+	\begin{equation}\xymatrix@C+3pc{
+		[m]\otimes[n] \ar[r]^{m_x} \ar[d]^{\Delta_\mu\mybinom{p}{q}}
+		& [m+n] \ar[d]^{\mybinom{p}{q}}
+		\\
+		\jump{q=m+n}q!\sum_{k=0}^p\binom{p}{k}[k]\otimes[p-k] 
+		& \jump{q=m+n}q![p] \ar[l]_{\Delta_x}
+		\\
+	}\end{equation}
+	したがって、双半代数$(MR_x,m_\mu,u_\mu,\Delta_\mu,\epsilon_\mu)$は
+	双半代数$(R_x,m_x,u_x,\Delta_x,\epsilon_x)$の畳み込みからも得ることが
+	できる。
+
+	ここで、半代数準同型写像$(R_x,m_x,u_x)\to (R_x,m_x,u_x)$を考える。
+	半代数準同型写像$(R_x,m_x,u_x)\to (R_x,m_x,u_x)$全体を
+	$\myop{end}R_x=(R_x,m_x,u_x)\to (R_x,m_x,u_x)$と書く。
+	任意の$y\in R_x$に対して$x\mapsto y$となる$y_*\in\myop{end}R_x$
+	は次のように書ける。
+	\begin{equation}\begin{split} %{
+		y_* &= 1_\mu + y[1] + \frac{1}{2!}m_x(y\otimes y)[2]^t + \cdots \\
+		&= 1_\mu + y[1]^t + \frac{1}{2!}m_\mu(y[1]^t\otimes y[1]^t) + \cdots \\
+		&= \exp_\mu(y[1]^t) \\
+	\end{split}\end{equation} %}
+	ここで、$\exp_\mu:MR_x\to MR_x$を、任意の$f\in MR_x$に対して次のように
+	おいた。
+	\begin{equation}\begin{split} %{
+		\exp_\mu f &= 1_\mu + f + \frac{1}{2!}m_\mu(f\otimes f) + \cdots \\
+	\end{split}\end{equation} %}
+	特に、合成の単位元$1_\circ$は$\exp_\mu$を用いて次のように書ける。
+	\begin{equation}\begin{split} %{
+		\exp_\mu \mybinom{1}{1} &= 1_\mu + \mybinom{1}{1} + \frac{1}{2!}m_\mu(\mybinom{1}{1}\otimes \mybinom{1}{1}) + \cdots \\
+	\end{split}\end{equation} %}
+	写像$\exp_\mu$は線形写像ではないことに注意する。
+
+\begin{todo}[until]\label{todo:until} %{
+	自己半代数準同型の合成は自己半代数準同型になるから、
+	$(\myop{end}R_x,m_\circ,u_\circ)$は$(MR_x,m_\circ,u_\circ)$の部分半代数
+	となる。次の写像$\phi$は集合同型となる。
+	\begin{equation}\begin{split} %{
+		\phi: R_x &\to \myop{end}R_x \\ 
+			y &\mapsto \exp_\mu(y[1]^t) \\
+	\end{split}\end{equation} %}
+
+	任意の$f,g\in MR_x$に対して$m_\mu(f\otimes g)=fg$とし、
+	$y=y_0+y_1[1]+y_2[2]+\cdots\in R_x$を
+	$y=y_0\mybinom{0}{0}+y_1\mybinom{1}{0}+y_2\mybinom{2}{0}+\cdots\in MR_x$
+	と同一視する。$y\in R_x$として微分作用素$y\partial$は次の式で得られる。
+	\begin{equation}\label{eq:微分変換群の一次近似}\begin{split} %{
+		\phi([1]+y) &= \exp_\mu(\mybinom{1}{1}+y\mybinom{0}{1}) \\
+			&= (\exp_\mu\mybinom{1}{1})(\exp_\mu y\mybinom{0}{1}) \\
+			&= 1_\circ(\exp_\mu y\mybinom{0}{1}) \\
+			&= 1_\circ + 1_\circ(y\mybinom{0}{1}) + \frac{1}{2!}1_\circ(y\mybinom{0}{1})^2 + \cdots \\
+			&= 1_\circ + y(1_\circ\mybinom{0}{1}) + \frac{1}{2!}y^2(1_\circ\mybinom{0}{2}) + \cdots \\
+			&= 1_\circ + y\partial + \frac{1}{2!}y^2(\partial\circ\partial) + \cdots \\
+	\end{split}\end{equation} %}
+	ここで、$\partial$を次のようにおき、
+	\begin{equation}\begin{split} %{
+		\partial = 1_\circ*\mybinom{0}{1} = \sum_{k=0}^\infty \frac{1}{k!}\mybinom{k}{k+1} \\
+	\end{split}\end{equation} %}
+	次の式が成り立つことを使った。
+	\begin{equation}\begin{split} %{
+		1_\circ\mybinom{0}{2} &= \partial\circ\partial \\
+		1_\circ\mybinom{0}{3} &= \partial\circ\partial\circ\partial \\
+		\cdots &= \cdots \\
+	\end{split}\end{equation} %}
+	式\eqref{eq:微分変換群の一次近似}は、微分変換$\exp_\circ(y\partial)$の
+	一次近似となっている。
+\end{todo} %todo:until}
+%s1:モノイド半環の自己線形写像}
+
+\section{The Explicit Computation of Integration Algorithms and First Integrals for Ordinary Differential Equations With Polynomial Coefficients Using Trees}\label{s1:The Explicit Computation of Integration Algorithms and First Integrals for Ordinary Differential Equations With Polynomial Coefficients Using Trees} %{
+	論文\cite{url:grossman:explicit}に関するメモを書いておく。
+
+	簡単のために一次元で考える。体$k$を実数または複素数とする。
+	$k$上の常微分方程式を考える。与えられた$v\in(k[x]\to k[x])$に対して、
+	次の式を満たす写像$x:k\to k$を求めることを考える。
+	\begin{equation}\label{eq:お題の常微分方程式}\begin{split} %{
+		\partial_tx = v(x),\quad x0=x_0 \\
+	\end{split}\end{equation} %}
+	この式の形式解$x$は次のように書ける。
+	\begin{equation}\begin{split} %{
+		x = e^{tv(x)\partial_x}x\bou_{x=x_0}
+	\end{split}\end{equation} %}
+	したがって、次の式を処理することで\eqref{eq:お題の常微分方程式}の解
+	の持つ性質が導かれる。
+	\begin{equation}\label{eq:常微分方程式の形式解}\begin{split} %{
+		e^{tv(x)\partial_x}x
+	\end{split}\end{equation} %}
+	この形式解の中で写像$e^{tv(x)\partial_x}$は$k[x]\to k[x]$の線形写像
+	となっている。$k[x]\to k[x]$の線形写像全体を$\myop{end}k[x]$と書く。
+	写像$e^{tv(x)\partial_x}$を$t$についてべき展開すると次のようになる。
+	\begin{equation}\begin{split} %{
+		e^{tv(x)\partial_x} &= \sum_{k\in\mybf{N}}\frac{t^k}{k!}(v\partial_x)^n \\
+	\end{split}\end{equation} %}
+	$(v\partial_x)^n$は$n=0,1,2,3$に対して次のようになる。
+	\begin{equation}\begin{split} %{
+		(v\partial_x)^0 &= 1 \\
+		(v\partial_x)^1 &= v\partial_x \\
+		(v\partial_x)^2 &= v^2\partial_x^2 + v(\partial_xv)\partial_x \\
+		(v\partial_x)^3 &= v^3\partial_x^3 + 3v^2(\partial_xv)\partial_x^2 
+			+ v^2(\partial_x^2v)\partial_x + v(\partial_xv)^2\partial_x \\
+	\end{split}\end{equation} %}
+	この$t$に関するべき展開は、根を黒丸、根以外の頂点を$v$とする木で
+	書くことができる。
+	\begin{equation}\begin{split} %{
+		(v\partial_x)^0 &\sim \mytree {
+			\bullet
+		} \\
+		(v\partial_x)^1 &\sim \mytree {
+			\bullet \ar@{-}[d] \\
+			v
+		} \\
+		(v\partial_x)^2 &\sim \mytree {
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			v && v \\
+		} + \mytree {
+			\bullet \ar@{-}[d] \\
+			v \ar@{-}[d] \\
+			v \\
+		} \\
+		(v\partial_x)^3 &\sim \mytree {
+			& \bullet \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+			v & v & v \\
+		} + 3 \mytree {
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			v \ar@{-}[d] && v \\
+			v \\
+		} + \mytree {
+			& \bullet \ar@{-}[d] \\
+			& v \ar@{-}[dl] \ar@{-}[dr] \\
+			v && v \\
+		} + \mytree {
+			\bullet \ar@{-}[d] \\
+			v \ar@{-}[d] \\
+			v \ar@{-}[d] \\
+			v \\
+		}  \\
+	\end{split}\end{equation} %}
+	$(v\partial_x)^{n+1}$を表す木は、$(v\partial_x)^{n}$を表す木の根を含む
+	各頂点の最後の子供に頂点$v$を付け足すと得られれる。
+	わかりやすくするために頂点の種類を$\set{v_1,v_2,\dots}$と複数に増やして、
+	頂点$v_i$を付け足す操作を$\lhd$で表すと次のような図になる。
+	\begin{equation}\begin{split} %{
+		\mytree{
+			\bullet
+		} \lhd v_1 &= \mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		} \\
+		\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		} \lhd v_2 &= \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 && v_2
+		} + \mytree{
+			\bullet \ar@{-}[d] \\
+			v_1 \ar@{-}[d] \\
+			v_2
+		} \\
+		\mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 && v_2
+		} \lhd v_3 &= \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[d] \ar@{-}[rd] \\
+			v_1 & v_2 & v_3
+		} + \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 \ar@{-}[d] && v_2 \\
+			v_3
+		} + \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 && v_2 \ar@{-}[d] \\
+			&& v_3
+		} \\
+		\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1 \ar@{-}[d] \\
+			v_2
+		} \lhd v_3 &= \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 \ar@{-}[d] && v_3 \\
+			v_2
+		} + \mytree{
+			& \bullet \ar@{-}[d] \\
+			& v_1 \ar@{-}[ld] \ar@{-}[rd] \\
+			v_2 && v_3
+		} + \mytree{
+			\bullet \ar@{-}[d] \\
+			v_1 \ar@{-}[d] \\
+			v_2 \ar@{-}[d] \\
+			v_3
+		}
+	\end{split}\end{equation} %}
+	木の子供の並びの順序の違いを無視すると次のようになる。
+	\begin{equation}\begin{split} %{
+		(v\partial_x)^0 &\sim \bullet \\
+		(v\partial_x)^1 &\sim \bullet\lhd v \\
+		(v\partial_x)^2 &\sim (\bullet\lhd v)\lhd v \\
+		(v\partial_x)^3 &\sim ((\bullet\lhd v)\lhd v)\lhd v \\
+	\end{split}\end{equation} %}
+
+	\begin{todo}[次の目標]\label{todo:次の目標} %{
+		\begin{itemize} %{
+			\item 頂点を付け足す操作を木の演算で書き直す。
+		\end{itemize} %}
+	\end{todo} %todo:次の目標}
+
+	\subsection{保留}\label{s2:保留} %{
+	微分係数が木で表すことをもう少し詳細に説明する。
+
+	\begin{definition}[根付きの木]\label{def:根付きの木} %{
+		根が一つ指定された木を根付きの木という。
+	\end{definition} %def:根付きの木}
+
+	組み合わせ論などでは、根が固定されていない木が用いられることが多いために、
+	根付きの木という特別な名前が用いられる。根付きの木と根が固定されていない木
+	の違いは同値関係の違いである。根付きの木に次のような同値関係をとったもの
+	が根が固定されていない木となる。
+	\begin{equation}\begin{split} %{
+		\text{根付きでない木}\quad \mytree{
+			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			s_1 \ar@{-}[d] && s_2 \\
+			s_3 \\
+		} \sim \mytree{
+			& s_1 \ar@{-}[ld] \ar@{-}[rd] \\
+			s_3 && \bullet \ar@{-}[d] \\
+			&& s_2 \\
+		} \sim \mytree{
+			s_3 \ar@{-}[d] \\
+			s_1 \ar@{-}[d] \\
+			\bullet \ar@{-}[d] \\
+			s_2 \\
+		} \sim \mytree{
+			s_2 \ar@{-}[d] \\
+			\bullet \ar@{-}[d] \\
+			s_1 \ar@{-}[d] \\
+			s_3 \\
+		}
+	\end{split}\end{equation} %}
+
+	\begin{definition}[対称な木]\label{def:対称な木} %{
+		子供の頂点の並びの順序を入れ替えたものを同値とみなす木を対称な木という。
+	\end{definition} %def:対称な木}
+
+	対称でない木に次のような同値関係をとったものが対称な木になる。
+	\begin{equation}\begin{split} %{
+		\text{対称な木}\quad \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			*+[F]{t_1} && *+[F]{t_2} \\
+		} \sim \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			*+[F]{t_2} && *+[F]{t_1} \\
+		} 
+	\end{split}\end{equation} %}
+
+	$S$を有限集合とする。すべての頂点を$S$の元とする根付きの木の集合を$T_+S$
+	とする。根を$\bullet$、根以外の頂点を$S$の元とする根付きの木の集合を
+	$T_\bullet S$とする。$T_+S$と$T_\bullet S$には空の木を含めないものとする。
+	$T_\bullet S$の元を子供の頂点を括弧でくくって次のように書くことにする。
+	\begin{equation}\begin{split} %{
+		\bullet &= \bullet[] = \bullet = 1_\bullet \\
+		\mytree {
+			& \bullet \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
+			*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_n} \\
+		} &= \bullet[t_1t_2\cdots t_n] \quad\text{for all }t_1,t_2,\dots,t_n\in T_+S \\
+	\end{split}\end{equation} %}
+	$T_+S$の元を次のように書くことにする。
+	\begin{equation}\begin{split} %{
+		s &= s[] = s \quad\text{for all }s\in S \\
+		\mytree {
+			& s \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
+			*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_n} \\
+		} &= s[t_1t_2\cdots t_n] \quad\text{for all }s\in S,\;t_1,t_2,\dots,t_n\in T_+S \\
+	\end{split}\end{equation} %}
+	$T_\bullet S$は$T_+S$から生成された自由モノイドとしてみることができる。
+	$T_\bullet S$に写像$m_*$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		m_*: T_\bullet S\times  T_\bullet S &\to T_\bullet S \\
+			\bullet[a_1a_2\cdots a_m]\times \bullet[b_1b_2\cdots b_n]
+			&\mapsto \bullet[a_1a_2\cdots a_mb_1b_2\cdots b_n] \\
+			&\text{for all }a_1,a_2,\dots,a_m,b_1,b_2,\dots,b_n\in T_+S \\
+	\end{split}\end{equation} %}
+	$m_*$は結合的になり、$1_\bullet$を単位元とする。$m_*$を中置記法で$*$と
+	書くことにする。
+
+	$R$を半環とする。$T_\bullet$を基底とする自由$R$半モジュールを
+	$RT_\bullet S$とする。$T_\bullet S$の積$m_*$を$R$線形に拡張し、同じ記号
+	$m_*:RT_\bullet S\otimes RT_\bullet S\to RT_\bullet S$を用いることにする。
+	積$m_*$に双対となる余積$\Delta_*$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		\Delta_*: RT_\bullet S &\to  RT_\bullet S\otimes RT_\bullet S \\
+			\bullet[t] &\mapsto \bullet[t]\otimes 1_\bullet + 1_\bullet\otimes \bullet[t] \quad\text{for all }t\in T_+S \\
+	\end{split}\end{equation} %}
+	余積$\Delta_*$は積$m_*$と双対になるから、任意の$t_1,t_2,\dots,t_n\in T_+S$
+	に対して次のようになる。
+	\begin{equation}\begin{split} %{
+		&\Delta_*[t_1t_2\cdots t_n]
+			= (\Delta_*[t_1])*(\Delta_*[t_2])*\cdots*(\Delta_*[t_n]) \\
+			&= 1_\bullet\otimes \bullet[t_1t_2\cdots t_n] \\
+			&+ \bullet[t_1]\otimes \bullet[t_2t_3\cdots t_n] 
+			+ \bullet[t_2]\otimes \bullet[t_1t_3\cdots t_n]
+			+ \cdots
+			+ \bullet[t_n]\otimes \bullet[t_1t_2t_3 \cdots t_{n-1}] \\
+			&+ \bullet[t_1t_2]\otimes \bullet[t_3\cdots t_n] 
+			+ \bullet[t_1t_3]\otimes \bullet[t_2\cdots t_n]
+			+ \cdots
+			+ \bullet[t_{n-1}t_n]\otimes \bullet[t_1t_2t_3 \cdots t_{n-2}] \\
+			&+\cdots \\
+			&+ \bullet[t_1t_2\cdots t_n]\otimes 1_\bullet \\
+	\end{split}\end{equation} %}
+	余積$\Delta_*$に対する余単位射$\epsilon_*$は次のようになる。
+	\begin{equation}\begin{split} %{
+		\epsilon_*: RT_\bullet &\to R \\
+			t &\mapsto \begin{cases} %{
+				1, &\text{ iff }t = 1_\bullet \\
+				0, &\text{ otherwise } \\
+			\end{cases} %}
+	\end{split}\end{equation} %}
+
+	$m_*$と$\Delta_*$のみでは、$T_+S$から生成された自由モノイド半双代数で
+	しかない。$m_*$を深さ方向に拡張することを考える。$R$双線形写像$m_\odot$
+	を次のように定義する。
+	\begin{equation}\begin{split} %{
+		m_\odot: RT_\bullet S\otimes RT_\bullet S &\to RT_\bullet S \\
+			t_1\otimes t_2 &\mapsto m_*(t_1\otimes t_2) + m_{\widebar{\odot}}(t_1\otimes t_2) \quad\text{for all }t_1,t_2\in T_\bullet S \\
+		m_{\widebar{\odot}}: RT_\bullet S\otimes RT_\bullet S &\to RT_\bullet S \\
+			\bullet[t_1t_2\cdots t_n]\otimes t 
+				&\mapsto m_*(t_1\otimes t_2) + m_{\widebar{\odot}}(t_1\otimes t_2) \quad\text{for all }t_1,t_2,\dots,t_n\in T_+S,\;t\in T_\bullet S \\
+	\end{split}\end{equation} %}
+
+	\begin{equation}\begin{split} %{
+			[t_1t_2\cdots t_n] 
+				&\mapsto t*[t_1t_2\cdots t_n] \\
+				&\quad + [(t\odot t_1)t_2\cdots t_n] + [t_1(t\odot t_2)\cdots t_n] \\
+				&\quad + \cdots + [t_1t_2\cdots(t\odot t_n)] \\
+				&\quad\text{for all }t\in T_\bullet S,\; t_1,t_2,\dots,t_n\in T_+S \\
+		m_\odot: RT_\bullet S\otimes T_+S &\to T_+S \\
+			1_\bullet\otimes u &\mapsto u \quad\text{for all }u\in T_+S \\
+			[t_1t_2\cdots t_{n+1}]\otimes u &\mapsto u \quad\text{for all }u\in T_+S \\
+	\end{split}\end{equation} %}
+	ここで、$m_\odot$を中置記法で$\odot$と書いた。
+
+	すべての頂点を$S$の元とする対称な根付きの木の集合を
+	$T_+S$と書く。$T_+S$には空の木を含めない。$T_+S$に空の木を含めたものを
+	$TS$と書く。$TS$の元を次のように、子供の頂点を括弧でくくって書くことに
+	する。
+	\begin{equation}\begin{split} %{
+		\text{空の木} &= 1_{TS}[] = 1_{TS} \\
+		s &= s[] = s \quad\text{for all }s\in S \\
+		\mytree {
+			& s \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
+			*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_n} \\
+		} &= s[t_1t_2\cdots t_n] \quad\text{for all }s\in S,\; t_1,t_2,\dots,t_n\in T_+S \\
+	\end{split}\end{equation} %}
+	$R=(R,+,0,,\myspace,1)$を半環とする。$TS$を基底とする$R$係数半モジュール
+	を$RTS$とする。$RTS$に双線形写像$m_\cdot:RT_+S\otimes RT_+S\to RT_+S$を
+	次のように定義する。
+	\begin{itemize} %{
+		\item $m_\cdot$を中置記法で$\cdot$と書き、
+		\item 任意の$t\in T_+S,\;s\in S$に対して
+		\begin{equation}\begin{split} %{
+			t\cdot s = s[t] \\
+		\end{split}\end{equation} %}
+		とし、
+		\item 任意の$t,t_1,t_2,\dots,t_n\in T_+S,\;s\in S$に対して
+		\begin{equation}\begin{split} %{
+			t\cdot s[t_1t_2\cdots t_n]
+				&= s[tt_1t_2\cdots t_n] + s[t_1tt_2\cdots t_n] 
+				%&\quad + \cdots + s[t_1t_2\cdots tt_n] \\
+				+ \cdots + s[t_1t_2\cdots tt_n] \\
+		\end{split}\end{equation} %}
+		とする。
+	\end{itemize} %}
+
+	根を$\bullet$、根以外の頂点を$S$の元とする対称な根付きの木の集合を$T_\bullet S$、
+	また、$S_\bullet=\set{\bullet}\cup S$とする。
+
+	\begin{definition}[ラベル付き根付き木 (labeled rooted tree)]\label{def:ラベル付き根付き木} %{
+		$S$を集合とする。$S$の元を根以外の頂点とする木を$S$ラベル根付き木という。
+	\end{definition} %def:ラベル付き根付き木}
+
+	$S$ラベル根付き木の集合$TS$は次のようになる。
+	\begin{equation}\begin{split} %{
+		TS &= \Set{\mytree{
+			\bullet
+		}}\cup \Set{\mytree{
+			\bullet \ar@{-}[d] \\
+			s
+		}}_{s\in S} \\
+		&\quad\cup \Set{\mytree{
+			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			s_1 && s_2
+		}}_{s_1,s_2\in S}\cup \Set{\mytree{
+			\bullet \ar@{-}[d] \\
+			s_1 \ar@{-}[d] \\
+			s_2
+		}}_{s_1,s_2\in S}\cup \cdots \\
+	\end{split}\end{equation} %}
+	根付き木というのは、根を固定しない木との対比で用いられる。
+	根を固定しない木は、根付き木に対して次のような同値関係で剰余をとったもの
+	である。
+	木の絵を書くのはしんどいので、次のように行きがけ順に括弧を使って木を
+	表現する。
+	\begin{equation}\begin{split} %{
+		\bullet = [],\; \mytree{
+			\bullet \ar@{-}[d] \\
+			s_1
+		} = [s_1],\; \mytree{
+			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			s_1 && s_2
+		} = [s_1s_2],\; \mytree{
+			\bullet \ar@{-}[d] \\
+			s_1 \ar@{-}[d] \\
+			s_2
+		} = [s_1[s_2]] \\
+		\mytree{
+			&\bullet \ar@{-}[ld] \ar@{-}[d] \ar@{-}[rd] \\
+			s_1 & s_2 & s_3 \\
+		} = [s_1s_2s_3],\; \mytree{
+			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			s_1 \ar@{-}[d] && s_2 \\
+			s_3
+		} = [s_1[s_3]s_2] \\
+		\mytree{
+			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			s_1 && s_2 \ar@{-}[d] \\
+			&& s_3
+		} = [s_1s_2[s_3]] 
+	\end{split}\end{equation} %}
+	$S$を集合、$R$を半環とする。$S$ラベル付き根付き木$TS$を基底とする
+	$R$係数半モジュールを$RTS$と書く。頂点数が$n+1$の$TS$の部分集合を
+	$T_nS$と書き、$T_nS$で張られる$RTS$の部分空間を$RT_nS$と書く。
+	線形写像$\phi$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		\phi:RT_1S\otimes RT_1S &\to RT_2S \\
+		[s_1]\otimes [s_2] &\mapsto [s_1s_2] + [s_1[s_2]] \quad\text{for all }s_1,s_2\in S
+	\end{split}\end{equation} %}
+
+	$WS$をから$S$から生成された自由半群とする。
+	$WS$の元を$s_1,s_2,\dots,s_n\in S$に対して括弧でくくって
+	$[s_1s_2\cdots s_n]$と書き、単語の連結を中置記法で$*$と書く。
+	例えば次のようになる。
+	\begin{equation*}\begin{split} %{
+		[s_1s_2\cdots s_n] &= [s_1]*[s_2]*\cdots*[s_n]
+	\end{split}\end{equation*} %}
+	任意の$n\in \mybf{N}_+$に対して$W^{n+1}S$を$W^nS$から生成された自由半群
+	とする。例えば、$WS,W^2S$は$S$の元を用いて次のように書くことができる。
+	\begin{equation}\begin{split} %{
+		WS &= \set{[s]}_{s\in S}\cup\set{[s_1s_2]}_{s_1,s_2\in S}\cup\cdots \\
+		W^2S &= \set{[[s]]}_{s\in S}\cup\set{[[s_1][s_2]]}_{s_1,s_2\in S}\cup\set{[[s_1s_2]]}_{s_1,s_2\in S}\cup\cdots \\
+	\end{split}\end{equation} %}
+	$W^+S=\cup_{n=1}^\infty W^nS$とする。$W^+S$から生成された自由半群を
+	$TS$と書く。$TS$に対しても$WS$と同様の表記をする。
+	$TS$の元を$w_1,w_2,\dots,w_n\in W^+S$に対して括弧でくくって
+	$[w_1w_2\cdots w_n]$と書き、単語の連結を中置記法で$*$と書く。
+	例えば次のようになる。
+	\begin{equation*}\begin{split} %{
+		[w_1w_2\cdots w_n] &= [w_1]*[w_2]*\cdots*[w_n]
+	\end{split}\end{equation*} %}
+	$TS$に単位元$[]$を加えたものを$\mycal{T}S$と書く。
+
+	$W^2S$を$WS$から生成された自由モノイドを同値関係$[[]]\sim[]$で剰余した
+	ものとする。$W^2S$の単位元$1_*$以外の任意の元は、単位元以外の元
+	$w_1,w_2,\dots,w_n\in WS$を用いて$[w_1w_2\cdots w_n]$と一意に書くことが
+	できる。
+	同様に$W^{n+1}S$を$W^nS$から生成された自由モノイドを同値関係$[[]]\sim[]$で
+	剰余したものとする。
+	\begin{formula}[Picardの再帰法]\label{formula:Picardの再帰法} %{
+		式変形
+		\begin{equation}\begin{split} %{
+			\exp tx &= 1 + tx + \frac{t^2}{2!}x^2 + \cdots \\
+				&= 1 + x(t + \frac{t^2}{2!}x + \cdots) \\
+				&= 1 + x\int_0^t ds (\exp sx) \\
+		\end{split}\end{equation} %}
+		を用いて\eqref{eq:常微分方程式の形式解}を変形すると次のようになる。
+		\begin{equation}\begin{split} %{
+			e^{tv(x)\partial_x}x
+			&= x + (vx)\partial_x\int_{0}^t dse^{sv(x)\partial_x}x \\
+			&= x + \int_{0}^t dse^{sv(x)\partial_x}v(x) \\
+			&= x + \int_{0}^t dsv(e^{sv(x)\partial_x}x) \\
+		\end{split}\end{equation} %}
+		$x_t=e^{tv(x)\partial_x}x$とおくと、更に次のように変形される。
+		\begin{equation}\begin{split} %{
+			x_t &= x + \int_0^t dsv(x_s) \\
+		\end{split}\end{equation} %}
+	\end{formula} %formula:Picardの再帰法}
+	%s2:保留}
+%s1:The Explicit Computation of Integration Algorithms and First Integrals for Ordinary Differential Equations With Polynomial Coefficients Using Trees}
+
 \section{Bialgebra Deformations of Certain Universal Enveloping Algebras}\label{s1:Bialgebra Deformations of Certain Universal Enveloping Algebras} %{
 	論文\cite{url:grossman:deform}に関するメモを書いておく。
 	すべてを理解していないので、断片的なメモになっている。

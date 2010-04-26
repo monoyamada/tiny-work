@@ -62,6 +62,8 @@
 \newcommand{\myxor}{\,\operatorname{xor}\,}
 \newcommand{\myand}{\,\operatorname{and}\,}
 \newcommand{\myspace}{\text{\textvisiblespace}}
+%\newcommand{\mybinom}[2]{\left[{{#1}\atop{#2}}\right]}
+\newcommand{\mybinom}[2]{\genfrac{[}{]}{0pt}{1}{#1}{#2}}
 %
 %category
 %
@@ -70,6 +72,11 @@
 \newcommand{\mydu}{{\myop{du}}}
 %\newcommand{\curry}{\myop{curring}}
 %\newcommand{\mycat}[1]{{\mathbf{#1}}}
+%
+%tree
+%
+%\newcommand{\raisexy}[1]{\raisebox{\depth}[\totalheight][0pt]{\xymatrix{#1}}}
+\newcommand{\mytree}[1]{\raisebox{0.4\totalheight}{\xymatrix@R=4pt@C=0pt{#1}}}
 %
 %program
 %
