@@ -1,0 +1,194 @@
+\section{リスト}\label{s1:リスト} %{
+	$R=(R,+,0,m_R,1)$を可換半環、$A$を有限集合、$WA=(WA,m_*,1_*)$を$A$から
+	生成された自由モノイドとする。ここで、積$m_*$は文字列の連結で定義される。
+	積$m_*$を中置記法で$*$とも書くことにする。$WA$の元を$A$の元を並べたものを
+	括弧でくくって表すことにする。例えば、$a_1,a_2,\dots, a_n\in A$を並べた
+	$WA$の元を$[a_1a_2\cdots a_n]$と書く。
+
+	$RWA$を$WA$を基底とする$R$係数半モジュールとする。$WA$の積$m_*$を$R$線形
+	に拡張して$RWA$の積としたものを同じ記号$m_*$で書き、中置記法で$*$とも書く。
+	さらに、中置記法$*$をテンソル積に対して次のように定義する。
+	\begin{equation}\begin{split} %{
+		&(w_{11}\otimes w_{12}\otimes\cdots\otimes w_{1m})
+		*(w_{21}\otimes w_{22}\otimes\cdots\otimes w_{2m}) \\
+		&\quad= (w_{11}*w_{21})\otimes (w_{12}*w_{22})\otimes\cdots\otimes (w_{1m}*w_{2m}) \\
+		&\quad\text{for all }w_{11},w_{12},\dots,w_{1m},w_{21},w_{22},\dots,w_{2m}\in WA
+	\end{split}\end{equation} %}
+	積$m_*$に双対で、任意の$a\in A$に対して
+	$\Delta_*[a]=[a]\otimes 1_*+1_*\otimes [a]$となる余積$\Delta_*$を求める。
+	任意の$a_1,a_2,\dots,a_m\in A$に対して次の式が成り立つ必要がある。
+	\begin{equation}\begin{split} %{
+		\Delta_*[a_1a_2\cdots a_m] &= (\Delta_*[a_1])*(\Delta_*[a_2])*\cdots*(\Delta_*[a_m]) \\
+		&= [a_1a_2\cdots a_m]\otimes 1_* \\
+		&\; + \sum_{1\le i\le n}[a_1a_2\cdots a_m]_{\neg{\set{i}}}\otimes [a_i] \\
+		&\; + \sum_{1\le i<j\le n}[a_1a_2\cdots a_m]_{\neg{\set{i,j}}}\otimes [a_ia_j] \\
+		&\; + \cdots \\
+		&\; + 1_*\otimes [a_1a_2\cdots a_m] \\
+	\end{split}\end{equation} %}
+	ここで、任意の$1\le i_1<i_2<i_n\le m$に対して
+	$[a_1a_2\cdots a_m]_{\neg\set{i_1,i_2,\dots,i_n}}$を$[a_1a_2\cdots a_m]$
+	から$i_1$番目と$i_2$番目と...と$i_n$番目の文字を取り除いた文字列とした。
+	例えば、$[abc]_{\neg\set{1}}=[bc]$、$[abc]_{\neg\set{2}}=[ac]$、
+	$[abc]_{\neg\set{1,3}}=[b]$となる。更に、余単位射を
+	$\epsilon_*:w\mapsto \jump{w=1_*}$で定めると、単位元$1_*$に対する余積が
+	$\Delta_*1_*=1_*\otimes 1_*+\cdots$という形になる必要がある。
+	一方、双対性$\Delta_*[a]=(\Delta_*1_*)*(\Delta_*[a])$を満たすためには、
+	$\Delta_*1_*=1_*\otimes 1_*$となる必要があることがわかる。まとめると、
+	次のようになる。
+
+	\begin{definition}[文字列の連結に双対な余積]\label{def:文字列の連結に双対な余積} %{
+		次の余積$\Delta_*$は積$m_*$に双対になる。
+		\begin{equation}\begin{split} %{
+			\Delta_*: RWA\otimes RWA &\to RWA \\
+			1_* &\mapsto 1_*\otimes 1_* \\
+			[a_1a_2\cdots a_m] &\mapsto (\Delta_*[a_1])*(\Delta_*[a_2])*\cdots*(\Delta_*[a_m]) \\
+			&= [a_1a_2\cdots a_m]\otimes 1_* \\
+			&\; + \sum_{1\le i\le n}[a_1a_2\cdots a_m]_{\neg{\set{i}}}\otimes [a_i] \\
+			&\; + \sum_{1\le i<j\le n}[a_1a_2\cdots a_m]_{\neg{\set{i,j}}}\otimes [a_ia_j] \\
+			&\; + \cdots \\
+			&\; + 1_*\otimes [a_1a_2\cdots a_m] \\
+		\end{split}\end{equation} %}
+		次の線形写像$\epsilon_*$は余積$\Delta_*$の余単位射となる。
+		\begin{equation}\begin{split} %{
+			\epsilon_*: RWA &\to R \\
+				w &\mapsto \jump{w=1_*} \\
+		\end{split}\end{equation} %}
+	\end{definition} %def:文字列の連結に双対な余積}
+
+	\begin{proposition}[$\Delta_*$は余可換]\label{prop:Delta_*は余可換} %{
+		$\Delta_*$は余可換である。
+	\end{proposition} %prop:Delta_*は余可換}
+	\begin{proof} %{
+		文字数についての帰納法で証明する。
+		$\Delta_*11_*=1_*\otimes 1_*$だから、文字数が$0$の場合は余可換となる
+		ことがわかる。
+		任意の$a\in A$に対して$\Delta_*1[a]=[a]\otimes 1_*+[a]\otimes 1_*$
+		だから、文字数が$1$の場合も余可換となることがわかる。
+		文字数が$n\in\mybf{N}\bou 1\le n$以下の任意の単語に対して$\Delta\*$が
+		余可換だとする。
+		\begin{equation*}\begin{split} %{
+			\Delta_*^{(1)}w\otimes\Delta_*^{(2)}w
+			=\Delta_*^{(2)}w\otimes\Delta_*^{(1)}w
+			\quad\text{for all }w\in WA\bou \zettai{w}\le n
+		\end{split}\end{equation*} %}
+		$w_1,w_2$を文字数が$n$以下の単語とする。次の式から単語$w_1*w_2$は
+		余可換になることがわかる。
+		\begin{equation*}\begin{split} %{
+			\Delta_*(w_1*w_2) &= (\Delta_*w_1)*(\Delta_*w_2) \\
+			&= \left((\Delta_*^{(1)}w_1)*(\Delta_*^{(1)}w_2)\right)
+			\otimes \left((\Delta_*^{(2)}w_1)*(\Delta_*^{(2)}w_2)\right) \\
+			&= \left((\Delta_*^{(2)}w_1)*(\Delta_*^{(2)}w_2)\right)
+			\otimes \left((\Delta_*^{(1)}w_1)*(\Delta_*^{(1)}w_2)\right) \\
+			& = \left(\Delta_*^{(2)}(w_1*w_2)\right)
+			\otimes \left(\Delta_*^{(1)}(w_1*w_2)\right) \\
+		\end{split}\end{equation*} %}
+		任意の$n+1$文字の単語$w$は、ある$1$文字の単語$x$とある$n$文字の単語$y$
+		の積$w=x*y$で書くことができるので、任意の$n+1$文字の単語に対する
+		余積$\Delta_*$は余可換となることがわかる。
+	\end{proof} %}
+
+	この証明で用いた事柄は次のものである。
+	\begin{itemize} %{
+		\item 任意の$m+n$文字の単語は、ある$m$文字の単語とある$n$文字の単語の積
+		で書くことができる。
+		\item 積$m_*$と余積$\Delta_*$が双対である。
+		\item $0$文字の単語に対する余積$\Delta_*$が余可換である。
+		\item $1$文字の単語に対する余積$\Delta_*$が余可換である。
+	\end{itemize} %}
+	したがって、
+	\begin{itemize} %{
+		\item 積$m_*$と双対になり、
+		\item $0$文字と$1$文字の単語に対する余積$\Delta_*$が余可換
+	\end{itemize} %}
+	となる任意の余積は余可換となる。
+
+	ここで、余可換な余積について調べる。$\Delta$を一般の余積とすると、
+	余結合性より、$\Delta^2$を次のように定義することができる。
+	\begin{equation*}\begin{split} %{
+		\Delta^2w=(\Delta\otimes\myid)\Delta w=(\myid\otimes\Delta)\Delta w
+	\end{split}\end{equation*} %}
+	同様にして、$\Delta^2$を次のように定義することができる。
+	\begin{equation*}\begin{split} %{
+		\Delta^3w
+		&=(\Delta\otimes\myid\otimes\myid)(\Delta\otimes\myid)\Delta w \\
+		&=(\myid\otimes\Delta\otimes\myid)(\Delta\otimes\myid)\Delta w \\
+		&=(\myid\otimes\myid\otimes\Delta)(\Delta\otimes\myid)\Delta w \\
+		&=(\Delta\otimes\myid\otimes\myid)(\myid\otimes\Delta)\Delta w \\
+		&=(\myid\otimes\Delta\otimes\myid)(\myid\otimes\Delta)\Delta w \\
+		&=(\myid\otimes\myid\otimes\Delta)(\myid\otimes\Delta)\Delta w \\
+	\end{split}\end{equation*} %}
+	任意の$n\in\mybf{N}\bou 1\le n$に対して、$\Delta^n$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\Delta^nw = \Delta^{(1)}w\otimes \Delta^{(1)}\Delta^{(2)}w\otimes 
+		\cdots\otimes \Delta^{(1)}\Delta^{(2)(n-1)}w\otimes \Delta^{(2)n}w
+	\end{split}\end{equation*} %}
+	この式を次の二分木で表すことにする。
+	\begin{equation}\label{eq:余積の二分木}
+		\Delta^nw = \xymatrix@R=1pc@C=1pc{
+			w \ar[r]\ar[d] & \Delta^{(2)}w \ar[r]\ar[d] 
+			& \cdots \ar[r] & \Delta^{(2)(n-1)} \ar[r]\ar[d] & \Delta^{(2)n}w \\
+			\Delta^{(1)}w & \Delta^{(1)}\Delta^{(2)}w 
+			& \cdots & \Delta^{(1)}\Delta^{(2)(n-1)}w \\
+		}
+	\end{equation}
+	この木のどの葉に対して余積$\Delta$をとっても、余結合性により次の図のよう
+	になり、最終的に図\eqref{eq:余積の二分木}の二分木の形になる。
+	\begin{equation*}\begin{split} %{
+		&\xymatrix@R=1pc@C=1pc{
+			\cdots \ar[r] & \Delta^{(2)k}w \ar[r]\ar[d] & \Delta^{(2)(k+1)} \ar[r]\ar[d] & \cdots \\
+			& \Delta^{(1)}\Delta^{(2)k}w \ar[ld]\ar[rd] & \Delta^{(1)}\Delta^{(2)(k+1)}w \\
+			\Delta^{(1)}\Delta^{(1)}\Delta^{(2)(k+1)}w && \Delta^{(2)}\Delta^{(1)}\Delta^{(2)(k+1)}w \\
+		} \\
+		\\
+		&= \xymatrix@R=1pc@C=1pc{
+			\cdots \ar[r] & \Delta^{(2)k}w \ar[r]\ar[d] & \Delta^{(2)(k+1)} \ar[r]\ar[d] & \cdots \\
+			& \Delta^{(1)}\Delta^{(2)k}w & \Delta^{(1)}\Delta^{(2)(k+1)}w \ar[ld]\ar[rd] \\
+			& \Delta^{(1)}\Delta^{(1)}\Delta^{(2)k}w && \Delta^{(2)}\Delta^{(1)}\Delta^{(2)k}w \\
+		} \\
+	\end{split}\end{equation*} %}
+	$WA$の基底を$\set{e_0,e_1,\cdots}$とおき、$R$値行列$\Delta_i^{jk}$を
+	用いて$\Delta e_i=\Delta_i^{jk}e_j\otimes e_k$とする。
+	余積$\Delta$の余結合性から、
+	$\Delta_i^{ja}\Delta_a^{kl}=\Delta_a^{jk}\Delta_i^{al}$という式を満たす。
+	図\eqref{eq:余積の二分木}による$\Delta^n$の表し方は、
+	$(\Delta^3)_i^{jklm}=\Delta_i^{ja}\Delta_a^{kb}\Delta_b^{lm}$
+	という縮約のとり方を指定していることに対応する。
+	
+	余積$\Delta$が余可換であった場合、$\Delta_i^{jk}=\Delta_i^{kj}$となる。
+	$\Delta^2$についてみてみる。
+	$(\Delta^2)_i^{jkl}=\Delta_i^{ja}\Delta_a^{kl}$となるが、
+	$(\Delta^2)_i^{jkl}$の添え字$(kl)$について対称なことは、
+	余積$\Delta$が余可換であることからわかる。また、余結合性
+	$\Delta_i^{ja}\Delta_a^{kl}=\Delta_a^{jk}\Delta_i^{al}$を使うと、
+	$(\Delta^2)_i^{jkl}$の添え字$(jk)$について対称なこともわかる。
+	したがって、$(\Delta^2)_i^{jkl}$の添え字は$(jkl)$の任意の置換によって
+	不変になっていることがわかる。テンソル積$\otimes$の記法を用いて
+	$\Delta^nw=w_{(1)}\otimes w_{(2)}\otimes\cdots\otimes w_{(n+1)}$
+	と書くと、$n+1$次の任意の置換$\sigma$に対して
+	$\Delta^nw=w_{(\sigma1)}\otimes w_{(\sigma2)}\otimes\cdots\otimes w_{\left(\sigma(n+1)\right)}$
+	となる。
+
+	次の$R$線形写像$\Delta_\amalg$は余積になる。
+	\begin{equation}\begin{split} %{
+		\Delta_\amalg: RWA &\to RWA\otimes RWA \\
+			[a_1a_2\cdots a_{m-1}a_m] 
+				&\mapsto [a_1a_2\cdots a_{m-1}a_m]\otimes 1_* \\
+				&\quad + [a_1a_2\cdots a_{m-1}]\otimes [a_m] \\
+				&\quad + \cdots \\
+				&\quad + [a_1]\otimes [a_2\cdots a_{m-1}a_m] \\
+				&\quad + 1_*\otimes [a_1a_2\cdots a_{m-1}a_m] \\
+	\end{split}\end{equation} %}
+	余積$\Delta_\amalg$に対する余単位射は$\epsilon_*$となる。
+
+	\begin{todo}[余積から積の導出]\label{todo:余積から積の導出} %{
+		与えられた余積と双対になる積を導出する方法を考える。
+		逆の場合の、与えられた積に双対になる余積の導出は、文字数の小さいもの
+		から大きなものを順の求めていけばよい。
+		一般に、積$m_\odot$に双対な余積$\Delta_\odot$は次のようになる。
+		\begin{equation}\begin{split} %{
+			\Delta_\odot(w_1\odot w_2) &= (\Delta_\odot w_1)\odot(\Delta_\odot w_2) \\
+		\end{split}\end{equation} %}
+		したがって、積$m_\odot$が文字数を保存する場合には、文字数の小さいもの
+		から大きなものへと余積$\Delta_\odot$が順に求まる。
+	\end{todo} %todo:余積から積の導出}
+%s1:リスト}

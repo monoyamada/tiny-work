@@ -1,3 +1,474 @@
+\section{木}\label{s1:木} %{
+	$S$を集合、$TS$を$S$を頂点に持つ木の集合とする。
+	$TS$の同値関係は、子供の頂点の並びまで含めるものする。
+	例えば、次のような同値関係とする。
+	\begin{equation*}\begin{split} %{
+		\mytree{
+			& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			s_1 && s_2 \\
+		} = \mytree{
+			& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			s_2 && s_1 \\
+		} \iff s_1 = s_2
+	\end{split}\end{equation*} %}
+	$TS$には空の木を含めないものとする。
+	木を次の図のように子供の頂点を括弧でくくって表すことにする。
+	\begin{equation*}\begin{split} %{
+		s_0[s_1[s_3]s_2[]] := \mytree{
+			& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			s_1 \ar@{-}[d] && s_2 \\
+			s_3 \\
+		}
+	\end{split}\end{equation*} %}
+	木$t\in TS$の頂点の集合を$\set{t}\subseteq S$と書く。
+	$WTS=(TS,m_*,1_*)$を$TS$から生成された自由モノイドとする。
+	$WTS$の元を$TS$の元を並べて括弧でくくって表すことにする。
+	例えば、$t_1,t_2,\dots,t_m\in TS$に対して$[t_1t_2\cdots t_m]$と書く。
+	$m_*$は文字列の連結で、$1_*$は空文字である。
+	$WTS$の元を枝と言うことにする。
+	枝$w\in WTS$の頂点の集合を$\set{w}\subseteq S$と書く。
+	木から頂点を取り除いてできる枝を木の枝ということにする。
+	例えば、$t_1,t_2,\dots,t_m\in TS$に対して、枝$[t_1t_2\cdots t_m]$は、
+	任意の$s\in S$を頂点とする木$s[t_1t_2\cdots t_m]$の枝となる。
+
+	写像$\myop{tree}$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		\myop{tree}: S\times WTS &\to TS \\
+		s\times w &\mapsto sw \\
+	\end{split}\end{equation} %}
+	写像$\myop{tree}$は集合同型となる。$\myop{tree}$の逆写像を
+	$\myop{tree}^{^1}$書く。
+	\begin{equation}\begin{split} %{
+		\myop{tree}^{-1}: TS &\to S\times WTS \\
+		sw &\mapsto s\times w \\
+	\end{split}\end{equation} %}
+	木から根を取り出す操作を$\myop{root}=\pi_1\myop{tree}^{-1}$、
+	木から根の子供達を$\myop{branch}=\pi_2\myop{tree}^{-1}$と書く。
+
+	$R=(R,+,0,\myspace,1)$を半環とする。
+	$RS$を$S$を基底とする$R$係数半モジュール、
+	$RTS$を$TS$を基底とする$R$係数半モジュール、
+	$RWTS$を$WTS$を基底とする$R$係数半モジュールとする。
+	文字列の連結$m_*:WTS\times WTS\to WTS$を$R$線形に$RWTS$に拡張したものを
+	同一の記号$m_*$で書くことにする。積$m_*$に双対になる余積$\Delta_*$を次の
+	ように定義する。
+	\begin{equation}\begin{split} %{
+		\Delta_*: RWTS\otimes RWTS &\to RWTS \\
+			[t_1t_2\cdots t_m] &\mapsto [t_1t_2\cdots t_m]\otimes 1_* \\
+				&\quad + \sum_{1\le i\le m}[t_1t_2\cdots t_m]\neg\set{i}\otimes [t_i] \\
+				&\quad + \sum_{1\le i<j\le m}[t_1t_2\cdots t_m]\neg\set{i,j}\otimes [t_it_j] \\
+				&\quad + \cdots \\
+				&\quad + \sum_{1\le i<j\le m}[t_i]\otimes [t_1t_2\cdots t_m]\neg\set{i} \\
+				&\quad + \sum_{1\le i<j\le m}1_*\otimes [t_1t_2\cdots t_m] \\
+	\end{split}\end{equation} %}
+	ここで、$[t_1t_2\cdots t_m]\neg{i_1,i_2,\dots,i_p}$は$[t_1t_2\cdots t_m]$
+	から$i_1,i_2,\dots,i_p$番目の文字を除いた単語とする。
+	例えば、次のようになる。
+	\begin{equation*}\begin{split} %{
+		[t_1t_2t_3]\neg\set{1} &= [t_2t_3] \\
+		[t_1t_2t_3]\neg\set{1,3} &= [t_2] \\
+		[t_1t_2t_3]\neg\set{1,2,3} &= [] \\
+	\end{split}\end{equation*} %}
+	余積$\Delta_*$に対する余単位射$\epsilon_*$は次のようになる。
+	\begin{equation}\begin{split} %{
+		\epsilon_*: RTW &\to R \\
+		w &\mapsto \begin{cases} %{
+			1, &\text{ iff }w=1_* \\
+			0, &\text{ otherwise } \\
+		\end{cases} %}
+	\end{split}\end{equation} %}
+
+	$RTS$に積を定義するための準備をする。
+
+	\begin{definition}[頂点を指定した接木]\label{def:頂点を指定した接木} %{
+		$S$を集合、$TS$を$S$を頂点にもつ木の集合とする。
+		$t\in TS$の頂点$i\in \set{t}$の最後の子供に木$t_1\in TS$を付け加える
+		操作を$t_1$の頂点$i$への接木ということにする。
+	\end{definition} %def:頂点を指定した接木}
+
+	ラベルによらずに頂点の位置を表すために頂点を'頂点の位置:ラベル'
+	という形で書いて、接木を図示すると次のようになる。
+	\begin{equation*}\begin{split} %{
+		\mytree{
+			& 0:s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			1:s_1 \ar@{-}[d] && 3:s_3 \\
+			2:s_2 \\
+		} \lhd_{1} \mytree{
+			& r_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			r_1 && r_2 \\
+		} &= \mytree{
+			&& 0:s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			& 1:s_1 \ar@{-}[dl] \ar@{-}[dr] && 3:s_3 \\
+			2:s_2 && r_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			& r_1 && r_2 \\
+		}
+	\end{split}\end{equation*} %}
+
+	すべての頂点にわたって接木をする操作を定義する。
+
+	\begin{definition}[木への接木]\label{def:木への接木} %{
+		$S$を集合、$R$を半環とする。$TS$を$S$頂点木の集合、$RTS$を$TS$を
+		基底とする$R$係数自由半モジュールとする。
+		$t\in TS$に対して、頂点$i\in \set{t}$への接木を$\lhd_i$と書く。
+		次の$R$双線形写像$\lhd$を木への接木ということにする。
+		\begin{equation}\begin{split} %{
+			\lhd: RTS\otimes RTS &\to RTS \\
+				t\otimes u &\mapsto \sum_{i\in \set{t}}t\lhd_{i}u
+				\quad\text{for all }t,u\in TS
+		\end{split}\end{equation} %}
+	\end{definition} %def:木への接木}
+
+	木への接木を図示すると次のようになる。
+	\begin{equation*}\begin{split} %{
+		\mytree{
+			& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			s_1 \ar@{-}[d] && s_3 \\
+			s_2 \\
+		} \lhd \mytree{
+			& r_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			r_1 && r_2 \\
+		} &= \mytree{
+			& s_0 \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+			s_1 \ar@{-}[d] & s_3 & r_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			s_2 & r_1 && r_2 \\
+		} + \mytree{
+			&& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			& s_1 \ar@{-}[dl] \ar@{-}[dr] && s_3 \\
+			s_2 && r_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			& r_1 && r_2 \\
+		} \\
+		&+ \mytree{
+			&& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			& s_1 \ar@{-}[d] && s_3 \\
+			& s_2 \ar@{-}[d] \\
+			& r_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			r_1 && r_2 \\
+		} + \mytree{
+			& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			s_1 \ar@{-}[d] && s_3 \ar@{-}[d] \\
+			s_2 && r_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			& r_1 && r_2 \\
+		}
+	\end{split}\end{equation*} %}
+
+	木への接木を枝による接木に拡張する。
+
+	\begin{definition}[枝による木への接木]\label{def:枝による木への接木} %{
+		$S$を集合、$R$を半環とする。$TS$を$S$頂点木の集合、
+		$WTS$を$TS$から生成された自由モノイド、
+		$RTS$を$TS$を基底とする$R$係数自由半モジュール、
+		$RWTS$を$WTS$を基底とする$R$係数自由半モジュールとする。
+		$t\in TS$の頂点$i\in \set{t}$への接木を$\lhd_i$と書く。
+		次の$R$双線形写像$\lhd$を枝による木への接木または単に木への接木
+		ということにする。
+		\begin{equation}\begin{split} %{
+			\lhd: RTS\otimes RWTS &\to RTS \\
+				t\otimes 1_* &\mapsto t \quad\text{for all }t\in TS \\
+				t\otimes [t_1t_2\cdots t_m] 
+				&\mapsto \sum_{i_1,i_2,\dots,i_m\in\set{t}}t\lhd_{i_1}t_1\lhd_{i_2}t_2\cdots\lhd_{i_m}t_m \\
+				&\quad\text{for all }t,t_1,t_2,\dots,t_m\in TS \\
+		\end{split}\end{equation} %}
+	\end{definition} %def:枝による木への接木}
+
+	木への接木は根を不変に保つので、次の式により$R$双線形二項演算
+	$\sqcup$を定義することができる。
+	\begin{equation}\begin{split} %{
+		(sw_1)\lhd w_2 = s(w_1\sqcup w_2)\quad\text{for all }s\in S,\;w_1,w_2\in WTS
+	\end{split}\end{equation} %}
+	前置記号を用いて書くと次のようになる。
+	\begin{equation}\begin{split} %{
+		\mybiop{\lhd}
+		= \myop{tree}(\myid\otimes\mybiop{\sqcup})(\myop{tree}^{-1}\otimes\myid)
+	\end{split}\end{equation} %}
+
+	$\sqcup$を計算してみる。
+	任意の$s\in S$、$w\in WTS$に対して次のようになる。
+	\begin{equation}\begin{split} %{
+		(s[])\lhd w=sw &\implies 1_*\sqcup w=w \\
+		(sw)\lhd 1_*=sw &\implies w\sqcup 1_*=w \\
+	\end{split}\end{equation} %}
+	任意の$s\in S$、$t,t_1,t_2,\dots,t_m\in TS$と任意の$1_*$でない$w\in WTS$
+	に対しては次の式が成り立つ。
+	\begin{equation}\begin{split} %{
+		(sw)\lhd[t_1t_2\cdots t_m]
+			&= \sum_{i_1,i_2,\dots,i_m\in\set{s}\cup\set{w}}(sw)\lhd_{i_1}t_1\lhd_{i_2}t_2\cdots\lhd_{i_m}t_m \\
+			&= (sw)\lhd_{s}[t_1t_2\cdots t_m] \\
+			&\;+ \sum_{1\le i\le m}(sw)\lhd_{s}[t_1t_2\cdots t_m]_{\neg\set{i}}\lhd_{\set{w}}[t_i] \\
+			&\;+ \sum_{1\le i<j\le m}(sw)\lhd_{s}[t_1t_2\cdots t_m]_{\neg\set{i,j}}\lhd_{\set{w}}[t_it_j] \\
+			&\;+ \cdots \\
+			&\;+ (sw)\lhd_{\set{w}}[t_1t_2\cdots t_m] \\
+	\end{split}\end{equation} %}
+	ここで、木$t\in TS$の頂点の部分集合$v\in\set{t}$に対して
+	$t\lhd_v[t_1t_2\cdots t_m]$を次のようにおいた。
+	\begin{equation}\begin{split} %{
+		t\lhd_v[t_1t_2\cdots t_m] 
+		&= \sum_{i_1,i_2,\dots,i_m\in v}t\lhd_{i_1}t_1\lhd_{i_2}t_2\cdots\lhd_{i_m}t_m
+	\end{split}\end{equation} %}
+	したがって、$\sqcup$は任意の$t,t_1,t_2,\dots,t_m\in TS$と任意の$1_*$で
+	ない$w\in WTS$に対して次のようになることがわかる。
+	\begin{equation}\label{eq:接木による積}\begin{split} %{
+		w\sqcup[t_1t_2\cdots t_m]
+		&= w\lhd[t_1t_2\cdots t_m] \\
+		&\;+ \sum_{1\le i\le m}(w\lhd[t_1t_2\cdots t_m]_{\neg\set{i}})*[t_i] \\
+		&\;+ \sum_{1\le i<j\le m}(w\lhd[t_1t_2\cdots t_m]_{\neg\set{i,j}})*[t_it_j] \\
+		&\;+ \cdots \\
+		&\;+ w*[t_1t_2\cdots t_m] \\
+	\end{split}\end{equation} %}
+	ここで、$w_1,w_2\in WTS$に対して$w_1\lhd w_2$を$w_1$のすべての頂点に
+	接木をした和とした。任意の$t\in TS$、$w\in WTS$に対して
+	$[t]\lhd w=[t\lhd w]$となり、
+	任意の$t,u_1,u_2,\dots,u_m\in TS$、任意の$1_*$でない$w\in WTS$に対して
+	次の再帰式を満たす。
+	\begin{equation*}\begin{split} %{
+		&([t]*w)\lhd [u_1u_2\cdots u_m] \\
+		&= ([t]\lhd 1_*)*(w\lhd [u_1u_2\cdots u_m]) \\
+		&\;+ \sum_{1\le i\le m}([t]\lhd[u_i])*(w\lhd [u_1u_2\cdots u_m]_{\neg\set{i}}) \\
+		&\; + \sum_{1\le i<j\le m}([t]\lhd[u_iu_j])*(w\lhd [u_1u_2\cdots u_m]_{\neg\set{i,j}}) \\
+		&\; + \cdots \\
+		&\; + ([t]\lhd [u_1u_2\cdots u_m])*(w\lhd 1_*) \\
+	\end{split}\end{equation*} %}
+	この式は、任意の$1_*$でない$w_1,w_2\in WTS$と任意の$w_3\in WTS$に対する
+	次の再帰式にまとまる。
+	\begin{equation}\label{eq:枝同士の接木}\begin{split} %{
+		(w_1*w_2)\lhd w_3 = \left(w_1\lhd (\Delta_*^{(1)}w_3)\right)*\left(w_1\lhd (\Delta_*^{(2)}w_3)\right) \\
+	\end{split}\end{equation} %}
+	さらに、任意の$w\in WTS$に対して$1_*\lhd w=\jump{w=1_*}1_*$と定義すると、
+	式\eqref{eq:枝同士の接木}は、任意の$t\in TS,\;w\in WTS$に対して
+	$[t]\lhd w=[t\lhd w]$を満たす。改めて、枝同士の接木$\lhd$を定義しておく。
+
+	\begin{definition}[枝への接木]\label{def:枝への接木} %{
+		$S$を集合、$R$を半環とする。$TS$を$S$頂点木の集合、
+		$WTS$を$TS$から生成された自由モノイド、
+		$RTS$を$TS$を基底とする$R$係数自由半モジュール、
+		$RWTS$を$WTS$を基底とする$R$係数自由半モジュールとする。
+		$t\in TS$の頂点$i\in \set{t}$への接木を$\lhd_i$と書く。
+		次の$R$双線形写像$\lhd$を枝による枝への接木または単に枝への接木
+		ということにする。
+		\begin{equation}\begin{split} %{
+			\lhd: RWTS\otimes RWTS &\to RWTS \\
+			1_*\otimes w &\mapsto \begin{cases} %{
+				1_*, &\text{ iff }w=1_* \\
+				0, &\text{ otherwise } \\
+			\end{cases} %}
+			\quad\text{for all }w\in WTS \\
+			[t]\otimes w &\mapsto [t\lhd w] \quad\text{for all }t\in TS,\;w\in WTS \\
+			(w_1*w_2)\otimes w &\mapsto \left(w_1\lhd(\Delta_*^{(1)}w)\right) * \left(w_2\lhd(\Delta_*^{(2)}w)\right) \\
+			& \quad\text{for all }w_1,w_2,w\in WTS \\
+		\end{split}\end{equation} %}
+	\end{definition} %def:枝への接木}
+
+	枝への接木を用いると、式\eqref{eq:接木による積}により、
+	任意の枝$w_1,w_2\in WTS$に対して次の式が成り立つことがわかる。
+	\begin{equation}\begin{split} %{
+		w_1\sqcup w_2 &= \left(w_1\lhd(\Delta_*^{(2)}w_2)\right)*(\Delta_*^{(1)}w_2)
+	\end{split}\end{equation} %}
+	前置記号で書くと次のようになる。
+	\begin{equation}\begin{split} %{
+		\mybiop{\sqcup} = m_*(\mybiop{\lhd}\otimes\myid)\sigma_{23}(\myid\otimes\Delta_*)
+	\end{split}\end{equation} %}
+
+	$\sqcup$の結合性を調べる。まず、任意の$w_1,w_2,w_3\in WTS$に対して
+	次の式が成り立つ。
+	\begin{equation}\begin{split} %{
+		(w_1\sqcup w_2)\sqcup w_3 
+		&= \left((w_1\sqcup w_2)\lhd (\Delta_*^{(2)}w_3)\right)*(\Delta_*^{(1)}w_3) \\ 
+		&= x_1*x_2*x_3 \\
+		x_1 &= \left(w_1\lhd(\Delta_*^{(2)}w_2)\right)\lhd(\Delta_*^{(1)}\Delta_*^{(2)}w_3) \\
+		x_2 &= (\Delta_*^{(1)}w_2)\lhd(\Delta_*^{(2)}\Delta_*^{(2)}w_3) \\
+		x_3 &= \Delta_*^{(1)}w_3 \\
+	\end{split}\end{equation} %}
+	一方、$w_1\sqcup(w_2\sqcup w_3)$は次のようになるが、
+	\begin{equation}\label{eq:接木の積の結合性その一}\begin{split} %{
+		w_1\sqcup(w_2\sqcup w_3) 
+		&= \left(w_1\lhd\left(\Delta_*^{(2)}(w_2\sqcup w_3)\right)\right)*\left(\Delta_*^{(1)}(w_2\sqcup w_3)\right) \\ 
+	\end{split}\end{equation} %}
+	次の式が成り立つから、
+	\begin{equation}\begin{split} %{
+		&\Delta_*(w_2\sqcup w_3) \\
+		&= \left((\Delta_*^{(1)}w_2)\sqcup(\Delta_*^{(1)}w_3)\right)
+		\otimes \left((\Delta_*^{(2)}w_2)\sqcup(\Delta_*^{(2)}w_3)\right) \\
+		&= \left(\left((\Delta_*^{(1)}w_2)\lhd(\Delta_*^{(2)}\Delta_*^{(1)}w_3)\right)*(\Delta_*^{(1)}\Delta_*^{(1)}w_3)\right)\otimes \left((\Delta_*^{(2)}w_2)\sqcup(\Delta_*^{(2)}w_3)\right) \\
+		&= \left(\left((\Delta_*^{(1)}w_2)\lhd(\Delta_*^{(1)}\Delta_*^{(2)}w_3)\right)*(\Delta_*^{(1)}w_3)\right)\otimes \left((\Delta_*^{(2)}w_2)\sqcup(\Delta_*^{(2)}\Delta_*^{(2)}w_3)\right) \\
+	\end{split}\end{equation} %}
+	式\eqref{eq:接木の積の結合性その一}は次のようになる。
+	\begin{equation}\begin{split} %{
+		w_1\sqcup(w_2\sqcup w_3) &= y_1*y_2*x_3 \\
+		y_1 &= w_1\lhd\left((\Delta_*^{(2)}w_2)\sqcup(\Delta_*^{(2)}\Delta_*^{(2)}w_3)\right) \\
+		y_2 &= (\Delta_*^{(1)}w_2)\lhd(\Delta_*^{(1)}\Delta_*^{(2)}w_3) \\
+	\end{split}\end{equation} %}
+	さらに、が余対称であることを使うと式\eqref{eq:接木の積の結合性その一}は
+	次のようになる。
+	\begin{equation}\begin{split} %{
+		w_1\sqcup(w_2\sqcup w_3) &= z_1*x_2*x_3 \\
+		z_1 &= w_1\lhd\left((\Delta_*^{(2)}w_2)\sqcup(\Delta_*^{(1)}\Delta_*^{(2)}w_3)\right) \\
+	\end{split}\end{equation} %}
+
+	until
+
+	枝$w\in WTS$の木$t\in TS$の頂点$s\in \set{t}$への接木を中置記法で
+	$t\lhd_{s}w$と書く。$s_0,s_1,s_2,s_3\in S$、$t\in TS$として、
+	接木$\lhd_{s_1}$を図示すると次のようになる。
+	\begin{equation*}\begin{split} %{
+		\mytree{
+			& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			s_1 \ar@{-}[d] && _2 \\
+			s_3 \\
+		}\lhd_{s_1} [t_1t_2] &= \mytree{
+			&& s_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			& s_1 \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] && s_2 \\
+			s_3 & *+[F]{t_1} & *+[F]{t_2} \\
+		}
+	\end{split}\end{equation*} %}
+
+	\begin{definition}[自然な成長]\label{def:自然な成長} %{
+		を
+		$R$双線形写像$\lhd_T$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			\mathchar`-\lhd_T\mathchar`- : RTS\otimes RWTS &\to RTS \\
+				t\otimes 1_* &\mapsto t \quad\text{for all }t\in TS \\
+				t\otimes [t_1t_2\cdots t_m] &\mapsto \sum_{s_1,s_2,\dots,s_m\in \set{t}}t \lhd_{s_1} t_1 \lhd_{s_2} t_2 \cdots \lhd_{s_m} t_m \\
+				&\quad\text{for all }t,t_1,t_2,\dots,t_m\in TS \\
+		\end{split}\end{equation} %}
+		$t\lhd_T w$を枝$w$による自然な成長ということにする。
+	\end{definition} %def:自然な成長}
+
+	until
+
+	木$t\in TS$の頂点の部分集合$v\subseteq \set{t}$に対して$\lhd_v$を
+	次のように定義する。
+	\begin{equation}\begin{split} %{
+		t\lhd_v w = \sum_{s\in v} t\lhd_s w 
+		\quad\text{for all }w\in WTS,\; v\in \set{t}
+	\end{split}\end{equation} %}
+	自然な成長は木の頂点を変えず頂点を保存する。任意の$t\in TS$、
+	$w\in WTS$、$v\subseteq \set{t}$に対して次のようになる。
+	\begin{equation*}\begin{split} %{
+		\myop{root}(t\lhd_{v} w) &= \myop{root}t \\
+		\set{t\lhd_{v} w} &= \set{t}\cup \set{w} \\
+	\end{split}\end{equation*} %}
+	自然な成長を用いて、$R$双線形な二項演算
+	$\mathchar`-\sqcup\mathchar`-:RWT\otimes RWT\to RWT$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		(sw_1)\lhd_{\set{t}} w_2 = s(w_1\sqcup w_2) \quad\text{for all }s\in S,\;w_1,w_2\in WTS \\
+	\end{split}\end{equation} %}
+	木$t\in TS$のすべての頂点に対する接木の和$\lhd_{\set{t}}$は、
+	任意の$t_1,t_2,\dots,t_m\in TS$に対して次のようになる。
+	\begin{equation*}\begin{split} %{
+		&t\lhd_{\set{t}}[t_1t_2\cdots t_m] \\
+		&= \sum_{s\in \set{t}}t\lhd_s[t_1t_2\cdots t_m] \\
+		&= t\lhd_{\myop{root}t}[t_1t_2\cdots t_m] \\
+		&+ \sum_{1\le i\le m}t\lhd_{\myop{root}t}[t_1t_2\cdots t_m]_{\neg\set{i}}\lhd_{\set{\myop{branch}t}}[t_i] \\
+		&+ \sum_{1\le i<j\le m}t\lhd_{\myop{root}t}[t_1t_2\cdots t_m]_{\neg\set{i,j}}\lhd_{\set{\myop{branch}t}}[t_it_j] \\
+		&+ \cdots \\
+		&+ t\lhd_{\set{\myop{branch}t}}[t_1t_2\cdots t_m] \\
+	\end{split}\end{equation*} %}
+	したがって、余積$\Delta_*$を用いると次のようになる。
+	\begin{equation*}\begin{split} %{
+		t\lhd_{\set{t}} w &= t\lhd_{\myop{root}t}\Delta_*^{(1)}w\lhd_{\set{\myop{branch}t}}\Delta_*^{(2)}w
+	\end{split}\end{equation*} %}
+
+until
+
+	特定の頂点に対する接木を、木のすべての頂点に対する接木に拡張する。
+
+	\begin{definition}[自然な成長]\label{def:自然な成長} %{
+		$R$双線形写像$\lhd_T$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			\mathchar`-\lhd_T\mathchar`- : RTS\otimes RWTS &\to RTS \\
+				t\otimes 1_* &\mapsto t \quad\text{for all }t\in TS \\
+				t\otimes [t_1t_2\cdots t_m] &\mapsto \sum_{s_1,s_2,\dots,s_m\in \set{t}}t \lhd_{s_1} t_1 \lhd_{s_2} t_2 \cdots \lhd_{s_m} t_m \\
+				&\quad\text{for all }t,t_1,t_2,\dots,t_m\in TS \\
+		\end{split}\end{equation} %}
+		$t\lhd_T w$を枝$w$による自然な成長ということにする。
+	\end{definition} %def:自然な成長}
+
+	次のように自然な成長を枝に対する操作$\lhd_W$に拡張する。
+	\begin{equation}\begin{split} %{
+		sw_1\lhd_T w_2 &= s(w_1\lhd_W w_2) 
+		\quad\text{for all }s\in S,\;w_1,w_2\in WTS
+	\end{split}\end{equation} %}
+	$\lhd_W$は次のようになる。
+	\begin{equation*}\begin{split} %{
+		t\lhd_T [t_1t_2\cdots t_m]
+		&= t\lhd_{\set{\myop{branch}t}}[t_1t_2\cdots t_m] \\
+		&+ \sum_{1\le i\le m}t\lhd_{\myop{root}t}[t_i]\lhd_{\set{\myop{branch}t}}[t_1t_2\cdots t_m]\neg\set{i} \\
+		&+ \sum_{1\le i<j\le m}t\lhd_{\myop{root}t}[t_it_j]\lhd_{\set{\myop{branch}t}}[t_1t_2\cdots t_m]\neg\set{i,j} \\
+		&+\cdots \\
+		&+ t\lhd_{\myop{root}t}[t_1t_2\cdots t_m]
+	\end{split}\end{equation*} %}
+
+	\begin{definition}[枝の自然な成長]\label{def:枝の自然な成長} %{
+		$R$線形写像$\lhd_W$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			\mathchar`-\lhd_W\mathchar`-: RWTS\otimes RWTS &\to RWTS \\
+				w_1\otimes w_2 &\mapsto \left(w_1\lhd_W' (\Delta_*^{(2)}w_2)\right)*(\Delta_*^{(1)}w_2) \\
+				&\quad\text{for all }w_1,w_2\in WTS \\
+			\mathchar`-\lhd_W'\mathchar`-: RWTS\otimes RWTS &\to RWTS \\
+				(w_1*w_2)\otimes w_3 &\mapsto \left(w_1\lhd_W' (\Delta_*^{(1)}w_3)\right)*\left(w_2\lhd_W' (\Delta_*^{(2)}w_3)\right) \\
+				&\quad\text{for all }w_1,w_2,w_3\in WTS \\
+		\end{split}\end{equation} %}
+	\end{definition} %def:枝の自然な成長}
+
+	枝の自然な成長を前置記号で書くと次のようになる。
+	\begin{equation*}\begin{split} %{
+		\mathchar`-\lhd_W\mathchar`-(w_1\otimes w_2)
+		&= m_*(\mathchar`-\lhd_W'\mathchar`-\otimes \myid)\sigma_{23}(\myid\otimes \Delta_*)(w_1\otimes w_2) \\
+	\end{split}\end{equation*} %}
+
+	木を頂点と頂点の子供の木に分割する$R$線形写像を$\tau$と書くことにする。
+	\begin{equation}\begin{split} %{
+		\tau: RTS &\to RS\otimes RWTS \\
+		s[t_1t_2\cdots t_m] &\mapsto s\times [t_1t_2\cdots t_m] \quad\text{for all }s\in S,\;t_1,t_2,\dots,t_m\in TS
+	\end{split}\end{equation} %}
+	$\tau$は$R$係数半モジュールとして同型となる。
+	さらに、$R$線形写像$\tau_1$を次のように定義し、
+	\begin{equation}\begin{split} %{
+		\tau_1: RTS &\to RS \\
+		s[t_1t_2\cdots t_m] &\mapsto s \quad\text{for all }s\in S,\;t_1,t_2,\dots,t_m\in TS
+	\end{split}\end{equation} %}
+	$R$線形写像$\tau_2$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		\tau_2: RTS &\to RWTS \\
+		s[t_1t_2\cdots t_m] &\mapsto [t_1t_2\cdots t_m] \quad\text{for all }s\in S,\;t_1,t_2,\dots,t_m\in TS
+	\end{split}\end{equation} %}
+	$R$線形写像$\phi_\perp$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		\phi_\perp: RTS\otimes RTS &\to RTS \\
+			s_1w_1\otimes s_2w_2 &\mapsto s_1\phi_\sqcup(w_1\otimes w_2) \\
+			& \quad\text{for all }s_1,s_2\in S\,\;w_1,w_2\in WTS \\
+	\end{split}\end{equation} %}
+	ここで、$R$線形写像$\xi_\perp:RWTS\otimes RWTS\to RWTS$を次のように
+	定義する。
+	\begin{itemize} %{
+		\item 任意の$w\in WTS$に対して
+		\begin{equation}\begin{split} %{
+			\phi_\sqcup(1_*\otimes w) = w = \phi_\sqcup(w\otimes 1_*) 
+		\end{split}\end{equation} %}
+		\item 任意の$w\in WTS$に対して
+		\begin{equation}\begin{split} %{
+			\phi_\sqcup(w_1\otimes w_2) &= []　\\
+			\phi_\sqcup([t_1t_2\cdots t_m]\otimes w)
+			&= m_*([t_1't_2'\cdots t_m']\otimes \Delta_*^{(2)}w) \quad\text{where} \\
+		\end{split}\end{equation} %}
+	\end{itemize} %}
+	\begin{equation}\begin{split} %{
+	\end{split}\end{equation} %}
+	\begin{equation}\begin{split} %{
+			w &= m_*(\phi_\vee\otimes \myid)(\myid\otimes \Delta_*)(w_1\otimes w_2 ) \\
+			t_1\otimes t_2 &= \tau^{-1}(\myid\otimes m_*(\phi_\vee\otimes \myid))(\tau\otimes \Delta_*\tau_2)(t_1\otimes t_2) \\
+			&\quad\text{for all }t_1,t_2\in TS \\
+		\phi_\vee: RWTS\otimes RWTS &\to RWTS \\
+	\end{split}\end{equation} %}
+
+	$R$を半環とする。$RTS$を$TS$を基底とする$R$係数半モジュール、
+	$RWTS$を$WTS$を基底とする$R$係数半モジュールとする。
+	二項演算$\sqcup$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		\sqcup: RTS\otimes RTS &\to RTS \\
+			t_1\otimes 
+	\end{split}\end{equation} %}
+%s1:木}
+
 \section{モノイド半環の自己線形写像}\label{s1:モノイド半環の自己線形写像} %{
 	$R=(R,+,0,m_R,1)$を可換半環、$R_x=R[[x]]$を$\set{x^n}_{n=0}^\infty$を基底
 	とする$R$係数半モジュールとする。
@@ -251,7 +722,18 @@
 		e^{tv(x)\partial_x}x
 	\end{split}\end{equation} %}
 	この形式解の中で写像$e^{tv(x)\partial_x}$は$k[x]\to k[x]$の線形写像
-	となっている。$k[x]\to k[x]$の線形写像全体を$\myop{end}k[x]$と書く。
+	\begin{equation}\begin{split} %{
+		e^{tv(x)\partial_x}(f+g) 
+		&= (e^{tv(x)\partial_x}f) + (e^{tv(x)\partial_x}g) \quad\text{for all }f,g\in k[x] \\
+		e^{tv(x)\partial_x}(af) &= a(e^{tv(x)\partial_x}f) \quad\text{for all }f\in k[x],\;a\in k \\
+	\end{split}\end{equation} %}
+	かつ準同型写像
+	\begin{equation}\begin{split} %{
+		e^{tv(x)\partial_x}x^{m+n} 
+		&= (e^{tv(x)\partial_x}x^m)(e^{tv(x)\partial_x}x^n) \quad\text{for all }m,n\in \mybf{N}
+	\end{split}\end{equation} %}
+	となっている。
+	$k[x]\to k[x]$の線形写像全体を$\myop{end}k[x]$と書く。
 	写像$e^{tv(x)\partial_x}$を$t$についてべき展開すると次のようになる。
 	\begin{equation}\begin{split} %{
 		e^{tv(x)\partial_x} &= \sum_{k\in\mybf{N}}\frac{t^k}{k!}(v\partial_x)^n \\
@@ -363,273 +845,424 @@
 		(v\partial_x)^2 &\sim (\bullet\lhd v)\lhd v \\
 		(v\partial_x)^3 &\sim ((\bullet\lhd v)\lhd v)\lhd v \\
 	\end{split}\end{equation} %}
-
-	\begin{todo}[次の目標]\label{todo:次の目標} %{
-		\begin{itemize} %{
-			\item 頂点を付け足す操作を木の演算で書き直す。
-		\end{itemize} %}
-	\end{todo} %todo:次の目標}
-
-	\subsection{保留}\label{s2:保留} %{
-	微分係数が木で表すことをもう少し詳細に説明する。
-
-	\begin{definition}[根付きの木]\label{def:根付きの木} %{
-		根が一つ指定された木を根付きの木という。
-	\end{definition} %def:根付きの木}
-
-	組み合わせ論などでは、根が固定されていない木が用いられることが多いために、
-	根付きの木という特別な名前が用いられる。根付きの木と根が固定されていない木
-	の違いは同値関係の違いである。根付きの木に次のような同値関係をとったもの
-	が根が固定されていない木となる。
+	木に頂点を付け足していく操作$\lhd$を木の二項演算$*$で書き直すことを考える。
+	括弧を省略して、$(\bullet\lhd v_1)\lhd v_2$を$\bullet\lhd v_1\lhd v_2$
+	と書き、木の二項演算$\amalg$を、二項目が二つの頂点だけからなる木に対して
+	次のように定義する。
 	\begin{equation}\begin{split} %{
-		\text{根付きでない木}\quad \mytree{
-			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
-			s_1 \ar@{-}[d] && s_2 \\
-			s_3 \\
-		} \sim \mytree{
-			& s_1 \ar@{-}[ld] \ar@{-}[rd] \\
-			s_3 && \bullet \ar@{-}[d] \\
-			&& s_2 \\
-		} \sim \mytree{
-			s_3 \ar@{-}[d] \\
-			s_1 \ar@{-}[d] \\
+		\bullet\amalg \mytree{
 			\bullet \ar@{-}[d] \\
-			s_2 \\
-		} \sim \mytree{
-			s_2 \ar@{-}[d] \\
+			v_1
+		} &= \bullet\lhd v_1 \\
+		\mytree{
 			\bullet \ar@{-}[d] \\
-			s_1 \ar@{-}[d] \\
-			s_3 \\
+			v_1
+		}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_2
+		} &= \bullet\lhd v_1\lhd v_2 \\
+		\kakko{\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_2
+		}}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_3
+		} &= \bullet\lhd v_1\lhd v_2\lhd v_3 \\
+	\end{split}\end{equation} %}
+	$\amalg$が結合律を満たすためには、次の式が成り立つ必要がある。
+	\begin{equation}\begin{split} %{
+		\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		}\amalg \kakko{\mytree{
+			\bullet \ar@{-}[d] \\
+			v_2
+		}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_3
+		}} &= \kakko{\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_2
+		}}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_3
+		}
+	\end{split}\end{equation} %}
+	つまり、次の式が成り立つ必要がある。
+	\begin{equation}\begin{split} %{
+		\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		}\amalg \kakko{\mytree{
+			\bullet \ar@{-}[d] \\
+			v_2
+		}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_3
+		}} &= \mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		}\amalg \kakko{\mytree {
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			v_2 && v_3
+		} + \mytree {
+			\bullet \ar@{-}[d] \\
+			v_2 \ar@{-}[d] \\
+			 v_3
+		}} \\
+		&= \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[d] \ar@{-}[rd] \\
+			v_1 & v_2 & v_3
+		} + \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 \ar@{-}[d] && v_2 \\
+			v_3
+		} + \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 && v_2 \ar@{-}[d] \\
+			&& v_3
+		} \\
+		&+ \mytree{
+			& \bullet \ar@{-}[ld] \ar@{-}[rd] \\
+			v_1 \ar@{-}[d] && v_3 \\
+			v_2
+		} + \mytree{
+			& \bullet \ar@{-}[d] \\
+			& v_1 \ar@{-}[ld] \ar@{-}[rd] \\
+			v_2 && v_3
+		} + \mytree{
+			\bullet \ar@{-}[d] \\
+			v_1 \ar@{-}[d] \\
+			v_2 \ar@{-}[d] \\
+			v_3
+		}
+	\end{split}\end{equation} %}
+	この式は$\amalg$を次のように定義すれば成り立つ。
+	\begin{equation}\begin{split} %{
+		\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		}\amalg \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			v_2 && v_3
+		} &= \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+			v_1 & v_2 & v_3
+		} + \mytree{
+			& \bullet \ar@{-}[dl]  \ar@{-}[dr] \\
+			v_1 \ar@{-}[d] && v_2 \\
+			v_3 
+		} + \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			v_1 \ar@{-}[d] && v_3 \\
+			v_2
+		} + \mytree{
+			& \bullet \ar@{-}[d] \\
+			& v_1 \ar@{-}[dl] \ar@{-}[dr] \\
+			v_2 && v_3
+		} \\
+		\mytree{
+			\bullet \ar@{-}[d] \\
+			v_1
+		}\amalg \mytree{
+			\bullet \ar@{-}[d] \\
+			v_2 \ar@{-}[d] \\
+			v_3
+		} &= \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			v_1 && v_2 \ar@{-}[d] \\
+			&& v_3
+		} + \mytree{
+			\bullet \ar@{-}[d] \\
+			v_1 \ar@{-}[d] \\
+			v_2 \ar@{-}[d] \\
+			v_3
 		}
 	\end{split}\end{equation} %}
 
-	\begin{definition}[対称な木]\label{def:対称な木} %{
-		子供の頂点の並びの順序を入れ替えたものを同値とみなす木を対称な木という。
-	\end{definition} %def:対称な木}
-
-	対称でない木に次のような同値関係をとったものが対称な木になる。
-	\begin{equation}\begin{split} %{
-		\text{対称な木}\quad \mytree{
-			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
-			*+[F]{t_1} && *+[F]{t_2} \\
-		} \sim \mytree{
-			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
-			*+[F]{t_2} && *+[F]{t_1} \\
-		} 
-	\end{split}\end{equation} %}
-
-	$S$を有限集合とする。すべての頂点を$S$の元とする根付きの木の集合を$T_+S$
-	とする。根を$\bullet$、根以外の頂点を$S$の元とする根付きの木の集合を
-	$T_\bullet S$とする。$T_+S$と$T_\bullet S$には空の木を含めないものとする。
-	$T_\bullet S$の元を子供の頂点を括弧でくくって次のように書くことにする。
-	\begin{equation}\begin{split} %{
-		\bullet &= \bullet[] = \bullet = 1_\bullet \\
-		\mytree {
-			& \bullet \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
-			*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_n} \\
-		} &= \bullet[t_1t_2\cdots t_n] \quad\text{for all }t_1,t_2,\dots,t_n\in T_+S \\
-	\end{split}\end{equation} %}
-	$T_+S$の元を次のように書くことにする。
-	\begin{equation}\begin{split} %{
-		s &= s[] = s \quad\text{for all }s\in S \\
-		\mytree {
-			& s \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
-			*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_n} \\
-		} &= s[t_1t_2\cdots t_n] \quad\text{for all }s\in S,\;t_1,t_2,\dots,t_n\in T_+S \\
-	\end{split}\end{equation} %}
-	$T_\bullet S$は$T_+S$から生成された自由モノイドとしてみることができる。
-	$T_\bullet S$に写像$m_*$を次のように定義する。
-	\begin{equation}\begin{split} %{
-		m_*: T_\bullet S\times  T_\bullet S &\to T_\bullet S \\
-			\bullet[a_1a_2\cdots a_m]\times \bullet[b_1b_2\cdots b_n]
-			&\mapsto \bullet[a_1a_2\cdots a_mb_1b_2\cdots b_n] \\
-			&\text{for all }a_1,a_2,\dots,a_m,b_1,b_2,\dots,b_n\in T_+S \\
-	\end{split}\end{equation} %}
-	$m_*$は結合的になり、$1_\bullet$を単位元とする。$m_*$を中置記法で$*$と
-	書くことにする。
-
-	$R$を半環とする。$T_\bullet$を基底とする自由$R$半モジュールを
-	$RT_\bullet S$とする。$T_\bullet S$の積$m_*$を$R$線形に拡張し、同じ記号
-	$m_*:RT_\bullet S\otimes RT_\bullet S\to RT_\bullet S$を用いることにする。
-	積$m_*$に双対となる余積$\Delta_*$を次のように定義する。
-	\begin{equation}\begin{split} %{
-		\Delta_*: RT_\bullet S &\to  RT_\bullet S\otimes RT_\bullet S \\
-			\bullet[t] &\mapsto \bullet[t]\otimes 1_\bullet + 1_\bullet\otimes \bullet[t] \quad\text{for all }t\in T_+S \\
-	\end{split}\end{equation} %}
-	余積$\Delta_*$は積$m_*$と双対になるから、任意の$t_1,t_2,\dots,t_n\in T_+S$
-	に対して次のようになる。
-	\begin{equation}\begin{split} %{
-		&\Delta_*[t_1t_2\cdots t_n]
-			= (\Delta_*[t_1])*(\Delta_*[t_2])*\cdots*(\Delta_*[t_n]) \\
-			&= 1_\bullet\otimes \bullet[t_1t_2\cdots t_n] \\
-			&+ \bullet[t_1]\otimes \bullet[t_2t_3\cdots t_n] 
-			+ \bullet[t_2]\otimes \bullet[t_1t_3\cdots t_n]
-			+ \cdots
-			+ \bullet[t_n]\otimes \bullet[t_1t_2t_3 \cdots t_{n-1}] \\
-			&+ \bullet[t_1t_2]\otimes \bullet[t_3\cdots t_n] 
-			+ \bullet[t_1t_3]\otimes \bullet[t_2\cdots t_n]
-			+ \cdots
-			+ \bullet[t_{n-1}t_n]\otimes \bullet[t_1t_2t_3 \cdots t_{n-2}] \\
-			&+\cdots \\
-			&+ \bullet[t_1t_2\cdots t_n]\otimes 1_\bullet \\
-	\end{split}\end{equation} %}
-	余積$\Delta_*$に対する余単位射$\epsilon_*$は次のようになる。
-	\begin{equation}\begin{split} %{
-		\epsilon_*: RT_\bullet &\to R \\
-			t &\mapsto \begin{cases} %{
-				1, &\text{ iff }t = 1_\bullet \\
-				0, &\text{ otherwise } \\
-			\end{cases} %}
-	\end{split}\end{equation} %}
-
-	$m_*$と$\Delta_*$のみでは、$T_+S$から生成された自由モノイド半双代数で
-	しかない。$m_*$を深さ方向に拡張することを考える。$R$双線形写像$m_\odot$
-	を次のように定義する。
-	\begin{equation}\begin{split} %{
-		m_\odot: RT_\bullet S\otimes RT_\bullet S &\to RT_\bullet S \\
-			t_1\otimes t_2 &\mapsto m_*(t_1\otimes t_2) + m_{\widebar{\odot}}(t_1\otimes t_2) \quad\text{for all }t_1,t_2\in T_\bullet S \\
-		m_{\widebar{\odot}}: RT_\bullet S\otimes RT_\bullet S &\to RT_\bullet S \\
-			\bullet[t_1t_2\cdots t_n]\otimes t 
-				&\mapsto m_*(t_1\otimes t_2) + m_{\widebar{\odot}}(t_1\otimes t_2) \quad\text{for all }t_1,t_2,\dots,t_n\in T_+S,\;t\in T_\bullet S \\
-	\end{split}\end{equation} %}
-
-	\begin{equation}\begin{split} %{
-			[t_1t_2\cdots t_n] 
-				&\mapsto t*[t_1t_2\cdots t_n] \\
-				&\quad + [(t\odot t_1)t_2\cdots t_n] + [t_1(t\odot t_2)\cdots t_n] \\
-				&\quad + \cdots + [t_1t_2\cdots(t\odot t_n)] \\
-				&\quad\text{for all }t\in T_\bullet S,\; t_1,t_2,\dots,t_n\in T_+S \\
-		m_\odot: RT_\bullet S\otimes T_+S &\to T_+S \\
-			1_\bullet\otimes u &\mapsto u \quad\text{for all }u\in T_+S \\
-			[t_1t_2\cdots t_{n+1}]\otimes u &\mapsto u \quad\text{for all }u\in T_+S \\
-	\end{split}\end{equation} %}
-	ここで、$m_\odot$を中置記法で$\odot$と書いた。
-
-	すべての頂点を$S$の元とする対称な根付きの木の集合を
-	$T_+S$と書く。$T_+S$には空の木を含めない。$T_+S$に空の木を含めたものを
-	$TS$と書く。$TS$の元を次のように、子供の頂点を括弧でくくって書くことに
-	する。
-	\begin{equation}\begin{split} %{
-		\text{空の木} &= 1_{TS}[] = 1_{TS} \\
-		s &= s[] = s \quad\text{for all }s\in S \\
-		\mytree {
-			& s \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
-			*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_n} \\
-		} &= s[t_1t_2\cdots t_n] \quad\text{for all }s\in S,\; t_1,t_2,\dots,t_n\in T_+S \\
-	\end{split}\end{equation} %}
-	$R=(R,+,0,,\myspace,1)$を半環とする。$TS$を基底とする$R$係数半モジュール
-	を$RTS$とする。$RTS$に双線形写像$m_\cdot:RT_+S\otimes RT_+S\to RT_+S$を
-	次のように定義する。
+	二項演算$\amalg$の演算規則は次のようになる。
 	\begin{itemize} %{
-		\item $m_\cdot$を中置記法で$\cdot$と書き、
-		\item 任意の$t\in T_+S,\;s\in S$に対して
+		\item $V$を集合とする。$V$を頂点とする空でない木の集合を$TV$とする。
+		$\bullet$を根、$V$を根以外の頂点とする空でない木の集合を
+		$T_\bullet V$とする。$T_\bullet V$の任意の元は、$\bullet$または、
+		$\mytree{
+				& \bullet \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+				*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_m}
+		}$という形に一意的に書ける。
+		$T_*V=T_\bullet V\cup TV$とする。
+		\item $R$を半環とする。$TV$を基底とする$R$自由半モジュールを$RVT$、
+		$T_\bullet V$を基底とする$R$自由半モジュールを$RV_\bullet T$、
+		$T_*V$を基底とする$R$自由半モジュールを$RV_*T$とする。
+		\item 木$t\in T_*V$の根を含むすべての頂点を$\set{t}$と書く。
+		\item 木$t\in T_*V$の頂点$v$の最後の子供に木$t_1\in TV$を付け加える
+		操作を中置記法で$t\lhd_v t_1$と書く。例えば、$s\in V\cup\set{\bullet}$
+		、$v_1,v_2\in V$、$t_0,t_1\in VT$に対して次のように定義する。
 		\begin{equation}\begin{split} %{
-			t\cdot s = s[t] \\
+			\mytree{
+			& s \ar@{-}[dl] \ar@{-}[dr] \\
+			v_1 \ar@{-}[d] && v_2 \\
+			*+[F]{t_0}
+		} \lhd_{v_1} t_1 &= \mytree{
+			&& s \ar@{-}[dl] \ar@{-}[dr] \\
+			&v_1 \ar@{-}[dl] \ar@{-}[dr] && v_2 \\
+			*+[F]{t_0} && *+[F]{t_1}
+		}
 		\end{split}\end{equation} %}
-		とし、
-		\item 任意の$t,t_1,t_2,\dots,t_n\in T_+S,\;s\in S$に対して
+		さらに、$t_1$を木$t_0$の部分木とするとき、任意の木$t$に対して
+		$t_0\lhd_{t_1}t=\sum_{v\in \set{t_1}}t_0\lhd_v t$と書く。
+		例えば次のように定義する。
 		\begin{equation}\begin{split} %{
-			t\cdot s[t_1t_2\cdots t_n]
-				&= s[tt_1t_2\cdots t_n] + s[t_1tt_2\cdots t_n] 
-				%&\quad + \cdots + s[t_1t_2\cdots tt_n] \\
-				+ \cdots + s[t_1t_2\cdots tt_n] \\
+			\mytree{
+			& v_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			v_1 \ar@{-}[d] && v_2 \\
+			*+[F]{t_0}
+		} \lhd_{\set{v_0,v_1}} t_1 &= \mytree{
+			& v_0 \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+			v_1 \ar@{-}[d] & *+[F]{t_1} & v_2 \\
+			*+[F]{t_0}
+		} + \mytree{
+			&& v_0 \ar@{-}[dl] \ar@{-}[dr] \\
+			&v_1 \ar@{-}[dl] \ar@{-}[dr] && v_2 \\
+			*+[F]{t_0} && *+[F]{t_1}
+		}
 		\end{split}\end{equation} %}
-		とする。
+		\item 任意の木$t\in T_\bullet V$と$t_1,t_2,\dots,t_m\in TV$、
+		$s\in V\cup\set{\bullet}$対して$R$双線形写像
+		$\amalg:RT_*V\otimes RT_*V\to RT_*V$を次のように定義する。
+		\begin{equation}\begin{split} %{
+			t\amalg s &= t \\
+			t\amalg \mytree{
+				& s \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+				*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_m}
+			} &= t\lhd_t t_1\lhd_t t_2\cdots \lhd_t t_m \\
+		\end{split}\end{equation} %}
 	\end{itemize} %}
+	木$t\in T_*V$の根を$s$としたとき、任意の木$t_1\in T_*V$に対して$t*t_1$
+	の根は$s$となる。したがって、任意の$f\in RT_\bullet V,\;g\in RT_*V$に
+	対して$f*g\in RT_\bullet V$となることに注意する。
 
-	根を$\bullet$、根以外の頂点を$S$の元とする対称な根付きの木の集合を$T_\bullet S$、
-	また、$S_\bullet=\set{\bullet}\cup S$とする。
-
-	\begin{definition}[ラベル付き根付き木 (labeled rooted tree)]\label{def:ラベル付き根付き木} %{
-		$S$を集合とする。$S$の元を根以外の頂点とする木を$S$ラベル根付き木という。
-	\end{definition} %def:ラベル付き根付き木}
-
-	$S$ラベル根付き木の集合$TS$は次のようになる。
+	二項演算$\amalg$の結合性を証明するために、木を簡潔に書くための記号を
+	導入する。任意の$s\in V\cup\set{\bullet}$、$t_1,t_2,\dots,t_m\in TV$
+	に対して次のようにして木を表すことにする。
 	\begin{equation}\begin{split} %{
-		TS &= \Set{\mytree{
-			\bullet
-		}}\cup \Set{\mytree{
-			\bullet \ar@{-}[d] \\
-			s
-		}}_{s\in S} \\
-		&\quad\cup \Set{\mytree{
-			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
-			s_1 && s_2
-		}}_{s_1,s_2\in S}\cup \Set{\mytree{
-			\bullet \ar@{-}[d] \\
-			s_1 \ar@{-}[d] \\
-			s_2
-		}}_{s_1,s_2\in S}\cup \cdots \\
+		s[t_1t_2\cdots t_m] &= \mytree {
+			& s \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+			*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_m}
+		}
 	\end{split}\end{equation} %}
-	根付き木というのは、根を固定しない木との対比で用いられる。
-	根を固定しない木は、根付き木に対して次のような同値関係で剰余をとったもの
-	である。
-	木の絵を書くのはしんどいので、次のように行きがけ順に括弧を使って木を
-	表現する。
-	\begin{equation}\begin{split} %{
-		\bullet = [],\; \mytree{
-			\bullet \ar@{-}[d] \\
-			s_1
-		} = [s_1],\; \mytree{
-			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
-			s_1 && s_2
-		} = [s_1s_2],\; \mytree{
-			\bullet \ar@{-}[d] \\
-			s_1 \ar@{-}[d] \\
-			s_2
-		} = [s_1[s_2]] \\
-		\mytree{
-			&\bullet \ar@{-}[ld] \ar@{-}[d] \ar@{-}[rd] \\
-			s_1 & s_2 & s_3 \\
-		} = [s_1s_2s_3],\; \mytree{
-			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
-			s_1 \ar@{-}[d] && s_2 \\
-			s_3
-		} = [s_1[s_3]s_2] \\
-		\mytree{
-			&\bullet \ar@{-}[ld] \ar@{-}[rd] \\
-			s_1 && s_2 \ar@{-}[d] \\
-			&& s_3
-		} = [s_1s_2[s_3]] 
-	\end{split}\end{equation} %}
-	$S$を集合、$R$を半環とする。$S$ラベル付き根付き木$TS$を基底とする
-	$R$係数半モジュールを$RTS$と書く。頂点数が$n+1$の$TS$の部分集合を
-	$T_nS$と書き、$T_nS$で張られる$RTS$の部分空間を$RT_nS$と書く。
-	線形写像$\phi$を次のように定義する。
-	\begin{equation}\begin{split} %{
-		\phi:RT_1S\otimes RT_1S &\to RT_2S \\
-		[s_1]\otimes [s_2] &\mapsto [s_1s_2] + [s_1[s_2]] \quad\text{for all }s_1,s_2\in S
-	\end{split}\end{equation} %}
-
-	$WS$をから$S$から生成された自由半群とする。
-	$WS$の元を$s_1,s_2,\dots,s_n\in S$に対して括弧でくくって
-	$[s_1s_2\cdots s_n]$と書き、単語の連結を中置記法で$*$と書く。
 	例えば次のようになる。
-	\begin{equation*}\begin{split} %{
-		[s_1s_2\cdots s_n] &= [s_1]*[s_2]*\cdots*[s_n]
-	\end{split}\end{equation*} %}
-	任意の$n\in \mybf{N}_+$に対して$W^{n+1}S$を$W^nS$から生成された自由半群
-	とする。例えば、$WS,W^2S$は$S$の元を用いて次のように書くことができる。
 	\begin{equation}\begin{split} %{
-		WS &= \set{[s]}_{s\in S}\cup\set{[s_1s_2]}_{s_1,s_2\in S}\cup\cdots \\
-		W^2S &= \set{[[s]]}_{s\in S}\cup\set{[[s_1][s_2]]}_{s_1,s_2\in S}\cup\set{[[s_1s_2]]}_{s_1,s_2\in S}\cup\cdots \\
+		s[v_1[v_3]v_2[]] &= \mytree {
+			& s \ar@{-}[dl] \ar@{-}[dr] \\
+			v_1 \ar@{-}[d] && v_2 \\
+			v_3
+		}
 	\end{split}\end{equation} %}
-	$W^+S=\cup_{n=1}^\infty W^nS$とする。$W^+S$から生成された自由半群を
-	$TS$と書く。$TS$に対しても$WS$と同様の表記をする。
-	$TS$の元を$w_1,w_2,\dots,w_n\in W^+S$に対して括弧でくくって
-	$[w_1w_2\cdots w_n]$と書き、単語の連結を中置記法で$*$と書く。
-	例えば次のようになる。
-	\begin{equation*}\begin{split} %{
-		[w_1w_2\cdots w_n] &= [w_1]*[w_2]*\cdots*[w_n]
-	\end{split}\end{equation*} %}
-	$TS$に単位元$[]$を加えたものを$\mycal{T}S$と書く。
+	誤解の恐れがないときは、葉の頂点は後ろの$[]$を省略する。例えば、
+	$s[v_1[v_3]v_2]=s[v_1[v_3]v_2[]]$と書く。
 
-	$W^2S$を$WS$から生成された自由モノイドを同値関係$[[]]\sim[]$で剰余した
-	ものとする。$W^2S$の単位元$1_*$以外の任意の元は、単位元以外の元
-	$w_1,w_2,\dots,w_n\in WS$を用いて$[w_1w_2\cdots w_n]$と一意に書くことが
-	できる。
-	同様に$W^{n+1}S$を$W^nS$から生成された自由モノイドを同値関係$[[]]\sim[]$で
-	剰余したものとする。
+	$RT_*V$の積$m_*$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		m_*: RT_*V\otimes RT_*V &\to RT_*V \\
+		s\otimes t &\mapsto t \quad\text{for all }s\in V\cup\set{\bullet},\;t\in T_*V \\
+		t\otimes s &\mapsto t \quad\text{for all }s\in V\cup\set{\bullet},\;t\in T_*V \\
+		s_1[t_{11}t_{12}\cdots t_{1m}]\otimes s_2[t_{21}t_{22}\cdots t_{2n}] 
+		&\mapsto s_1[t_{11}t_{12}\cdots t_{1m}t_{21}t_{22}\cdots t_{2n}] \\
+		&\quad\text{for all }s_1,s_2\in V\cup\set{\bullet}\\
+		&\quad, t_{11},t_{12},\dots,t_{1m},t_{21},t_{22},\dots,t_{2n}\in TV \\
+	\end{split}\end{equation} %}
+	$m_*$は$T_*V$を$TV$から生成された自由モノイドとしてみたときの文字列の
+	連結による積に他ならない。余積$\Delta_*$を次のように定義する。
+	\begin{equation}\begin{split} %{
+		\Delta_*: RT_*V &\to RT_*V\otimes RT_*V \\
+		s[] &\mapsto s[]\otimes s[] \quad\text{for all }s\in V\cup\set{\bullet} \\
+		s[t_1t_2\cdots t_m] &\mapsto s[]\otimes s[t_1t_2\cdots t_m] \\
+			&\quad + \sum_{1\le i\le m} s[t_i]\otimes s[t_1t_2\cdots t_m]\neg\set{i} \\
+			&\quad + \sum_{1\le i<j\le m} s[t_it_j]\otimes s[t_1t_2\cdots t_m]\neg\set{i,j} \\
+			&\quad + \cdots \\
+			&\quad + s[t_1t_2\cdots t_m]\otimes s[]
+	\end{split}\end{equation} %}
+	積$m_*$と余積$\Delta_*$は双対となる。$*$を中置記法で$*$と書き、
+	\begin{equation}\begin{split} %{
+		&(t_{11}\otimes t_{12}\otimes t_{1m})*(t_{21}\otimes t_{22}\otimes t_{2m}) \\
+		&=(t_{11}*t_{21})\otimes(t_{11}*t_{21})\otimes\cdots\otimes(t_{1m}*t_{2m})
+	\end{split}\end{equation} %}
+	とすると、積$m_*$と余積$\Delta_*$の双対性は次のように書ける。
+	\begin{equation}\begin{split} %{
+		\Delta_*(t_1*t_2) = (\Delta_*t_1)*(\Delta_*t_2) \\
+	\end{split}\end{equation} %}
+	積$m_*$と余積$\Delta_*$を用いると、二項演算は任意の木$t_1,t_2\in T_*V$
+	に対して次のように書くことができる。
+	\begin{equation}\begin{split} %{
+		t_1\amalg t_2 &= (t_1\amalg' (\Delta_*^{(1)}t_2)) * (\Delta_*^{(2)}t_2) \\
+			&= m_*(-\amalg'-\otimes \myid)(\myid\otimes \Delta_*)(t_1\otimes t_2) \\
+	\end{split}\end{equation} %}
+	ここで、$\amalg':T_*V\otimes T_*V\to T_*V$は$\amalg$の部分木に対する
+	再帰部分で、任意の$s\in V\cup\set{\bullet},\;t\in V_*T$に対して
+	$s[]\amalg't=0$、任意の
+	$s\in V\cup\set{\bullet},\;t\in V_*T,\;t_1,t_2,\dots,t_m\in VT$
+	に対して次のように定義される。
+	\begin{equation}\begin{split} %{
+		s[t_1t_2\cdots t_m]\amalg't &= s[t_1't_2'\cdots t_m']\quad\text{where} \\
+		t_1' &= t_1\amalg(\Delta_*^{(1)}t) \\
+		t_2' &= t_1\amalg(\Delta_*^{(1)}\Delta_*^{(2)}t) \\
+		\vdots \\
+		t_{m-1}' &= t_1\amalg(\Delta_*^{(1)}\Delta_*^{(2)m-2}t) \\
+		t_m' &= t_1\amalg(\Delta_*^{(2)m-1}t) \\
+	\end{split}\end{equation} %}
+	$*$と$\amalg'$は任意の$t_1,t_2,t_3\in T_*V$に対して次の分配則が成り立つ。
+	\begin{equation}\label{eq:木の分配則その一}\begin{split} %{
+		(t_1*t_2)\amalg't_3 = \left(t_1\amalg'(\Delta_*^{(1)}t_3)\right)
+			*\left(t_2\amalg'(\Delta_*^{(2)}t_3)\right)
+	\end{split}\end{equation} %}
+
+	\begin{proof} %{
+		二項演算$\amalg$の結合性を証明する。
+		任意の$t_1,t_2,t_3\in T_*V$に対して次のように書ける。
+		\begin{equation}\begin{split} %{
+			&(t_1\amalg t_2)\amalg t_3 \\
+			& = \left((t_1\amalg t_2)\amalg'(\Delta_*^{(1)}t_3)\right)*(\Delta_*^{(2)}t_3) \\
+			& = \left(\left((t_1\amalg' (\Delta_*^{(1)}t_2))*(\Delta_*^{(2)}t_2)\right)\amalg'(\Delta_*^{(1)}t_3)\right)*(\Delta_*^{(2)}t_3) \\
+		\end{split}\end{equation} %}
+		分配則\eqref{eq:木の分配則その一}を使うと次のようになる。
+		\begin{equation}\begin{split} %{
+			(t_1\amalg t_2)\amalg t_3 &= t_1'*t_2'*t_3' \\
+			t_1' &= \left(t_1\amalg'(\Delta_*^{(1)}t_2)\right)\amalg'(\Delta_*^{(1)}\Delta_*^{(1)}t_3) \\
+			t_2' &= (\Delta_*^{(2)}t_2)\amalg'(\Delta_*^{(2)}\Delta_*^{(1)}t_3) \\
+			t_3' &= \Delta_*^{(2)}t_3 \\
+		\end{split}\end{equation} %}
+
+until
+
+
+		積$m_*$と余積$\Delta_*$を用いると、二項演算$\amalg$は、
+		任意の$s\in V\cup\set{\bullet}$、$u_1,u_2,\dots,u_m\in TV$、
+		$t\in T_*V$に対して次のように書ける。
+		\begin{equation}\begin{split} %{
+			s[u_1u_2\cdots u_m]\amalg t
+			&= s[u_1'u_2'\cdots u_m']*(\Delta_{*(1)}t) \\
+			u_1' &= u_1\amalg (\Delta_{*(1)}\Delta_{*(2)}t) \\
+			u_2' &= u_2\amalg (\Delta_{*(1)}\Delta_{*(2)}^2t) \\
+			\cdots \\
+			u_{m-1}' &= u_{m-1}\amalg (\Delta_{*(1)}\Delta_{*(2)}^{m-1}t) \\
+			u_m' &= u_m\amalg (\Delta_{*(2)}^mt) \\
+		\end{split}\end{equation} %}
+		したがって、任意の$s\in V\cup\set{\bullet}$、
+		$u_1,u_2,\dots,u_m\in TV$、$t_1,t_2\in T_*V$に対して次のように書ける。
+		\begin{equation}\label{eq:再帰その一}\begin{split} %{
+			(s[u_1u_2\cdots u_m]\amalg t_1)\amalg t_2
+			&= s[u_1'u_2'\cdots u_m']*(\Delta_{*(1)}t_1)*(\Delta_{*(1)}t_2) \\
+			u_1' &= \left(u_1\amalg (\Delta_{*(1)}\Delta_{*(2)}t_1)\right)\amalg (\Delta_{*(1)}\Delta_{*(2)}t_2) \\
+			u_2' &= \left(u_2\amalg (\Delta_{*(1)}\Delta_{*(2)}^2t_1)\right)\amalg (\Delta_{*(1)}\Delta_{*(2)}^2t_2) \\
+			\cdots \\
+			u_{m-1}' &= \left(u_{m-1}\amalg (\Delta_{*(1)}\Delta_{*(2)}^{m-1}t_1)\right)\amalg (\Delta_{*(1)}\Delta_{*(2)}^{m-1}t_2) \\
+			u_m' &= \left(u_m\amalg (\Delta_{*(2)}^mt_1)\right)\amalg (\Delta_{*(2)}^mt_2) \\
+		\end{split}\end{equation} %}
+		$m_*$は結合的だから、次の式
+		\begin{equation}\label{eq:再帰その二}\begin{split} %{
+			\left(u_m\amalg (\Delta_{*(2)}^mt_1)\right)\amalg (\Delta_{*(2)}^mt_2)
+			= u_m\amalg \left((\Delta_{*(2)}^mt_1)\amalg (\Delta_{*(2)}^mt_2)\right)
+		\end{split}\end{equation} %}
+		と、$i=1,2,\dots,m-1$に対して次の式
+		\begin{equation}\label{eq:再帰その三}\begin{split} %{
+			&\left(u_i\amalg (\Delta_{*(1)}\Delta_{*(2)}^it_1)\right)\amalg (\Delta_{*(1)}\Delta_{*(2)}^it_2) \\
+			&\quad = u_i\amalg \left((\Delta_{*(1)}\Delta_{*(2)}^it_1)\amalg (\Delta_{*(1)}\Delta_{*(2)}^it_2)\right)
+		\end{split}\end{equation} %}
+		が成り立つことが示せれば、二項演算$\amalg$が結合的になることがわかる。
+		式\eqref{eq:再帰その一}と\eqref{eq:再帰その二}と\eqref{eq:再帰その三}
+		は木$s[u_1u_2\cdots u_m]$の深さ方向への再帰の形になっている。
+		したがって、木$s[u_1u_2\cdots u_m]$の任意の葉$r\in V\cup\set{\bullet}$
+		と、任意の木$w_{11},w_{12},\dots,w_{1p},w_{21},w_{22},\dots,w_{2q}\in TV$
+		に対して次の式が成り立てば、二項演算$\amalg$が結合的になることが示せる。
+		\begin{equation}\label{eq:再帰の葉}\begin{split} %{
+			&\left(r\amalg \bullet[w_{11}w_{12}\cdots w_{1p}]\right)\amalg \bullet[w_{21}w_{22}\cdots w_{2q}] \\
+			&\quad = r\amalg \left(\bullet[w_{11}w_{12}\cdots w_{1p}]\amalg \bullet[w_{21}w_{22}\cdots w_{2q}]\right)
+		\end{split}\end{equation} %}
+		より一般に、任意の$r_0,r_1,r_2\in V\cup\set{\bullet}$に対して
+		次の式が成り立つので、式$\eqref{eq:再帰の葉}$は成り立つ。
+		\begin{equation}\begin{split} %{
+			&\left(r_0\amalg r_1[w_{11}w_{12}\cdots w_{1p}]\right)\amalg r_2[w_{21}w_{22}\cdots w_{2q}] \\
+			&\quad = r_0[w_{11}w_{12}\cdots w_{1p}]\amalg r_2[w_{21}w_{22}\cdots w_{2q}] \\
+			&\quad = r_0\amalg \left(r_1[w_{11}w_{12}\cdots w_{1p}]\amalg r_2[w_{21}w_{22}\cdots w_{2q}]\right)
+		\end{split}\end{equation} %}
+	\end{proof} %}
+
+	積$m_\amalg$は定義域が$RT_*V$のままでは左単位元を持たないが\footnote{
+		任意の根だけからなる木が右単位元となる。
+	}、定義域を$RT_\bullet V$に制限すると、根だけからなる木$\bullet[]$が
+	単位元となる。
+
+	\begin{todo}[この先]\label{todo:この先} %{
+		$\mybf{1}=\set{\circ}$として、写像$\xi$を次のようにおく。
+		\begin{equation}\begin{split} %{
+			\xi: k[x]\times kT_\bullet\mybf{1} &\to \myop{end}k[x] \\
+			v\times t &\mapsto \xi_vt \\
+		\end{split}\end{equation} %}
+		ここで、$k$線形写像$\xi_v:kT_\bullet\mybf{1}\to\myop{end}k[x]$を任意の
+		$t_1,t_2,\dots,t_m\in T\mybf{1}$に対して次のようにおいた。
+		\begin{equation}\begin{split} %{
+			\xi_v\bullet[] &= \myid \\
+			\xi_v\circ[] &= v \\
+			\xi_v\bullet[t_1t_2\cdots t_m] &= (\xi_vt_1)(\xi_vt_2)\cdots(\xi_vt_m)\partial_x^m \\
+			\xi_v\circ[t_1t_2\cdots t_m] &= (\xi_vt_1)(\xi_vt_2)\cdots(\xi_vt_m)(\partial_x^mv) \\
+		\end{split}\end{equation} %}
+		$\xi_v$は子供の部分木の順序を置換しても不変となることに注意する。
+		この不変性がCM(Connes-Mxxx)係数に反映される。
+		\begin{equation}\begin{split} %{
+			\xi_v\mytree{
+				&& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+				&\circ \ar@{-}[dl] \ar@{-}[dr] && \circ \\
+				\circ \ar@{-}[d] && \circ \\
+				\circ
+			} = \xi_v\mytree{
+				&& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+				&\circ \ar@{-}[dl] \ar@{-}[dr] && \circ \\
+				\circ && \circ \ar@{-}[d] \\
+				&& \circ
+			} = \xi_v\mytree{
+				& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+				\circ && \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				& \circ \ar@{-}[d] && \circ \\
+				& \circ
+			} = \xi_v\mytree{
+				& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+				\circ && \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				& \circ && \circ \ar@{-}[d] \\
+				&&& \circ
+			}
+		\end{split}\end{equation} %}
+		$\xi_v$は準同型$(T_\bullet\mybf{1},\amalg,\bullet[])\to (\myop{end}k[x],\myspace,\myid)$
+		になる。(要証明$\to$べき乗の次数に関する帰納法)
+		\begin{equation}\begin{split} %{
+			\xi_v(f_1\amalg f_2) = (\xi_vf_1)(\xi_vf_2) \quad\text{for all }f_1,f_2\in kT_\bullet\mybf{1}
+		\end{split}\end{equation} %}
+		べき乗を任意の$f\in kT_\bullet\mybf{1},\;n\in\mybf{N}$に対して
+		次のように定義し、
+		\begin{equation}\begin{split} %{
+			f^{\amalg n} &= \begin{cases} %{
+				\bullet[], &\text{ iff }n=0 \\
+				\underbrace{f\amalg\cdots\amalg f}_{n\text{個}}, &\text{ otherwise } \\
+			\end{cases} %}
+		\end{split}\end{equation} %}
+		エクスポーネントを任意の$f\in kT_\bullet\mybf{1}$に対して
+		次のように定義する。
+		\begin{equation}\begin{split} %{
+			\exp_\amalg f = \sum_{n\in\mybf{N}}\frac{1}{n!}f^{\amalg n}
+		\end{split}\end{equation} %}
+		すると、任意の$t\in k$に対して次の式が成り立つ。
+		\begin{equation}\begin{split} %{
+			\xi_v\exp_\amalg(t\bullet[\circ]) = \exp(tv\partial_x)
+		\end{split}\end{equation} %}
+
+		$m_\amalg$に双対な余積を求めて、その役割を調べる。
+	\end{todo} %todo:この先}
+
 	\begin{formula}[Picardの再帰法]\label{formula:Picardの再帰法} %{
 		式変形
 		\begin{equation}\begin{split} %{
