@@ -1,3 +1,274 @@
+\section{文字列}\label{s1:文字列} %{
+	この節で用いる約束を挙げておく。この節では、これらの約束を断りなく使う。
+	\input{word}
+
+	\subsection{積の摂動計算の例}\label{s2:積の摂動計算の例} %{
+		$R$を半環、$m$を積とする。積$m$の定義域はある$R$係数半モジュールとする。
+		積$m_t$がパラメータ$t\in R$で次のように与えられたとする。
+		\begin{equation*}\begin{split} %{
+			m_t &= \beta_0 + t\beta_1 + t^2\beta_2 + \cdots \\
+			\beta_0 &= m \\
+		\end{split}\end{equation*} %}
+		このとき、$m_t$の結合性$m_t(m_t\otimes \myid)=m_t(\myid\otimes m_t)$
+		を$t$のべきについて展開すると、任意の$t$に対しての結合性が成り立つための
+		必要十分条件（少なくとも十分条件）が次の式が与えられる。
+		\begin{equation*}\begin{split} %{
+			\beta_1(\beta_0\otimes \myid) + \beta_0(\beta_1\otimes \myid)
+			&= \beta_1(\myid\otimes \beta_0) + \beta_0(\myid\otimes \beta_1)
+			\\
+			\beta_2(\beta_0\otimes \myid) + \beta_1(\beta_1\otimes \myid)
+			+ \beta_0(\beta_2\otimes \myid)
+			&= \beta_2(\myid\otimes \beta_0) + \beta_1(\myid\otimes \beta_1)
+			+ \beta_0(\myid\otimes \beta_2)
+			\\
+			\cdots \\
+			\sum_{0\le i\le n}\beta_{n-i}(\beta_i\otimes \myid)
+			&= \sum_{0\le i\le n}\beta_{n-i}(\myid\otimes \beta_i)
+			\cdots \\
+		\end{split}\end{equation*} %}
+
+		集合$A$から生成された自由モノイド$WA$で、文字列の連結$m_*$からの変形
+		\begin{equation}\label{eq:積の変形その一}\begin{split} %{
+			m_t([a_1]\otimes[a_2]) &= [a_1a_2] + t[a_2a_1] \\
+		\end{split}\end{equation} %}
+		を計算してみる。$m_t$の結合性の条件は、$1$以上の自然数$n$に対して
+		\begin{equation*}\begin{split} %{
+			\beta_L^n = \sum_{0\le i\le n}\beta_{n-i}(\beta_i\otimes \myid)
+			,\quad
+			\beta_R^n = \sum_{0\le i\le n}\beta_{n-i}(\myid\otimes \beta_i)
+		\end{split}\end{equation*} %}
+		とおくと任意の$w_1,w_2,w_3\in WA$に対して
+		\begin{equation*}\begin{split} %{
+			\beta_L^n(w_1\otimes w_2\otimes w_3)
+			=\beta_R^n(w_1\otimes w_2\otimes w_3)
+		\end{split}\end{equation*} %}
+		となる。文字列の並べ替えを計算するだけなので、
+		$[a_1a_2\cdots a_m]=(12\cdots m)$と並びの順序を括弧$()$でくくって書き、
+		テンソル積の記号は省略する。例えば、$[a_1a_2]\otimes[a_3a_4]$は$(12)(34)$
+		と書く。
+		
+		$(1)(2)(3)$に対する結合性の条件をの$t^n$の項ごとに計算する。
+		$0=\beta_2(1)(2)=\beta_3(1)(2)=\cdots$だから、$(1)(2)(3)$に対する計算
+		では、任意の$n\in\mybf{N}+$で、次のように$\beta_L^n$と$\beta_R^n$は
+		二項だけの和になる。
+		\begin{equation*}\begin{split} %{
+			\beta_L^n(1)(2)(3) &= \Bigl(\beta_n(\beta_0\otimes \myid)
+			+\beta_{n-1}(\beta_1\otimes \myid)\Bigr)(1)(2)(3) \\
+			&= \beta_n(12)(3) + \beta_{n-1}(21)(3) \\
+			\beta_R^n(1)(2)(3) &= \Bigl(\beta_n(\myid\otimes \beta_0)
+			+\beta_{n-1}(\myid\otimes \beta_1)\Bigr)(1)(2)(3) \\
+			&= \beta_n(1)(23) + \beta_{n-1}(1)(32) \\
+		\end{split}\end{equation*} %}
+		となる。つまり、$t^n$の項で$m_t(1)(2)(3)$の結合性が成り立つための条件が
+		\begin{equation*}\begin{split} %{
+			\beta_n(12)(3) + \beta_{n-1}(21)(3)
+			=\beta_n(1)(23) + \beta_{n-1}(1)(32)
+		\end{split}\end{equation*} %}
+		となる。したがって、ある$n$で$\beta_n(12)(3)=\beta_n(1)(23)=0$とできれば、
+		$n$以上のすべての$p$で$\beta_p(12)(3)=\beta_p(1)(23)=0$とできる。
+		以上を注意して計算する。
+
+		$(1)(2)(3)$に対する一次の条件は
+		$\beta_1(12)(3) + (213)=\beta_1(1)(23) + (132)$となり、
+		$\beta_1(12)(3) = (132),\quad \beta_1(1)(23) = (213)$とおける。 
+		二次の条件は
+		$\beta_2(12)(3)+(231)=\beta_2(1)(23)+(312)$となり、
+		$\beta_2(12)(3)=(312),\quad\beta_2(1)(23)=(231)$とおける。
+		三次の条件は$\beta_3(12)(3)+(321)= \beta_3(1)(23)+(321)$となり、
+		$\beta_3(12)(3)=\beta_3(1)(23)=0$とおける。したがって、
+		\begin{equation*}\begin{split} %{
+			m_t(12)(3) &= (123) + t(132) + t^2(312) \\
+			m_t(1)(23) &= (123) + t(213) + t^2(231) \\
+		\end{split}\end{equation*} %}
+		となることがわかる。
+
+		$(12)(3)(4)$に対する$m_t$の結合性のための条件は
+		\begin{equation*}\begin{split} %{
+			\beta_1(123)(4)+(1324)=\beta_1(12)(34)+(1243)
+		\end{split}\end{equation*} %}
+		および、$n\in\mybf{N}$に対して
+		\begin{equation*}\begin{split} %{
+			&\beta_{n+2}(123)(4) +\beta_{n+1}(132)(4) +\beta_{n}(312)(4) \\
+			&= \beta_{n+2}(12)(34)+\beta_{n+1}(12)(43)
+		\end{split}\end{equation*} %}
+		となり、$(12)(3)$に対する場合と同様に、$\beta_n$の次数$n$について順に
+		計算していくと、
+		\begin{equation*}\begin{split} %{
+			m_t(123)(4) &= (1234)+ t(1243)+ t^2(1423)+ t^3(4123) \\
+			m_t(12)(34) &= (1234)+ t(1324)+ t^2\Bigl((1342)+ t^2(3124)\Bigr)
+			+ t^3(3142)+ t^4(3412)
+		\end{split}\end{equation*} %}
+		となることがわかる。
+
+		$\beta_n$の次数$n$について低次の項を二つ計算してみたが、$m_t$の規則の
+		予想がつく。$m_t([a_1a_2\cdots a_m]\otimes[b_1b_2\cdots b_n])$に対して、
+		一項目の文字の集合を$(a)=\set{a_1,a_2,\dots,a_n}$、
+		二項目の文字の集合を$(b)=\set{b_1,b_2}$とすると、
+		\begin{itemize} %{
+			\item 文字列$[a_1a_2\cdots a_mb_1b_2\cdots b_n]$から始めて、
+			\item 一度に一組だけ隣り合った$(a)$と$(b)$の文字の順序を入れ替えて
+			新たな文字列を作り出す。
+			ただし、$(a)$を右へ$(b)$を左へ動かす入れ替えしか許さないものと
+			する。例えば、$[a_1a_2b_1a_3b_2]$という文字列から$[a_1b_1a_2a_3b_2]$
+			または$[a_1a_2b_1b_2a_3]$へ文字の順序を入れ替える。
+			\item 文字を入れ替えた時、因子$t$を文字列に掛ける。
+			\item 文字を入れ替えたとき、既に同一の文字があったらそれ以上の
+			文字の入れ替えを中止する。
+			\item 文字列$[b_1b_2\cdots b_na_1a_2\cdots a_m]$に到達したとき
+			終了する。
+		\end{itemize} %}
+		例えば、$m_t([a_1a_2]\otimes[b_1b_2])$の計算では、次のような規則で
+		項を列挙していく。
+		\begin{equation*}\xymatrix{
+			& [a_1a_2b_1b_2] \ar[d] \\
+			& [a_1b_1a_2b_2] \ar[dl] \ar[dr] \\
+			[b_1a_1a_2b_2] \ar[dr] && [a_1b_1b_2a_2] \ar[dl] \\
+			& [b_1a_1b_2a_2] \ar[d] \\
+			& [b_1b_2a_1a_2] \\
+		}\end{equation*}
+		\begin{equation*}\begin{split} %{
+		\end{split}\end{equation*} %}
+		始点と終点を唯一つだけもつDAG（分岐と合流だけでループを持たないグラフ）
+		で表現される。始点からの経路の長さが$t$のべきになる。
+		また、次のような木の操作で表現してもよいだろう。
+		\begin{equation*}\begin{split} %{
+			\mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			a_1 && a_2 \\
+			} \lhd [b_1b_2] &= \mytree{
+			&& \bullet \ar@{-}[dll] \ar@{-}[dl]\ar@{-}[dr] \ar@{-}[drr]\\
+			a_1 & a_2 && b_1 & b_2 \\
+			}+ \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			a_1 && a_2 \ar@{-}[dl] \ar@{-}[dr] \\
+			& b_1 && b_2 \\
+			}+ \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr]\\
+			a_1 & a_2 \ar@{-}[d]  & b_2\\
+			& b_1 \\
+			} \\
+			&\;+ \mytree{
+			&& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			& a_1 \ar@{-}[dl] \ar@{-}[dr] && a_2 \\
+			b_1 && b_2 \\
+			} + \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[dr] \\
+			a_1 \ar@{-}[d] && a_2 \ar@{-}[d] \\
+			b_1 && b_2 \\
+			} + \mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+			a_1 \ar@{-}[d] & a_2 & b_2\\
+			b_1 \\
+			} \\
+			&= \sum_{1\le i_1\le i_2\le 3}\left(\mytree{
+			& \bullet:3 \ar@{-}[dl] \ar@{-}[dr] \\
+			a_1:1 && a_2:2 \\
+			}\lhd_{i_1}b_1\right)\lhd_{i_2}b_2
+		\end{split}\end{equation*} %}
+		ここで、$x\lhd_i b$は葉$b$を木$x$の$i$番目の頂点の最右の子供として
+		付け加えるという操作である。頂点の番号は帰りがけ順につけられる。
+		こうして作られた木を帰りがけ順に並べて単語にして、根$\bullet$を取り除く
+		と、積$m_t([a_1a_2]\otimes[b_1b_2])$の項の和が列挙される。この方法では
+		$t$のべきが明確でないが、DAGを用いた計算で必要となる重複のチェックを
+		必要としないことが利点となる。
+
+		\begin{todo}[接木によるシャッフル積の導出]\label{todo:接木によるシャッフル積の導出} %{
+			$\beta_\lhd:RT_+A\otimes RWA\to RT_+A$を、任意の木$t\in T_+A$に対して
+			\begin{equation*}\begin{split} %{
+				t\lhd 1_W = t
+			\end{split}\end{equation*} %}
+			、任意の木$t\in T_+A,\;a_1,a_2,\dots,a_m\in A$に対して
+			\begin{equation*}\begin{split} %{
+				t\lhd [a_1a_2\cdots a_m] = 
+				\sum_{i_1\le i_2\le \cdots\le i_m\in \myop{post}t}
+				\Bigl(\cdots\bigl((t\lhd_{i_1}a_1)\lhd_{i_2}a_2\bigr)\cdots\Bigr)\lhd_{i_m}a_m
+			\end{split}\end{equation*} %}
+			と定義する。すると、
+			\begin{equation*}\begin{split} %{
+				t\lhd[a_1]\lhd[a_2]
+				&= (\sum_{i_1<i_2\in \myop{post}t}+\sum_{i_2<i_1\in \myop{post}t})
+				t\lhd_{i_1}a_1\lhd_{i_2}a_2 \\
+				&\; + \sum_{i\in \myop{post}t}(t\lhd_{i}a_1)\lhd_{i}a_2
+			\end{split}\end{equation*} %}
+			となるが、二項目は$a_1$と$a_2$が同じの頂点$i$の部分木になる場合で、
+			次の二通りの場合がある。
+			\begin{equation*}\begin{split} %{
+				\mytree{
+					& b:i \ar@{-}[dl]\ar@{-}[d]\ar@{-}[dr] \\
+					*+[F]{u} & a_1 & a_2 \\
+				},\quad \mytree{
+					& b:i \ar@{-}[dl]\ar@{-}[dr] \\
+					*+[F]{u} && a_1 \ar@{-}[d] \\
+					&& a_2 \\
+				}
+			\end{split}\end{equation*} %}
+			ここで、$u$は操作前に$t$に存在する$i$の部分木で、$b\in A$は頂点$i$
+			のラベルとする。二つ目の場合は、帰りがけ順で単語に射影
+			$\pi_{\myop{post}}$すると次の木と同一の単語
+			$[\pi_{\myop{post}}u]*[a_2a_1b]$を与える。
+			\begin{equation*}\begin{split} %{
+				\mytree{
+					& b:i \ar@{-}[dl]\ar@{-}[d]\ar@{-}[dr] \\
+					*+[F]{u} & a_2 & a_1 \\
+				}
+			\end{split}\end{equation*} %}
+			したがって、$
+				\pi_{\myop{post}}\Bigl(t\lhd[a_1]\lhd[a_2]\Bigr) 
+				= \pi_{\myop{post}}\Bigl(t\lhd\bigl([a_1a_2] + [a_2a_1]\bigr)\Bigr)
+			$となって、シャッフル積$[a_1]\sqcup[a_2]=[a_1a_2]+[a_2a_1]$を与える。
+			三文字以上の場合は、場合分けが複雑になるので工夫が必要になるが、
+			木の操作からシャッフル積を導出できるかもしれない。
+			そもそもシャッフル積そのものが複雑である。
+		\end{todo} %todo:接木によるシャッフル積の導出}
+
+		\begin{todo}[余積からシャッフル積を導出]\label{todo:余積からシャッフル積を導出} %{
+			シャッフル積を計算する手立てを余積で与えることを考える。
+			余積$\Delta_\sqcup:RWA\to RWA\otimes RWA$を、
+			\begin{equation*}\begin{split} %{
+				\Delta_\sqcup1_W = 1_W\otimes 1_W
+			\end{split}\end{equation*} %}
+			任意の$a_1,a_2,\dots,a_m\in A$に対して
+			\begin{equation*}\begin{split} %{
+				\Delta_\sqcup [a_1a_2a_3\cdots a_m]
+				& = 1_W\otimes [a_1a_2a_3\cdots a_m] \\
+				&\; + [a_1]\otimes [a_2a_3\cdots a_m] \\
+				&\; + [a_1a_2]\otimes [\cdots a_m] \\
+				&\; + \cdots \\
+				&\; + [a_1a_2a_3\cdots a_m]\otimes 1_W
+			\end{split}\end{equation*} %}
+			と定義する。次の可換図を満たす$R$双線形二項写像$\beta$を考える。
+			\begin{equation*}\xymatrix@C+2pc{
+				RWA^{\otimes 2} 
+				\ar[r]^{(\Delta_\sqcup\otimes \Delta_\sqcup)\sigma_{23}}
+				\ar[d]^{\beta}
+				& RWA^{\otimes 4} \ar[d] 
+				\ar[d]^{\beta\otimes \beta}
+				\\
+				RWA 
+				& RWA^{\otimes 2} \ar[l]_{m_*} \\
+			}\end{equation*}
+		\end{todo} %todo:余積からシャッフル積を導出}
+
+		\begin{todo}[課題]\label{todo:課題} %{
+			\begin{itemize} %{
+				\item 任意の元に対する積$m_t$を結合性の条件のみから定めることが
+				できるか？
+				\item できるとするならばなぜ？
+				\item できるとするならば、線形代数で任意の元に対する積$m_t$を
+				を求められないか？
+				\item 双対な余積の変形
+				\item 余積$
+				[a_1a_2\cdots a_m]\mapsto
+				1_W\otimes[a_1a_2a_3\cdots a_m]+[a_1]\otimes[a_2a_3\cdots a_m]
+				+[a_1a_2]\otimes[\cdots a_m]+\cdots+[a_1a_2a_3\cdots a_m]\otimes1_W
+				$に双対で$m([a_1]\otimes[a_2])=[a_1a_2]+[a_2a_1]$となる積は
+				唯一定まるか？
+				\item
+			\end{itemize} %}
+		\end{todo} %todo:課題}
+	%s2:積の摂動計算の例}
+%s1:文字列}
+
 \section{リスト}\label{s1:リスト} %{
 	$R=(R,+,0,m_R,1)$を可換半環、$A$を有限集合、$WA=(WA,m_*,1_*)$を$A$から
 	生成された自由モノイドとする。ここで、積$m_*$は文字列の連結で定義される。
@@ -167,6 +438,18 @@
 	と書くと、$n+1$次の任意の置換$\sigma$に対して
 	$\Delta^nw=w_{(\sigma1)}\otimes w_{(\sigma2)}\otimes\cdots\otimes w_{\left(\sigma(n+1)\right)}$
 	となる。
+
+	\begin{todo}[シャッフル積]\label{todo:シャッフル積} %{
+		次の可換図で定義された$R$双線形二項演算$\beta_\sqcup$は積になるか？
+		\begin{equation}\xymatrix{
+			RWA\otimes RWA \ar[r]^{m_*} \ar@{.>}[d]^{\beta_\sqcup} 
+			& RWA \ar[d]^{\Delta_*} \\
+			RWA & RWA\otimes RWA \ar[l]_{m_*} \\
+		}\end{equation}
+	\end{todo} %todo:シャッフル積}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
 
 	次の$R$線形写像$\Delta_\amalg$は余積になる。
 	\begin{equation}\begin{split} %{
