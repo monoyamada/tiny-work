@@ -1,93 +1,6 @@
-\section{木} %{
+\section{木構造}\label{s1:木構造} %{
 	この節で用いる約束を挙げておく。この節では、これらの約束を断りなく使う。
-	\input{word}
-
-	\subsection{作用から積の導出}\label{s2:作用から積の導出} %{
-		$A,B$を集合、$R$を半環とする。
-		$R$双線形作用$\beta_\rhd:RA\otimes RB\to RB$
-		と$R$双線形二項演算$\beta_\perp:RA\otimes RA\to RA$が定義されていて、
-		次の性質を満たすとする。
-		\begin{equation}\label{eq:結合的な作用}\begin{split} %{
-			a_2\rhd a_1\rhd b &= (a_2\perp a_1)\rhd b
-			\quad\text{for all }a_1,a_2\in A,\;b\in B
-		\end{split}\end{equation} %}
-		すると、任意の$a_1,a_2,a_3\in A,\;b\in B$に対して、内側から
-		二項演算$\perp$に書き直していくと
-		\begin{equation*}\begin{split} %{
-			a_3\rhd a_2\rhd a_1\rhd b &= a_3\rhd(a_2\perp a_1)\rhd b \\
-			&= \Bigl(a_3\perp(a_2\perp a_1)\Bigr)\rhd b
-		\end{split}\end{equation*} %}
-		となり、外側から二項演算$\perp$に書き直していくと
-		\begin{equation*}\begin{split} %{
-			a_3\rhd a_2\rhd a_1\rhd b &= (a_3\perp a_2)\rhd a_1\rhd b \\
-			&= \Bigl((a_3\perp a_2)\perp a_1\Bigr)\rhd b
-		\end{split}\end{equation*} %}
-		となる。したがって、$A$の同値関係$\sim_\rhd$
-		\begin{equation}\begin{split} %{
-			a_1 \sim_\rhd a_2 \implies
-			a_1\rhd b = a_2\rhd b \quad\text{for all }b\in B
-		\end{split}\end{equation} %}
-		を用いて、$\perp$の結合性が導かれる。
-		\begin{equation*}\begin{split} %{
-			a_3\perp(a_2\perp a_1) \sim_\rhd (a_3\perp a_2)\perp a_1
-		\end{split}\end{equation*} %}
-
-		$\rhd$と$\perp$の関係式\eqref{eq:結合的な作用}を可換図で書くと
-		次のようになる。
-		\begin{equation*}\xymatrix@C+1pc{
-			RA\otimes RA\otimes RB \ar[d]^{\myid\otimes \beta_\rhd} \ar[r]^{\beta_\perp\otimes \myid} 
-			& RA\otimes RB \ar[d]^{\beta_\rhd} \\
-			RA\otimes RB \ar[r]^{\beta_\rhd} & RB \\
-		}\end{equation*}
-		余作用$\nabla:RB\to RA\otimes RB$と
-		余二項演算$\gamma:RA\to RA\otimes RA$を用いて、
-		この可換図の矢印の向きを反転させると次の可換図になる。
-		\begin{equation*}\xymatrix@C+1pc{
-			RA\otimes RA\otimes RB  
-			&  RA\otimes RB \ar[l]_{\gamma\otimes \myid} \\
-			RA\otimes RB \ar[u]_{\myid\otimes \nabla}
-			& RB \ar[l]_{\nabla} \ar[u]_{\nabla} \\
-		}\end{equation*}
-		式で書くと$(\myid\otimes\nabla)\nabla=(\gamma\otimes\myid)\nabla$
-		となる。この関係を$
-		(\myid\otimes\myid\otimes\nabla)(\myid\otimes\nabla)\nabla
-		$に対して左から適用していくと
-		\begin{equation*}\begin{split} %{
-			(\myid\otimes\myid\otimes\nabla)(\myid\otimes\nabla)\nabla
-			&= (\myid\otimes\gamma\otimes\myid)(\myid\otimes\nabla)\nabla \\
-			&= (\myid\otimes\gamma\otimes\myid)(\gamma\otimes\myid)\nabla \\
-		\end{split}\end{equation*} %}
-		となり、右から適用していくと
-		\begin{equation*}\begin{split} %{
-			(\myid\otimes\myid\otimes\nabla)(\myid\otimes\nabla)\nabla
-			&= (\myid\otimes\myid\otimes\nabla)(\gamma\otimes\myid)\nabla \\
-			&= (\gamma\otimes\nabla)\nabla \\
-			&= (\gamma\otimes\myid\otimes\myid)(\myid\otimes\nabla)\nabla \\
-			&= (\gamma\otimes\myid\otimes\myid)(\gamma\otimes\myid)\nabla \\
-		\end{split}\end{equation*} %}
-		となる。したがって、$\set{\nabla^{(1)}b}_{b\in B}$で張られる
-		部分空間$\nabla^{(1)}A\subseteq A$内で、$\gamma$の余結合性が導かれる。
-		\begin{equation*}\begin{split} %{
-			(\myid\otimes\gamma)\gamma = (\gamma\otimes\myid)\gamma
-			\quad\text{in }\nabla^{(1)}A
-		\end{split}\end{equation*} %}
-
-		一般には、与えられた作用$\rhd$に対して、式\eqref{eq:結合的な作用}
-		を満たすような二項演算$\perp$は定義できないが、
-		$\beta_\rhd:RA\otimes RB\to RB$から空間$RA$を二項演算$\perp$が定義
-		できるところまで拡大していけることがある。
-		\begin{equation*}\begin{split} %{
-			\xymatrix{
-				RA \ar[dr]_{\mybiop{\rhd}} \ar[r]^{i}
-				& R\widetilde{A} \ar[d]^{\mybiop{\widetilde{\rhd}}} \\
-				& \myop{end}RB \\
-			} \quad
-			\mybiop{\widetilde{\rhd}}(\myid\otimes\mybiop{\widetilde{\rhd}})
-			=\mybiop{\widetilde{\rhd}}(\mybiop{\perp}\otimes\myid)
-		\end{split}\end{equation*} %}
-		空間の拡大の仕方が、文字から単語、単語から木、木からグラフといった
-		データ構造を拡大していく方法が使えることがある。
-	%s2:作用から積の導出}
+	\input{term}
 
 	\subsection{木の定義}\label{s2:木の定義} %{
 		木構造は様々な場面で使われ、使う場面ごとに様々な定義がある。
@@ -95,1089 +8,475 @@
 		平面上のラベル付き根付き木\cite{arxiv:hoffman:0710.3739}という長い
 		修飾子がついた木になる。この節で使ういくつかの木を定義しておく。
 
-		\begin{todo}[定義すべきもの]\label{todo:定義すべきもの} %{
-			\begin{description} %{
-				\item[根付きの木]木の同値関係の観点から
-				\item[平面上の木]木の同値関係の観点から
-				\item[ラベル付きの木]木の同値関係の観点から
-				\item[頂点の指定の仕方]三種類の頂点の指定の仕方
-				\begin{itemize} %{
-					\item 行きがけ順
-					\item 帰りがけ順
-				\end{itemize} %}
-				頂点に順序をつけて表す。木の操作ごとに適切な順序を用いる。
-				例えば、次のような場合は、順序関係$i\le j$は行きがけ順と帰りがけ順
-				で異なる。
-				\begin{equation*}\begin{split} %{
-					\sum_{i\le j\in\myop{pre}t}t\lhd_ix\lhd_jy
-				\end{split}\end{equation*} %}
-				また、木を単語に直す際、行きがけ順と帰りがけ順では、文字の並び以外
-				にも単語としての同値性も違いがでる。例えば、次の五つの木は、
-				行きがけ順で単語にするとすべて同じ単語になってしまう。
-				\begin{equation*}\begin{array}{rlllll} %{
-					& \mytree{
-						& a_0 \ar@{-}[dl]\ar@{-}[d]\ar@{-}[dr] \\
-						a_1 & a_2 & a_3 \\
-					},& \mytree{
-						& a_0 \ar@{-}[dl]\ar@{-}[dr] \\
-						a_1 \ar@{-}[d] && a_3 \\
-						a_2 \\
-					},& \mytree{
-						& a_0 \ar@{-}[dl]\ar@{-}[dr] \\
-						a_1 && a_2 \ar@{-}[d]\\
-						&& a_3
-					},& \mytree{
-						& a_0 \ar@{-}[d] \\
-						& a_1 \ar@{-}[dl]\ar@{-}[dr] \\
-						a_2 && a_3
-					},& \mytree{
-						a_0 \ar@{-}[d] \\
-						a_1 \ar@{-}[d] \\
-						a_2 \ar@{-}[d] \\
-						a_3
-					} \\
-					\text{pre} & [0123] & [0123] & [0123] & [0123] & [0123] \\
-					\text{post} & [1230] & [2130] & [1320] & [2310] & [3210] \\
-				\end{array}\end{equation*} %}
-				逆に、次の五つの木は、帰りがけ順で単語にするとすべて同じ単語に
-				なってしまう。
-				\begin{equation*}\begin{array}{rlllll} %{
-					& \mytree{
-						& a_3 \ar@{-}[dl]\ar@{-}[d]\ar@{-}[dr] \\
-						a_0 & a_1 & a_2 \\
-					},& \mytree{
-						& a_3 \ar@{-}[dl]\ar@{-}[dr] \\
-						a_1 \ar@{-}[d] && a_2 \\
-						a_0 \\
-					},& \mytree{
-						& a_3 \ar@{-}[dl]\ar@{-}[dr] \\
-						a_0 && a_2 \ar@{-}[d]\\
-						&& a_1
-					},& \mytree{
-						& a_3 \ar@{-}[d] \\
-						& a_2 \ar@{-}[dl]\ar@{-}[dr] \\
-						a_0 && a_1
-					},& \mytree{
-						a_3 \ar@{-}[d] \\
-						a_2 \ar@{-}[d] \\
-						a_1 \ar@{-}[d] \\
-						a_0
-					} \\
-					\text{pre} & [3012] & [3102] & [3021] & [3201] & [3210] \\
-					\text{post} & [0123] & [0123] & [0123] & [0123] & [0123] \\
-				\end{array}\end{equation*} %}
-				\item[木の書き方]子供を括弧$[]$でくくって書く。また、文献
-				\cite{arxiv:hoffman:0710.3739}のBalanced Bracket Arrangement
-				という書き方は、この書き方のラベルなしの場合になっている。
-				\item[空の木の取り扱い]空の木をどのように取り扱うかを明記すること。
-				\item[森]森を定義すること。
-			\end{description} %}
-		\end{todo} %todo:定義すべきもの}
+		通常の離散数学では、木とは一種のグラフとして定義される。
+
+		\begin{definition}[木]\label{def:木} %{
+			$a$をグラフとする。$a$が次の条件を満たすとき$a$を木という。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 無向で、
+				\item 単純で、
+				\item 連結で、
+				\item サイクルを持たない。
+			\end{itemize} %}
+			ここで、単純グラフとは次の条件を満たすグラフのことである。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 頂点間に2つ以上の辺を持たず、
+				\item ループを持たない。
+			\end{itemize} %}
+			ループとは始点と終点が同一の頂点となる辺のことである。
+			サイクルとは始点と終点が同一の頂点となる辺の連結のことである。
+		\end{definition} %def:木}
+
+		\begin{definition}[根付きの木]\label{def:根付きの木} %{
+			根と呼ばれる頂点が一つ固定された木を根付きの木という。
+		\end{definition} %def:根付きの木}
+
+		根付きの木とそうでない木との違いは、同値関係の違いである。
+		次の図は、$\set{a,b,c}$を頂点とする木でその違いを示す。
+		\begin{equation*}\begin{array}{rcccccc} %{
+			\text{根付きの木} & \mytree{
+				& a \ar@{-}[dl] \ar@{-}[dr] \\
+				b && c
+			} &\neq& \mytree{
+				b \ar@{-}[d] \\
+				a \ar@{-}[d] \\
+				c
+			} &\neq& \mytree{
+				c \ar@{-}[d] \\
+				a \ar@{-}[d] \\
+				b
+			} \\
+			\text{根付きでない木} & \mytree{
+				& a \ar@{-}[dl] \ar@{-}[dr] \\
+				b && c
+			} &=& \mytree{
+				b \ar@{-}[d] \\
+				a \ar@{-}[d] \\
+				c
+			} &=& \mytree{
+				c \ar@{-}[d] \\
+				a \ar@{-}[d] \\
+				b
+			}
+		\end{array}\end{equation*} %}
+
+		\begin{definition}[平面上の木]\label{def:平面上の木} %{
+			平面上に書かれた木を平面上の木という。
+		\end{definition} %def:平面上の木}
+
+		平面上の木とそうでない木との違いは、同値関係の違いである。
+		次の図は、$\set{a,b,c}$を頂点とする木でその違いを示す。
+		\begin{equation*}\begin{array}{rcccccc} %{
+			\text{平面上の木} & \mytree{
+				& a \ar@{-}[dl] \ar@{-}[dr] \\
+				b && c
+			} &\neq& \mytree{
+				& a \ar@{-}[dl] \ar@{-}[dr] \\
+				c && b
+			} \\
+			\text{平面上でない木} & \mytree{
+				& a \ar@{-}[dl] \ar@{-}[dr] \\
+				b && c
+			} &=& \mytree{
+				& a \ar@{-}[dl] \ar@{-}[dr] \\
+				c && b
+			}
+		\end{array}\end{equation*} %}
+
+		\begin{definition}[ラベル付きの木]\label{def:ラベル付きの木} %{
+			$A$を集合とする。木の頂点に$A$の元を書いたものを$A$のラベル付きの木
+			という。
+		\end{definition} %def:ラベル付きの木}
+
+		ラベル付きの木とそうでない木との違いは、同値関係の違いである。
+		次の図は、$\set{a,b,c,d}$をラベルとする木でラベル付きの木の同値関係を
+		示す。
+		\begin{equation*}\begin{split} %{
+			\mytree{
+				& 0:a \ar@{-}[dl] \ar@{-}[dr] \\
+				1:b && 2:c
+			} = \mytree{
+				& 0:a \ar@{-}[dl] \ar@{-}[dr] \\
+				1:b && 2:d
+			} \iff c = d \\
+		\end{split}\end{equation*} %}
+
+		どのような同値関係を使いたいかによって、木の種類が使い分けられる。
+		プログラミングでは、木とは
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 平面上の
+			\item 根付きの
+			\item ラベル付きの
+		\end{itemize} %}
+		木を指すことが多いが、数学の場合は様々である。
+
+		集合$A$をラベルとする平面上の根付きの木全体の集合を$TA$と書く。
+		この節では、平面上の根付きの木を単に木という。
+		木$t\in TA$の頂点数を$\zettai{t}$と書く。
+		$T_nA\subseteq TA$を頂点数が$n$の部分集合とする
+		$T_nA=\set{t\in TA\bou \zettai{t}=n}$。'disjoint union'を用いて$
+		TA=\oplus_{n\in\mybf{N}}T_n$と書かれる。
+		頂点数が$0$の空の木を除いた$TA$の部分集合を$
+		T_+A:=\oplus_{n\in\mybf{N}_+}T_n$と書く。
+		$TA$から生成された自由モノイド$WTA$を森という。
+
+		$TA$の元をラベルと括弧$[]$を並べて次のように書く。
+		\begin{equation*}\begin{split} %{
+			a_1[a_2[a_4]a_3] := \mytree{
+				& a_1 \ar@{-}[dl] \ar@{-}[dr] \\
+				a_2 \ar@{-}[d] && a_3 \\
+				a_4
+			}\quad\text{for all }a_1,a_2,a_3,a_4\in A
+		\end{split}\end{equation*} %}
+		また、頂点のラベルと子供の部分木と括弧$[]$を並べて次のようにも書く。
+		\begin{equation*}\begin{split} %{
+			a[t_1t_2\cdots t_m] := \mytree{
+				& a \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+				*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_m}
+			}\quad\text{for all }a\in A,\;t_1,t_2,\dots,t_m\in TA
+		\end{split}\end{equation*} %}
+		頂点が一つもない空の木は$1_T$と書く。
+
+		木$t\in TA$の頂点全体の集合を$\set{t}$と書く。
+		$\set{t}$はラベルの集合ではなく、プログラミングにおけるポインターの
+		集合に相当するものである。
+		同様に$w\in WTA$の頂点全体の集合を$\set{w}$と書く。
+		$t_1t_2\cdots t_m\in TA$とすると、
+		$\set{[t_1t_2\cdots t_m]}=\oplus_{1\le i\le m}\set{t_i}$となる。
+		木$t\in TA$の根は$\myop{root}t\in \set{t}$と書く。
+		また、根の子供からなる森を$\myop{forest}$と書く。
+		例えば、$t_1t_2\cdots t_m\in TA$とすると、
+		$\myop{forest}a[t_1t_2\cdots t_m]=[t_1t_2\cdots t_m]$となる。
 	%s2:木の定義}
 
-	\subsection{この節で扱う木}\label{s2:この節で扱う木} %{
-		$A$を集合、$TA$を$A$を頂点に持つ木の集合とする。
-		$TA$には空の木を含めるとする。空の木を含めない場合は$T_+A$と書く。
+	\subsection{接木}\label{s2:接木} %{
+		$A$を集合、$TA$を$A$をラベルとする平面上の根付き木全体の集合とする。
+		$R$を半環、$RTA$を$R$を基底とする係数の自由半モジュールとする。
 
-		$TA$の元は根が固定されているものとする（根付き木）。
-		例えば、次のような同値関係とする。
-		\begin{equation*}\begin{split} %{
-			\mytree{
-				& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-				a_1 && a_2 \\
-			} \neq \mytree{
-				a_1 \ar@{-}[d] \\
-				a_0 \ar@{-}[d] \\
-				a_2 \\
-			} 
-		\end{split}\end{equation*} %}
-		また、$TA$の同値関係は子供の頂点の並びまで含めるものする（ラベル付き木）。
-		例えば、次のような同値関係とする。
-		\begin{equation*}\begin{split} %{
-			\mytree{
-				& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-				a_1 && a_2 \\
-			} = \mytree{
-				& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-				a_2 && a_1 \\
-			} \iff a_1 = a_2
-		\end{split}\end{equation*} %}
-
-		木を次の図のように子供の頂点を括弧でくくって表すことにする。
-		\begin{equation*}\begin{split} %{
-			a_0[a_1[a_3]a_2[]] = \mytree{
-				& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-				a_1 \ar@{-}[d] && a_2 \\
-				a_3 \\
-			}
-		\end{split}\end{equation*} %}
-		子供を持たない頂点に関しては、$a_0[a_1[a_3]a_2]=a_0[a_1[a_3]a_2[]]$の
-		ように括弧を省略して書くこともある。
-		頂点を一つも持たない木を$1_T$と書く。
-		木$t$の頂点の個数を$\zettai{t}$と書く。
-		例えば、$\zettai{a_0[a_1[a_3]a_2]}=3$、$\zettai{1_T}=0$となる。
-
-		$A$から$TA$への写像$i_T$を次のように定める。
-		\begin{equation*}\begin{split} %{
-			i_Ta = a[]
-		\end{split}\end{equation*} %}
-		$i_TA=\set{i_Ta}_{a\in A}\subseteq TA$は根だけからなる木の集合となり、
-		頂点数が一つの木はすべて$i_TA$に含まれる。
-
-		$TA$から生成される自由モノイド$WTA$の元を森という。森の文字が木になる。
-		$a\in A$を根とし、根の子供の部分木が$t_1,t_2,\dots,t_m$となる木
-		を$a[t_1t_2\cdots t_m]$と書く。また、文字列の連結$m_*$を用いて
-		$a([t_1]*[t_2\cdots t_m])=a[t_1t_2\cdots t_m]$とも書く。
-
-		\begin{todo}[空の木と空の森]\label{todo:空の木と空の森} %{
-			空の木と空の森は同一視されるべきものではないだろうか？
-			単語の場合と異なり、空の木を含めない$T_+A$で考えた方がきれいに
-			まとまるように思える。
-		\end{todo} %todo:空の木と空の森}
-	%s2:この節で扱う木}
-
-	\subsection{根への接木}\label{s2:根への接木} %{
-		木の頂点を行きがけ順に並べることで、木から文字列への写像が定義できる。
-		例えば、$a_0[a_1[a_3]a_2]\mapsto[a_0a_1a_3a_2]$という写像になる。
-		この写像を$\pi_W$と書く。次の可換図を満たす、$T_+A$の二項演算$\land_0$
-		を定義する。
-		\begin{equation}\label{eq:行きがけ順を保つ二項演算}\xymatrix{
-			T_+A\times T_+A \ar@{.>}[d]^{\beta_{\land_0}} \ar[r]^{\pi_W\times\pi_W}
-			& WA\times WA \ar[d]^{m_*} \\
-			T_+A \ar[r]^{\pi_W} & WA \\
-		}\end{equation}
-		$\land_0$は一意には決まらないが、次のように定義すれば可換図を満たす。
-
-		\begin{definition}[根への接木]\label{def:根への接木} %{
-			$R$双線形二項演算$\beta_{\land_0}: RT_+A\otimes RT_+A \to RT_+A$を、
-			任意の$t\in T_+A$に対して次のように、
+		\begin{definition}[頂点への接木]\label{def:頂点への接木} %{
+			木$t\in T_+A$の頂点$i\in\set{t}$の最右の子供として木$u\in T_+A$
+			を付け足す操作を、$t$の頂点$i$へ$u$を接木するといい、中置記法で
+			$\lhd_i$と書く。
+			絵で書くと次のようになる。
 			\begin{equation*}\begin{split} %{
-				t\land_0 1_T = t \\
+				\mytree{
+					& \vdots & \\
+					& a:i \ar@{-}[u] \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+					*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_m}
+				}\lhd_i u = \mytree{
+					& \vdots & \\
+					& a:i \ar@{-}[u] \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \ar@{-}@(r,ru)[drrr] \\
+					*+[F]{t_1} & *+[F]{t_2} & \cdots & *+[F]{t_m} & *+[F]{u}
+				}
 			\end{split}\end{equation*} %}
-			任意の$t,t_1,t_2,\dots,t_m\in T_+A$に対して次のように定義する。
+		\end{definition} %def:頂点への接木}
+
+		すべての頂点にわたって接木をして和をとれば、木の$R$双線形二項演算を
+		定義できる。
+
+		\begin{definition}[接木]\label{def:接木} %{
+			木$t\in T_+A$のすべての頂点に木$u$を接木して和をとる操作を、
+			$t$へ$u$を接木するといい、中置記法で$\lhd$と書く。
 			\begin{equation*}\begin{split} %{
-				a[t_1t_2\cdots t_m]\land_0 t &= a[t_1t_2\cdots t_mt] 
+				\beta_\lhd: RT_+A\otimes RT_+A &\to RT_+A \\
+					t\otimes u &\mapsto \sum_{i\in\set{t}}t\lhd_i u
+					\quad\text{for all }t,u\in T_+A
 			\end{split}\end{equation*} %}
-			二項演算$\land_0$を根への接木ということにする。
-		\end{definition} %def:根への接木}
+		\end{definition} %def:接木}
 
-		$t_1\land_0 t_2$は木$t_1$の根の最右の子供に木$t_2$を付け足す操作である。
-		$\land_0$は結合性を満たさない。例えば、任意の$a_1,a_2,a_3\in A$に
-		対して次のようになり、
-		\begin{equation*}\begin{array}{rll} %{
-			a_1\land_0(a_2\land_0 a_3) &= a_1\land_0 a_2[a_3] &= a_1[a_2[a_3]] \\
-			(a_1\land_0 a_2)\land_0 a_3 &= a_1[a_2]\land_0 a_3 &= a_1[a_2a_3] \\
-		\end{array}\end{equation*} %}
-		次のように結合性が満たされないことがわかる。
-		\begin{equation*}\begin{split} %{
-			a_1\land_0(a_2\land_0 a_3) \neq (a_1\land_0 a_2)\land_0 a_3
-		\end{split}\end{equation*} %}
-		根への接木$\land_0$は結合性を満たさないが、根だけから木
-		$\set{a[]}_{a\in A}$から$T_+A$を生成することができる。
-		例えば、次のようになる。
-		\begin{equation*}\begin{split} %{
-			&a_1\land_0 a_2 = \mytree{
-				a_1 \ar@{-}[d] \\
-				a_2
-			} \\
-			&(a_1\land_0 a_2)\land_0 a_3 = \mytree{
-				& a_1 \ar@{-}[ld] \ar@{-}[rd] \\
-				a_2 && a_3
-			},\quad a_1\land_0(a_2\land_0 a_3) = \mytree{
-				a_1 \ar@{-}[d] \\
-				a_2 \ar@{-}[d] \\
-				a_3
-			} \\
-			&\bigl((a_1\land_0 a_2)\land_0 a_3\bigr)\land_0 a_4 = \mytree{
-				& a_1 \ar@{-}[ld] \ar@{-}[d] \ar@{-}[rd] \\
-				a_2 & a_3 & a_4
-			},\quad \bigl(a_1\land_0 (a_2\land_0 a_3)\bigr)\land_0 a_4 = \mytree{
-				& a_1 \ar@{-}[ld] \ar@{-}[rd] \\
-				a_2 \ar@{-}[d] && a_4 \\
-				a_3
-			}\\
-			&(a_1\land_0 a_2)\land_0 (a_3\land_0 a_4) = \mytree{
-				& a_1 \ar@{-}[ld] \ar@{-}[rd] \\
-				a_2 && a_3 \ar@{-}[d] \\
-				&& a_4
-			} \\
-			&a_1\land_0\bigl((a_2\land_0 a_3)\land_0 a_4\bigr) = \mytree{
-				& a_1 \ar@{-}[d] \\
-				& a_2 \ar@{-}[ld] \ar@{-}[rd] \\
-				a_3 && a_4
-			},\quad a_1\land_0\bigl(a_2\land_0 (a_3\land_0 a_4)\bigr) = \mytree{
-				a_1 \ar@{-}[d] \\
-				a_2 \ar@{-}[d] \\
-				a_3 \ar@{-}[d] \\
-				a_4
-			} \\
-			&\cdots
-		\end{split}\end{equation*} %}
-		このことを命題の形で証明しておく。
-
-		\begin{proposition}[木の生成]\label{prop:木の生成} %{
-			$T_+A$の任意の元$t$は、$\zettai{t}$個の$i_TA$の元を根への
-			接木$\land_0$で掛け合わせたもので書くことができる。
-		\end{proposition} %prop:木の生成}
-		\begin{proof} %{
-			木の頂点数に関する帰納法によって証明する。
-			頂点数が二つの木は、$a_1,a_2\in A$に対して$a_1\land_0 a_2=a_1[a_2]$
-			となるから命題が成り立つ。$n$を$2$以上の自然数とし、頂点数が$n$個の木
-			に対して命題が成り立つとする。頂点数が$n+1$の任意の木$t\in T_+A$は
-			ある自然数$p$があって、空でない木$t_1,t_2,\dots,t_p,t_{p+1}\in T_+X$
-			と根$a\in A$によって$t=a[t_1t_2\cdots t_pt_{p+1}]$と書ける。
-			木$t_p$の頂点数は$n$以下で、木$a[t_1t_2\cdots t_p]$の頂点数も$n$以下
-			である。したがって、帰納法の仮定によって、木$t_p$も
-			木$a[t_1t_2\cdots t_p]$も共に$T_1X$からに$\land_0$よって生成される。
-			また、$t=a[t_1t_2\cdots t_p]\land_0 t_{p+1}$だから、$t$もまた$\land_0$に
-			よって生成される。
-			したがって、頂点数が$n+1$に場合にも命題が成り立つ。
-		\end{proof} %}
-
-		根への接木$\land_0$に前節\ref{s2:作用から積の導出}の議論を適用してみる。
-		任意の$a\in A,\;w\in WT_+A$と任意の木$t_1,t_2\in WT_+A$に対して、
-		$((aw)\land_0 t_1)\land_0 t_2=a(w*[t_1t_2])$となるから、
-		任意の森$w_1\in WT_+A$に対して$(aw)\land_0 w_1=a(w*w_1)$と定義すると、
-		$((aw)\land_0 t_1)\land_0 t_2=(aw)\land_0([t_1]*[t_2])$と書ける。
-		このことを、定義と命題の形にまとめておく。
-
-		\begin{definition}[森による根への接木]\label{def:森による根への接木} %{
-			$R$双線形作用$\beta_{\land_0}: RT_+A\otimes RWT_+A \to RT_+A$を、
-			任意の$t\in T_+A$に対して次のように、
-			\begin{equation*}\begin{split} %{
-				t\land_0 1_W = t
-			\end{split}\end{equation*} %}
-			任意の$a\in A,\;w_1,w_2\in WT_+A$に対して次のように定義する。
-			\begin{equation*}\begin{split} %{
-				(aw_1)\land_0 w_2 &= a(w_1*w_2)
-			\end{split}\end{equation*} %}
-			作用$\land_0$を森による根への接木または、単に、根への接木ということに
-			する。
-		\end{definition} %def:森による根への接木}
-
-		\begin{proposition}[根への接木と単語の連結の関係]\label{prop:根への接木と単語の連結の関係} %{
-			任意の$t\in T_+A,\;w_1,w_2\in WT_+A$に対して次の式が成り立つ。
-			\begin{equation*}\begin{split} %{
-				(t\land_0 w_1)\land_0 w_2 = t\land_0(w_1*w_2)
-			\end{split}\end{equation*} %}
-		\end{proposition} %prop:根への接木と単語の連結の関係}
-		\begin{proof} %{
-			任意の木$t$はある$a\in A,\;w\in WT_+A$で$t=aw$と書くことができる。
-			森による根への接木$\land_0$の定義\ref{def:森による根への接木}より、
-			任意の$w_1,w_2\in WT_+A$に対して$
-			((aw)\land_0 w_1)\land_0 w_2=a(w*w_1*w_2)=(aw)\land_0(w_1*w_2)
-			$となり命題が成り立つ。
-		\end{proof} %}
-
-		根への接木に双対となる操作を定義する。
-
-		\begin{definition}[根での枝刈り]\label{def:根での枝刈り} %{
-			$R$線形余作用$\widebar{\land}_0:RT_+A\to RT_+A\otimes RWT_+A$を
-			任意の$a\in A,\;w\in WT_+A$に対して次のように定義する。
-			\begin{equation*}\begin{split} %{
-				\widebar{\land}_0(aw) &= (aw_{(1)})\otimes(w_{(2)})
-				\quad\text{where } \Delta_*w = w_{(1)}\otimes w_{(2)} \\
-			\end{split}\end{equation*} %}
-		\end{definition} %def:根での枝刈り}
-
-		\begin{proposition}[根での枝刈りと単語の連結の関係]\label{prop:根での枝刈りと単語の連結の関係} %{
-			根での枝刈り$\widebar{\land}_0$と余積$\Delta_*$は次の関係が成り立つ。
-			\begin{equation*}\begin{split} %{
-				(\widebar{\land}_0\otimes\myid)\widebar{\land}_0
-				= (\myid\otimes\Delta_*)\widebar{\land}_0
-			\end{split}\end{equation*} %}
-		\end{proposition} %prop:根での枝刈りと単語の連結の関係}
-		\begin{proof} %{
-			$\Delta_*$に対してSweedler記法を使ってテンソルの成分を計算する。
-			任意の$w\in WT_+A$に対して次の式が成り立つ。
-			\begin{equation*}\begin{split} %{
-				(\widebar{\land}_0\otimes\myid)\widebar{\land}_0(aw) 
-				&= (aw_{(11)})\otimes w_{(21)}\otimes w_{(2)}
-				\quad\lcomment{$\widebar{\land}_0$の定義} \\
-				&= (aw_{(1)})\otimes w_{(12)}\otimes w_{(22)}
-				\quad\lcomment{$\Delta_*$の余結合性} \\
-				&= (\myid\otimes \Delta_*)\Bigl((aw_{(1)})\otimes w_{(2)}\Bigr) \\
-				&= (\myid\otimes \Delta_*)\widebar{\land}_0(aw)
-				\quad\lcomment{$\widebar{\land}_0$の定義} \\
-			\end{split}\end{equation*} %}
-		\end{proof} %}
-
-		命題\ref{prop:根への接木と単語の連結の関係}と
-		命題\ref{prop:根での枝刈りと単語の連結の関係}を作用素の形で書くと
-		次のようになる。
-		\begin{equation*}\begin{split} %{
-			\land_0(\land_0\otimes \myid) &= \land_0(\myid\otimes m) \\
-			(\widebar{\land}_0\otimes \myid)\widebar{\land}_0 
-			&= (\myid\otimes \Delta_*)\widebar{\land}_0 \\
-		\end{split}\end{equation*} %}
-		結合性と余結合性の定義によく似た形をしている。
-
-		根に森を付け足して木にする$R$双線形な操作
-		$\myop{tree}:RA\otimes RWT_+A\to RT_+A$は
-		$\myop{tree}= \beta_{\land_0}(i_T\otimes\myid)$と書くことができる。
-
-		次の例は、可換図\eqref{eq:行きがけ順を保つ二項演算}が
-		二項演算$\land_0$を定めない例である。
-		\begin{equation*}\begin{split} %{
-			\mytree{
-				& a_1 \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
-				a_2 & a_3 & *+[F]{t} \\
-			} \xrightarrow{\pi_W} [a_1a_2a_3] * (\pi_W t) \xleftarrow{\pi_W}
-			\mytree{
-				& a_1 \ar@{-}[dl] \ar@{-}[dr] \\
-				a_2 && a_3 \ar@{-}[d] \\
-				&& *+[F]{t}
-			}
-		\end{split}\end{equation*} %}
-		頂点が$2$個以上の木では、行きがけ順で最後になるように頂点を付け加える
-		方法は$2$通りある。一つの方法が、根の最右の子供として付け加える方法、
-		もう一つの方法が、現在の行きがけ順で最後の頂点の子供として付け加える
-		方法である。その両方の方法を足し合わせてしまうことを考える。
-
-		\begin{todo}[足し合わせた場合]\label{todo:足し合わせた場合} %{
-			どのような森の二項演算が導かれるか？
-		\end{todo} %todo:足し合わせた場合}
-	%s2:根への接木}
-
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-	\end{todo} %todo:ここまで}
-
-	木$t\in TA$の頂点の集合を$\set{t}$と書く。
-	$WTA=(TA,m_*,1_*)$を$TA$から生成された自由モノイドとする。
-	$WTA$の元を$TA$の元を並べて括弧でくくって表すことにする。
-	例えば、$t_1,t_2,\dots,t_m\in TA$に対して$[t_1t_2\cdots t_m]$と書く。
-	$m_*$は文字列の連結で、$1_*$は空文字である。
-	$WTA$の元を森と言うことにする。
-	森$w\in WTA$の頂点の集合を$\set{w}$と書く。例えば、
-	木$t_1,t_2,\dots,t_m\in TA$に対して$
-	\set{[t_1t_2\cdots t_m]}=\set{t_1}\cup\set{t_2}\cup\cdots\cup\set{t_m}
-	$となる。木から頂点を取り除いてできる森を木の森ということにする。
-	例えば、$t_1,t_2,\dots,t_m\in TA$に対して、森$[t_1t_2\cdots t_m]$は、
-	任意の$s\in S$を頂点とする木$s[t_1t_2\cdots t_m]$の森となる。
-
-	写像$\myop{tree}$を次のように定義する。
-	\begin{equation}\begin{split} %{
-		\myop{tree}: S\times WTA &\to TA \\
-		s\times w &\mapsto sw \\
-	\end{split}\end{equation} %}
-	写像$\myop{tree}$は集合同型となる。$\myop{tree}$の逆写像を
-	$\myop{tree}^{^1}$書く。
-	\begin{equation}\begin{split} %{
-		\myop{tree}^{-1}: TA &\to S\times WTA \\
-		sw &\mapsto s\times w \\
-	\end{split}\end{equation} %}
-	木から根を取り出す操作を$\myop{root}=\pi_1\myop{tree}^{-1}$、
-	木から根の子供達を$\myop{forest}=\pi_2\myop{tree}^{-1}$と書く。
-
-	$R=(R,+,0,\myspace,1)$を半環とする。
-	$RS$を$S$を基底とする$R$係数半モジュール、
-	$RTA$を$TA$を基底とする$R$係数半モジュール、
-	$RWTA$を$WTA$を基底とする$R$係数半モジュールとする。
-	文字列の連結$m_*:WTA\times WTA\to WTA$を$R$線形に$RWTA$に拡張したものを
-	同一の記号$m_*$で書くことにする。積$m_*$に双対になる余積$\Delta_*$を次の
-	ように定義する。
-	\begin{equation}\begin{split} %{
-		\Delta_*: RWTA\otimes RWTA &\to RWTA \\
-			[t_1t_2\cdots t_m] &\mapsto [t_1t_2\cdots t_m]\otimes 1_* \\
-				&\quad + \sum_{1\le i\le m}[t_1t_2\cdots t_m]\neg\set{i}\otimes [t_i] \\
-				&\quad + \sum_{1\le i<j\le m}[t_1t_2\cdots t_m]\neg\set{i,j}\otimes [t_it_j] \\
-				&\quad + \cdots \\
-				&\quad + \sum_{1\le i<j\le m}[t_i]\otimes [t_1t_2\cdots t_m]\neg\set{i} \\
-				&\quad + \sum_{1\le i<j\le m}1_*\otimes [t_1t_2\cdots t_m] \\
-	\end{split}\end{equation} %}
-	ここで、$[t_1t_2\cdots t_m]\neg{i_1,i_2,\dots,i_p}$は$[t_1t_2\cdots t_m]$
-	から$i_1,i_2,\dots,i_p$番目の文字を除いた単語とする。
-	例えば、次のようになる。
-	\begin{equation*}\begin{split} %{
-		[t_1t_2t_3]\neg\set{1} &= [t_2t_3] \\
-		[t_1t_2t_3]\neg\set{1,3} &= [t_2] \\
-		[t_1t_2t_3]\neg\set{1,2,3} &= [] \\
-	\end{split}\end{equation*} %}
-	余積$\Delta_*$に対する余単位射$\epsilon_*$は次のようになる。
-	\begin{equation}\begin{split} %{
-		\epsilon_*: RTW &\to R \\
-		w &\mapsto \begin{cases} %{
-			1, &\text{ iff }w=1_* \\
-			0, &\text{ otherwise } \\
-		\end{cases} %}
-	\end{split}\end{equation} %}
-
-	$RTA$に積を定義するための準備をする。
-
-	\begin{definition}[頂点を指定した接木]\label{def:頂点を指定した接木} %{
-		木$t\in TA$の頂点$i\in \set{t}$の最後の子供に木$t_1\in TA$を付け加える
-		操作を$t_1$の頂点$i$への接木ということにする。
-	\end{definition} %def:頂点を指定した接木}
-
-	ラベルによらずに頂点の位置を表すために頂点を'頂点の位置:ラベル'
-	という形で書いて、接木を図示すると次のようになる。
-	\begin{equation*}\begin{split} %{
-		\mytree{
-			& 0:a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			1:a_1 \ar@{-}[d] && 3:a_3 \\
-			2:a_2 \\
-		} \lhd_{1} \mytree{
-			& r_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			r_1 && r_2 \\
-		} &= \mytree{
-			&& 0:a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			& 1:a_1 \ar@{-}[dl] \ar@{-}[dr] && 3:a_3 \\
-			2:a_2 && r_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			& r_1 && r_2 \\
-		}
-	\end{split}\end{equation*} %}
-
-	すべての頂点にわたって接木をする操作を定義する。
-
-	\begin{definition}[木への接木]\label{def:木への接木} %{
-		木$t\in TA$の頂点$i\in \set{t}$への接木を$\lhd_i$と書く。
-		次の$R$双線形写像$\lhd$を木への接木ということにする。
-		\begin{equation}\begin{split} %{
-			\lhd: RTA\otimes RTA &\to RTA \\
-				t\otimes u &\mapsto \sum_{i\in \set{t}}t\lhd_{i}u
-				\quad\text{for all }t,u\in TA
+		接木は、任意の$t,t_1,t_2\in T_+A$に対して次のようになる。
+		\begin{equation}\label{eq:接木の結合その一}\begin{split} %{
+			(t\lhd t_1)\lhd t_2 
+			&= \sum_{i\in\set{t}\cup\set{t_1}}(t\lhd t_1)\lhd_i t_2 \\
+			&= \Bigl(\sum_{i\in\set{t}}+\sum_{i\in\set{t_1}}\Bigr)(t\lhd t_1)\lhd_i t_2 \\
+			&= \sum_{i_1,i_2\in\set{t}}(t\lhd_{i_1} t_1)\lhd_{i_2}t_2
+			+ t\lhd (t_1\lhd t_2) \\
 		\end{split}\end{equation} %}
-	\end{definition} %def:木への接木}
-
-	木への接木を図示すると次のようになる。
-	\begin{equation*}\begin{split} %{
-		\mytree{
-			& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			a_1 \ar@{-}[d] && a_3 \\
-			a_2 \\
-		} \lhd \mytree{
-			& r_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			r_1 && r_2 \\
-		} &= \mytree{
-			& a_0 \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
-			a_1 \ar@{-}[d] & a_3 & r_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			a_2 & r_1 && r_2 \\
-		} + \mytree{
-			&& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			& a_1 \ar@{-}[dl] \ar@{-}[dr] && a_3 \\
-			a_2 && r_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			& r_1 && r_2 \\
-		} \\
-		&+ \mytree{
-			&& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			& a_1 \ar@{-}[d] && a_3 \\
-			& a_2 \ar@{-}[d] \\
-			& r_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			r_1 && r_2 \\
-		} + \mytree{
-			& a_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			a_1 \ar@{-}[d] && a_3 \ar@{-}[d] \\
-			a_2 && r_0 \ar@{-}[dl] \ar@{-}[dr] \\
-			& r_1 && r_2 \\
-		}
-	\end{split}\end{equation*} %}
-
-	接木はの$R$双線形二項演算であるが、結合的ではないことに注意する。
-	例えば次のようになって、結合性は満たさない。
-	\begin{equation*}\begin{split} %{
-		\bigl([a_1]\lhd[a_2]\bigr)\lhd[a_3] &= [a_1]\lhd\bigl([a_2]\lhd[a_3]\bigr)+[a_1[a_2][a_3]] \\
-		[a_1]\lhd\bigl([a_2]\lhd[a_3]\bigr) &= [a_1[a_2[a_3]]] \\
-	\end{split}\end{equation*} %}
-
-	木への接木を森による接木に拡張する。
-
-	\begin{definition}[森による木への接木]\label{def:森による木への接木} %{
-		木$t\in TA$の頂点$i\in \set{t}$への接木を$\lhd_i$と書く。
-		次の$R$双線形写像$\lhd$を森による木への接木または単に木への接木
-		ということにする。
-		\begin{equation}\begin{split} %{
-			\lhd: RTA\otimes RWTA &\to RTA \\
-				t\otimes 1_* &\mapsto t \quad\text{for all }t\in TA \\
-				t\otimes [t_1t_2\cdots t_m] 
-				&\mapsto \sum_{i_1,i_2,\dots,i_m\in\set{t}}t\lhd_{i_1}t_1\lhd_{i_2}t_2\cdots\lhd_{i_m}t_m \\
-				&\quad\text{for all }t,t_1,t_2,\dots,t_m\in TA \\
-		\end{split}\end{equation} %}
-	\end{definition} %def:森による木への接木}
-
-	木への接木の結合則からのずれが、森による木への接木によって表される。
-
-	\begin{proposition}[接木の結合則もどき]\label{prop:接木の結合則もどき} %{
-		任意の木$t_1,t_2,t_3\in TA$に対して次の式が成り立つ。
-		\begin{equation}\begin{split} %{
-			(t_1\lhd t_2)\lhd t_3 = t_1\lhd(t_2\lhd t_3) + t_1\lhd[t_2t_3]
-		\end{split}\end{equation} %}
-		ここで、左辺と右辺の第一項目の$\lhd$は木による接木で、右辺の第二項目は
-		森による接木である。
-	\end{proposition} %prop:接木の結合則もどき}
-	\begin{proof} %{
+		ここで、森による接木$\beta_\lhd:RT_+A\otimes RWT_+A\to RT_+A$を、
+		任意の$t,t_1,t_2,\cdots,t_m\in T_+A$に対して次のように定義すると、
 		\begin{equation*}\begin{split} %{
-			(t_1\lhd t_2)\lhd t_3 
-			&= \sum_{i_3\in\set{t_1}\cup\set{t_2}}(t_1\lhd t_2)\lhd_{i_3} t_3 \\
-			&= \left(\sum_{i_3\in\set{t_1}}+\sum_{i_3\in\set{t_2}}\right)(t_1\lhd t_2)\lhd_{i_3} t_3 \\
-			&= \left(\sum_{i_2,i_3\in\set{t_1}}t_1\lhd_{i_2} t_2\lhd_{i_3} t_3\right)
-			+ \bigl(t_1\lhd(t_2\lhd t_3)\bigr) \\
+			t\lhd [t_1t_2\cdots t_m] 
+			&= \sum_{i_1,i_2,\dots,i_m\in\set{t}}
+			\Bigl(\cdots\bigl((t\lhd_{i_1}t_1)\lhd_{i_2}t_2\bigr)\cdots\Bigr)\lhd_{i_m}t_m \\
 		\end{split}\end{equation*} %}
-		右辺の第一項目は森による接木の定義により$t_1\lhd[t_2t_3]$となり、
-		命題が成り立つ。
-	\end{proof} %}
-
-	森による木への接木は根を不変に保つので、次の式により$R$双線形二項演算
-	$\perp$を定義することができる。
-	\begin{equation}\label{eq:接木による森の二項演算の定義}\begin{split} %{
-		(aw_1)\lhd w_2 = a(w_1\perp w_2)\quad\text{for all }a\in A,\;w_1,w_2\in WTA
-	\end{split}\end{equation} %}
-	$\perp$は根のラベル$a$には依存しない。つまり、
-	$(aw_1)\lhd w_2=a(w_1\perp_aw_2)$、$(bw_1)\lhd w_2=b(w_1\perp_bw_2)$、
-	とおいたとき、任意の$w_1,w_2\in WTA$に対して
-	$(w_1\perp_aw_2)=(w_1\perp_bw_2)$となる。
-
-	\begin{definition}[接木による森の二項演算]\label{def:接木による森の二項演算} %{
-		$R$双線形写像$\perp:RTWA\otimes RTWA\to RTWA$を次のように定義する。
-		\begin{equation}\begin{split} %{
-			(aw_1)\lhd w_2 = a(w_1\perp w_2)\quad\text{for all }a\in A,\;w_1,w_2\in WTA
+		次の可換図が成り立ち、
+		\begin{equation*}\xymatrix{
+			RT_+A\otimes RT_+A \ar[d]^{\beta_\lhd} \ar[r]^{\myid\otimes i_W}
+			& RT_+A\otimes RWT_+A \ar[dl]^{\beta_\lhd} \\
+			RT_+A
+		}\end{equation*}
+		式\eqref{eq:接木の結合その一}は次のように書ける。
+		\begin{equation*}\begin{split} %{
+			\bigl(t\lhd[t_1]\bigr)\lhd[t_2]
+			= t\lhd\bigl([t_1\lhd t_2] + [t_1t_2]\bigr)
+		\end{split}\end{equation*} %}
+		そこで、森の双線形二項演算$\beta_\land$を次のように定義できれば、
+		\begin{equation}\label{eq:接木による森の2項演算の定義}\begin{split} %{
+			(t\lhd w_1)\lhd w_2 &= t\lhd (w_1\land w_2) \\
+			&\quad\text{for all }t\in T_+A,\;w_1,w_2\in WT_+A
 		\end{split}\end{equation} %}
-	\end{definition} %def:接木による森の二項演算}
-
-	前置記号を用いると$
-	\mybiop{\lhd}=\myop{tree}(\myid\otimes\mybiop{\perp})
-	(\myop{tree}^{-1}\otimes\myid)
-	$となる。
-
-	$\perp$を計算してみる。まず、任意の$a\in A,\;w\in WTA$に対して
-	次の式が成り立つ。
-	\begin{equation}\label{eq:接木による積の定義その一}\begin{split} %{
-		(a[])\lhd w=aw &\implies 1_*\perp w=w \\
-		(aw)\lhd 1_*=aw &\implies w\perp 1_*=w \\
-	\end{split}\end{equation} %}
-	また、任意の$a\in A,\;t_1,t_2,\dots,t_m\in TA$と任意の$1_*$でない
-	$w\in WTA$に対しては次の式が成り立つ。
-	\begin{equation}\begin{split} %{
-		(aw)\lhd[t_1t_2\cdots t_m]
-			&= \sum_{i_1,i_2,\dots,i_m\in\set{aw}}(aw)
-			\lhd_{i_1}t_1\lhd_{i_2}t_2\cdots\lhd_{i_m}t_m \\
+		任意の木$t\in T_+A$は、ある$a\in A,\;w\in WT_+A$によって一意に
+		$t=aw=(a[])\lhd w:=a\lhd w$と書けるから、
+		$\land$の定義\eqref{eq:接木による森の2項演算の定義}は次のように書ける。
+		\begin{equation*}\begin{split} %{
+			\bigl((a\lhd w)\lhd w_1\bigr)\lhd w_2 &= (a\lhd w)\lhd(w_1\land w_2) \\
+			&\quad\text{for all }a\in A,\;w,w_1,w_2\in WT_+A
+		\end{split}\end{equation*} %}
+		この式に$\land$の定義\eqref{eq:接木による森の2項演算の定義}を適用すると
+		次の式が得られる。
+		\begin{equation}\label{eq:接木による森の2項演算の結合性}\begin{split} %{
+			a\lhd \bigl((w\land w_1)\land w_2\bigr)
+			&= a\lhd \bigl(w\land(w_1\land w_2)\bigr) \\
+			&\quad\text{for all }a\in A,\;w,w_1,w_2\in WT_+A
+		\end{split}\end{equation} %}
+		さらに、次の式が成り立つので、
+		\begin{equation}\begin{split} %{
+			a\lhd w_1 = a\lhd w_2 &\iff w_1=w_2 \\
+			&\quad\text{for all }a\in A,\;w_1,w_2\in WT_+A
+		\end{split}\end{equation} %}
+		式\eqref{eq:接木による森の2項演算の結合性}は次のようになり、
+		森の二項演算$\land$（定義\eqref{eq:接木による森の2項演算の定義}）が
+		結合的になることがわかる。
+		\begin{equation*}\begin{split} %{
+			(w\land w_1)\land w_2 &= w\land(w_1\land w_2) \\
+			&\quad\text{for all }w,w_1,w_2\in WT_+A
+		\end{split}\end{equation*} %}
+		式\eqref{eq:接木による森の2項演算の定義}によって森の二項演算$\land$
+		が定義できることを確かめる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$t\in T_+A$に対して$t\lhd 1_W=t$が成り立つから、
+			任意の$t\in T_+A,w\in WT_+A$に対して
+			$(t\lhd 1_W)\lhd w=t\lhd w=(t\lhd w)\lhd 1_W$
+			が成り立つ。したがって次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				1_W\land w = w\land 1_W \quad\text{for all }w\in WT_+A
+			\end{split}\end{equation*} %}
 			%
-			&= (aw)\lhd_{\set{a}}[t_1t_2\cdots t_m] \\
-			&\;+ \sum_{1\le i\le m}(aw)
-			\lhd_{\set{a}}[t_1t_2\cdots t_m]_{\neg\set{i}}\lhd_{\set{w}}[t_i] \\
-			&\;+ \sum_{1\le i<j\le m}(aw)
-			\lhd_{\set{a}}[t_1t_2\cdots t_m]_{\neg\set{i,j}}\lhd_{\set{w}}[t_it_j] \\
-			&\;+ \cdots \\
-			&\;+ (aw)\lhd_{\set{w}}[t_1t_2\cdots t_m] \\
-	\end{split}\end{equation} %}
-	ここで、木$t\in TA$の頂点の部分集合$v\in\set{t}$に対して
-	$t\lhd_v[t_1t_2\cdots t_m]$を次のようにおいた。
-	\begin{equation}\begin{split} %{
-		t\lhd_v[t_1t_2\cdots t_m] 
-		&= \sum_{i_1,i_2,\dots,i_m\in v}t\lhd_{i_1}t_1\lhd_{i_2}t_2\cdots\lhd_{i_m}t_m
-	\end{split}\end{equation} %}
-	したがって、$\perp$は任意の$t,t_1,t_2,\dots,t_m\in TA$と
-	任意の$1_*$でない$w\in WTA$に対して次のようになることがわかる。
-	\begin{equation}\label{eq:接木による積の定義その二}\begin{split} %{
-		w\perp[t_1t_2\cdots t_m]
-		&= w\lhd[t_1t_2\cdots t_m] \\
-		&\;+ \sum_{1\le i\le m}(w\lhd[t_1t_2\cdots t_m]_{\neg\set{i}})*[t_i] \\
-		&\;+ \sum_{1\le i<j\le m}(w\lhd[t_1t_2\cdots t_m]_{\neg\set{i,j}})*[t_it_j] \\
-		&\;+ \cdots \\
-		&\;+ w*[t_1t_2\cdots t_m] \\
-	\end{split}\end{equation} %}
-	ここで、$w_1,w_2\in WTA$に対して$w_1\lhd w_2$を$w_1$のすべての頂点に
-	接木をした和とした。任意の$t\in TA$、$w\in WTA$に対して
-	$[t]\lhd w=[t\lhd w]$となり、
-	任意の$t,u_1,u_2,\dots,u_m\in TA$、任意の$1_*$でない$w\in WTA$に対して
-	次の再帰式を満たす。
-	\begin{equation*}\begin{split} %{
-		&([t]*w)\lhd [u_1u_2\cdots u_m] \\
-		&= ([t]\lhd 1_*)*(w\lhd [u_1u_2\cdots u_m]) \\
-		&\;+ \sum_{1\le i\le m}([t]\lhd[u_i])*(w\lhd [u_1u_2\cdots u_m]_{\neg\set{i}}) \\
-		&\; + \sum_{1\le i<j\le m}([t]\lhd[u_iu_j])*(w\lhd [u_1u_2\cdots u_m]_{\neg\set{i,j}}) \\
-		&\; + \cdots \\
-		&\; + ([t]\lhd [u_1u_2\cdots u_m])*(w\lhd 1_*) \\
-	\end{split}\end{equation*} %}
-	この式は、任意の$1_*$でない$w_1,w_2\in WTA$と任意の$w_3\in WTA$に対する
-	次の再帰式にまとまる。
-	\begin{equation}\label{eq:森同士の接木}\begin{split} %{
-		(w_1*w_2)\lhd w_3 = \left(w_1\lhd (\Delta_*^{(1)}w_3)\right)*\left(w_1\lhd (\Delta_*^{(2)}w_3)\right) \\
-	\end{split}\end{equation} %}
-	さらに、任意の$w\in WTA$に対して$1_*\lhd w=\jump{w=1_*}1_*$と定義すると、
-	式\eqref{eq:森同士の接木}は、任意の$t\in TA,\;w\in WTA$に対して
-	$[t]\lhd w=[t\lhd w]$を満たす。改めて、森への接木$\lhd$を定義しておく。
-
-	\begin{definition}[森への接木]\label{def:森への接木} %{
-		木$t\in TA$の頂点$i\in \set{t}$への接木を$\lhd_i$と書く。
-		次の$R$双線形写像$\lhd:RWTA\otimes RWTA\to RWTA$を森による森への接木
-		または単に森への接木ということにする。
-		\begin{itemize} %{
-			\item 任意の$w\in WTA$に対して
+			\item 任意の$t,u\in T_+A,w\in WT_+A$に対して次の式が成り立つ。
 			\begin{equation*}\begin{split} %{
-				1_*\lhd w = \begin{cases} %{
-					1_*, &\text{ iff }w=1_* \\
+				(t\lhd w)\lhd u 
+				&= \sum_{i\in \set{t}\cup \set{w}}(t\lhd w)\lhd_i u \\
+				&= (\sum_{i\in \set{t}}+\sum_{i\in \set{w}})(t\lhd w)\lhd_i u \\
+			\end{split}\end{equation*} %}
+			$\sum_{i\in \set{t}}(t\lhd w)\lhd_i u=t\lhd (w*[u])$が成り立つから、
+			この式は次のようになる。
+			\begin{equation}\label{eq:森の二項演算の確かめその一}\begin{split} %{
+				(t\lhd w)\lhd u 
+				&= t\lhd (w*[u]) + \sum_{i\in \set{w}}(t\lhd w)\lhd_i u \\
+			\end{split}\end{equation} %}
+			そこで、$\beta_\lhd: RWT_+A\otimes RWT_+A\to RWT_+A$を次のように
+			定義する。
+			\begin{equation}\label{eq:森への接木の定義}\begin{split} %{
+				1_W\otimes w &\mapsto \begin{cases} %{
+					1_W, &\text{ iff }w=1_W \\
 					0, &\text{ otherwise } \\
 				\end{cases} %}
-			\end{split}\end{equation*} %}
-			\item 任意の$t\in TA,\;w\in WTA$に対して
+				\quad\text{for all }w\in WT_+A \\
+				[t]\otimes w &\mapsto [t\lhd w]
+				\quad\text{for all }t\in T_+A,\;w\in WT_+A \\
+				(w_1*w_2)\otimes w &\mapsto (w_1\lhd w_{(1)})*(w_2\lhd w_{(2)}) \\
+				&\quad\text{for all }w,w_1,w_2\in WT_+A \\
+				&\quad\text{where }w_{(1)}\otimes w_{(2)}=\Delta_*w
+			\end{split}\end{equation} %}
+			すると、任意の$t,t_1,t_2,\dots,t_m\in T_+A$に対して次の式が成り立ち、
 			\begin{equation*}\begin{split} %{
-				[t]\lhd w = [t\lhd w] 
+				&[t_1t_2\cdots t_m]\lhd[t] \\
+				&= ([t_1]\lhd [t])*([t_2\cdots t_m]\lhd 1_W)
+				+ ([t_1]\lhd 1_W)*([t_2\cdots t_m]\lhd [t]) \\
+				&= [(t_1\lhd t)t_2\cdots t_m]
+				+ [t_1]*([t_2\cdots t_m]\lhd [t]) \\
+				&\cdots \\
+				&= [(t_1\lhd t)t_2\cdots t_m] + [t_1(t_2\lhd t)\cdots t_m]
+				+ \cdots + [t_1t_2\cdots (t_m\lhd t)] \\
+				&= \sum_{i\in \set{t_1}\cup\set{t_2}\cup\cdots\cup{t_m}}
+				[t_1t_2\cdots t_m]\lhd_i[t]
 			\end{split}\end{equation*} %}
-			\item 任意の$w_1,w_2\in WTA$に対して
-			\begin{equation*}\begin{split} %{
-				(w_1*w_2)\lhd w 
-				&= \left(w_1\lhd(\Delta_*^{(1)}w)\right) * \left(w_2\lhd(\Delta_*^{(2)}w)\right) \\
-				&= m_*\bigl((w_1\otimes w_2)\lhd(\Delta_*w)\bigr) \\
-			\end{split}\end{equation*} %}
-		\end{itemize} %}
-	\end{definition} %def:森への接木}
-
-	$\perp$の定義\eqref{eq:接木による積の定義その一}と
-	\eqref{eq:接木による積の定義その二}は、任意の森$w_1,w_2\in WTA$に対して、$
-	w_1\perp w_2=\left(w_1\lhd(\Delta_*^{(2)}w_2)\right)*(\Delta_*^{(1)}w_2)
-	$と書かれることがわかる。
-	森への接木\ref{def:森への接木}では、空文字への接木以外は
-	木への接木\ref{def:森による木への接木}を自然に拡張したものになっている。
-	空文字への接木に自然な拡張がないので、式$
-	w_1\perp w_2=\left(w_1\lhd(\Delta_*^{(2)}w_2)\right)*(\Delta_*^{(1)}w_2)
-	$が成り立つように空文字への接木$1_*\lhd1_*=\jump{w=1_*}1_*$を定義している。
-	木への接木\ref{def:木への接木}が結合的でないのと同様に、森への接木
-	\ref{def:森への接木}も結合的でない。
-	その一方で、森への接木は右単位元$1_*$をもつことに注意する。
-
-	\begin{proposition}[森の二項演算と森への接木の関係]\label{prop:森の二項演算と森への接木の関係} %{
-		任意の$w_1,w_2\in WTS$に対して次の式が成り立つ。
-		\begin{equation}\begin{split} %{
-			w_1\perp w_2 
-			= \left(w_1\lhd(\Delta_*^{(2)}w_2)\right)*(\Delta_*^{(1)}w_2)
-		\end{split}\end{equation} %}
-	\end{proposition} %prop:森の二項演算と森への接木の関係}
-	\begin{proof} %{
-		命題の式が成り立つように森への接木$\lhd$を定義した。
-	\end{proof} %}
-
-	$1_*$が接木による森の二項演算$\perp$の単位元になることはすぐわかる。
-
-	\begin{proposition}[接木による森の二項演算の単位元]\label{prop:接木による森の二項演算の単位元} %{
-		空文字$1_*$は接木による森の二項演算$\perp$の単位元となる。
-	\end{proposition} %prop:接木による森の二項演算の単位元}
-	\begin{proof} %{
-		式\eqref{eq:接木による積の定義その一}によって証明は完了するが、
-		ここでは、命題\ref{prop:森の二項演算と森への接木の関係}を用いて
-		証明してみる。
-		$\Delta_*1_*=1_*\otimes 1_*$より、任意の$w\in WTA$に対して
-		$w\perp1_*=(w\lhd1_*)*1_*$となり、森への接木の定義\ref{def:森への接木}
-		より、$w\lhd1_*=w$となるから$w\perp1_*=w$となる。
-		ここで、$i,j=1,2$に対して$w^{(i)}=\Delta_*^{(j)}w$とする。
-		$1_*\perp w=(1_*\lhd w^{(2)})*w^{(1)}$となり、
-		森への接木の定義\ref{def:森への接木}より、$1_*w=(\epsilon_*w)1_*$
-		となるから、$1_*\perp w=(\epsilon_*w^{(2)})w^{(1)}$となる。
-	\end{proof} %}
-
-	接木の結合則もどきの命題\ref{prop:接木の結合則もどき}を拡張することを
-	考える。森の二項演算$\perp$の定義\ref{def:接木による森の二項演算}は、
-	任意の$a\in A,\;w_1,w_2\in WTA$に対して次のように書き換えることができる。
-	\begin{equation*}\begin{split} %{
-		([a]\lhd w_1)\lhd w_2 = [a]\lhd(w_1\perp w_2)
-	\end{split}\end{equation*} %}
-	根だけの木$[a]$から一般の森に変更することで次の命題が得られる。
-
-	\begin{proposition}[森への接木の結合則もどき]\label{prop:森への接木の結合則もどき} %{
-		任意の森$w_1,w_2,w_3\in TA$に対して次の式が成り立つ。
-		\begin{equation}\begin{split} %{
-			(w_1\lhd w_2)\lhd w_3 = w_1\lhd(w_2\perp w_3)
-		\end{split}\end{equation} %}
-	\end{proposition} %prop:森への接木の結合則もどき}
-	\begin{proof} %{
-		$\perp$の定義\ref{eq:接木による森の二項演算の定義}から
-		命題\ref{prop:森の二項演算と森への接木の関係}を導いた手順を繰り返す
-		ことで証明が得られる。まず、任意の$w_1,w_2\in WTA$に対して、$1_*$が
-		$\perp$の単位元だから次の式が成り立つ。
-		\begin{equation*}\begin{split} %{
-			(w_1\lhd w_2)\lhd 1_*=w_1\lhd w_2=w_1\lhd(w_2\perp 1_*)
-		\end{split}\end{equation*} %}
-		次に、任意の$w_1,w_2\in WTA$と$t_1,t_2,\dots,t_m\in TA$に対して、
-		次の式が成り立つ。
-		\begin{equation*}\begin{split} %{
-			&(w_1\lhd w_2)\lhd[t_1t_2\cdots t_m] \\
-			&= \sum_{i_1,i_2,\dots,i_m\in\set{w_1}\cup\set{w_1}}(w_1\lhd w_2)
-			\lhd_{i_1}t_1\lhd_{i_2}t_2\cdots\lhd_{i_m}t_m \\
-			&= (w_1\lhd w_2)\lhd_{\set{w_1}}[t_1t_2\cdots t_m] \\
-			&\;+ \sum_{1\le i\le m}(w_1\lhd w_2)
-			\lhd_{\set{w_1}}[t_1t_2\cdots t_m]_{\neg\set{i}}\lhd_{\set{w_2}}[t_i] \\
-			&\;+ \sum_{1\le i<j\le m}(w_1\lhd w_2)
-			\lhd_{\set{w_1}}[t_1t_2\cdots t_m]_{\neg\set{i,j}}\lhd_{\set{w_2}}[t_it_j] \\
-			&\;+ \cdots \\
-			&\;+ (w_1\lhd w_2)\lhd_{\set{w_2}}[t_1t_2\cdots t_m] \\
-			&= w_1\lhd(w_2*[t_1t_2\cdots t_m]) \\
-			&\;+ \sum_{1\le i\le m}w_1
-			\lhd\bigl((w_2\lhd[t_i])*[t_1t_2\cdots t_m]_{\neg\set{i}}\bigr) \\
-			&\;+ \sum_{1\le i<j\le m}w_1
-			\lhd\bigl((w_2\lhd[t_it_j])*[t_1t_2\cdots t_m]_{\neg\set{i,j}}\bigr) \\
-			&\;+ \cdots \\
-			&\;+ w_1\lhd(w_2\lhd[t_1t_2\cdots t_m]) \\
-			&= w_1\lhd\Bigl(\bigl(w_1\lhd(\Delta_*^{(2)}[t_1t_2\cdots t_m])\bigr)*(\Delta_*^{(1)}[t_1t_2\cdots t_m])\Bigr) \\
-			&= w_1\lhd(w_1\perp[t_1t_2\cdots t_m]) \\
-		\end{split}\end{equation*} %}
-		したがって、命題が証明された。
-	\end{proof} %}
-
-	$\Delta_*w=w\otimes 1_*+1_*\otimes w+r$とおくと、
-	命題\ref{prop:森への接木の結合則もどき}から、$r$に関する$0$次近似が
-	木への接木の場合\ref{prop:接木の結合則もどき}と同じ形になる次の式
-	が得られる。
-	\begin{equation*}\begin{split} %{
-		(w_1\lhd w_2)\lhd w_3 = w_1\lhd(w_2\lhd w_3) + w_1\lhd(w_2*w_3) + (\text{order}\;r)
-	\end{split}\end{equation*} %}
-
-	\begin{proposition}[接木による森の二項演算は積]\label{prop:接木による森の二項演算は積} %{
-		接木による森の二項演算$\perp$は積である。
-		\begin{equation}\begin{split} %{
-			(w_1\perp w_2)\perp w_3 = w_1\perp(w_2\perp w_3) \quad\text{for all }w_1,w_2,w_3\in WTA
-		\end{split}\end{equation} %}
-	\end{proposition} %prop:接木による森の二項演算は積}
-	\begin{proof} %{
-		任意の$a\in A,w,w_1,w_2\in WTA$に対して次の式が成り立つ。
-		\begin{equation*}\begin{split} %{
-			([aw]\lhd w_2)\lhd w_3 
-			&= ((aw)\lhd w_2)\lhd w_3 \quad \lcomment{$\lhd$の定義} \\
-			&= (a(w\perp w_2))\lhd w_3 \quad \lcomment{$\perp$の定義} \\
-			&= a((w\perp w_2)\perp w_3) \quad \lcomment{$\perp$の定義} \\
+			式\eqref{eq:森の二項演算の確かめその一}は
+			$(t\lhd w)\lhd u=t\lhd (w*[u]+w\lhd[u])$と書ける。
+			したがって、次の式が成り立つ。
+			\begin{equation}\label{eq:一文字の森の場合の森の二項演算}\begin{split} %{
+				w\land [t] = w*[t]+w\lhd[t] \quad\text{for all }t\in T_+A,\;w\in WT_+A
+			\end{split}\end{equation} %}
 			%
-			([aw])\lhd(w_2\perp w_3)
-			&= (aw)\lhd(w_2\perp w_3) \quad \lcomment{$\lhd$の定義} \\
-			&= a(w\perp(w_2\perp w_3)) \quad \lcomment{$\perp$の定義} \\
-		\end{split}\end{equation*} %}
-		この結果を結合律もどき（命題\ref{prop:森への接木の結合則もどき}）
-		\begin{equation*}\begin{split} %{
-			(w_1\lhd w_2)\lhd w_3 = w_1\lhd(w_2\perp w_3) \quad\text{for all }w_1,w_2,w_3\in WTA
-		\end{split}\end{equation*} %}
-		に当てはめると、$\perp$の結合律が導かれる。
-		\begin{equation*}\begin{split} %{
-			(w\perp w_2)\perp w_3 = w\perp(w_2\perp w_3) \quad\text{for all }w,w_1,w_2\in WTA
-		\end{split}\end{equation*} %}
-	\end{proof} %}
-
-	\subsection{考察}\label{s2:考察} %{
-		ここまでの議論を振り返ってみる。木ということを忘れて文字列で考えてみる。
-		$A$を集合、$R$を半環とする。
-		$WA$を自由モノイドから生成された自由モノイド、$RWA$を
-		$WA$を基底とする$R$係数自由半モジュールとする。
-		$RWA$の$n$文字だけからなる部分空間を$RW_nA$とする。$RWA$は直和分解できて
-		$RWA=\oplus_{n=0}^\infty RW_nA$となる。$WA$の文字列の連結を$m_*$、
-		その双対で$W_1A$の元をプリミティブとする余積を$\Delta_*$とする。
-
-		$X$を集合、$RX$を$X$を基底とする$R$係数自由半モジュールとする。
-		$RWA$の$RX$への$R$双線形作用$\lhd:RA\otimes RWX\to RX$と
-		$RWA$の$R$双線形二項演算$\perp$が定義されていて、次の性質を持つとする。
-		\begin{description} %{
-			\item[単位性]ある$1_\perp$が存在して、任意の$x\in X$に対して
-			次の式が成り立つ。
+			\item 任意の$t,u_1,u_2\in T_+A,w\in WT_+A$に対して次の式が成り立つ。
 			\begin{equation*}\begin{split} %{
-				x\lhd 1_\perp x = x 
-			\end{split}\end{equation*} %}
-			\item[結合性]任意の$w_1,w_2\in WA,\; x\in X$に対して次の式が成り立つ。
-			\begin{equation*}\begin{split} %{
-				x\lhd w_1\lhd w_2 = x\lhd (w_1\perp w_2)
-			\end{split}\end{equation*} %}
-			\item[キャンセル可能性]任意の$w_1,w_2\in WA,\; x\in X$に対して
-			次の式が成り立つ。
-			\begin{equation*}\begin{split} %{
-				x\lhd w_1 = x\lhd w_2 \implies w_1=w_2
-			\end{split}\end{equation*} %}
-		\end{description} %}
-		
-		任意の$w_1,w_2,w_3\in WA,\; x\in X$に対して、内側から'結合性'を適用
-		していくことによって、次の式が得られる。
-		\begin{equation*}\begin{split} %{
-			x\lhd w_1\lhd w_2\lhd w_3
-			&= x\lhd (w_1\perp w_2)\lhd w_3 \\
-			&= x\lhd \bigl((w_1\perp w_2)\perp w_3)\bigr) \\
-		\end{split}\end{equation*} %}
-		外側から'結合性'を適用していくことによって、次の式が得られる。
-		\begin{equation*}\begin{split} %{
-			x\lhd w_1\lhd w_2\lhd w_3
-			&= x\lhd w_1\lhd (w_2\perp w_3) \\
-			&= \bigl(w_1\perp (w_2\perp w_3)\bigr) \\
-		\end{split}\end{equation*} %}
-		'キャンセル可能性'を適用すると、$\perp$の結合性が導かれる。
-		\begin{equation*}\begin{split} %{
-			(w_1\perp w_2)\perp w_3 = w_1\perp (w_2\perp w_3) 
-		\end{split}\end{equation*} %}
-		また、任意の$w\in WA,\; x\in X$に対して、'単位性'と'結合性'を適用
-		すると、次の式が導かれ、
-		\begin{equation*}\begin{split} %{
-			x\lhd w\lhd 1_\perp
-			&= x\lhd w \quad\lcomment{'単位性'} \\
-			&= x\lhd (w\perp 1_\perp) x \quad\lcomment{'結合性'} \\
-		\end{split}\end{equation*} %}
-		'キャンセル可能性'を適用すると、$1_\perp$が$\perp$の右単位元になることが
-		導かれる。同様に、次の式が導かれ、
-		\begin{equation*}\begin{split} %{
-			x\lhd 1_\perp\lhd w
-			&= x\lhd w \quad\lcomment{'単位性'} \\
-			&= x\lhd (1_\perp\perp w) \quad\lcomment{'結合性'} \\
-		\end{split}\end{equation*} %}
-		'キャンセル可能性'を適用すると、$1_\perp$が$\perp$の左単位元になることが
-		導かれる。以上より、作用$\rhd$から半代数$(RWA,\perp,1_\perp)$の$RX$への
-		表現が得られることがわかる。
-
-		\subsubsection{木の場合の考察}\label{s3:木の場合の考察} %{
-			$X$を集合、$R$を半環とする。
-			$TX$を$X$を頂点とする木の集合、$T_{\bullet}X$を$\bullet$を根、
-			$X$を根以外の頂点とする木の集合とする。
-			$X$の$RT_{\bullet}X$への作用$
-			\beta_\lhd:RT_\bullet X\otimes RX\to RT_\bullet X
-			$を次のように定義する。
-			\begin{equation}\label{eq:頂点の作用の定義}\begin{split} %{
-				t\lhd x &= \sum_{i\in\set{t}}t\lhd_i x \\
-				t\lhd_i x &= \text{$t$の頂点$i$の最右の子供として$x$を付け足す}
-			\end{split}\end{equation} %}
-			例えば、$x_1,x_2,\dots\in X$として、次のようになる。
-			\begin{equation}\label{eq:頂点による接木の例}\begin{split} %{
-				\bullet\lhd x_1 &= \bullet[x_1] \\
-				\bullet[x_1]\lhd x_2 &= \bullet[x_1x_2] + \bullet[x_1[x_2]] \\
-				\bullet[x_1x_2]\lhd x_3 &= \bullet[x_1x_2x_3] + \bullet[x_1[x_3]x_2] + \bullet[x_1x_2[x_3]] \\
-				\bullet[x_1[x_2]]\lhd x_3 &= \bullet[x_1[x_2]x_3] + \bullet[x_1[x_2x_3]] + \bullet[x_1[x_2[x_3]]] \\
-				\dots \\
-			\end{split}\end{equation} %}
-
-			'結合性'\;$t\lhd x_1\lhd x_2=t\lhd(x_1\perp x_2)$から積$\perp$を
-			定義することを考える。
-			\begin{equation}\label{eq:接木のフェチその一}\begin{split} %{
-				\bullet\lhd x_1 &= \bullet[x_1] \\
-				\bullet\lhd(x_1\perp x_2) 
-				&\sim \bullet\lhd\Bigl([x_1x_2] + [x_1[x_2]]\Bigr) \\
-				\bullet(x_1\perp x_2\perp x_3) 
-				&\sim \bullet\lhd\Bigl([x_1x_2x_3]+[x_1[x_3]x_2]+[x_1x_2[x_3]] \\
-				&\;+ [x_1[x_2]x_3]+[x_1[x_2x_3]]+[x_1[x_2[x_3]]]\Bigr) \\
-				\dots \\
-			\end{split}\end{equation} %}
-			$RX$では二項演算$\perp$は定義できないが、
-			式\eqref{eq:接木のフェチその一}の右辺が木の単語の和になっているので、
-			$RWTX$なら$\perp$が定義できそうである。したがって、
-			$X$からへ$TX$の入射$i_T:x\mapsto[x]$と$TX$からへ$WTX$の入射
-			$i_W:t\mapsto[t]$を用いて、次の可換図によりそれぞれの$RT_\bullet X$
-			への作用を定義することを考える。
-			\begin{equation*}\xymatrix{
-				RX \ar[rd]_{\beta_\lhd} \ar[r]^{i_T} 
-				& RTX \ar@{.>}[d]^{\beta_\lhd} \ar[r]^{i_W}
-				& RWTX \ar@{.>}[ld]^{\beta_\lhd} \\
-				& \myop{end}RT_\bullet X
-			}\end{equation*}
-
-			まず、作用$\beta_\lhd:RT_\bullet X\otimes RTX\to RT_\bullet X$を
-			定義することを考える。
-			$X$の$RT_{\bullet}X$への作用の定義\eqref{eq:頂点の作用の定義}で
-			付け足す頂点を付け足す木に拡張して、$TX$の$RT_{\bullet}X$への作用$
-			\beta_\lhd:RT_\bullet X\otimes RTX\to RT_\bullet X$を次のように
-			定義する。
-			\begin{equation}\label{eq:木の作用の定義}\begin{split} %{
-				t\lhd u &= \sum_{i\in\set{t}}t\lhd_i u 
-				\quad\text{for all }t\in T_\bullet X,\; u\in TX \\
-				t\lhd_i u &= \text{$t$の頂点$i$の最右の子供として$u$を付け足す}
-			\end{split}\end{equation} %}
-			例えば、$t_1,t_2,\dots\in TX$として、次のようになる。
-			\begin{equation}\label{eq:木による接木の例}\begin{split} %{
-				\bullet\lhd t_1 &= \bullet[t_1] \\
-				\bullet[t_1]\lhd t_2 &= \bullet[t_1t_2] + \bullet[t_1\unlhd t_2] \\
-				\bullet[t_1t_2]\lhd t_3 &= \bullet[t_1t_2t_3] + \bullet[(t_1\unlhd t_3)t_2] + \bullet[t_1(t_2\unlhd t_3)] \\
-				\bullet[t_1\unlhd t_2]\lhd t_3 &= \bullet[(t_1\unlhd t_2)t_3] + \bullet[(t_1\unlhd t_2)\unlhd t_3] \\
-				\dots \\
-			\end{split}\end{equation} %}
-			ここで、$R$双線形写像$\beta_\unlhd:RTX\otimes RTX\to RTX$を次のように
-			定義した。
-			\begin{equation}\label{eq:木の二項演算の定義}\begin{split} %{
-				t_1\unlhd t_2 &= \sum_{i\in\set{t_1}}t_1\unlhd_i t_2
-				\quad\text{for all }t_1,t_2\in TX \\
-				t_1\unlhd_i t_2 &= \text{$t_1$の頂点$i$の最右の子供として$t_2$を付け足す}
-			\end{split}\end{equation} %}
-			$\lhd$の定義\ref{eq:木の作用の定義}と$\unlhd$の定義\ref{eq:木の二項演算の定義}
-			は作用か二項演算かの違いだけで、行う操作はまったく同じである。
-			したがって、ここで定義した$\unlhd$も同じ記号$\lhd$で書くことにする。
-			ただし、$\lhd$を$RTX\otimes RTX\to RTX$の意味で使う場合は演算の順序
-			が問題となる。演算順序の指定をしないで書いた場合は、左から演算する
-			ものとする。例えば、$t_1\lhd t_2\lhd t_3:=(t_1\lhd t_2)\lhd t_3$
-			である。それ以外の場合は、$t_1\lhd(t_2\lhd t_3)$のように括弧に
-			よって演算順序を明示的に指定する。
-
-			次に、作用$\beta_\lhd:RT_\bullet X\otimes RWTX\to RT_\bullet X$を
-			定義することを考える。$WTX$の元を森ということにする。
-			木の場合の例\eqref{eq:木による接木の例}を森の作用に拡張すると
-			次のようになる。
-			\begin{equation}\label{eq:森による接木の例その一}\begin{split} %{
-				\bullet\lhd[t_1] &= \bullet[t_1] \\
-				\bullet[t_1]\lhd[t_2] &= \bullet[t_1t_2] + \bullet[t_1\lhd t_2] \\
-				\bullet[t_1t_2]\lhd[t_3] &= \bullet[t_1t_2t_3] + \bullet[(t_1\lhd t_3)t_2] + \bullet[t_1(t_2\lhd t_3)] \\
-				\bullet[t_1\lhd t_2]\lhd[t_3] &= \bullet[(t_1\lhd t_2)t_3] + \bullet[t_1\lhd t_2\lhd t_3] \\
-				\dots \\
-			\end{split}\end{equation} %}
-			さらに、次のようにを定義すると
-			\begin{equation*}\begin{split} %{
-				\bullet\lhd1_* &= \bullet \\
-				\bullet\lhd[t_1t_2\cdots t_m] &= \bullet[t_1t_2\cdots t_m] \\
-			\end{split}\end{equation*} %}
-			式\eqref{eq:森による接木の例その一}は次のようになる。
-			\begin{equation*}\begin{split} %{
-				\bullet\lhd[t_1]\lhd[t_2] 
-				&= \bullet\lhd\Bigl([t_1t_2]+[t_1\lhd t_2]\Bigr) \\
-				\bullet\lhd[t_1t_2]\lhd[t_3] 
-				&= \bullet\lhd\Bigl([t_1t_2t_3]+[(t_1\lhd t_3)t_2]+[t_1(t_2\lhd t_3)]\Bigr) \\
-				\bullet\lhd[t_1\lhd t_2]\lhd[t_3] 
-				&= \bullet\lhd\Bigl([(t_1\lhd t_2)t_3]+[t_1\lhd t_2\lhd t_3]\Bigr) \\
-				\dots \\
-			\end{split}\end{equation*} %}
-			任意の$w_1,w_2\in WTX$に対して$
-			\bullet\lhd w_1=\bullet\lhd w_2 \implies w_1=w_2
-			$が成り立つから、次のように$R$双線形二項演算$
-			\beta_\perp:RWTX\otimes RWTX\to RWTX
-			$が定義される。
-			\begin{equation*}\begin{split} %{
-				[t_1]\perp[t_2] &= [t_1t_2]+[t_1\lhd t_2] \\
-				[t_1t_2]\perp[t_3] 
-				&= [t_1t_2t_3]+[(t_1\lhd t_3)t_2]+[t_1(t_2\lhd t_3)] \\
-				[t_1\lhd t_2]\perp[t_3]
-				&= [(t_1\lhd t_2)t_3]+[t_1\lhd t_2\lhd t_3] \\
-				\dots \\
-			\end{split}\end{equation*} %}
-			さらに、$\lhd$の定義\eqref{eq:木の二項演算の定義}より
-			\begin{equation*}\begin{split} %{
-				t_1\lhd t_2\lhd t_3 
-				&= \sum_{i\in\set{t_1}\cup\set{t_2}}t_1\lhd t_2\lhd_{i}t_3 \\
-				&= \Bigl(\sum_{i\in\set{t_1}}+\sum_{i\in\set{t_2}}\Bigr)t_1\lhd t_2\lhd_{i}t_3 \\
-				&= \Bigl(\sum_{i\in\set{t_1}}t_1\lhd t_2\lhd_{i}t_3\Bigr) + t_1\lhd(t_2\lhd t_3) \\
-			\end{split}\end{equation*} %}
-			となるから、$
-			t_1\lhd[t_2t_3] = \sum_{i\in\set{t_1}}t_1\lhd t_2\lhd_{i}t_3
-			$と定義すれば、
-			\begin{equation*}\begin{split} %{
-				t_1\lhd t_2\lhd t_3 &= t_1\lhd[t_2t_3] + t_1\lhd(t_2\lhd t_3)
-			\end{split}\end{equation*} %}
-			となる。
-
-
-			here
-
-			until
-
-			を用いて$\lhd$を$
-			\lhd:RT_\bullet X\otimes RWTX \to RT_\bullet X
-			$に拡張して、$
-			t\lhd([x_1]\perp[x_2])=t\lhd[x_1]\lhd[x_2]
-			$により$RTX$の積$m_\perp$を定義する。例えば次のようになる。
-			\begin{equation*}\begin{split} %{
-				\bullet\lhd([x_1]\perp[x_2])
-				&= \bullet[x_1x_2] + \bullet[x_1[x_2]] \\
+				(t\lhd w)\lhd[u_1u_2]
+				&= \sum_{i\in \set{t}\cup \set{w}}
+					\bigl((t\lhd w)\lhd u_1\bigr)\lhd_i u_2 \\
+				&= (\sum_{i\in \set{t}}+\sum_{i\in \set{w}})
+					\bigl((t\lhd w)\lhd u_1\bigr)\lhd_i u_2 \\
+				&= t_{12}^{t} + t_{12}^{w} \\
 				%
-				\bullet\lhd([x_1]\perp[x_2]\perp[x_3]) 
-				&= \bullet[x_1x_2x_3] + \bullet[x_1[x_3]x_2] + \bullet[x_1x_2[x_3]] \\
-				&\;+ \bullet[x_1[x_2]x_3] + \bullet[x_1[x_2x_3]] + \bullet[x_1[x_2[x_3]]] \\
-				\dots \\
+				t_{12}^{t} &= \sum_{i\in \set{t}}
+					\bigl((t\lhd w)\lhd u_1\bigr)\lhd_i u_2 \\
+				&= \sum_{i\in \set{t}}\bigl(t\lhd (w\land u_1)\bigr)\lhd_i u_2 \\
+				&= t\lhd \bigl((w\land[u_1])*[u_2]\bigr) \\
+				&= t\lhd \bigl(w*[u_1u_2]+(w\lhd[u_1])*[u_2]\bigr) \\
+				%
+				t_{12}^{w} &= \sum_{i\in \set{w}}
+					\bigl((t\lhd w)\lhd u_1\bigr)\lhd_i u_2 \\
+				&= \sum_{i\in \set{w}}\bigl(t\lhd (w\land u_1)\bigr)\lhd_i u_2 \\
+				&= \sum_{i\in \set{w}}\bigl(t\lhd (w*[u_1]+w\lhd[u_1])\bigr)\lhd_i u_2 \\
+				&= t\lhd \bigl((w\lhd[u_2])*[u_1]+w\lhd[u_1u_2]\bigr) \\
 			\end{split}\end{equation*} %}
-			可換図で書くと、次の図を可換にする$\beta_\lhd$を求めることになる。
+			したがって、次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				w\land[t_1t_2] &=w*[t_1t_2]+(w\lhd[t_1])*[t_2] \\
+					&\;+ (w\lhd[t_2])*[t_1]+w\lhd[t_1t_2] \\
+					&= \bigl(w\lhd[t_1t_2]_{(2)}\bigr)*[t_1t_2]_{(1)} \\
+					&\quad\text{for all }t_1,t_2\in T_+A,\;w\in WT_+A \\
+					&\quad\text{where }[t_1t_2]_{(1)}\otimes[t_1t_2]_{(2)}=\Delta_*[t_1t_2] \\
+			\end{split}\end{equation*} %}
+			%
+			\item 帰納法により、任意の$t\in T_+A,\;w_1,w_2\in WT_+A$に対して
+			次の式が成り立つことを証明する。
+			\begin{equation}\label{eq:森の二項演算の余積による計算}\begin{split} %{
+				(t\lhd w_1)\lhd w_2 &= t\lhd (w_1\land w_2) \\
+				w_1\land w_2 &= (w_1\lhd w_{2(2)})* w_{2(1)} \\
+				&\quad\text{where }w_{2(1)}\otimes w_{2(2)}=\Delta_*w_2 \\
+			\end{split}\end{equation} %}
+			余積$\Delta_*$をSweedler記法を用いて、任意の森$w\in WT_+A$に対して
+			$w_{2(1)}\otimes w_{2(2)}=\Delta_*w_2$と書く。
+			\begin{proof} %{
+				式\eqref{eq:一文字の森の場合の森の二項演算}が成り立つので、
+				任意の$t\in T_+A,\;w_1\in T_+A$と$1$文字の森$w_2\in WT_+A$
+				に対して式\eqref{eq:森の二項演算の余積による計算}は成り立つ。
+				そこで、任意の$t\in T_+A,\;w_1\in T_+A$と$n\ge 1$文字以下の森
+				$w_2\in WT_+A$に対して式\eqref{eq:森の二項演算の余積による計算}が
+				成り立つとする。
 
-			$\bullet\in T_\bullet X$に対する$TX$の作用$\lhd$を次のように定義すれば、
-			\begin{equation*}\begin{split} %{
-				\bullet\lhd1_* &= \bullet \\
-				\bullet\lhd[t_1t_2\cdots t_m]&= \bullet[t_1t_2\cdots t_m] \\
-			\end{split}\end{equation*} %}
-			任意の$w\in WTX$に対して$\bullet\lhd w\neq0$だから、次のようになる。
-			\begin{equation*}\begin{split} %{
-				[x_1]\perp[x_2] &= [x_1x_2] + [x_1[x_2]] \\
-				[x_1]\perp[x_2]\perp[x_3]
-				&= [x_1x_2x_3]+[x_1[x_3]x_2]+[x_1x_2[x_3]] \\
-				&\;+ [x_1[x_2]x_3]+[x_1[x_2x_3]]+[x_1[x_2[x_3]]] \\
-				\dots \\
-			\end{split}\end{equation*} %}
+				任意の$t,u\in T_+A,\;w_1\in T_+A$と$n$文字の森$x_2\in WT_+A$に対して
+				次の式が成り立つ。
+				\begin{equation*}\begin{split} %{
+					(t\lhd w_1)\lhd (x_2*[u])
+					&= \sum_{i\in \set{t}\cup\set{w_1}}
+						\bigl((t\lhd w_1)\lhd x_2\bigr)\lhd_i u \\
+					&= \sum_{i\in \set{t}\cup\set{w_1}}
+						\bigl(t\lhd (w_1\land x_2)\bigr)\lhd_i u \\
+					&= (\sum_{i\in \set{t}}+\sum_{i\in \set{w_1}})
+						\bigl(t\lhd (w_1\land x_2)\bigr)\lhd_i u \\
+					&= t\lhd \bigl((w_1\land x_2)*[u]\bigr)
+						+ t\lhd \bigl(\sum_{i\in \set{w_1}}(w_1\land x_2)\lhd_i u\bigr) \\
+				\end{split}\end{equation*} %}
+				ここで、 次の式が成り立つから、
+				\begin{equation*}\begin{split} %{
+					\sum_{i\in \set{w_1}}(w_1\land x_2)\lhd_i u
+					&= \sum_{i\in \set{w_1}}\bigl((w_1\lhd x_{2(2)})*x_{2(1)}\bigr)\lhd_i u \\
+					&= \bigl(w_1\lhd (x_{2(2)}*[u])\bigr)*x_{2(1)} \\
+				\end{split}\end{equation*} %}
+				次の式が成り立つ。
+				\begin{equation*}\begin{split} %{
+					(t\lhd w_1)\lhd (x_2*[u])
+					&= t\lhd \bigl(w_1\land (x_2*[u])\bigr) \\
+					w_1\land (x_2*[u])
+					&= (w_1\land x_2)*[u]+\bigl(w_1\lhd (x_{2(2)}*[u])\bigr)*x_{2(1)} \\
+					&= \bigl(w_1\lhd (x_{2(2)}*[u]_{(2)})\bigr)*(x_{2(1)}*[u]_{(1)}) \\
+					&= \bigl(w_1\lhd (x_2*[u])_{(2)})\bigr)*\bigl((x_2*[u])_{(1)}\bigr) \\
+				\end{split}\end{equation*} %}
+				任意の$n+1$文字の森$w_2\in WT_+A$は、ある$u\in T_+A$と$x_2\in WT_+A$
+				があって一意に$w_2=x_2*[u]$と書くことができるので、任意の$n+1$文字
+				の森$w_2\in WT_+A$の場合にも
+				式\eqref{eq:森の二項演算の余積による計算}が成り立つことがわかる。
+			\end{proof} %}
+		\end{itemize} %}
+		以上で、式\eqref{eq:接木による森の2項演算の定義}によって森の二項演算
+		$\land$が定義できることを確かめた。確認するために使った定義や命題を
+		まとめておく。
 
-until
+		\begin{definition}[森への接木]\label{def:森への接木} %{
+			$R$双線形写像$\beta_\lhd: RWT_+A\otimes RT_+A\to RWT_+A$を
+			次のように定義する。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 任意の$t\in T_+A$に対して次のように定義する。
+				\begin{equation*}\begin{split} %{
+					1_W\lhd t = 0
+				\end{split}\end{equation*} %}
+				\item 任意の$t,t_1,t_2,\dots,t_m\in T_+A$に対して次のように定義する。
+				\begin{equation*}\begin{split} %{
+					[t_1t_2\cdots t_m]\lhd t 
+					&= [(t_1\lhd t)t_2\cdots t_m] + [t_1(t_2\lhd t)\cdots t_m] \\
+					&\;+ \cdots + [t_1t_2\cdots (t_m\lhd t)]
+				\end{split}\end{equation*} %}
+			\end{itemize} %}
+		\end{definition} %def:森への接木}
 
-			$T_{\bullet}X$へ$WX$の作用$\lhd$を次のように定義する。
+		\begin{proposition}[森への接木のライプニッツ性]\label{prop:森への接木のライプニッツ性} %{
+			森への接木$\lhd$は、次のライプニッツ則を満たす。
 			\begin{equation*}\begin{split} %{
-				\bullet\lhd1_* &= \bullet \\
-				\bullet\lhd[x_1] &= \bullet[x_1] \\
-				\bullet[x_1]\lhd[x_2] &= \bullet[x_1x_2] + \bullet[x_1[x_2]] \\
-				\bullet[x_1x_2]\lhd[x_3] &= \bullet[x_1x_2x_3] + \bullet[x_1[x_3]x_2] + \bullet[x_1x_2[x_3]] \\
-				\bullet[x_1[x_2]]\lhd[x_3] &= \bullet[x_1[x_2]x_3] + \bullet[x_1[x_2x_3]] + \bullet[x_1[x_2[x_3]]] \\
-				\dots \\
-				\bullet\lhd[x_1x_2\cdots x_m] &= \bullet[x_1x_2\cdots x_m] \\
+				(w_1*w_2)\lhd t &= (w_1\lhd t)*w_2 + w_1*(w_2\lhd t) \\
+				&\quad\text{for all }t\in T_+A,\;w_1,w_2\in WT_+A \\
 			\end{split}\end{equation*} %}
-			'結合性'$t\lhd w_1\lhd w_2=t\lhd(w_1\perp w_2)$は$RWTX$に対して
-			次の積を導く。
-			\begin{equation*}\begin{split} %{
-				[x_1]\perp[x_2] &= [x_1x_2] + [x_1[x_2]] \\
-				[x_1x_2]\perp[x_3] &= [x_1x_2x_3] + [x_1[x_3]x_2] + [x_1x_2[x_3]] \\
-				[x_1[x_2]]\perp[x_3] &= [x_1[x_2]x_3] + [x_1[x_2x_3]] + [x_1[x_2[x_3]]] \\
-				\dots \\
-			\end{split}\end{equation*} %}
-			また、$\perp$の結合性から次の関係が得られる。
-			\begin{equation*}\begin{split} %{
-				[x_1]\perp[x_2]\perp[x_3] &= [x_1x_2]\perp[x_3] + [x_1[x_2]]\perp[x_3] \\
-				&\Downarrow \quad\lcomment{十分条件} \\
-				[x_1]\perp[x_2x_3] &= [x_1x_2x_3] + [x_1[x_3]x_2] + [x_1[x_2]x_3] + [x_1[x_2x_3]] \\
-				[x_1]\perp[x_2[x_3]] &= [x_1x_2[x_3]] + [x_1[x_2[x_3]]] \\
-				\dots \\
-			\end{split}\end{equation*} %}
-			$[x]\mapsto[x]\otimes1_*+1_*\otimes[x]$となる$\perp$に双対な余積
-			$\Delta$は次のように与えられる。
-			\begin{equation*}\begin{split} %{
-				\Delta([x_1]\otimes[x_2]) 
-				&= (\Delta[x_1])\perp(\Delta[x_2]) \\
-				&\Downarrow \quad\lcomment{十分条件} \\
-				\Delta[x_1x_2] &= \begin{pmatrix}
-				[x_1x_2] \\
-				1_*
-				\end{pmatrix} + \begin{pmatrix}
-				[x_1] \\
-				[x_2]
-				\end{pmatrix} + \begin{pmatrix}
-				[x_2] \\
-				[x_1]
-				\end{pmatrix} + \begin{pmatrix}
-				[x_1x_2] \\
-				1_*
-				\end{pmatrix} \\
-				\Delta[x_1[x_2]] &= \begin{pmatrix}
-				[x_1[x_2]] \\
-				1_*
-				\end{pmatrix} + \begin{pmatrix}
-				1_* \\
-				[x_1[x_2]]
-				\end{pmatrix} \\
-			\end{split}\end{equation*} %}
-			余積$\Delta$は余積$\Delta_*$に他ならない。
+		\end{proposition} %prop:森への接木のライプニッツ性}
+		\begin{proof} %{
+			森への接木$\lhd$の定義\ref{def:森への接木}から命題の式が成り立つこと
+			がわかる。
+		\end{proof} %}
 
-			積$m_\perp$は積$m_*+\cdots$となっている。$m_*$の残りの部分を
-			$\beta_\dashv$とする。
+		\begin{definition}[森による森への接木]\label{def:森による森への接木} %{
+			$R$双線形写像$\beta_\lhd: RWT_+A\otimes RWT_+A\to RWT_+A$を
+			次のように定義する。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 任意の$w\in WT_+A$に対して次のように定義する。
+				\begin{equation*}\begin{split} %{
+					w\lhd 1_W = w
+				\end{split}\end{equation*} %}
+				\item 任意の$t_1,t_2,\dots,t_m\in T_+A,\;w\in WT_+A$に対して
+				次のように定義する。
+				\begin{equation*}\begin{split} %{
+					w\lhd [t_1t_2\cdots t_m] 
+					= \sum_{i_1,i_2,\dots,i_m\in \set{w}}\Bigl(
+					\cdots\bigl((w\lhd_{i_1}t_1)\lhd_{i_2}t_2\bigr)\cdots
+					\Bigr)\lhd_{i_m}t_m
+				\end{split}\end{equation*} %}
+			\end{itemize} %}
+		\end{definition} %def:森による森への接木}
+
+		\begin{proposition}[森への接木の余積による表示]\label{prop:森への接木の余積による表示} %{
+			森による森への接木$\lhd$は、余積$\Delta_*$を用いて次のように書くこと
+			ができる。
 			\begin{equation*}\begin{split} %{
-				m_\perp &= m_* + \beta_\dashv \\
+				(w_1*w_2)\lhd w &= (w_1\lhd w_{(1)})*(w_2\lhd w_{(2)}) \\
+				&\quad\text{for all }w,w_1,w_2\in WT_+A
 			\end{split}\end{equation*} %}
-			$\beta_\dashv$は次のようになる。
+			ここで、任意の$x\in WT_+A$に対して$x_{(1)}\otimes x_{(2)}=\Delta_*x$
+			とおいた。
+		\end{proposition} %prop:森への接木の余積による表示}
+		\begin{proof} %{
+			森による森への接木の定義\ref{def:森による森への接木}を実直に
+			計算すれば証明できる。
 			\begin{equation*}\begin{split} %{
-				1_*\dashv1_* &= 0 \\
-				1_*\dashv[x_1] &= 0 \\
-				[x_1]\dashv1_* &= 0 \\
-				[x_1]\dashv[x_2] &= [x_1[x_2]] \\
-				[x_1x_2]\dashv[x_3] &= [x_1[x_3]x_2] + [x_1x_2[x_3]] \\
-				[x_1[x_2]]\dashv[x_3] &= [x_1[x_2x_3]] + [x_1[x_2[x_3]]] \\
-				[x_1]\dashv[x_2x_3] &= [x_1[x_3]x_2] + [x_1[x_2]x_3] + [x_1[x_2x_3]] \\
-				[x_1]\dashv[x_2[x_3]] &= [x_1[x_2[x_3]]] \\
-				\dots \\
+				(w_1*w_2)\lhd[t_1] &= (w_1*w_2)\lhd t_1 \\
+				&= (w_1\lhd t_1)*w_2 + w_1*(w_2\lhd t_1) \\
+				&\quad\lcomment{ライプニッツ性\ref{prop:森への接木のライプニッツ性}} \\
+				(w_1*w_2)\lhd[t_1t_2] &= \sum_{i_2\in\set{w_1}\cup\set{w_2}}
+					\bigl((w_1*w_2)\lhd t_1\bigr)\lhd_{i_2}t_2 \\
+				&= (\sum_{i_2\in\set{w_1}}+\sum_{i_2\in\set{w_2}})
+					\bigl((w_1*w_2)\lhd t_1\bigr)\lhd_{i_2}t_2 \\
+				&= (w_1\lhd [t_1t_2])*w_2 + (w_1\lhd t_2)*(w_2\lhd t_1) \\
+				&\;+ (w_1\lhd t_1)*(w_2\lhd t_2) + w_1*(w_2\lhd [t_1t_2]) \\
+				\cdots
 			\end{split}\end{equation*} %}
-			結合性$m_\perp(m_\perp\otimes\myid)=m_\perp(\myid\otimes m_\perp)$
-			から次の式が導かれる。
+		\end{proof} %}
+
+		\begin{definition}[森の二項演算]\label{def:森の二項演算} %{
+			$R$双線形写像$\beta_\land: RWT_+A\otimes RWT_+A\to RWT_+A$を
+			次のように定義する。
 			\begin{equation*}\begin{split} %{
-				\beta_\dashv(\beta_\dashv\otimes\myid) 
-				+ m_*(\beta_\dashv\otimes\myid) 
-				+ \beta_\dashv(m_*\otimes\myid)　\\
-				= \beta_\dashv(\myid\otimes\beta_\dashv)
-				+ m_*(\myid\otimes\beta_\dashv)
-				+ \beta_\dashv(\myid\otimes m_*)
+				w_1\land w_2 &= (w_1\lhd w_{2(2)})*w_{2(1)}
+				\quad\text{for all }w_1,w_2\in WT_+A
 			\end{split}\end{equation*} %}
-			双対性
+			ここで、任意の$x\in WT_+A$に対して$x_{(1)}\otimes x_{(2)}=\Delta_*x$
+			とおいた。
+		\end{definition} %def:森の二項演算}
+
+		\begin{proposition}[接木と森の二項演算との関係]\label{prop:接木と森の二項演算との関係} %{
+			森による接木$\lhd$と森の二項演算$\land$は次の関係を満たす。
 			\begin{equation*}\begin{split} %{
-				\Delta_*m_\perp 
-				&= (m_\perp\otimes m_\perp)\sigma_{23}(\Delta_*\otimes \Delta_*) \\
-				\Delta_*m_*
-				&= (m_*\otimes m_*)\sigma_{23}(\Delta_*\otimes \Delta_*) \\
+				(t\lhd w_1)\lhd w_2 = t\lhd (w_1\land w_2)
+				\quad\text{for all }t\in T_+A,\;w_1,w_2\in WT_+A
 			\end{split}\end{equation*} %}
-			から次の式が導かれる。
-			\begin{equation*}\begin{split} %{
-				\Delta_*\beta_\dashv 
-				= (\beta_\dashv\otimes \beta_\dashv 
-				+ m_*\otimes \beta_\dashv
-				+ \beta_\dashv\otimes m_*)\sigma_{23}(\Delta_*\otimes\Delta_*)
-			\end{split}\end{equation*} %}
-		%s3:木の場合の考察}
-	%s2:考察}
-%}
+		\end{proposition} %prop:接木と森の二項演算との関係}
+		\begin{proof} %{
+		\end{proof} %}
+	%s2:接木}
+%s1:木構造}
