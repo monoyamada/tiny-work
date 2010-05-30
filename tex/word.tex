@@ -1,10 +1,27 @@
 \section{文字列}\label{s1:文字列} %{
 	$R=(R,+,0,\myspace,1)$を可換半環、$A$を有限集合、$WA=(WA,m_*,1_W)$を$A$
-	から生成された自由モノイドとする。ここで、積$m_*$は文字列の連結で定義
-	された積とする。積$m_*$を中置記法で$*$とも書くことにする。
+	から生成された自由モノイド、$RWA$を$WA$を基底とする$R$係数自由半
+	モジュールとする。ここで、積$m_*$は文字列の連結で定義された積とし、
+	中置記法で$*$とも書くことにする。また、$1_W$は文字数$0$の単語とする。
 	$WA$の元を$A$の元を並べたものを括弧でくくって表すことにする。
 	例えば、$a_1,a_2,\dots, a_n\in A$を並べた$WA$の元を$[a_1a_2\cdots a_n]$
 	と書く。
+	
+	任意の$n\in\mybf{N}$に対して$W_nA\subseteq WA$を文字数$n$の単語の集合と
+	する。つまり、$WA=\oplus_{n\in N}W_nA$となる。$RW_nA$を$W_nA$を基底とする
+	$R$係数自由半モジュールとする。やはり、$RWA=\oplus_{n\in N}RW_nA$となる。
+	積$m_*$は$R$双線形写像$m_*:RW_mA\otimes RW_nA\to RW_{m+n}A$として
+	みることもできる。
+
+	ケース文を'簡潔に書くために、デルタ関数'$\jump{\mathchar`-}$を定義して
+	おく。論理値$\mybf{B}=\set{0_{\mybf{B}},1_{\mybf{B}}}$から半環
+	$R=(R,+,0_R,\myspace,1_R)$への写像$\jump{\mathchar`-}$を次のように
+	定義する。
+	\begin{equation*}\begin{split} %{
+		\jump{\mathchar`-}: \mybf{B} &\mapsto R \\
+		0_{\mybf{B}} &\mapsto 0_R \\
+		1_{\mybf{B}} &\mapsto 1_R \\
+	\end{split}\end{equation*} %}
 
 	$RWA$を$WA$を基底とする$R$係数半モジュールとする。$WA$の積$m_*$を$R$線形
 	に拡張して$RWA$の積としたものを同じ記号$m_*$で書き、中置記法で$*$とも
@@ -16,45 +33,45 @@
 		&\quad\text{for all }w_{11},w_{12},\dots,w_{1m},w_{21},w_{22},\dots,w_{2m}\in WA
 	\end{split}\end{equation} %}
 	積$m_*$に双対で、任意の$a\in A$に対して
-	$\Delta_*[a]=[a]\otimes 1_*+1_*\otimes [a]$となる余積$\Delta_*$を求める。
+	$\Delta_*[a]=[a]\otimes 1_W+1_W\otimes [a]$となる余積$\Delta_*$を求める。
 	任意の$a_1,a_2,\dots,a_m\in A$に対して次の式が成り立つ必要がある。
 	\begin{equation}\begin{split} %{
 		\Delta_*[a_1a_2\cdots a_m] &= (\Delta_*[a_1])*(\Delta_*[a_2])*\cdots*(\Delta_*[a_m]) \\
-		&= [a_1a_2\cdots a_m]\otimes 1_* \\
+		&= [a_1a_2\cdots a_m]\otimes 1_W \\
 		&\; + \sum_{1\le i\le n}[a_1a_2\cdots a_m]_{\neg{\set{i}}}\otimes [a_i] \\
 		&\; + \sum_{1\le i<j\le n}[a_1a_2\cdots a_m]_{\neg{\set{i,j}}}\otimes [a_ia_j] \\
 		&\; + \cdots \\
-		&\; + 1_*\otimes [a_1a_2\cdots a_m] \\
+		&\; + 1_W\otimes [a_1a_2\cdots a_m] \\
 	\end{split}\end{equation} %}
 	ここで、任意の$1\le i_1<i_2<i_n\le m$に対して
 	$[a_1a_2\cdots a_m]_{\neg\set{i_1,i_2,\dots,i_n}}$を$[a_1a_2\cdots a_m]$
 	から$i_1$番目と$i_2$番目と...と$i_n$番目の文字を取り除いた文字列とした。
 	例えば、$[abc]_{\neg\set{1}}=[bc]$、$[abc]_{\neg\set{2}}=[ac]$、
 	$[abc]_{\neg\set{1,3}}=[b]$となる。更に、余単位射を
-	$\epsilon_*:w\mapsto \jump{w=1_*}$で定めると、単位元$1_*$に対する余積が
-	$\Delta_*1_*=1_*\otimes 1_*+\cdots$という形になる必要がある。
-	一方、双対性$\Delta_*[a]=(\Delta_*1_*)*(\Delta_*[a])$を満たすためには、
-	$\Delta_*1_*=1_*\otimes 1_*$となる必要があることがわかる。まとめると、
+	$\epsilon_*:w\mapsto \jump{w=1_W}$で定めると、単位元$1_W$に対する余積が
+	$\Delta_*1_W=1_W\otimes 1_W+\cdots$という形になる必要がある。
+	一方、双対性$\Delta_*[a]=(\Delta_*1_W)*(\Delta_*[a])$を満たすためには、
+	$\Delta_*1_W=1_W\otimes 1_W$となる必要があることがわかる。まとめると、
 	次のようになる。
 
 	\begin{definition}[文字列の連結に双対な余積]\label{def:文字列の連結に双対な余積} %{
 		$R$線形写像$\Delta_*$を次のように定義する。
 		\begin{equation}\begin{split} %{
 			\Delta_*: RWA\otimes RWA &\to RWA \\
-			1_* &\mapsto 1_*\otimes 1_* \\
+			1_W &\mapsto 1_W\otimes 1_W \\
 			[a_1a_2\cdots a_m] &\mapsto (\Delta_*[a_1])*(\Delta_*[a_2])*\cdots*(\Delta_*[a_m]) \\
-			&= [a_1a_2\cdots a_m]\otimes 1_* \\
+			&= [a_1a_2\cdots a_m]\otimes 1_W \\
 			&\; + \sum_{1\le i\le n}[a_1a_2\cdots a_m]_{\neg{\set{i}}}\otimes [a_i] \\
 			&\; + \sum_{1\le i<j\le n}[a_1a_2\cdots a_m]_{\neg{\set{i,j}}}\otimes [a_ia_j] \\
 			&\; + \cdots \\
-			&\; + 1_*\otimes [a_1a_2\cdots a_m] \\
+			&\; + 1_W\otimes [a_1a_2\cdots a_m] \\
 			&\quad\text{for all }a_1,a_2,\dots,a_m \in A
 		\end{split}\end{equation} %}
 		$\Delta_*$は積$m_*$に双対になる。
 		また、次の$R$線形写像$\epsilon_*$は余積$\Delta_*$の余単位射となる。
 		\begin{equation}\begin{split} %{
 			\epsilon_*: RWA &\to R \\
-				w &\mapsto \jump{w=1_*}\quad\text{for all }w\in WA
+				w &\mapsto \jump{w=1_W}\quad\text{for all }w\in WA
 		\end{split}\end{equation} %}
 	\end{definition} %def:文字列の連結に双対な余積}
 
@@ -63,9 +80,9 @@
 	\end{proposition} %prop:Delta_*は余可換}
 	\begin{proof} %{
 		文字数についての帰納法で証明する。
-		$\Delta_*1_*=1_*\otimes 1_*$だから、文字数が$0$の場合は余可換となる
+		$\Delta_*1_W=1_W\otimes 1_W$だから、文字数が$0$の場合は余可換となる
 		ことがわかる。
-		任意の$a\in A$に対して$\Delta_*1[a]=[a]\otimes 1_*+[a]\otimes 1_*$
+		任意の$a\in A$に対して$\Delta_*1[a]=[a]\otimes 1_W+[a]\otimes 1_W$
 		だから、文字数が$1$の場合も余可換となることがわかる。
 		文字数が$n\in\mybf{N}\bou 1\le n$以下の任意の単語に対して$\Delta\*$が
 		余可換だとする。
@@ -90,27 +107,12 @@
 		余積$\Delta_*$は余可換となることがわかる。
 	\end{proof} %}
 
-	この証明で用いた事柄は次のものである。
-	\begin{itemize} %{
-		\item 任意の$m+n$文字の単語は、ある$m$文字の単語とある$n$文字の単語の積
-		で書くことができる。
-		\item 積$m_*$と余積$\Delta_*$が双対である。
-		\item $0$文字の単語に対する余積$\Delta_*$が余可換である。
-		\item $1$文字の単語に対する余積$\Delta_*$が余可換である。
-	\end{itemize} %}
-	したがって、
-	\begin{itemize} %{
-		\item 積$m_*$と双対になり、
-		\item $0$文字と$1$文字の単語に対する余積$\Delta_*$が余可換
-	\end{itemize} %}
-	となる任意の余積は余可換となる。
-
 	ここで、余可換な余積について調べる。$\Delta$を一般の余積とすると、
 	余結合性より、$\Delta^2$を次のように定義することができる。
 	\begin{equation*}\begin{split} %{
 		\Delta^2w=(\Delta\otimes\myid)\Delta w=(\myid\otimes\Delta)\Delta w
 	\end{split}\end{equation*} %}
-	同様にして、$\Delta^2$を次のように定義することができる。
+	同様にして、$\Delta^3$を次のように定義することができる。
 	\begin{equation*}\begin{split} %{
 		\Delta^3w
 		&=(\Delta\otimes\myid\otimes\myid)(\Delta\otimes\myid)\Delta w \\
@@ -120,7 +122,7 @@
 		&=(\myid\otimes\Delta\otimes\myid)(\myid\otimes\Delta)\Delta w \\
 		&=(\myid\otimes\myid\otimes\Delta)(\myid\otimes\Delta)\Delta w \\
 	\end{split}\end{equation*} %}
-	任意の$n\in\mybf{N}\bou 1\le n$に対して、$\Delta^n$を次のように定義する。
+	任意の$n\in\mybf{N}_+$に対して、$\Delta^n$を次のように定義する。
 	\begin{equation*}\begin{split} %{
 		\Delta^nw = \Delta^{(1)}w\otimes \Delta^{(1)}\Delta^{(2)}w\otimes 
 		\cdots\otimes \Delta^{(1)}\Delta^{(2)(n-1)}w\otimes \Delta^{(2)n}w
@@ -135,7 +137,7 @@
 		}
 	\end{equation}
 	この木のどの葉に対して余積$\Delta$をとっても、余結合性により次の図のよう
-	になり、最終的に図\eqref{eq:余積の二分木}の二分木の形になる。
+	になり、最終的に図\eqref{eq:余積の二分木}の二分木の形にすることができる。
 	\begin{equation*}\begin{split} %{
 		&\xymatrix@R=1pc@C=1pc{
 			\cdots \ar[r] & \Delta^{(2)k}w \ar[r]\ar[d] & \Delta^{(2)(k+1)} \ar[r]\ar[d] & \cdots \\
@@ -149,14 +151,14 @@
 			& \Delta^{(1)}\Delta^{(1)}\Delta^{(2)k}w && \Delta^{(2)}\Delta^{(1)}\Delta^{(2)k}w \\
 		} \\
 	\end{split}\end{equation*} %}
+	余表現の面から余積の余可換性を見てみる。
 	$WA$の基底を$\set{e_0,e_1,\cdots}$とおき、$R$値行列$\Delta_i^{jk}$を
 	用いて$\Delta e_i=\Delta_i^{jk}e_j\otimes e_k$とする。
-	余積$\Delta$の余結合性から、
-	$\Delta_i^{ja}\Delta_a^{kl}=\Delta_a^{jk}\Delta_i^{al}$という式を満たす。
+	余積$\Delta$の余結合性は、余表現に対する
+	$\Delta_i^{ja}\Delta_a^{kl}=\Delta_a^{jk}\Delta_i^{al}$という条件になる。
 	図\eqref{eq:余積の二分木}による$\Delta^n$の表し方は、
 	$(\Delta^3)_i^{jklm}=\Delta_i^{ja}\Delta_a^{kb}\Delta_b^{lm}$
 	という縮約のとり方を指定していることに対応する。
-	
 	余積$\Delta$が余可換であった場合、$\Delta_i^{jk}=\Delta_i^{kj}$となる。
 	$\Delta^2$についてみてみる。
 	$(\Delta^2)_i^{jkl}=\Delta_i^{ja}\Delta_a^{kl}$となるが、
@@ -164,12 +166,189 @@
 	余積$\Delta$が余可換であることからわかる。また、余結合性
 	$\Delta_i^{ja}\Delta_a^{kl}=\Delta_a^{jk}\Delta_i^{al}$を使うと、
 	$(\Delta^2)_i^{jkl}$の添え字$(jk)$について対称なこともわかる。
-	したがって、$(\Delta^2)_i^{jkl}$の添え字は$(jkl)$の任意の置換によって
-	不変になっていることがわかる。テンソル積$\otimes$の記法を用いて
+	したがって、$(\Delta^2)_i^{jkl}$は添え字$(jkl)$の任意の置換で不変なこと
+	がわかる。同様にして、$(\Delta^n)_i^{i_1i_2\cdots i_{n+1}}$は添え字
+	$(i_1i_2\cdots i_{n+1})$の任意の置換で不変なこともわかる。
+	したがって、Sweedler記法を用いて
 	$\Delta^nw=w_{(1)}\otimes w_{(2)}\otimes\cdots\otimes w_{(n+1)}$
-	と書くと、$n+1$次の任意の置換$\sigma$に対して
+	と書くと、$\Delta$が余可換であれば、$n+1$次の任意の置換$\sigma$に対して
 	$\Delta^nw=w_{(\sigma1)}\otimes w_{(\sigma2)}\otimes\cdots\otimes w_{\left(\sigma(n+1)\right)}$
 	となる。
+%s1:文字列}
+
+\section{文字列とその双対空間}\label{s1:文字列とその双対空間} %{
+	前節\ref{s1:文字列}と同じ記号を用いて、さらに、
+	$WA$から$\mybf{2}\subseteq R$への写像全体の作る空間を$WA^t$、
+	$RWA$から$R$への$R$線形写像全体の作る空間を$RWA^t$とする。
+	単語$w\in WA$に双対な元を$w^t$と書く。
+	\begin{equation*}\begin{split} %{
+		w_1^tw_2 = \jump{w_1=w_2} \quad\text{for all }w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+	$WA$の元を$A$の元を用いて書いた場合にも同様に書く。
+	例えば、$a_1,a_2,\dots, a_n\in A$として、$[a_1a_2\cdots a_n]\in WA$
+	に双対な元を$[a_1a_2\cdots a_n]^t\in WA^t$と書く。
+
+	次の畳み込みによって$RWA$に余積$\Delta_\sqcup$を定義する。
+	\begin{equation*}\begin{split} %{
+		\xymatrix{
+			RWA\otimes RWA \ar[r]^{m_*} \ar@{.>}[d]^{\Delta_\sqcup f} 
+			& RWA \ar[d]^{f} \\
+			R\otimes R & R \ar[l]_{\Delta_\myspace} \\
+		} \\
+		\text{where } \Delta_\myspace r = r\otimes 1 = 1\otimes r
+		\quad\text{for all }r\in R
+	\end{split}\end{equation*} %}
+	$R$値行列$D$を用いて、任意の$w\in WA$に対して
+	$\Delta_\sqcup w^t=\sum_{w_1,w_2\in WA}D_{w_1w_2}^ww_1^t\otimes w_2^t$
+	とすると、可換図式により$D_{w_1w_2}^w=w^t(w_1*w_2)$となる。したがって、
+	余積$\Delta_\sqcup$は具体的に求まって次のようになる。
+	\begin{equation*}\begin{split} %{
+		\Delta_\sqcup w^t 
+		= \sum_{w_1,w_2\in WA}\jump{w=w_1*w_2}w_1^t\otimes w_2^t
+		\quad\text{for all }w\in WA
+	\end{split}\end{equation*} %}
+	$A$の元を用いて書くと、次のようになる。
+	\begin{equation*}\begin{split} %{
+		\Delta_\sqcup [a_1a_2\cdots a_m]^t
+		&= 1_W^t\otimes [a_1a_2\cdots a_m]^t + [a_1]^t\otimes [a_2\cdots a_m]^t  \\
+		&\;+ [a_1a_2]^t\otimes [\cdots a_m]^t + \cdots + [a_1a_2\cdots a_m]^t\otimes 1_W^t \\
+		&\quad\text{for all }a_1,a_2,\dots,a_m\in A
+	\end{split}\end{equation*} %}
+	さらに、$m_\myspace\Delta_\myspace=\myid$となるから、余積$\Delta_\sqcup$
+	は次の可換図を満たす。
+	\begin{equation*}\xymatrix{
+		RWA\otimes RWA \ar[r]^{m_*} \ar[d]^{\Delta_\sqcup f} 
+		& RWA \ar[d]^{f} \\
+		R\otimes R \ar[r]^{m_\myspace} & R \\
+	}\end{equation*}
+	また、余積$\Delta_\sqcup$に対する余単位射$\epsilon_\sqcup$は、
+	余積$\Delta_\sqcup$に対する単位射$\epsilon_*$と同じ形になる。
+	\begin{equation*}\begin{split} %{
+		\epsilon_\sqcup w^t = \jump{w=1_W} \quad\text{for all }w\in WA
+	\end{split}\end{equation*} %}
+
+	次の畳み込みによって$RWA$に余積$m_\sqcup$を定義する。
+	\begin{equation*}\begin{split} %{
+		\xymatrix{
+			RWA\otimes RWA \ar[d]^{f\otimes g} 
+			& RWA \ar[l]_{\Delta_*} \ar@{.>}[d]^{f\sqcup g}\\
+			R\otimes R \ar[r]^{m_\myspace} & R  \\
+		} 
+	\end{split}\end{equation*} %}
+	$m_*$と$\Delta_*$、$m_\myspace$と$\Delta_\myspace$が共に双対な積と余積
+	になっているから、積$m_\sqcup$と余積$\Delta_\sqcup$は双対になる。
+	さらに、$\Delta_\myspace m_\myspace=\myid\otimes \myid$となるから、
+	積$m_\sqcup$は次の可換図を満たす。
+	\begin{equation*}\begin{split} %{
+		\xymatrix{
+			RWA\otimes RWA \ar[d]^{f\otimes g} 
+			& RWA \ar[l]_{\Delta_*} \ar[d]^{f\sqcup g}\\
+			R\otimes R & R \ar[l]_{\Delta_\myspace} \\
+		} 
+	\end{split}\end{equation*} %}
+	$R$値行列$D$を用いて、任意の$w_1,w_2\in WA$に対して
+	$w_1^t\sqcup w_2^t=\sum_{w\in WA}M_{w_1w_2}^ww^t$とすると、
+	可換図式により$M_{w_1w_2}^w=(w_1^t\Delta_{*(1)}w)(w_2^t\Delta_{*(2)}w)$
+	となる。余積$\Delta_\sqcup$の場合と異なり、$m_\sqcup$の具体的な形を
+	求めることは難しい。しかし、次の事柄はすぐわかる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\Delta_*$が余可換だから、$m_\sqcup$は可換になる。つまり、
+		任意の$w_1,w_2\in WA$に対して$w_1^t\sqcup w_2^t=w_2^t\sqcup w_1^t$
+		となる。
+		\item $\Delta_*$の余単位射$\epsilon_*$が$\epsilon_*=1_W^t$となるから、
+		任意の$w,w_2\in WA$に対して
+		\begin{equation*}\begin{split} %{
+			M_{1_Ww_2}^w &= (1_W^t\Delta_{*(1)}w)(w_2^t\Delta_{*(2)}w) \\
+			&= (\epsilon_*\Delta_{*(1)}w)(w_2^t\Delta_{*(2)}w) \\
+			&= w_2^tw \\
+		\end{split}\end{equation*} %}
+		となり、$1_W$が単位元になる。つまり、
+		任意の$w\in WA$に対して$w^t\sqcup 1_W^t=w=1_W^t\sqcup w^t$となる。
+	\end{itemize} %}
+	余積$\Delta_\sqcup$の具体的な形を求めることを考える。
+	まず、任意の$a\in A$と$w,x\in WA$に対して
+	$M_{[a]x}^w=([a]^t\Delta_{*(1)}w)*(x^t\Delta_{*(2)}w)$
+	となり、任意の$a,b_1,b_2,\dots,b_m\in A$に対して
+	\begin{equation*}\begin{split} %{
+		[a]^t\sqcup [b_1b_2\cdots b_m]^t
+		&= \sum_{w\in WA}M_{[a][b_1b_2\cdots b_m]}^ww^t \\
+		&= \sum_{w\in WA}\jump{\Delta_*w=[a]\otimes [b_1b_2\cdots b_m]+\cdots}w^t \\
+		&= [ab_1b_2\cdots b_m]^t + [b_1ab_2\cdots b_m]^t
+			+ \cdots + [b_1b_2\cdots b_ma]^t \\
+	\end{split}\end{equation*} %}
+	となることがわかる。つまり、次のようになる。
+	\begin{equation*}\begin{split} %{
+		[a]^t\sqcup w^t 
+		&= (\Delta_{\sqcup(1)}w^t)*[a]^t*(\Delta_{\sqcup(2)}w^t) \\
+		&\quad\text{for all }a\in A,\;w\in WA
+	\end{split}\end{equation*} %}
+	\begin{todo}[双対空間に対する積$m_*$]\label{todo:双対空間に対する積} %{
+		双対空間$WA^t$に対する積$m_*$の定義をしないまま使っている。
+		転置${\mathchar`-}^t:WA\to WA^t$を同型で定義
+		\begin{equation*}\begin{split} %{
+			(w_1*w_2)^t &= w_1^t * w_2^t \\
+			(w_1^t\otimes w_2^t)(w_3\otimes w_4) &= (w_1^tw_3)(w_2^tw_4) \\
+		\end{split}\end{equation*} %}
+		するか、反同型で定義
+		\begin{equation*}\begin{split} %{
+			(w_1*w_2)^t &= w_2^t * w_1^t \\
+			(w_1^t\otimes w_2^t)(w_3\otimes w_4) &= (w_2^tw_3)(w_1^tw_4) \\
+		\end{split}\end{equation*} %}
+		するかで双対空間$WA^t$の文字$A^t$を並べる順序が異なってくる。
+	\end{todo} %todo:双対空間に対する積}
+	次に、任意の$a_1,a_2\in A$と$w,x\in WA$に対して
+	$M_{[a_1a_2]x}^w=([a_1a_2]^t\Delta_{*(1)}w)*(x^t\Delta_{*(2)}w)$
+	となり、任意の$a_1,a_2,b_1,b_2,\dots,b_m\in A$に対して
+	\begin{equation*}\begin{split} %{
+		[a_1a_2]^t\sqcup [b_1b_2\cdots b_m]^t
+		&= \sum_{w\in WA}M_{[a_1a_2][b_1b_2\cdots b_m]}^ww^t \\
+		&= \sum_{w\in WA}\jump{\Delta_*w=[a_1a_2]\otimes [b_1b_2\cdots b_m]+\cdots}w^t \\
+		&= [a_1a_2b_1b_2\cdots b_m]^t + [a_1b_1a_2b_2\cdots b_m]^t
+			+ \cdots + [a_1b_1b_2\cdots b_ma_2]^t \\
+		&\;+ [b_1a_1a_2b_2\cdots b_m]^t + \cdots + [b_1a_1b_2\cdots b_ma_2]^t \\
+		&\;+ \cdots \\
+		&\;+ [b_1b_2\cdots a_1a_2b_m]^t + [b_1b_2\cdots a_1b_ma_2]^t \\
+		&\;+ [b_1b_2\cdots b_ma_1a_2]^t \\
+	\end{split}\end{equation*} %}
+	となることがわかる。つまり、次のようになる。
+	\begin{equation*}\begin{split} %{
+		[a_1a_2]^t\sqcup w^t
+		&= (\Delta_{\sqcup(1)}w^t)*[a_1]^t
+			*(\Delta_{\sqcup(1)}\Delta_{\sqcup(2)}w^t)*[a_2]^t
+			*(\Delta_{\sqcup(2)}\Delta_{\sqcup(2)}w^t) \\
+		&= (\Delta_{\sqcup(1)}w^t)*[a_1]^t
+			*\bigl([a_2]^t\sqcup(\Delta_{\sqcup(2)}w^t)\bigr) \\
+		&\quad\text{for all }a_1,a_2\in A,\;w\in WA
+	\end{split}\end{equation*} %}
+	余積$\Delta_\sqcup$の$W_1A\otimes WA\to RWA$と$W_2A\otimes WA\to RWA$の
+	場合の計算から、次の式が成り立つことが予想される。
+	\begin{equation*}\begin{split} %{
+		([a]*w_1)^t\sqcup w_2^t 
+		&= (\Delta_{\sqcup(1)}w_2^t)*[a]^t
+			*\bigl(w_1^t\sqcup(\Delta_{\sqcup(2)}w_2^t)\bigr) \\
+		&\quad\text{for all }a\in A,\;w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+
+	\begin{todo}[余積の計算]\label{todo:余積の計算} %{
+		次の式が成り立つことを証明するためには、$\Delta_*$に対して成り立つ式
+		がいくつか必要になると思われる。
+		\begin{equation*}\begin{split} %{
+			([a]*w_1)^t\sqcup w_2^t 
+			&= (\Delta_{\sqcup(1)}w_2^t)*[a]^t
+				*\bigl(w_1^t\sqcup(\Delta_{\sqcup(2)}w_2^t)\bigr) \\
+			&\quad\text{for all }a\in A,\;w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		積$m_\sqcup$は余積$\Delta_*$から次のように定義される。
+		\begin{equation*}\begin{split} %{
+			w_1^t\sqcup w_2^t &= \sum_{w\in WA}M_{w_1w_2}^ww^t \\
+			&= \sum_{w\in WA}(w_1^t\Delta_{*(1)}w)(w_2^t\Delta_{*(2)}w)w^t \\
+			&= \sum_{w\in WA}\jump{\Delta_{*}w\propto w_1\otimes w_2+\cdots}w^t \\
+		\end{split}\end{equation*} %}
+	\end{todo} %todo:余積の計算}
+%s1:文字列とその双対空間}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
 
 	\begin{todo}[シャッフル積]\label{todo:シャッフル積} %{
 		次の可換図で定義された$R$双線形二項演算$\beta_\sqcup$は積になるか？
@@ -180,18 +359,15 @@
 		}\end{equation}
 	\end{todo} %todo:シャッフル積}
 
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-	\end{todo} %todo:ここまで}
-
 	次の$R$線形写像$\Delta_\amalg$は余積になる。
 	\begin{equation}\begin{split} %{
 		\Delta_\amalg: RWA &\to RWA\otimes RWA \\
 			[a_1a_2\cdots a_{m-1}a_m] 
-				&\mapsto [a_1a_2\cdots a_{m-1}a_m]\otimes 1_* \\
+				&\mapsto [a_1a_2\cdots a_{m-1}a_m]\otimes 1_W \\
 				&\quad + [a_1a_2\cdots a_{m-1}]\otimes [a_m] \\
 				&\quad + \cdots \\
 				&\quad + [a_1]\otimes [a_2\cdots a_{m-1}a_m] \\
-				&\quad + 1_*\otimes [a_1a_2\cdots a_{m-1}a_m] \\
+				&\quad + 1_W\otimes [a_1a_2\cdots a_{m-1}a_m] \\
 	\end{split}\end{equation} %}
 	余積$\Delta_\amalg$に対する余単位射は$\epsilon_*$となる。
 
@@ -206,4 +382,3 @@
 		したがって、積$m_\odot$が文字数を保存する場合には、文字数の小さいもの
 		から大きなものへと余積$\Delta_\odot$が順に求まる。
 	\end{todo} %todo:余積から積の導出}
-%s1:文字列}
