@@ -42,7 +42,8 @@
 \newtheorem[S]{observation}{観察}[section]
 \newtheorem[S]{formula}{公式}[section]
 \newtheorem[S]{todo}{課題}[section]
-\newtheorem[S]{notation}{記法}[section]
+%\newtheorem[S]{notation}{記法}[section]
+\newtheorem[S]{note}{ノート}[section]
 \def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
 \def\endproof{{\large$\Box$}\endtrivlist}
 %
@@ -65,12 +66,15 @@
 \newcommand{\myspace}{\text{\textvisiblespace}}
 %\newcommand{\mybinom}[2]{\left[{{#1}\atop{#2}}\right]}
 \newcommand{\mybinom}[2]{\genfrac{[}{]}{0pt}{1}{#1}{#2}}
-\newcommand{\mybiop}[1]{\mathchar`-{#1}\mathchar`-}
+\newcommand{\myhere}{\mathchar`-}
+\newcommand{\mybiop}[1]{\mathchar`-{#1}\myhere}
+\newcommand{\mypowop}[1]{\myhere^{#1}}
 \newcommand{\lcomment}[1]{//\;\text{#1}}
 %
 %category
 %
 \newcommand{\homset}{\myop{hom}}
+\newcommand{\mapset}{\myop{map}}
 \newcommand{\myid}{{\myop{id}}}
 \newcommand{\mydu}{{\myop{du}}}
 %\newcommand{\curry}{\myop{curring}}
