@@ -1,0 +1,489 @@
+\section{領域分割のパターン}\label{s1:領域分割のパターン} %{
+	集合$X$から集合$Y$への写像$f$が与えられたとき、写像$f$を分割していって、
+	$f$の計算をより簡単な計算に帰着させることがよく行われる。
+	写像$f$を簡単にすること以外にも、計算機での処理における並列化でも$f$を
+	分割することが使われる。写像$f$を分割することを可換図で書くと
+	次のようになるだろう。
+	\begin{equation*}\begin{split} %{
+		\xymatrix@C+4pc{
+			X\times X \ar[d]^{fの分割}
+				& X \ar[l]_{\text{定義域の分割}} \ar[d]^{f} \\
+			Y\times Y \ar[r]^{\text{値域の合成}} & Y \\
+		}
+	\end{split}\end{equation*} %}
+	写像$f$を計算するために、このような可換図を利用することを
+	'領域分割のパターン'ということにする。
+
+	$RA$の積$m$と余積$\Delta$から畳み込みによって$\myop{end}(RA)$に
+	積と余積を定義することができる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			RA\otimes RA \ar[d]^{f_1\otimes f_2} 
+				& RA \ar[l]_{\Delta} \ar@{.>}[d]^{\widehat{m}(f_1\otimes f_2)} \\
+			RA\otimes RA \ar[r]^{m} & RA  \\
+		} \xymatrix{
+			RA\otimes RA \ar[r]^{m} \ar@{.>}[d]^{\widehat{\Delta}f} 
+				& RA \ar[d]^{f} \\
+			RA\otimes RA & RA \ar[l]_{\Delta} \\
+		}
+	\end{split}\end{equation*}
+	そして、$m\Delta$が$0$固有値を持たなければ、$(m\Delta)^{-1}$が定義
+	できて、領域分割のパターンを定義できる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			RA\otimes RA \ar[r]^{m} \ar[d]^{\widehat{\Delta}f} 
+				& RA \ar[d]^{f} \\
+			RA\otimes RA \ar[rd]_{m} & RA \ar[l]_{\Delta} \ar[d]^{m\Delta} \\
+			& RA \\
+		}	= \xymatrix@C+2pc{
+			RA\otimes RA \ar[r]^{m} \ar[d]^{\widehat{\Delta}f} 
+				& RA \ar[d]^{f} \\
+			RA\otimes RA \ar[r]^{(m\Delta)^{-1}m} & RA \\
+		}
+	\end{split}\end{equation*}
+	$f\in\myop{end}(RA)$の計算するのに余積$\widehat{\Delta}f$が利用できる
+	可能性が出てくる。もちろん、余積$\widehat{\Delta}f$がなんらかのかたちで
+	問題を小さくしていくものであるときのみ有効は方法である。
+	作用素$m\Delta$の例を挙げてみる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $A$が自然数、積$m$が自然数の乗法、余積$\Delta$が積$m$の転置
+		の場合、$m\Delta$は'含んでいる素数の数'なので、$(m\Delta)^{-1}$が
+		定義できるが、その計算は困難である。また、余積$\Delta$は本質的には
+		素因数分解なので、余積の計算そのものも困難である。
+		\item $A$が文字列、積$m$が文字列の連結、余積$\Delta$が積$m$の転置
+		の場合、$m\Delta$は'文字数+1'なので、$(m\Delta)^{-1}$が定義できて、
+		その計算は容易である。
+		\item $A$が群、積$m$が群の積、余積$\Delta$が積$m$の転置の場合、
+		$m\Delta$は'群の大きさ'なので、群が有限の場合は、$(m\Delta)^{-1}$が
+		定義できて、その計算は容易である。
+	\end{itemize} %}
+%s1:領域分割のパターン}
+
+\section{*半環}\label{s1:*半環} %{
+	\begin{definition}[*半環]\label{def:*半環} %{
+		$R$を半環とする。$R$が次の性質をもつ逆順半環準同型写像$\myhere^*:R\to R$
+		を持つとき、$R$を*半環という。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 逆順半環準同型
+			\begin{equation*}\begin{split} %{
+				(r_1+r_2)^* = r_1^*+r_2^*,\quad (r_1r_2)^* = r_2^*r_1^*
+				\quad\text{for all }r_1,r_2\in R
+			\end{split}\end{equation*} %}
+			\item 反転性 $1^*=1$
+			\item 冪等性 $(r^*)^*=1 \quad\text{for all }r\in R$
+		\end{itemize} %}
+	\end{definition} %def:*半環}
+%s1:*半環}
+
+\section{双対の圏論的側面}\label{s1:双対の圏論的側面} %{
+	代数では次の二つの双対が現れる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 代数的な双対
+		\begin{equation*}\begin{split} %{
+			\homset(X_1\otimes X_2, X_3)\simeq\homset(X_1,\homset(X_2,X_3))
+		\end{split}\end{equation*} %}
+		\item 内積による双対
+		\begin{equation*}\begin{split} %{
+			\homset(X_1\otimes X_2, X_3)\simeq\homset(X_3,X_2\otimes X_1))
+		\end{split}\end{equation*} %}
+	\end{itemize} %}
+%s1:双対の圏論的側面}
+
+\section{群のホップ代数}\label{s1:群のホップ代数} %{
+	教科書\cite{bk:jinbo.ryousigun}に載っている例を使って、アンチポードの
+	意味を考える。
+
+	群$G=(G,m_\myspace,1_G)$から$K=\mybf{C}$への
+	写像$KG^t\simeq \mapset(G,K)$を考える。まずは、$G$を基底とする$K$係数
+	の自由ベクトル$KG$の積と余積を構成する。
+	$G$の積$m_\myspace$をそのまま$R$線形に拡張して$KG$の積とする。
+	$G$の余積$\delta$を$\delta x=x\otimes x$と定義する。
+	群的な余積は任意の積と双対になるので、$\delta$は$G$の積$m_\myspace$
+	と双対である。$G$の余積$\delta$をそのまま$R$線形に拡張して$KG$の余積
+	とする。
+	$\delta$は任意の$x\in G$に対して$\zeta x=1$となる定数写像である。
+
+	余積$\Delta_*$を$m_\myspace$の転置となるように定める。
+	\begin{equation*}\begin{split} %{
+		(\Delta_*x)^t(x_1\otimes x_2) &\simeq x^t(x_1x_2)
+			\quad\text{for all }x,x_1,x_2\in G \\
+		\Delta_*x &= \sum_{x_1,x_2\in G}\jump{x=x_1x_2}x_1\otimes x_2
+			\quad\text{for all }x\in G \\
+	\end{split}\end{equation*} %}
+	すると、$f=\sum_{x\in G}f_xx\in KG$に対して次のようになる。
+	\begin{equation*}\begin{split} %{
+		(\Delta_*f)^t(x_1\otimes x_2) 
+		&= \sum_{x\in G}f_x(\Delta_*x)^t(x_1\otimes x_2) \\
+		&= \sum_{x\in G}f_{x_1x_2}1\otimes 1 \\
+		&= f^t(x_1x_2)\otimes 1
+	\end{split}\end{equation*} %}
+	$m_\myspace$が結合的だから、$m_\myspace$の転置である余積$\Delta_*$は
+	余結合的になる。
+	$1_G^t$は、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\Delta_*1_G=1_G\otimes1_G$だから、$KG$から$K$への代数射となり、
+		\item 次の式を満たすから、
+			\begin{equation*}\begin{split} %{
+				(1_G^t\otimes \myid)\Delta_*x = 1\otimes x \simeq x \\
+				(\myid\otimes 1_G^t)\Delta_*x = 1\otimes x \simeq x \\
+			\end{split}\end{equation*} %}
+	\end{itemize} %}
+	余積$\Delta_*$の余単位射をとなる。
+
+	積$m_*$は余積$\delta$の転置となるように定める。
+	\begin{equation*}\begin{array}{ll} %{
+		(x_1*x_2)^tx = (x_1^tx)(x_2^tx) \simeq (x_1\otimes x_2)^t\delta x
+			& \quad\text{for all }x,x_1,x_2\in G \\
+		x_1*x_2 = \jump{x_1=x_2}x_2
+			& \quad\text{for all }x_1,x_2\in G \\
+	\end{array}\end{equation*} %}
+	すると、$f_i=\sum_{x\in G}f_{ix}x\in KG,\;i=1,2$に対して次のようになる。
+	\begin{equation*}\begin{split} %{
+		(f_1*f_2)^tx 
+		= \sum_{x_1,x_2\in G}\jump{x_1=x_2}f_{1x_1}f_{2x_2}(x_1^tx)(x_2^tx)
+		= (f_1^tx)(f_2^tx)
+	\end{split}\end{equation*} %}
+	積$m_*$の単位元$1_*$は余積$\delta$の余単位射$\zeta$（
+	$\zeta x=1\quad\text{for all }x\in G$）を転置したものになっている。
+	転置を使って$\zeta=\sum_{x\in G}x^t$と書けるから、
+	$1_*=\sum_{x\in G}x$と書け、$\zeta=1_*^t$となる。
+
+	まとめると表\ref{table:群の双代数}のようになる。
+	\begin{table}[htbp]
+		\begin{center}\begin{tabular}{cccc} \hline
+			演算 & 単位 & 可換性 & 双対関係	\\ \hline
+			群の積$m_\myspace$ & $1_G$ & 非可換 & $\delta$ \\
+			群的余積$\delta$ & $1_*^t$ & 可換 & $m_\myspace$と$m_*$ \\
+			積$m_*\simeq\delta^t$ & $1_*=\sum_{x\in G}x^t$ & 可換 
+				& $\Delta_*$と$\delta$ \\
+			余積$\Delta_*=m_\myspace^t$ & $1_G^t$ & 非可換 & $m_*$ \\
+		\end{tabular}\end{center}
+		\caption{群の双代数}\label{table:群の双代数}
+	\end{table}
+
+	教科書\cite{bk:jinbo.ryousigun}にしたがって、アンチポードを導入する。
+	今までの話では$G$が群であることを使っていない。
+	$G$がモノイドでもすべて事柄が成り立つ。
+	アンチポードは$G$が群であることの性質を使って定義される。
+	まず、$G$が群だから次の式がなりたつ。
+	\begin{equation}\label{eq:群のアンチポードの定義式}\begin{split} %{
+		f^t(x^{-1}x) = f^t1_G = f^t(xx^{-1})
+		\quad\text{for all }x\in G,\; f\in KG
+	\end{split}\end{equation} %}
+	そして、トリッキーな次の式
+	\begin{equation*}\begin{split} %{
+		x = x1_*^ty \quad\text{for all }x,y\in G
+	\end{split}\end{equation*} %}
+	を使うと、次の式が成り立ち、
+	\begin{equation*}\begin{split} %{
+		f^t1_G = f^t1_G1_*^t x = (1_*1_G^tf)^t x 
+			\quad\text{for all }x\in G,\; f\in KG
+	\end{split}\end{equation*} %}
+	さらに、内積の対称性
+	\begin{equation*}\begin{split} %{
+		x_1^tx_2^{-1} = (x_1^{-1})^tx_2 \quad\text{for all }x_1,x_2\in G
+	\end{split}\end{equation*} %}
+	から、逆元をとる操作$\myhere^{-1}$を$R$線形に$G$から$KG$に拡張すると、
+	次の式が成り立つから、
+	\begin{equation*}\begin{split} %{
+		f^t(x^{-1}x) &= m_\myspace(\Delta_*f)^t(x^{-1}\otimes x) \\
+		&= m_\myspace\bigl((\myhere^{-1}\otimes\myid)\Delta_*f\bigr)^t
+			(x\otimes x) \\
+		&= m_\myspace\bigl((\myhere^{-1}\otimes\myid)\Delta_*f\bigr)^t
+			\delta x \\
+		&= \bigl(m_*(\myhere^{-1}\otimes\myid)\Delta_*f\bigr)^tx \\
+		&\quad\text{for all }x\in G,\;f\in KG
+	\end{split}\end{equation*} %}
+	最終的に次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		(1_*1_G^tf)^tx_1
+		= \bigl(m_*(\myhere^{-1}\otimes\myid)\Delta_*f\bigr)^tx_2 
+		\quad\text{for all }x_1,x_2\in G,\; f\in KG
+	\end{split}\end{equation*} %}
+	この式から次のアンチポードの定義式の半分が導かれる。
+	\begin{equation*}\begin{split} %{
+		u\epsilon = m(S\otimes\myid)\Delta 
+		\quad\text{in this case }\begin{cases} %{
+			u &= 1_* \\
+			\epsilon &= 1_G^t \\
+			S &= \myhere^{-1} \\
+			\Delta &= \Delta_* \\
+		\end{cases} %}
+	\end{split}\end{equation*} %}
+
+	ここまで、形式的な計算だけを行ってきたが、体$K$が複素数$\mybf{C}$で、
+	群$G$が無限群のとき、$1_*=\sum_{x\in G}x$だから、
+	$1_*^t1_*=1+1+\cdots=\infty$となって、ベクトル$1_*$はすべての成分が有限
+	であるにも関わらずノルムが発散する。体$K$が有限体の場合もしくは群$G$が
+	有限群の場合は、こうした発散の問題はない。問題が出るのは、体$K$と群$G$
+	が共に無限の場合である。
+
+	\begin{example}[リー環の場合]\label{eg:リー環の場合} %{
+		群から一次の微分をとればリー環になる。
+		$G$の元をリー環で$\exp tX$と書くと、余積$\delta$は次のようになる。
+		\begin{equation*}\begin{split} %{
+			\delta \exp tX &= (\exp tX)\otimes(\exp tX) \\
+			&\sim (1_G+tX)\otimes(1_G+tX) \\
+			&\sim 1_G\otimes X + X\otimes 1_G \\
+		\end{split}\end{equation*} %}
+		$\delta$の余単位射は$1_G^t$となる。
+		これは、群の場合の余単位射$\sum_{x\in G}x^t$からリー環の普遍包絡環の
+		中に残った唯一の群元$1_G$の部分のみが生き残った形になっている。
+		また、アンチポード$S$は$SX=-X,\;S1_G=1_G$となる。
+		以上より、リー環の場合のアンチポードの式は次のようになる。
+		\begin{equation*}\begin{split} %{
+			u\epsilon = m(S\otimes\myid)\Delta
+			\quad\text{in Lie algebra case }\begin{cases} %{
+				u &= 1_G \\
+				\epsilon &= 1_G^t \\
+				S &= X^n\mapsto (-1)^nX^n \quad\text{for all }n\in \mybf{N} \\
+				\Delta &= \Delta_* \\
+			\end{cases} %}
+		\end{split}\end{equation*} %}
+	\end{example} %eg:リー環の場合}
+
+	\begin{todo}[群の因数分解の列挙]\label{todo:群の因数分解の列挙} %{
+		任意の$x\in G$に対して次の式が成り立つか？
+		\begin{equation*}\begin{split} %{
+			\sum_{x_1,x_2\in G}\jump{x=x_1x_2}x_1\otimes x_2
+			= \sum_{y\in G}(xy)\otimes y^{-1}
+		\end{split}\end{equation*} %}
+		成り立てば、$\Delta_*x=\sum_{y\in G}(xy)\otimes y^{-1}$となる。
+	\end{todo} %todo:群の因数分解の列挙}
+%s1:群のホップ代数}
+
+\section{Duchampによる解説}\label{s1:Duchampによる解説} %{
+	Duchanmp等によるレビュー\cite{arxiv:0912.3866}がわかり易い。
+	内積の観点から代数的な概念を説明している。
+	$(RWA^t\otimes RWA^t)\subseteq (RWA\otimes RWA)^t$（発散の問題？）から、
+	余積の転置がいつでもできることに対して、積の転置はできるとは限らない
+	そうだ。
+	\begin{equation*}\begin{split} %{
+		\Delta\in\set{RWA\to RWA\otimes RWA} &\xrightarrow{\myhere^t} 
+			\Delta^t\in\set{(RWA\otimes RWA)^t\to RWA^t} \\
+		m\in\set{RWA\otimes  RWA\to RWA} &\xrightarrow{\myhere^t} 
+			m^t\in\set{RWA^t\to (RWA\otimes RWA)^t} \\
+	\end{split}\end{equation*} %}
+	$\Delta^t$は定義域を$RWA^t\otimes RWA^t$に制限すればよいのに対して、
+	$m^t$は値域が$RWA^t\otimes RWA^t$をはみ出てしまうので対処できない
+	ということらしい。
+
+	無限の問題について、Duchanmp等による別の論文\cite{arxiv:0712.0125}
+	にある例を見てみる。積と双対になっていない余積に起こり得る現象の例
+	である。余積$\Delta:\mybf{Q}[x]\to\mybf{Q}[x]\otimes\mybf{Q}[x]$を
+	次のように定義\footnote{
+		論文\cite{arxiv:0712.0125}では
+		$\Delta:x\mapsto \frac{1}{n!}(x^n\otimes x^n)$ なっているが、
+		タイプミスだろう。
+	}し、
+	\begin{equation*}\begin{split} %{
+		x^n &\mapsto \frac{1}{n!}(x^n\otimes x^n) 
+			\quad\text{for all }n\in\mybf{N}
+	\end{split}\end{equation*} %}
+	その内積$(x^m)^tx^n=\jump{m=n}$に関する双対$\Delta^t$を求めると、
+	\begin{equation*}\begin{split} %{
+		(\Delta x^m)^t(x^p\otimes x^q) 
+			&= \frac{1}{m!}(x^m\otimes x^m)^t(x^p\otimes x^q) \\
+			&= \frac{1}{m!}\jump{p=q=m}(1\otimes 1) \\
+			&\simeq (x^m)^t\bigl(\Delta^t(x^p\otimes x^q)\bigr) \\
+	\end{split}\end{equation*} %}
+	より、次のようになり、
+	\begin{equation*}\begin{split} %{
+		\Delta^t(x^p\otimes x^q) &= \jump{p=q}\frac{1}{p!}
+		\quad\text{for all }p,q\in \mybf{N}
+	\end{split}\end{equation*} %}
+	$\frac{1}{1-x}\in \mybf{Q}[x]$の二乗を求めると次のようになって、
+	$\mybf{Q}[x]$をはみ出て$\mybf{R}[x]$に飛び出してしまう。
+	\begin{equation*}\begin{split} %{
+		\Delta^t(\frac{1}{1-x}\otimes \frac{1}{1-x}) = \exp x \not\in \mybf{Q}[x] \\
+	\end{split}\end{equation*} %}
+%s1:Duchampによる解説}
+
+\section{超対称性}\label{s1:超対称性} %{
+	無限次元ベクトル空間が有限次元の場合とは異なる振る舞いをする例として、
+	簡単な超対称性モデルを書いておく。
+
+	$V$を複素数$\mybf{C}$を係数とするベクトル空間、$Q\in\myop{end}V$を
+	冪ゼロ$Q^2=0$な作用素、$N_F\in\myop{end}V$を$N_FQ=Q(N_F+1)$となる
+	エルミート$N_F^\dag=N_F$な作用素とする。$N_F$はエルミートだから固有値は
+	実数になる。$N_F$の固有値$\lambda$に属する固有ベクトル$v$に対して、
+	$N_FQv=Q(N_F+1)v=(\lambda+1)Qv$となるから、$Qv$は$N_F$の固有値$\lambda+1$
+	を持つ。$N_F$が自然数に固有値を持つとする。
+	すると、$N_F$の固有値$n\in\mybf{N}$を持つ固有ベクトルで張られる空間を
+	$V_n$として、$V=\oplus_{n\in\mybf{N}}V_n$と書け、任意の$n\in\mybf{N}$
+	に対して$Q:V_n\to V_{n+1}$となる。エルミートな作用素$H=QQ^\dag+Q^\dag Q$
+	を考える。$H$はエルミートで$Q$の二乗だからその固有値は$0$以上の実数値に
+	なる。$Q$と$H$は可換になり、$N_F$と$H$も可換になる。
+	特に、$N_F$と$H$は共にエルミートな作用素なので同時対角化が可能である。
+	$H$の固有値$\lambda$に属する固有ベクトル$v\neq0$に対して次のことが
+	成り立つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $Qv\neq0$なら、$Qv$も$H$の固有値$\lambda$を持ち、
+		$0<\lambda$となる。
+		\begin{proof} %{
+			\begin{equation*}\begin{split} %{
+				HQv=QHv=\lambda Qv,\quad HQ^\dag v=Q^\dag Hv=\lambda Q^\dag v
+			\end{split}\end{equation*} %}
+			となるから、$Qv\neq0$なら、$Qv$も$H$の固有値$\lambda$を持つ。
+			任意の$w\in V$に対してその二乗ノルムを$\zettai{w}^2=w^\dag w$と書く
+			と、$Hv=\lambda v$だから、
+			$\lambda\zettai{v}^2=v^\dag Hv=\zettai{Qv}^2+\zettai{Q^\dag v}^2$
+			が成り立ち、次の不等式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				0 < \frac{\zettai{Qv}^2}{\zettai{v}^2} \le \lambda
+					= \frac{\zettai{Qv}^2+\zettai{Q^\dag v}^2}{\zettai{v}^2}
+			\end{split}\end{equation*} %}
+		\end{proof} %}
+		\item $Qv=0$なら、$Q^\dag v=0$となり、$0=\lambda$となる。
+		\begin{proof} %{
+			$Qv=0$と$Hv=0$から$QQ^\dag v=0$となるが、
+			$0=v^\dag QQ^\dag v=\zettai{Q^\dag v}^2$となり、$Q^\dag v=0$となる。
+		\end{proof} %}
+	\end{itemize} %}
+	$Q$と$Q^\dag$は対称的なかたちで$H$に入っているから、次のことも成り立つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $Q^\dag v\neq0$なら、$Q^\dag v$も$H$の固有値$\lambda$を持ち、
+		$0<\lambda$となる。
+		\item $Q^\dag v=0$なら、$Q^\dag v=0$となり、$0=\lambda$となる。
+	\end{itemize} %}
+	したがって、すべての$n\in\mybf{N}$で、$V_n$における$H$の$0$以外の固有値
+	の分布は一致する。$H$の$0$以外の固有値の分布を$\myop{eigen}_+H$とすると、
+	すべての$n\in\mybf{N}$で$V_n$は次のように分解される。
+	\begin{equation*}\begin{split} %{
+		V_n = V_n^0\oplus \sum_{\lambda\in\myop{eigen}_+H}V_n^\lambda
+		,\quad \begin{array}{ll}
+			Hv = 0 &\quad\text{for all }v\in V_n^0 \\
+			Hv = \lambda v &\quad\text{for all }v\in V_n^\lambda \\
+		\end{array} \\
+		\begin{array}{rrcl}
+			Q :& V_n^\lambda &\to& V_{n+1}^\lambda \\
+			Q^\dag :& V_{n+1}^\lambda &\to& V_n^\lambda
+			\end{array} \quad\text{for all }\lambda\in\myop{eigen}_+H
+	\end{split}\end{equation*} %}
+	ここまでの議論では、すべての$\lambda\in\myop{eigen}_+H$で$V_n^\lambda$と
+	$V_{n+1}^\lambda$が$1:1$かつ$\myop{onto}$の関係にあることが示されていない。
+	\begin{equation*}\begin{split}
+		Qが1:1\text{でない} & \quad Qが\myop{onto}\text{でない} \\
+		\xymatrix@R=1ex{
+			V_n^\lambda \ar[r]^{Q} & V_{n+1}^\lambda \\
+			v_n^1 \ar[r] & v_{n+1}^1 \\
+			v_n^2 \ar[ru] & v_{n+1}^2 \\
+		} & \quad \xymatrix@R=1ex{
+			V_n^\lambda \ar[r]^{Q} & V_{n+1}^\lambda \\
+			v_n^1 \ar[rd] & v_{n+1}^1 \\
+			v_n^2 \ar[rd] & v_{n+1}^2 \\
+			\vdots & \vdots \\
+		}
+	\end{split}\end{equation*}
+	次の式が成り立つことから、
+	任意の$n\in\mybf{N},\;\lambda\in\myop{eigen}_+H$に対して
+	$Q$と$Q^\dag$が共に$1:1$写像であることがわかる。
+	\begin{equation*}\begin{split} %{
+		Qv_1=Qv_2 \implies Q(v_1-v_2)=0\implies v_1=v_2
+		& \quad\text{for all }v_1,v_2\in V_n^\lambda \\
+		Q^\dag v_1=Q^\dag v_2 \implies Q^\dag (v_1-v_2)=0\implies v_1=v_2
+		& \quad\text{for all }v_1,v_2\in V_{n+1}^\lambda \\
+	\end{split}\end{equation*} %}
+	また、任意の$n\in\mybf{N},\;\lambda\in\myop{eigen}_+H
+	,\;v\neq0\in V_n^\lambda$に対して次の式が成り立ち、
+	$Q^\dag Qv\propto v$となることがわかる。
+	\begin{equation*}\begin{split} %{
+		Q^\dag Q v = cv + v_\bot
+		,\quad c = \frac{\zettai{Qv}^2}{\zettai{v}^2}
+		,\quad v^\dag v_\bot = 0 \\
+		\Downarrow \\
+		Qv_\bot = (QQ^\dag - c)Qv = (H - c)Qv = (\lambda - c)Qv \\
+		\Downarrow \\
+		v_\bot = (\lambda - c)v \implies \zettai{v_\bot}^2 = 0
+		\implies v_\bot = 0
+	\end{split}\end{equation*} %}
+	したがって、任意の
+	$n\in\mybf{N},\;\lambda\in\myop{eigen}_+H,\;v\neq0\in V_n^\lambda$
+	に対して次の式が成り立ち、$Q^\dag$が$\myop{onto}$写像であることがわかる。
+	\begin{equation*}\begin{split} %{
+		Q^\dag Qv = \frac{\zettai{Qv}^2}{\zettai{v}^2}v
+		\Leftrightarrow 
+		v = Q^\dag\left(\frac{\zettai{v}^2}{\zettai{Qv}^2}Qv\right)
+		\in Q^\dag V_{n+1}^\lambda
+	\end{split}\end{equation*} %}
+	$Q$が$\myop{onto}$写像であることも同様に示される。したがって、
+	$Q$と$Q^\dag$はともに$1:1$かつ$\myop{onto}$になることがわかる。
+	$V_0,V_1,V_2$について対応関係を図にすると次のようになる。
+	\begin{equation*}\begin{array}{ccccccccc} %{
+		V_0 &=& V_0^0 &\oplus& V_0^{\lambda_1} &\oplus& V_0^{\lambda_1} 
+			&\oplus&\cdots \\
+		& & & & \text{\rotatebox[origin=c]{-90}{$\simeq$}} 
+		& & \text{\rotatebox[origin=c]{-90}{$\simeq$}} \\
+		V_1 &=& V_1^0 &\oplus& V_1^{\lambda_1} &\oplus& V_1^{\lambda_1} 
+			&\oplus&\cdots \\
+		& & & & \text{\rotatebox[origin=c]{-90}{$\simeq$}} 
+		& & \text{\rotatebox[origin=c]{-90}{$\simeq$}} \\
+		V_2 &=& V_2^0 &\oplus& V_2^{\lambda_1} &\oplus& V_2^{\lambda_1} 
+			&\oplus&\cdots \\
+	\end{array}\end{equation*} %}
+
+	$V$が有限次元ならば、ある有限の$N\in\mybf{N}$があって、
+	すべての$\lambda\in\myop{eigen}_+H$で$QV_N^\lambda=0$となる。
+	したがって、
+	任意の$\lambda\in\myop{eigen}_+H$で
+	$\myop{dim}V_0^\lambda=\myop{dim}V_1^\lambda=\myop{dim}V_2^\lambda
+	=\cdots=\myop{dim}V_N^\lambda=0$となり、$Q=0$となる。
+	したがって、ここに書いている超対称モデルは、$V$が無限次元の時にのみ
+	意味を持つ。
+%s1:超対称性}
+
+\section{文字列作用のバックアップ}\label{s1:文字列作用のバックアップ} %{
+	転置$\myhere^t:\myop{end}(RWA)\to\myop{end}(RWA)$を積に適用すると、
+	任意の$w,w_1,w_2\in WA$に対して
+	$w^t(w_1*w_2)=(w_2^t*w)^tw_1=(w*w_1^t)^tw_2$により、
+	$R$線形写像$\myhere^t*:RWA\to \myop{end}(RWA)$と、
+	\begin{equation*}\begin{split} %{
+		[a_1a_2\cdots a_m]^t*[b_1b_2\cdots b_n]
+		&= \begin{cases} %{
+			c[b_{m+1}b_{m+2}\cdots b_n], &\text{ iff }m\le n \\
+			0, &\text{ otherwise } \\
+		\end{cases} \\ %}
+		&\quad\text{where}c=[a_1a_2\cdots a_m]^t[b_1b_2\cdots b_m] \\
+	\end{split}\end{equation*} %}
+	$*\myhere^t:RWA\to \myop{end}(RWA)$が定義される。
+	\begin{equation*}\begin{split} %{
+		[b_1b_2\cdots b_n]*[a_1a_2\cdots a_m]^t
+		&= \begin{cases} %{
+			c[b_{1}b_{2}\cdots b_{n-m}], &\text{ iff }m\le n \\
+			0, &\text{ otherwise } \\
+		\end{cases} \\ %}
+		&\quad\text{where}c=[a_1a_2\cdots a_m]^t[b_{n-m+1}b_{n-m+2}\cdots b_m]
+	\end{split}\end{equation*} %}
+	内積は余単位射$\epsilon_*$を使って次のように書ける。
+	\begin{equation*}\begin{split} %{
+		w_1^tw_2 = \epsilon_*(w_1^t*w_2) \quad\text{for all }w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+	$\myop{end}(RWA)$は写像の合成$\myhere\myspace\myhere$を積とし、単位元を
+	恒等写像$\myid$とする$R$係数半代数となっている。$R$線形写像$\myhere^t*$
+	は逆順$R$半代数準同型
+	$(RWA,\beta_*,1_W)\to(\myop{end}(RWA),\beta_\myspace,\myid)$となる。
+	\begin{equation*}\begin{split} %{
+		(w_1*w_2)^t* &= w_2^t*w_1^t* \quad\text{for all }w_1,w_2\in WA \\
+		\because\quad w^t(w_1*w_2*w_3) &= \bigl((w_1*w_2)^t*w\bigr)^tw_3 \\
+			&= \bigl(w_2^t*w_1^t*w\bigr)^tw_3
+			\quad\text{for all }w,w_1,w_2,w_3\in WA
+	\end{split}\end{equation*} %}
+
+	$\Delta_\sqcup$の定義から次のようになる。
+	\begin{equation*}\begin{split} %{
+		w^t(w_1*w_2) &\simeq (\Delta_\sqcup w_1)^t(w_2\otimes w_3)\bigr) \\
+		&= \bigl((\Delta_{\sqcup(1)}w_1)^tw_2\bigr)
+			\bigl((\Delta_{\sqcup(2)}w_1)^tw_3\bigr) \\
+		&= \epsilon_*\bigl((\Delta_{\sqcup(1)}w_1)^t*w_2\bigr)
+			\epsilon_*\bigl((\Delta_{\sqcup(2)}w_1)^t*w_3\bigr) \\
+		&= \epsilon_*\Bigl(\bigl((\Delta_{\sqcup(1)}w_1)^t*w_2\bigr)
+			*\bigl((\Delta_{\sqcup(2)}w_1)^t*w_3\bigr)\Bigr)
+	\end{split}\end{equation*} %}
+	$w_1^t(w_2*w_3)\simeq (\Delta_\sqcup w_1)^t(w_2\otimes w_3)$
+	に適用すると、 任意の$w_1,w_2,w_3\in WA$に対して次のようになる。
+	\begin{equation*}\begin{split} %{
+		(\Delta_{\sqcup(2)}w_1)^t\biggl(\bigl((\Delta_{\sqcup(1)}w_1)*w_2\bigr)\otimes w_3\biggr)
+		\simeq w_1^t(w_2*w_3)
+		\simeq (\Delta_{\sqcup(1)}w_1)^t\biggl(w_2\otimes \bigl((\Delta_{\sqcup(2)}w_1)*w_3\bigr)\biggr)
+	\end{split}\end{equation*} %}
+%s1:文字列作用のバックアップ}

@@ -8,26 +8,25 @@
 	\end{definition} %def:始対象と終対象}
 
 	始対象と終対象を絵で書くと次のようになる。
-	\begin{equation}\xymatrix{
-		\text{始対象} \ar[r] \ar[rd] & X_1 \\
-		& X_2 \\
-	}\quad\xymatrix{
-		X_1 \ar[r] & \text{終対象} \\
-		X_2 \ar[ur] \\
-	}\end{equation}
+	\begin{equation*}\xymatrix{
+		\text{始対象} \ar[r] \ar[rd] \ar[rdd] & X_1 \ar[r] & \text{終対象} \\
+		& X_2 \ar[ur] \\
+		& \vdots \ar[uur] \\
+	}\end{equation*}
 
-	\begin{example}[始対象と終対象の例]\label{obs:始対象と終対象の例} %{
+	\begin{example}[始対象と終対象の例]\label{eg:始対象と終対象の例} %{
+		いくつかの始対象と終対象の例を挙げる。
 		\begin{itemize}
 			\item 集合 \\
 			空集合が始対象、元が一つだけの集合が終対象となる。
 			終対象の方はわかるが、空集合からの射とはなんだろうか？
 			\item 半群 \\
-			空半群が始対象、自明な半群\ref{def:自明な半群}が終対象となる。
+			空半群が始対象、自明な半群（一つの元だけからなる半群）が終対象となる。
 			\item モノイド \\
-			自明なモノイド\ref{def:自明なモノイド}がゼロ対象となる。
-			\item 半環 \\
-			自明な半環を含む半環の圏では、
-			自明な半環\ref{def:自明な半環}がゼロ対象となる。
+			自明なモノイド（一つの元だけからなるモノイド）がゼロ対象となる。
+			\item 乗法の単位元をもつ半環 \\
+			論理和を加法、論理積を乗法とするブーリアン$\set{0,1}$が始対象、
+			自明な半環（一つの元だけからなる半環）が終対象となる。
 		\end{itemize}
-	\end{example} %obs:始対象と終対象の例}
+	\end{example} %eg:始対象と終対象の例}
 %s1:圏}

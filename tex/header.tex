@@ -1,12 +1,10 @@
 \usepackage{amsmath,amssymb,amscd}
-\usepackage[dvipdfm]{color}
-\usepackage[dvipdfm,dvips]{graphicx}
 \usepackage[obeyspaces]{url}
 \usepackage[all]{xy}
 \usepackage{multicol}
 \usepackage{stmaryrd}
 \usepackage{float}
-\usepackage{sty/thmbox}
+%\usepackage{sty/thmbox}
 \usepackage{sty/cprog}
 \usepackage{sty/simplewick}
 \usepackage{sty/braket}
@@ -16,6 +14,8 @@
 \usepackage{sty/algpseudocode}
 %\usepackage{sty/multirow}
 \usepackage{sty/bigdelim}
+\usepackage[dvipdfm]{color}
+\usepackage[dvipdfm,dvips]{graphicx}
 \usepackage[dvipdfm %
   , colorlinks=true %
   , bookmarks=true %
@@ -31,25 +31,42 @@
 %
 %theorem
 %
-\newtheorem[S]{theorem}{定理}[section]
-\newtheorem[S]{proposition}{命題}[section]
-\newtheorem[S]{corollary}{系}[section]
-\newtheorem[S]{lemma}{補題}[section]
-\newtheorem[S]{definition}{定義}[section]
-\newtheorem[S]{example}{例}[section]
-\newtheorem[S]{conjecture}{予想}[section]
-\newtheorem[S]{problem}{問題}[section]
-\newtheorem[S]{observation}{観察}[section]
-\newtheorem[S]{formula}{公式}[section]
-\newtheorem[S]{todo}{課題}[section]
+%\newtheorem[S]{theorem}{定理}[section]
+%\newtheorem[S]{proposition}{命題}[section]
+%\newtheorem[S]{corollary}{系}[section]
+%\newtheorem[S]{lemma}{補題}[section]
+%\newtheorem[S]{definition}{定義}[section]
+%\newtheorem[S]{example}{例}[section]
+%\newtheorem[S]{conjecture}{予想}[section]
+%\newtheorem[S]{problem}{問題}[section]
+%\newtheorem[S]{observation}{観察}[section]
+%\newtheorem[S]{formula}{公式}[section]
+%\newtheorem[S]{todo}{課題}[section]
 %\newtheorem[S]{notation}{記法}[section]
-\newtheorem[S]{note}{ノート}[section]
+%\newtheorem[S]{note}{ノート}[section]
+%
+\usepackage{sty/shadethm}
+%\newshadetheorem[S]{theorem}{定理}[section]
+\newshadetheorem{proposition}{命題}[section]
+%\newshadetheorem[S]{corollary}{系}[section]
+%\newshadetheorem[S]{lemma}{補題}[section]
+\newshadetheorem{definition}{定義}[section]
+\newshadetheorem{example}{例}[section]
+%\newshadetheorem[S]{conjecture}{予想}[section]
+%\newshadetheorem[S]{problem}{問題}[section]
+%\newshadetheorem[S]{observation}{観察}[section]
+%\newshadetheorem[S]{formula}{公式}[section]
+\newshadetheorem{todo}{課題}[section]
+%\newshadetheorem[S]{notation}{記法}[section]
+\newshadetheorem{note}{ノート}[section]
+%
 \def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
 \def\endproof{{\large$\Box$}\endtrivlist}
 %
 %symbols
 %
 \newcommand{\zettai}[1]{\left|{#1}\right|}
+%\newcommand{\mynorm}[1]{\left\lVert{#1}\right\rVert}
 \newcommand{\kakko}[1]{\left({#1}\right)}
 \newcommand{\bakko}[1]{\left[{#1}\right]}
 \newcommand{\bou}{\;\vert\;}
@@ -68,7 +85,8 @@
 \newcommand{\mybinom}[2]{\genfrac{[}{]}{0pt}{1}{#1}{#2}}
 \newcommand{\myhere}{\mathchar`-}
 \newcommand{\mybiop}[1]{\mathchar`-{#1}\myhere}
-\newcommand{\mypowop}[1]{\myhere^{#1}}
+%obsolete
+%\newcommand{\mypowop}[1]{\myhere^{#1}}
 \newcommand{\lcomment}[1]{//\;\text{#1}}
 %
 %category

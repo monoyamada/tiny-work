@@ -1,0 +1,1182 @@
+\section{内積と自己線形写像}\label{s1:内積と自己線形写像} %{
+	転置を使うと、任意の$\phi\in\myop{end}(RWA)$は
+	$\phi=\sum_{w\in RWA}(\phi w)w^t$と書くことができる。さらに、恒等写像
+	$\myid=\sum_{w\in RWA}ww^t$を使うと、次のように書くことができる。
+	\begin{equation*}\begin{split} %{
+		\phi = \sum_{w\in WA}(\phi w)w^t 
+		= \myid\sum_{w\in WA}(\phi w)w^t
+		= \sum_{w_1,w_2\in WA}(w_1^t\phi w_2)w_1w_2^t
+	\end{split}\end{equation*} %}
+	また逆に、任意の$R$値行列$\set{\phi_{w_1w_2}}_{w_1,w_2\in WA}$
+	に対して、$\sum_{w_1,w_2\in WA}\phi_{w_1w_2}w_1\otimes w_2^t$は
+	$w\mapsto \sum_{w_1\in WA}\phi_{w_1w}w_1$となる$R$線形写像となる。
+	したがって、$R$線形写像$\mu:RWA\otimes RWA\to \myop{end}(RWA)$を
+	次のように定義すると、
+	\begin{equation*}\begin{split} %{
+		\mu(w_1\otimes w_2) = w_1w_2^t \quad\text{for all }w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+	写像$\mu$は集合同型となる。
+	$RWA\otimes RWA$の二項演算$\myhere\circ\myhere$を次のように定義すると、
+	\begin{equation*}\begin{split} %{
+		(w_1\otimes w_2)\circ(w_3\otimes w_4) = (w_2^tw_3)w_1\otimes w_4
+	\end{split}\end{equation*} %}
+	二項演算$\myhere\circ\myhere$は$1_\circ=\sum_{w\in WA}w\otimes w$を
+	単位元とする積$m_\circ$となる。そして、次の式が成り立つから、
+	\begin{equation*}\xymatrix{
+		w_1\otimes w_2\otimes w_3\otimes w_4
+			\ar@{|->}[r]^{\mu\otimes\mu} \ar@{|->}[d]^{m_\circ}
+			& (w_1w_2^t)\otimes(w_3w_4^t) \ar@{|->}[d]^{m_\myspace} \\
+		(w_2^tw_3)w_1\otimes w_4 \ar@{|->}[r]^{\mu}
+			& (w_2w_3^t)w_1w_4^t \\
+	}\end{equation*}
+	写像$\mu$は次の$R$同型射となる。
+	\begin{equation*}\begin{split} %{
+		\mu: (RWA\otimes RWA,m_\circ,1_\circ)
+		\simeq (\myop{end}(RWA,m_\myspace,\myid)
+	\end{split}\end{equation*} %}
+
+	単位元$1_\circ$は、群的な積$m_\land$（定義\ref{def:群的な積}）の
+	単位元$1_\land$と群的な余積$\Delta_\land$（定義\ref{def:群的な余積}）
+	を用いて、$1_\circ=\Delta_\land 1_\land$と書くことができる。
+%s1:内積と自己線形写像}
+
+\section{状態と作用素}\label{s1:状態と作用素} %{
+	同型射$\homset(RWA\otimes RWA,RWA)\simeq\homset(RWA,RWA\to RWA)$
+	によって、積を作用素に翻訳することを考える。
+
+	\begin{todo}[修正]\label{todo:修正} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 共役の部分を単に$R$線形に書き直す。
+			\item キャンセル可能性の翻訳\\
+			積$m_*$がキャンセル可能ならば、
+			行列$(w_1^t*)(w_2*)$の対角成分は成分に依らずに$w_1^tw_2$となる。
+			\begin{equation*}\begin{split} %{
+				\myop{diag}\bigl((w_1^t*)(w_2*)\bigr)=(w_1^tw_2)(1,1,\dots)
+			\end{split}\end{equation*} %}
+			\begin{proof} %{
+				積$m_*$がキャンセル可能
+				\begin{equation*}\begin{split} %{
+					w_1*w=w_2*w \implies w_1=w_2 \quad\text{for all }w\in WA
+				\end{split}\end{equation*} %}
+				ならば、
+				\begin{equation*}\begin{split} %{
+					w_1^tw_2 = (w_1*w)^t(w_2*w) = w^t(w_1^t*)(w_2*)w
+					\quad\text{for all }w,w_1,w_2\in WA
+				\end{split}\end{equation*} %}
+			\end{proof} %}
+		\end{itemize} %}
+	\end{todo} %todo:修正}
+
+	$RWA$に積$m_\square$とその単位元$1_\square$が与えられたとする。
+	$R$線形写像$\myhere\square:RWA\to\myop{end}(RWA)$を次の式が成り立つ
+	ように定義する。
+	\begin{equation*}\begin{split} %{
+		(w_1\square)w_2 = w_1\square w_2 \quad\text{for all }w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+	$m_\myspace$を写像の合成とすると、
+	写像$\myhere\square$は$(RWA,m_\square,1_\square)$から
+	$(\myop{end}(RWA),m_\myspace,\myid)$への$R$代数射となる。
+	\begin{equation*}\begin{split} %{
+		\bigl((w_1\square w_2)\square\bigr)w
+		= w_1\square w_2\square w
+		= (w_1\square)(w_2\square)w \\
+		(1_\square\square)w = 1_\square\square w = w
+		\quad\text{for all }w,w_1,w_2\in WA \\
+	\end{split}\end{equation*} %}
+
+	同様に、$R$線形写像$\square\myhere:RWA\to\myop{end}(RWA)$を次の式が
+	成り立つように定義する。
+	\begin{equation*}\begin{split} %{
+		(\square w_1)w_2 = w_1\square w_2
+		\quad\text{for all }w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+	写像$\square\myhere$は$(RWA,m_\square,1_\square)$から
+	$(\myop{end}(RWA),m_\myspace,\myid)$への逆順$R$代数射となる。
+	\begin{equation*}\begin{split} %{
+		\bigl(\square(w_1\square w_2)\bigr)w
+		= w\square w_1\square w_2
+		= (\square w_2)(\square w_1)w \\
+		(\square1_\square)w = w\square 1_\square = w
+		\quad\text{for all }w,w_1,w_2\in WA \\
+	\end{split}\end{equation*} %}
+	$RWA$を左半モジュールとなるように写像$\square\myhere$を定義しているから
+	が逆順$R$代数射となっている。
+
+	$RWA$に積$m_\square$の転置となる余積$m_\square^t$が与えられたとする。
+	\begin{equation*}\begin{split} %{
+		w^t(w_1\square w_2) \simeq (m_\square^tw)^t(w_1\otimes w_2)
+			\quad\text{for all }w,w_1,w_2\in WA \\
+		(1_\square^t\otimes\myid)m_\square^tw
+			\simeq w \simeq (\myid\otimes1_\square^t)m_\square^tw
+			\quad\text{for all }w\in WA \\
+	\end{split}\end{equation*} %}
+
+	$R$または$R^c$線形写像$\myhere^t\square:RWA\to\myop{end}(RWA)$を
+	次の式が成り立つように定義する。
+	\begin{equation*}\begin{split} %{
+		\bigl((w_1^t\square)w\bigr)^tw_2 = w^t(w_1\square w_2)
+		\quad\text{for all }w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+	写像$\myhere^t\square$は余積$m_\square^t$を使って次のように書ける。
+	\begin{equation*}\begin{split} %{
+		\bigl((w_1^t\square)w\bigr)^tw_2 
+		\simeq (m_\square^tw)^t(w_1\otimes w_2)
+		\quad\text{for all }w,w_1,w_2\in WA \\
+	\end{split}\end{equation*} %}
+	したがって、次のように単語に対する$\myspace^t\square$の作用は
+	$\myspace\square$の作用の転置になっている。
+	\begin{equation*}\begin{split} %{
+		\bigl((w_1^t\square)w\bigr)^tw_2 
+		= w^t\bigl((w_1\square) w_2\bigr)
+		\quad\text{for all }w,w_1,w_2\in WA \\
+	\end{split}\end{equation*} %}
+	そこで、写像$\myhere^t\square$を$R^c$線形写像として、
+	写像$\myhere\square$の転置となるようにする。
+	\begin{equation*}\begin{split} %{
+		\bigl((f^t\square)w_1\bigr)^tw_2 
+		= w_1^t\bigl((f\square) w_2\bigr)
+		\quad\text{for all }w_1,w_2\in WA,\;f\in RWA \\
+	\end{split}\end{equation*} %}
+	写像$\myhere^t\square$の計算を続けると、次のようになり、
+	\begin{equation*}\begin{split} %{
+		(w_1^t\square)w
+		& = \bigl((m_{\square(1)}^tw)^tw_1\bigr)^cm_{\square(2)}^tw
+		= \bigl(w_1^t(m_{\square(1)}^tw)\bigr)m_{\square(2)}^tw \\
+		& \simeq (w_1^t\otimes\myid)m_\square^tw
+		\quad\text{for all }w,w_1\in WA \\
+	\end{split}\end{equation*} %}
+	最終的に次のようになる。
+	\begin{equation*}\begin{split} %{
+		f^t\square \simeq (f^t\otimes\myid)m_\square^t 
+		\quad\text{for all }f\in RWA \\
+	\end{split}\end{equation*} %}
+	写像$\myhere^t\square$は逆順$R^c$代数射となっている。
+	\begin{equation*}\begin{split} %{
+		(w_1\square w_2)^t\square 
+		&\simeq \bigl((w_1\square w_2)^t\otimes \myid\bigr)m_\square^t \\
+		&= \bigl(w_1^t\otimes w_2^t\otimes \myid\bigr)(m_\square^t\otimes\myid)m_\square^t \\
+		&= \bigl(w_1^t\otimes w_2^t\otimes \myid\bigr)(\myid\otimes m_\square^t)m_\square^t \\
+		&\simeq \bigl(w_1^t\otimes (w_2^t\square)\bigr)m_\square^t \\
+		&\simeq (w_2^t\square)(w_1^t\square) \\
+	\end{split}\end{equation*} %}
+
+	同様に、$R^c$線形写像$\square\myhere^t:RWA\to\myop{end}(RWA)$を次の式が
+	成り立つように定義する。
+	\begin{equation*}\begin{split} %{
+		\bigl((\square w_2^t)w\bigr)^tw_1 = w^t(w_1\square w_2)
+		\quad\text{for all }w_1,w_2\in WA
+	\end{split}\end{equation*} %}
+	写像$\myhere^t\square$は余積$m_\square^t$を使って次のように書ける。
+	\begin{equation*}\begin{split} %{
+		\bigl((\square w_2^t)w\bigr)^tw_1
+		\bigl((w_1^t\square)w\bigr)^tw_2 
+		\simeq (m_\square^tw)^t(w_1\otimes w_2)
+		\quad\text{for all }w,w_1,w_2\in WA \\
+	\end{split}\end{equation*} %}
+	したがって、写像$\square\myhere^t$は写像$\square\myhere$の転置と
+	なっている。
+	\begin{equation*}\begin{split} %{
+		\bigl((\square f^t)w_1\bigr)^tw_2
+		= w_1^t\bigl((\square f)w_1\bigr)
+		\quad\text{for all }w_1,w_2\in WA,\;f\in RWA \\
+	\end{split}\end{equation*} %}
+	次のようになる。
+	\begin{equation*}\begin{split} %{
+		\square f^t \simeq (\myid\otimes f^t)m_\square^t 
+		\quad\text{for all }f\in RWA \\
+	\end{split}\end{equation*} %}
+	写像$\myhere^t\square$は正順$R^c$代数射となっている。
+	\begin{equation*}\begin{split} %{
+		\square(w_1\square w_2)^t 
+		&\simeq \bigl(\myid\otimes (w_1\square w_2)^t\bigr)m_\square^t \\
+		&= \bigl(\myid\otimes w_1^t\otimes w_2^t\bigr)(\myid\otimes m_\square^t)m_\square^t \\
+		&= \bigl(\myid\otimes w_1^t\otimes w_2^t\bigr)(m_\square^t\otimes \myid)m_\square^t \\
+		&\simeq \bigl((w_1^t\square)\otimes w_2^t\bigr)m_\square^t \\
+		&\simeq (w_1^t\square)(w_2^t\square) \\
+	\end{split}\end{equation*} %}
+
+	\begin{note}[アンチポードとの類似]\label{note:アンチポードとの類似} %{
+		単語$WA$が群$G$であった場合、元$x\in G$の転置は逆元をとる操作
+		$x^t=x^{-1}$になる。したがって、$x^t\square$は次のようになり、
+		\begin{equation*}\begin{split} %{
+			x^t\square \simeq (x^t\otimes\myid)m_\square^t 
+			\simeq m_\square(x^{-1}\otimes\myid)m_\square^t 
+			\quad\text{for all }x\in G \\
+		\end{split}\end{equation*} %}
+		アンチポードの定義式によく似た形になる。
+	\end{note} %note:アンチポードとの類似}
+%s1:状態と作用素}
+
+\section{文字列とその双対空間}\label{s1:文字列とその双対空間} %{
+
+	\subsection{転置による積}\label{s2:転置による積} %{
+		$RWA$に積$m_\square$とその転置となる余積$m_\square^t$が与えられた
+		とする。
+		\begin{equation*}\begin{split} %{
+			w^t(w_1\square w_2) = m_\myspace(m_\square^tw)^t(w_1\otimes w_2)
+			\quad\text{for all }w,w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		$R$線形写像$\myhere^t\square:RWA\to \myop{end}(RWA)$を次の式が
+		成り立つように定義する。
+		\begin{equation*}\begin{split} %{
+			(w_1^t\square w)^tw_2 = w^t(w_1\square w_2)
+			\quad\text{for all }w,w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		任意の$w,w_1\in WA$に対して次の式が成り立つから、
+		\begin{equation*}\begin{split} %{
+			(w_1^t\square w)^tw_2 &= w^t(w_1\square w_2) \\
+			&= m_\myspace(m_\square^t w)^t(w_1\otimes w_2) \\
+			&= \bigl((m_{\square(1)}^tw)^tw_1\bigr)
+				\bigl((m_{\square(2)}^tw)^tw_2\bigr) \\
+			&\quad\text{for all }w,w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		$\myhere^t\square$を次のように定義すればよいことがわかる。
+		\begin{equation*}\begin{split} %{
+			w_1^t\square w 
+			&= \bigl((m_{\square(1)}^tw)^tw_1\bigr)m_{\square(2)}^tw \\
+			&= (w_1^tm_{\square(1)}^tw)m_{\square(2)}^tw \\
+			&\simeq (w_1^t\otimes\myid)m_{\square}^tw \\
+		\end{split}\end{equation*} %}
+		また、写像の合成による積$w_2^t\square w_2^t\square$を計算すると、
+		次のようになる。
+		\begin{equation}\label{eq:転置による積の結合性の計算}\begin{split} %{
+			w_2^t\square w_1^t\square w
+			&\simeq (\myid\otimes w_2^t\otimes\myid)(\myid\otimes m_{\square}^t)
+				(w_1^t\otimes\myid)m_{\square}^tw \\
+			&= (w_1^t\otimes w_2^t\otimes\myid)(\myid\otimes m_{\square}^t)
+				m_{\square}^tw \\
+			&= (w_1^t\otimes w_2^t\otimes\myid)(m_{\square}^t\otimes \myid)
+				m_{\square}^tw \\
+		\end{split}\end{equation} %}
+		ここで、積$m_\square:RWA^t\otimes RWA^t\to RWA^t$を次の式が成り立つ
+		ように定義すれば、
+		\begin{equation*}\begin{split} %{
+			(w_1^t\square w_2^t)w \simeq (w_1\otimes w_2)^tm_{\square}^tw 
+		\end{split}\end{equation*} %}
+		式\eqref{eq:転置による積の結合性の計算}は、次のようになり、
+		\begin{equation*}\begin{split} %{
+			w_2^t\square(w_1^t\square w)
+			&= \bigl((w_1^t\square w_2^t)\otimes\myid\bigr)m_{\square}^tw
+			= (w_1^t\square w_2^t)\square w \\
+			&\quad\text{for all }w,w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		$\myhere^t\square$が逆順半代数射
+		$(RWA,m_\square)\to(\myop{end}(RWA),m_\myspace)$になることがわかる。
+
+		同様に、$R$線形写像$\square\myhere^t:RWA\to \myop{end}(RWA)$を
+		成り立つように定義する。
+		\begin{equation*}\begin{split} %{
+			(w\square w_2^t)^tw_1 = w^t(w_1\square w_2)
+			\quad\text{for all }w,w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		$\square\myhere^t$が次のようになることがわかる。
+		\begin{equation*}\begin{split} %{
+			w\square w_2^t
+			&= \bigl(w_2^t(m_{\square(2)}^tw)\bigr)m_{\square(1)}^tw \\
+			&\simeq (\myid\otimes w_2^t)m_{\square}^tw \\
+			&\quad\text{for all }w,w_2\in WA
+		\end{split}\end{equation*} %}
+	%s2:転置による積}
+
+	until
+
+	\subsection{積から誘導される写像}\label{s2:積から誘導される写像} %{
+		$(m_\square,1_\square)$を$RWA$の積と単位元とする。
+		$R$線形写像$\myhere\square$を次のように定義する。
+		\begin{equation*}\begin{split} %{
+			\myhere\square: RWA&\to \myop{end}(RWA) \\
+			w &\mapsto w\square \quad\text{for all }w\in WA\quad\text{ such that }
+				(w\square)w_1 = w\square w_1
+		\end{split}\end{equation*} %}
+		$\myop{end}(RWA)$は写像の合成$m_\myspace$を積、恒等写像$\myid$を単位元
+		とする$R$係数半代数であるが、写像$\myhere\square$は
+		\begin{equation*}\begin{split} %{
+			\bigl((w_1\square w_2)\square\bigr)w_3 = w_1\square w_2\square w_3 
+				= (w_1\square)(w_2\square)w_3 \quad\text{for all }w_1,w_2,w_3\in WA
+		\end{split}\end{equation*} %}
+		より結合的になり、
+		\begin{equation*}\begin{split} %{
+			(1_\square\square)(w_1\square)w_2 = 1_\square\square w_1\square w_2 
+			= w_1\square w_2 
+			= w_1\square 1_\square\square w_2 = (w_1\square)(1_\square\square)w_2 \\
+			\quad\text{for all }w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		より単位元を単位元に写像するから、
+		$R$係数半代数準同型$\myhere\square:(RWA,m_\square,1_\square)
+		\to(\myop{end}(RWA),m_\myspace,\myid)$となる。
+		また、積$m_\square$がキャンセル可能であれば、
+		\begin{equation*}\begin{split} %{
+			(w_1\square)w = (w_2\square)w
+			\Leftrightarrow w_1\square w = w_2\square w
+			\implies w_1 = w_2 \\
+			\quad\text{for all }w,w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		だから、$\myspace\square$は$1:1$写像となり、
+		\begin{equation*}\begin{split} %{
+			(w\square)w_1 = (w\square)w_2
+			\Leftrightarrow w\square w_1 = w\square w_2
+			\implies w_1 = w_2 \\
+			\quad\text{for all }w,w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		だから、任意の$w\in WA$に対して$w\square$は$0$を不動点にもつ
+		$1:1$写像となる。
+		$R$線形写像$\myhere\square$を定義と命題の形でまとめておく。
+
+		\begin{definition}[積から誘導された写像]\label{def:積から誘導された写像} %{
+			$m_\square$を$RWA$の積とする。次のように定義された
+			$R$線形写像$\myhere\square$を積$m_\square$から誘導された写像
+			ということにする。
+			\begin{equation*}\begin{split} %{
+				\myhere\square: RWA&\to \myop{end}(RWA) \\
+				w &\mapsto w\square \quad\text{for all }w\in WA\quad\text{ such that }
+					(w\square)w_1 = w\square w_1
+			\end{split}\end{equation*} %}
+		\end{definition} %def:積から誘導された写像}
+		\begin{proposition}[積から誘導された写像のもつ性質]\label{prop:積から誘導された写像のもつ性質} %{
+			$m_\square$を$RWA$の積、写像$\myhere\square$を積$m_\square$から
+			誘導された写像とする。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $\myhere\square$は$R$係数半代数準同型
+				$\myhere\square:(RWA,m_\square,1_\square)
+				\to(\myop{end}(RWA),m_\myspace,\myid)$となる。
+				\item 積$m_\square$がキャンセル可能であれば、$\myhere\square$は
+				$1:1$になる。
+				\item 積$m_\square$がキャンセル可能であれば、任意の$w\in WA$に対して
+				$w\square$は$0$を不動点にもつ$1:1$写像となる。
+			\end{itemize} %}
+		\end{proposition} %prop:積から誘導された写像のもつ性質}
+	%s2:積から誘導される写像}
+
+	\subsection{バックアップ}\label{s2:バックアップ} %{
+		ここで、積$m_*$と$m_\sqcup$に対応する作用素を見てみる。
+
+		任意の$w,w_0,w_2\in WA$に対して、$R\otimes R\simeq R$の同一視で、
+		$w^tm_*(w_1\otimes w_2)\simeq(\Delta_\sqcup w)^t(w_1\otimes w_2)$
+		となるから、余積$\Delta_\sqcup$は積$m_*$の転置$\Delta_\sqcup=m_*^t$
+		となっている。作用素$\set{a*}_{a\in A}$の転置
+		$\set{a^t*}_{a\in A}:=\set{(a*)^t}_{a\in A}$は次の式で定義され、
+		\begin{equation*}\begin{split} %{
+			w_1^t(a*w_2)=(a^t*w_1)^tw_2 \quad\text{for all }a\in A,\;w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		任意の$a\in A$に対して次のようになる。
+		\begin{equation*}\begin{split} %{
+			a^t*1_W &= 0 \\
+			a^t*[a_1a_2\cdots a_m]^t &= \jump{a=a_1}[a_2\cdots a_m] 
+			\quad\text{for all }a_1,a_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+
+		積$m_\sqcup$に対応する作用素$a\sqcup$を任意の$a\in A$に対して
+		次のように定義する。
+		\begin{equation*}\begin{split} %{
+			a\sqcup: RWA\to RWA \\
+			w \mapsto [a]\sqcup w \quad\text{for all }w\in WA 
+		\end{split}\end{equation*} %}
+		積$m_\sqcup$は可換なので、任意の$a\in A$に対して$a\sqcup=\sqcup a$となり、
+		$a*$の場合と異なり、右からの作用$a\sqcup$と左からの作用$\sqcup a$を
+		区別する必要はない。任意の$a\in A$に対して次のようになる。
+		\begin{equation*}\begin{split} %{
+			a\sqcup 1_W &= [a] \\
+			a\sqcup[a_1a_2\cdots a_m] &= [aa_1a_2\cdots a_m] \\
+			&\;+ [a_1aa_2\cdots a_m] \\
+			&\;+ [a_1a_2a\cdots a_m] \\
+			&\; + \cdots \\
+			&\;+ [a_1a_2\cdots aa_m] \\
+			&\;+ [a_1a_2\cdots a_ma] \\
+			&\quad\text{for all }a_1,a_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+		任意の$w,w_0,w_2\in WA$に対して、$R\otimes R\simeq R$の同一視で、
+		$(w_1\sqcup w_2)^t w\simeq(w_1\otimes w_2)^t(\Delta_* w)$
+		となるから、余積$\Delta_*$は積$m_\sqcup$の転置$\Delta_*=m_\sqcup^t$
+		となっている。$\set{a\sqcup}_{a\in A}$の転置
+		$\set{a^t\sqcup}_{a\in A}:=\set{(a\sqcup)^t}_{a\in A}$は次の式で
+		定義され、
+		\begin{equation*}\begin{split} %{
+			(a\sqcup w_1)^tw_2=w_1^t(a^t\sqcup w_2)
+			\quad\text{for all }a\in A,\;w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		任意の$a\in A$に対して次のようになる。
+		\begin{equation*}\begin{split} %{
+			a^t\sqcup 1_W &= 0 \\
+			a^t\sqcup [a_1a_2\cdots a_m]^t &= \jump{a=a_1}[a_2\cdots a_m] \\
+			&\;+ \jump{a=a_2}[a_1a_3\cdots a_m] \\
+			&\;+ \cdots \\
+			&\;+ \jump{a=a_m}[a_1a_3\cdots a_{m-1}] \\
+			&\quad\text{for all }a_1,a_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+
+		積と作用素の関係と作用素における双対性をまとめると次のようになる。
+		\begin{minipage}{0.5\hsize}
+			\begin{center}\begin{tabular}{ccc}
+				積 & 作用素 & 可換性 \\ \hline
+				$m_*$ & $a*$ & 非可換 \\
+				$\Delta_\sqcup=m_*^t$ & $a^t*$ & 非可換 \\
+				$m_\sqcup$ & $a\sqcup$ & 可換 \\
+				$\Delta_*=m_\sqcup^t$ & $a^t\sqcup$ & 可換 \\
+			\end{tabular}\end{center}
+		\end{minipage}
+		\begin{minipage}{0.5\hsize}
+			\begin{center}\begin{tabular}{c|cccc}
+				双対性 & $a*$ & $a^t*$ & $a\sqcup$ & $a^t\sqcup$ \\ \hline
+				$a*$ & & 転置 & & 代数 \\
+				$a^t*$ & 転置 & & 代数　\\
+				$a\sqcup$ & & 代数 & & 転置 \\
+				$a^t\sqcup$ & 代数 & & 転置 \\
+			\end{tabular}\end{center}
+		\end{minipage}
+		作用素の交換関係は次のようになる。
+		\begin{equation}\label{eq:作用素の交換関係}\begin{split} %{
+			a_1^t* a_2* &= \jump{a_1=a_2} \\
+			a_1^t\sqcup a_2\sqcup &= \jump{a_1=a_2}(\nu + 1) 
+				+ \delta(a_1\otimes a_2^t)+ a_2\sqcup a_1^t\sqcup \\
+			a_1^t* a_2\sqcup &= \jump{a_1=a_2} + a_2\sqcup a_1^t* \\
+			a_1^t\sqcup a_2* &= \jump{a_1=a_2} + a_2* a_1^t\sqcup \\
+		\end{split}\end{equation} %}
+		ここで、$\nu$は文字数を数える$R$線形写像で次のように定義される。
+		\begin{equation*}\begin{split} %{
+			\nu: RWA &\to RWA \\
+			1_W &\mapsto 0 \\
+			[a_1a_2\cdots a_m] &\mapsto m \quad\text{for all }a_1,a_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+		また、$\delta$はリー微分に相当する$R$双線形写像で次のように定義される。
+		\begin{equation*}\begin{split} %{
+			\delta: RA\otimes RA^t &\mapsto \myop{end}(RWA) \\
+			\delta(a_1\otimes a_2^t)[b_1b_2\cdots b_n]
+			&= \jump{a_2=b_1}[a_1b_2\cdots b_n] \\
+			&\;+ \jump{a_2=b_2}[b_1a_1b_3\cdots b_n] \\
+			&\;+ \cdots \\
+			&\;+ \jump{a_2=b_m}[b_1b_2\cdots b_{n-1}a_1] \\
+			&\quad\text{for all }a_1,a_2,b_1,b_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+		'リー微分'$\delta$を使うと文字数の勘定は
+		$\nu=\sum_{a\in A}\delta(a\otimes a^t)$と書くことができる。
+		実直に計算すると作用素の交換関係\eqref{eq:作用素の交換関係}が得られる。
+		\begin{proof} %{
+			\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+				\item 任意の$a_1,a_2\in A,\;w_1,w_2\in WA$に対して次の式が成り立つ。
+				\begin{equation*}\begin{split} %{
+					w_1^t a_1^t* a_2* w_2 &= (a_1* w_1)^t a_2* w_2 \\
+					&= \jump{a_1* w_1=a_2* w_2} \\
+					&= \jump{a_1=a_2}\jump{w_1 = w_2} \\
+				\end{split}\end{equation*} %}
+				\item 任意の$a_1,a_2,b_1,b_2,\dots,b_m\in A$に対して次の式が成り立つ。
+				\begin{equation*}\begin{split} %{
+					& a_1^t\sqcup a_2\sqcup [b_1b_2\cdots b_m] \\
+					&= a_1^t\sqcup \bigl([a_2b_1b_2\cdots b_m] 
+						+ [b_1a_2b_2\cdots b_m] + \cdots + [b_1b_2\cdots b_ma_2]\bigr)\\
+					&= (m+1)\jump{a_1=a_2}[b_1b_2\cdots b_m] \\
+					&\;+ \jump{a_1=b_1}\bigl([a_2b_2b_3\cdots b_m] 
+						+ [a_2b_2b_3\cdots b_m] + \cdots + [b_2\cdots b_ma_2]\bigr)\\
+					&\;+ \jump{a_1=b_2}\bigl([a_2b_1b_3\cdots b_m] 
+						+ [b_1a_2b_3\cdots b_m] + \cdots + [b_1b_3\cdots b_ma_2]\bigr)\\
+					&\;+ \cdots \\
+					&\;+ \jump{a_1=b_m}\bigl([a_2b_1b_2\cdots b_{m-1}] 
+						+ [b_1a_2b_2\cdots b_{m-1}] + \cdots + [b_1b_2\cdots b_{m-1}a_2]\bigr)\\
+					&= (m+1)\jump{a_1=a_2}[b_1b_2\cdots b_m] \\
+					&\;+ \jump{a_1=b_1}[a_2b_2b_3\cdots b_m]
+						+ \jump{a_1=b_2}[b_1a_2b_3\cdots b_m] + \cdots + \jump{a_1=b_m}[b_1b_2\cdots b_{m-1}a_2] \\
+					&\;+ a_2\sqcup a_1^t\sqcup [b_1b_2\cdots b_m] \\
+					&= \Bigl((m+1)\jump{a_1=a_2} +\delta(a_2\otimes a_1^t)	
+						+ a_2\sqcup a_1^t\sqcup\Bigr) [b_1b_2\cdots b_m] \\
+				\end{split}\end{equation*} %}
+				\item 任意の$a_1,a_2,b_1,b_2,\dots,b_m\in A$に対して次の式が成り立つ。
+				\begin{equation*}\begin{split} %{
+					& a_1^t* a_2\sqcup [b_1b_2\cdots b_m] \\
+					&= a_1^t* \bigl([a_2b_1b_2\cdots b_m] 
+						+ [b_1a_2b_2\cdots b_m] + \cdots + [b_1b_2\cdots b_ma_2]\bigr)\\
+					&= \jump{a_1=a_2}[b_1b_2\cdots b_m]
+						+ \jump{a_1=b_1}\bigl([a_2b_2\cdots b_m]+[b_2a_2b_3\cdots b_m]
+						+ \cdots + [b_2b_3\cdots b_ma_2]\bigr) \\
+					&= \bigl(\jump{a_1=a_2} + a_2\sqcup a_1^t*\bigr)[b_1b_2\cdots b_m] \\
+				\end{split}\end{equation*} %}
+				\item 式$a_1^t*a_2\sqcup=\jump{a_1=a_2}+a_2\sqcup a_1^t*$の転置を
+				とれば、$a_2^t\sqcup a_1*=\jump{a_1=a_2}+a_1*a_2^t\sqcup$となる。
+				具体的に計算すると以下のようになる。
+				任意の$a_1,a_2,b_1,b_2,\dots,b_m\in A$に対して次の式が成り立つ。
+				\begin{equation*}\begin{split} %{
+					& a_1^t\sqcup a_2* [b_1b_2\cdots b_m] \\
+					&= a_1^t\sqcup [a_2b_1b_2\cdots b_m] \\
+					&= (\jump{a_1=a_2} + a_2* a_1^t\sqcup) [b_1b_2\cdots b_m] \\
+				\end{split}\end{equation*} %}
+			\end{enumerate} %}
+		\end{proof} %}
+		
+		until
+
+		定義\ref{def:シャッフル積}から通常のシャッフル積の定義を導く。
+		\begin{proposition}[シャッフル余積の性質]\label{prop:シャッフル余積の性質} %{
+			シャッフル余積$\Delta_\sqcup$は次の式を満たす。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 任意の$a\in A,\;w\in WA$に対して次の式が成り立つ。
+				\begin{equation}\label{eq:シャッフル余積の性質その一}\begin{split} %{
+					\Delta_\sqcup(a*w) &= 1_W\otimes (a*w) 
+						+ (a\otimes 1_W)*(\Delta_{\sqcup}w) \\
+				\end{split}\end{equation} %}
+			\end{itemize} %}
+		\end{proposition} %prop:シャッフル余積の性質}
+		\begin{proof} %{
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 式\eqref{eq:シャッフル余積の性質その一}の証明。
+				任意の$a_1,a_2,\dots,a_m\in A$に対して次の式が成り立つ。
+				\begin{equation*}\begin{split} %{
+						& \Delta_\sqcup[a_1a_2\cdots a_m] \\
+						& = 1_W\otimes [a_1a_2\cdots a_m]
+						+ [a_1]\otimes [a_2\cdots a_m] + \cdots 
+						+ [a_1a_2\cdots a_m]\otimes 1_W 
+						\\
+						& = 1_W\otimes [a_1a_2\cdots a_m] 
+						+ (a_1\otimes 1_W)*(\Delta_\sqcup [a_2\cdots a_m])
+						\\
+						& \quad\text{for all }a_1,a_2,\dots,a_m\in A
+				\end{split}\end{equation*} %}
+				したがって、$a=a_1$と$w=[a_2\cdots a_m]$おくと命題の式が成り立つこと
+				がわかる。
+			\end{itemize} %}
+		\end{proof} %}
+		\begin{proposition}[通常のシャッフル積の定義]\label{prop:通常のシャッフル積の定義} %{
+			シャッフル積$m_\sqcup$は次の式を満たす。
+			\begin{equation*}\begin{split} %{
+				(a_1*w_1)\sqcup(a_2*w_2) &= a_1*\bigl(w_1\sqcup (a_2*w_2)\bigr)
+					+ a_2*\bigl((a_1*w_1)\sqcup w_2\bigr)
+			\end{split}\end{equation*} %}
+			シャッフル積は通常この形で定義される。
+		\end{proposition} %prop:通常のシャッフル積の定義}
+		\begin{proof} %{
+			シャッフル積の定義\ref{def:シャッフル積}から次の式が成り立つ。
+			\begin{equation}\label{eq:シャッフル積の性質その一}\begin{split} %{
+				(a_1*w_1)\sqcup w 
+				& = (\Delta_{\sqcup(1)}w)*a_1*\bigl(w_1\sqcup(\Delta_{\sqcup(2)}w)\bigr) \\
+				& \quad\text{for all }a_1\in A,\; w,w_1\in WA
+			\end{split}\end{equation} %}
+			この式に式\eqref{eq:シャッフル余積の性質その一}を用いると、次のよう
+			になり、命題が証明される。
+			\begin{equation*}\begin{split} %{
+				& (a_1*w_1)\sqcup (a_2*w_2) \\
+				& = \bigl(\Delta_{\sqcup(1)}(a_2*w_2)\bigr)*a_1
+					*\Bigl(w_1\sqcup\bigl(\Delta_{\sqcup(2)}(a_2*w_2)\bigr)\Bigr) \\
+				& \quad\lcomment{式\eqref{eq:シャッフル積の性質その一}} \\
+				& = 1_W*a_1*\bigl(w_1\sqcup(a_2*w_2)\bigr)
+					+ a_2*(\Delta_{\sqcup(1)}w_2)*a_1
+					*\bigl(w_1\sqcup(\Delta_{\sqcup(2)}w_2)\bigr) \\
+				& \quad\lcomment{式\eqref{eq:シャッフル余積の性質その一}} \\
+				& = a_1*\bigl(w_1\sqcup(a_2*w_2)\bigr)
+					+ a_2*\bigl((a_1*w_1)\sqcup w_2\bigr) \\
+				& \quad\lcomment{和の二項目に式\eqref{eq:シャッフル積の性質その一}} \\
+			\end{split}\end{equation*} %}
+		\end{proof} %}
+
+		任意の$w_1,w_2,w\in WA$に対して次の式が成り立つから、
+		\begin{equation*}\begin{split} %{
+			\xymatrix@R-1pc@C-1pc{
+				w^t(w_1*w_2) \ar@{=}[r] \ar@{=}[d]
+					& m_\myspace(\Delta_\sqcup w^t)(w_1\otimes w_2)\ar@{=}[d] \\
+				(w_1^t*w_2^t)w & m_\myspace(w_1^t\otimes w_2^t)(\Delta_\sqcup w) \\
+			},\quad \xymatrix@R-1pc@C-1pc{
+				m_\myspace(w_1^t\otimes w_2^t)(\Delta_*w) \ar@{=}[r] \ar@{=}[d]
+					& (w_1^t\sqcup w_2^t)w \ar@{=}[d] \\
+				m_\myspace(\Delta_*w^t)(w_1\otimes w_2) & w^t(w_1\sqcup w_2) \\
+			}
+		\end{split}\end{equation*} %}
+		可換図\eqref{eq:シャッフル余積の可換図その二}と
+		\eqref{eq:シャッフル積の可換図その一}の$*$と$\sqcup$の役割を入れ替えた
+		次の可換図が成り立つ。
+		\begin{equation}\label{eq:シャッフル積とシャッフル余積の可換図}\begin{split} %{
+			\xymatrix{
+				RWA\otimes RWA \ar[r]^{m_\sqcup} \ar[d]^{\Delta_* f} 
+				& RWA \ar[d]^{f} \\
+				R\otimes R \ar[r]^{m_\myspace} & R \\
+			},\quad \xymatrix{
+				RWA\otimes RWA \ar[d]^{f\otimes g} 
+				& RWA \ar[l]_{\Delta_\sqcup} \ar[d]^{f* g}\\
+				R\otimes R \ar[r]^{m_\myspace} & R \\
+			}
+		\end{split}\end{equation} %}
+	%s2:バックアップ}
+
+	\subsection{半代数準同型とKleeneスター}\label{s2:半代数準同型とKleeneスター} %{
+		$RWA^t$の部分空間で半代数準同型となる部分空間を考える。
+		$m_\square$を$RWA$の積とし、$RWA^t$の元で次の図が可換になる元で張られる
+		部分空間を$\homset_\square(RWA,R)$とする。
+		\begin{equation}\label{eq:半モジュール準同型の可換図}
+			\xymatrix{
+				RWA\otimes RWA \ar[d]^{x\otimes x} \ar[r]^{m_\square} 
+					& RWA \ar[d]^{x} \\
+				R\otimes R \ar[r]^{m_\myspace} & R \\
+			}\quad\text{for all }x\in \homset_\square(RWA,R)
+		\end{equation}
+		自由モノイドの普遍性により、任意の$x\in RA^t\simeq \mapset(A,R)$に対して
+		次の図を可換にする$k_*x\in \homset_*(RWA,R)$が一意に定まり、
+		\begin{equation*}\begin{split} %{
+			\xymatrix{
+				A \ar[dr]_{x} \ar[r]^{i_W} & WA \ar@{.>}[d]^{k_*x} \\
+				& R \\
+			} \\
+		\end{split}\end{equation*} %}
+		写像$k_*$は集合同型$k_*:RA^t\simeq \homset_*(RWA,R)$となる。
+		写像$k_*$は任意の$x\in RA^t$に対して次のようになる。
+		\begin{equation*}\begin{split} %{
+			(k_*x)1_W &= 1 \\
+			(k_*x)[a_1a_2\cdots a_m] &= (xa_1)(xa_2)\cdots(xa_m)
+				\quad\text{for all }a_1,a_2,\dots,a_m\in A \\
+		\end{split}\end{equation*} %}
+		したがって、任意の$x\in RA^t$に対して次のように書ける。
+		\begin{equation*}\begin{split} %{
+			k_*f &= \sum_{n\in\mybf{N}}(i_Wf)^{*n} \\
+			&= 1_W^t + i_Wf + (i_Wf)*(i_Wf) + \cdots \\
+		\end{split}\end{equation*} %}
+		写像$k_*$はKleeneスターと呼ばれる演算である。つまり、$x\in RA^t$に対して
+		Kleeneスター$k_*x$をとれば、それは$RWA$から$R$への半モジュール準同型
+		となる。写像$k_*$は線形でないことに注意する。
+		\begin{equation*}\begin{split} %{
+			k_*(x_1+x_2) \neq k_*x_1+ k_*x_2 \quad\text{in generally }x_1,x_2\in RA^t \\
+			k_*(rx) \neq rk_*x \quad\text{in generally }r\in R,\;x\in RA^t \\
+		\end{split}\end{equation*} %}
+		Kleeneスターを少し一般化して定義しておく。
+		\begin{definition}[Kleeneスター]\label{def:Kleeneスター} %{
+			$m_\square$を$RWA$の積、$1_\square$を積$m_\square$の単位元とする。
+			次の写像$\kappa_\square$を$m_\square$のKleeneスターという。
+			\begin{equation*}\begin{split} %{
+				\kappa_\square: RWA &\to RWA \\
+				f &\mapsto \sum_{n\in\mybf{N}}x^{\square n}
+					= 1_\square + f + x\square f + \cdots
+					\quad\text{for all }f\in RWA
+			\end{split}\end{equation*} %}
+		\end{definition} %def:Kleeneスター}
+		Kleeneスターを使って、$RA^t$と$\homset_*(RWA,R)$の集合同型を
+		命題の形で書いておく。
+		\begin{proposition}[群と環の関係]\label{prop:群と環の関係} %{
+			次の写像$k_*$は集合同型となる。
+			\begin{equation*}\begin{split} %{
+				k_*: RA^t &\to \homset_*(RWA,R) \\
+				x &\mapsto \kappa_*i_W x \quad\text{for all }x\in RA^t \\
+			\end{split}\end{equation*} %}
+		\end{proposition} %prop:群と環の関係}
+		標準埋め込み$i_W$による同一視によって、任意の$x\in RA^t$に対して
+		$\kappa_*x:=k_*x$と書く。
+
+		Kleeneスターを使った計算でよく使う式を命題の形で書いておく。
+		\begin{proposition}[Kleeneスターの性質]\label{prop:Kleeneスターの性質} %{
+			\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+				\item 任意の$f\in RWA$に対して次の式が成り立つ。
+				\begin{equation}\label{eq:Kleeneスターの性質その一}\begin{split} %{
+					\kappa_\square f = 1_\square + f\square(\kappa_\square f)
+				\end{split}\end{equation} %}
+			\end{enumerate} %}
+		\end{proposition} %prop:Kleeneスターの性質}
+		\begin{proof} %{
+			\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+				\item 任意の$f\in RWA$に対して次のようになり、命題の式が成り立つ
+				ことがわかる。
+				\begin{equation*}\begin{split} %{
+					\kappa_\square f &= 1_\square + f + f\square f + \cdots \\
+					&= 1_\square + f\square(1_\square + f + \cdots) \\
+					&= 1_\square + f\square(\kappa_\square f) \\
+				\end{split}\end{equation*} %}
+			\end{enumerate} %}
+		\end{proof} %}
+		$\homset_*(RWA,R)$を定義する可換図\eqref{eq:半モジュール準同型の可換図}は
+		シャッフル余積$\Delta_\sqcup$を定義する可換図
+		\eqref{eq:シャッフル余積の可換図その二}によく似ている。
+		そこで、$\homset_*(RWA,R)$の元に対するシャッフル余積は群的な余積になること
+		が予想される。式で書くと次のような予想である。
+		\begin{equation}\label{eq:Kleeneスターのシャッフル余積が群的になること}\begin{split} %{
+			\Delta_\sqcup x = x\otimes x \quad\text{for all }x\in \homset(RWA,R)
+		\end{split}\end{equation} %}
+		この予想を$\kappa_*RA$に対して確かめてみる。
+		任意の$f\in RA$に対して次の式が成り立つ。
+		\begin{equation*}\begin{array}{ll} %{
+			\Delta_\sqcup\kappa_*f \\
+			= \Delta_\sqcup\bigl(1_W+f*(\kappa_*f)\bigr)
+				&\quad\lcomment{式\eqref{eq:Kleeneスターの性質その一}} \\
+			= 1_W\otimes 1_W + \Delta_\sqcup\bigl(f*(\kappa_*f)\bigr)
+				&\quad\lcomment{$\Delta_\sqcup$の定義} \\
+			= 1_W\otimes 1_W + 1_W\otimes \bigl(f*(\kappa_*f)\bigr) 
+				+ (f\otimes 1_W)*(\Delta_\sqcup\kappa_*f)
+				&\quad\lcomment{式\eqref{eq:シャッフル余積の性質その一}} \\
+			= 1_W\otimes(\kappa_*f) 
+				+ (f\otimes 1_W)*(\Delta_\sqcup\kappa_*f)
+				&\quad\lcomment{式\eqref{eq:Kleeneスターの性質その一}} \\
+			= (1_W+f)\otimes(\kappa_*f) 
+				+ (f^{*2}\otimes 1_W)*(\Delta_\sqcup\kappa_*f)
+				&\quad\lcomment{摂動} \\
+			= (\sum_{k=0}^nf^{*k})\otimes(\kappa_*f)
+				+ (f^{*(n+1)}\otimes 1_W)*(\Delta_\sqcup\kappa_*f)
+				&\quad\lcomment{摂動} \\
+		\end{array}\end{equation*} %}
+		したがって、摂動が収束するための条件
+		\begin{equation}\label{eq:Kleeneスターの余積の摂動が収束するための条件}\begin{split} %{
+			(f^{*(n+1)}\otimes 1_W)*(\Delta_\sqcup\kappa_*f)
+				\xrightarrow{n\to\infty}0
+				\quad\text{for }f\in RA
+		\end{split}\end{equation} %}
+		を仮定すると、$\Delta_\sqcup\kappa_*f=(\kappa_*f)\otimes(\kappa_*f)$
+		が成り立つ。摂動の収束条件
+		\eqref{eq:Kleeneスターの余積の摂動が収束するための条件}が成り立たない場合
+		でも、文字数が有限の範囲で、任意の$f\in RA$に対して
+		式$\Delta_\sqcup\kappa_*f=(\kappa_*f)\otimes(\kappa_*f)$が成り立つ。
+		つまり、収束条件\eqref{eq:Kleeneスターの余積の摂動が収束するための条件}が
+		成立するしないに関わらず、任意の\underline{有限文字数}の$w_1,w_2\in WA$
+		と任意の$x\in RA^t$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			(\kappa_*x)(w_1*w_2) 
+			&= (\Delta_\sqcup\kappa_*x)(w_1\otimes w_2) \\
+			&= \bigl((\kappa_*x)\otimes(\kappa_*x)\bigr)(w_1\otimes w_2) \\
+			&= \bigl((\kappa_*x)w_1\bigr)\otimes\bigl((\kappa_*x)w_2\bigr) \\
+		\end{split}\end{equation*} %}
+		文字数が無限の単語に対する作用が含まれる場合にのみ、
+		収束条件\eqref{eq:Kleeneスターの余積の摂動が収束するための条件}
+		を考慮する必要がある。この結果を命題の形でまとめておく。
+
+		\begin{proposition}[文字のKleeneスターに対するシャッフル余積]\label{prop:文字のKleeneスターに対するシャッフル余積} %{
+			任意の$f\in RA$に対して次の式が文字数が有限の範囲で成り立つ。
+			\begin{equation*}\begin{split} %{
+				\Delta_\sqcup\kappa_*f = (\kappa_*f)\otimes (\kappa_*f)
+			\end{split}\end{equation*} %}
+		\end{proposition} %prop:文字のKleeneスターに対するシャッフル余積}
+
+		一般に、$RWA^t$の文字数が無限の単語の項を含む元でも、$RWA$の文字数が
+		有限の単語に作用する場合は収束性の問題は生じないが、文字数が無限の単語に
+		作用する場合は収束性を考慮する必要がある。
+		文字数が無限の単語に対する作用が含まれる場合の例として、
+		$r\in R,\;a\in A$として次のようなものがある。
+		\begin{equation*}\begin{split} %{
+			\bigl(\kappa_*(ra^t)\bigr)(\kappa_*a)
+			&= \sum_{n\in\mybf{N}}r^n \\
+		\end{split}\end{equation*} %}
+		この場合、半環$R$が自然数の場合は$r\neq0$で発散、
+		有理数/実数/複素数の場合は$1\le\zettai{r}$で発散する。
+		\begin{note}[文字数が無限大のイメージ]\label{note:文字数が無限大のイメージ} %{
+			文字として、円$S^1$から複素数$\mybf{C}$への写像
+			$\set{u:\sigma\mapsto e^{i\sigma}}$を考えると、文字数が無限大の単語は
+			は$\lim_{n\to\infty}u^n$に対応し、振動数が無限大の領域に対応する。
+			量子力学でエネルギーの固有状態を摂動によって計算するとき現れる紫外発散
+			は振動数が無限大の領域での積分に起因するものである。紫外発散からの
+			類推で、完全系$\sum_{w\in WA}w\otimes w^t$を使うような場合、
+			文字数が有限の範囲で成り立つ命題
+			\ref{prop:文字のKleeneスターに対するシャッフル余積}（=古典論）
+			が成り立たなくなるかもしれない。
+		\end{note} %note:文字数が無限大のイメージ}
+
+		$f\in RWA,\;x\in RA^t$を次のようにおくと、
+		\begin{equation*}\begin{array}{rll} %{
+			f &= \sum_{w\in WA}f_ww, &f_w\in R \quad\text{for all }w\in WA \\
+			x &= \sum_{a\in A}x_aa^t, &x_a\in R \quad\text{for all }a\in A \\
+		\end{array}\end{equation*} %}
+		$(\kappa_*x)f$は次のようになる。
+		\begin{equation}\label{eq:内積が関数になる式}\begin{split} %{
+			(\kappa_*x)f &= f_{1_W} + \sum_{a\in A}f_{a}x_a
+				+ \sum_{a_1,a_2\in A}f_{a_1a_2}x_{a_1}x_{a_2} + \cdots \\
+		\end{split}\end{equation} %}
+		したがって、$(\kappa_*x)f$は$x_A=\set{x_a\in R}_{a\in A}$を不定変数とする
+		$R$係数多項式としてみることができる。$x_A=\set{x_a\in R}_{a\in A}$を
+		不定変数とする$R$係数多項式全体の作る集合を$R[x_A]$と書く。
+		式\eqref{eq:内積が関数になる式}の形から、任意の$g\in R[x_A]$に対して
+		$g=(\kappa_*x)f$となる$f\in RWA,\;x\in RA^t$が存在することがわかる。
+		つまり、$R$線形写像$(\kappa_*x):RWA\to R[x_A]$は$\myop{onto}$になる。
+		$(R,m_\myspace)$は可換で、$(RWA,m_*)$は非可換だから、$\zettai{A}\le 1$の
+		時のみ$(\kappa_*x)$は$1:1$となる可能性がある。
+		そして、$x=\sum_{a\in A}x_aa^t\in RA^t$とすると、
+		任意の$a\in A$と任意の文字数が有限な$f\in RWA$に対して次の式が成り立つ。
+		\begin{equation}\label{eq:コヒーレント状態}\begin{array}{lll} %{
+			(\kappa_*x)(a*f) &= x_a\bigl((\kappa_*x)f\bigr) &= (\kappa_*x)(f*a) \\
+			\bigr(a^t\sqcup(\kappa_*x)\bigr)f
+				&= \frac{\partial}{\partial x_a}\bigl((\kappa_*x)f\bigr)
+				&= \bigl((\kappa_*x)\sqcup a^t\bigr)f \\
+		\end{array}\end{equation} %}
+		\begin{proof} %{
+			任意の$a\in A$と任意の文字数が有限な$f\in RWA$に対して次の式が成り立ち、
+			\begin{equation*}\begin{array}{lll} %{
+				(\kappa_*x)(a*f)
+				&= m_\myspace(\Delta_\sqcup\kappa_*x)(a\otimes f) 
+					&\quad\lcomment{可換図\eqref{eq:シャッフル余積の可換図その二}} \\
+				&= m_\myspace(\kappa_*x\otimes \kappa_*x)(a\otimes f) 
+					&\quad\lcomment{命題\ref{prop:文字のKleeneスターに対するシャッフル余積}} \\
+				&= x_a(\kappa_*x)f
+					&\quad\lcomment{$(\kappa_*x)a=x_a$} \\
+			\end{array}\end{equation*} %}
+			$R$が可換だから命題の一つ目の式が成り立つことがわかる。
+
+			任意の$a\in A$と任意の$f\in RWA$に対して次の式が成り立つが、
+			\begin{equation*}\begin{array}{lll} %{
+				\bigr(a^t\sqcup(\kappa_*x)\bigr)f
+				&= m_\myspace\bigl(a^t\otimes (\kappa_*x)\bigr)\Delta_*f 
+					&\quad\lcomment{可換図\eqref{eq:シャッフル積とシャッフル余積の可換図}} \\
+			\end{array}\end{equation*} %}
+			任意の$a_1,a_2,\dots,a_m\in A$に対して次の式が成り立つから、
+			\begin{equation*}\begin{split} %{
+				(a^t\otimes \myid)(\Delta_\sqcup[a_1a_2\cdots a_m])
+				&= \jump{a=a_1}1_W\otimes [a_2\cdots a_m] \\
+				&\;+ \jump{a=a_2}1_W\otimes [a_1a_3\cdots a_m] \\
+				&\;+ \cdots \\
+				&\;+ \jump{a=a_m}1_W\otimes [a_1a_2\cdots a_{m-1}] \\
+			\end{split}\end{equation*} %}
+			任意の$g^t\in RWA^t$に対して次の式が成り立ち、
+			\begin{equation*}\begin{split} %{
+				(a^t\sqcup g^t)[a_1a_2\cdots a_m]
+				&= \jump{a=a_1}g^t[a_2\cdots a_m] \\
+				&\;+ \jump{a=a_2}g^t[a_1a_3\cdots a_m] \\
+				&\;+ \cdots \\
+				&\;+ \jump{a=a_m}g^t[a_1a_2\cdots a_{m-1}] \\
+			\end{split}\end{equation*} %}
+			$x=\sum_{a\in A}x_aa^t\in RA^t$とすると、次の式が成り立ち、
+			\begin{equation*}\begin{split} %{
+				(a^t\sqcup \kappa_*x)[a_1a_2\cdots a_m]
+				&= \jump{a=a_1}x_{a_2}\cdots x_{a_m} \\
+				&\;+ \jump{a=a_2}x_{a_1}x_{a_3}\cdots x_{a_m} \\
+				&\;+ \cdots \\
+				&\;+ \jump{a=a_m}x_{a_1}x_{a_2}\cdots x_{a_{m-1}} \\
+				&= \frac{\partial}{\partial x_a}x_{a_1}x_{a_2}\cdots x_{a_m} \\
+				&= \frac{\partial}{\partial x_a}\bigl((\kappa_*x)[a_1a_2\cdots a_m]\bigr) \\
+			\end{split}\end{equation*} %}
+			$m_\sqcup$が可換だから、命題の二つ目の式が成り立つ。
+		\end{proof} %}
+		式\eqref{eq:コヒーレント状態}は、文字$x\in RA^t$のKleeneスター
+		$\kappa_*x$が量子力学でのFock空間におけるコヒーレント状態に相当する
+		ことを示している。
+		以上の事柄を定義と命題の形でまとめておく。
+		\begin{definition}[多項式への写像]\label{def:多項式への写像} %{
+			集合$A$で添え字付けられた$R$の不定変数$x_A=\set{x_a\in R}_{a\in A}$
+			に対して、$R$線形写像$\lambda_*$を次のように定義する。
+			\begin{equation*}\begin{split} %{
+				\lambda_*: RWA &\to R[x_A] \\
+				f &\mapsto (\kappa_*x)f \quad\text{for all finite }f\in RWA \\
+				&\quad\text{where } x=\sum_{a\in A}x_aa^t\in RA^t \\
+			\end{split}\end{equation*} %}
+		\end{definition} %def:多項式への写像}
+		\begin{proposition}[多項式の上への写像]\label{prop:多項式の上への写像} %{
+			$\lambda_*$は$\myop{onto}$となる。
+		\end{proposition} %prop:多項式の上への写像}
+		\begin{proposition}[コヒーレント状態]\label{prop:コヒーレント状態} %{
+			任意の$a\in A$と任意の文字数が有限な$f\in RWA$に対して次の式が
+			成り立つ。
+			\begin{equation*}\begin{array}{lll} %{
+				(\kappa_*x)(a*f) &= x_a\bigl((\kappa_*x)f\bigr) &= (\kappa_*x)(f*a) \\
+				\bigr(a^t\sqcup(\kappa_*x)\bigr)f
+					&= \frac{\partial}{\partial x_a}\bigl((\kappa_*x)f\bigr)
+					&= \bigl((\kappa_*x)\sqcup a^t\bigr)f \\
+			\end{array}\end{equation*} %}
+		\end{proposition} %prop:コヒーレント状態}
+	%s2:半代数準同型とKleeneスター}
+
+	\subsection{内積と交換関係}\label{s2:内積と交換関係} %{
+		ベクトル空間の転置$(Mv_1)^tv_2=v_1^tM^tv_2$に倣い、
+		$R$線形写像$\myhere\rhd_\square:RA^t\to \myop{end}(RWA)$を、
+		任意の$w,w_1,w_2\in WA$に対して次の式が成り立つように定義する。
+		\begin{equation}\label{eq:転置の定義式}\begin{array}{cc} %{
+			(w_1^t* w_2^t)w = w_2^t(w_1^t\rhd_* w)
+				, & (w_1^t\sqcup w_2^t)w = w_2^t(w_1^t\rhd_\sqcup w)
+		\end{array}\end{equation} %}
+		関係式$(w_1^t* w_2^t)w=m_\myspace(w_1^t\otimes w_2^t)\Delta_\sqcup w$
+		と$(w_1^t\sqcup w_2^t)w_2=m_\myspace(w_1^t\otimes w_2^t)\Delta_*w$
+		を使うと、任意の$w,w_1,w_2\in WA$に対して次のように定義すれば、
+		式\eqref{eq:転置の定義式}が成り立つことがわかる。
+		\begin{equation*}\begin{array}{cc} %{
+			w_1^t\rhd_* w_2 = m_\myspace(w_1^t\otimes \myid)(\Delta_\sqcup w_2)
+			, & w_1^t\rhd_\sqcup w_2 = m_\myspace(w_1^t\otimes \myid)(\Delta_* w_2)
+		\end{array}\end{equation*} %}
+		特に、任意の$w\in WA$に対して$1_W^t\rhd_\square w=w$となり、
+		$1_W^t\rhd_\square=\myid$となる。
+		また、式\eqref{eq:転置の定義式}から、任意の$w_1,w_2,w_3\in WA$に対して
+		次のようになり、
+		\begin{equation*}\begin{split} %{
+			w_3^t\bigl((w_1^t\square w_2^t)\rhd_\square w\bigr)
+			= (w_1^t\square w_2^t\square w_3^t)w 
+			= w_3^t(w_2^t\rhd_\square w_1^t\rhd_\square w)
+		\end{split}\end{equation*} %}
+		任意の$w_1,w_2\in WA$に対して次のようになる。
+		\begin{equation*}\begin{split} %{
+			(w_1^t\square w_2^t)\rhd_\square = w_2^t\rhd_\square w_1^t\rhd_\square
+		\end{split}\end{equation*} %}
+		したがって、写像$\myhere\rhd_\square$は逆順準同型
+		$(RA^t,m_\square,1_W^t)\to(\myop{end}(RWA),\circ,\myid)$になることが
+		わかる。ただし、$m_\sqcup$は可換なので、写像は$\myhere\rhd_\sqcup$
+		は正順と逆順の違いはない。$\rhd_\square$の作用を文字を使って書いておく。
+		任意の$a,a_1,a_2,\dots,a_m\in A$に対して、$a^t\rhd_*$の作用は
+		\begin{equation*}\begin{split} %{
+			a^t\rhd_* 1_W &= 0 \\
+			a^t\rhd_* [a_1a_2\cdots a_m] &= \jump{a=a_1}[a_2\cdots a_m] \\
+		\end{split}\end{equation*} %}
+		となり、$a^t\rhd_\sqcup$の作用は
+		\begin{equation*}\begin{split} %{
+			a^t\rhd_\sqcup 1_W &= 0 \\
+			a^t\rhd_\sqcup [a_1a_2\cdots a_m]
+				&= \jump{a=a_1}[a_2\cdots a_m] \\
+				&\;+ \jump{a=a_2}[a_1a_3\cdots a_m] \\
+				&\;+ \cdots \\
+				&\;+ \jump{a=a_m}[a_1a_2\cdots a_{m-1}] \\
+		\end{split}\end{equation*} %}
+		となる。記法が対称的になるように、任意の$a\in A,\;w\in WA$に対して
+		\begin{equation*}\begin{split} %{
+			a\rhd_*w &= [a]*w \\
+			a\rhd_\sqcup w &= [a]\sqcup w
+		\end{split}\end{equation*} %}
+		と書くと、任意の$a_1,a_2,b_1,b_2,\cdots,b_m\in A$に対して
+		次のようになる。
+		\begin{equation*}\begin{split} %{
+			a_1^t\rhd_*a_2\rhd_*[b_1b_2\cdots b_m] 
+			&= a_1^t\rhd_*[a_2b_1b_2\cdots b_m] \\
+			&= \jump{a_1=a_2}[b_1b_2\cdots b_m] \\
+			%
+			a_1^t\rhd_*a_2\rhd_\sqcup[b_1b_2\cdots b_m] 
+			&= a_1^t\rhd_*\bigl([a_2b_1b_2\cdots b_m]+\cdots+[b_1b_2\cdots b_ma_2]\bigr) \\
+			&= \bigl(\jump{a_1=a_2}+a_2\rhd_\sqcup a_1^t\rhd_*\bigr)[b_1b_2\cdots b_m] \\
+			%
+			a_1^t\rhd_\sqcup a_2\rhd_*[b_1b_2\cdots b_m] 
+			&= a_1^t\rhd_\sqcup[a_2b_1b_2\cdots b_m] \\
+			&= \bigl(\jump{a_1=a_2}+a_2\rhd_* a_1^t\rhd_*\bigr)[b_1b_2\cdots b_m] \\
+			%
+			a_1^t\rhd_\sqcup a_2\rhd_\sqcup[b_1b_2\cdots b_m]
+			&= a_1^t\rhd_\sqcup\bigl([a_2b_1b_2\cdots b_m]+\cdots+[b_1b_2\cdots b_ma_2]\bigr) \\
+			&= \bigl((m+1)\jump{a_1=a_2}+a_2\rhd_\sqcup a_1^t\rhd_\sqcup\bigr)[b_1b_2\cdots b_m] \\
+		\end{split}\end{equation*} %}
+		つまり、任意の$a_1,a_2\in A$に対して次のようになる。
+		\begin{equation}\label{eq:シングルトンの交換関係}\begin{split} %{
+			a_1^t\rhd_*a_2\rhd_* &= \jump{a_1=a_2} \\
+			a_1^t\rhd_*a_2\rhd_\sqcup &= \jump{a_1=a_2}+a_2\rhd_\sqcup a_1^t\rhd_* \\
+			a_1^t\rhd_\sqcup a_2\rhd_* &= \jump{a_1=a_2}+a_2\rhd_* a_1^t\rhd_* \\
+			a_1^t\rhd_\sqcup a_2\rhd_\sqcup	&= (\nu+1)\jump{a_1=a_2}+a_2\rhd_\sqcup a_1^t\rhd_\sqcup \\
+		\end{split}\end{equation} %}
+		ここで、$\nu$は文字数を数える$R$線形写像で次のように定義される。
+		\begin{equation*}\begin{split} %{
+			\nu: RWA &\to RWA \\
+				1_W &\mapsto 0 \\
+				[a_1a_2\cdots a_m] &\mapsto m[a_1a_2\cdots a_m]
+				\quad\text{for all }a_1,a_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+		交換関係\eqref{eq:シングルトンの交換関係}にはWely代数によく似た構造が
+		表われている。正準交換関係
+		$[\alpha_1,\alpha_2^\dag]=\jump{\alpha_1=\alpha_2}$になるパターンは
+		次の二通りになる。\\
+		\begin{minipage}{0.5\hsize}
+			\begin{center}\begin{tabular}{c|cc}
+				& 作用素 & 可換性 \\ \hline
+				消滅演算子 & $a^t\rhd_*$ & 非可換 \\
+				生成演算子 & $a\rhd_\sqcup$ & 可換 \\
+			\end{tabular}\end{center}
+		\end{minipage}
+		\begin{minipage}{0.5\hsize}
+			\begin{center}\begin{tabular}{c|cc}
+				& 作用素 & 可換性 \\ \hline
+				消滅演算子 & $a^t\rhd_\sqcup$ & 可換 \\
+				生成演算子 & $a\rhd_*$ & 非可換 \\
+			\end{tabular}\end{center}
+		\end{minipage}
+		正準交換関係に似た交換関係
+		$[\alpha_1,\alpha_2^\dag]=(\nu+1)\jump{\alpha_1=\alpha_2}$になる
+		パターンに次のものがある。\\
+		\begin{minipage}{0.5\hsize}
+			\begin{center}\begin{tabular}{c|cc}
+				& 作用素 & 可換性 \\ \hline
+				消滅演算子 & $a^t\rhd_\sqcup$ & 可換 \\
+				生成演算子 & $a\rhd_\sqcup$ & 可換 \\
+			\end{tabular}\end{center}
+		\end{minipage}
+
+		ディラックのブラケット記法を用いて書き直してみる。
+		$u_*$を積$m_*$と$m_\sqcup$の単位射$w\mapsto \jump{w=1_W}$とすると、
+		任意の$a_1,a_2,\dots,a_m\in A,\;f\in RWA$に対して、
+		$[a_1a_2\cdots a_m]^t$と$f$の内積は次のように書ける。
+		\begin{equation*}\begin{split} %{
+			[a_1a_2\cdots a_m]^t f &= u_*[a_1a_2\cdots a_m]^t\rhd_* f \\
+			&= u_*a_m^t\rhd_*\cdots a_2^t\rhd_*a_1^t\rhd_* f \\
+		\end{split}\end{equation*} %}
+		したがって、次のようにブラケット記法に対応付ける。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $a\rhd_*$と$a^t\rhd_*$をそれぞれ$a$と$a^t$と省略して書き、
+			\begin{equation*}\begin{split} %{
+				a_1\rhd_*a_2\rhd_*\cdots a_m\rhd_* &\mapsto a_1a_2\cdots a_m \\
+				a_1^t\rhd_*a_2^t\rhd_*\cdots a_m^t\rhd_* &\mapsto a_1^t a_2^t \cdots a_m^t \\
+			\end{split}\end{equation*} %}
+			\item 次のようにケットを対応させ、
+			\begin{equation*}\begin{split} %{
+				1_W &\mapsto \ket{} \\
+				[a_1a_2\cdots a_m] &\mapsto a_1a_2\cdots a_m\ket{} \\
+				&= a_1a_2\cdots a_{m-1}\ket{a_m} \\
+				&\vdots \\
+				&= a_1\ket{a_2\cdots a_m} \\
+				&= \ket{a_1a_2\cdots a_m} \\
+			\end{split}\end{equation*} %}
+			\item 次のようにブラを対応させる。
+			\begin{equation*}\begin{split} %{
+				u_* &\mapsto \bra{} \\
+				[a_1a_2\cdots a_m]^t 
+				&\mapsto \bra{}a_m^t\cdots a_2^t a_1^t \\
+				&= \bra{a_m}a_{m-1}^t\cdots a_2^t a_1^t \\
+				&\vdots \\
+				&= \bra{a_2\cdots a_m}a_1^t \\
+				&= \bra{a_1a_2\cdots a_m} \\
+			\end{split}\end{equation*} %}
+		\end{itemize} %}
+		すると、ブラとケットの直行関係は、任意の$w_1,w_2\in WA$に対して
+		$\bra{w_1}\ket{w_2}=\jump{w_1=w_2}$となり、$A^t$のケットへの作用と
+		$A$のブラへの作用は、任意の$a,a_1,a_2,\dots,a_m\in A$に対して
+		次のようになり、
+		\begin{equation*}\begin{split} %{
+			a^t\ket{} &= 0 \\
+			a^t\ket{a_1a_2\cdots a_m} &= \jump{a=a_1}\ket{a_2\cdots a_m} \\
+			\bra{}a &= 0 \\
+			\bra{a_1a_2\cdots a_m}a &= \jump{a=a_1}\bra{a_2\cdots a_m} \\
+		\end{split}\end{equation*} %}
+		$R$線形写像$\myhere^t$が、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item ブラとケットに換えて、
+			\item 演算子$a,a^t$の並び方と反転させて、
+			\item 各演算子に$\myhere^t$をかけたものになる。
+		\end{itemize} %}
+		\begin{equation*}\begin{split} %{
+			\bigl(a_1a_2\cdots a_mb_1^t b_2^t \cdots b_n^t \ket{f}\bigr)^t 
+			 = \bra{f}b_1b_2\cdots b_na_m^t\cdots a_2^t a_1^t \\
+			\quad\text{for all }a_1,a_2,\dots,a_m,b_1,b_2,\dots,b_n\in A
+			,\; f\in RWA
+		\end{split}\end{equation*} %}
+		テンソル積の記号$\otimes$は省略して、テンソル積の内積を次のように
+		定義する。
+		\begin{equation*}\begin{split} %{
+			\bra{f}\ket{f_1}\ket{f_2}\cdots\ket{f_m}
+			&= \ket{f_2}\cdots\ket{f_m}\braket{f|f_1} \\
+			\bra{f_m}\cdots\bra{f_2}\bra{f_1}\ket{f}
+			&= \braket{f_1|f}\bra{f_m}\cdots\bra{f_2} \\
+			&\quad\text{for all }f,f_1,f_2,\dots,f_m\in RWA
+		\end{split}\end{equation*} %}
+		ケットの積$m_*$を$R$線形写像として次のように定義する。
+		\begin{equation*}\begin{split} %{
+			m_*\ket{a_1a_2\cdots a_m}\ket{b_1b_2\cdots b_n}
+			= \ket{a_1a_2\cdots a_mb_1b_2\cdots b_n} \\
+			\quad\text{for all }a_1,a_2,\dots,a_m,b_1,b_2,\dots,b_n\in A
+		\end{split}\end{equation*} %}
+		すると、$m_*$のブラへの作用は次のようになる。
+		\begin{equation*}\begin{split} %{
+			\bra{a_1a_2\cdots a_m}m_*
+			&= \bra{a_1a_2\cdots a_m}\bra{} \\
+			&\;+ \bra{a_2\cdots a_m}\bra{a_1} \\
+			&\;+ \cdots \\
+			&\;+ \bra{}\bra{a_1a_2\cdots a_m} \\
+			&\quad\text{for all }a_1,a_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+		ケットの余積$\Delta_*$を$R$線形写像として次のように定義する。
+		\begin{equation*}\begin{split} %{
+			\Delta_*\ket{a_1a_2\cdots a_m}
+			&= \bigl(\Delta_*\ket{a_1}\bigr) * \bigl(\Delta_*\ket{a_2}\bigr)
+				* \cdots * \bigl(\Delta_*\ket{a_m}\bigr) \\
+			\Delta_*\ket{a} &= \ket{}\ket{a} + \ket{a}\ket{} \\
+			\Delta_*\ket{} &= \ket{}\ket{} \\
+			&\quad\text{for all }a,a_1,a_2,\cdots a_m\in A
+		\end{split}\end{equation*} %}
+		すると、$\Delta_*$のブラへの作用は次のようになる。
+		\begin{equation*}\begin{split} %{
+			\bra{a_1a_2\cdots a_m}\bra{w}\Delta_*
+				&= \bra{w_1a_1w_2a_2\cdots w_ma_mw_{m+1}} \\
+			\bra{w_k} &= \bra{w}m_{*(1)}m_{*(2)}^{k-1} \quad\text{for all }k=1,\dots,m\\
+			\bra{w_{m+1}} &= \bra{w}m_{*(2)}^m \\
+			&\quad\text{for all }a_1,a_2,\dots,a_m\in A,\;w\in WA
+		\end{split}\end{equation*} %}
+		シャッフル積とシャッフル余積は、文字列の連結とその余積の転置として
+		得られる。
+	%s2:内積と交換関係}
+%s1:文字列とその双対空間}
+
+\section{課題}\label{s1:課題} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 式\ref{eq:シャッフル余積の性質その一}とBrzozowski微分は
+		よく似ている。
+		$R$双線形写像$\myop{pop}_L$（左ポップ）を次のように定義し、
+		\begin{equation*}\begin{split} %{
+			\myop{pop}_L: RWA &\to RA\otimes RWA \\
+			1_W &\mapsto 0 \\
+			[a_1a_2\cdots a_m] &\mapsto a_1\otimes [a_2\cdots a_m]
+			\quad\text{for all }a_1,a_2,\dots,a_m\in A
+		\end{split}\end{equation*} %}
+		$R$線形写像$u_L$（左単位テンソル積）を次のように定義する。
+		\begin{equation*}\begin{split} %{
+			u_L: RWA &\to RWA \\
+			w &\mapsto 1_W\otimes w \quad\text{for all }w\in WA
+		\end{split}\end{equation*} %}
+		すると、式\ref{eq:シャッフル余積の性質その一}の式は前置記法のみで
+		次のように書ける。
+		\begin{equation*}\begin{split} %{
+			\Delta_\sqcup = u_L 
+			+ (\beta_*\otimes \myid)(\myid\otimes \Delta_\sqcup)\myop{pop}_L
+		\end{split}\end{equation*} %}
+		単語$w=[a_1a_2\cdots a_m]$に対して適用すると次のような漸化式になる。
+		\begin{equation*}\begin{array}{lll} %{
+			\Delta_\sqcup w_0 
+			& = u_Lw_0 + (a_1\otimes 1_W) * (\Delta_\sqcup w_1),
+			& a_1\otimes w_1 = \myop{pop}_Lw_0 \\
+			%
+			\Delta_\sqcup w_1
+			& = u_Lw_1 + (a_2\otimes 1_W) * (\Delta_\sqcup w_2),
+			& a_2\otimes w_2 = \myop{pop}_Lw_1 \\
+			%
+			& \vdots \\
+			%
+			\Delta_\sqcup w_{m-1} 
+			& = u_Lw_{m-1} + (a_m\otimes 1_W) * (\Delta_\sqcup w_m),
+			& a_m\otimes w_m = \myop{pop}_Lw_{m-1} \\
+			%
+			\Delta_\sqcup w_m & = u_Lw_m & 0 = \myop{pop}_Lw_m \\
+		\end{array}\end{equation*} %}
+		$R$線形作用$RA\otimes RWA\to RWA$
+		\begin{equation*}\begin{split} %{
+			a\rhd_L w = ([a]^t\otimes \myid)\Delta_\sqcup w
+		\end{split}\end{equation*} %}
+		で考えた方が簡潔になりそうだ。
+		%
+		\item バックアップ\\
+		作用素の交換関係\eqref{eq:作用素の交換関係}の中で、代数的な双対の関係
+		にある作用素の交換関係が正準交換関係
+		$\alpha\alpha^\dag-\alpha^\dag\alpha=1$になっている。
+		正準交換関係が現れたそもそもの原因は、積$m_*$に双対な余積$\Delta_*$を
+		$a\in A$に対して$\Delta_*[a]=[a]\otimes 1_W+1_W\otimes [a]$と定義したこと
+		にある。$\Delta_*[a]$の定義と作用素の交換関係の関係を調べてみる。
+		三つ目の式と四つ目の式は互いに転置をとったものだから、四つ目の式
+		\begin{equation}\label{eq:調べる交換関係}\begin{split} %{
+			a_1^t\sqcup a_2* &= \jump{a_1=a_2} + a_2* a_1^t\sqcup \\
+		\end{split}\end{equation} %}
+		について調べれば十分である。代数的な双対の関係
+		\begin{equation*}\begin{split} %{
+			\Delta_*(w_1* w_2) = (\Delta_*w_1)*(\Delta_*w_2)
+			\quad\text{for all }w_1,w_2\in WA
+		\end{split}\end{equation*} %}
+		の内積をとると次の式が得られる。
+		\begin{equation*}\begin{split} %{
+			(w_1\sqcup w_2)^t(w_3* w_4) 
+			&= \bigl((\Delta_\sqcup w_1)\otimes(\Delta_\sqcup w_2)\bigr)^t
+				\sigma_{23}\bigl((\Delta_*w_3)\otimes(\Delta_*w_4)\bigr) \\
+			& \quad\text{for all }w_1,w_2,w_3,w_4\in WA
+		\end{split}\end{equation*} %}
+		したがって、任意の$a_1,a_2\in A,\;w_1,w_2\in WA$に対して次の式が成り立つ。
+		\begin{equation}\label{eq:交換関係を導くための双対性}\begin{split} %{
+			(a_1\sqcup w_1)^t(a_2* w_2) 
+			&= \bigl((\Delta_\sqcup[a_1])\otimes(\Delta_\sqcup w_1)\bigr)^t
+				\sigma_{23}\bigl((\Delta_*[a_2])\otimes(\Delta_*w_2)\bigr) \\
+		\end{split}\end{equation} %}
+		この式の左辺は$w_1^ta_1^t\sqcup a_2* w_2$となり、
+		交換関係\eqref{eq:調べる交換関係}の左辺になる。同一視$R\otimes R\simeq R$
+		によって、次の式が成り立つから、
+		\begin{equation*}\begin{split} %{
+			(\Delta_\sqcup[b])^t(x_1\otimes x_2) &\simeq [b]^t(x_1\sqcup x_2) \\
+			&= \jump{x_1=[b]}\jump{x_2=1_W} + \jump{x_1=1_W}\jump{x_2=[b]} \\
+			&= (\epsilon_*{b^t*x_1})(\epsilon_*{x_2}) 
+				+ (\epsilon_*{x_1})(\epsilon_*{b^t*x_2}) \\
+			& \quad\text{for all }b\in A,\;x_1,x_2\in WA
+		\end{split}\end{equation*} %}
+		式\eqref{eq:交換関係を導くための双対性}の右辺は次のようになる。
+		\begin{equation*}\begin{split} %{
+			& \bigl((\Delta_\sqcup[a_1])\otimes(\Delta_\sqcup w_1)\bigr)^t
+				\sigma_{23}\bigl((\Delta_*[a_2])\otimes(\Delta_*w_2)\bigr) \\
+			&= \bigl((\Delta_\sqcup[a_1])\otimes(\Delta_\sqcup w_1)\bigr)^t
+				\bigl((\Delta_{*(1)}[a_2])\otimes(\Delta_{*(1)}w_2)\otimes(\Delta_{*(2)}[a_2])\otimes(\Delta_{*(2)}w_2)\bigr) \\
+			&\simeq (\epsilon_*a_1^t*\Delta_{*(1)}[a_2])(\epsilon_*\Delta_{*(1)}w_2)
+				(\Delta_\sqcup w_1)^t\bigl((\Delta_{*(2)}[a_2])\otimes(\Delta_{*(2)}w_2)\bigr) \\
+			&\;+ (\epsilon_*\Delta_{*(1)}[a_2])(\epsilon_*a_1^t*\Delta_{*(1)}w_2)
+				(\Delta_\sqcup w_1)^t\bigl((\Delta_{*(2)}[a_2])\otimes(\Delta_{*(2)}w_2)\bigr) \\
+			&= (\epsilon_*a_1^t*\Delta_{*(1)}[a_2])(\Delta_\sqcup w_1)^t
+				\bigl((\Delta_{*(2)}[a_2])\otimes w_2\bigr) \\
+			&\;+ (\epsilon_*a_1^t*\Delta_{*(1)}w_2)(\Delta_\sqcup w_1)^t
+				\bigl([a_2]\otimes(\Delta_{*(2)}w_2)\bigr) \\
+			&= (\epsilon_*a_1^t*\Delta_{*(1)}[a_2])w_1^t
+				\bigl((\Delta_{*(2)}[a_2])* w_2\bigr) \\
+			&\;+ (\epsilon_*a_1^t*\Delta_{*(1)}w_2)w_1^t
+				\bigl(a_2*(\Delta_{*(2)}w_2)\bigr) \\
+		\end{split}\end{equation*} %}
+	\end{itemize} %}
+%s1:課題}

@@ -1,3 +1,51 @@
+\section{二項演算と作用}\label{s1:二項演算と作用} %{
+	$A$を集合、$\myhere*\myhere$を$A$の二項演算とする。 ある元$a\in A$から
+	写像$a_*:A\to A$を$a_*b=a*b,\;\forall b\in A$によって定義することが
+	できる。文字$a_*$から作られるモノイド$Wa_*=\set{\myid,a_*,a_*^2,\dots}$
+	は文字の連結が写像の合成となる。
+	ある元$b\in A$に対してを無限に作用させて作られた単語
+	$[b(a_*b)(a_*^2b)\cdots]\in WA$を、有限パターンの繰り返しまたは
+	それ以外に分類する。有限パターンの繰り返しの場合、文字$b$に戻ってくる
+	場合と戻ってこない場合に分類する。
+	\begin{equation*}\xymatrix{
+		\text{無限パターン} &
+		b \ar[r] & a_*b \ar[r] & a_*^2b \ar[r] & \cdots \\
+		b\text{に戻らない有限パターン} &
+		b \ar[r] & a_*b \ar[r] & a_*^2b \ar@(u,u)[l] \\
+		b\text{に戻るパターン} &
+		b \ar[r] & a_*b \ar[r] & a_*^2b \ar@(u,u)[ll] \\
+	}\end{equation*} %}
+	それぞれのパターンは$Wa_*$の代数的な性質に対応する。
+	\begin{equation*}\begin{split} %{
+		Wa_*\text{が自由モノイド} 
+			&\implies \text{すべての$b\in A$に対して無限パターン} \\
+		Wa_*\text{がキャンセル不可能な有限モノイド} 
+			&\implies \text{ある$b\in A$に対して$b$に戻らない有限パターン} \\
+		Wa_*\text{が有限巡回群}
+			&\implies \text{すべての$b\in A$に対して$b$に戻るパターン} \\
+	\end{split}\end{equation*} %}
+	図の例の$b$に戻らない有限パターンでは、$a_*^3b=a_*b$だが
+	$a_*^2b\neq b$より$a_*^2\neq\myid$となり、キャンセル不可能になっている。
+	逆に、二項演算$\myhere*\myhere$がキャンセル可能であれば、任意の$a\in A$
+	に対して$a_*$がキャンセル可能になる。多分次の言い草は正しい。
+	\begin{equation*}\begin{split} %{
+		\text{二項演算$\myhere*\myhere$がキャンセル可能}
+		\Leftrightarrow A_*=\set{a_*}_{a\in A}\text{がキャンセル可能}
+	\end{split}\end{equation*} %}
+
+	二項演算$\myhere*\myhere$が結合的であれば、写像$a_*$にどのような特徴
+	が現れるだろうか。$m\in\mybf{N}_+,\;a\in A$に対して
+	$a_{*(m)}:A\to A$を$a_{*(m)}b=(a^{*m})*b,\;\forall b\in A$
+	で定義する。二項演算$\myhere*\myhere$が結合的であれば、$a_*^m=a_{*(m)}$
+	となり、$A_* = \cup_{k\in \mybf{N}_+}A_{*(k)}$となる。
+	二項演算$\myhere*\myhere$が結合的でないと、一般には$a_*^m\neq a_{*(m)}$
+	となる。標語的に次のように書いておく。
+	\begin{equation*}\begin{split} %{
+		\text{二項演算$\myhere*\myhere$が結合的}
+		\implies A_*\text{だけを考えれば十分}
+	\end{split}\end{equation*} %}
+%s1:二項演算と作用}
+
 \section{プログラミング言語}\label{s1:プログラミング言語} %{
 	\begin{description}\setlength{\itemsep}{-1mm} %{
 		\item[Zoltan Esik]シャッフル積とプログラミング言語
