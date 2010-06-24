@@ -1,3 +1,178 @@
+\section{いっぱい環}\label{s1:いっぱい環} %{
+	自然数$\mybf{N}$からor-andブーリアン$\mybf{B}$への写像$f$を次のように
+	定義する。
+	\begin{equation*}\begin{split} %{
+		fm = \jump{m\neq0} \quad\text{for all }m\in\mybf{N}
+	\end{split}\end{equation*} %}
+	すると、次の可換図が成り立ち、$f$は半環準同型になるこことがわかる。
+	\begin{equation*}\xymatrix@C+2pc{
+		m_1\times m_2 \ar[r]^{m_+} \ar[d]^{f\times f} 
+		& m_1+m_2 \ar[d]^{f} \\
+		\jump{m_1\neq0}\times \jump{m_2\neq0} \ar[r]^{m_\lor}
+		& \jump{m_1\neq0}\lor\jump{m_2\neq0}=\jump{m_1+m_2\neq0}
+	}\end{equation*}
+	\begin{equation*}\xymatrix@C+2pc{
+		m_1\times m_2 \ar[r]^{m_\myspace} \ar[d]^{f\times f} 
+		& m_1m_2 \ar[d]^{f} \\
+		\jump{m_1\neq0}\times \jump{m_2\neq0} \ar[r]^{m_\land}
+		& \jump{m_1\neq0}\land\jump{m_2\neq0}=\jump{m_1m_2\neq0}
+	}\end{equation*}
+	したがって、自然数を係数とする半モジュールで作られた理論はそのまま
+	or-andブーリアンを係数とする理論に移行できると思われる。
+	逆の写像$\mybf{B}\to\mybf{N}$では半環準同型は多分存在しない。
+	したがって、or-andブーリアンを係数とする半モジュールで作られた理論
+	は自然数を係数とする理論へ移行することはできないと思われる。
+
+	or-andブーリアンは$\set{0,1=\text{いっぱい}}$とみることができる。
+	これを拡張して、$2\le n\in\mybf{N}$に対して、
+	$\myop{Max}_n=\set{0,1,n-1=\text{いっぱい}}$を考えてみる。
+	$\myop{Max}_n$に演算$+_n$と$\myspace_n$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		p\square_nq=\myop{max}_n(p\square q)
+		\quad\text{for all }p,q\in\myop{Max}_n,\;\square\in \set{+,\myspace}
+	\end{split}\end{equation*} %}
+	ここで、$\myop{max}_np=\max(n\times p)$とした。
+	可換図で書くと、射影$\pi_n:\mybf{N}\to\myop{Max}_n$と
+	埋め込み$\iota_n:\myop{Max}_n\to\mybf{N}$
+	\begin{equation*}\begin{split} %{
+		\pi_n p &= \myop{max}_np \quad\text{for all }p\in \mybf{N} \\
+		\iota_n p &= p \quad\text{for all }p\in \myop{Max}_n \\
+	\end{split}\end{equation*} %}
+	を使って、次のような畳み込みで$\square_n$を定義したことになる。
+	\begin{equation*}\xymatrix@C+1pc{
+		\mybf{N}\times \mybf{N} \ar[d]^{\myhere\square\myhere}
+			& \myop{Max}_n\times \myop{Max}_n 
+			\ar@{.>}[d]^{\myhere\square_n\myhere}
+			\ar[l]_{\iota_n\times \iota_n} \\
+		\mybf{N} \ar[r]^{\pi_n} & \myop{Max}_n
+	}\end{equation*}
+	$\square_n$は畳み込みで定義されているから結合的になることはわかる。
+	加法$+_n$に関しては次のようになり、$\pi_n$がモノイド準同型となることが
+	わかる。
+	\begin{equation*}\begin{split} %{
+		(\myop{max}_np)+_n(\myop{max}_nq) &= \begin{cases}
+			p+q, &\text{ if }p+q\le n \\
+			\myop{max}_n(n+n) = n &\text{ else }n\le p\text{ and }n\le q \\
+			\myop{max}_n(n+q) = n &\text{ else }n<p\text{ and }q<n  \\
+			\myop{max}_n(p+n) = n &\text{ else }p<n\text{ and }n<q  \\
+			\myop{max}_n(p+q) = n &\text{ otherwise }(p<n\text{ and }q<n) \\
+		\end{cases} \\
+		&= \myop{max}_n(p+q) \quad\text{for all }p,q\in\mybf{N}
+	\end{split}\end{equation*} %}
+	乗法$\myspace_n$に関しては次のようになり、$\pi_n$がモノイド準同型となる
+	ことがわかる。
+	\begin{equation*}\begin{split} %{
+		(\myop{max}_np)\myspace_n(\myop{max}_nq) &= \begin{cases}
+			pq, &\text{ if }pq\le n \\
+			\myop{max}_n(n^2) = n &\text{ else }n\le p\text{ and }n\le q \\
+			\myop{max}_n(nq) = \jump{0<q}n &\text{ else }n<p\text{ and }q<n  \\
+			\myop{max}_n(pn) = \jump{0<p}n &\text{ else }p<n\text{ and }n<q  \\
+			\myop{max}_n(pq) = n &\text{ otherwise }(p<n\text{ and }q<n) \\
+		\end{cases} \\
+		&= \myop{max}_n(pq) \quad\text{for all }p,q\in\mybf{N}
+	\end{split}\end{equation*} %}
+	したがって、射影$\pi_n$が半環準同型となることがわかる。
+%s1:いっぱい環}
+
+\section{一見して同じとわからない正規表現}\label{s1:一見して同じとわからない正規表現} %{
+	or-andブーリアン係数では、次の異なる二つのBNFは同一の正規表現$(ab)^*a$
+	を与えているように見える。
+	\begin{equation*}\begin{split} %{
+		x = a + abx,\quad y = a + yby
+	\end{split}\end{equation*} %}
+	$x$に関しては次のようになり、$x=(ab)^*a$とわかる。
+	\begin{equation*}\begin{split} %{
+		(1-ab)x=a \implies x = \frac{1}{1-ab}a = (ab)^*a
+	\end{split}\end{equation*} %}
+	$y$に関しては次のようになる。
+	\begin{equation*}\begin{split} %{
+		y=a+(a+yby)b(a+yby)=a+aba+abyby+ybyba+ybybyby
+	\end{split}\end{equation*} %}
+	$x=y$だとすると、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		a+ab(ab)^*a = (ab)^*a = a+(ab)^*ab(ab)^*a
+	\end{split}\end{equation*} %}
+	したがって、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		1+ab(ab)^* = (ab)^* = 1+(ab)^*ab(ab)^*
+	\end{split}\end{equation*} %}
+	一般化すると、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		1+xx^* = x^* = 1+x^*xx^*
+	\end{split}\end{equation*} %}
+	冪等ブーリアンだと、$(x^*)^2=x^*$が成り立つのではないだろうか？
+	冪等性を仮定せずに計算してみる。
+	\begin{equation}\label{eq:ハミルトニアンに相似な式}\begin{split} %{
+		(f^*)^2 &= (1+ f + f^2 + \cdots)^2 \\
+		&= 1 + (1f+f1) + (1f^2+ff+f^21) \\
+		&\;+ (1f^3+ff^2+f^2f+f^31) + \cdots \\
+		&= 1 + 2f + 3f^2 + 4f^3 + \cdots \\
+		&= \sum_{k\in\mybf{N}}(k+1)f^k \quad\text{for all }f\in \mybf{C}WA
+	\end{split}\end{equation} %}
+	確かに冪等ブーリアンだと、$(x^*)^2=x^*$が成り立つ。
+	したがって、最初の問題、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 次の$x$と$y$は等しいか？
+		\begin{equation*}\begin{split} %{
+			x &= a + (ab)^*x \\
+			y &= a + yby \\
+		\end{split}\end{equation*} %}
+	\end{itemize} %}
+	という問題に対する解答は得られて、次のような答えになる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 冪等ブーリアン係数であれば、$((ab)^*)^2=(ab)^*$が成り立つから
+		$x$と$y$は等しい。
+		\item さらに、次の式も成り立つ。
+		\begin{equation*}\begin{split} %{
+			x &= (ab)^*a \\
+			&= a + abx \\
+			&= a + xbx \\
+			&= a + xbx + xbxbx \\
+			&= \cdots \\
+		\end{split}\end{equation*} %}
+	\end{itemize} %}
+
+	式\eqref{eq:ハミルトニアンに相似な式}のべき乗を一般化してみる。
+	単語の連結積$m$とその転置$\Delta$を用いると次のようになる。
+	\begin{equation}\label{eq:単語に対するハミルトニアンを用いた式}\begin{split} %{
+		(a^*)^{n+1} &= (1+ a + a^2 + \cdots)^{n+1} \\
+		&= \sum_{k\in\mybf{N}}m^n\Delta^na^k
+		\quad\text{for all }a\in A,\;n\in\mybf{N}
+	\end{split}\end{equation} %}
+	余積$\Delta^n$は与えられた単語を$n+1$個の単語に分割する方法の列挙である。
+	$\Delta^na^k$は$(1+a+a^2+\cdots+a^k)^{n+1}$から$a^k$の項をピックアップ
+	する方法の列挙に対応する。
+
+	式\eqref{eq:単語に対するハミルトニアンを用いた式}に線形写像
+	$f:\mybf{C}A\to \mybf{C}WA$から誘導される代数射
+	$f_*:\mybf{C}WA\to\mybf{C}WA$
+	\begin{equation*}\begin{split} %{
+		f_*1_W &= 1_W \\
+		f_*[a_1a_2\cdots a_m] &= (fa_1)(fa_2)\cdots(fa_m)
+		\quad\text{for all }a_1,a_2,\dots,a_m\in A \\
+	\end{split}\end{equation*} %}
+	を適用すると、$m^n\Delta^n[a^k]=([a^k]^\dag m^n\Delta^n[a^k])[a^k]$となる
+	ことに注意して、次のようになる。
+	\begin{equation*}\begin{split} %{
+		f_*\bigl([a]^*\bigr)^{n+1} &= \bigl((fa)^*\bigr)^{n+1} \\
+		&= \sum_{k\in\mybf{N}}\bigl([a^k]^\dag m^n\Delta^n[a^k]\bigr)(fa)^k
+		\quad\text{for all }a\in A,\;n\in\mybf{N} \\
+	\end{split}\end{equation*} %}
+	したがって、式\eqref{eq:単語に対するハミルトニアンを用いた式}を一般化した
+	次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		(f^*)^{n+1} 
+		&= \sum_{k\in\mybf{N}}c^{n+1}_kf^k
+		\quad\text{for all }f\in\mybf{C}WA,\; n\in\mybf{N} \\
+		c^{n+1}_k
+		&= [a^k]^\dag m^n\Delta^n[a^k]
+		\quad\text{for all }a\in A,\; n\in\mybf{N},\;k\in\mybf{N} \\
+	\end{split}\end{equation*} %}
+	ここで、定数$c^{n+1}_k$を定めるために使われている$[a^k]$は長さ$k$の単語
+	であれば何でもよい。任意の長さ$k$の単語$w_1,w_2\in W_kA$に対して
+	$w_1^\dag m^n\Delta^nw_1=w_2^\dag m^n\Delta^nw_2$が成り立つ。
+%s1:一見して同じとわからない正規表現}
+
 \section{領域分割のパターン}\label{s1:領域分割のパターン} %{
 	集合$X$から集合$Y$への写像$f$が与えられたとき、写像$f$を分割していって、
 	$f$の計算をより簡単な計算に帰着させることがよく行われる。
@@ -36,7 +211,7 @@
 			RA\otimes RA \ar[rd]_{m} & RA \ar[l]_{\Delta} \ar[d]^{m\Delta} \\
 			& RA \\
 		}	= \xymatrix@C+2pc{
-			RA\otimes RA \ar[r]^{m} \ar[d]^{\widehat{\Delta}f} 
+			RA\otimes RA \ar[r]^{m} \ar[d]^{\widehat{\Delta}f}
 				& RA \ar[d]^{f} \\
 			RA\otimes RA \ar[r]^{(m\Delta)^{-1}m} & RA \\
 		}
@@ -431,59 +606,3 @@
 	したがって、ここに書いている超対称モデルは、$V$が無限次元の時にのみ
 	意味を持つ。
 %s1:超対称性}
-
-\section{文字列作用のバックアップ}\label{s1:文字列作用のバックアップ} %{
-	転置$\myhere^t:\myop{end}(RWA)\to\myop{end}(RWA)$を積に適用すると、
-	任意の$w,w_1,w_2\in WA$に対して
-	$w^t(w_1*w_2)=(w_2^t*w)^tw_1=(w*w_1^t)^tw_2$により、
-	$R$線形写像$\myhere^t*:RWA\to \myop{end}(RWA)$と、
-	\begin{equation*}\begin{split} %{
-		[a_1a_2\cdots a_m]^t*[b_1b_2\cdots b_n]
-		&= \begin{cases} %{
-			c[b_{m+1}b_{m+2}\cdots b_n], &\text{ iff }m\le n \\
-			0, &\text{ otherwise } \\
-		\end{cases} \\ %}
-		&\quad\text{where}c=[a_1a_2\cdots a_m]^t[b_1b_2\cdots b_m] \\
-	\end{split}\end{equation*} %}
-	$*\myhere^t:RWA\to \myop{end}(RWA)$が定義される。
-	\begin{equation*}\begin{split} %{
-		[b_1b_2\cdots b_n]*[a_1a_2\cdots a_m]^t
-		&= \begin{cases} %{
-			c[b_{1}b_{2}\cdots b_{n-m}], &\text{ iff }m\le n \\
-			0, &\text{ otherwise } \\
-		\end{cases} \\ %}
-		&\quad\text{where}c=[a_1a_2\cdots a_m]^t[b_{n-m+1}b_{n-m+2}\cdots b_m]
-	\end{split}\end{equation*} %}
-	内積は余単位射$\epsilon_*$を使って次のように書ける。
-	\begin{equation*}\begin{split} %{
-		w_1^tw_2 = \epsilon_*(w_1^t*w_2) \quad\text{for all }w_1,w_2\in WA
-	\end{split}\end{equation*} %}
-	$\myop{end}(RWA)$は写像の合成$\myhere\myspace\myhere$を積とし、単位元を
-	恒等写像$\myid$とする$R$係数半代数となっている。$R$線形写像$\myhere^t*$
-	は逆順$R$半代数準同型
-	$(RWA,\beta_*,1_W)\to(\myop{end}(RWA),\beta_\myspace,\myid)$となる。
-	\begin{equation*}\begin{split} %{
-		(w_1*w_2)^t* &= w_2^t*w_1^t* \quad\text{for all }w_1,w_2\in WA \\
-		\because\quad w^t(w_1*w_2*w_3) &= \bigl((w_1*w_2)^t*w\bigr)^tw_3 \\
-			&= \bigl(w_2^t*w_1^t*w\bigr)^tw_3
-			\quad\text{for all }w,w_1,w_2,w_3\in WA
-	\end{split}\end{equation*} %}
-
-	$\Delta_\sqcup$の定義から次のようになる。
-	\begin{equation*}\begin{split} %{
-		w^t(w_1*w_2) &\simeq (\Delta_\sqcup w_1)^t(w_2\otimes w_3)\bigr) \\
-		&= \bigl((\Delta_{\sqcup(1)}w_1)^tw_2\bigr)
-			\bigl((\Delta_{\sqcup(2)}w_1)^tw_3\bigr) \\
-		&= \epsilon_*\bigl((\Delta_{\sqcup(1)}w_1)^t*w_2\bigr)
-			\epsilon_*\bigl((\Delta_{\sqcup(2)}w_1)^t*w_3\bigr) \\
-		&= \epsilon_*\Bigl(\bigl((\Delta_{\sqcup(1)}w_1)^t*w_2\bigr)
-			*\bigl((\Delta_{\sqcup(2)}w_1)^t*w_3\bigr)\Bigr)
-	\end{split}\end{equation*} %}
-	$w_1^t(w_2*w_3)\simeq (\Delta_\sqcup w_1)^t(w_2\otimes w_3)$
-	に適用すると、 任意の$w_1,w_2,w_3\in WA$に対して次のようになる。
-	\begin{equation*}\begin{split} %{
-		(\Delta_{\sqcup(2)}w_1)^t\biggl(\bigl((\Delta_{\sqcup(1)}w_1)*w_2\bigr)\otimes w_3\biggr)
-		\simeq w_1^t(w_2*w_3)
-		\simeq (\Delta_{\sqcup(1)}w_1)^t\biggl(w_2\otimes \bigl((\Delta_{\sqcup(2)}w_1)*w_3\bigr)\biggr)
-	\end{split}\end{equation*} %}
-%s1:文字列作用のバックアップ}
