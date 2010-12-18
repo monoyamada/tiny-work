@@ -1,0 +1,1242 @@
+\section{分配}\label{s1:分配} %{
+	$n$個の球を$k$個の箱に分配する仕方を考える。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 球が区別つく場合とつかない場合、
+		\item 箱が区別つく場合とつかない場合、
+		\item 空の箱を許すか許さないか
+	\end{itemize} %}
+	で状態空間が異なってくる。これらのバリエーションごとに個別に調べてみる。
+
+	\subsection{球と箱が区別がつく場合}\label{s2:球と箱が区別がつく場合} %{
+		\subsubsection{空の箱を許す場合}\label{s3:空の箱を許す場合} %{
+			この場合は、$n$個の球を$k$個の箱に分配する状態空間は、直積集合
+			$(1..k)^n$と集合同型になる。この状態空間は$1..n$から$1..k$への
+			写像全体と集合同型となる。
+		%s3:空の箱を許す場合}
+
+		\subsubsection{空の箱を許さない場合}\label{s3:球と箱が区別がつき空の箱を許さない場合} %{
+			この場合の、$n$個の球を$k$個の箱に分配する状態空間は、
+			$(1..k)^n$を$1..k$を文字とする文字列集合とみて、
+			文字列の中にすべての文字が含まれるものに制限したものになる。
+			$n$個の球を$k$個の箱に分配する空の箱を許さない場合の状態空間を
+			$[(1..k)^n]$とすると、$[(1..k)^n]$は次のように書ける。
+			\begin{equation*}\begin{split} %{
+				[(1..k)^n]
+				&= \set{w\in (1..k)^n
+					\bou 1\le \sharp_aw \quad\text{for all }a\in (1..k)}
+			\end{split}\end{equation*} %}
+			ここで、$\sharp$は文字数を数える写像で、
+			任意の有限集合$A$と$A$を文字とする文字列集合$WA$に対して次のように
+			定義した。
+			\begin{equation*}\begin{split} %{
+				\sharp: WA\times A &\to \mybf{N} \\
+				w\times a &\mapsto w\text{の中に含まれる}a\text{の数}
+			\end{split}\end{equation*} %}
+			状態空間$[(1..k)^n]$は$1..n$から$1..k$への$\myop{onto}$写像全体と
+			集合同型となる。
+			$n<k$の場合は、空の箱を許さない分配は不可能なので、$\bakko{(1..k)^n}$
+			は空集合となることに注意する。
+
+			状態空間$\bakko{(1..k)^n}$の大きさを調べてみる。まず、
+			簡単な例から始める。$\bakko{(1..2)^3}$の状態は次のようになり、
+			\begin{equation*}\begin{split} %{
+				(1..2)^3 &= \set{[111],[112],[121],[122],[211],[212],[221],[222]} \\
+				\bakko{(1..2)^3} &= \set{[112],[121],[122],[211],[212],[221]} \\
+				\bakko{\set{1}^3} &= \set{[111]} \\
+				\bakko{\set{2}^3} &= \set{[222]} \\
+			\end{split}\end{equation*} %}
+			空の箱を許す状態空間$(1..2)^3$が空の箱を許さない状態空間の直和で
+			書けることがわかる。
+			\begin{equation*}\begin{split} %{
+				(1..2)^3=[(1..2)^3]+[\set{1}^3]+[\set{2}^3]
+			\end{split}\end{equation*} %}
+			この関係を一般の場合に拡張する。
+			空の箱を許す状態空間$(1..k)^n$は、次のように空の箱を許さない状態空間
+			の直和で書ける。
+			\begin{equation*}\begin{split} %{
+				(1..k)^n &= 1\text{個の箱だけが空でない場合} \\
+				&+ 2\text{個の箱だけが空でない場合} \\
+				&+ \cdots \\
+				&+ k\text{個の箱だけが空でない場合} \\
+			\end{split}\end{equation*} %}
+			ただし、空でない$p$個の箱を選びだす仕方は$\binom{k}{p}$通りある。
+			冪集合を用いて書くこともできる。集合$A$に対するべき集合を$PA$と書き、
+			$PA$の部分集合で空集合を含まないものを$P_+A$と書く。
+			\begin{equation*}\begin{split} %{
+				P_+A = \set{x\in PA\bou x\neq \emptyset}
+			\end{split}\end{equation*} %}
+			すると、$(1..k)^n$は次のように空の箱を許さない状態空間の直和で書ける。
+			\begin{equation*}\begin{split} %{
+				(1..k)^n = \sum_{X\in P_+(1..k)}\bakko{X^n}
+			\end{split}\end{equation*} %}
+			したがって、任意の有限集合$A$に対して$\bakko{X^n}$の大きさを
+			$W_{\zettai{X}}^n$と書くと、任意の$k,n\in \mybf{N}_+$に対して
+			次の漸化式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				k^n = \cup_{X\in P_+(1..k)}\zettai{[X^n]} 
+				= \cup_{X\in P_+(1..k)}W_{\zettai{X}}^n
+				= \sum_{p\in1..k}\binom{k}{p}W_p^n
+			\end{split}\end{equation*} %}
+			この漸化式を行列の形で書くと次のようになる。
+			\begin{equation*}\begin{split} %{
+				K = CW
+			\end{split}\end{equation*} %}
+			ここで、$K,C,W$はそれぞれ次のように定義した。
+			\begin{equation*}\begin{split} %{
+				K = \begin{pmatrix}
+					k^n \\ (k-1)^n \\ \vdots \\ 1^n
+				\end{pmatrix} 
+				,\quad W = \begin{pmatrix}
+					W_k^n \\ W_{k-1}^n \\ \vdots \\ W_1^n
+				\end{pmatrix}
+				,\quad C = \begin{pmatrix}
+					\binom{k}{0} & \binom{k}{1} & \cdots & \binom{k}{k-1} \\
+					0 & \binom{k-1}{0} & \cdots & \binom{k-1}{k-2} \\
+					\vdots & \vdots & \cdots & \vdots \\
+					0 & 0 & \cdots & \binom{1}{0} \\
+				\end{pmatrix} 
+			\end{split}\end{equation*} %}
+			行列$C$の逆行列が求まれば$C^{-1}K$によって$W$が求まる。
+			$C$の行列式は$1$だから逆行列を持ち次のようになる。
+			\begin{equation*}\begin{split} %{
+				C^{-1} = \begin{pmatrix}
+					\binom{k}{0} & -\binom{k}{1} & \cdots & (-)^{k-1}\binom{k}{k-1} \\
+					0 & \binom{k-1}{0} & \cdots & (-)^{k-2}\binom{k-1}{k-2} \\
+					\vdots & \vdots & \cdots & \vdots \\
+					0 & 0 & \cdots & \binom{1}{0} \\
+				\end{pmatrix}
+			\end{split}\end{equation*} %}
+			したがって漸化式が解けて、任意の$k,n\in\mybf{N}_+$に対して
+			次のようになる。
+			\begin{equation}\label{eq:分配の大きさ}\begin{split} %{
+				W_k^n &= \begin{cases}
+					\widehat{W}_k^n, &\text{ iff }k\le n \\
+					0, &\text{ otherwise } \\
+				\end{cases} \\
+				\widehat{W}_k^n &= \sum_{p\in1..k}(-)^{k-p}\binom{k}{p}p^n
+			\end{split}\end{equation} %}
+
+			幸いなことに、数列$\set{W_k^n}_{k\le n\in\mybf{N}_+}$は生成関数を
+			もつ。式\eqref{eq:分配の大きさ}の$\widehat{W}_k^n$は、
+			任意の$k,n\in \mybf{N}$に対してそのまま定義される。
+			ただし、二項係数は次のように定義されるものとする。
+			\begin{equation*}\begin{array}{rcll} %{
+				p! &=& \begin{cases}
+					p(p-1)(p-2)\cdots1, &\text{ iff }0 < p \\
+					1, &\text{ otherwise } \\
+				\end{cases} &\quad\text{for all }p\in \mybf{N} \\
+				\binom{p}{q} &=& \begin{cases}
+					\frac{p!}{q!(p-q)!}, &\text{ iff }q\le p \\
+					0, &\text{ otherwise } \\
+				\end{cases} &\quad\text{for all }p,q\in \mybf{N} \\
+			\end{array}\end{equation*} %}
+			任意の$k\in\mybf{N}$に対して$\widehat{W}_k:\mybf{C}\to\mybf{C}$を
+			次のように定義する。
+			\begin{equation*}\begin{split} %{
+				\widehat{W}_kt
+				&= \sum_{n\in\mybf{N}}\frac{t^n}{n!}\widehat{W}_k^n \\
+				&= \sum_{n\in\mybf{N}}\frac{t^n}{n!}
+					\sum_{p\in1..k}(-)^{k-p}\binom{k}{p}p^n
+				= \sum_{n\in\mybf{N}}\frac{t^n}{n!}
+					\sum_{p\in0..k}(-)^{k-p}\binom{k}{p}p^n \\
+				&= \sum_{p\in0..k}(-)^{k-p}\binom{k}{p}
+					\sum_{n\in\mybf{N}}\frac{t^n}{n!}p^n
+				= \sum_{p\in0..k}(-)^{k-p}\binom{k}{p}e^{pt} \\
+				&= (e^t-1)^k \\
+			\end{split}\end{equation*} %}
+			したがって、式\eqref{eq:分配の大きさ}は次のように書くことができる。
+			\begin{equation}\label{eq:分配の大きさその二}\begin{split} %{
+				W_k^n &= \begin{cases}
+					\lim_{t\to0}\frac{1}{n!}\partial_t^n(\widehat{W}_kt)
+						,&\text{ iff }k\le n \\
+					0, &\text{ otherwise } \\
+				\end{cases} \\
+				\widehat{W}_kt &= (e^t-1)^k \\
+			\end{split}\end{equation} %}
+
+			状態空間を文字列的な見方をして漸化式を導く。
+			文字列$w\in\bakko{(1..k)^{n+1}}$から最後の一文字$a$を取り除いた
+			文字列$x$は（$x$と$[a]$を連結したら$w$になる）、
+			$x\in\bakko{(1..k)^n}$となる場合と
+			$x\in\bakko{\bigl((1..k)-\set{a}\bigr)^n}$となる場合がある。
+			式で書くと次のようになる。
+			\begin{equation*}\begin{split} %{
+				A &= 1..k \\
+				\bakko{A^{n+1}} &= \sum_{a\in A}
+					\biggl(\bakko{A^n}+\bakko{\bigl(A-\set{a}\bigr)^n}\biggr)*[a]
+			\end{split}\end{equation*} %}
+			したがって、任意の$k\le n\in \mybf{N}_+$に対して次の漸化式が成り立つ。
+			\begin{equation}\label{eq:分配の大きさの漸化式}\begin{split} %{
+				\frac{1}{k+1}W_{k+1}^{n+1} = W_{k+1}^n + W_k^n
+			\end{split}\end{equation} %}
+			この漸化式は式\eqref{eq:分配の大きさその二}からも導くことができる。
+			\begin{equation*}\begin{split} %{
+				\frac{1}{k+1}\partial_t^{n+1}(e^t-1)^{k+1}
+				&= \partial_t^n\biggl(e^t(e^t-1)^k\biggr)
+				= \partial_t^n\biggl((e^t-1)^{k+1}+(e^t-1)^k\biggr) \\
+				&= \partial_t^n(e^t-1)^{k+1}+\partial_t^n(e^t-1)^k \\
+			\end{split}\end{equation*} %}
+			この式で$t\to0$としたものが漸化式\eqref{eq:分配の大きさの漸化式}になる。
+		%s3:空の箱を許さない場合}
+	%s2:球と箱が区別がつく場合}
+
+	\subsection{球が区別つき、箱が区別つかない場合}\label{s2:球が区別つき、箱が区別つかない場合} %{
+		\subsubsection{空の箱を許す場合}\label{s3:空の箱を許す場合} %{
+			この場合の状態空間は、球と箱の区別がつき空の箱を許す場合の状態空間を
+			箱ついて対称化すれば得られれる。式で書くと、
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $S_n$を$n$次対称群とし、
+				\item 状態空間$(1..k)^n$に次の同値関係$\sim_{\sqcup}$を定義し、
+				\begin{equation*}\begin{split} %{
+					[a_1a_2\cdots a_n] \sim_{\sqcup} [b_1b_2\cdots b_n]
+					\Leftrightarrow \text{there exists }\sigma\in S_n \text{ such that } \\
+					[a_1a_2\cdots a_n] = [(\sigma b_1)(\sigma b_2)\cdots (\sigma b_n)]
+				\end{split}\end{equation*} %}
+				\item $(1..k)^n$を$\sim_{\sqcup}$で剰余したものが求める状態空間となる。
+			\end{itemize} %}
+			$(1..k)^n/\sim_{\sqcup}$の大きさは、単純に$(1..k)^n$の大きさを$S_k$の
+			大きさで割ったものにならない。つまり、一般には次のようになる。
+			\begin{equation*}\begin{split} %{
+				\frac{\zettai{(1..k)^n}}{\zettai{S_k}} 
+				= \frac{k^n}{k!}\le \zettai{(1..k)^n/\sim_{\sqcup}}
+			\end{split}\end{equation*} %}
+			状態空間$(1..k)^n$に$S_k$の作用で不変な状態があるためである。
+			例えば、$(1..3)^3$の場合、状態$[123]$の同値類は次の$6=\zettai{S_3}$個
+			になるのに対して、
+			\begin{equation*}\begin{split} %{
+				[123],[132],[213],[231],[312],[321]
+			\end{split}\end{equation*} %}
+			状態$[111]$の同値類は次の$3$個だけである。
+			\begin{equation*}\begin{split} %{
+				[111],[222],[333]
+			\end{split}\end{equation*} %}
+			これは、状態$[123]$を不変にする$S_3$の作用が恒等写像だけなのに対して、
+			状態$[111]$は作用$\binom{123}{132}\in S_3$で不変になることに
+			対応している。
+
+			$(1..k)^n/\sim_{\sqcup}$の大きさを直接計算することが難しいので、
+			空の箱を許さない場合の状態空間を使って計算することを考える。
+			\begin{equation*}\begin{split} %{
+				(1..k)^n/\sim_{\sqcup} &= 1\text{個の箱だけが空でない場合} \\
+				&+ 2\text{個の箱だけが空でない場合} \\
+				&+ \cdots \\
+				&+ k\text{個の箱だけが空でない場合} \\
+			\end{split}\end{equation*} %}
+			空の箱を許さない場合の状態空間を$\braket{S^n}=[S^n]/\sim_{\sqcup}$、
+			$\braket{S^n}$の大きさを$S_{\zettai{S}}^n$と書く。
+			すると、状態空間$(1..k)^n/\sim_{\sqcup}$は次のように書くことができる。
+			\begin{equation*}\begin{split} %{
+				(1..k)^n/\sim_{\sqcup} = \sum_{p\in(1..k)}\braket{(1..p)^n}
+			\end{split}\end{equation*} %}
+			したがって、$(1..k)^n/\sim_{\sqcup}$の大きさは次のように書くことが
+			できる。
+			\begin{equation*}\begin{split} %{
+				\zettai{(1..k)^n/\sim_{\sqcup}} = \sum_{p\in(1..k)}S_p^n
+			\end{split}\end{equation*} %}
+		%s3:空の箱を許す場合}
+
+		\subsubsection{空の箱を許さない場合}\label{s3:空の箱を許さない場合} %{
+			この場合も、空の箱を許す場合\ref{s3:空の箱を許さない場合}と同様に、
+			箱が区別つく場合の状態空間を箱について対称化すれば、求める状態空間
+			が得られる。定義より状態空間$[(1..k)^n]$に$S_k$不変な状態はないので、
+			\begin{equation}\label{eq:空箱を許さない場合の効果的な箱変換}\begin{split} %{
+				\sigma w = w \implies \sigma = \myid
+				\quad\text{for all }w\in\bakko{(1..k)^n},\;\sigma\in S_k
+			\end{split}\end{equation} %}
+			状態空間$\braket{(1..k)^n}$の大きさ$S_k^n$は、単純に
+			$\bakko{(1..k)^n}$の大きさを$S_k$の大きさで割ったものになる。
+			\begin{equation}\label{eq:第二種スターリング数}\begin{split} %{
+				S_k^n = \begin{cases}
+					\frac{1}{k!}W_k^n, &\text{ iff }k\le n \\
+					0, &\text{ otherwise } \\
+				\end{cases} \quad\text{for all }k,n\in \mybf{N}
+			\end{split}\end{equation} %}
+			空の箱を許さない場合は、空の箱を許す場合と異なり、箱が区別つく場合の
+			状態空間に箱の変換群が効果的に作用している
+			（式\eqref{eq:空箱を許さない場合の効果的な箱変換}）
+			ことが大きさの計算が容易になっているミソである。
+
+			ここで求めた状態数$S_k^n$のことを第二種スターリング数という。
+
+			\begin{definition}[第二種スターリング数（Stirling number of 2nd kind）]\label{def:第二種スターリング数} %{
+				式\eqref{eq:第二種スターリング数}の$S_k^n$を第二種スターリング数
+				という。
+			\end{definition} %def:第二種スターリング数}
+		%s3:空の箱を許さない場合}
+	%s2:球が区別つき、箱が区別つかない場合}
+
+	\subsection{球が区別つかず、箱が区別つく場合}\label{s2:球が区別つかず、箱が区別つく場合} %{
+		空の箱を許さない場合の方が簡単なので、空の箱を許さない場合から始める。
+		\subsubsection{空の箱を許さない場合}\label{s3:空の箱を許さない場合} %{
+			$n$個の区別のつかない球を、$k$個の区別のつく箱に入れる状態空間
+			$\Gamma_k^n$は、
+			$n=a_1+a_2+\cdots+a_k$となる$\mybf{N}_+$を文字とする長さ$k$の文字列
+			$[a_1a_2\cdots a_k]$全体となる。式で書くと次のようになる。
+			\begin{equation*}\begin{split} %{
+				\Gamma_k^n = \set{[a_1a_2\cdots a_k]\in \mybf{N}_+^k
+					\bou a_1+a_2+\cdots+a_k=n}
+			\end{split}\end{equation*} %}
+			$\Gamma_k^n$の大きさは次のようにして求めることができる。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $1$の間に$\square$を挟んで次のように書く。
+				\begin{equation*}\begin{split} %{
+					(\underbrace{1\square 1\square \cdots \square 1}
+						_{1\text{が}n\text{個}})
+				\end{split}\end{equation*} %}
+				\item $\square$に$+$または$,$を書き込むと$\Gamma_k^n$の状態となる。
+			\end{itemize} %}
+			例えば$n=3$であれば次のようになる。
+			\begin{equation*}\begin{array}{rclclcl} %{
+				(1\square 1\square 1) 
+				&\xrightarrow{(++)}& (1+1+1) &=& (3) &\in& C_1^3 \\
+				&\xrightarrow{(+,)}& (1+1, 1) &=& (2, 1) &\in& C_2^3 \\
+				&\xrightarrow{(,+)}& (1, 1+1) &=& (1, 2) &\in& C_2^3 \\
+				&\xrightarrow{(,,)}& (1, 1, 1) &=& (1, 1, 1) &\in& C_3^3 \\
+			\end{array}\end{equation*} %}
+			一般の$\Gamma_k^n$では、$n-1$個の$\square$の中から$k-1$個を選択して
+			そこに$,$を書き込むと$\Gamma_k^n$の状態ができる。
+			したがって、$\Gamma_k^n$の大きさは次のようになることがわかる。
+			\begin{equation*}\begin{split} %{
+				\zettai{\Gamma_k^n} = \begin{cases}
+					\binom{n-1}{k-1}, &\text{ iff } k\le n \\
+					0, &\text{ otherwise } \\
+				\end{cases} \quad\text{for all }k,n\in \mybf{N}_+
+			\end{split}\end{equation*} %}
+			また、$\sum_{k\in(1..n)}\Gamma_k^n$は、$+$と$,$を文字とする長さ$n-1$
+			の文字列全体と集合同型だから、次の式が成り立つことがわかる。
+			\begin{equation*}\begin{split} %{
+				2^{n-1} = \sum_{k\in(1..n)}\zettai{\Gamma_k^n}
+			\end{split}\end{equation*} %}
+
+			$\Gamma_k^n$の状態を$n$の合成という。
+
+			\begin{definition}[自然数の合成（Compositioin）]\label{def:自然数の合成（Compositioin）} %{
+				$\Gamma_k^n$の状態を長さ$n$の$k$の合成という。
+			\end{definition} %def:自然数の合成（Compositioin）}
+		%s3:空の箱を許さない場合}
+		\subsubsection{空の箱を許す場合}\label{s3:空の箱を許す場合} %{
+			この場合の状態数は巧妙な方法で求められる。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $k$個の箱に一つづつ球を入れた状態でスタートする。
+				\item $n$個の球を箱に分配する。
+				\item すると、$k$個すべての箱が空でなく、$n$個の球を箱に分配する
+				状態数と同数の状態が出現する。
+			\end{itemize} %}
+			したがって、$n$個の球を$k$個の箱に空の箱を許して分配する状態数は
+			$\zettai{\Gamma_k^{n+k}}$となる。
+
+			空の箱を許す状態空間を空の箱を許さない状態空間の直和で表すことで
+			二項係数に関する恒等式が導かれる。次の式が成り立つから、
+			\begin{equation*}\begin{split} %{
+				\text{空の箱を許す場合} &= 1\text{個の箱だけが空でない場合} \\
+				&+ 2\text{個の箱だけが空でない場合} \\
+				&+ \cdots \\
+				&+ k\text{個の箱だけが空でない場合} \\
+			\end{split}\end{equation*} %}
+			次の式が成り立つことがわかる。
+			\begin{equation*}\begin{split} %{
+				\zettai{\Gamma_k^{n+k}} = \sum_{p\in(1..k)}\zettai{\Gamma_p^n}
+			\end{split}\end{equation*} %}
+			つまり、任意の$k\le n\in \mybf{N}_+$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				\binom{n+k-1}{k-1} = \sum_{p\in(1..k)}\binom{n-1}{p-1}
+			\end{split}\end{equation*} %}
+		%s3:空の箱を許す場合}
+	%s2:球が区別つかず、箱が区別つく場合}
+
+	\subsection{まとめ}\label{s2:まとめ} %{
+		$n$個の球を$k$個の箱に分配する仕方を次のバリエーションごとに調べた。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 球が区別つく場合とつかない場合
+			\item 箱が区別つく場合とつかない場合
+			\item 空の箱を許すか許さないか
+		\end{itemize} %}
+		それらをまとめると、$n$個の球を$k$個の箱に分配する状態数は次のように
+		なる。
+		\begingroup
+		\renewcommand{\arraystretch}{1.5}
+		\begin{equation*}\begin{array}{cccc} %{
+			\text{球の区別} & \text{箱の区別} & \text{空箱} & \text{状態数} \\
+			\text{有り} & \text{有り} & \text{有り} & k^n \\
+			\text{有り} & \text{有り} & \text{無し} & W_k^n \\
+			\text{有り} & \text{無し} & \text{有り} & \sum_{k\in(1..n)}\frac{1}{k!}W_k^n \\
+			\text{有り} & \text{無し} & \text{無し} & \frac{1}{k!}W_k^n \\
+			\text{無し} & \text{有り} & \text{有り} & \binom{n+k-1}{k-1} \\
+			\text{無し} & \text{有り} & \text{無し} & C_k^n \\
+		\end{array}\end{equation*} %}
+		ここで、$W_k^n$と$C_k^n$はそれぞれ次のように定義される。
+		\begin{equation*}\begin{split} %{
+			W_k^n &= \begin{cases}
+				\sum_{p\in(1..k)}(-)^{k-p}\binom{k}{p}p^n, &\text{ iff }k\le n \\
+				0, &\text{ otherwise } \\
+			\end{cases} \\
+			C_k^n &= \begin{cases}
+				\binom{n-1}{k-1}, &\text{ iff }k\le n \\
+				0, &\text{ otherwise } \\
+			\end{cases} \\
+		\end{split}\end{equation*} %}
+		\endgroup
+	%s2:まとめ}
+%s1:分配}
+
+\section{分配と正規積}\label{s1:分配と正規積} %{
+	微分$x\partial_x$と第二種スターリング数$S_k^n$の間に次の関係が成り立つ。
+	\begin{equation*}\begin{split} %{
+		(x\partial_x)^n = \sum_{k\in(1..n)}S_k^nx^k\partial_x^k
+	\end{split}\end{equation*} %}
+	この式の右辺は微分$x\partial_x$の正規積だから、微分$x\partial_x$のべき乗
+	を正規積の和で書き直したときの係数が第二種スターリング数になるということ
+	である。第二種スターリング数$S_k^n$は$n$個の区別のつく球を$k$個の区別の
+	つかない箱に分配する仕方の数である。微分$x\partial_x$のべき乗を正規積に
+	書き直す際に第二種スターリング数が現れる理由を考えてみる。
+
+	\begin{todo}[正規積とスターリング数]\label{todo:正規積とスターリング数} %{
+		次の式において第二種スターリング数が現れる理由を考えよ。
+		\begin{equation*}\begin{split} %{
+			(x\partial_x)^n = \sum_{k\in(1..n)}S_k^n:(x\partial_x)^k:
+		\end{split}\end{equation*} %}
+	\end{todo} %todo:正規積とスターリング数}
+
+	まず、$n$個の区別のつく球を$k$個の区別のつかない箱に分配する仕方を列挙
+	してみる。次の方法で列挙する。
+	\begin{equation*}\begin{split} %{
+		& \xrightarrow{\text{球}1} \young(1) \\
+		\young(1) & \xrightarrow{\text{球}2} \young(1,2) + \young(12) \\
+		\young(1,2) & \xrightarrow{\text{球}3} \young(1,2,3) + \young(13,2) + \young(1,23) \\
+		\young(12) & \xrightarrow{\text{球}3} \young(12,3) + \young(123) \\
+	\end{split}\end{equation*} %}
+	列挙を加法の記号$+$を使って表している。数字が球、ヤング盤もどきの列が箱を
+	表す。例えば、$\young(13,2)$は箱$1$に球$1$と$3$、箱$2$に球$2$が分配された
+	状態を表す。列挙の方法は次の手順で行われる。
+
+	\begin{procedure}[箱に球を分配する手順]\label{proc:箱に球を分配する手順} %{
+		$n$個の球の分配が終わったとし、$n+1$番目のの玉を次方法で追加する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 新たに箱を一個追加してその箱に球を入れたものを$+$して、
+			\begin{equation*}\begin{split} %{
+				\young(1,2) & \xrightarrow{\text{球}3} \young(1,2,3)
+			\end{split}\end{equation*} %}
+			\item 既存の各箱に球を追加したものを$+$する。
+			\begin{equation*}\begin{split} %{
+				\young(1,2) & \xrightarrow{\text{球}3} \young(13,2) + \young(1,23)
+			\end{split}\end{equation*} %}
+		\end{itemize} %}
+		この手順で列挙された$n$個の球を$k$個の箱に分配する仕方の集合を
+		$\mycal{P}_k^n$と書くことにする。
+		\begin{equation*}\begin{split} %{
+			\mycal{P}_1^1 = \young(1)
+			,\quad \mycal{P}_1^2 = \young(12)
+			,\quad \mycal{P}_2^2 = \young(1,2) \\
+			\mycal{P}_1^3 = \young(123)
+			,\quad \mycal{P}_2^3 = \young(13,2) + \young(1,23) + \young(12,3)
+			,\quad \mycal{P}_3^3 = \young(1,2,3) \\
+		\end{split}\end{equation*} %}
+		$\mycal{P}_2^3$で箱の順序を無視して見ると、$3$個の区別のつく球を
+		$2$個の区別のつかない箱に空の箱を許さずに分配する仕方の集合
+		$\bakko{(1..3)^2}$（節\ref{s3:球と箱が区別がつき空の箱を許さない場合}）
+		になっている。$\mycal{P}_2^3$は、$\bakko{(1..3)^2}$の箱を、箱の中に
+		入っている最も小さな数字によって箱を上から下に並べたものになっている。
+	\end{procedure} %proc:箱に球を分配する手順}
+
+	\begin{proposition}[$\mycal{P}_k^n$と$(1..k)^n$は集合同型] %{
+		任意の$k\le n\in \mybf{N}_+$に対して$\mycal{P}_k^n$と$(1..k)^n$は
+		集合同型となる。
+	\end{proposition}
+	\begin{proof} %{
+		漸化式\eqref{eq:分配の大きさの漸化式}の順序を図式化した次の順序の
+		帰納法で示す。
+		\begin{equation*}\xymatrix@R=8pt@C=8pt{
+			\mycal{P}_1^1 \ar[d] \ar[dr] \\
+			\mycal{P}_1^2 \ar[d] \ar[dr] & \mycal{P}_2^2 \ar[d] \ar[dr] \\
+			\mycal{P}_1^3 \ar[d] \ar[dr] & \mycal{P}_2^3 \ar[d] \ar[dr] & \mycal{P}_3^3 \ar[d] \ar[dr] \\
+			& & & \\
+		}\end{equation*}
+		$\zettai{\mycal{P}_1^1}=\zettai{(1..1)^1}=1$が成り立つ。
+		ある$n\in \mybf{N}_+$と任意の$k\le n$に対して命題が成り立つとする。
+		上の図で斜めの矢印$\mycal{P}_k^n\to\mycal{P}_{k+1}^{n+1}$は新規に箱を
+		付け足し球$n+1$を新規の箱に入れる仕方を表す。
+		下への矢印$\mycal{P}_k^n\to\mycal{P}_{k}^{n+1}$は既存の箱に球$n+1$
+		を入れる仕方を表す。$\set{\mycal{P}_k^n}_{k,n\in \mybf{N}_*}$の
+		構成方法（\ref{proc:箱に球を分配する手順}）により、
+		$n+1$でも命題が成り立つことが示される。
+	\end{proof} %}
+
+	この命題により、以下では$\mycal{P}_k^n$を$\bakko{(1..k)^n}$の元を基底
+	とする自然数係数自由半モジュール空間とする。
+	また、任意の$n\in \mybf{N}_+$に対して
+	$\mycal{P}_+^n=\sum_{k\in(1..n)}\mycal{P}_k^n$、
+	$\mycal{P}_+^+=\sum_{n\in\mybf{N}_+}\mycal{P}_+^+$と書く。
+	球を追加する操作\ref{proc:箱に球を分配する手順}を線形写像として
+	$\myop{grow}:\mycal{P}_+^+\to\mycal{P}_+^+$と書く。
+	\begin{equation}\label{eq:分配の場合の自然な成長}\begin{split} %{
+		\young(1) & \xrightarrow{\myop{grow}} \young(1,2) + \young(12) \\
+		\young(1,2) & \xrightarrow{\myop{grow}} \young(1,2,3) + \young(13,2)
+			+ \young(1,23) \\
+		\young(12) & \xrightarrow{\myop{grow}} \young(12,3) + \young(123) \\
+	\end{split}\end{equation} %}
+	ここでの記号$+$は列挙ではなく半モジュールの加法として解釈する。
+%% 以下で使われていない
+%	さらに、$n$次$k$行ヤング図形（$n$升目が$k$個ある行のヤング図形）
+%	を基底とする自然数係数自由半モジュール空間を$\mycal{Y}_k^n$
+%	と書き、線形写像$\myop{diagram}:\mycal{P}_k^n\to\mycal{Y}_k^n$を
+%	基底の数字を空白にしてヤング図形にする操作とする。
+%	\begin{equation*}\begin{split} %{
+%		\yng(2,1) &= \myop{diagram}\young(13,2)
+%			= \myop{diagram}\young(1,23) = \myop{diagram}\young(12,3) \\
+%		\yng(3,1) & = \myop{diagram}\young(134,2)
+%			= \myop{diagram}\young(1,234) = \myop{diagram}\young(124,3) \\
+%			&= \myop{diagram}\young(123,4) \\
+%		\yng(2,2) & = \myop{diagram}\young(13,24)
+%			= \myop{diagram}\young(14,23) = \myop{diagram}\young(12,34) \\
+%	\end{split}\end{equation*} %}
+
+	以上の準備のもとに、もともとの課題\ref{todo:正規積とスターリング数}に
+	取り組むことにする。問題を少し一般化して原点で正則な微分
+	$v=v^\mu\partial_\mu$のべき乗を正規積の和で表すことを考える。
+	低次の項を書いてみると次のようになる。
+	\begin{equation*}\begin{split} %{
+		v^2 &= :v^2: + v\rhd v \\
+		v^3 &= :v^3: + :(v\rhd v)v: + :v(v\rhd v): + :(v\rhd v)v: \\
+		&\quad + :v^2:\rhd v + v\rhd v\rhd v \\
+	\end{split}\end{equation*} %}
+	ここで、$:\cdots:$は通常の正規積で、作用素$-\rhd$は次のように定義される。
+	\begin{equation*}\begin{split} %{
+		(u^{\mu_1\mu_2\cdots\mu_n}
+			\partial_{\mu_1}\partial_{\mu_2}\cdots\partial_{\mu_n})\rhd
+			(v^{\nu_1\nu_2\cdots\nu_n}
+			\partial_{\nu_1}\partial_{\nu_2}\cdots\partial_{\nu_n}) \\
+		= u^{\mu_1\mu_2\cdots\mu_n}
+		 (\partial_{\mu_1}\partial_{\mu_2}\cdots\partial_{\mu_n}
+			v^{\nu_1\nu_2\cdots\nu_n})
+			\partial_{\nu_1}\partial_{\nu_2}\cdots\partial_{\nu_n} 
+	\end{split}\end{equation*} %}
+	また、$u\rhd v\rhd w=u\rhd(v\rhd w)$という優先順位で略記している。
+	正規積は積であるが、$\rhd$は積ではなく、
+	\begin{equation*}\begin{split} %{
+		::uv:w: &= :u:vw:: \\
+		(u\rhd v)\rhd w &\neq u\rhd (v\rhd w),\quad\text{in general}
+	\end{split}\end{equation*} %}
+	次の式が成り立つ作用素$-\rhd$である。
+	\begin{equation*}\begin{split} %{
+		u\rhd v\rhd w = (uv)\rhd w
+	\end{split}\end{equation*} %}
+	$x\partial_x$の場合、任意の$n\in \mybf{N}$に対して次の式が成り立ち、
+	\begin{equation*}\begin{split} %{
+		:(x\partial_x)^n:\rhd x\partial_x &= \begin{cases}
+			x\partial_x, &\text{ iff } n=0,1 \\
+			0, &\text{ otherwise } \\
+		\end{cases} \\
+	\end{split}\end{equation*} %}
+	$x\partial_x$のべき乗と$\mycal{P}_+^+$に次のような対応がつく。
+	\begin{equation*}\xymatrix@R=10pt@C=8pt{
+		v = \underset{\young(1)}{x\partial_x} \ar[d] \ar[drr] \\
+		v^2 = \underset{\young(1,2)}{:v^2:} \ar[d] \ar[dr]
+			& & + \underset{\young(12)}{v\rhd v} \ar[d] \ar[dr] \\
+		v^3 = \underset{\young(1,2,3)}{:v^3:}
+			& \underset{\young(13,2)}{:(v\rhd v)v:} 
+				+ \underset{\young(1,23)}{:(v\rhd v)v:} 
+			& + \underset{\young(12,3)}{:(v\rhd v)v:} 
+			& + \underset{\young(123)}{v\rhd v\rhd v} \\
+	}\end{equation*}
+	ここで矢印は$\myop{grow}$の作用を表す。そして、
+	写像$\myop{butcher}$を任意の$\bakko{(1..k)^+}$の元に対して正規積
+	$:(x\partial_x)^k:$に対応させるものとする。
+	\begin{equation}\label{eq:ヤング図形の行数と微分のべき乗の対応}\begin{split} %{
+		\myop{butcher}y=:(x\partial_x)^k:
+			\quad\text{for all }y\in\bakko{(1..k)^+}
+	\end{split}\end{equation} %}
+	すると、${:(x\partial_x)^k:}_{k\in\mybf{N}_+}$を基底とする自然数係数の
+	半モジュールを$\mybf{N}(x\partial_x)^+$と書くと、写像$\myop{butcher}$を
+	線形に拡張して、次の可換図が成り立つ。
+	\begin{equation}\label{eq:分配と数演算子の対応図}\xymatrix@C+4ex{
+		\mycal{P}_+^+ \ar[d]^{\myop{grow}} \ar[r]^{\myop{butcher}}
+			& \mybf{N}(x\partial_x)^+ \ar[d]^{x\partial_x-} \\
+		\mycal{P}_+^+ \ar[r]^{\myop{butcher}} & \mybf{N}(x\partial_x)^+ \\
+	}\end{equation} %}
+	つまり、箱が一つも無い状態を$\bullet$とし、$\myop{grow}\bullet=\young(1)$
+	とすると、任意の$n\in\mybf{N}_+$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		(x\partial_x)^n 
+			&= \myop{butcher}\myop{grow}^n\bullet \\
+			&= \myop{butcher}\sum_{k\in(1..n)}\sum_{y\in\mycal{P}_k^n}y \\
+			&= \sum_{k\in(1..n)}\sum_{y\in\mycal{P}_k^n}\myop{butcher}y \\
+			&= \sum_{k\in(1..n)}\zettai{\mycal{P}_k^n}:(x\partial_x)^k: \\
+	\end{split}\end{equation*} %}
+	したがって、$\zettai{\mycal{P}_k^n}$が第二種スターリング数$S_k^n$だから、
+	この節の始めの問題\ref{todo:正規積とスターリング数}の答えの一つが得られ
+	た。肝は、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 球を箱に分配していく手続き\ref{proc:箱に球を分配する手順}が、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 微分のライプニッツ則と、
+			\item $x\partial_x$の特殊性$:(x\partial_x)^2:\rhd(x\partial_x)=0$
+			によって、
+		\end{itemize} %}
+		$x\partial_x$を左から掛けていく操作に対応しているために、
+		可換図\eqref{eq:分配と数演算子の対応図}が成り立っていることと、
+		\item 球の箱への分配から微分への写像$\myop{butter}$が、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $x\partial_x$の特殊性
+			$(x\partial_x)\rhd(x\partial_x)=x\partial_x$によって、
+		\end{itemize} %}
+		箱の数だけによっているために、分配の仕方の数$\zettai{\mycal{P}_k^n}$
+		がそのまま$:(x\partial_x)^k:$の係数として現れること
+	\end{itemize} %}
+	である。
+%s1:分配と正規積}
+
+\section{平面木と微分の対応}\label{s1:平面木と微分の対応} %{
+	前節\ref{s1:分配と正規積}の$x\partial_x$を任意の$D$次元$1$階微分に
+	拡張する。
+
+	多変数の高解微分を簡単に書くための記法を定義しておく。
+	文字列の余積$\Delta$を、任意の文字$a_i,\;i\in1..n$に対して次のように
+	定義する。
+	\begin{equation*}\begin{split} %{
+		\Delta[] &= [] \\
+		\Delta[a_1a_2\cdots a_n] &= []\otimes[a_1a_2\cdots a_n] \\
+		&\quad + \sum_{1\le i\le n}[a_i]\otimes[a_1a_2\cdots a_n]_{-\set{i}} \\
+		&\quad + \sum_{1\le i<j\le n}[a_ia_j]\otimes
+			[a_1a_2\cdots a_n]_{-\set{i,j}} \\
+		&\quad + \cdots \\
+		&\quad + [a_1a_2\cdots a_n]\otimes[] \\
+	\end{split}\end{equation*} %}
+	文字列の連結を任意の文字列$w_1,w_2$に対して$w_1*w_2$と書くことにする。
+	$n$階微分を次のように略記し、
+	\begin{equation*}\begin{split} %{
+		\nabla_{[]} &= 1 \\
+		\nabla_{\mu}
+			&= \partial_{\mu_1}\partial_{\mu_2}\cdots\partial_{\mu_n}
+			\quad \text{for } \mu = [\mu_1\mu_2\cdots\mu_n] \\
+	\end{split}\end{equation*} %}
+	微分の掛け算を文字列の連結を用いて次のように書き、
+	\begin{equation*}\begin{split} %{
+		\nabla_\mu\nabla_\nu = \nabla_{\mu*\nu}
+	\end{split}\end{equation*} %}
+	微分のライプニッツ則をSweedler記法を用いて次のように書くことにする。
+	\begin{equation*}\begin{split} %{
+		\nabla_{\mu}f &= (\nabla_{\Delta^{(1)}\mu}f)\nabla_{\Delta^{(2)}\mu}
+	\end{split}\end{equation*} %}
+
+	原点近傍で無限回微分可能な複素数値関数全体を$\mycal{F}$と書く。
+	原点近傍で$\mycal{F}$を係数にもつ$n$階の単項微分作用素全体を$\mycal{F}_n$
+	と書く。
+	\begin{equation*}\begin{split} %{
+		\mycal{F}_n = \set{f^\mu\nabla_\mu
+			\bou f^\mu\in\mycal{F},\;\mu\in(1..D)^n}
+	\end{split}\end{equation*} %}
+	$\mycal{F}_n$は通常の複素ベクトル空間の構造が定義されているとする。
+	そして、$\mycal{F}_*=\sum_{n\in \mybf{N}}\mycal{F}_n$と書く。
+
+	$\mycal{F}_*$の積を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(f^\mu\nabla_\mu)(g^\nu\nabla_\nu) 
+		= f^\mu(\nabla_{\Delta^{(1)}\mu}g^\nu)\nabla_{\Delta^{(2)}\mu}\nabla_\nu
+		\quad\text{for all }f^\mu\nabla_\mu,\;g^\mu\nabla_\mu\in\mycal{F}_*
+	\end{split}\end{equation*} %}
+	これは通常の積である。
+	$\mycal{F}_*$に正規積$:\cdots:$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		:(f_1^{\mu_1}\nabla_{\mu_1})(f_1^{\mu_2}\nabla_{\mu_2}): 
+		= f_1^{\mu_1}f_2^{\mu_2}\nabla_{\mu_1*\mu_2}
+	\end{split}\end{equation*} %}
+	これは通常の正規積である。
+	正規積$:\cdots:$は結合律を満たす積である。
+	線形写像$-\rhd:F_*\to (F_*\to F_*)$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(f^\mu\nabla_\mu\rhd)g^\nu\nabla_\nu 
+		= f^\mu(\nabla_\mu g^\nu)\nabla_\nu
+		\quad\text{for all }f^\mu\nabla_\mu,\;g^\mu\nabla_\mu\in\mycal{F}_*
+	\end{split}\end{equation*} %}
+	$-\rhd$は$\mycal{F}_*$の積に対してスカラー積となっている。
+	\begin{equation*}\begin{split} %{
+		(f\rhd)(g\rhd) = (fg)\rhd \quad\text{for all }f,g\in\mycal{F}_*
+	\end{split}\end{equation*} %}
+	$-\rhd$は次のライプニッツ則を満たす。
+	\begin{equation*}\begin{split} %{
+		(f^\mu\nabla_\mu\rhd)(gh) 
+		&= f^\mu(\nabla_{\Delta^{(1)}\mu}g)(\nabla_{\Delta^{(2)}\mu}h) \\
+		(f^\mu\nabla_\mu\rhd):gh:
+		&= f^\mu:(\nabla_{\Delta^{(1)}\mu}g)(\nabla_{\Delta^{(2)}\mu}h):
+	\end{split}
+	\quad\text{for all }f,g,h\in\mycal{F}_*
+	\end{equation*} %}
+	$-\rhd$は次のように略記する。
+	\begin{equation*}\begin{split} %{
+		f\rhd g &= (f\rhd) g \\
+		f\rhd g\rhd h &= (f\rhd)\bigl((g\rhd)h\bigr) \\
+	\end{split}\end{equation*} %}
+
+	微分作用素のべき乗を平面上の根付き木に対応させる。
+	そのために平面上の根付き木についていくつかの定義をしておく。
+
+	$n$頂点の単色の平面上の根付き木の空間を$\mycal{T}_n$と書き、
+	$\mycal{T}_+=\cup_{n\in\mybf{N}_+}\mycal{T}_n$、
+	$\mycal{T}_*=\cup_{n\in\mybf{N}}\mycal{T}_n$と書く。
+	$\mycal{T}_*$の頂点は$\circ$で表すことにする。
+	木を頂点の子供をかぎ括弧で括って次のようにも書くことにする。
+	\begin{equation*}\begin{split} %{
+		\circ\bigl[\circ\circ[\circ]\bigr] &= \mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[d] \\
+			& & \circ
+		} \\
+		\circ[t_1t_2] &= \mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			t_1 & & t_2
+		} \quad\text{for all }t_1,t_2\in T_+
+	\end{split}\end{equation*} %}
+	木を基底とする自然数係数の半モジュールを木の空間に応じて$\mybf{N}T_n$、
+	$\mybf{N}T_+$、$\mybf{N}T_+$と書く。
+
+	線形写像$\myop{grow}:\mybf{N}\mycal{T}_+\to\mybf{N}\mycal{T}_+$を
+	木の各頂点の一番右側の子供に新たに頂点を追加する操作とする。
+	例えば次のようになる。
+	\begin{equation*}\begin{split} %{
+		\myop{grow}\mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[d] \\
+			& & \circ
+		} = \mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[d] \ar@{-}[dl] \\
+			\circ & \circ \ar@{-}[d] & \circ \\
+			& \circ
+		} + \mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ \ar@{-}[d] & & \circ \ar@{-}[d] \\
+			\circ & & \circ
+		} + \mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& \circ & & \circ
+		} + \mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[d] \\
+			& & \circ \ar@{-}[d] \\
+			& & \circ
+		}
+	\end{split}\end{equation*} %}
+	この$\myop{grow}$は前節\ref{s1:分配と正規積}の$\myop{grow}$
+	(式\eqref{eq:分配の場合の自然な成長})に対応する。
+
+	線形写像$-\succ:\mycal{F}_1\to(\mybf{N}\mycal{T}_+\to\mycal{F}_1)$
+	を任意の$f\in\mycal{F}_1$に対して次のように再帰的に定義する。
+	\begin{equation*}\begin{split} %{
+		f\succ\circ &= f \\
+		f\succ\mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+			t_1 & t_2 & \cdots & t_n
+		} &= :(f\succ t_1)(f\succ t_2)\cdots(f\succ t_n):\rhd f \\
+		&\quad\text{for all }t_1,t_2,\dots,t_n\in\mycal{T}_+
+	\end{split}\end{equation*} %}
+	例えば次のようになる。
+	\begin{equation*}\begin{split} %{
+		f\succ\mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[d] \\
+			& & \circ
+		} &= :(f\rhd f)f):\rhd f
+	\end{split}\end{equation*} %}
+	写像は各頂点で子供の順序の並べ替えについて対称になっている。
+	\begin{equation*}\begin{split} %{
+		f\succ\mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[d] \\
+			& & \circ
+		} = :(f\rhd f)f):\rhd f = f\succ\mytree{
+			& \circ \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ \ar@{-}[d] & & \circ \\
+			\circ & &
+		}
+	\end{split}\end{equation*} %}
+
+	\begin{proposition}[木の成長と$-\rhd$のべき乗]\label{prop:木の成長と微分もどきのべき乗} %{
+		任意の$f\in\mycal{F}_1$に対して次の可換図が成り立つ。
+		\begin{equation*}\xymatrix{
+			\mycal{T}_+ \ar[d]^{\myop{grow}} \ar[r]^{f\succ}
+				& \mycal{F}_1 \ar[d]^{(f\rhd)-} \\
+			\mycal{T}_+ \ar[r]^{f\succ} &  \mycal{F}_1 \\
+		}\end{equation*}
+	\end{proposition} %prop:木の成長と微分もどきのべき乗}
+	\begin{proof} %{
+		任意の$f\in\mycal{T}_1$について、木の頂点数についての帰納法で証明する。
+		まず、根だけの木については、次の式が成り立つから命題の可換図が成り立つ。
+		\begin{equation*}\begin{split} %{
+			f\rhd(f\succ\circ) &= f\rhd f \\
+			f\succ(\myop{grow}\circ) &= f\succ(\circ[\circ])= f\rhd f
+		\end{split}\end{equation*} %}
+		頂点数$n$の任意の木について命題の可換図が成り立つとする。
+		$t_1,t_2,\dots,t_p$を任意の頂点数$N$以下の木とする。
+		すると、次の式が成り立つことから、
+		\begin{equation*}\begin{split} %{
+			f\rhd(:g:\rhd h) = :fg:\rhd h + :(f\rhd g):\rhd h
+			\quad\text{for all }g,h\in \mycal{F}_*
+		\end{split}\end{equation*} %}
+		次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split} %{
+			f\rhd\bigl(f\succ\circ[t_1t_2\cdots t_p]\bigr)
+			&= f\rhd\bigl(:(f\succ t_1)(f\succ t_2)\cdots(f\succ t_p):\rhd f\bigr) \\
+			&= :f(f\succ t_1)(f\succ t_2)\cdots(f\succ t_p):\rhd f \\
+			&\quad + :\bigl(f\rhd(f\succ t_1)\bigr)(f\succ t_2)\cdots(f\succ t_p):\rhd f \\
+			&\quad + :(f\succ t_1)\bigl(f\rhd(f\succ t_2)\bigr)\cdots(f\succ t_p):\rhd f \\
+			&\quad + \cdots \\
+			&\quad + :(f\succ t_1)f\succ t_2)\cdots(\bigl(f\rhd(f\succ t_p)\bigr):\rhd f \\
+		\end{split}\end{equation*} %}
+		一方、次の式も成り立つ。
+		\begin{equation*}\begin{split} %{
+			f\succ\myop{grow}\circ[t_1t_2\cdots t_p]
+			&= f\succ\bigl(\circ[t_1t_2\cdots t_p\circ] \\
+			&\quad + \circ[(\myop{grow}t_1)t_2\cdots t_p] \\
+			&\quad + \circ[t_1(\myop{grow}t_2)\cdots t_p] \\
+			&\quad + \cdots \\
+			&\quad + \circ[t_1t_2\cdots (\myop{grow}t_p)]\bigr) \\
+			&= :(f\succ t_1)(f\succ t_2)\cdots(f\succ t_p)f:\rhd f \\
+			&\quad + :(f\succ\myop{grow}t_1)(f\succ t_2)\cdots(f\succ t_p):\rhd f \\
+			&\quad + :(f\succ t_1)(f\succ\myop{grow}t_2)\cdots(f\succ t_p):\rhd f \\
+			&\quad + \cdots \\
+			&\quad + :(f\succ t_1)(f\succ t_2)\cdots(f\succ\myop{grow}t_p):\rhd f \\
+		\end{split}\end{equation*} %}
+		したがって、帰納法の仮定より各$i\in(1..p)$に対して
+		$f\rhd(f\succ t_i)=f\succ\myop{grow}t_i$が成り立つから木
+		$\circ[t_1t_2\cdots t_p]$に対して命題が成り立つ。
+		任意の頂点数$N+1$の木は、頂点数$N$の木を頂点の子供として付け加える
+		ことで得られるから、任意の頂点数$N+1$の木に対しても命題が成り立つこと
+		がわかる。
+	\end{proof} %}
+
+	根を$\bullet$、それ以外の頂点を$\circ$とする平面上の根付き木の空の木を
+	含まない集合を$\mycal{T}_\bullet$とする。
+	
+	$\mycal{T}_+$に対して定義した写像$\myop{grow}$を$\mycal{T}_\bullet$に
+	そのままに拡張する。頂点を含む任意の頂点の最も右の子供に新規の頂点
+	$\circ$を付け加える。例えば次のようになる。
+	\begin{equation*}\begin{split} %{
+		\myop{grow}\mytree{
+			& \bullet \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[d] \\
+			& & \circ
+		} = \mytree{
+			& \bullet \ar@{-}[dr] \ar@{-}[d] \ar@{-}[dl] \\
+			\circ & \circ \ar@{-}[d] & \circ \\
+			& \circ
+		} + \mytree{
+			& \bullet \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ \ar@{-}[d] & & \circ \ar@{-}[d] \\
+			\circ & & \circ
+		} + \mytree{
+			& \bullet \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& \circ & & \circ
+		} + \mytree{
+			& \bullet \ar@{-}[dr] \ar@{-}[dl] \\
+			\circ & & \circ \ar@{-}[d] \\
+			& & \circ \ar@{-}[d] \\
+			& & \circ
+		}
+	\end{split}\end{equation*} %}
+
+	$\mycal{T}_+$に対して定義した写像$-\succ$を$\mycal{T}_\bullet$に
+	次のように拡張する。
+	\begin{equation*}\begin{split} %{
+		-\succ: \mycal{F}_1 &\to (\mybf{N}\mycal{T}_\bullet\to\mycal{F}_*) \\
+		f\succ\bullet &= 1 \\
+		f\succ\mytree{
+			& \bullet \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+			t_1 & t_2 & \cdots & t_n
+		} &= :(f\succ t_1)(f\succ t_2)\cdots(f\succ t_n): \\
+		&\quad\text{for all }t_1,t_2,\dots,t_n\in\mycal{T}_+
+	\end{split}\end{equation*} %}
+	$-\succ:\mycal{F}_1\to(\mybf{N}\mycal{T}_+\to\mycal{F}_1)$に対して、
+	$-\succ:\mycal{F}_1\to(\mybf{N}\mycal{T}_\bullet\to\mycal{F}_*)$と
+	なっていることに注意する。
+	この$-\succ$は前節\ref{s1:分配と正規積}の$\myop{butcher}$
+	(式\eqref{eq:ヤング図形の行数と微分のべき乗の対応})に対応する。
+	写像$\myop{butcher}$が箱の並べ替えに対して対称になっているのと同様に、
+	木$t$の任意の頂点で子供の順序を並べ替えても$f\succ t$の値は不変である。
+
+	\begin{proposition}[木の成長と微分のべき乗]\label{prop:木の成長と微分のべき乗} %{
+		任意の$f\in\mycal{F}_1$に対して次の可換図が成り立つ。
+		\begin{equation*}\xymatrix{
+			\mycal{T}_\bullet \ar[d]^{\myop{grow}} \ar[r]^{f\succ}
+				& \mycal{F}_* \ar[d]^{f-} \\
+			\mycal{T}_\bullet \ar[r]^{f\succ} & \mycal{F}_* \\
+		}\end{equation*}
+	\end{proposition} %prop:木の成長と微分のべき乗}
+	\begin{proof} %{
+		任意の$f\in\mycal{F}_1$について証明する。
+		根だけの木については、次の式が成り立つから命題の可換図が成り立つ。
+		\begin{equation*}\begin{split} %{
+			f(f\succ\bullet) &= f \\
+			f\succ(\myop{grow}\bullet) &= f\succ(\bullet[\circ])= f
+		\end{split}\end{equation*} %}
+		任意の$t_1,t_2,\dots,t_p\in\mycal{T}_+$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			f\bigl(f\succ\bullet[t_1t_2\cdots t_p]\bigr)
+			&= f:(f\succ t_1)(f\succ t_2)\cdots(f\succ t_p): \\
+			&= :f(f\succ t_1)(f\succ t_2)\cdots(f\succ t_p):\rhd f \\
+			&\quad + :\bigl(f\rhd(f\succ t_1)\bigr)(f\succ t_2)\cdots(f\succ t_p):\rhd f \\
+			&\quad + :(f\succ t_1)\bigl(f\rhd(f\succ t_2)\bigr)\cdots(f\succ t_p):\rhd f \\
+			&\quad + \cdots \\
+			&\quad + :(f\succ t_1)f\succ t_2)\cdots(\bigl(f\rhd(f\succ t_p)\bigr):\rhd f \\
+		\end{split}\end{equation*} %}
+		一方、次の式も成り立つ。
+		\begin{equation*}\begin{split} %{
+			f\succ\myop{grow}\bullet[t_1t_2\cdots t_p]
+			&= f\succ\bigl(\bullet[t_1t_2\cdots t_p\circ] \\
+			&\quad + \bullet[(\myop{grow}t_1)t_2\cdots t_p] \\
+			&\quad + \bullet[t_1(\myop{grow}t_2)\cdots t_p] \\
+			&\quad + \cdots \\
+			&\quad + \bullet[t_1t_2\cdots (\myop{grow}t_p)]\bigr) \\
+			&= :(f\succ t_1)(f\succ t_2)\cdots(f\succ t_p)f: \\
+			&\quad + :(f\succ\myop{grow}t_1)(f\succ t_2)\cdots(f\succ t_p): \\
+			&\quad + :(f\succ t_1)(f\succ\myop{grow}t_2)\cdots(f\succ t_p): \\
+			&\quad + \cdots \\
+			&\quad + :(f\succ t_1)(f\succ t_2)\cdots(f\succ\myop{grow}t_p): \\
+		\end{split}\end{equation*} %}
+		命題\ref{prop:木の成長と微分もどきのべき乗}から、任意の$t\in\mycal{T}_+$
+		に対して$f\rhd(f\succ t)=f\succ\myop{grow}t$が成り立つから、
+		木$\bullet[t_1t_2\cdots t_p]$に対して命題が成り立つ。
+	\end{proof} %}
+
+	この命題は、任意の$f\in\mycal{F}_1$に対して次の式が成り立つことを
+	言っている。
+	\begin{equation*}\begin{split} %{
+		f^n = f\succ\myop{grow}^n\bullet \quad\text{for all }n\in \mybf{N}
+	\end{split}\end{equation*} %}
+%s1:平面木と微分の対応}
+
+\section{数の分割}\label{s1:数の分割} %{
+	自然数の分割（和が与えられた自然数になる自然数列を求めること）は順序付き
+	の場合と順序なしの場合がある。順序付きの場合をComposition、
+	順序なしの場合をPartitionという。
+
+	\begin{definition}[自然数の順序つき分割（Composition）]\label{def:自然数の順序つき分割} %{
+		自然数$n$に対して成分の和が$n$になる自然数列を$n$の順序付き分割という。
+	\end{definition} %def:自然数の順序つき分割}
+
+	\begin{definition}[自然数の分割（Partition）]\label{def:自然数の分割} %{
+		自然数の順序付き分割で順序の違いを無視したものを単に自然数の分割という。
+	\end{definition} %def:自然数の順序つき分割}
+
+	順序付き分割と単なる分割の違いは次のようになる。
+
+	\begin{example}[自然数の順序付き分割と単なる分割の違い]\label{eg:自然数の順序付き分割と単なる分割の違い} %{
+		$3$の順序付き分割は$(1,2)$と$(2,1)$になるが、単なる分割は$(1,2)$だけで
+		ある。
+	\end{example} %eg:自然数の順序付き分割と単なる分割の違い}
+
+	順序付き分割と順序なし分割を球を箱に分配する問題に当てはめると、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 順序付き分割は、区別のつく球を区別のつく箱に分配することに、
+		\item 順序なし分割は、区別のつく球を区別のつかない箱に分配することに
+	\end{itemize} %}
+	対応する。
+
+	\begin{proposition}[順序付き分割の個数]\label{prop:順序付き分割の個数} %{
+		自然数$n$の順序付き分割は全部で$2^{n-1}$通りあり、
+		順序付き$k$分割は$\binom{n-1}{k-1}$通りある。
+	\end{proposition} %prop:順序付き分割の個数}
+	\begin{proof} %{
+	\end{proof} %}
+
+	この命題より、式$\sum_{k\in1..n}\binom{n-1}{k-1}=2^{n-1}$が成り立つこともわかる。
+
+	次に、区別のつく球を区別のつかない箱に分配する仕方を考えて、それを用いて
+	第一種スターリング数と第二種スターリング数を定義する。
+
+	\begin{definition}[分配]\label{def:分配} %{
+		区別のつく$n$個の球を区別のつかない$k$個の箱に入れた空の箱を含まない状態を
+		$1..n$の$k$分配とする。
+	\end{definition} %def:分配}
+
+	$1..n$の$k$分配の集合を$\mycal{S}_{n,k}$と書き、合併を
+	$\mycal{S}_n=\cup_{k\in1..n}\mycal{S}_{n,k}$と
+	$\mycal{S}=\cup_{n\in\mybf{N}_+}\mycal{S}_n$と書くことにする。
+
+	\begin{example}[分配の例]\label{eg:分配の例} %{
+		$1..4$の$2$分配$\mycal{S}_{4,2}$をヤング盤に似た形で書くと次のものになる。
+		\begin{equation*}\begin{split} %{
+			\young(123,4),\quad \young(412,3),\quad \young(341,2),\quad \young(234,1)
+			,\quad \young(12,34),\quad \young(13,24),\quad \young(14,23)
+		\end{split}\end{equation*} %}
+	\end{example} %eg:分配の例}
+
+	分配からヤング図形への写像$\pi_{\mycal{S}}$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\yng(3,1) &= \pi_{\mycal{S}}\young(123,4) 
+			= \pi_{\mycal{S}}\young(412,3)
+			= \pi_{\mycal{S}}\young(341,2)
+			= \pi_{\mycal{S}}\young(234,1) \\
+		\yng(2,2) &= \pi_{\mycal{S}}\young(12,34)
+			= \pi_{\mycal{S}}\young(13,24)
+			= \pi_{\mycal{S}}\young(14,23)
+	\end{split}\end{equation*} %}
+	$n$次$k$行のヤング図形の集合を$\mycal{G}_{n,k}$と書き、合併を
+	$\mycal{G}_n=\cup_{k\in1..n}\mycal{S}_{n,k}$と
+	$\mycal{G}=\cup_{n\in\mybf{N}_+}\mycal{G}_n$と書くことにする。例えば次のようになる。
+	\begin{equation*}\begin{split} %{
+		\mycal{G}_{4,2} = \set{\yng(3,1),\yng(2,2)}
+	\end{split}\end{equation*} %}
+	写像$\pi_{\mycal{S}}$を用いると$1..n$の$k$分配の大きさ次のように書ける。
+	\begin{equation*}\begin{split} %{
+		\zettai{\mycal{S}_{n,k}} = \sum_{g\in\mycal{G}_{n,k}}\zettai{\pi_{\mycal{S}}^{-1}g}
+	\end{split}\end{equation*} %}
+	$\zettai{\pi_{\mycal{S}}^{-1}-}$は任意の
+	$(k_1\times m_1,k_2\times m_2,\dots,k_p\times m_p)\in\mycal{G}$に対して
+	次の式で与えられる。
+	\begin{equation*}\begin{split} %{
+	\zettai{\pi_{\mycal{S}}^{-1}(k_1\times m_1, k_2\times m_2, \dots, k_p\times m_p)}
+		&= \frac{(k_1m_1+k_2m_2+\cdots+k_pm_p)!}
+		{(k_1!)(k_2!)\cdots(k_p!)(m_1!)^{k_1}(m_2!)^{k_2}\cdots(m_p!)^{k_p}}
+	\end{split}\end{equation*} %}
+	$1..n$の$k$分配の大きさを第二種スターリング数という。
+
+	\begin{definition}[第二種スターリング数]\label{def:第二種スターリング数} %{
+		区別のつく$n$個の球を区別のつかない$k$個の箱に、空の箱ができないように、
+		分配する仕方の総数を第二種スターリング数といい$S_{n,k}$と書く。
+	\end{definition} %def:第二種スターリング数}
+
+	分配の集合$\mycal{S}_{n,k}$と第二種スターリング数$S_{n,k}$の関係は
+	$S_{n,k}=\zettai{\mycal{S}_{n,k}}$である。
+
+	第二種スターリング数を別の方法で表してみる。
+	区別のつく$n$個の球を区別のつく$k$個の箱に、空の箱ができてもかまわずに
+	分配する仕方の総数は$k^n$通りである。
+%s1:数の分割}
+
+\section{Chinese restaurant process}\label{s1:Chinese restaurant process} %{
+	Chinese restaurant processを日本語に訳すと中華料理屋過程となるかもしれ
+	ないが、ここでは略記CRPと書くことにする。
+
+	まず、CRPでテーブル数の増加傾向を調べてみる。
+	$T$人が入室したときの一人以上が着席しているテーブル数の期待値を$N_T$と
+	すると、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		N_{T+1} & = (1-\frac{N_T\alpha+\theta}{T+\theta})N_T
+			+ \frac{N_T\alpha+\theta}{T+\theta}(N_T+1) \\
+		& = N_T + \frac{N_T\alpha+\theta}{T+\theta} \\
+	\end{split}\end{equation*} %}
+	$T\to\infty$で$N_{T+1}-N_T\to \frac{dN_T}{dT}$とすると、$
+		\frac{dN_T}{N_T\alpha+\theta} = \frac{dT}{T+\theta}
+	$となるから、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		\lim_{T\to\infty}N_T = \begin{cases}
+			\text{const.}\theta\ln(T+\theta), &\text{ iff }\alpha=0 \\
+			\frac{\text{const.}(T+\theta)^\alpha-\theta}{\alpha}, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation*} %}
+	定数項を評価するために、漸化式を直接解く。
+	\begin{equation*}\begin{split} %{
+		N_{T+1} & = N_T + \frac{N_T\alpha+\theta}{T+\theta} \\
+	\end{split}\end{equation*} %}
+
+	CRPの入室数無限大の漸近挙動を考える。
+	そのために、CRPに似た次のような状態遷移を考える。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $1$から$T$までの数字を順に$2$次元配列に挿入する。
+		\item $2$次元配列$[x_1,x_2,\dots,x_N]$
+		\begin{equation*}\begin{split} %{
+			1\le \zettai{x_i}\quad\text{for all }i=1..N \\
+			\sum_{i\in1..N}\zettai{x_i}=T \\
+		\end{split}\end{equation*} %}
+		に対して数字を$T+1$を挿入するときの遷移確率を次のように定義する。
+		\begin{equation*}\begin{split} %{
+			& \Braket{[x_1*[T+1],x_2,\dots,x_N]\bou[x_1,x_2,\dots,x_N]} \\
+			= & \Braket{[x_1,x_2*[T+1],\dots,x_N]\bou[x_1,x_2,\dots,x_N]} \\
+			= & \cdots \\
+			= & \Braket{[x_1,x_2,\dots,x_N*[T+1]]\bou[x_1,x_2,\dots,x_N]} 
+				= \frac{\zettai{x_1}-\alpha}{T+\theta} \\
+			& \Braket{[x_1,x_2,\dots,x_N,[T+1]]\bou[x_1,x_2,\dots,x_N]}
+				= \frac{N\alpha+\theta}{T+\theta} \\
+		\end{split}\end{equation*} %}
+	\end{itemize} %}
+	状態遷移を低次の項について図示すると次のようになる。
+	\begin{equation*}\label{eq:ラベル付きCRPの遷移図}\xymatrix{
+		\ar[d]^{1+\theta} 
+			& [[1]] \ar[d]^{1-\alpha} \ar[drr]^{\alpha+\theta} \\
+		\ar[d]^{2+\theta} & [[1,2]] \ar[d]^{2-\alpha} \ar[dr]^{\alpha+\theta} 
+			& & [[1],[2]] \ar[d]^{1-\alpha} \ar[dr]^{1-\alpha}
+			\ar@(r,u)[drr]^{2\alpha+\theta} \\
+		& [[1,2,3]] & [[1,2],[3]] & [[1],[2,3]] & [[1,3],[2]] & [[1],[2],[3]] \\
+	}\end{equation*}
+	左端のリストは遷移確率の分母、右の木は遷移確率の分子である。
+	この状態遷移をラベル付きCRPということにする。
+	上の図で同値関係$[[1,2],[3]]\sim[[1],[2,3]]\sim[[1,3],[2]]$をとったものが
+	CRPとなる。
+
+	ラベル付きCRPの状態はヤング盤に似たものになる。
+	ヤング図とヤング盤をWikipediaにしたがって定義しておく。
+
+	\begin{definition}[自然数の分割]\label{def:自然数の分割} %{
+		自然数$n$に対して次のような自然数$k_1,k_2,\dots,k_m$を$n$の分割という。
+		\begin{equation*}\begin{split} %{
+			n = k_1 + k_2 + \cdots + k_m \\
+			k_1 \ge k_2 \ge \cdots \ge k_m > 1 \\
+		\end{split}\end{equation*} %}
+	\end{definition} %def:自然数の分割}
+
+	\begin{definition}[ヤング図形（Young diagram）]\label{def:ヤング図形} %{
+		自然数$n$の分割を升目を並べて表したものを$n$の分割のヤング図形という。
+		例えば、$5$の分割$(2,2,1)$のヤング図形は{\tiny\yng(2,2,1)}となる。
+	\end{definition} %def:ヤング図形}
+
+	\begin{definition}[ヤング盤（Young tableaux）]\label{def:ヤング盤} %{
+		$1$から$n$までの自然数を$n$の分割のヤング図形の升目に書き込んだものを
+		$n$の分割のヤング盤という。
+		升目に数字を書き込む順番は左上から順に書き込む。
+		つまり、$n$の分割のヤング盤は$n$の分割のヤング図形に
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $1..n$の数字が重複なく、
+			\item 各行で右から左に数字が小さくなる順序で、
+			\item 各列で上から下に数字が大きくなる順序で
+		\end{itemize} %}
+		書き込んだものである。
+	\end{definition} %def:ヤング盤}
+
+	\begin{example}[ヤング盤の例]\label{eg:ヤング盤の例} %{
+		次の例はヤング盤であり、
+		\begin{equation*}\begin{matrix} %{
+			\young(12,3) & \young(13,2) \\
+		\end{matrix}\end{equation*} %}
+		次の例はヤング盤でない。
+		\begin{equation*}\begin{matrix} %{
+			\young(1,23) & \text{ヤング図形でない} \\
+			\young(23,1) & \text{列の順序が異なる} \\
+		\end{matrix}\end{equation*} %}
+	\end{example} %eg:ヤング盤の例}
+
+	ラベル付きCRPの状態はヤング盤の条件を弱めたものになっている。
+	状態遷移図\label{eq:ラベル付きCRPの遷移図}をヤング盤に似せた記号を用いて
+	次のように書き直すことができる。
+	\begin{equation*}\label{eq:ラベル付きCRPの遷移図その二}\xymatrix{
+		\ar[d]^{1+\theta} 
+			& {\young(1)} \ar[d]^{1-\alpha} \ar[drr]^{\alpha+\theta} \\
+		\ar[d]^{2+\theta} & {\young(12)} \ar[d]^{2-\alpha} \ar[dr]^{\alpha+\theta} 
+			& & {\young(1,2)} \ar[d]^{1-\alpha} \ar[dr]^{1-\alpha}
+			\ar@(r,u)[drr]^{2\alpha+\theta} \\
+		& {\young(123)} & {\young(12,3)} & {\young(23,1)} & {\young(13,2)} & {\young(1,2,3)} \\
+	}\end{equation*}
+	この状態遷移図に現れる状態は結婚披露宴でのテーブル振り分けに似ているので、
+	テーブル振り分けと名づけてヤング盤に習って定義する。
+
+	\begin{definition}[テーブル振り分け]\label{def:テーブル振り分け} %{
+		$1$から$n$までの自然数を$n$の分割のヤング図形の升目に書き込んだものを
+		$1..n$のテーブル振り分けという。
+		升目に数字を書き込む順番は左から順に書き込む。
+		つまり、$1..n$のテーブル振り分けは$n$の分割のヤング図形に
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $1..n$の数字が重複なく、
+			\item 各行で右から左に数字が小さくなる順序で
+		\end{itemize} %}
+		書き込んだものである。
+	\end{definition} %def:テーブル振り分け}
+
+	\begin{example}[テーブル振り分けの例]\label{eg:テーブル振り分けの例} %{
+		次の例はテーブル振り分けであり、
+		\begin{equation*}\begin{matrix} %{
+			\young(12,3) & \young(13,2) & \young(23,1)
+		\end{matrix}\end{equation*} %}
+		次の例はテーブル振り分けでない。
+		\begin{equation*}\begin{matrix} %{
+			\young(1,23) & \text{ヤング図形でない} \\
+		\end{matrix}\end{equation*} %}
+	\end{example} %eg:テーブル振り分けの例}
+
+	テーブル振り分けを与えるとラベル付きCRPの実現確率が定まるが、
+	ヤング図形の等しいテーブル振り分けは同一の実現確率になる。
+	状態遷移図\label{eq:ラベル付きCRPの遷移図その二}の例では、
+	テーブル振り分け$[[1,2],[3]],[[2,3],[1]],[[1,3],[2]]$はすべて等しい
+	実現確率$\frac{(\alpha+\theta)(1-\alpha)}{(1+\theta)(2+\theta)}$を持つ。
+	$1$以上の自然数$n$に対して
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\mycal{G}_n$を$n$の分割のヤング図形の集合とし、
+		$\mycal{G}=\cup_{n\in\myop{N}_+}\mycal{G}_n$、
+		\item $\mycal{H}_n$を$1..n$のテーブル振り分けの集合とし、
+		$\mycal{H}=\cup_{n\in\myop{N}_+}\mycal{H}_n$、
+		\item テーブル振り分け$h$からそのヤング図形を与える写像を
+		$\pi_{\mycal{H}}:\mycal{H}\to\mycal{G}$
+	\end{itemize} %}
+	とする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item CRPの実現確率を$p_{\mycal{G}}:\mycal{G}\to \mybf{R}$、
+		\item ラベル付きCRPの実現確率を$p_{\mycal{H}}:\mycal{H}\to \mybf{R}$
+	\end{itemize} %}
+	とし、写像$p:\mycal{G}\to\mybf{R}$を$(n_1,n2,\dots,n_N)\in\mycal{G}_T$
+	に対して次のようにおく。
+	\begin{equation*}\begin{split} %{
+		p(n_1,n2,\dots,n_N)
+			&= \frac{\prod_{i\in1..N}(n_i-1-\alpha)(n_i-2-\alpha)\cdots(1-\alpha)}
+				{(T-1+\theta)\cdots(2+\theta)(1+\theta)} \\
+			&= \alpha^N\frac{\Gamma(\theta)}{\Gamma(T+\theta)}
+				\frac{\Gamma(N+\frac{\theta}{\alpha})}{\Gamma(\frac{\theta}{\alpha})}
+				\prod_{i\in1..N}\frac{\Gamma(n_i-\alpha)}{\Gamma(1-\alpha)} \\
+	\end{split}\end{equation*} %}
+	ここで、$\Gamma$はガンマ関数である。すると、次の式が成り立つ。
+	\begin{equation*}\begin{array}{rcll} %{
+		p_{\mycal{G}}g &=& \sum_{h\in\pi_{\mycal{H}}^{-1}g}p_{\mycal{H}}h
+			& \quad\text{for all }g\in\mycal{G} \\
+		p_{\mycal{H}}h &=& p\pi_{\mycal{H}}h
+			& \quad\text{for all }h\in\mycal{H} \\
+	\end{array}\end{equation*} %}
+	したがって、CRPの実現確率は次のようになる。
+	\begin{equation*}\begin{split} %{
+		p_{\mycal{G}}g &= \zettai{\pi_{\mycal{H}}^{-1}g}(pg)
+			\quad\text{for all }g\in\mycal{G} \\
+	\end{split}\end{equation*} %}
+	$\pi_{\mycal{H}}^{-1}$の大きさは次の式で与えられる。
+	\begin{equation*}\begin{split} %{
+		\zettai{\pi_{\mycal{H}}^{-1}(
+		\underbrace{m_1,\dots,m_1}_{k_1\text{個}}
+		, \underbrace{m_2,\dots,m_2}_{k_2\text{個}}
+		, \dots
+		, \underbrace{m_M,\dots,m_M}_{k_M\text{個}}
+		)} \\
+		= \frac{(k_1m_1+k_2m_2+\cdots+k_Mm_M)!}
+		{(k_1!)(k_2!)\cdots(k_M!)(m_1!)^{k_1}(m_2!)^{k_2}\cdots(m_M!)^{k_M}}
+	\end{split}\end{equation*} %}
+
+	CRPの実現確率は格子$\mycal{V}=\cup_{n\in\mybf{N}_+}\mybf{N}_+^n$上の点を
+	状態として書くこともできる。写像$\pi_{\mycal{V}}:\mycal{V}\to\mycal{G}$
+	を$\mycal{V}$の元の成分を並び替えて$\mycal{G}$の元にするものとする。
+	\begin{equation*}\begin{split} %{
+		\pi_{\mycal{V}}(v_1,v_2,\dots,v_N) 
+		= (v_{\sigma1},v_{\sigma2},\dots,v_{\sigma N})
+		\quad\text{where } \sigma\in S_N \\
+		\quad\text{such that }
+		v_{\sigma1}\ge v_{\sigma2}\ge\cdots \ge v_{\sigma N}
+	\end{split}\end{equation*} %}
+	写像$\pi_{\mycal{V}}$を用いるとCRPの実現確率は格子$\mycal{V}$上の関数
+	として次のように書き換えることができる。
+	\begin{equation*}\begin{split} %{
+		p_{\mycal{G}}g 
+		&= \frac{\zettai{\pi_{\mycal{H}}^{-1}g}}{\zettai{\pi_{\mycal{V}}^{-1}g}}
+		\sum_{v\in\pi_{\mycal{V}}^{-1}g}(p\pi_{\mycal{V}}v)
+			\quad\text{for all }g\in\mycal{G} \\
+	\end{split}\end{equation*} %}
+	$\pi_{\mycal{V}}^{-1}$の大きさは次の式で与えられる。
+	\begin{equation*}\begin{split} %{
+		\zettai{\pi_{\mycal{V}}^{-1}(
+		\underbrace{m_1,\dots,m_1}_{k_1\text{個}}
+		, \underbrace{m_2,\dots,m_2}_{k_2\text{個}}
+		, \dots
+		, \underbrace{m_M,\dots,m_M}_{k_M\text{個}}
+		)} = \frac{(k_1+k_2+\cdots+k_M)!}{(k_1!)(k_2!)\cdots(k_M!)}
+	\end{split}\end{equation*} %}
+	以上をまとめると次のようになる。
+	\begin{equation*}\begin{split} %{
+		p_{\mycal{G}}g 
+		= (cg)\sum_{v\in\pi_{\mycal{V}}^{-1}g}(p\pi_{\mycal{V}}v)
+		\quad\text{for all }g\in\mycal{G} \\
+	\end{split}\end{equation*} %}
+	ここで、$T=n_1+n_2+\cdots+n_N$となる$(n_1,n_2,\dots,n_N)\in\mycal{G}$
+	に対して次のように定義される。
+	\begin{equation*}\begin{split} %{
+		c(n_1,n_2,\dots,n_N) 
+		&= \frac{\Gamma(T+1)}{\Gamma(N+1)}
+			\prod_{i\in1..N}\frac{1}{\Gamma(n_i+1)} \\
+		p(n_1,n2,\dots,n_N)
+		&= \alpha^N\frac{\Gamma(\theta)}{\Gamma(T+\theta)}
+			\frac{\Gamma(N+\frac{\theta}{\alpha})}{\Gamma(\frac{\theta}{\alpha})}
+			\prod_{i\in1..N}\frac{\Gamma(n_i-\alpha)}{\Gamma(1-\alpha)} \\
+	\end{split}\end{equation*} %}
+%s1:Chinese restaurant process}
