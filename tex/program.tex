@@ -1,0 +1,34 @@
+\section{べき乗}\label{s1:自然数のべき乗} %{
+	自然数べき乗をする関数$\myop{power}_\sizen:A\times\sizen\to A$を考える。
+	\begin{equation*}\begin{split} %{
+		a\times n \mapsto a^n \\
+	\end{split}\end{equation*} %}
+	$A$は積$\mybiop{\myspace}$が定義された集合とする。
+	ビット計算が高速な環境で関数$\myop{power}_\sizen$を実装する方法を
+	考える。次のような例を考えてみる。
+	\begin{equation*}\begin{matrix} %{
+		a^3 &=& a^{2^0+2^1} &=& aa^2 \\
+		a^4 &=& a^{2^2} &=& (a^2)^2 \\
+		a^5 &=& a^{2^0+2^2} &=& a(a^2)^2 \\
+		a^6 &=& a^{2^1+2^2} &=& a^2(a^2)^2 \\
+		a^7 &=& a^{2^0+2^1+2^2} &=& aa^2(a^2)^2 \\
+		a^8 &=& a^{2^3} &=& \bigl((a^2)^2\bigr)^2 \\
+	\end{matrix}\end{equation*} %}
+	べきを二進数に書き直すと、二乗の繰り返しと積でべき乗が書けるのがわかる。
+	Javaで書くとコード\ref{code:自然数べき乗のプログラム}のような
+	プログラムが考えられる。ここで、関数に単位元を要求しているのは$0$乗に
+	対応するためである。
+
+	\begin{lstlisting}[caption=自然数べき乗のプログラム, label=code:自然数べき乗のプログラム]
+power_N = (a:A, n:N, op:(A, A) -> A, unit:A) -> A {
+	for (; 0 < n; n = n >> 1) {
+		if (0 < (n & 1)) {
+			unit = op(unit, x);
+		}
+		x *= x;
+	}
+	return unit;
+}
+	\end{lstlisting}
+%s1:べき乗}
+

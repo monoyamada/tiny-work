@@ -4,6 +4,8 @@
 \usepackage{multicol}
 \usepackage{stmaryrd}
 \usepackage{float}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\small, tabsize=2, language=Java}
 %\usepackage{sty/thmbox}
 \usepackage{sty/cprog}
 \usepackage{sty/simplewick}
@@ -46,22 +48,29 @@
 %\newtheorem[S]{notation}{記法}[section]
 %\newtheorem[S]{note}{ノート}[section]
 %
-\usepackage{sty/shadethm}
+%\usepackage{sty/shadethm}
 %\newshadetheorem[S]{theorem}{定理}[section]
-\newshadetheorem{proposition}{命題}[section]
+%\newshadetheorem{proposition}{命題}[section]
 %\newshadetheorem[S]{corollary}{系}[section]
 %\newshadetheorem[S]{lemma}{補題}[section]
-\newshadetheorem{definition}{定義}[section]
-\newshadetheorem{example}{例}[section]
+%\newshadetheorem{definition}{定義}[section]
+%\newshadetheorem{example}{例}[section]
 %\newshadetheorem[S]{conjecture}{予想}[section]
 %\newshadetheorem[S]{problem}{問題}[section]
-\newshadetheorem{problem}{問題}[section]
+%\newshadetheorem{problem}{問題}[section]
 %\newshadetheorem[S]{observation}{観察}[section]
 %\newshadetheorem[S]{formula}{公式}[section]
-\newshadetheorem{notation}{記法}[section]
-\newshadetheorem{todo}{課題}[section]
-\newshadetheorem{note}{ノート}[section]
-\newshadetheorem{procedure}{手順}[section]
+%\newshadetheorem{notation}{記法}[section]
+%\newshadetheorem{todo}{課題}[section]
+%\newshadetheorem{note}{ノート}[section]
+%\newshadetheorem{procedure}{手順}[section]
+\usepackage[amsmath,thmmarks,hyperref]{sty/ntheorem}
+\theoremstyle{changebreak}
+\theoremsymbol{\textparagraph}
+\newtheorem{definition}{定義}[section]
+\newtheorem{proposition}{命題}[section]
+\newtheorem{todo}{課題}[section]
+\newtheorem{example}{例}[section]
 %
 \def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
 \def\endproof{{\large$\Box$}\endtrivlist}
@@ -76,6 +85,7 @@
 \newcommand{\myop}[1]{\operatorname{#1}}
 \newcommand{\mybf}[1]{{\mathbf{#1}}}
 \newcommand{\mycal}[1]{{\mathcal{#1}}}
+
 \def\obra#1{\mathinner{({#1}|}}
 \def\oket#1{\mathinner{|{#1})}}
 \def\obraket#1{\mathinner{({#1})}}

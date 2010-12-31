@@ -1,3 +1,31 @@
+\section{文字の大きさの単位}\label{s1:文字の大きさの単位} %{
+	{\TeX}の文字の大きさは次のような単位を用いている。
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{ll} \hline
+			記号 & 説明 \\ \hline
+			mm & ミリメートル \\
+			cm & センチメートル \\
+			in & インチ \\
+			pt & $1\myop{pt}=1/72.27\myop{in}$ \\
+			pc & $1\myop{pc}=12\myop{pt}$ \\
+			ex & 文字\;x\;の高さ \\
+			em & 文字\;M\;の幅 \\
+		\end{tabular}\end{center}
+		\caption{文字の大きさの単位}
+	\end{table} %}
+%s1:文字の大きさの単位}
+
+\section{局所的なマクロ}\label{s1:局所的なマクロ} %{
+	マクロを文書内で局所的に使いたい場合、\\begingroup$\cdots$\\endgroup
+	で範囲を限定してマクロを定義する。
+	\begingroup
+	\providecommand{\xxx}{hello}
+	'\xxx' form inside
+	\endgroup
+	% コンパイルエラー
+	% '\xxx' form outside
+%s1:局所的なマクロ}
+
 \section{表}
 \begin{table}[htbp]
 	\begin{center}\begin{tabular}{|l|c|r|} \hline
