@@ -1,5 +1,15 @@
+\section{和記号の添え字}\label{s1:和記号の添え字} %{
+	\begin{equation*}\begin{split} %{
+		\sideset{_{\text{左下}}^{\text{左上}}}{_{\text{右下}}^{\text{右上}}}
+			\sum_{n=0}^\infty
+	\end{split}\end{equation*} %}
+%s1:和記号の添え字}
+
 \section{文字の大きさの単位}\label{s1:文字の大きさの単位} %{
-	{\TeX}の文字の大きさは次のような単位を用いている。
+	{\TeX}の文字の大きさは表\ref{tab:文字の大きさの単位}のような単位を表す
+	定数が定義されている。その他に縦横の大きさを表す単位として
+	表\ref{tab:縦横の大きさの単位}のものがある。
+
 	\begin{table}[htbp] %{
 		\begin{center}\begin{tabular}{ll} \hline
 			記号 & 説明 \\ \hline
@@ -12,6 +22,18 @@
 			em & 文字\;M\;の幅 \\
 		\end{tabular}\end{center}
 		\caption{文字の大きさの単位}
+		\label{tab:文字の大きさの単位}
+	\end{table} %}
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{ll} \hline
+			記号 & 説明 \\ \hline
+			$\backslash$textwith & 本文領域の横幅 \\
+			$\backslash$linewidth & 本文領域の横幅 \\
+			& 一段組みの場合は$\backslash$textwidthと同じになるが、\\
+			& 二段組の場合は$\backslash$textwidthの約半分の幅となる。 \\
+		\end{tabular}\end{center}
+		\caption{縦横の大きさの単位}
+		\label{tab:縦横の大きさの単位}
 	\end{table} %}
 %s1:文字の大きさの単位}
 

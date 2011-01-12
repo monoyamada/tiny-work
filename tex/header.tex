@@ -4,8 +4,11 @@
 \usepackage{multicol}
 \usepackage{stmaryrd}
 \usepackage{float}
+% installed in the system by hand
+\usepackage{shuffle}
 \usepackage{listings}
-\lstset{basicstyle=\ttfamily\small, tabsize=2, language=Java}
+\lstset{basicstyle=\ttfamily\small, tabsize=2, frame=leftline, language=Java}
+\renewcommand{\lstlistingname}{プログラム}
 %\usepackage{sty/thmbox}
 \usepackage{sty/cprog}
 \usepackage{sty/simplewick}
@@ -70,6 +73,7 @@
 \newtheorem{definition}{定義}[section]
 \newtheorem{proposition}{命題}[section]
 \newtheorem{todo}{課題}[section]
+\newtheorem{note}{ノート}[section]
 \newtheorem{example}{例}[section]
 %
 \def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
@@ -186,3 +190,9 @@
 \newcommand{\hidari}[1]{\xleftarrow{#1}{}}
 \newcommand{\Migi}[1]{\xRightarrow{#1}{}}
 \newcommand{\Hidari}[1]{\xLeftarrow{#1}{}}
+%
+% to be deplicated
+% sum, prod with suffix
+%
+\newcommand{\mysum}[2]{\sideset{_{#1}}{_{#2}}\sum}
+\newcommand{\myprod}[2]{\sideset{_{#1}}{_{#2}}\prod}

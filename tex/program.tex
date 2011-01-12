@@ -1,3 +1,930 @@
+\section{数の合成の列挙}\label{s1:数の合成の列挙} %{
+\begingroup %{
+	\providecommand{\hakodama}{\mycal{D}}
+	\providecommand{\tugi}{\rightharpoondown}
+	\providecommand{\seki}[1]{\sideset{}{_{#1}}\prod}
+	\providecommand{\uer}[1]{\overrightarrow{#1}}
+	\providecommand{\uel}[1]{\overleftarrow{#1}}
+	%
+	自然数$n$に対して和をとると$n$になる$k$個の自然数の組全体を$\hakodama_k^n$
+	と書く。
+	\begin{equation*}\begin{split} %{
+		\mycal{D}_k^n &= \set{(n_1,n_2,\dots,n_k)\in\sizen^k
+			\bou n_1+n_2+\cdots+n_k=n}
+	\end{split}\end{equation*} %}
+	任意の$k\in\sizen_+,\;n\in\sizen$に対して$\mycal{D}_k^n$の元をすべて
+	列挙することを考える。集合の大きさだけは既にわかっていて
+	$\zettai{\hakodama_k^n}=\binom{n+k-1}{k-1}$となる。
+
+	この節では$\mycal{D}_k^n$の元を、自然数を文字とする文字列として扱うこと
+	がある。自然数を文字とする文字列全体の集合を$W\sizen$と書き、
+	$W\sizen$の元を文字とする文字列全体の集合を$W^2\sizen$と書く。
+	$\mycal{D}_k^n$は$W\sizen$の部分集合、$\mycal{D}_k^n$の元の列挙は
+	$W^2\sizen$の元とみることができる。この節では次の用語や記号を使うものと
+	する。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[箱球] $W\sizen$の元を箱球ということにする。数字の加減を多用
+		するために、$W\sizen$の元は$[n_1n_2\cdots n_k]$ではなく
+		$(n_1,n_2,\dots,n_k)$というように通常の直積の記号で書く。
+		任意の$(n_1,n_2,\dots,n_k)\in W\sizen$に対して、$k$を箱の数、$n_i$を
+		箱$i$の球の数といい、$\myop{tr}(n_1,n_2,\dots,n_k)=n_1+n_2+\cdots+n_k$
+		を球の総数という。特に、球の数が$0$となる箱を空の箱という。
+		文字列の連結による$W\sizen$の積を中置記法で$*$と書く。
+		\begin{equation*}\begin{split} %{
+			(m_1, m_2,\dots, m_k) * (n_1, n_2,\dots, n_l)
+			= (m_1, m_2,\dots, m_k, n_1, n_2,\dots, n_l)
+		\end{split}\end{equation*} %}
+		%
+		\item[箱球列] $W^2\sizen$の元を箱球列ということにする。$W^2\sizen$の元を
+		$w_1\tugi w_2\tugi\dots\tugi w_k$というように矢印$\tugi$でつなげて書く。
+		文字列の連結による$W^2\sizen$の積も同じ中置記法$\tugi$を用いて次のように
+		書く。
+		\begin{equation*}\begin{split} %{
+			(w_1\tugi w_2\tugi\dots\tugi w_k)
+				\tugi(x_1\tugi x_2\tugi\dots\tugi x_l) \\
+			= w_1\tugi w_2\tugi\dots\tugi w_k\tugi x_1\tugi x_2\tugi\dots\tugi x_l
+		\end{split}\end{equation*} %}
+		%
+		\item[文字列一般] $WA$を集合$A$を文字とする文字列全体の集合とする。
+		文字列$w\in WA$の文字数を$\zettai{w}$と書く。また、文字数$k$の文字列全体
+		の集合を$W_kA=\set{w\in WA\bou \zettai{w}=k}$と書き、文字数が$1$以上の
+		文字列全体の集合を$W_+A=\cup_{k\in\sizen_+}A$と書く。
+		$WA$の積$\square$に対して$\seki{\square}$を次のように定義する。
+		\begin{equation*}\begin{split} %{
+			\seki{\square}_{i=1}^nw_i 
+				&= w_1\square w_2\square \cdots\square w_n \\
+			\seki{\square}_{i=n}^1w_i
+				&= w_n\square w_{n-1}\square \cdots\square w_1 \\
+		\end{split}
+			\quad\text{for all }w_1,w_2,\dots,w_n\in WA
+		\end{equation*} %}
+		自然な入射$(-)_W:A\to WA$と関手$(-)_W:\set{A\to B}\to\set{WA\to WB}$を
+		次のように定義する。
+		\begin{equation*}\begin{split} %{
+			(a)_W &= (a)\in WA \quad\text{for all }a\in A \\
+			(f)_W(a_1,a_2,\dots,a_k) &= (fa_1,fa_2,\dots,fa_k)\in WB \\
+			&\quad\text{for all }a_1,a_2,\dots,a_k\in A,\;f\in\set{A\to B} \\
+		\end{split}\end{equation*} %}
+	\end{description} %}
+
+\subsection{辞書式順序}\label{s2:辞書式順序} %{
+	$\hakodama_k^n$を辞書式順序で並べて列挙することを考える。
+	$W\sizen$に対して辞書式順序$<$を次のように定める。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 長さが等しい文字列同士は次のように定義する。
+		\begin{equation*}\begin{split} %{
+			(m_1,m_2,\dots,m_k) < (n_1,n_2,\dots,n_k)
+			\iff \text{there exists }l\in1..k \text{ such that } \\
+			m_l < n_l \text{ and }m_i = n_i \text{ for all }i\in1..(l-1) \\
+		\end{split}\end{equation*} %}
+		%
+		\item 長さが等しくない文字列同士は次のように定義する。
+		\begin{equation*}\begin{split} %{
+			(m_1,m_2,\dots,m_k) < (m_1,m_2,\dots,m_k,m_{k+1}) \\
+		\end{split}\end{equation*} %}
+	\end{itemize} %}
+	$\hakodama_k^n$を辞書式順序で並べて列挙した箱球列を
+	$d_k^n\in W\hakodama_k^n\subset W\sizen$と書く。
+
+	箱の数が$2$の時は次のようになり、
+	\begin{equation*}\begin{split} %{
+		d_2^n = (0,n)\tugi(1,n-1)\tugi\cdots\tugi(n,0)
+	\end{split}\end{equation*} %}
+	箱の数が$3$の時は次のようになる。
+	\begin{equation*}\begin{split} %{
+		d_3^n &= \seki{\tugi}_{p=0}^n (p)*d_2^{n-p} \\
+		&= \bigl((0)*d_2^n\bigr)\tugi\bigl((1)*d_2^{n-1}\bigr)
+			\tugi\cdots\tugi\bigl((n)*d_2^{0}\bigr) \\
+		&= (0,0,n)\tugi(0,1,n-1)\tugi\cdots\tugi(0,n,0) \\
+		&\; \tugi(1,0,n-1)\tugi(1,1,n-2)\tugi\cdots\tugi(1,n-1,0) \\
+		&\; \tugi\cdots \\
+		&\; \tugi(n,0,0) \\
+	\end{split}\end{equation*} %}
+	ここで、$(n)*$を球が$n$個入った箱を箱球の左端に付け足す操作とした。
+	\begin{equation*}\begin{split} %{
+		(n)*(w_1\tugi w_2\tugi\cdots\tugi w_p)
+		= \bigl((n)*w_1\bigr)\tugi\bigl((n)*w_2\bigr)
+			\tugi\cdots\tugi\bigl((n)*w_p\bigr) \\
+		\quad\text{for all }w_1,w_2,\dots,w_p\in W\sizen,\;n\in\sizen
+	\end{split}\end{equation*} %}
+	同様に、球が$n$個入った箱を箱球の右端に付け足す操作を$*(n)$と書く。
+	一般に箱球列$d_k^n$は任意の$n\in\sizen$に対して次のように再帰的に
+	定義することができる。
+	\begin{equation}\label{eq:辞書式順序の箱球列の定義}\begin{split} %{
+		d_1^n &= (n) \\
+		d_{k+1}^n &= \seki{\tugi}_{p=0}^n (p)*d_k^{n-p}
+		\quad\text{for all }k\in\sizen_+
+	\end{split}\end{equation} %}
+	与えられた$(n_1,n_2,\dots,n_k)\in\hakodama_k^n$に対して辞書式順序で次に
+	なる元は次のようにして求まるだろう。
+
+	\begin{proposition}[辞書式順序で順に列挙する手順]
+	\label{prop:辞書式順序で順に列挙する手順} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[空でない箱を探す] 空でない最も右側の箱$i$を見つける。
+			\begin{equation*}\begin{split} %{
+				(n_1,\dots,n_{i-1},n_i>0, n_{i+1}=0,\dots,n_k=0)
+			\end{split}\end{equation*} %}
+			箱$1$以外がすべて空ならば次はない。
+			\item[球を移動する] 箱$i$から箱$i-1$へ球を一つ移動してから、
+			\begin{equation*}\begin{split} %{
+				(n_1,\dots,,n_{i-1},n_i>0, n_{i+1}=0,\dots,n_k=0) \\
+				\mapsto
+				(n_1,\dots,n_{i-1}+1,n_i-1\ge0, n_{i+1}=0,\dots,n_k=0)
+			\end{split}\end{equation*} %}
+			箱$i$の球をすべて箱$k$に移す。
+			\begin{equation*}\begin{split} %{
+				(n_1,\dots,n_{i-1}+1,n_i-1\ge0, n_{i+1}=0,\dots,n_k=0) \\
+				\mapsto
+				(n_1,\dots,n_{i-1}+1,n_i=0, n_{i+1}=0,\dots,n_k\ge0)
+			\end{split}\end{equation*} %}
+		\end{description} %}
+	\end{proposition} %prop:辞書式順序で順に列挙する手順}
+
+	この手順をプログラムして箱球列$d_4^3$を出力した結果は次のようになり、
+	この手順で良さそうである。
+	\begin{equation*}\begin{split} %{
+		0003 \tugi 0012 \tugi 0021 \tugi 0030 \tugi 0102 \tugi 0111 \tugi
+		0120 \tugi 0201 \tugi 0210 \tugi 0300 \\
+		\tugi 1002 \tugi 1011 \tugi 1020 \tugi 1101 \tugi 1110 \tugi 1200 \\
+		\tugi 2001 \tugi 2010 \tugi 2100 \\
+		\tugi 3000 \\
+	\end{split}\end{equation*} %}
+
+	箱球列$d_k^n$の定義\eqref{eq:辞書式順序の箱球列の定義}から手順
+	\ref{prop:辞書式順序で順に列挙する手順}を導き出しておく。そのためにまず、
+	次の命題を証明しておく。
+
+	\begin{proposition}[辞書式順序の箱球列の両端]\label{prop:辞書式順序の箱球列の両端} %{
+		任意の$k\in\sizen_+$に対して箱球列$d_k^n$は次の形になる。
+		\begin{equation*}\begin{split} %{
+			d_k^n = (0,0,\dots,0,n)\tugi\cdots\tugi (n,0,\dots,0,0)
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:辞書式順序の箱球列の両端}
+	\begin{proof} %{
+		箱の数についての帰納法で証明する。箱の数が$1$の時は、$d_1^n=(n)$
+		となるから命題が成り立つ。箱の数が$k$の時、命題が成り立つとする。
+		帰納法の仮定から次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			d_{k+1}^n &= \prod_{p=0}^n(p)*d_k^{n-p} \\
+			&= \prod_{p=0}^n(p)*
+				\bigl((0,0,\dots,0,n-p)\tugi\cdots\tugi(n-p,0,\dots,0,0)\bigr) \\
+			&= (0)*\bigl((0,0,\dots,0,n)\tugi\cdots\tugi(n,0,\dots,0,0)\bigr) \\
+			&\; \tugi(1)*\bigl((0,0,\dots,0,n-1)\tugi\cdots\tugi(n-1,0,\dots,0,0)\bigr) \\
+			&\; \tugi\cdots \\
+			&\; \tugi(n)*(0,0,\dots,0,0) \\
+		\end{split}\end{equation*} %}
+		したがって、$d_{k+1}^n=(0,0,\dots,0,n)\tugi\cdots\tugi(n,0,\dots,0,0)$
+		という形になり、箱の数が$k+1$の時も命題が成り立つことがわかる。
+	\end{proof} %}
+
+	この命題より任意の$k\in\sizen_+$に対して箱球列
+	$d_{k+1}^n=\seki{\tugi}_{p=0}^n(p)*d_k^{n-p}$の部分箱球列
+	$(p)*d_k^{n-p}\tugi(p+1)*d_k^{n-p-1}$は次の形になることがわかる。
+	\begin{equation*}\begin{split} %{
+		&(p)*d_k^{n-p}\tugi(p+1)*d_k^{n-p-1} \\
+		&= (p)*\bigl((0,0,\dots,0,n-p)\tugi\cdots\tugi(n-p,0,\dots,0,0)\bigr) \\
+		&\tugi (p+1)*\bigl((0,0,\dots,0,n-p-1)\tugi\cdots\tugi(n-p-1,0,\dots,0,0)\bigr) \\
+		&= (p,0,0,\dots,0,n-p)\tugi\cdots\tugi(p,n-p,0,\dots,0,0) \\
+		&\tugi (p+1,0,0,\dots,0,n-p-1)\tugi\cdots\tugi(p+1,n-p-1,0,\dots,0,0) \\
+	\end{split}\end{equation*} %}
+	特に、$(p)*d_k^{n-p}$と$(p+1)*d_k^{n-p-1}$の継ぎ目の部分が次の形となる。
+	\begin{equation}\label{eq:辞書式順序での継ぎ目の部分}\begin{split} %{
+		(p,n-p,0,\dots,0,0)\tugi(p+1,0,0,\dots,0,n-p-1)
+	\end{split}\end{equation} %}
+	手順\ref{prop:辞書式順序で順に列挙する手順}の"球を移動する"操作が、
+	この継ぎ目の部分の遷移を行う。そして、$(p)*d_k^{n-p}$内の遷移は
+	手順\ref{prop:辞書式順序で順に列挙する手順}の"空でない箱を探す"ことが、
+	$d_{k+1}$から$d_k,d_{k-1},d_{k-2},\dots,d_1$と再帰的に
+	$(p,n-p,0,\dots,0,0)\tugi(p+1,0,0,\dots,0,n-p-1)$となる継ぎ目を探すこと
+	に対応する。
+
+	最後に$\hakodama$を辞書式順序の逆順で列挙する手続きを書いておく。
+	継ぎ目の部分の式\eqref{eq:辞書式順序での継ぎ目の部分}を見て
+	逆順になる操作をすればよい。
+
+	\begin{proposition}[辞書式順序で逆順に列挙する手順]
+	\label{prop:辞書式順序で逆順に列挙する手順} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[空でない箱を探す] 箱$1$から箱$k-1$までで空でない最も右側の箱
+			$i$を見つける。
+			\begin{equation*}\begin{split} %{
+				(n_1,\dots,n_{i-1},n_i>0, n_{i+1}=0,n_{i+2}=0,\dots,n_{k-1}=0,n_k)
+			\end{split}\end{equation*} %}
+			箱$k$以外がすべて空ならば次はない。
+			\item[球を移動する] 箱$i$から箱$i+1$へ球を一つ移動してから、
+			\begin{equation*}\begin{split} %{
+				(n_1,\dots,n_{i-1},n_i>0, n_{i+1}=0,n_{i+2}=0,\dots,n_{k-1}=0,n_k) \\
+				\mapsto
+				(n_1,\dots,n_{i-1},n_i-1\ge0, n_{i+1}=1,n_{i+2}=0,\dots,n_{k-1}=0,n_k)
+			\end{split}\end{equation*} %}
+			箱$k$の球をすべて箱$i+1$に移す。
+			\begin{equation*}\begin{split} %{
+				(n_1,\dots,n_{i-1},n_i-1\ge0, n_{i+1}=1,n_{i+2}=0,\dots,n_{k-1}=0,n_k) \\
+				\mapsto
+				(n_1,\dots,n_{i-1},n_i-1\ge0, n_{i+1}=1,n_{i+2}=0,\dots,n_{k-1}=0,n_k=0)
+			\end{split}\end{equation*} %}
+		\end{description} %}
+	\end{proposition} %prop:辞書式順序で逆順に列挙する手順}
+
+	\begin{todo}[列挙を作用素で書く]\label{todo:列挙を作用素で書く} %{
+		辞書式順序で次の箱球を与える関数を無理やり作用素を使って書くと
+		次のようになるだろう。
+		\begin{equation*}\begin{split} %{
+			\uer{A}_{RR}(\uel{m}_R\otimes\pi_0)\Delta_\shuffle
+		\end{split}\end{equation*} %}
+		$\Delta_\shuffle$はシャッフル余積で$WA$に対して次のように定義される。
+		\begin{equation*}\begin{split} %{
+			\Delta_\shuffle[a_1a_2\cdots a_k] &= 1_W\otimes[a_1a_2\cdots a_k] \\
+			&+ [a_1]\otimes[a_2\cdots a_k] \\
+			&+ [a_1a_2]\otimes[a_3\cdots a_k] \\
+			&+ \cdots \\
+			&+ [a_1a_2\cdots a_k]\otimes1_W \\
+		\end{split}\end{equation*} %}
+		$\pi_0$は球の入っていない箱球への射影で$W\sizen$の双対空間$W\sizen^t$
+		を用いて次のように定義される。
+		\begin{equation*}\begin{split} %{
+			\pi_0 = (0)(0)^t + (0,0)(0,0)^t + \cdots
+		\end{split}\end{equation*} %}
+		$\uel{m}_R$は右端の箱から右端の左隣の箱へ球を一つ移動する操作である。
+		\begin{equation*}\begin{split} %{
+			\uel{m}_R(n) &= 0 \\
+			\uel{m}_R(n_1,\dots,n_k,n_{k+1})
+			&= \jump{1\le n_{k+1}}(n_1,\dots,n_k+1,n_{k+1}-1)
+		\end{split}\end{equation*} %}
+		$\uer{A}_{RR}$は$W\sizen\otimes W\sizen$に対する操作で、左の箱球の右端の
+		箱から左の箱球の右端の箱へ球をすべて移動する操作である。
+		\begin{equation*}\begin{split} %{
+			\uer{A}_{RR} (m_1,\dots,m_{k-1},m_k)\otimes(n_1,\dots,n_{l-1},n_l) \\
+			= (m_1,\dots,m_{k-1},0)\otimes(n_1,\dots,n_{l-1},n_l+m_k)
+		\end{split}\end{equation*} %}
+	\end{todo} %todo:列挙を作用素で書く}
+%s2:辞書式順序}
+
+\subsection{グレイコード}\label{s2:グレイコード} %{
+	文字数$k$の文字列全体の集合$W_k\sizen$にはハミング距離$d$が定義できる。
+	\begin{equation*}\begin{split} %{
+		d:(m_1,m_2,\dots,m_k)\otimes(n_1,n_2,\dots,n_k)
+		&\mapsto \sum_{p\in1..k}\zettai{m_p-n_p}
+	\end{split}\end{equation*} %}
+	$W_k\sizen$では異なる元の間の最小のハミング距離は$2$なる。
+	列の前後の元同士のハミング距離が$2$になるように$\mycal{D}_k^n$の元を
+	列挙したものをグレイコードという。
+
+	もともとのグレイコードはビット列を列挙する問題に対して定義されたもので
+	あろうが、現在ではより一般的に組み合わせ的グレイコードとしてビット列以外
+	の対象にも拡張されている。文献\cite{html:holmes}等にその紹介がある。
+
+	一般の$\mycal{D}_k^n$にグレイコードが存在するかどうかは簡単には
+	わからないが、箱の数が$2$の場合には辞書式順序はグレイコードになっていて、
+	箱の数が$3$の場合には次のように順序を変更するとグレイコードになる。
+	\begin{equation*}\begin{array}{cc} %{
+		\text{辞書式順序} & \text{グレイコード} \\
+		\xymatrix@R=3ex@C=2ex{
+			003\ar[r] & 012\ar[r] & 021\ar[r] & 030\ar@(d,u)[dlll] \\
+			102\ar[r] & 111\ar[r] & 120\ar@(d,u)[dll] \\
+			201\ar[r] & 210\ar@(d,u)[dl] \\
+			300
+		} & \xymatrix@R=3ex@C=2ex{
+			003\ar[r] & 012\ar[r] & 021\ar[r] & 030\ar@(d,l)[dl] \\
+			102\ar[d] & 111\ar[l] & 120\ar[l] \\
+			201\ar[r] & 210\ar@(d,l)[dl] \\
+			300
+		}
+	\end{array}\end{equation*} %}
+%s2:グレイコード}
+\endgroup %}
+%s1:数の合成の列挙}
+
+\section{自然数の合成の列挙}\label{s1:自然数の合成の列挙} %{
+\begingroup %{
+	\providecommand{\op}[2]{{\myop{#1}}_{\myop{#2}}}
+	\providecommand{\move}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\subsection{グレイコード}\label{s2:グレイコード} %{
+	各$\mycal{D}_k^n$にはハミング距離$d$が定義できる。
+	\begin{equation*}\begin{split} %{
+		d\bigl((m_1,m_2,\dots,m_k),(n_1,n_2,\dots,n_k)\bigr)
+		= \sum_{i=1..k}\zettai{m_i-n_i}
+	\end{split}\end{equation*} %}
+	異なる元の間の最小のハミング距離は$2$なる。$\mycal{D}_k^n$の元を列挙
+	する方法で、列挙の列の前後の元同士のハミング距離が$2$となるような列挙の
+	方法をグレイコードという。
+
+	グレイコードはグラフの問題に帰着される。
+	ハミング距離が$2$となる$\mycal{D}_k^n$の元同士を向きのない線でつなぐと
+	$\mycal{D}_k^n$の元を頂点とする連結な無向グラフとなる。
+	このグラフを一筆書きする経路、つまりすべての頂点を唯一度だけ通る経路が
+	グレイコードとなる。グラフを一筆書きする経路のことをハミルトン経路という。
+
+	\begin{definition}[ハミルトン経路]\label{def:ハミルトン経路} %{
+		無向グラフのすべての頂点を唯一度だけ通る経路をハミルトン経路という。
+		また、ループするハミルトン経路をハミルトン閉路という。
+	\end{definition} %def:ハミルトン経路}
+
+	一般のグラフに対してハミルトン経路やハミルトン閉路を求める問題はNP問題に
+	分類されていて、グラフの特殊性を使わないと効率的にハミルトン経路を求める
+	ことができないようである。
+
+	もともとのグレイコードはビット列を効率的に列挙する方法として考えられた
+	ようだが、現在では一般化されて、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 文字列に距離を定義し、
+		\item 列の前後の元同士の距離が最小かつ一定になるような
+	\end{itemize} %}
+	列挙の方法をグレイコードというようだ。
+
+	この節では$\mycal{D}_k^n$を球を箱に入れる仕方に対応させることにする。
+	$\mycal{D}_k^n$は、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 区別のつく$k$個の箱に、
+		\item 区別のつかない$n$個の球を、
+		\item 空箱を許して入れる
+	\end{itemize} %}
+	仕方全体とみることができる。ハミング距離が$2$となる$\mycal{D}_k^n$の
+	任意の二つの元は、ある二つの箱の間で一つの球を移動したものになっている。
+	例えば$(1,1,1,0)$は$(0,2,1,0)$の箱$2$から箱$1$へ球を一つ移動したもの
+	になっている。グレイコードは箱から別の箱に球を移動させることで得られるが、
+	ここでは、球の移動を右隣の箱への移動に制限して考えてみる。
+	ただし、右端の箱の右隣は左端の箱として考える。球を右隣の箱へ移動する操作を
+	加法の記号を使って書くと次のようになる。
+	\begin{equation*}\begin{split} %{
+		(m_1,m_2,\dots,m_k) &\mapsto (m_1-1,m_2+1,\dots,m_k) \\
+		&+ (m_1,m_2-1,m_3+1,\dots,m_k) \\
+		&+ (m_1,m_2,\dots,m_{k-1}-1,m_k+1) \\
+		&+ (m_1+1,m_2,\dots,m_{k-1},m_k-1)
+	\end{split}\end{equation*} %}
+	$\mycal{D}_4^3$の場合に、球を右隣の箱へ移動する操作を図に描くと次の
+	ようになる。
+	\begin{equation*}\xymatrix@R=4ex@C=2ex{
+		3000 \ar[d] \\
+		2100 \ar[r] \ar[d] & 2010 \ar[r] \ar[d] & 2001 \ar[llu] \ar[d] \\
+		1200 \ar[r] \ar[d] & 1110 \ar[r] \ar[d] \ar@/^6ex/[rrrrrr] 
+			& 1101 \ar[r] \ar[llu] \ar[d] & 1011 \ar[r] \ar[d] \ar[llu] \ar[d] 
+			& 1002 \ar[llu] \ar[d] & & & 1020 \ar@/_4ex/[llll] \ar[d] \\
+		0300 \ar[r] & 0210 \ar[r] \ar@/_6ex/[rrrrrr] & 0201 \ar[r] \ar[llu] 
+			& 0111 \ar[r] \ar[llu] \ar@/_6ex/[rrrrrr] & 0102 \ar[r] \ar[llu]
+			& 0012 \ar[r] \ar[llu] & 0003 \ar[llu] 
+			& 0120 \ar[r] \ar@/^6ex/[llll] & 0030 \ar[r] & 0021 \ar[llu] \\
+			\\
+	}\end{equation*}
+	一般に$\mycal{D}_k^n$の場合には、各頂点$w\in\mycal{D}_k^n$には
+	$\sharp_+w$個の長さ$k$の閉じた経路が現れる。
+	ここで、$w\in\mycal{D}_k^n$に対して$\sharp_+w$を空でない箱の数とする。
+	例えば、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 頂点$(2,1,0,0)$は$(2,1,0,0)$を基点とする$\sharp_+(2,1,0,0)=2$個
+		の長さ$4$の閉じた経路を持ち、
+		\item 頂点$(1,1,0,1)$は$(1,1,0,1)$を基点とする
+		$\sharp_+(1,1,0,1)=3$個の長さ$4$の閉じた経路を持つ。
+	\end{itemize} %}
+	箱の数が$4$以上だと紙に書くことが難しいので、箱の数が$3$の場合を書くと次の
+	ようになる。
+	\begin{equation*}\xymatrix@R=4ex@C=2ex{
+		400 \ar[d] \\
+		310 \ar[r] \ar[d] & 301 \ar[lu] \ar[d] \\
+		220 \ar[r] \ar[d] & 211 \ar[r] \ar[d] \ar[lu] & 202 \ar[d] \ar[lu] \\
+		130 \ar[r] \ar[d] & 121 \ar[d] \ar[r] \ar[lu] & 112 \ar[d] \ar[r] \ar[lu] & 103 \ar[d] \ar[lu] \\
+		040 \ar[r] & 031 \ar[r] \ar[lu] & 022 \ar[r] \ar[lu] & 013 \ar[r] \ar[lu] & 004 \ar[lu]\\
+	}\end{equation*}
+	この図を見ると箱$3$の球の数が偶数の時は正順で、箱$2$の球の数が奇数の時は
+	逆順で辺をたどるハミルトン経路がプログラムする際に簡単になりそうである。
+	逆順にたどる辺を$\sim>$と書くと次のようになる。
+	\begin{equation}\label{eq:箱の数が3の場合のハミルトン経路}\xymatrix@R=4ex@C=2ex{
+		400 \ar[d] \\
+		310 \ar[d] & 301 \ar@{<~}[d] \\
+		220 \ar[d] & 211 \ar@{<~}[d] & 202 \ar[d] \ar@{<~}[lu] \\
+		130 \ar[d] & 121 \ar@{<~}[d] & 112 \ar[d] & 103 \ar@{<~}[d] \\
+		040 \ar[r] & 031 & 022 \ar[r] & 013 & 004 \ar@{<~}[lu]\\
+	}\end{equation}
+	Javaプログラム\ref{code:箱の数が２または３の場合}は箱の数が$2$または$3$
+	の場合にのみ、この図の順序で列挙するプログラムである。
+	箱の数が$2$または$3$に限定されるが、簡単にプログラムを書くことができる。
+
+	図\eqref{eq:箱の数が3の場合のハミルトン経路}のように球を一つ右か左の箱へ
+	移動させて順に列挙していくグレイコードを隣接グレイコードということにする。
+
+	箱の数についての漸化式
+	\begin{equation*}\begin{split} %{
+		\mycal{D}_{k+1}^n = \cup_{p\in0..n}\mycal{D}_{k}^{n-p}*(p)
+	\end{split}\end{equation*} %}
+	によって、図\eqref{eq:箱の数が3の場合のハミルトン経路}の経路を箱の数が
+	$4$以上に拡張することを考える。$\mycal{D}_k^n$の元を文字とする文字列を
+	$W\mycal{D}_k^n$と書く。任意の$w\in\mycal{D}_p^m$に対して
+	写像$(w*)/(*w):W\mycal{D}_k^n\to W\mycal{D}_{p+k}^{m+n}$を次のように
+	定義する。
+	\begin{equation*}\begin{split} %{
+		(w*)(w_1,w_2,\dots,w_r) &= (w*w_1,w*w_2,\dots,w*w_r) \\
+		(*w)(w_1,w_2,\dots,w_r) &= (w_1*w,w_2*w,\dots,w_r*w)
+	\end{split}\end{equation*} %}
+	特に任意の自然数$n$に対して$(n*)=\bigl((n)*\bigr)$や
+	$(*n)=\bigl(*(n)\bigr)$と書くことにする。文字の並びを反転される操作を
+	$R$と書くことにする。
+	\begin{equation*}\begin{split} %{
+		R(w_1,w_2,\dots,w_r) = (w_r,\dots,w_2,w_1)
+	\end{split}\end{equation*} %}
+	すると、図\eqref{eq:箱の数が3の場合のハミルトン経路}の経路による
+	グレイコードは次のように書ける。
+	\begin{equation}\label{eq:箱の数が3までのハミルトン経路}\begin{split} %{
+		\text{箱の数が$1$} &= \bigl((n)\bigr) \\
+		\text{箱の数が$2$} &= \bigl((n,0),(n-1,1),\dots,(0,n)\bigr) \\
+		\text{箱の数が$3$} &= \bigl((*0)R^0w_2^n\bigr)
+			*\bigl((*1)R^1w_2^{n-1}\bigr)*\cdots*\bigl((*n)R^nw_2^0\bigr) \\
+		&= \prod_{p=0}^n(*p)R^pw_2^{n-p} \\
+	\end{split}\end{equation} %}
+	これを箱の数が以上に一般化して$W\mycal{D}_+^*$の部分集合
+	$\set{w_k^n\in W\mycal{D}_k^n}$を次のように定義する。
+	\begin{equation}\label{eq:Klingsbergの隣接グレーコード}\begin{split} %{
+		w_1^n &= \bigl((n)\bigr) \\
+		w_{k+1}^n &= \prod_{p=0}^n(*p)R^pw_k^{n-p}
+			\quad\text{for all }k\in\sizen_+
+	\end{split}\end{equation} %}
+	$w_k^n$は箱の数が$3$までの場合、式\eqref{eq:箱の数が3までのハミルトン経路}
+	による隣接グレイコードに一致する。$w_1^n$が箱の数が$1$、$w_2^n$が箱の数が
+	$2$、$w_3^n$が箱の数が$3$の時の隣接グレイコードである。
+	一般の$w_k^n$が$\mycal{D}_k^n$の列挙になっていることはわかるが、それが
+	グレイコードかどうかはすぐにはわからない。
+	箱の数が$4$の時は次のようになり、
+	\begin{equation*}\begin{split} %{
+		(*0)R^0w_3^3 &= (*0)R^0(300,210,\dots,003) \\
+			&= (3000,2100,1200,0300,0210,1110,2010,1020,0120,0030) \\
+		(*1)R^1w_3^2 &= (*1)R^1(200,110,\dots,002) \\
+			&= (0021,1011,0111,0201,1101,2001) \\
+		(*2)R^1w_3^1 &= (*2)R^2(100,010,001) \\
+			&= (1002,0102,0012) \\
+		(*3)R^1w_3^0 &= (*3)R^3(000) \\
+			&= (0003) \\
+	\end{split}\end{equation*} %}
+	$w_4^3$は次のようになることがわかる。
+	\begin{equation}\label{eq:箱の数が4のグレイコード}\begin{split} %{
+		w_4^3 &= (3000,2100,1200,0300,0210,1110,2010,1020,0120,0030 \\
+			&\quad ,0021,1011,0111,0201,1101,2001 \\
+			&\quad ,1002,0102,0012 \\
+			&\quad ,0003)
+	\end{split}\end{equation} %}
+	したがって、$w_4^3$もまたグレイコードになっていることがわかる。
+	ただし、隣接グレイコードにはなっていない。例えば、$(*1)R^1w_3^2$の中の並び
+	$0021\mapsto1011$は隣り合った箱の間で球を一つ移動したものになっていない。
+	$w_3^2$は隣接グレイコードであるが、$w_3^2$の中に両端の箱の間の球の移動
+	$101\mapsto200$が含まれているために、$(*1)$の操作で右端に箱$4$を付け足す
+	ために$(*1)w_3^2$においては箱$1$と箱$3$は隣り合わなくなるからである。
+
+	$w_k^n$がグレイコードになっていることを認めてしまえば、帰納法により、
+	グレイコードの並びの反転$R$はやはりグレイコードだから、
+	$w_{k+1}^n=\prod_{p=0}^n(*p)R^pw_k^{n-p}$において、任意の$p\in0..n$に
+	対して$(*p)R^pw_k^{n-p}$がグレイコードになっていることはすぐわかる。
+	しかし、$(*p)R^pw_k^{n-p}$と$(*p+1)R^{p+1}w_k^{n-(p+1)}$のつなぎ目が
+	グレイコードになっていることはすぐにわからない。$w_4^3$の場合、
+	$0030\mapsto0021$、$2001\mapsto1002$、$0012\mapsto0003$というつなぎ目で
+	ある。ここのつなぎ目がグレイコードになっているミソは
+	\begin{equation*}\begin{split} %{
+		003 &\xmapsto{\text{右端の数字を一つ下げる}} 002 \\
+		200 &\xmapsto{\text{左端の数字を一つ下げる}} 100 \\
+		001 &\xmapsto{\text{右端の数字を一つ下げる}} 000 \\
+	\end{split}\end{equation*} %}
+	となっていることである。したがって、$w_k^{n-p}$の右端の文字となる
+	$\mycal{D}_k^{n-p}$の元の左端または右端の箱から球を一つ取り出せば
+	$w_k^{n-(p+1)}$の左端の文字となる$\mycal{D}_k^{n-(p+1)}$の元になること
+	が示せれば、$w_{k+1}^n$がグレイコードになることが示せる。
+
+	\begin{proposition}[列挙の両端の元]\label{prop:列挙の両端の元} %{
+		$w_k^n$の左端の文字となる$\mycal{D}_k^n$の元は$(n,0,\dots,0)$となり、
+		右端の文字となる$\mycal{D}_k^n$の元は$(0,0,\dots,n)$となる。
+	\end{proposition} %prop:列挙の両端の元}
+	\begin{proof} %{
+		箱の数についての帰納法で証明する。
+		箱の数が$1$の時は$w_1^n=\bigl((n)\bigr)$だから命題が成り立つ。
+		箱の数が$k$で命題が成り立つと仮定する。すると、$w_{k+1}^n$の左端の
+		文字は$(*0)R^0w_k^n$の左端の文字となるから、帰納法の仮定より
+		$(n,0,\dots,0)$となる。また、$w_{k+1}^n$の右端の文字は、
+		$(*n)R^nw_k^0$の右端の文字となるから、$w_k^0=\bigl((0,0,\dots,0)\bigr)$
+		より、$(0,\dots,0,n)$となる。したがって、箱の数が$k+1$の時にも命題が
+		成り立つことが証明された。
+	\end{proof} %}
+
+	\begin{proposition}[グレーコードになる]\label{prop:グレーコードになる} %{
+		$w_k^n$は$\mycal{D}_k^n$のグレーコードとなる。
+	\end{proposition} %prop:グレーコードになる}
+	\begin{proof} %{
+		箱の数についての帰納法で証明する。
+		箱の数が$1$の時は$w_1^n=\bigl((n)\bigr)$だから命題が成り立つ。
+		箱の数が$k$で命題が成り立つと仮定する。すると、$w_k^n$の定義より、
+		$w_{k+1}^n=\prod_{p=0}^n(*p)R^pw_k^{n-p}$だが、グレーコードの文字列の
+		反転$R$はまたグレーコードだから、帰納法の仮定より、任意の
+		$p\in0..n$に対して$(*p)R^pw_k^{n-p}$がグレーコードになることがわかる。
+		また、命題\ref{prop:列挙の両端の元}より、任意の$p\in0..(n-1)$で
+		次のようになる。
+		\begin{equation*}\begin{split} %{
+			&(*p)R^pw_k^{n-p} \\
+			&= (*p)R^p\bigl((n-p,0,\dots,0),\dots,(0,0,\dots,n-p)\bigr) \\
+			&= \begin{cases}
+				\bigl((n-p,0,\dots,0,p),\dots,(0,0,\dots,n-p,p)\bigr)
+					, &\text{ iff }p\text{ is even} \\
+				\bigl((0,0,\dots,n-p,p),\dots,(n-p,0,\dots,0,p)\bigr)
+					, &\text{ otherwise } \\
+			\end{cases} \\
+			&(*p+1)R^{p+1}w_k^{n-(p+1)} \\
+			&= (*p+1)R^{p+1}\bigl((n-p-1,0,\dots,0),\dots,(0,0,\dots,n-p-1)\bigr) \\
+			&= \begin{cases}
+				\bigl((0,0,\dots,n-p-1,p+1),\dots,(n-p-1,0,\dots,0,p+1)\bigr)
+					, &\text{ iff }p\text{ is even} \\
+				\bigl((n-p-1,0,\dots,0,p+1),\dots,(0,0,\dots,n-p-1,p+1)\bigr)
+					, &\text{ otherwise } \\
+			\end{cases} \\
+		\end{split}\end{equation*} %}
+		したがって、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $p$が偶数の場合は$(*p)R^pw_k^{n-p}$の右端の文字となる
+			$\mycal{D}_{k+1}^n$の元に対して箱$k$から箱$k+1$へ球を一つ移したものが
+			$(*p+1)R^{p+1}w_k^{n-(p+1)}$の左端の文字となる$\mycal{D}_{k+1}^n$の元
+			となり、
+			\item $p$が奇数の場合は$(*p)R^pw_k^{n-p}$の右端の文字となる
+			$\mycal{D}_{k+1}^n$の元に対して箱$1$から箱$k+1$へ球を一つ移したものが
+			$(*p+1)R^{p+1}w_k^{n-(p+1)}$の左端の文字となる$\mycal{D}_{k+1}^n$の元
+			となり、
+		\end{itemize} %}
+		文字列の連結$\bigl((*p)R^pw_k^{n-p}\bigr)\bigl((*p)R^pw_k^{n-p}\bigr)$
+		もやはりグレーコードになることがわかる。以上より、箱の数が$k+1$の時も
+		命題が成り立つことがわかる。
+	\end{proof} %}
+
+	この命題によって式\eqref{eq:Klingsbergの隣接グレーコード}で定義された
+	$w_k^n$がグレーコードになることがわかる。グレーコードを与える線形写像
+	$\myop{next}_k:\sizen\myop{D}_k^*\to\sizen\myop{D}_k^*$は再帰を用いると
+	次のように書ける。
+	\begin{equation*}\begin{split} %{
+		\myop{next}_1(n) &= 0 \\
+		\myop{next}_{k+1}(n_1,\dots,n_{k+1}) &= \left\{\begin{split}
+			n_{k+1}\text{ is even} &\implies \left\{\begin{split}
+				n_1\neq 0 &\implies (\myop{next}_k(n_1,\dots,n_k)) * (n_{k+1})\\
+				\text{else} &\implies M_{-k}(n_1,\dots,n_{k+1}) \\
+			\end{split}\right. \\ %\}
+			\text{else} &\implies \left\{\begin{split}
+				n_1\neq 0 &\implies (\myop{next}_k(n_k,\dots,n_1)) * (n_{k+1})\\
+				\text{else} &\implies M_{+(k+1)}(n_1,\dots,n_{k+1}) \\
+			\end{split}\right. \\ %\}
+		\end{split}\right. \\ %\}
+		&\quad\text{for all }k\in\sizen_+
+	\end{split}\end{equation*} %}
+	これをそのまま再帰を用いてC言語で書くと末尾再帰となる。したがって、
+	このプログラムは$\myop{while}$文で書き直すことができるはずである。
+	このプログラムを$\myop{while}$文で書き直すことを考える。そのために、
+	箱の数が小さいところの様子を見てみよう。
+
+	箱の数が$3$の時は次のようになる。
+	\begin{equation*}\begin{split} %{
+		w_3^n &= \prod_{p=0}^nR^p\prod_{q=0}^{n-p}(n-p-q,q,p) \\
+		&= \prod_{p=0}^n \left\{\begin{split}
+			p\text{ is even} &\implies \prod_{q=0}^{n-p} \\
+			\text{else} &\implies \prod_{q=n-p}^{0} \\
+		\end{split}\right\}(n-p-q,q,p) \\  %\}
+		&= \prod_{p=0}^n \left\{\begin{split}
+			p\text{ is even} &\implies \prod_{q=0}^{n-p} (n-p-q,q,p) \\
+			\text{else} &\implies \prod_{q=0}^{n-p} (q,n-p-q,p) \\
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation*} %}
+	したがって、$\myop{next}_3$は次のようになることがわかる。
+	\begin{equation*}\begin{split} %{
+		\myop{next}_3(n_1,n_2,n_3) = \left\{\begin{split}
+			n_3\text{ is even} &\implies \left\{\begin{array}{rll}
+				0< n_1 &\implies M_{-1}(n_1,n_2,n_3) &\text{// }\prod_q \\
+				\text{else} &\implies M_{-2}(n_1,n_2,n_3) &\text{// }\prod_p(*p) \\
+			\end{array}\right. \\ %\}
+			\text{else} &\implies \left\{\begin{array}{rll}
+				0< n_2 &\implies M_{+1}(n_1,n_2,n_3) &\text{// }\prod_q \\
+				\text{else} &\implies M_{+3}(n_1,n_2,n_3) &\text{// }\prod_p(*p) \\
+			\end{array}\right. \\ %\}
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation*} %}
+	ここで、箱$i$から箱$j$へ球を一つ移動する操作を$\move{j}{i}$と書くと、
+	$\myop{next}_3$は次のように箱$1$と箱$2$を対称的に書ける。
+	\begin{equation*}\begin{split} %{
+		\myop{next}_3(n_1,n_2,n_3) = \left\{\begin{split}
+			n_3\text{ is even} &\implies \left\{\begin{split}
+				0< n_1 &\implies \move{2}{1}(n_1,n_2,n_3) \\
+				\text{else} &\implies \move{3}{2}(n_1,n_2,n_3) \\
+			\end{split}\right. \\ %\}
+			\text{else} &\implies \left\{\begin{split}
+				0< n_2 &\implies \move{1}{2}(n_1,n_2,n_3) \\
+				\text{else} &\implies \move{3}{1}(n_1,n_2,n_3) \\
+			\end{split}\right. \\ %\}
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation*} %}
+
+	箱の数が$4$の時は次のようになる。
+	\begin{equation*}\begin{split} %{
+		w_4^n &= \prod_{p=0}^n(*p)R^p\prod_{q=0}^{n-p}(*q)R^q\prod_{r=0}^{n-p-q}
+			M_{-1}^r(n-p-q,0) \\
+		&= \prod_{p=0}^n(*p)R^p\prod_{q=0}^{n-p}(*q)\left\{\begin{split}
+			q\text{ is even} &\implies \prod_{r=0}^{n-p-q} M_{-1}^r(n-p-q,0) \\
+			\text{else} &\implies \prod_{r=n-p-q}^{0} M_{-1}^r(n-p-q,0) \\
+		\end{split}\right. \\ %\}
+		&= \prod_{p=0}^n(*p) \left\{\begin{split}
+			p\text{ is even and }q\text{ is even} &\implies 
+				\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q} \\
+			p\text{ is even and }q\text{ is odd} &\implies 
+				\prod_{q=0}^{n-p}\prod_{r=n-p-q}^{0} \\
+			p\text{ is odd and }q\text{ is even} &\implies 
+				\prod_{q=n-p}^{0}\prod_{r=n-p-q}^{0} \\
+			p\text{ is odd and }q\text{ is odd} &\implies
+				\prod_{q=n-p}^{0}\prod_{r=0}^{n-p-q} \\
+		\end{split}\right\} M_{-1}^r(n-p-q,0,q) \\
+		&= \prod_{p=0}^n(*p)\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q} \left\{\begin{split}
+			p\text{ is even and }q\text{ is even} &\implies 
+				\move{3}{2}^q\move{2}{1}^r(n-p,0,0) \\
+			p\text{ is even and }q\text{ is odd} &\implies 
+				\move{3}{1}^q\move{1}{2}^r(0,n-p,0) \\
+			p\text{ is odd and }q\text{ is even} &\implies 
+				\move{3}{1}^q\move{1}{2}^r(0,n-p,0) \\
+			p\text{ is odd and }q\text{ is odd} &\implies 
+				\move{3}{1}^q\move{2}{1}^r(n-p,0,0) \\
+		\end{split}\right. \\ %\}  \\
+	\end{split}\end{equation*} %}
+	をプログラムするためには、与えられた元$w\in\myop{D}_k^n$の、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item どの箱から
+		\item 正順もしくは逆順に
+	\end{itemize} %}
+	球を移動させればよいかを簡単に判別できなくてはならない。
+
+	箱$i$から右隣の箱へ球を一つ移動させる操作を次の線形写像
+	$M_{-i}:\sizen\mycal{D}_k^n\to\sizen\mycal{D}_k^n$で表し、
+	\begin{equation*}\begin{split} %{
+		M_{-i}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
+		&= \jump{1\le n_i}(n_1,\dots,n_i-1,n_{i+1}+1,\dots,n_k) \\
+		M_{-k}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
+		&= \jump{1\le n_k}(n_1+1,\dots,n_i,n_{i+1},\dots,n_k-1) \\
+	\end{split}\end{equation*} %}
+	箱$i$へ右隣の箱から球を一つ移動させる操作を次の線形写像
+	$M_{+i}:\sizen\mycal{D}_k^n\to\sizen\mycal{D}_k^n$で表すことにする。
+	\begin{equation*}\begin{split} %{
+		M_{+i}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
+		&= \jump{1\le n_{i+1}}(n_1,\dots,n_i+1,n_{i+1}-1,\dots,n_k) \\
+		M_{+k}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
+		&= \jump{1\le n_1}(n_1-1,\dots,n_i,n_{i+1},\dots,n_k+1) \\
+	\end{split}\end{equation*} %}
+	$M_{\pm i}$の$\mycal{D}_1^n$に対する作用は$0$とする。
+	\begin{equation*}\begin{split} %{
+		M_{\pm i}w = 0 \quad\text{for all }w\in\mycal{D}_1^n \\
+	\end{split}\end{equation*} %}
+
+	$w_2^n$は$M_{-1}$を使って次のように書くことができる。
+	\begin{equation*}\begin{split} %{
+		w_2^n &= M_{-1}^0(n,0)\mapsto M_{-1}^1(n,0)
+			\mapsto\cdots\mapsto M_{-1}^n(n,0) \\
+		&= (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)(n,0) \\
+	\end{split}\end{equation*} %}
+	したがって、$w_2^n$は箱$1$から右隣の箱へ球を一つ移動させれば順に文字を
+	たどれることがわかる。$w_3^n$は次のようになる。
+	\begin{equation*}\begin{array}{rcl@{\quad}l} %{
+		w_3^n
+		&=& (*0)(M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
+			(n,0) & \text{定義} \\
+		&&\mapsto (*1)R(M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto
+			M_{-1}^{n-1})(n-1,0) \\
+		&&\mapsto (*2)(M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto
+			M_{-1}^{n-2})(n-2,0) \\
+		&&\mapsto \cdots \\
+		&&\mapsto (*n)R^n(M_{-1}^0)(0,0) \\
+		&=& (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
+			(n,0,0) & \text{展開} \\
+		&&\mapsto (M_{-1}^{n-1}\mapsto\cdots\mapsto M_{-1}^1\mapsto M_{-1}^0)
+			(n-1,0,1) \\
+		&&\mapsto (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^{n-2})
+			(n-2,0,2) \\
+		&&\mapsto\cdots \\
+		&&\mapsto(0,0,n) \\
+		&=& (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
+			(n,0,0) & \text{反転部分} \\
+		&&\mapsto(M_{+1}^0\mapsto\cdots\mapsto M_{+1}^{n-2}\mapsto M_{+1}^{n-1})
+			(0,n-1,1) \\
+		&&\mapsto (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^{n-2})
+			(n-2,0,2) \\
+		&&\mapsto \cdots \\
+		&&\mapsto (0,0,n) \\
+		&=& (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
+			(n,0,0) & \text{つなぎ} \\
+		&&\mapsto(M_{+1}^0\mapsto\cdots\mapsto M_{+1}^{n-2}\mapsto M_{+1}^{n-1})
+			M_{-2}M_{-1}^n(n,0,0) \\
+		&&\mapsto (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^{n-2})
+			M_{+3}M_{+1}^{n-1}M_{-2}M_{-1}^n(n,0,0) \\
+		&&\mapsto \cdots \\
+		&&\mapsto \begin{cases}
+			M_{+3}M_{+1}^1\cdots M_{+3}M_{+1}^{n-1}M_{-2}M_{-1}^n(n,0,0)
+				, &\text{ iff $n$ is even} \\
+			M_{-2}M_{-1}^1\cdots M_{+3}M_{+1}^{n-1}M_{-2}M_{-1}^n(n,0,0)
+			, &\text{ otherwise } \\
+		\end{cases} \\
+	\end{array}\end{equation*} %}
+	したがって、箱の数$3$がの場合はグレイコード$w_3^n$をたどる操作は次の
+	線形写像$\myop{next}_3:\sizen\mycal{D}_3^n\to\sizen\mycal{D}_3^n$で
+	表されるだろう。
+	\begin{equation*}\begin{split} %{
+		\myop{next}_3 = \begin{cases}
+			\text{箱$3$の球数が偶} &\implies \begin{cases}
+				\text{箱$1$が空でない} &\implies M_{-1} \\
+				\text{ otherwise } &\implies M_{-2} \\
+			\end{cases} \\
+			\text{ otherwise } &\implies \begin{cases}
+				\text{箱$2$が空でない} &\implies M_{+1} \\
+				\text{ otherwise } &\implies M_{+3} \\
+			\end{cases}\\
+		\end{cases}
+	\end{split}\end{equation*} %}
+
+\subsubsection{箱の数が4の場合}\label{s3:箱の数が4の場合} %{
+	箱の数が4の場合は次のようになる。
+	\begin{equation*}\begin{split} %{
+		w_4^n &= \prod_{p=0}^n(*p)R^pw_3^{n-p} \\
+		&= \prod_{p=0}^n\prod_{q=0}^{n-p}(*p)(*q)R^{p+q}w_2^{n-p-q} \\
+		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q}(*p)(*q)R^{p+q}
+			M_{-1}^r(n-p-q,0) \\
+		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q}(*p)(*q)
+		\begin{cases}
+			M_{-1}^r(n-p-q,0), &\text{ iff }p+q\text{ is } even \\
+			M_{+1}^r(0,n-p-q), &\text{ otherwise } \\
+		\end{cases} \\
+		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q}(*p) \begin{cases}
+			M_{+3}^qM_{-1}^r(n-p,0,0), &\text{ iff }p+q\text{ is } even \\
+			M_{-2}^qM_{+1}^r(0,n-p,0), &\text{ otherwise } \\
+		\end{cases} \\
+		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q} \begin{cases}
+			M_{+4}^p(M_{+3}M_{+4})^qM_{-1}^r(n,0,0,0)
+				, &\text{ iff }p+q\text{ is } even \\
+			(M_{-3}M_{-2})^pM_{-2}^qM_{+1}^r(0,n,0,0), &\text{ otherwise } \\
+		\end{cases} \\
+	\end{split}\end{equation*} %}
+	この式からグレイコード$w_4^n$を順にたどる線形写像$\myop{next}_4$が次の
+	ように求まる。
+	\begin{equation*}\begin{split} %{
+		\myop{next}_4(n_1,n_2,n_3,n_4) \\
+		= \begin{cases} n_3+n_4\text{ is even} &\implies \begin{cases}
+				1\le n_1 &\implies M_{-1} \\
+				\text{otherwise} &\implies \begin{cases}
+					1\le n_2 &\implies M_{-2} \\
+					\text{otherwise} &\implies M_{-3}
+				\end{cases} \\
+			\end{cases} \\
+			\text{otherwise} &\implies \begin{cases}
+				1\le n_2 &\implies M_{+1} \\
+				\text{otherwise} &\implies \begin{cases}
+					1\le n_2 &\implies M_{+4} \\
+					\text{otherwise} &\implies M_{+3}
+				\end{cases} \\
+			\end{cases} \\
+		\end{cases}
+	\end{split}\end{equation*} %}
+
+	箱の数が$4$の場合はグレイコード$w_4^n$を表すためには、$M_{+3}M_{+4}$や
+	$M_{-3}M_{-2}$という球を隣の隣に移動する操作が必要になることに注意する。
+	$w_4^3$の例\eqref{eq:箱の数が4のグレイコード}に現れた球を一つ左右の箱に
+	移動するだけでない操作は、空箱を一つ足してそこに球を移動させる操作に
+	起因する。
+	\begin{equation*}\begin{array}{ccccc} %{
+		(*2)(*1)(0,0) &=& (*2)M_{+3}(1,0,0) 
+			&=& M_{+4}^2(M_{+3}M_{+4})(3,0,0,0) \\
+		(*2)(*1)(0,0) &=& (*2)M_{-2}(0,1,0) 
+			&=& (M_{-3}M_{-2})^2M_{-2}(0,3,0,0) \\
+	\end{array}\end{equation*} %}
+%s3:箱の数が4の場合}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 記法を統一する。
+			\begin{equation*}\begin{split} %{
+				W\sizen\text{の元} &\mapsto \text{箱球の単語} \\
+				W^2\sizen\text{の元} &\mapsto 
+					\text{箱球の句(V.Turaevの用法\cite{arxiv:turaev})} \\
+				W\sizen\text{の連結積} &\mapsto \mybiop{*} \\
+				W^2\sizen\text{の連結積} &\mapsto \mybiop{\mapsto} \\
+				\square\text{の多重積} &\mapsto \myprod{}{\square}_{p=m}^nx_p
+				= \begin{cases}
+					x_m\square x_{m+1}\square\cdots\square x_n
+						, &\text{ iff }m\le n \\
+					x_n\square x_{n+1}\square\cdots\square x_m
+						, &\text{ otherwise } \\
+				\end{cases} \\
+				\text{Hamming隣接} &\mapsfrom
+					\text{Hamming距離が2の箱球の単語} \\
+				\text{球の移動距離} &\mapsfrom 
+					\text{球を一つずつ隣の箱へ移動して別の箱球に到達する最小手数} \\
+					&\text{球の移動距離が1の箱球の単語同士はHamming隣接する}
+			\end{split}\end{equation*} %}
+			\item 余積を次のように定義する。
+			\begin{equation*}\begin{split} %{
+				\Delta n  = \sum_{p=0}^n p\otimes(n-p)
+			\end{split}\end{equation*} %}
+			すると、$\Delta^k n$は$\mycal{D}_{k+1}^n$の元を列挙する。
+			この余積を変形してグレイコードを導けないものだろうか。
+		\end{itemize} %}
+	\end{todo} %todo:ここまで}
+	箱の数が小さいところを見てみると次のようになる。
+	\begin{equation*}\begin{split} %{
+		w_2^3 
+		&= \underbrace{30\mapsto21\mapsto12\mapsto03}_{\text{箱$1$から右}} \\
+		w_3^3
+		&= \underbrace{300\mapsto210\mapsto120\mapsto030}_{\text{箱$1$から右}}
+		\underbrace{\mapsto}_{\text{箱$2$から右}}
+		\underbrace{021\mapsto111\mapsto201}_{\text{箱$2$から左}} \\
+		&\underbrace{\mapsto}_{\text{箱$1$から左}}
+		\underbrace{102\mapsto012}_{\text{箱$1$から右}}
+		\underbrace{\mapsto}_{\text{箱$2$から右}}
+		003 \\
+		w_4^3
+		&= \underbrace{3000\mapsto2100\mapsto1200\mapsto0300}_{\text{箱$1$から右}}
+		\underbrace{\mapsto}_{\text{箱$2$から右}}
+		\underbrace{0210\mapsto1110\mapsto2010}_{\text{箱$2$から左}} \\
+		&\underbrace{\mapsto}_{\text{箱$1$から左}}
+		\underbrace{102\mapsto0120}_{\text{箱$1$から右}}
+		\underbrace{\mapsto}_{\text{箱$2$から右}}
+		0030 \\
+		&\underbrace{\mapsto}_{\text{箱$3$から右}}
+		0021 
+		\underbrace{\mapsto}_{\text{箱$3$から左}}
+		\underbrace{1011\mapsto0111}_{\text{箱$1$から右}}
+		\underbrace{\mapsto}_{\text{箱$3$から左}}
+		\underbrace{0201\mapsto1101\mapsto2001}_{\text{箱$2$から左}}
+	\end{split}\end{equation*} %}
+
+	\begin{lstlisting}[caption=箱の数が２または３の場合, label=code:箱の数が２または３の場合]
+		static boolean moveR(int[] value, int index) {
+			if (value[index] < 1) {
+				return false;
+			}
+			value[index] -= 1;
+			value[index == value.length - 1 ? 0 : index + 1] += 1;
+			return true;
+		}
+		static boolean moveL(int[] value, int index) {
+			if (value[index] < 1) {
+				return false;
+			}
+			value[index] -= 1;
+			value[index == 0 ? value.length - 1 : index - 1] += 1;
+			return true;
+		}
+		static boolean next(int[] value) {
+			if ((value[value.length - 1] & 1) == 0) {
+				for (int i = 0, n = value.length - 1; i < n; ++i) {
+					if (moveR(value, i)) {
+						return true;
+					}
+				}
+			} else {
+				for (int n = value.length - 1; 0 < n--;) {
+					if (moveL(value, n)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	\end{lstlisting}
+%s2:グレイコード}
+
+\subsection{保留}\label{s2:保留} %{
+	\begin{equation*}\begin{matrix} %{
+		3000 & 2100 & 2010 & 2001 \\
+		1200 & 1110 & 1101 \\
+		1020 & 1011 & 1002 \\
+		0300 & 0210 & 0201 \\
+		0120 & 0111 & 0102 \\
+		0030 & 0021 & 0012 & 0003 \\
+	\end{matrix}\end{equation*} %}
+
+	集合$\mycal{D}_k^n$は箱の数に関する次の漸化式を満たす。
+	\begin{equation*}\begin{split} %{
+		\mycal{D}_{k+1}^n = \mycal{D}_k^{n}*(0)
+			+ \mycal{D}_k^{n-1}*(1) + \cdots + \mycal{D}_k^{0}*(n)
+	\end{split}\end{equation*} %}
+	ここで、$\mycal{D}_k^{n-p}*(p)$はすべての$\mycal{D}_k^{n-p}$の元の右側に
+	を文字列$(p)$連結したものを表す。
+	\begin{equation*}\begin{split} %{
+		\mycal{D}_4^n 
+		&= \mycal{D}_3^3*(0) + \mycal{D}_3^2*(1) + \mycal{D}_3^1*(2) 
+			+ \mycal{D}_3^0*(3) \\
+		&= \mycal{D}_2^3*(0)*(0) + \mycal{D}_2^2*(1)*(0)
+			+ \mycal{D}_2^1*(2)*(0) + \mycal{D}_2^0*(3)*(0)
+	\end{split}\end{equation*} %}
+
+	逆辞書式順序を次のように変形してみる。
+	\begin{equation*}\xymatrix@R=3ex@C=2ex{
+		3000 \ar[d] \\
+		2100 \ar[d] & 2010 \ar@(u,u)[rrd] & 2001 \ar[d] \\
+		1200 \ar[d] & 1110 \ar[u] & 1101 \ar[d] 
+			& 1020 \ar[d] & 1011 \ar@(u,u)[llu] & 1002 \ar@(r,u)[rrrd] \\
+		0300 \ar[r] & 0210 \ar[u] & 0201 \ar@(d,d)[rrr] & 0120 \ar@(d,d)[rrr]
+			& 0111 \ar[u] & 0102 \ar[u] & 0030 \ar[r] & 0021 \ar@(d,d)[lll]
+			& 0012 \ar[r] & 0003 \\
+		\\
+	}\end{equation*}
+	すると、並びの前後でのHamming距離が$2$となる。
+	この順序をスピン付き逆辞書式順序ということにする\footnote{
+		特に慣用的な名前はないようだ。
+	}。
+%s2:保留}
+\endgroup %{
+%s1:自然数の合成の列挙}
+
 \section{べき乗}\label{s1:自然数のべき乗} %{
 	自然数べき乗をする関数$\myop{power}_\sizen:A\times\sizen\to A$を考える。
 	\begin{equation*}\begin{split} %{

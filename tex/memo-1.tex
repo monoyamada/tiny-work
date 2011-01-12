@@ -1,3 +1,40 @@
+\section{連結積とシャッフル積}\label{s1:連結積とシャッフル積} %{
+	文字列の連結積とシャッフル積およびそれらの余積は互いに準同型と内積で
+	結びついている。
+	\begin{equation*}\begin{split} %{
+		\Delta_*(w_1*w_2) &= (\Delta_*w_1) * (\Delta_*w_2) \\
+		\Delta_\shuffle(w_1\shuffle w_2) 
+			&= (\Delta_\shuffle w_1) \shuffle (\Delta_\shuffle w_2) \\
+		w_1^t(w_2 * w_3) &= (\Delta_\shuffle w_1)^t(w_1\otimes w_2) \\
+		w_1^t(w_2 \shuffle w_3) &= (\Delta_* w_1)^t(w_1\otimes w_2) \\
+	\end{split}\end{equation*} %}
+	連結余積とシャッフル余積は比較的簡単に計算できる。
+	\begin{equation*}\begin{split} %{
+		\Delta_*([a]*w) &= (1_W\otimes[a]+[a]\otimes1_W)*(\Delta_*w) \\
+		\Delta_\shuffle[a_1a_2\cdots a_n] &= 1_W\otimes[a_1a_2\cdots a_n] \\
+		&\; + [a_1]\otimes[a_2a_3\cdots a_n] \\
+		&\; + [a_1a_2]\otimes[a_3a_4\cdots a_n] \\
+		&\; + \cdots \\
+		&\; + [a_1a_2\cdots a_n]\otimes1_W \\
+	\end{split}\end{equation*} %}
+	一方、シャッフル積の計算は難しいと思う。
+	\begin{equation*}\begin{split} %{
+		w_1\shuffle w_2 &= \sum_{w\in WA}w(\Delta_*w)^t(w_1\otimes w_2)
+	\end{split}\end{equation*} %}
+	漸化式の形に持ち込むと次のようになる。
+	\begin{equation*}\begin{split} %{
+		a\shuffle w &= \sum_{x\in WA}x(\Delta_*x)^t([a]\otimes w) \\
+		&= \sum_{x\in WA}\jump{\nabla_{a}x=w}x \\
+		\nabla_{a}[a_1a_2\cdots a_n]
+		&= \jump{a=a_1}[a_2a_3\cdots a_n] \\
+		&\;+ \jump{a=a_2}[a_1a_3\cdots a_n] \\
+		&\;+ \cdots \\
+		&\;+ \jump{a=a_n}[a_1a_2\cdots a_{n-1}] \\
+	\end{split}\end{equation*} %}
+	$\nabla_a$はライプニッツ則を満たすので微分であり、$a\shuffle w$は$a$に
+	ついて$w$を積分したものになっている。
+%s1:連結積とシャッフル積}
+
 \section{二項分布とポアソン分布}\label{s1:二項分布とポアソン分布} %{
 	二項分布で粒子数が大きくなるとポアソン分布で近似できることを導いておく。
 	$N$個の粒子を２つの箱に分ける場合の粒子の分布確率を考える。

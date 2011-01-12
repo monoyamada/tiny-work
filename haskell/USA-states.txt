@@ -1,0 +1,6 @@
+AL Alabama
+AK Alaska
+WV West Virginea
+WI Wisconsin
+WY Wyoming
+DC District of Columbia (Washington D.C.)
