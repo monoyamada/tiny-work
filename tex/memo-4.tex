@@ -1,0 +1,59 @@
+\section{スターリング数}\label{s1:スターリング数} %{
+	数演算子$a_+a_-$のべき乗を正規積の和に書き直すときに、第二種スターリング数
+	$S_k^n$が現れる。
+	\begin{equation}\label{eq:第二種スターリング数}\begin{split} %{
+		(a_+a_-)^n = \sum_{k\in1..n} S_k^n a_+^ka_-^k
+	\end{split}\end{equation} %}
+	逆に、正規積をべき乗の和に書き直すときに、第一種スターリング数$s_k^n$が
+	現れる。
+	\begin{equation*}\begin{split} %{
+		a_+^na_-^n = \sum_{k\in1..n} s_k^n (a_+a_-)^k
+	\end{split}\end{equation*} %}
+	また、第二種スターリング数を拡張した数列$S_p(n,k)$を次のように定めることが
+	できる。
+	\begin{equation}\label{eq:第二種拡張スターリング数}\begin{split} %{
+		(a_+^pa_-)^n = \sum_{k\in1..n} S_p^(n,k) a_+^{k+(p-1)}a_-^k
+	\end{split}\end{equation} %}
+	同様に、第一種スターリング数を拡張した数列$s_p(n,k)$を次のように定めること
+	ができる。
+	\begin{equation*}\begin{split} %{
+		a_+^{pn}a_-^n = \sum_{k\in1..n} s_p^(n,k) a_+^{(p-1)(n-k)}(a_+^pa_-)^k
+	\end{split}\end{equation*} %}
+	このように拡張したスターリング数$S_p(n,k),\;s_p(n,k)$の性質を求めることが
+	この節の目標である。
+
+	スターリング数は様々な一般化がある\cite{hsu.stirling}。
+	したがって、第二種スターリング数の拡張\eqref{eq:第二種拡張スターリング数}
+	を'一般化スターリング数'という文献があるが、この節では
+	'第二種スターリング数$S_p$'等と書き、特に名前をつけないことにする。
+
+	この節では次のような記号を用いることにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[昇降演算子] 消滅演算子を$a_-$、生成演算子を$a_+$と書く。
+		\begin{equation*}\begin{split} %{
+			[a_-,a_+] = 1
+		\end{split}\end{equation*} %}
+		また、共形場理論にならって$l_m$と書くことにする。
+		\begin{equation*}\begin{split} %{
+			l_m &= a_+^{m+1}a_- \\
+		\end{split}\end{equation*} %}
+		$l_m$の積は次のようになる。
+		\begin{equation*}\begin{split} %{
+			l_ml_n &= nl_{m+n} + l_m*l_n
+		\end{split}\end{equation*} %}
+		エネルギーテンソル$t_z$も同様に定義しておく。
+		\begin{equation*}\begin{split} %{
+			t_z &= z^{-2}\sum_{m\in\sizen}l_mz^{-m} \\
+		\end{split}\end{equation*} %}
+		ここで定義した$t_z$は共形場と異なり、振動モードを独立に扱っていない
+		ので、$l_m$の添字の範囲は自然数となり、中心拡大も存在しない。
+		\item[正規積] 生成消滅演算子の通常の積を記号なしまたは$m_\myspace$と
+		書き、正規積を$*$または$m_*$と書く。これらの記号を用いると、
+		第二種スターリング数の現れる式\ref{eq:第二種拡張スターリング数}は
+		次のようになる。
+		\begin{equation*}\begin{split} %{
+			l_m^n = \sum_{k\in1..n} S_{m+1}(n,k) a_+^ml_0^{*k}
+			\quad\text{for all }m,n\in\sizen
+		\end{split}\end{equation*} %}
+	\end{description} %}
+%s1:スターリング数}

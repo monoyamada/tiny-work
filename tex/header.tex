@@ -7,7 +7,27 @@
 % installed in the system by hand
 \usepackage{shuffle}
 \usepackage{listings}
-\lstset{basicstyle=\ttfamily\small, tabsize=2, frame=leftline, language=Java}
+\lstset{language=java %
+%	, numbers=left %
+%	, numberstyle ={\tiny \emph} %
+%	, numbersep=10pt %
+%	, breaklines=true %
+%	, breakindent=40pt %
+%	, frame=tlRB %
+	, frame=leftline %
+%	, frameround=ffft %
+%	, framesep=3pt %
+%	, rulesep=1pt %
+%	, rulecolor={\color{blue}} %
+%	, rulesepcolor={\color{blue}} %
+	, flexiblecolumns=true %
+	, keepspaces=false %
+	, basicstyle=\scriptsize %
+	, identifierstyle=\itshape\scriptsize %
+	, commentstyle=\fontfamily{ptm}\selectfont\scriptsize %
+	, stringstyle=\scshape\scriptsize %
+	, tabsize=2 %
+}
 \renewcommand{\lstlistingname}{プログラム}
 %\usepackage{sty/thmbox}
 \usepackage{sty/cprog}
@@ -20,6 +40,8 @@
 %\usepackage{sty/multirow}
 \usepackage{sty/bigdelim}
 \usepackage{sty/youngtab}
+\usepackage{sty/jumoline}
+\usepackage{ifthen}
 \usepackage[dvipdfm]{color}
 \usepackage[dvipdfm,dvips]{graphicx}
 \usepackage[dvipdfm %
@@ -72,6 +94,7 @@
 \theoremsymbol{\textparagraph}
 \newtheorem{definition}{定義}[section]
 \newtheorem{proposition}{命題}[section]
+\newtheorem{procedure}{手続き}[section]
 \newtheorem{todo}{課題}[section]
 \newtheorem{note}{ノート}[section]
 \newtheorem{example}{例}[section]
@@ -86,9 +109,9 @@
 \newcommand{\kakko}[1]{\left({#1}\right)}
 \newcommand{\bakko}[1]{\left[{#1}\right]}
 \newcommand{\bou}{\;\vert\;}
-\newcommand{\myop}[1]{\operatorname{#1}}
-\newcommand{\mybf}[1]{{\mathbf{#1}}}
-\newcommand{\mycal}[1]{{\mathcal{#1}}}
+\newcommand{\myop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\mybf}[1]{{\ensuremath{\mathbf{#1}}}}
+\newcommand{\mycal}[1]{\ensuremath{{\mathcal{#1}}}}
 
 \def\obra#1{\mathinner{({#1}|}}
 \def\oket#1{\mathinner{|{#1})}}
@@ -108,10 +131,10 @@
 %
 %category
 %
-\newcommand{\homset}{\myop{hom}}
-\newcommand{\mapset}{\myop{map}}
-\newcommand{\myid}{{\myop{id}}}
-\newcommand{\mydu}{{\myop{du}}}
+\newcommand{\homset}{\ensuremath{\myop{hom}}}
+\newcommand{\mapset}{\ensuremath{\myop{map}}}
+\newcommand{\myid}{\ensuremath{\myop{id}}}
+\newcommand{\mydu}{\ensuremath{\myop{du}}}
 %\newcommand{\curry}{\myop{curring}}
 %\newcommand{\mycat}[1]{{\mathbf{#1}}}
 %
@@ -127,11 +150,11 @@
 %\newcommand{\bnfletter}[1]{\operatorname{#1}}
 %\newcommand{\bnfword}[1]{\braket{\operatorname{#1}}}
 %\newcommand{\bnfaction}[1]{\bakko{\operatorname{#1}}}
-\newcommand{\bool}{\mybf{B}}
-\newcommand{\sizen}{\mybf{N}}
-\newcommand{\sei}{\mybf{Z}}
-\newcommand{\jitu}{\mybf{R}}
-\newcommand{\fukuso}{\mybf{C}}
+\newcommand{\bool}{\ensuremath{\mybf{B}}}
+\newcommand{\sizen}{\ensuremath{\mybf{N}}}
+\newcommand{\sei}{\ensuremath{\mybf{Z}}}
+\newcommand{\jitu}{\ensuremath{\mybf{R}}}
+\newcommand{\fukuso}{\ensuremath{\mybf{C}}}
 %
 \usepackage{sty/accents}
 \makeatletter

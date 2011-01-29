@@ -65,9 +65,12 @@
   \if@inlabel \indent\fi
   \if@newlist \@noitemerr\fi
   \ifhmode
-     \ifdim\lastskip >\z@ #1\unskip \par  %<<<<<<<<<<<<<<<<<<<<<<
-           \else \unskip \par \fi
-     \fi
+		% shirak
+    %\ifdim\lastskip >\z@ #1\unskip \par  %<<<<<<<<<<<<<<<<<<<<<<
+    %      \else \unskip \par \fi
+    \ifdim\lastskip <\z@ \else #1 \fi  %<<<<<<<<<<<<<<<<<<<<<<
+		\unskip \par
+  \fi
   \if@noparlist \else
     \ifdim\lastskip >\z@
        \@tempskipa\lastskip \vskip -\lastskip

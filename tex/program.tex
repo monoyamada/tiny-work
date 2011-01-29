@@ -1,13 +1,16 @@
-\section{数の合成の列挙}\label{s1:数の合成の列挙} %{
 \begingroup %{
-	\providecommand{\hakodama}{\mycal{D}}
-	\providecommand{\tugi}{\rightharpoondown}
-	\providecommand{\seki}[1]{\sideset{}{_{#1}}\prod}
-	\providecommand{\uer}[1]{\overrightarrow{#1}}
-	\providecommand{\uel}[1]{\overleftarrow{#1}}
+	\newcommand{\hakodama}{\mycal{D}}
+	\newcommand{\sosei}{\mycal{C}}
+	\newcommand{\bunkatu}{\mycal{P}}
+	\newcommand{\myeven}{\ensuremath{{2\sizen}}}
+	\newcommand{\myodd}{\ensuremath{{2\sizen+1}}}
+	\newcommand{\kazu}[1]{\ensuremath{{\sharp_{\myop{#1}}}}}
+	\setlength\arraycolsep{2pt}
 	%
-	自然数$n$に対して和をとると$n$になる$k$個の自然数の組全体を$\hakodama_k^n$
-	と書く。
+\section{箱球の列挙}\label{s1:箱球の列挙} %{
+	%
+	自然数$n$に対して和をとると$n$になる$k$個の自然数の組全体を
+	$\hakodama_k^n$と書く。
 	\begin{equation*}\begin{split} %{
 		\mycal{D}_k^n &= \set{(n_1,n_2,\dots,n_k)\in\sizen^k
 			\bou n_1+n_2+\cdots+n_k=n}
@@ -16,914 +19,1029 @@
 	列挙することを考える。集合の大きさだけは既にわかっていて
 	$\zettai{\hakodama_k^n}=\binom{n+k-1}{k-1}$となる。
 
-	この節では$\mycal{D}_k^n$の元を、自然数を文字とする文字列として扱うこと
-	がある。自然数を文字とする文字列全体の集合を$W\sizen$と書き、
-	$W\sizen$の元を文字とする文字列全体の集合を$W^2\sizen$と書く。
-	$\mycal{D}_k^n$は$W\sizen$の部分集合、$\mycal{D}_k^n$の元の列挙は
-	$W^2\sizen$の元とみることができる。この節では次の用語や記号を使うものと
-	する。
+	この節では次の用語や記号を使うものとする。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[箱球] $W\sizen$の元を箱球ということにする。数字の加減を多用
-		するために、$W\sizen$の元は$[n_1n_2\cdots n_k]$ではなく
-		$(n_1,n_2,\dots,n_k)$というように通常の直積の記号で書く。
-		任意の$(n_1,n_2,\dots,n_k)\in W\sizen$に対して、$k$を箱の数、$n_i$を
-		箱$i$の球の数といい、$\myop{tr}(n_1,n_2,\dots,n_k)=n_1+n_2+\cdots+n_k$
-		を球の総数という。特に、球の数が$0$となる箱を空の箱という。
-		文字列の連結による$W\sizen$の積を中置記法で$*$と書く。
-		\begin{equation*}\begin{split} %{
-			(m_1, m_2,\dots, m_k) * (n_1, n_2,\dots, n_l)
-			= (m_1, m_2,\dots, m_k, n_1, n_2,\dots, n_l)
-		\end{split}\end{equation*} %}
+		\item[係数] $R=(R,m_+,0_R,m_\myspace,1_R)$を半環とする。
+		$R$はブーリアン、自然数、整数、実数、複素数とする。
 		%
-		\item[箱球列] $W^2\sizen$の元を箱球列ということにする。$W^2\sizen$の元を
-		$w_1\tugi w_2\tugi\dots\tugi w_k$というように矢印$\tugi$でつなげて書く。
-		文字列の連結による$W^2\sizen$の積も同じ中置記法$\tugi$を用いて次のように
-		書く。
-		\begin{equation*}\begin{split} %{
-			(w_1\tugi w_2\tugi\dots\tugi w_k)
-				\tugi(x_1\tugi x_2\tugi\dots\tugi x_l) \\
-			= w_1\tugi w_2\tugi\dots\tugi w_k\tugi x_1\tugi x_2\tugi\dots\tugi x_l
-		\end{split}\end{equation*} %}
+		\item[箱] 球の$n$個入った箱を$\ket{n}$と書く。
+		$\set{\ket{n}}_{n\in\sizen}$を基底とする$R$自由半モジュールを
+		$R\sizen$と書く。
+		$R\sizen$の$R$双対空間を$R\sizen^t$と書き、$\ket{n}$の双対元を$\bra{n}$
+		と書く。$\braket{m|n}=\jump{m=n}$
 		%
-		\item[文字列一般] $WA$を集合$A$を文字とする文字列全体の集合とする。
-		文字列$w\in WA$の文字数を$\zettai{w}$と書く。また、文字数$k$の文字列全体
-		の集合を$W_kA=\set{w\in WA\bou \zettai{w}=k}$と書き、文字数が$1$以上の
-		文字列全体の集合を$W_+A=\cup_{k\in\sizen_+}A$と書く。
-		$WA$の積$\square$に対して$\seki{\square}$を次のように定義する。
-		\begin{equation*}\begin{split} %{
-			\seki{\square}_{i=1}^nw_i 
-				&= w_1\square w_2\square \cdots\square w_n \\
-			\seki{\square}_{i=n}^1w_i
-				&= w_n\square w_{n-1}\square \cdots\square w_1 \\
-		\end{split}
-			\quad\text{for all }w_1,w_2,\dots,w_n\in WA
-		\end{equation*} %}
-		自然な入射$(-)_W:A\to WA$と関手$(-)_W:\set{A\to B}\to\set{WA\to WB}$を
-		次のように定義する。
-		\begin{equation*}\begin{split} %{
-			(a)_W &= (a)\in WA \quad\text{for all }a\in A \\
-			(f)_W(a_1,a_2,\dots,a_k) &= (fa_1,fa_2,\dots,fa_k)\in WB \\
-			&\quad\text{for all }a_1,a_2,\dots,a_k\in A,\;f\in\set{A\to B} \\
-		\end{split}\end{equation*} %}
+		\item[箱の操作] 箱に対する操作を$R\sizen$の$R$係数自己線形写像$M\sizen$
+		で表す。操作の結果が$0_R$となる場合は、操作失敗を表す。
+		$M\sizen$は写像の合成を積とする$R$係数の半代数として扱う。
+		%
+		\item[箱球] $k$個の箱を左から右へ並べたものを箱の数が$k$個の箱球
+		ということにする。
+		箱の数が$k$個の箱球全体のつくる集合を$W_k\sizen$と書く。
+		$RW_k\sizen$と$R\sizen$の$R$係数$k$次テンソル積全体の作る集合
+		$T_k\sizen$を同一視する。
+		箱の数を限定しない場合は、$W_+\sizen$または$T\sizen$と書く。
+		$T\sizen$の元をテンソル積の記号$\otimes$でつなげた通常の記法とは
+		別に、$\ket{n_1,n_2,\dots,n_k}
+		=\ket{n_1}\otimes\ket{n_2}\otimes\cdots\otimes\ket{n_k}$
+		のようにケットの中にまとめて書くこともある。
+		%
+		\item[箱球の操作] 箱球の操作を$M\sizen$のテンソル積$TM\sizen$で表す。
+		各$k\in\sizen_+$に対して$T_kM\sizen$は成分毎の写像の合成を積とする
+		$R$係数の半代数として扱う。
+		また、$T\sizen$の元を、テンソル積の記号$\otimes$でつなげた通常の記法
+		とは別に、$(f_1,f_2,\dots,f_k)
+		=f_1\otimes f_2\otimes\cdots\otimes f_k$
+		のようにカッコの中にまとめて書くこともある。
+		%
+		\item[数の集合] 数の範囲を$..$を使って$p..q=\set{p,p+1,\dots,q}$と
+		表し、$[]$を使って$[n]=\set{0,1,\dots,n-1}$と表す。
 	\end{description} %}
 
-\subsection{辞書式順序}\label{s2:辞書式順序} %{
+	いくつかの写像$M\sizen$を定義しておく。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[生成消滅演算子] 生成消滅演算子を$a_\pm$と書くことにする。
+		\begin{equation*}\begin{split} %{
+			a_+ = \sum_{n\in\sizen}\ket{n+1}\bra{n}
+			,\quad a_- = \sum_{n\in\sizen}\ket{n}\bra{n+1}
+		\end{split}\end{equation*} %}
+		\item[球の数の偶奇性] 球の数が偶数の箱への射影を$\pi_\myeven$と書き、
+		球の数が奇数の箱への射影を$\pi_\myodd$と書く。
+		\begin{equation*}\begin{split} %{
+			\pi_\myeven = \sum_{n\in\sizen}\ket{2n}\bra{2n}
+			,\quad \pi_\myodd &= \sum_{n\in\sizen}\ket{2n+1}\bra{2n+1}
+		\end{split}\end{equation*} %}
+		また、球の数が偶数の任意の箱球を$\ket{\myeven}$
+		、球の数が奇数の任意の箱球を$\ket{\myodd}$と書くことにする。
+		\item[球の有無] 球の数が$n$の箱への射影を$\pi_n$と書き、
+		球の数が$1$以上の箱への射影を$\pi_+$と書く。
+		\begin{equation*}\begin{split} %{
+			\pi_n = \ket{n}\bra{n}
+			,\quad \pi_+ &= \sum_{n\in\sizen}\ket{n+1}\bra{n+1}
+		\end{split}\end{equation*} %}
+		また、球の数が$1$以上の任意の箱を$\ket{+}$と書く。
+	\end{description} %}
+
+	加法を取り入れて考えるのは二つの理由がある。一つは操作の失敗を表すために
+	ゼロ元$0_R$を取り入れてスカラー積として扱うためで、もう一つは操作結果と
+	して複数の箱球を列挙することを許すためである。例えば、次のように
+	一つの操作を複数の操作に分解して考えることができる。
+	\begin{equation*}\begin{split} %{
+		\text{箱球} \xmapsto{ある操作} \text{箱球}1 + \text{箱球}2
+		\xmapsto{ある選択} \text{箱球}1
+	\end{split}\end{equation*} %}
+
+	箱球をテンソル積で表すのは、箱球に対する操作をなるべく個々の箱に対する
+	操作に分解して考えるためである。例えば箱数が$k$の箱球に対する操作は
+	ある$c:(M\sizen)^{\times k}\to R$によって次のように書ける。
+	\begin{equation*}\begin{split} %{
+		\sum_{f_1,f_2,\dots,f_k\in M\sizen}c_{f_1f_2\cdots f_k}
+			f_1\otimes f_2\otimes\cdots\otimes f_k
+	\end{split}\end{equation*} %}
+	箱球に対する任意の操作を線形写像として表すことが可能かどうかは不明だが、
+	ここでは、線形写像として表すことができる操作のみを考える。
+
+	$\hakodama_k^n$の大きさを導いておく。箱球の左端の球の数によって分類して
+	考える。式にすると次のように分解する。
+	\begin{equation*}\begin{split} %{
+		\sum_{w\in\hakodama_{k+1}^{n+1}}w 
+		&= \ket{0}\otimes\sum_{w\in\hakodama_k^{n+1}}w
+		+ \ket{1}\otimes\sum_{w\in\hakodama_k^{n}}w
+		+ \cdots
+		+ \ket{n+1}\otimes\sum_{w\in\hakodama_k^0}w \\
+		&= \ket{0}\otimes\sum_{w\in\hakodama_k^{n+1}}w
+		+ (a_+\otimes\myid^k)\biggl(\ket{0}\otimes\sum_{w\in\hakodama_k^n}w
+		+ \cdots
+		+ \ket{n}\otimes\sum_{w\in\hakodama_k^0}w\biggr) \\
+		&= \ket{0}\otimes\sum_{w\in\hakodama_k^{n+1}}w
+		+ (a_+\otimes\myid^k)\sum_{w\in\hakodama_{k+1}^n}w \\
+	\end{split}\end{equation*} %}
+	したがって、$D_k^n=\zettai{\hakodama_k^n}$とすると、
+	次の漸化式が導かれる。
+	\begin{equation}\label{eq:Dの大きさ}\begin{split} %{
+		D_{k+1}^{n+1} &= D_k^{n+1} + D_{k+1}^n
+		\quad\text{for all }k\in\sizen_+,\;n\in\sizen
+	\end{split}\end{equation} %}
+	図にすると次のようになる。
+	\begin{equation*}\xymatrix@R=3ex@C=3ex{
+		D_1^0\ar[r]\ar[d] & D_1^1\ar[r]\ar[d] & D_1^2\ar[r]\ar[d] 
+		& D_1^3\ar[r]\ar[d] & \cdots \\
+		D_2^0\ar[r]\ar[d] & D_2^1\ar[r]\ar[d] & D_2^2\ar[r]\ar[d] 
+		& D_2^3\ar[r]\ar[d] & \cdots \\
+		D_3^0\ar[r]\ar[d] & D_3^1\ar[r]\ar[d] & D_3^2\ar[r]\ar[d] 
+		& D_3^3\ar[r]\ar[d] & \cdots \\
+		\vdots & \vdots & \vdots & \vdots & \cdots \\
+	}\end{equation*}
+	したがって、$D_1^0=1$だから、$D_k^n$は$D_1^0$から$D_k^n$への経路の数
+	になる。$D_1^0$から$D_k^n$への経路を文字$\set{d,r}$の文字列として
+	表すと、$d$を$k-1$個、$r$を$n$個含む文字列になる。
+	$d$を$k-1$個、$r$を$n$個含む文字列は全部で$\binom{n+k-1}{k-1}$個ある。
+	したがって、$D_k^n=\binom{n+k-1}{k-1}$となることがわかる。
+
+\subsection{辞書式順序による列挙}\label{s2:辞書式順序による列挙} %{
 	$\hakodama_k^n$を辞書式順序で並べて列挙することを考える。
-	$W\sizen$に対して辞書式順序$<$を次のように定める。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 長さが等しい文字列同士は次のように定義する。
+	辞書式順序とは次の順序である。
+
+	\begin{definition}[辞書式順序]\label{def:辞書式順序} %{
+		$\sizen^k$に対して次のように定義された順序を辞書式順序という。
 		\begin{equation*}\begin{split} %{
 			(m_1,m_2,\dots,m_k) < (n_1,n_2,\dots,n_k)
 			\iff \text{there exists }l\in1..k \text{ such that } \\
 			m_l < n_l \text{ and }m_i = n_i \text{ for all }i\in1..(l-1) \\
 		\end{split}\end{equation*} %}
-		%
-		\item 長さが等しくない文字列同士は次のように定義する。
+	\end{definition} %def:辞書式順序}
+
+	辞書式順序はお金の大小関係と同じ順序と思うと覚えやすい。
+	\begin{equation*}\begin{split} %{
+		\yen100 < \yen101 < \yen200
+	\end{split}\end{equation*} %}
+	それに対して辞書式順序で左右の文字の並びを反転させたものを反転辞書式順序
+	ということにする。反転辞書式順序では次のようになる。
+	\begin{equation*}\begin{split} %{
+		100 < 200 < 101
+	\end{split}\end{equation*} %}
+	反転辞書式順序は辞書式順序の逆順ではないことに注意する。
+	日常生活では箱球の右端の箱を一桁目、その左隣の箱を二桁目と数えていくが、
+	ここでは、箱の添え字を左端の箱を箱$1$、その左隣の箱を箱$2$とふる。
+	そのために、辞書式順序ではなく反転辞書式順序で考えた方が記述が素直に
+	なる。
+
+	$\hakodama_3^2$を反転辞書式順序$<$で列挙すると次のようになる。
+	\begin{equation*}\begin{split} %{
+	(2,0,0) < (1,1,0) < (0,2,0) < (1,0,1) < (0,1,1) < (0,0,2)
+	\end{split}\end{equation*} %}
+	与えられた箱球に対して反転辞書式順序で次の箱球を求める操作は次のように
+	なる。
+
+	\begin{procedure}[箱球の反転辞書式順序]
+	\label{proc:箱球の反転辞書式順序} %{
+		箱球では反転辞書式順序で箱球を並べると、$(n,0,\dots,0)$が
+		最初になり、$(0,0,\dots,0,n)$が最後になることを使う。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[箱球の箱の数が$1$] $0_R$を返す。
+			\item[箱球の箱の数が$2$] \quad
+			\begin{description}\setlength{\itemsep}{-1mm} %{
+				\item[左の箱が空でない] 左の箱から右の箱へ球を一つ移動する。
+				\item[else] $0_R$を返す。
+			\end{description} %}
+			\item[箱球の箱の数が$3$以上] \quad
+			\begin{description}\setlength{\itemsep}{-1mm} %{
+				\item[空でない最も左の箱$i$を見つける] \quad
+				\begin{description}\setlength{\itemsep}{-1mm} %{
+					\item[箱$i$の右隣の箱がある] 箱$i$から右の箱に球を一つ
+					移動して、箱$i$の残りの球を全て箱$1$に移動する。
+					\item[ない] $0_R$を返す。
+				\end{description} %}
+				\item[見つからない] $0_R$を返す。
+			\end{description} %}
+		\end{description} %}
+	\end{procedure} %proc:箱球の反転辞書式順序}
+
+	この手続きを作用素で表すと次のようになる。
+
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 空でない最も左の箱$i$を見つける。
 		\begin{equation*}\begin{split} %{
-			(m_1,m_2,\dots,m_k) < (m_1,m_2,\dots,m_k,m_{k+1}) \\
+			\pi_0\otimes\pi_0\otimes\cdots\otimes\pi_0\otimes
+			\underbrace{\pi_+}_{\text{箱$i$}}\otimes \myid\otimes 
+			\myid\otimes\cdots\otimes \myid
+		\end{split}\end{equation*} %}
+		\item 箱$i$からその右隣の箱に球を一つ移動する。
+		\begin{equation*}\begin{split} %{
+			\myid\otimes\myid\otimes\cdots\otimes\myid\otimes
+			\underbrace{a_-}_{\text{箱$i$}}\otimes a_+\otimes 
+			\myid\otimes\cdots\otimes \myid
+		\end{split}\end{equation*} %}
+		\item 箱$i$の残りの球を全て箱$1$に移動する。
+		\begin{equation*}\begin{split} %{
+			\sum_{p\in\sizen}\;\underbrace{a_+^p}_{\text{箱$1$}}
+			\otimes\myid\otimes\cdots\otimes \myid\otimes
+			\underbrace{\pi_0a_-^p}_{\text{箱$i$}}\otimes \myid\otimes 
+			\myid\otimes\cdots\otimes \myid
 		\end{split}\end{equation*} %}
 	\end{itemize} %}
-	$\hakodama_k^n$を辞書式順序で並べて列挙した箱球列を
-	$d_k^n\in W\hakodama_k^n\subset W\sizen$と書く。
 
-	箱の数が$2$の時は次のようになり、
+	箱の数が$k+2$の箱球の箱$i$に対するこれらの操作をまとめて
+	$c_{k+2}^{(i)}$とする。
 	\begin{equation*}\begin{split} %{
-		d_2^n = (0,n)\tugi(1,n-1)\tugi\cdots\tugi(n,0)
+		c_{k+2}^{(i)} = \left\{\begin{split}
+			i=0 &\implies a_-\otimes a_+\otimes \myid^{\otimes k} \\
+			i=1 &\implies \sum_{p\in\sizen}\; a_+^p\pi_0\otimes \pi_0a_-^{p+1}
+				\otimes a_+\otimes \myid^{\otimes(k-i)} \\
+			2\le i< k &\implies \sum_{p\in\sizen}\; a_+^p\pi_0
+				\otimes \pi_0^{\otimes(i-1)}\otimes \pi_0a_-^{p+1}
+				\otimes a_+\otimes \myid^{\otimes(k-i)} \\
+			i=k &\implies \sum_{p\in\sizen}\; a_+^p\pi_0
+				\otimes \pi_0^{\otimes(k-1)}\otimes \pi_0a_-^{p+1}
+				\otimes a_+ \\
+			\text{else} &\implies 0_R \\
+		\end{split}\right. \\ %\}
 	\end{split}\end{equation*} %}
-	箱の数が$3$の時は次のようになる。
+	手続き\ref{proc:箱球の反転辞書式順序}に対応する線形写像は$c_{k+2}$
+	は$c_{k+2}^{(i)}$を用いて$c_{k+2}=\sum_{i\in0..k}c_{k+2}^{(i)}$と書ける。
+
+	$TM\sizen$の自己線形写像$\phi:TM\sizen\to TM\sizen$を任意の
+	$f_1,f_2,\dots,f_k\in M\sizen$に対して次のように定義する。
 	\begin{equation*}\begin{split} %{
-		d_3^n &= \seki{\tugi}_{p=0}^n (p)*d_2^{n-p} \\
-		&= \bigl((0)*d_2^n\bigr)\tugi\bigl((1)*d_2^{n-1}\bigr)
-			\tugi\cdots\tugi\bigl((n)*d_2^{0}\bigr) \\
-		&= (0,0,n)\tugi(0,1,n-1)\tugi\cdots\tugi(0,n,0) \\
-		&\; \tugi(1,0,n-1)\tugi(1,1,n-2)\tugi\cdots\tugi(1,n-1,0) \\
-		&\; \tugi\cdots \\
-		&\; \tugi(n,0,0) \\
+		\phi(f_1\otimes f_2\otimes \cdots\otimes f_k) 
+		&= \sum_{p\in\sizen}\; a_+^p\pi_0\otimes \pi_0a_-^pf_1\otimes f_2
+			\otimes\cdots\otimes f_k \\
 	\end{split}\end{equation*} %}
-	ここで、$(n)*$を球が$n$個入った箱を箱球の左端に付け足す操作とした。
+	$\phi$はテンソル次数を一つ上げる線形写像である。
+	$\phi$のべき乗は次のような性質をもつ。
 	\begin{equation*}\begin{split} %{
-		(n)*(w_1\tugi w_2\tugi\cdots\tugi w_p)
-		= \bigl((n)*w_1\bigr)\tugi\bigl((n)*w_2\bigr)
-			\tugi\cdots\tugi\bigl((n)*w_p\bigr) \\
-		\quad\text{for all }w_1,w_2,\dots,w_p\in W\sizen,\;n\in\sizen
+		\phi^2(f_1\otimes\cdots\otimes f_k)
+		&= \sum_{p,q\in\sizen}\; a_+^q\pi_0\otimes \pi_0a_-^qa_+^p\pi_0
+			\otimes \pi_0a_-^pf_1\otimes\cdots\otimes f_k \\
+		&= \sum_{p\in\sizen}\; a_+^p\pi_0\otimes \pi_0\otimes 
+			\pi_0a_-^pf_1\otimes\cdots\otimes f_k \\
+		\phi^m(f_1\otimes\cdots\otimes f_k)
+		&= \sum_{p\in\sizen}\; a_+^p\pi_0\otimes \pi_0^{m-1}\otimes 
+			\pi_0a_-^pf_1\otimes\cdots\otimes f_k \\
 	\end{split}\end{equation*} %}
-	同様に、球が$n$個入った箱を箱球の右端に付け足す操作を$*(n)$と書く。
-	一般に箱球列$d_k^n$は任意の$n\in\sizen$に対して次のように再帰的に
-	定義することができる。
-	\begin{equation}\label{eq:辞書式順序の箱球列の定義}\begin{split} %{
-		d_1^n &= (n) \\
-		d_{k+1}^n &= \seki{\tugi}_{p=0}^n (p)*d_k^{n-p}
-		\quad\text{for all }k\in\sizen_+
+	したがって、任意の$i\in0..k$に対して$c_{k+2}^{(i)}$は$\phi$を用いて
+	次のように書くことができ、
+	\begin{equation*}\begin{split} %{
+		c_{k+2}^{(i)} 
+		= \bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)}
+	\end{split}\end{equation*} %}
+	$c_{k+2}$は次のように書くことができる。
+	\begin{equation*}\begin{split} %{
+		c_{k+2} &= \sum_{i=0}^k
+			\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)}
+	\end{split}\end{equation*} %}
+	さらに、$\phi$について次の式が成り立つので、
+	\begin{equation}\label{eq:phiのライプニッツ則}\begin{split} %{
+		\phi(x\otimes y)=(\phi x)\otimes y \quad\text{for all }x,y\in TM\sizen
 	\end{split}\end{equation} %}
-	与えられた$(n_1,n_2,\dots,n_k)\in\hakodama_k^n$に対して辞書式順序で次に
-	なる元は次のようにして求まるだろう。
-
-	\begin{proposition}[辞書式順序で順に列挙する手順]
-	\label{prop:辞書式順序で順に列挙する手順} %{
-		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[空でない箱を探す] 空でない最も右側の箱$i$を見つける。
-			\begin{equation*}\begin{split} %{
-				(n_1,\dots,n_{i-1},n_i>0, n_{i+1}=0,\dots,n_k=0)
-			\end{split}\end{equation*} %}
-			箱$1$以外がすべて空ならば次はない。
-			\item[球を移動する] 箱$i$から箱$i-1$へ球を一つ移動してから、
-			\begin{equation*}\begin{split} %{
-				(n_1,\dots,,n_{i-1},n_i>0, n_{i+1}=0,\dots,n_k=0) \\
-				\mapsto
-				(n_1,\dots,n_{i-1}+1,n_i-1\ge0, n_{i+1}=0,\dots,n_k=0)
-			\end{split}\end{equation*} %}
-			箱$i$の球をすべて箱$k$に移す。
-			\begin{equation*}\begin{split} %{
-				(n_1,\dots,n_{i-1}+1,n_i-1\ge0, n_{i+1}=0,\dots,n_k=0) \\
-				\mapsto
-				(n_1,\dots,n_{i-1}+1,n_i=0, n_{i+1}=0,\dots,n_k\ge0)
-			\end{split}\end{equation*} %}
-		\end{description} %}
-	\end{proposition} %prop:辞書式順序で順に列挙する手順}
-
-	この手順をプログラムして箱球列$d_4^3$を出力した結果は次のようになり、
-	この手順で良さそうである。
-	\begin{equation*}\begin{split} %{
-		0003 \tugi 0012 \tugi 0021 \tugi 0030 \tugi 0102 \tugi 0111 \tugi
-		0120 \tugi 0201 \tugi 0210 \tugi 0300 \\
-		\tugi 1002 \tugi 1011 \tugi 1020 \tugi 1101 \tugi 1110 \tugi 1200 \\
-		\tugi 2001 \tugi 2010 \tugi 2100 \\
-		\tugi 3000 \\
-	\end{split}\end{equation*} %}
-
-	箱球列$d_k^n$の定義\eqref{eq:辞書式順序の箱球列の定義}から手順
-	\ref{prop:辞書式順序で順に列挙する手順}を導き出しておく。そのためにまず、
-	次の命題を証明しておく。
-
-	\begin{proposition}[辞書式順序の箱球列の両端]\label{prop:辞書式順序の箱球列の両端} %{
-		任意の$k\in\sizen_+$に対して箱球列$d_k^n$は次の形になる。
-		\begin{equation*}\begin{split} %{
-			d_k^n = (0,0,\dots,0,n)\tugi\cdots\tugi (n,0,\dots,0,0)
-		\end{split}\end{equation*} %}
-	\end{proposition} %prop:辞書式順序の箱球列の両端}
 	\begin{proof} %{
-		箱の数についての帰納法で証明する。箱の数が$1$の時は、$d_1^n=(n)$
-		となるから命題が成り立つ。箱の数が$k$の時、命題が成り立つとする。
-		帰納法の仮定から次の式が成り立つ。
+		任意の$f_1,\dots,f_k,g_1,\dots,g_l\in M\sizen$に対して次の式が成り立つ。
 		\begin{equation*}\begin{split} %{
-			d_{k+1}^n &= \prod_{p=0}^n(p)*d_k^{n-p} \\
-			&= \prod_{p=0}^n(p)*
-				\bigl((0,0,\dots,0,n-p)\tugi\cdots\tugi(n-p,0,\dots,0,0)\bigr) \\
-			&= (0)*\bigl((0,0,\dots,0,n)\tugi\cdots\tugi(n,0,\dots,0,0)\bigr) \\
-			&\; \tugi(1)*\bigl((0,0,\dots,0,n-1)\tugi\cdots\tugi(n-1,0,\dots,0,0)\bigr) \\
-			&\; \tugi\cdots \\
-			&\; \tugi(n)*(0,0,\dots,0,0) \\
+			&\bigl(\phi(f_1\otimes f_2\otimes\cdots\otimes f_k)\bigr)
+				\otimes (g_1\otimes\cdots\otimes g_l) \\
+			&= \sum_{p\in\sizen}
+				a_-^p\pi_0f_1\otimes \pi_0 a_-^pf_2\otimes\cdots\otimes f_k
+				\otimes g_1\otimes\cdots\otimes g_l \\
+			&= \phi(f_1\otimes f_2\otimes\cdots\otimes f_k
+				\otimes g_1\otimes\cdots\otimes g_l) \\
 		\end{split}\end{equation*} %}
-		したがって、$d_{k+1}^n=(0,0,\dots,0,n)\tugi\cdots\tugi(n,0,\dots,0,0)$
-		という形になり、箱の数が$k+1$の時も命題が成り立つことがわかる。
 	\end{proof} %}
-
-	この命題より任意の$k\in\sizen_+$に対して箱球列
-	$d_{k+1}^n=\seki{\tugi}_{p=0}^n(p)*d_k^{n-p}$の部分箱球列
-	$(p)*d_k^{n-p}\tugi(p+1)*d_k^{n-p-1}$は次の形になることがわかる。
-	\begin{equation*}\begin{split} %{
-		&(p)*d_k^{n-p}\tugi(p+1)*d_k^{n-p-1} \\
-		&= (p)*\bigl((0,0,\dots,0,n-p)\tugi\cdots\tugi(n-p,0,\dots,0,0)\bigr) \\
-		&\tugi (p+1)*\bigl((0,0,\dots,0,n-p-1)\tugi\cdots\tugi(n-p-1,0,\dots,0,0)\bigr) \\
-		&= (p,0,0,\dots,0,n-p)\tugi\cdots\tugi(p,n-p,0,\dots,0,0) \\
-		&\tugi (p+1,0,0,\dots,0,n-p-1)\tugi\cdots\tugi(p+1,n-p-1,0,\dots,0,0) \\
-	\end{split}\end{equation*} %}
-	特に、$(p)*d_k^{n-p}$と$(p+1)*d_k^{n-p-1}$の継ぎ目の部分が次の形となる。
-	\begin{equation}\label{eq:辞書式順序での継ぎ目の部分}\begin{split} %{
-		(p,n-p,0,\dots,0,0)\tugi(p+1,0,0,\dots,0,n-p-1)
+	$c_{k+2}$について次の漸化式が成り立つことがわかる。
+	\begin{equation}\label{eq:cの漸化式}\begin{split} %{
+		c_{k+2} = a_-\otimes a_+\otimes\myid^{\otimes k} + \phi c_{k+1}
 	\end{split}\end{equation} %}
-	手順\ref{prop:辞書式順序で順に列挙する手順}の"球を移動する"操作が、
-	この継ぎ目の部分の遷移を行う。そして、$(p)*d_k^{n-p}$内の遷移は
-	手順\ref{prop:辞書式順序で順に列挙する手順}の"空でない箱を探す"ことが、
-	$d_{k+1}$から$d_k,d_{k-1},d_{k-2},\dots,d_1$と再帰的に
-	$(p,n-p,0,\dots,0,0)\tugi(p+1,0,0,\dots,0,n-p-1)$となる継ぎ目を探すこと
-	に対応する。
+	\begin{proof} %{
+		\begin{equation*}\begin{split} %{
+			c_{k+2} &= \sum_{i=0}^k
+				\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)} \\
+			&= a_-\otimes a_+\otimes\myid^{\otimes k}
+				+ \sum_{i=1}^k
+				\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)} \\
+			&= a_-\otimes a_+\otimes\myid^{\otimes k}
+				+ \sum_{i=0}^{k-1} \bigl(\phi^{i+1}(a_-\otimes a_+)\bigr)
+				\otimes\myid^{\otimes(k-1-i)} \\
+			&= a_-\otimes a_+\otimes\myid^{\otimes k}
+				+ \phi\sum_{i=0}^{k-1} \bigl(\phi^{i}(a_-\otimes a_+)\bigr)
+				\otimes\myid^{\otimes(k-1-i)} \\
+			&= a_-\otimes a_+\otimes\myid^{\otimes k} + \phi c_{k+1} \\
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+	今の場合、目的の操作$c_{k+2}$がすでに既知の操作$c_{k+2}^{(i)}$の和で
+	書かれているために、この漸化式は必要ない。
 
-	最後に$\hakodama$を辞書式順序の逆順で列挙する手続きを書いておく。
-	継ぎ目の部分の式\eqref{eq:辞書式順序での継ぎ目の部分}を見て
-	逆順になる操作をすればよい。
+	各操作$c_{k+2}^{(i)},\;i=0..k$の有効な箱球を調べる。
+	任意の$x\in TM\sizen$の核を$\ker x$と書き、核の補空間を$\ker_\perp x$
+	と書くことにする。$\ker_\perp c_{k+2}^{(i)}$は次のようになる。
+	\begin{equation}\label{eq:cの核の補空間}\begin{split} %{
+		\ker_\perp c_{k+2}^{(i)} 
+		&= \ket{0}^{\otimes i}\ket{\sizen_+}\otimes\ket{\sizen}^{\otimes(k+1-i)}
+	\end{split}\end{equation} %}
+	したがって、$i\neq j\in 0..k$ならば、$\ker_\perp c_{k+2}^{(i)}$と
+	$\ker_\perp c_{k+2}^{(i)}$は互いに直交する。最初に挙げた手続き
+	\ref{proc:箱球の反転辞書式順序} はこの直交性を使って効率的に
+	処理をしている。箱球の左の箱から箱の球の数を調べていき、
+	状態遷移を与える操作を集合$\set{c_{k+2}^{(i)}|i\in0..k}$の中から
+	選び出している。次の図のように状態の検査$\to$と遷移$\cdots>$を行っている。
+	\begin{equation*}\xymatrix@R=4ex@C=16ex{
+		\ket{\sizen}^{\otimes(k+2)} \ar[d]_{\text{else}}
+			\ar[r]|(.4){\text{箱$1$が非空}}
+		& \ket{\sizen_+}\otimes\ket{\sizen}^{\otimes(k+1)}
+			\ar@{.>}[ld]|{c_{k+2}^{(0)}} \ar@{.>}@(r,u)_{c_{k+2}^{(0)}} \\
+		\ket{0}\otimes\ket{\sizen}^{\otimes(k+1)}
+			\ar[d]_{\text{else}} \ar[r]|(0.4){\text{箱$2$が非空}}
+		& \ket{0}\otimes\ket{\sizen_+}\otimes\ket{\sizen}^{\otimes k}
+			\ar@{.>}[ld]|{c_{k+2}^{(1)}} \ar@{.>}@(r,u)_{c_{k+2}^{(1)}} \\
+		\ket{0}^{\otimes2}\otimes\ket{\sizen}^{\otimes k}
+			\ar[d]_{\text{else}} \ar[r]|(0.4){\text{箱$3$が非空}}
+		& \ket{0}^{\otimes2}\otimes\ket{\sizen_+}
+			\ar@{.>}[ld]|{c_{k+2}^{(2)}} \ar@{.>}@(r,u)_{c_{k+2}^{(2)}} \\
+		\vdots \\
+	}\end{equation*}
+	また、個々の核の補空間を調べなくても、$c_{k+2}$の漸化式
+	\eqref{eq:cの漸化式}より、
+	\begin{equation*}\begin{split} %{
+		\ker_\perp c_{k+2} 
+		&= \ker_\perp(a_-\otimes a_+\otimes\myid^{\otimes k})
+			\cup \ker_\perp(\phi c_{k+1}) \\
+	\end{split}\end{equation*} %}
+	となるが、
+	\begin{equation*}\begin{split} %{
+		\ker_\perp(a_-\otimes a_+\otimes\myid^{\otimes k})
+		&= \ket{\sizen_+}\otimes\ket{\sizen}^{\otimes(k+1)} \\
+		\ker_\perp(\phi c_{k+1}) &= \ket{0}\otimes (\ker_\perp c_{k+1}) \\
+	\end{split}\end{equation*} %}
+	だから、$\ker_\perp c_{k+2}$は次のように直和分解されることがわかる。
+	\begin{equation*}\begin{split} %{
+		\ker_\perp c_{k+2} 
+		&= \ker_\perp(a_-\otimes a_+\otimes\myid^{\otimes k})
+			\oplus \ker_\perp(\phi c_{k+1}) \\
+	\end{split}\end{equation*} %}
+	漸化式を使って、順次箱の数を減らしていけば次の核の補空間の系列が得られる。
+	\begin{equation*}\begin{array}{lclcl} %{
+		\ker_\perp c_{k+2} &=& \ker_\perp c_{k+2}^{(0)}
+			&\oplus& \ket{0}\otimes(\ker_\perp c_{k+1}) \\
+		\ker_\perp c_{k+1} &=& \ker_\perp c_{k+1}^{(0)}
+			&\oplus& \ket{0}\otimes(\ker_\perp c_{k}) \\
+		\vdots & \\
+		\ker_\perp c_{3} &=& \ker_\perp c_3^{(0)}
+			&\oplus& \ket{0}\otimes(\ker_\perp c_{2}) \\
+		\ker_\perp c_{2} &=& \ker_\perp c_2^{(0)}
+	\end{array}\end{equation*} %}
 
-	\begin{proposition}[辞書式順序で逆順に列挙する手順]
-	\label{prop:辞書式順序で逆順に列挙する手順} %{
-		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[空でない箱を探す] 箱$1$から箱$k-1$までで空でない最も右側の箱
-			$i$を見つける。
-			\begin{equation*}\begin{split} %{
-				(n_1,\dots,n_{i-1},n_i>0, n_{i+1}=0,n_{i+2}=0,\dots,n_{k-1}=0,n_k)
-			\end{split}\end{equation*} %}
-			箱$k$以外がすべて空ならば次はない。
-			\item[球を移動する] 箱$i$から箱$i+1$へ球を一つ移動してから、
-			\begin{equation*}\begin{split} %{
-				(n_1,\dots,n_{i-1},n_i>0, n_{i+1}=0,n_{i+2}=0,\dots,n_{k-1}=0,n_k) \\
-				\mapsto
-				(n_1,\dots,n_{i-1},n_i-1\ge0, n_{i+1}=1,n_{i+2}=0,\dots,n_{k-1}=0,n_k)
-			\end{split}\end{equation*} %}
-			箱$k$の球をすべて箱$i+1$に移す。
-			\begin{equation*}\begin{split} %{
-				(n_1,\dots,n_{i-1},n_i-1\ge0, n_{i+1}=1,n_{i+2}=0,\dots,n_{k-1}=0,n_k) \\
-				\mapsto
-				(n_1,\dots,n_{i-1},n_i-1\ge0, n_{i+1}=1,n_{i+2}=0,\dots,n_{k-1}=0,n_k=0)
-			\end{split}\end{equation*} %}
-		\end{description} %}
-	\end{proposition} %prop:辞書式順序で逆順に列挙する手順}
-
-	\begin{todo}[列挙を作用素で書く]\label{todo:列挙を作用素で書く} %{
-		辞書式順序で次の箱球を与える関数を無理やり作用素を使って書くと
-		次のようになるだろう。
-		\begin{equation*}\begin{split} %{
-			\uer{A}_{RR}(\uel{m}_R\otimes\pi_0)\Delta_\shuffle
-		\end{split}\end{equation*} %}
-		$\Delta_\shuffle$はシャッフル余積で$WA$に対して次のように定義される。
-		\begin{equation*}\begin{split} %{
-			\Delta_\shuffle[a_1a_2\cdots a_k] &= 1_W\otimes[a_1a_2\cdots a_k] \\
-			&+ [a_1]\otimes[a_2\cdots a_k] \\
-			&+ [a_1a_2]\otimes[a_3\cdots a_k] \\
-			&+ \cdots \\
-			&+ [a_1a_2\cdots a_k]\otimes1_W \\
-		\end{split}\end{equation*} %}
-		$\pi_0$は球の入っていない箱球への射影で$W\sizen$の双対空間$W\sizen^t$
-		を用いて次のように定義される。
-		\begin{equation*}\begin{split} %{
-			\pi_0 = (0)(0)^t + (0,0)(0,0)^t + \cdots
-		\end{split}\end{equation*} %}
-		$\uel{m}_R$は右端の箱から右端の左隣の箱へ球を一つ移動する操作である。
-		\begin{equation*}\begin{split} %{
-			\uel{m}_R(n) &= 0 \\
-			\uel{m}_R(n_1,\dots,n_k,n_{k+1})
-			&= \jump{1\le n_{k+1}}(n_1,\dots,n_k+1,n_{k+1}-1)
-		\end{split}\end{equation*} %}
-		$\uer{A}_{RR}$は$W\sizen\otimes W\sizen$に対する操作で、左の箱球の右端の
-		箱から左の箱球の右端の箱へ球をすべて移動する操作である。
-		\begin{equation*}\begin{split} %{
-			\uer{A}_{RR} (m_1,\dots,m_{k-1},m_k)\otimes(n_1,\dots,n_{l-1},n_l) \\
-			= (m_1,\dots,m_{k-1},0)\otimes(n_1,\dots,n_{l-1},n_l+m_k)
-		\end{split}\end{equation*} %}
-	\end{todo} %todo:列挙を作用素で書く}
-%s2:辞書式順序}
-
-\subsection{グレイコード}\label{s2:グレイコード} %{
-	文字数$k$の文字列全体の集合$W_k\sizen$にはハミング距離$d$が定義できる。
+	この節の話しから次の教訓が得られた教訓をまとめておく。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[操作の重ねあわせ] アルゴリズムを数式で書こうとするとき、
+		複雑な操作を既知の操作の重ね合わせとして表すことを検討する。
+		この節の場合は、目的の操作$c_{k+2}$を
+		$c_{k+2}=\sum_{i\in0..k}c_{k+2}^{(i)}$という重ね合わせで表し、
+		それぞれの操作$c_{k+2}^{(i)}$を球を一つ右隣の箱に移動する操作
+		$a_-\otimes a_+$を$\phi$で変形することで得られた。
+		\item[核の補空間] 目的の操作が複数の既知の操作の和として求まった場合、
+		それらの核の補空間が互いに直交するかどうかを調べる。直交していれば、
+		状態遷移が失敗$0_R$も含めてただ一つ定まる。
+		この節の場合、$c_{k+2}^{(i)})$の核の補空間は互いに直交していた。そして、
+		それらの核の補空間は簡単に見分けることができた
+		（式\eqref{eq:cの核の補空間}）。
+	\end{description} %}
+%s2:辞書式順序による列挙}
+\subsection{グレイコードによる列挙}\label{s2:グレイコードによる列挙} %{
+	%
+	$W_k\sizen$にはハミング距離$d$が定義できる。
 	\begin{equation*}\begin{split} %{
 		d:(m_1,m_2,\dots,m_k)\otimes(n_1,n_2,\dots,n_k)
 		&\mapsto \sum_{p\in1..k}\zettai{m_p-n_p}
 	\end{split}\end{equation*} %}
-	$W_k\sizen$では異なる元の間の最小のハミング距離は$2$なる。
-	列の前後の元同士のハミング距離が$2$になるように$\mycal{D}_k^n$の元を
-	列挙したものをグレイコードという。
+	$W_k\sizen$では異なる箱球の間の最小のハミング距離は$1$なり、
+	$\hakodama_k^n$では異なる箱球の間の最小のハミング距離は$2$なる。
+	列の前後の元同士のハミング距離が$2$になるように$\hakodama_k^n$の箱球を
+	すべて列挙したものを$\hakodama_k^n$のグレイコードという。
+	ここで、グレイコードの存在は自明でないことに注意する。例えば、
+	列の前後の箱球同士のハミング距離が$1$になるように$W_k\sizen$の箱球を
+	すべて列挙することはできない。
 
-	もともとのグレイコードはビット列を列挙する問題に対して定義されたもので
-	あろうが、現在ではより一般的に組み合わせ的グレイコードとしてビット列以外
-	の対象にも拡張されている。文献\cite{html:holmes}等にその紹介がある。
+	\Midline{名前からしてもともとのグレイコードはビット列を列挙する問題に
+	対して定義されたものであろうが、}\footnote{
+		文献\cite{html:ams.graycode}によると、Bell研の技術者Frank Grayに
+		因んで名付けられたようだ。
+	}
+	現在ではより一般的に組み合わせ的グレイコード
+	としてビット列以外の対象にも拡張されている。
+	文献\cite{html:savage.comb,html:holmes}等にその紹介がある。
 
-	一般の$\mycal{D}_k^n$にグレイコードが存在するかどうかは簡単には
-	わからないが、箱の数が$2$の場合には辞書式順序はグレイコードになっていて、
-	箱の数が$3$の場合には次のように順序を変更するとグレイコードになる。
-	\begin{equation*}\begin{array}{cc} %{
-		\text{辞書式順序} & \text{グレイコード} \\
-		\xymatrix@R=3ex@C=2ex{
-			003\ar[r] & 012\ar[r] & 021\ar[r] & 030\ar@(d,u)[dlll] \\
-			102\ar[r] & 111\ar[r] & 120\ar@(d,u)[dll] \\
-			201\ar[r] & 210\ar@(d,u)[dl] \\
-			300
-		} & \xymatrix@R=3ex@C=2ex{
-			003\ar[r] & 012\ar[r] & 021\ar[r] & 030\ar@(d,l)[dl] \\
-			102\ar[d] & 111\ar[l] & 120\ar[l] \\
-			201\ar[r] & 210\ar@(d,l)[dl] \\
-			300
-		}
+	$\hakodama_k^n$を順序にしたがって列挙したものがグレイコードとなる順序を
+	グレイコード順序ということにする。
+	反転辞書式順序を変更してグレイコードを与える操作を求めることにする。
+
+	箱の数が$1$のときと箱の数が$2$のときは反転辞書式順序はグレイコード順序
+	になっている。
+	\begin{equation*}\begin{split} %{
+		40\to 31\to 22\to 13\to 04
+	\end{split}\end{equation*} %}
+	$g_2=a_-\otimes a_+$と書く。
+	箱の数が$3$以上のときは、手続き\ref{proc:箱球の反転辞書式順序}の
+	'箱$i$の残りの球を全て箱$1$に移動する'という操作によって、反転辞書式順序
+	はグレイコード順序ではなくなる。次の図で矢印$\cdots>$がグレイコード順序
+	でない部分である。
+	\begin{equation*}\xymatrix@R=2ex@C=4ex{ %{
+		400\ar[r] & 310\ar[r] & 220\ar[r] & 130\ar[r] 
+			& 040\ar@{.>}@(dl,ur)[dllll] \\
+		301\ar[r] & 211\ar[r] & 121\ar[r] & 031\ar@{.>}@(dl,ur)[dlll] \\
+		202\ar[r] & 112\ar[r] & 022 \ar@{.>}@(dl,ur)[dll] \\
+		103\ar[r] & 013\ar@{.>}@(dl,ur)[dl] \\
+		004 \\
+	}\end{equation*} %}
+
+	箱の数が$3$のときには、手続き\ref{proc:箱球の反転辞書式順序}の
+	'箱$i$の残りの球を全て箱$1$に移動する'という操作を次のように、
+	'箱$3$に球を一つ追加したら箱$1$と箱$2$の間での球の移動を左右反転する'
+	という操作に変更するとグレイコード順序になる。
+	\begin{equation*}\xymatrix@R=2ex@C=4ex{ %{
+		400\ar[r] & 310\ar[r] & 220\ar[r] & 130\ar[r] & 040\ar[dl] \\
+		301\ar[d] & 211\ar[l] & 121\ar[l] & 031\ar[l] \\
+		202\ar[r] & 112\ar[r] & 022 \ar[dl] \\
+		103\ar[d] & 013\ar[l] \\
+		004 \\
+	}\end{equation*} %}
+	これを線形作用素の形で書くと次のようになる。
+	\begin{equation*}\begin{split} %{
+		a_-\otimes a_+\otimes \pi_0
+		&: 400\mapsto 310\mapsto 220\mapsto 130\mapsto 040 \\
+		\pi_0\otimes a_-\otimes a_+\pi_0 &: 040\mapsto 031 \\
+		a_+\otimes a_-\otimes \pi_1
+		&: 031\mapsto 121\mapsto 211\mapsto 301 \\
+		a_-\otimes \pi_0\otimes a_+\pi_1 &: 301\mapsto 202 \\
+		a_-\otimes a_+\otimes \pi_2
+		&: 202\mapsto 112\mapsto 022 \\
+		\pi_0 \otimes a_-\otimes a_+\pi_2 &: 022\mapsto 013 \\
+		a_+\otimes a_-\otimes \pi_3 &: 013\mapsto 103 \\
+		a_-\otimes \pi_0\otimes a_+\pi_3 &: 103\mapsto 004 \\
+	\end{split}\end{equation*} %}
+	箱$3$の球数の偶奇によって次のように操作が分かれている。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[箱$3$の球の数が偶数] $a_-\otimes a_+\otimes\myid$と
+		$\pi_0\otimes a_-\otimes a_+$
+		\item[箱$3$の球の数が奇数] $a_+\otimes a_-\otimes\myid$と
+		$a_-\otimes\pi_0\otimes a_+$
+	\end{description} %}
+	これらの操作をまとめた線形写像を$g_3$とする。
+	\begin{equation*}\begin{split} %{
+		g_3 &= a_-\otimes a_+\otimes \pi_\myeven 
+		+ a_+\otimes a_-\otimes \pi_\myodd
+		+ \pi_0\otimes a_-\otimes a_+\pi_\myeven 
+		+ a_-\otimes \pi_0\otimes a_+\pi_\myodd
+	\end{split}\end{equation*} %}
+	転置$g_3^\dag$が$g_3$を逆順に辿る写像になっていることを利用して、
+	箱の数が$4$のときの線形写像$g_4$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		g_3\otimes\pi_\myeven &: 4000\mapsto\cdots\mapsto 0040 \\
+		\pi_0^{\otimes2}\otimes a_-\otimes a_+\pi_\myeven &: 0040\mapsto 0031 \\
+		g_3^\dag\otimes\pi_\myodd &: 0031\mapsto\cdots\mapsto 3001 \\
+		a_-\otimes \pi_0^{\otimes2}\otimes a_+\pi_\myodd &: 3001\mapsto 2002 \\
+		g_3\otimes\pi_\myeven &: 2002\mapsto\cdots\mapsto 0022 \\
+		\pi_0^{\otimes2}\otimes a_-\otimes a_+\pi_\myeven &: 0022\mapsto 0013 \\
+		g_3^\dag\otimes\pi_\myodd	&: 0013\mapsto\cdots\mapsto 1003 \\
+		a_-\otimes \pi_0^{\otimes2}\otimes a_+\pi_\myodd &: 1003\mapsto 0004 \\
+	\end{split}\end{equation*} %}
+	$g_4$は次のように書くことができる。
+	\begin{equation*}\begin{split} %{
+		g_{4} &= g_{3}\otimes \pi_\myeven + g_{3}^\dag\otimes \pi_\myodd
+			+ \pi_0^{\otimes 2}\otimes a_-\otimes a_+\pi_\myeven 
+			+ a_-\otimes \pi_0^{\otimes 2}\otimes a_+\pi_\myodd 
+	\end{split}\end{equation*} %}
+
+	以上のパターンから、線形写像$g_k:T_kM\sizen\to T_kM\sizen$をテンソルの
+	各次数ごとに次のように定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $g_1=0_R$と定義する。
+		\item $g_2=a_-\otimes a_+$と定義する。
+		\item 任意の$k\in\sizen_+$に対して次のように定義する。
+		\begin{equation}\label{eq:gの漸化式}\begin{split} %{
+			g_{k+2} &= g_{k+1}\otimes \pi_\myeven + g_{k+1}^\dag\otimes \pi_\myodd \\
+				&+ \pi_0^{\otimes k}\otimes a_-\otimes a_+\pi_\myeven
+				+ a_-\otimes \pi_0^{\otimes k}\otimes a_+\pi_\myodd
+		\end{split}\end{equation} %}
+	\end{itemize} %}
+
+	$g_{k+2}$の漸化式から核の補空間を調べる。
+	$g_{k+2}$の漸化式での定数項をまとめて、
+	$\gamma_{k+2}=\gamma_{k+2}^{(1)}+\gamma_{k+2}^{(2)}\in TM\sizen$を
+	次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\gamma_{k+2}^{(1)} = \pi_0^{\otimes k}\otimes a_-\otimes a_+\pi_\myeven
+		,\quad \gamma_{k+2}^{(2)} = a_-\otimes \pi_0^{\otimes k}\otimes a_+\pi_\myodd
+	\end{split}\end{equation*} %}
+	$\gamma_{k+2}^{(i)},\;i=1,2$の核の補空間は次のようになる。
+	\begin{equation*}\begin{split} %{
+		\ker_\perp\gamma_{k+2}^{(1)}
+			&= \ket{0}^{\otimes k}\otimes\ket{\sizen_+}\otimes\ket{\myeven} \\
+		\ker_\perp\gamma_{k+2}^{(2)}
+			&= \ket{\sizen_+}\otimes\ket{0}^{\otimes k}\otimes\ket{\myodd} \\
+	\end{split}\end{equation*} %}
+	また、$g_{k+2}$が次のような写像になっていることを認めてしまえば、
+	\begin{equation*}\begin{split} %{
+		g_{k+2}: \ket{n,0,\dots,0}\mapsto\cdots\mapsto\ket{0,\dots,0,n}
+			\mapsto0_R
+	\end{split}\end{equation*} %}
+	$g_{k+2}$の核の補空間は次のようになることがわかる。
+	\begin{equation*}\begin{split} %{
+		\ker_\perp g_{k+2} = \ket{\sizen_+}_{k+1}\otimes\ket{\sizen}
+	\end{split}\end{equation*} %}
+	ここで、$\ket{\sizen_+}_k$は個の箱に少なくとも一つの球が入っている箱球
+	を表すものとする。したがって、$g_{k+1}\otimes\pi_\myeven$と
+	$g_{k+1}^\dag\otimes\pi_\myodd$の核の補空間は次のようになることがわかる。
+	\begin{equation*}\begin{split} %{
+		\ker_\perp(g_{k+1}\otimes\pi_\myeven)
+			&= \ket{\sizen_+}_k\otimes\ket{\sizen}\otimes\ket{\myeven} \\
+		\ker_\perp(g_{k+1}^\dag\otimes\pi_\myodd)
+			&= \ket{\sizen}\otimes\ket{\sizen_+}_k\otimes\ket{\myodd} \\
+	\end{split}\end{equation*} %}
+	よって、$\gamma_{k+2}^{(1)}$と$\gamma_{k+2}^{(2)}$と
+	$g_{k+1}\otimes\pi_\myeven$と$g_{k+1}^\dag\otimes\pi_\myodd$の核の補空間
+	はすべて互いに直交することがわかる。
+
+	$g_{k+2}$の漸化式\eqref{eq:gの漸化式}をプログラムに落としこむためには、
+	共役$g_{k+1}^\dag$を手続きとして解釈可能な形にする必要がある。
+	そのために、$g_{k+2}$の漸化式を展開してしまうことを考える。
+	その前に、この節の今後の便宜のために、射影とその核の補空間を次のように
+	定義しておく。
+	\begin{equation*}\begin{array}{lcllcl} %{
+		(\pi_0)_k &=& \pi_0^{\otimes k}, &\quad
+			\ket{0}_k &=& \ket{0}^{\otimes k} \\
+		(\pi_+)_k &=& \myid^{\otimes k} - (\pi_0)_k, &\quad
+			\ket{+}_k &=& \ket{0}^{\otimes k}\text{に直交する箱球空間} \\
+		(\pi_\myeven)_k &=& \ket{\myeven}\text{への射影}, &\quad
+			\ket{\myeven}_k &=& \text{球の総数が偶数になる箱球空間} \\
+		(\pi_\myodd)_k &=& \ket{\myodd}\text{への射影}, &\quad
+			\ket{\myodd}_k &=& \text{球の総数が奇数になる箱球空間} \\
 	\end{array}\end{equation*} %}
-%s2:グレイコード}
-\endgroup %}
-%s1:数の合成の列挙}
-
-\section{自然数の合成の列挙}\label{s1:自然数の合成の列挙} %{
-\begingroup %{
-	\providecommand{\op}[2]{{\myop{#1}}_{\myop{#2}}}
-	\providecommand{\move}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
-\subsection{グレイコード}\label{s2:グレイコード} %{
-	各$\mycal{D}_k^n$にはハミング距離$d$が定義できる。
-	\begin{equation*}\begin{split} %{
-		d\bigl((m_1,m_2,\dots,m_k),(n_1,n_2,\dots,n_k)\bigr)
-		= \sum_{i=1..k}\zettai{m_i-n_i}
-	\end{split}\end{equation*} %}
-	異なる元の間の最小のハミング距離は$2$なる。$\mycal{D}_k^n$の元を列挙
-	する方法で、列挙の列の前後の元同士のハミング距離が$2$となるような列挙の
-	方法をグレイコードという。
-
-	グレイコードはグラフの問題に帰着される。
-	ハミング距離が$2$となる$\mycal{D}_k^n$の元同士を向きのない線でつなぐと
-	$\mycal{D}_k^n$の元を頂点とする連結な無向グラフとなる。
-	このグラフを一筆書きする経路、つまりすべての頂点を唯一度だけ通る経路が
-	グレイコードとなる。グラフを一筆書きする経路のことをハミルトン経路という。
-
-	\begin{definition}[ハミルトン経路]\label{def:ハミルトン経路} %{
-		無向グラフのすべての頂点を唯一度だけ通る経路をハミルトン経路という。
-		また、ループするハミルトン経路をハミルトン閉路という。
-	\end{definition} %def:ハミルトン経路}
-
-	一般のグラフに対してハミルトン経路やハミルトン閉路を求める問題はNP問題に
-	分類されていて、グラフの特殊性を使わないと効率的にハミルトン経路を求める
-	ことができないようである。
-
-	もともとのグレイコードはビット列を効率的に列挙する方法として考えられた
-	ようだが、現在では一般化されて、
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 文字列に距離を定義し、
-		\item 列の前後の元同士の距離が最小かつ一定になるような
-	\end{itemize} %}
-	列挙の方法をグレイコードというようだ。
-
-	この節では$\mycal{D}_k^n$を球を箱に入れる仕方に対応させることにする。
-	$\mycal{D}_k^n$は、
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 区別のつく$k$個の箱に、
-		\item 区別のつかない$n$個の球を、
-		\item 空箱を許して入れる
-	\end{itemize} %}
-	仕方全体とみることができる。ハミング距離が$2$となる$\mycal{D}_k^n$の
-	任意の二つの元は、ある二つの箱の間で一つの球を移動したものになっている。
-	例えば$(1,1,1,0)$は$(0,2,1,0)$の箱$2$から箱$1$へ球を一つ移動したもの
-	になっている。グレイコードは箱から別の箱に球を移動させることで得られるが、
-	ここでは、球の移動を右隣の箱への移動に制限して考えてみる。
-	ただし、右端の箱の右隣は左端の箱として考える。球を右隣の箱へ移動する操作を
-	加法の記号を使って書くと次のようになる。
-	\begin{equation*}\begin{split} %{
-		(m_1,m_2,\dots,m_k) &\mapsto (m_1-1,m_2+1,\dots,m_k) \\
-		&+ (m_1,m_2-1,m_3+1,\dots,m_k) \\
-		&+ (m_1,m_2,\dots,m_{k-1}-1,m_k+1) \\
-		&+ (m_1+1,m_2,\dots,m_{k-1},m_k-1)
-	\end{split}\end{equation*} %}
-	$\mycal{D}_4^3$の場合に、球を右隣の箱へ移動する操作を図に描くと次の
-	ようになる。
-	\begin{equation*}\xymatrix@R=4ex@C=2ex{
-		3000 \ar[d] \\
-		2100 \ar[r] \ar[d] & 2010 \ar[r] \ar[d] & 2001 \ar[llu] \ar[d] \\
-		1200 \ar[r] \ar[d] & 1110 \ar[r] \ar[d] \ar@/^6ex/[rrrrrr] 
-			& 1101 \ar[r] \ar[llu] \ar[d] & 1011 \ar[r] \ar[d] \ar[llu] \ar[d] 
-			& 1002 \ar[llu] \ar[d] & & & 1020 \ar@/_4ex/[llll] \ar[d] \\
-		0300 \ar[r] & 0210 \ar[r] \ar@/_6ex/[rrrrrr] & 0201 \ar[r] \ar[llu] 
-			& 0111 \ar[r] \ar[llu] \ar@/_6ex/[rrrrrr] & 0102 \ar[r] \ar[llu]
-			& 0012 \ar[r] \ar[llu] & 0003 \ar[llu] 
-			& 0120 \ar[r] \ar@/^6ex/[llll] & 0030 \ar[r] & 0021 \ar[llu] \\
-			\\
-	}\end{equation*}
-	一般に$\mycal{D}_k^n$の場合には、各頂点$w\in\mycal{D}_k^n$には
-	$\sharp_+w$個の長さ$k$の閉じた経路が現れる。
-	ここで、$w\in\mycal{D}_k^n$に対して$\sharp_+w$を空でない箱の数とする。
-	例えば、
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 頂点$(2,1,0,0)$は$(2,1,0,0)$を基点とする$\sharp_+(2,1,0,0)=2$個
-		の長さ$4$の閉じた経路を持ち、
-		\item 頂点$(1,1,0,1)$は$(1,1,0,1)$を基点とする
-		$\sharp_+(1,1,0,1)=3$個の長さ$4$の閉じた経路を持つ。
-	\end{itemize} %}
-	箱の数が$4$以上だと紙に書くことが難しいので、箱の数が$3$の場合を書くと次の
-	ようになる。
-	\begin{equation*}\xymatrix@R=4ex@C=2ex{
-		400 \ar[d] \\
-		310 \ar[r] \ar[d] & 301 \ar[lu] \ar[d] \\
-		220 \ar[r] \ar[d] & 211 \ar[r] \ar[d] \ar[lu] & 202 \ar[d] \ar[lu] \\
-		130 \ar[r] \ar[d] & 121 \ar[d] \ar[r] \ar[lu] & 112 \ar[d] \ar[r] \ar[lu] & 103 \ar[d] \ar[lu] \\
-		040 \ar[r] & 031 \ar[r] \ar[lu] & 022 \ar[r] \ar[lu] & 013 \ar[r] \ar[lu] & 004 \ar[lu]\\
-	}\end{equation*}
-	この図を見ると箱$3$の球の数が偶数の時は正順で、箱$2$の球の数が奇数の時は
-	逆順で辺をたどるハミルトン経路がプログラムする際に簡単になりそうである。
-	逆順にたどる辺を$\sim>$と書くと次のようになる。
-	\begin{equation}\label{eq:箱の数が3の場合のハミルトン経路}\xymatrix@R=4ex@C=2ex{
-		400 \ar[d] \\
-		310 \ar[d] & 301 \ar@{<~}[d] \\
-		220 \ar[d] & 211 \ar@{<~}[d] & 202 \ar[d] \ar@{<~}[lu] \\
-		130 \ar[d] & 121 \ar@{<~}[d] & 112 \ar[d] & 103 \ar@{<~}[d] \\
-		040 \ar[r] & 031 & 022 \ar[r] & 013 & 004 \ar@{<~}[lu]\\
-	}\end{equation}
-	Javaプログラム\ref{code:箱の数が２または３の場合}は箱の数が$2$または$3$
-	の場合にのみ、この図の順序で列挙するプログラムである。
-	箱の数が$2$または$3$に限定されるが、簡単にプログラムを書くことができる。
-
-	図\eqref{eq:箱の数が3の場合のハミルトン経路}のように球を一つ右か左の箱へ
-	移動させて順に列挙していくグレイコードを隣接グレイコードということにする。
-
-	箱の数についての漸化式
-	\begin{equation*}\begin{split} %{
-		\mycal{D}_{k+1}^n = \cup_{p\in0..n}\mycal{D}_{k}^{n-p}*(p)
-	\end{split}\end{equation*} %}
-	によって、図\eqref{eq:箱の数が3の場合のハミルトン経路}の経路を箱の数が
-	$4$以上に拡張することを考える。$\mycal{D}_k^n$の元を文字とする文字列を
-	$W\mycal{D}_k^n$と書く。任意の$w\in\mycal{D}_p^m$に対して
-	写像$(w*)/(*w):W\mycal{D}_k^n\to W\mycal{D}_{p+k}^{m+n}$を次のように
-	定義する。
-	\begin{equation*}\begin{split} %{
-		(w*)(w_1,w_2,\dots,w_r) &= (w*w_1,w*w_2,\dots,w*w_r) \\
-		(*w)(w_1,w_2,\dots,w_r) &= (w_1*w,w_2*w,\dots,w_r*w)
-	\end{split}\end{equation*} %}
-	特に任意の自然数$n$に対して$(n*)=\bigl((n)*\bigr)$や
-	$(*n)=\bigl(*(n)\bigr)$と書くことにする。文字の並びを反転される操作を
-	$R$と書くことにする。
-	\begin{equation*}\begin{split} %{
-		R(w_1,w_2,\dots,w_r) = (w_r,\dots,w_2,w_1)
-	\end{split}\end{equation*} %}
-	すると、図\eqref{eq:箱の数が3の場合のハミルトン経路}の経路による
-	グレイコードは次のように書ける。
-	\begin{equation}\label{eq:箱の数が3までのハミルトン経路}\begin{split} %{
-		\text{箱の数が$1$} &= \bigl((n)\bigr) \\
-		\text{箱の数が$2$} &= \bigl((n,0),(n-1,1),\dots,(0,n)\bigr) \\
-		\text{箱の数が$3$} &= \bigl((*0)R^0w_2^n\bigr)
-			*\bigl((*1)R^1w_2^{n-1}\bigr)*\cdots*\bigl((*n)R^nw_2^0\bigr) \\
-		&= \prod_{p=0}^n(*p)R^pw_2^{n-p} \\
-	\end{split}\end{equation} %}
-	これを箱の数が以上に一般化して$W\mycal{D}_+^*$の部分集合
-	$\set{w_k^n\in W\mycal{D}_k^n}$を次のように定義する。
-	\begin{equation}\label{eq:Klingsbergの隣接グレーコード}\begin{split} %{
-		w_1^n &= \bigl((n)\bigr) \\
-		w_{k+1}^n &= \prod_{p=0}^n(*p)R^pw_k^{n-p}
-			\quad\text{for all }k\in\sizen_+
-	\end{split}\end{equation} %}
-	$w_k^n$は箱の数が$3$までの場合、式\eqref{eq:箱の数が3までのハミルトン経路}
-	による隣接グレイコードに一致する。$w_1^n$が箱の数が$1$、$w_2^n$が箱の数が
-	$2$、$w_3^n$が箱の数が$3$の時の隣接グレイコードである。
-	一般の$w_k^n$が$\mycal{D}_k^n$の列挙になっていることはわかるが、それが
-	グレイコードかどうかはすぐにはわからない。
-	箱の数が$4$の時は次のようになり、
-	\begin{equation*}\begin{split} %{
-		(*0)R^0w_3^3 &= (*0)R^0(300,210,\dots,003) \\
-			&= (3000,2100,1200,0300,0210,1110,2010,1020,0120,0030) \\
-		(*1)R^1w_3^2 &= (*1)R^1(200,110,\dots,002) \\
-			&= (0021,1011,0111,0201,1101,2001) \\
-		(*2)R^1w_3^1 &= (*2)R^2(100,010,001) \\
-			&= (1002,0102,0012) \\
-		(*3)R^1w_3^0 &= (*3)R^3(000) \\
-			&= (0003) \\
-	\end{split}\end{equation*} %}
-	$w_4^3$は次のようになることがわかる。
-	\begin{equation}\label{eq:箱の数が4のグレイコード}\begin{split} %{
-		w_4^3 &= (3000,2100,1200,0300,0210,1110,2010,1020,0120,0030 \\
-			&\quad ,0021,1011,0111,0201,1101,2001 \\
-			&\quad ,1002,0102,0012 \\
-			&\quad ,0003)
-	\end{split}\end{equation} %}
-	したがって、$w_4^3$もまたグレイコードになっていることがわかる。
-	ただし、隣接グレイコードにはなっていない。例えば、$(*1)R^1w_3^2$の中の並び
-	$0021\mapsto1011$は隣り合った箱の間で球を一つ移動したものになっていない。
-	$w_3^2$は隣接グレイコードであるが、$w_3^2$の中に両端の箱の間の球の移動
-	$101\mapsto200$が含まれているために、$(*1)$の操作で右端に箱$4$を付け足す
-	ために$(*1)w_3^2$においては箱$1$と箱$3$は隣り合わなくなるからである。
-
-	$w_k^n$がグレイコードになっていることを認めてしまえば、帰納法により、
-	グレイコードの並びの反転$R$はやはりグレイコードだから、
-	$w_{k+1}^n=\prod_{p=0}^n(*p)R^pw_k^{n-p}$において、任意の$p\in0..n$に
-	対して$(*p)R^pw_k^{n-p}$がグレイコードになっていることはすぐわかる。
-	しかし、$(*p)R^pw_k^{n-p}$と$(*p+1)R^{p+1}w_k^{n-(p+1)}$のつなぎ目が
-	グレイコードになっていることはすぐにわからない。$w_4^3$の場合、
-	$0030\mapsto0021$、$2001\mapsto1002$、$0012\mapsto0003$というつなぎ目で
-	ある。ここのつなぎ目がグレイコードになっているミソは
-	\begin{equation*}\begin{split} %{
-		003 &\xmapsto{\text{右端の数字を一つ下げる}} 002 \\
-		200 &\xmapsto{\text{左端の数字を一つ下げる}} 100 \\
-		001 &\xmapsto{\text{右端の数字を一つ下げる}} 000 \\
-	\end{split}\end{equation*} %}
-	となっていることである。したがって、$w_k^{n-p}$の右端の文字となる
-	$\mycal{D}_k^{n-p}$の元の左端または右端の箱から球を一つ取り出せば
-	$w_k^{n-(p+1)}$の左端の文字となる$\mycal{D}_k^{n-(p+1)}$の元になること
-	が示せれば、$w_{k+1}^n$がグレイコードになることが示せる。
-
-	\begin{proposition}[列挙の両端の元]\label{prop:列挙の両端の元} %{
-		$w_k^n$の左端の文字となる$\mycal{D}_k^n$の元は$(n,0,\dots,0)$となり、
-		右端の文字となる$\mycal{D}_k^n$の元は$(0,0,\dots,n)$となる。
-	\end{proposition} %prop:列挙の両端の元}
-	\begin{proof} %{
-		箱の数についての帰納法で証明する。
-		箱の数が$1$の時は$w_1^n=\bigl((n)\bigr)$だから命題が成り立つ。
-		箱の数が$k$で命題が成り立つと仮定する。すると、$w_{k+1}^n$の左端の
-		文字は$(*0)R^0w_k^n$の左端の文字となるから、帰納法の仮定より
-		$(n,0,\dots,0)$となる。また、$w_{k+1}^n$の右端の文字は、
-		$(*n)R^nw_k^0$の右端の文字となるから、$w_k^0=\bigl((0,0,\dots,0)\bigr)$
-		より、$(0,\dots,0,n)$となる。したがって、箱の数が$k+1$の時にも命題が
-		成り立つことが証明された。
-	\end{proof} %}
-
-	\begin{proposition}[グレーコードになる]\label{prop:グレーコードになる} %{
-		$w_k^n$は$\mycal{D}_k^n$のグレーコードとなる。
-	\end{proposition} %prop:グレーコードになる}
-	\begin{proof} %{
-		箱の数についての帰納法で証明する。
-		箱の数が$1$の時は$w_1^n=\bigl((n)\bigr)$だから命題が成り立つ。
-		箱の数が$k$で命題が成り立つと仮定する。すると、$w_k^n$の定義より、
-		$w_{k+1}^n=\prod_{p=0}^n(*p)R^pw_k^{n-p}$だが、グレーコードの文字列の
-		反転$R$はまたグレーコードだから、帰納法の仮定より、任意の
-		$p\in0..n$に対して$(*p)R^pw_k^{n-p}$がグレーコードになることがわかる。
-		また、命題\ref{prop:列挙の両端の元}より、任意の$p\in0..(n-1)$で
-		次のようになる。
-		\begin{equation*}\begin{split} %{
-			&(*p)R^pw_k^{n-p} \\
-			&= (*p)R^p\bigl((n-p,0,\dots,0),\dots,(0,0,\dots,n-p)\bigr) \\
-			&= \begin{cases}
-				\bigl((n-p,0,\dots,0,p),\dots,(0,0,\dots,n-p,p)\bigr)
-					, &\text{ iff }p\text{ is even} \\
-				\bigl((0,0,\dots,n-p,p),\dots,(n-p,0,\dots,0,p)\bigr)
-					, &\text{ otherwise } \\
-			\end{cases} \\
-			&(*p+1)R^{p+1}w_k^{n-(p+1)} \\
-			&= (*p+1)R^{p+1}\bigl((n-p-1,0,\dots,0),\dots,(0,0,\dots,n-p-1)\bigr) \\
-			&= \begin{cases}
-				\bigl((0,0,\dots,n-p-1,p+1),\dots,(n-p-1,0,\dots,0,p+1)\bigr)
-					, &\text{ iff }p\text{ is even} \\
-				\bigl((n-p-1,0,\dots,0,p+1),\dots,(0,0,\dots,n-p-1,p+1)\bigr)
-					, &\text{ otherwise } \\
-			\end{cases} \\
-		\end{split}\end{equation*} %}
-		したがって、
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item $p$が偶数の場合は$(*p)R^pw_k^{n-p}$の右端の文字となる
-			$\mycal{D}_{k+1}^n$の元に対して箱$k$から箱$k+1$へ球を一つ移したものが
-			$(*p+1)R^{p+1}w_k^{n-(p+1)}$の左端の文字となる$\mycal{D}_{k+1}^n$の元
-			となり、
-			\item $p$が奇数の場合は$(*p)R^pw_k^{n-p}$の右端の文字となる
-			$\mycal{D}_{k+1}^n$の元に対して箱$1$から箱$k+1$へ球を一つ移したものが
-			$(*p+1)R^{p+1}w_k^{n-(p+1)}$の左端の文字となる$\mycal{D}_{k+1}^n$の元
-			となり、
-		\end{itemize} %}
-		文字列の連結$\bigl((*p)R^pw_k^{n-p}\bigr)\bigl((*p)R^pw_k^{n-p}\bigr)$
-		もやはりグレーコードになることがわかる。以上より、箱の数が$k+1$の時も
-		命題が成り立つことがわかる。
-	\end{proof} %}
-
-	この命題によって式\eqref{eq:Klingsbergの隣接グレーコード}で定義された
-	$w_k^n$がグレーコードになることがわかる。グレーコードを与える線形写像
-	$\myop{next}_k:\sizen\myop{D}_k^*\to\sizen\myop{D}_k^*$は再帰を用いると
-	次のように書ける。
-	\begin{equation*}\begin{split} %{
-		\myop{next}_1(n) &= 0 \\
-		\myop{next}_{k+1}(n_1,\dots,n_{k+1}) &= \left\{\begin{split}
-			n_{k+1}\text{ is even} &\implies \left\{\begin{split}
-				n_1\neq 0 &\implies (\myop{next}_k(n_1,\dots,n_k)) * (n_{k+1})\\
-				\text{else} &\implies M_{-k}(n_1,\dots,n_{k+1}) \\
-			\end{split}\right. \\ %\}
-			\text{else} &\implies \left\{\begin{split}
-				n_1\neq 0 &\implies (\myop{next}_k(n_k,\dots,n_1)) * (n_{k+1})\\
-				\text{else} &\implies M_{+(k+1)}(n_1,\dots,n_{k+1}) \\
-			\end{split}\right. \\ %\}
-		\end{split}\right. \\ %\}
-		&\quad\text{for all }k\in\sizen_+
-	\end{split}\end{equation*} %}
-	これをそのまま再帰を用いてC言語で書くと末尾再帰となる。したがって、
-	このプログラムは$\myop{while}$文で書き直すことができるはずである。
-	このプログラムを$\myop{while}$文で書き直すことを考える。そのために、
-	箱の数が小さいところの様子を見てみよう。
-
-	箱の数が$3$の時は次のようになる。
-	\begin{equation*}\begin{split} %{
-		w_3^n &= \prod_{p=0}^nR^p\prod_{q=0}^{n-p}(n-p-q,q,p) \\
-		&= \prod_{p=0}^n \left\{\begin{split}
-			p\text{ is even} &\implies \prod_{q=0}^{n-p} \\
-			\text{else} &\implies \prod_{q=n-p}^{0} \\
-		\end{split}\right\}(n-p-q,q,p) \\  %\}
-		&= \prod_{p=0}^n \left\{\begin{split}
-			p\text{ is even} &\implies \prod_{q=0}^{n-p} (n-p-q,q,p) \\
-			\text{else} &\implies \prod_{q=0}^{n-p} (q,n-p-q,p) \\
-		\end{split}\right. \\ %\}
-	\end{split}\end{equation*} %}
-	したがって、$\myop{next}_3$は次のようになることがわかる。
-	\begin{equation*}\begin{split} %{
-		\myop{next}_3(n_1,n_2,n_3) = \left\{\begin{split}
-			n_3\text{ is even} &\implies \left\{\begin{array}{rll}
-				0< n_1 &\implies M_{-1}(n_1,n_2,n_3) &\text{// }\prod_q \\
-				\text{else} &\implies M_{-2}(n_1,n_2,n_3) &\text{// }\prod_p(*p) \\
-			\end{array}\right. \\ %\}
-			\text{else} &\implies \left\{\begin{array}{rll}
-				0< n_2 &\implies M_{+1}(n_1,n_2,n_3) &\text{// }\prod_q \\
-				\text{else} &\implies M_{+3}(n_1,n_2,n_3) &\text{// }\prod_p(*p) \\
-			\end{array}\right. \\ %\}
-		\end{split}\right. \\ %\}
-	\end{split}\end{equation*} %}
-	ここで、箱$i$から箱$j$へ球を一つ移動する操作を$\move{j}{i}$と書くと、
-	$\myop{next}_3$は次のように箱$1$と箱$2$を対称的に書ける。
-	\begin{equation*}\begin{split} %{
-		\myop{next}_3(n_1,n_2,n_3) = \left\{\begin{split}
-			n_3\text{ is even} &\implies \left\{\begin{split}
-				0< n_1 &\implies \move{2}{1}(n_1,n_2,n_3) \\
-				\text{else} &\implies \move{3}{2}(n_1,n_2,n_3) \\
-			\end{split}\right. \\ %\}
-			\text{else} &\implies \left\{\begin{split}
-				0< n_2 &\implies \move{1}{2}(n_1,n_2,n_3) \\
-				\text{else} &\implies \move{3}{1}(n_1,n_2,n_3) \\
-			\end{split}\right. \\ %\}
-		\end{split}\right. \\ %\}
-	\end{split}\end{equation*} %}
-
-	箱の数が$4$の時は次のようになる。
-	\begin{equation*}\begin{split} %{
-		w_4^n &= \prod_{p=0}^n(*p)R^p\prod_{q=0}^{n-p}(*q)R^q\prod_{r=0}^{n-p-q}
-			M_{-1}^r(n-p-q,0) \\
-		&= \prod_{p=0}^n(*p)R^p\prod_{q=0}^{n-p}(*q)\left\{\begin{split}
-			q\text{ is even} &\implies \prod_{r=0}^{n-p-q} M_{-1}^r(n-p-q,0) \\
-			\text{else} &\implies \prod_{r=n-p-q}^{0} M_{-1}^r(n-p-q,0) \\
-		\end{split}\right. \\ %\}
-		&= \prod_{p=0}^n(*p) \left\{\begin{split}
-			p\text{ is even and }q\text{ is even} &\implies 
-				\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q} \\
-			p\text{ is even and }q\text{ is odd} &\implies 
-				\prod_{q=0}^{n-p}\prod_{r=n-p-q}^{0} \\
-			p\text{ is odd and }q\text{ is even} &\implies 
-				\prod_{q=n-p}^{0}\prod_{r=n-p-q}^{0} \\
-			p\text{ is odd and }q\text{ is odd} &\implies
-				\prod_{q=n-p}^{0}\prod_{r=0}^{n-p-q} \\
-		\end{split}\right\} M_{-1}^r(n-p-q,0,q) \\
-		&= \prod_{p=0}^n(*p)\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q} \left\{\begin{split}
-			p\text{ is even and }q\text{ is even} &\implies 
-				\move{3}{2}^q\move{2}{1}^r(n-p,0,0) \\
-			p\text{ is even and }q\text{ is odd} &\implies 
-				\move{3}{1}^q\move{1}{2}^r(0,n-p,0) \\
-			p\text{ is odd and }q\text{ is even} &\implies 
-				\move{3}{1}^q\move{1}{2}^r(0,n-p,0) \\
-			p\text{ is odd and }q\text{ is odd} &\implies 
-				\move{3}{1}^q\move{2}{1}^r(n-p,0,0) \\
-		\end{split}\right. \\ %\}  \\
-	\end{split}\end{equation*} %}
-	をプログラムするためには、与えられた元$w\in\myop{D}_k^n$の、
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item どの箱から
-		\item 正順もしくは逆順に
-	\end{itemize} %}
-	球を移動させればよいかを簡単に判別できなくてはならない。
-
-	箱$i$から右隣の箱へ球を一つ移動させる操作を次の線形写像
-	$M_{-i}:\sizen\mycal{D}_k^n\to\sizen\mycal{D}_k^n$で表し、
-	\begin{equation*}\begin{split} %{
-		M_{-i}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
-		&= \jump{1\le n_i}(n_1,\dots,n_i-1,n_{i+1}+1,\dots,n_k) \\
-		M_{-k}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
-		&= \jump{1\le n_k}(n_1+1,\dots,n_i,n_{i+1},\dots,n_k-1) \\
-	\end{split}\end{equation*} %}
-	箱$i$へ右隣の箱から球を一つ移動させる操作を次の線形写像
-	$M_{+i}:\sizen\mycal{D}_k^n\to\sizen\mycal{D}_k^n$で表すことにする。
-	\begin{equation*}\begin{split} %{
-		M_{+i}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
-		&= \jump{1\le n_{i+1}}(n_1,\dots,n_i+1,n_{i+1}-1,\dots,n_k) \\
-		M_{+k}(n_1,\dots,n_i,n_{i+1},\dots,n_k)
-		&= \jump{1\le n_1}(n_1-1,\dots,n_i,n_{i+1},\dots,n_k+1) \\
-	\end{split}\end{equation*} %}
-	$M_{\pm i}$の$\mycal{D}_1^n$に対する作用は$0$とする。
-	\begin{equation*}\begin{split} %{
-		M_{\pm i}w = 0 \quad\text{for all }w\in\mycal{D}_1^n \\
-	\end{split}\end{equation*} %}
-
-	$w_2^n$は$M_{-1}$を使って次のように書くことができる。
-	\begin{equation*}\begin{split} %{
-		w_2^n &= M_{-1}^0(n,0)\mapsto M_{-1}^1(n,0)
-			\mapsto\cdots\mapsto M_{-1}^n(n,0) \\
-		&= (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)(n,0) \\
-	\end{split}\end{equation*} %}
-	したがって、$w_2^n$は箱$1$から右隣の箱へ球を一つ移動させれば順に文字を
-	たどれることがわかる。$w_3^n$は次のようになる。
-	\begin{equation*}\begin{array}{rcl@{\quad}l} %{
-		w_3^n
-		&=& (*0)(M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
-			(n,0) & \text{定義} \\
-		&&\mapsto (*1)R(M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto
-			M_{-1}^{n-1})(n-1,0) \\
-		&&\mapsto (*2)(M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto
-			M_{-1}^{n-2})(n-2,0) \\
-		&&\mapsto \cdots \\
-		&&\mapsto (*n)R^n(M_{-1}^0)(0,0) \\
-		&=& (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
-			(n,0,0) & \text{展開} \\
-		&&\mapsto (M_{-1}^{n-1}\mapsto\cdots\mapsto M_{-1}^1\mapsto M_{-1}^0)
-			(n-1,0,1) \\
-		&&\mapsto (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^{n-2})
-			(n-2,0,2) \\
-		&&\mapsto\cdots \\
-		&&\mapsto(0,0,n) \\
-		&=& (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
-			(n,0,0) & \text{反転部分} \\
-		&&\mapsto(M_{+1}^0\mapsto\cdots\mapsto M_{+1}^{n-2}\mapsto M_{+1}^{n-1})
-			(0,n-1,1) \\
-		&&\mapsto (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^{n-2})
-			(n-2,0,2) \\
-		&&\mapsto \cdots \\
-		&&\mapsto (0,0,n) \\
-		&=& (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^n)
-			(n,0,0) & \text{つなぎ} \\
-		&&\mapsto(M_{+1}^0\mapsto\cdots\mapsto M_{+1}^{n-2}\mapsto M_{+1}^{n-1})
-			M_{-2}M_{-1}^n(n,0,0) \\
-		&&\mapsto (M_{-1}^0\mapsto M_{-1}^1\mapsto\cdots\mapsto M_{-1}^{n-2})
-			M_{+3}M_{+1}^{n-1}M_{-2}M_{-1}^n(n,0,0) \\
-		&&\mapsto \cdots \\
-		&&\mapsto \begin{cases}
-			M_{+3}M_{+1}^1\cdots M_{+3}M_{+1}^{n-1}M_{-2}M_{-1}^n(n,0,0)
-				, &\text{ iff $n$ is even} \\
-			M_{-2}M_{-1}^1\cdots M_{+3}M_{+1}^{n-1}M_{-2}M_{-1}^n(n,0,0)
-			, &\text{ otherwise } \\
-		\end{cases} \\
+	さらに便宜上、箱がない箱球に対しても次のように射影を定義しておく。
+	\begin{equation*}\begin{array}{lcllcl} %{
+		(\pi_0)_0 &=& 1_R, &\quad (\pi_+)_0 &=& 0_R \\
+		(\pi_\myeven)_0 &=& 1_R, &\quad (\pi_\myodd)_0 &=& 0_R \\
 	\end{array}\end{equation*} %}
-	したがって、箱の数$3$がの場合はグレイコード$w_3^n$をたどる操作は次の
-	線形写像$\myop{next}_3:\sizen\mycal{D}_3^n\to\sizen\mycal{D}_3^n$で
-	表されるだろう。
-	\begin{equation*}\begin{split} %{
-		\myop{next}_3 = \begin{cases}
-			\text{箱$3$の球数が偶} &\implies \begin{cases}
-				\text{箱$1$が空でない} &\implies M_{-1} \\
-				\text{ otherwise } &\implies M_{-2} \\
-			\end{cases} \\
-			\text{ otherwise } &\implies \begin{cases}
-				\text{箱$2$が空でない} &\implies M_{+1} \\
-				\text{ otherwise } &\implies M_{+3} \\
-			\end{cases}\\
-		\end{cases}
-	\end{split}\end{equation*} %}
 
-\subsubsection{箱の数が4の場合}\label{s3:箱の数が4の場合} %{
-	箱の数が4の場合は次のようになる。
+	$g_{k+2}$の漸化式\eqref{eq:gの漸化式}とその共役は次のようになる。
 	\begin{equation*}\begin{split} %{
-		w_4^n &= \prod_{p=0}^n(*p)R^pw_3^{n-p} \\
-		&= \prod_{p=0}^n\prod_{q=0}^{n-p}(*p)(*q)R^{p+q}w_2^{n-p-q} \\
-		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q}(*p)(*q)R^{p+q}
-			M_{-1}^r(n-p-q,0) \\
-		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q}(*p)(*q)
-		\begin{cases}
-			M_{-1}^r(n-p-q,0), &\text{ iff }p+q\text{ is } even \\
-			M_{+1}^r(0,n-p-q), &\text{ otherwise } \\
-		\end{cases} \\
-		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q}(*p) \begin{cases}
-			M_{+3}^qM_{-1}^r(n-p,0,0), &\text{ iff }p+q\text{ is } even \\
-			M_{-2}^qM_{+1}^r(0,n-p,0), &\text{ otherwise } \\
-		\end{cases} \\
-		&= \prod_{p=0}^n\prod_{q=0}^{n-p}\prod_{r=0}^{n-p-q} \begin{cases}
-			M_{+4}^p(M_{+3}M_{+4})^qM_{-1}^r(n,0,0,0)
-				, &\text{ iff }p+q\text{ is } even \\
-			(M_{-3}M_{-2})^pM_{-2}^qM_{+1}^r(0,n,0,0), &\text{ otherwise } \\
-		\end{cases} \\
+		g_{k+2} &= g_{k+1}\otimes \pi_\myeven 
+			+ g_{k+1}^\dag\otimes \pi_\myodd + \gamma_{k+2} \\
+		g_{k+2}^\dag &= g_{k+1}^\dag\otimes \pi_\myeven 
+			+ g_{k+1}\otimes \pi_\myodd + \gamma_{k+2}^\dag \\
 	\end{split}\end{equation*} %}
-	この式からグレイコード$w_4^n$を順にたどる線形写像$\myop{next}_4$が次の
-	ように求まる。
+	この式を$2\times 2$行列の形にまとめると次のようになる。
+	\begin{equation}\label{eq:gの漸化式の行列版}\begin{split} %{
+		G_{k+2}^t &= G_{k+1}^t\otimes(\pi_\myeven + \pi_\myodd F) 
+			+ \Gamma_{k+2}^t
+	\end{split}\end{equation} %}
+	ここで、$-^t$は$-^\dag$とは独立の$2$次元の転置を表し、
+	$G,\Gamma=\Gamma^{(1)}+\Gamma^{(2)},F$は次のように定義した。
+	\begin{equation}\label{eq:Gammaの定義}\begin{split} %{
+		G_{k+2} = \begin{pmatrix}
+			g_{k+2}\\ g_{k+2}^\dag
+		\end{pmatrix},\quad \Gamma_{k+2}^{(1)} = \begin{pmatrix}
+			\gamma_{k+2}^{(1)}\\ \gamma_{k+2}^{(1)\dag}
+		\end{pmatrix},\quad \Gamma_{k+2}^{(1)} = \begin{pmatrix}
+			\gamma_{k+2}^{(2)}\\ \gamma_{k+2}^{(2)\dag}
+		\end{pmatrix},\quad F = \begin{pmatrix}
+			0 & 1_R \\ 1_R & 0
+		\end{pmatrix}
+	\end{split}\end{equation} %}
+	この漸化式を展開すると次のようになる。
 	\begin{equation*}\begin{split} %{
-		\myop{next}_4(n_1,n_2,n_3,n_4) \\
-		= \begin{cases} n_3+n_4\text{ is even} &\implies \begin{cases}
-				1\le n_1 &\implies M_{-1} \\
-				\text{otherwise} &\implies \begin{cases}
-					1\le n_2 &\implies M_{-2} \\
-					\text{otherwise} &\implies M_{-3}
-				\end{cases} \\
-			\end{cases} \\
-			\text{otherwise} &\implies \begin{cases}
-				1\le n_2 &\implies M_{+1} \\
-				\text{otherwise} &\implies \begin{cases}
-					1\le n_2 &\implies M_{+4} \\
-					\text{otherwise} &\implies M_{+3}
-				\end{cases} \\
-			\end{cases} \\
-		\end{cases}
+		G_{k+2}^t &= \sum_{i=0}^{k}
+			\Gamma_{i+2}^t\otimes(\pi_\myeven + \pi_\myodd F)^{\otimes(k-i)}
 	\end{split}\end{equation*} %}
+	さらに、$F^2=1_R$より次のようになるから、
+	\begin{equation*}\begin{split} %{
+		(\pi_\myeven + \pi_\myodd F)^k = (\pi_\myeven)_k + (\pi_\myodd)_k F
+	\end{split}\end{equation*} %}
+	$G_{k+2}$は次のようになる。
+	\begin{equation}\label{eq:gの展開の行列版}\begin{split} %{
+		G_{k+2}^t &= \sum_{i=0}^{k} \Gamma_{i+2}^t
+			\otimes\bigl((\pi_\myeven)_{k-i} + (\pi_\myodd)_{k-i}F\bigr)
+	\end{split}\end{equation} %}
+	$g_{k+2}$は既知の写像の和として次のように書ける。
+	\begin{equation}\label{eq:gの展開}\begin{split} %{
+		g_{k+2} = \sum_{i=0}^{k}\Gamma_{i+2}^t\otimes P_{k-i}
+	\end{split}\end{equation} %}
+	ここで、$P_k^t=\bigl((\pi_\myeven)_k,(\pi_\myodd)_k\bigr)$と定義した。
 
-	箱の数が$4$の場合はグレイコード$w_4^n$を表すためには、$M_{+3}M_{+4}$や
-	$M_{-3}M_{-2}$という球を隣の隣に移動する操作が必要になることに注意する。
-	$w_4^3$の例\eqref{eq:箱の数が4のグレイコード}に現れた球を一つ左右の箱に
-	移動するだけでない操作は、空箱を一つ足してそこに球を移動させる操作に
-	起因する。
+	この式\eqref{eq:gの展開}の和を
+	$\sum_{i=0}^{k}=\sum_{i=0}^{k-1}+\sum_{i=k}^{k}$とすると
+	元の漸化式\eqref{eq:gの漸化式}になる。
+	この式の和を$\sum_{i=0}^{k}=\sum_{i=0}^{0}+\sum_{i=0}^{k-1}$として
+	新たな漸化式を求めることにする。
+	\begin{equation*}\begin{split} %{
+		g_{k+2} &= \Gamma_2^t\otimes P_k
+			+ \sum_{i=1}^{k} \Gamma_{i+2}^t\otimes P_{k-i}
+	\end{split}\end{equation*} %}
+	この式の二項目と$G_{k+1}$の関係が求まれば漸化式に持ち込める。
+	\begin{equation*}\begin{split} %{
+		\text{二項目} &= \sum_{i=0}^{k-1} \Gamma_{i+3}^t\otimes P_{(k-1)-i} \\
+		g_{k+1} &= \sum_{i=0}^{k-1} \Gamma_{i+2}^t\otimes P_{(k-1)-i} \\
+	\end{split}\end{equation*} %}
+	最も素直な方法は次の線形写像$\phi:T_{k+1}M\sizen\to T_{k+2}M\sizen$
+	を求めることだろう。
+	\begin{equation*}\begin{split} %{
+		\phi(\Gamma_{i+2}^t\otimes P_{(k-1)-i})
+			= \Gamma_{i+3}^t\otimes P_{(k-1)-i} \quad\text{for all }i\in0..(k-1)
+	\end{split}\end{equation*} %}
+	$g_{k+1}$の$\Gamma_{i+2}^t\otimes P_{(k-1)-i}$の核の補空間は次のように
+	なっている。
+	\begin{equation*}\begin{split} %{
+		\ker_\perp(\Gamma_{i+2}^{(1)t}\otimes P_{(k-1)-i})
+		&= \begin{pmatrix}
+			\ket{0}_{i}\otimes\ket{\sizen_+}\otimes\ket{\myeven} \\
+			\ket{0}_{i}\otimes\ket{\sizen}\otimes\ket{\myodd} \\
+		\end{pmatrix}^t\otimes \begin{pmatrix}
+			\ket{\myeven}_{(k-1)-i} \\
+			\ket{\myodd}_{(k-1)-i} \\
+		\end{pmatrix} \\
+		\ker_\perp(\Gamma_{i+2}^{(2)t}\otimes P_{(k-1)-i})
+		&= \begin{pmatrix}
+			\ket{\sizen_+}\otimes\ket{0}_{i}\otimes\ket{\myodd} \\
+			\ket{\sizen}\otimes\ket{0}_{i}\otimes\ket{\myeven_+} \\
+		\end{pmatrix}^t\otimes \begin{pmatrix}
+			\ket{\myeven}_{(k-1)-i} \\
+			\ket{\myodd}_{(k-1)-i} \\
+		\end{pmatrix}
+	\end{split}\end{equation*} %}
+	$\ker_\perp(\Gamma_{k+2}^t\otimes P_{(k-1)-i})$は四つの互いに直交する
+	箱球空間から成り立っていることがわかる。
+	したがって、$\phi$を次のように定義してみる。
+	\begin{equation}\label{eq:phiの定義その一}\begin{split} %{
+		\phi &= \phi^{(1)}+\phi^{(2)}
+		,\quad \phi^{(p)} = \sum_{i\in\sizen}\phi_{i}^{(p)}
+		\quad\text{for all }p\in1..2 \\
+	\end{split}\end{equation} %}
+	ここで、$\phi_i^{(p)}$は$T_nM\sizen,\;n<i+2$に対しては次のように$0_R$
+	とし、
+	\begin{equation*}\begin{split} %{
+		\phi_i^{(p)}TM\sizen=\phi_i^{(p)}T_1M\sizen=\cdots
+		=\phi_i^{(p)}T_{i+1}M\sizen=0_R
+		\quad\text{for all }p=1..2
+	\end{split}\end{equation*} %}
+	$T_nM\sizen,\;i+2\le n\;$に対しては、任意の
+	$f_1,f_2,\dots,f_n\in M\sizen$に対して次のように定義する。
+	\begin{equation}\label{eq:phiの定義その二}\begin{split} %{
+		&\phi_{i}^{(1)}(f_1\otimes f_2\otimes\cdots\otimes f_n) \\
+		&= (\myid\otimes f_1\otimes f_2\otimes\cdots\otimes f_n)
+		\begin{pmatrix}
+			(\pi_0)_{i+1}\otimes\pi_+\otimes\pi_\myeven \\
+			(\pi_0)_{i+1}\otimes\myid\otimes\pi_\myodd \\
+		\end{pmatrix}^t\otimes \begin{pmatrix}
+			(\pi_\myeven)_{n-2-i} \\
+			(\pi_\myodd)_{n-2-i} \\
+		\end{pmatrix} \\
+		&\phi_{i}^{(2)}(f_1\otimes f_2\otimes\cdots\otimes f_n) \\
+		&= (f_1\otimes \myid\otimes f_2\otimes\cdots\otimes f_n)
+		\begin{pmatrix}
+			\pi_+\otimes(\pi_0)_{i+1}\otimes\pi_\myodd \\
+			\myid\otimes(\pi_0)_{i+1}\otimes\pi_{\myeven_+} \\
+		\end{pmatrix}^t\otimes \begin{pmatrix}
+			(\pi_\myeven)_{n-2-i} \\
+			(\pi_\myodd)_{n-2-i} \\
+		\end{pmatrix}
+	\end{split}\end{equation} %}
+	核の補空間の直交性から任意の$p,q\in1..2,\;i,j\in0..(k-1)$に対して
+	次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split} %{
+		\phi_{i}^{(p)}(\Gamma_{j+2}^{(q)t}\otimes P_{(k-1)-j})
+		&= \jump{p=q}\jump{i=j}\;\Gamma_{j+3}^{(q)t}\otimes P_{(k-1)-j} \\
+	\end{split}\end{equation*} %}
+	以上より、次の$g_{k+2}$の漸化式が得られる。
+	\begin{equation}\label{eq:gの漸化式その二}\begin{split} %{
+		g_{k+2} &= \Gamma_2^t\otimes P_k + \phi g_{k+1} \\
+		\Gamma_2^t\otimes P_k &= g_2\otimes(\pi_\myeven)_k 
+			+ g_2^\dag\otimes(\pi_\myodd)_k
+	\end{split}\end{equation} %}
+
+	$g_{k+2}$の漸化式\eqref{eq:gの漸化式その二}を手続きとして解釈することを
+	考える。次の式は箱球の箱を箱$2$から右端の箱$k+2$まで順に操作していくことを
+	表す。
 	\begin{equation*}\begin{array}{ccccc} %{
-		(*2)(*1)(0,0) &=& (*2)M_{+3}(1,0,0) 
-			&=& M_{+4}^2(M_{+3}M_{+4})(3,0,0,0) \\
-		(*2)(*1)(0,0) &=& (*2)M_{-2}(0,1,0) 
-			&=& (M_{-3}M_{-2})^2M_{-2}(0,3,0,0) \\
+		g_{k+2} &=& \Gamma_2^t\otimes P_k &+& \phi g_{k+1} \\
+		&& \text{箱$2$に対する操作} && \text{箱$2$の右側の箱に対する操作} \\
+		\phi g_{k+1} &=& \Gamma_3^t\otimes P_{k-1} &+& \phi g_{k+1} \\
+		&& \text{箱$3$に対する操作} && \text{箱$3$の右側の箱に対する操作} \\
+		\vdots \\
 	\end{array}\end{equation*} %}
-%s3:箱の数が4の場合}
+	$\set{\Gamma_{i+2}^t\otimes P_{k-i}}_{i\in0..k}$の核の補空間が互いに
+	直交しているので、箱$i+2$に対する操作結果が$0_R$でなければ、残りの操作を
+	中断して全操作を終了することができる。箱$i+2$に対する操作は次のように
+	分解できる。
+	\begin{equation}\label{eq:gの手続き}\begin{split} %{
+		\Gamma_{i+2}^t\otimes P_{k-i} &= \left\{\begin{split}
+			\text{箱$i+2$より右側の球の総数が偶数}
+				&\implies \gamma_{i+2}\otimes(\myid)_{k-i} \\
+			\text{else} &\implies \gamma_{i+2}^\dag\otimes(\myid)_{k-i} \\
+		\end{split}\right. \\ %\}
+		\gamma_{i+2}\otimes(\myid)_{k-i} &= \left\{\begin{split}
+			\text{箱$i+2$の球数が偶数}
+				&\implies (\pi_0)_i\otimes a_-\otimes a_+\otimes (\myid)_{k-i} \\
+			\text{else}
+				&\implies a_-\otimes (\pi_0)_i\otimes a_+\otimes (\myid)_{k-i} \\
+		\end{split}\right. \\ %\}
+		\gamma_{i+2}^\dag\otimes(\myid)_{k-i} &= \left\{\begin{split}
+			\text{箱$i+2$の球数が奇数}
+				&\implies (\pi_0)_i\otimes a_+\otimes a_-\otimes (\myid)_{k-i} \\
+			\text{else}
+				&\implies a_+\otimes (\pi_0)_i\otimes a_-\otimes (\myid)_{k-i} \\
+		\end{split}\right. \\ %\}
+		(\pi_0)_i\otimes a_-\otimes a_+\otimes (\myid)_{k-i}
+		&= \left\{\begin{split}
+			\text{箱$i+1$が空} &\implies \text{箱$i+3$へ移動} \\
+			\text{else} &\implies \text{箱$i+1$から箱$i+2$へ球を一つ移動して終了}
+		\end{split}\right. \\ %\}
+		a_-\otimes (\pi_0)_i\otimes a_+\otimes (\myid)_{k-i}
+		&= \left\{\begin{split}
+			\text{箱$1$が空} &\implies \text{箱$i+3$へ移動} \\
+			\text{else} &\implies \text{箱$1$から箱$i+2$へ球を一つ移動して終了}
+		\end{split}\right. \\ %\}
+		(\pi_0)_i\otimes a_+\otimes a_-\otimes (\myid)_{k-i}
+		&= \left\{\begin{split}
+			\text{箱$i+2$が空} &\implies \text{箱$i+3$へ移動} \\
+			\text{else} &\implies \text{箱$i+2$から箱$i+1$へ球を一つ移動して終了}
+		\end{split}\right. \\ %\}
+		a_+\otimes (\pi_0)_i\otimes a_-\otimes (\myid)_{k-i}
+		&= \left\{\begin{split}
+			\text{箱$i+2$が空} &\implies \text{箱$i+3$へ移動} \\
+			\text{else} &\implies \text{箱$i+2$から箱$1$へ球を一つ移動して終了}
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation} %}
 
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item 記法を統一する。
-			\begin{equation*}\begin{split} %{
-				W\sizen\text{の元} &\mapsto \text{箱球の単語} \\
-				W^2\sizen\text{の元} &\mapsto 
-					\text{箱球の句(V.Turaevの用法\cite{arxiv:turaev})} \\
-				W\sizen\text{の連結積} &\mapsto \mybiop{*} \\
-				W^2\sizen\text{の連結積} &\mapsto \mybiop{\mapsto} \\
-				\square\text{の多重積} &\mapsto \myprod{}{\square}_{p=m}^nx_p
-				= \begin{cases}
-					x_m\square x_{m+1}\square\cdots\square x_n
-						, &\text{ iff }m\le n \\
-					x_n\square x_{n+1}\square\cdots\square x_m
-						, &\text{ otherwise } \\
-				\end{cases} \\
-				\text{Hamming隣接} &\mapsfrom
-					\text{Hamming距離が2の箱球の単語} \\
-				\text{球の移動距離} &\mapsfrom 
-					\text{球を一つずつ隣の箱へ移動して別の箱球に到達する最小手数} \\
-					&\text{球の移動距離が1の箱球の単語同士はHamming隣接する}
-			\end{split}\end{equation*} %}
-			\item 余積を次のように定義する。
-			\begin{equation*}\begin{split} %{
-				\Delta n  = \sum_{p=0}^n p\otimes(n-p)
-			\end{split}\end{equation*} %}
-			すると、$\Delta^k n$は$\mycal{D}_{k+1}^n$の元を列挙する。
-			この余積を変形してグレイコードを導けないものだろうか。
-		\end{itemize} %}
-	\end{todo} %todo:ここまで}
-	箱の数が小さいところを見てみると次のようになる。
+	箱球を$g_{k+2}$と逆順で列挙する方法は$g_{k+2}$の共役$g_{k+2}^\dag$を
+	とればよい。したがって、$(\Gamma_{i+2}^t\otimes P_{k-i})^\dag$を
+	計算すれば手続きに翻訳できるが、$\Gamma_{i+2}$の定義
+	\eqref{eq:Gammaの定義}より次の式が成り立つ。
 	\begin{equation*}\begin{split} %{
-		w_2^3 
-		&= \underbrace{30\mapsto21\mapsto12\mapsto03}_{\text{箱$1$から右}} \\
-		w_3^3
-		&= \underbrace{300\mapsto210\mapsto120\mapsto030}_{\text{箱$1$から右}}
-		\underbrace{\mapsto}_{\text{箱$2$から右}}
-		\underbrace{021\mapsto111\mapsto201}_{\text{箱$2$から左}} \\
-		&\underbrace{\mapsto}_{\text{箱$1$から左}}
-		\underbrace{102\mapsto012}_{\text{箱$1$から右}}
-		\underbrace{\mapsto}_{\text{箱$2$から右}}
-		003 \\
-		w_4^3
-		&= \underbrace{3000\mapsto2100\mapsto1200\mapsto0300}_{\text{箱$1$から右}}
-		\underbrace{\mapsto}_{\text{箱$2$から右}}
-		\underbrace{0210\mapsto1110\mapsto2010}_{\text{箱$2$から左}} \\
-		&\underbrace{\mapsto}_{\text{箱$1$から左}}
-		\underbrace{102\mapsto0120}_{\text{箱$1$から右}}
-		\underbrace{\mapsto}_{\text{箱$2$から右}}
-		0030 \\
-		&\underbrace{\mapsto}_{\text{箱$3$から右}}
-		0021 
-		\underbrace{\mapsto}_{\text{箱$3$から左}}
-		\underbrace{1011\mapsto0111}_{\text{箱$1$から右}}
-		\underbrace{\mapsto}_{\text{箱$3$から左}}
-		\underbrace{0201\mapsto1101\mapsto2001}_{\text{箱$2$から左}}
+		(\Gamma_{i+2}^t\otimes P_{k-i})^\dag
+		= (\Gamma_{i+2}^t)^\dag\otimes P_{k-i}
+		= (F\Gamma_{i+2}^t)\otimes P_{k-i}
+		= \Gamma_{i+2}^t\otimes (FP_{k-i})
 	\end{split}\end{equation*} %}
+	したがって、箱球を$g_{k+2}$と逆順で列挙する方法は手続き
+	\eqref{eq:gの手続き}の条件分岐を次のように変えればよい。
+	\begin{equation}\label{eq:gの逆順の手続き}\begin{split} %{
+		\Gamma_{i+2}^t\otimes P_{k-i} &= \left\{\begin{split}
+			\text{箱$i+2$より右側の球の総数が奇数}
+				&\implies \gamma_{i+2}\otimes(\myid)_{k-i} \\
+			\text{else} &\implies \gamma_{i+2}^\dag\otimes(\myid)_{k-i} \\
+		\end{split}\right. \\ %\}
+		&\text{以下同じ$g_{k+2}$と同じ} \\
+	\end{split}\end{equation} %}
 
-	\begin{lstlisting}[caption=箱の数が２または３の場合, label=code:箱の数が２または３の場合]
-		static boolean moveR(int[] value, int index) {
-			if (value[index] < 1) {
-				return false;
-			}
-			value[index] -= 1;
-			value[index == value.length - 1 ? 0 : index + 1] += 1;
-			return true;
-		}
-		static boolean moveL(int[] value, int index) {
-			if (value[index] < 1) {
-				return false;
-			}
-			value[index] -= 1;
-			value[index == 0 ? value.length - 1 : index - 1] += 1;
-			return true;
-		}
-		static boolean next(int[] value) {
-			if ((value[value.length - 1] & 1) == 0) {
-				for (int i = 0, n = value.length - 1; i < n; ++i) {
-					if (moveR(value, i)) {
-						return true;
+	ここで求めた写像$g_{k+2}$はKunth-Klingsbergのグレイコードと言われる
+	箱球を列挙する順序である。
+	$g_{k+2}$の手続きへの翻訳\eqref{eq:gの手続き}の条件分岐をもう少しスマート
+	にした形で使われるようである。文献\cite{html:walsh}などを参照すること。
+	\begin{lstlisting}[caption=Kunth-Klingsbergのグレイコード
+	, label=code:Kunth-Klingsbergのグレイコード]
+	g: natural[] -> natural[] or null
+	g = w |-> do {
+		left = w[0];
+		right = w.sum() - left;
+		for (i = 1; i < w.length(); ++i) {
+			right -= w[i];
+			if (right.is_even()) {
+				if (0 < left) {
+					w[i] += 1;
+					if (w[i].is_even()) {
+						w[i-1] -= 1;
+					} else {
+						w[0] -= 1;
 					}
+					return w;
 				}
 			} else {
-				for (int n = value.length - 1; 0 < n--;) {
-					if (moveL(value, n)) {
-						return true;
+				if (0 < w[i]) {
+					if (w[i].is_even()) {
+						w[0] += 1;
+					} else {
+						w[i-1] += 1;
 					}
+					w[i] -= 1;
+					return w;
 				}
+				left += w[i];
 			}
-			return false;
 		}
+		return null;
+	}
 	\end{lstlisting}
-%s2:グレイコード}
+%s2:グレイコードによる列挙}
+\subsection{第二種スターリング数と箱球の列挙}
+\label{s2:第二種スターリング数と箱球の列挙} %{
+	箱球の列挙を考えたもともとの動機は第二種スターリング数$S_k^n$
+	について成り立つと思わる次の式を検証するためであった。
+	\begin{equation}\label{eq:第二種スターリング数と箱球の関係}
+	\begin{split} %{
+		S_k^n &= \sum_{(n_1,n_2,\dots,n_k)\in\hakodama_k^{n-k}}
+			1^{n_1}2^{n_2}\cdots k^{n_k}
+			\quad\text{for all }k\le n\in\sizen_+
+	\end{split}\end{equation} %}
+	この式の右辺をパソコンで計算した結果は次のようになる。
+	\begin{equation*}\begin{array}{r|@{\quad}rrrrrrrrrr} %{
+		n\backslash k & \hspace{1em}1 & \hspace{1em}2 & \hspace{1em}3 & \hspace{1em}4 & \hspace{1em}5 & \hspace{1em}6 & \hspace{1em}7 & \hspace{1em}8 & \hspace{1em}9 \\ \hline
+		1 & 1 \\
+		2 & 1 & 1 \\
+		3 & 1 & 3 & 1 \\
+		4 & 1 & 7 & 6 & 1 \\
+		5 & 1 & 15 & 25 & 10 & 1 \\
+		6 & 1 & 31 & 90 & 65 & 15 & 1 \\
+		7 & 1 & 63 & 301 & 350 & 140 & 21 & 1 \\
+		8 & 1 & 127 & 966 & 1701 & 1050 & 266 & 28 & 1 \\
+		9 & 1 & 255 & 3025 & 7770 & 6951 & 2646 & 462 & 36 & 1 \\
+	\end{array}\end{equation*} %}
+	ここまでの結果は式\eqref{eq:第二種スターリング数と箱球の関係}が正しい
+	ことを支持している。
+%s2:第二種スターリング数と箱球の列挙}
+\subsection{グレイコード順序の数}\label{s2:グレイコード順序の数} %{
+	$\hakodama_k^n$において、$(n,0,\dots,0)$から始めて$(0,\dots,0,n)$で
+	終わるグレイコードはいくつあるだろうか。
+	節\ref{s2:グレイコードによる列挙}で扱ったグレイコードは数ある
+	グレイコードの一つである。
+%s2:グレイコード順序の数}
+%s1:箱球の列挙}
+%
+\section{数の分割の列挙}\label{s1:数の分割の列挙} %{
+	%
+	数の組成と数の分割の定義を与えてから話を進める。
+	\begin{definition}[数の組成と列挙]\label{def:数の組成と列挙} %{
+		正の自然数$n\in\sizen_+$に対して、$n$個の正の自然数の組
+		$(n_1,n_2,\dots,n_k)\in\sizen_+^k$で$n=n_1,n_2,\dots,n_k$となる
+		ものを$n$の$k$組成という。さらに、条件$n_1\ge n_2\ge\cdots\ge n_k$
+		を満たすものを$n$の$k$分割という。
+	\end{definition} %def:数の組成と列挙}
+	数の組成と分割の違いは順序の違いを考慮に入れるか入れないかの違いである。
+	$n$の$k$組成全体の集合を$\sosei_k^n$、$n$の$k$分割全体の集合を
+	$\bunkatu_k^n$と書く。
 
-\subsection{保留}\label{s2:保留} %{
-	\begin{equation*}\begin{matrix} %{
-		3000 & 2100 & 2010 & 2001 \\
-		1200 & 1110 & 1101 \\
-		1020 & 1011 & 1002 \\
-		0300 & 0210 & 0201 \\
-		0120 & 0111 & 0102 \\
-		0030 & 0021 & 0012 & 0003 \\
-	\end{matrix}\end{equation*} %}
-
-	集合$\mycal{D}_k^n$は箱の数に関する次の漸化式を満たす。
+	箱球$\hakodama_k^n$と数の組成$\sosei_k^n$の違いは空箱を許すから許さない
+	かの違いである。箱球のすべての箱に球を一つ追加すると数の組成になる。
+	式で書くと次の集合同型$f: \hakodama_k^n\simeq\sosei_k^{n+k}$になる。
 	\begin{equation*}\begin{split} %{
-		\mycal{D}_{k+1}^n = \mycal{D}_k^{n}*(0)
-			+ \mycal{D}_k^{n-1}*(1) + \cdots + \mycal{D}_k^{0}*(n)
+		f(n_1,n_2,\dots,n_k) = (n_1+1,n_2+2,\dots,n_k+1)
+		\quad\text{for all }n_1,n_2,\dots,n_k\in\sizen
 	\end{split}\end{equation*} %}
-	ここで、$\mycal{D}_k^{n-p}*(p)$はすべての$\mycal{D}_k^{n-p}$の元の右側に
-	を文字列$(p)$連結したものを表す。
+	したがって、前節の箱球の列挙と数の組成の列挙は同じことになる。
+	また、$\sosei_k^{n+k}$の大きさは$\hakodama_k^n$の大きさと同じ
+	$\binom{n-k-1}{k-1}$となる。
+
+	$\bunkatu_k^n$の大きさ$P_k^n$を導いておく。$\hakodama_k^n$の場合は
+	左端の球の数によって分類すれば、$\hakodama_k^n$の大きさが満たす漸化式
+	\eqref{eq:Dの大きさ}が得られたが、$\bunkatu_k^n$の場合それが難しい。
 	\begin{equation*}\begin{split} %{
-		\mycal{D}_4^n 
-		&= \mycal{D}_3^3*(0) + \mycal{D}_3^2*(1) + \mycal{D}_3^1*(2) 
-			+ \mycal{D}_3^0*(3) \\
-		&= \mycal{D}_2^3*(0)*(0) + \mycal{D}_2^2*(1)*(0)
-			+ \mycal{D}_2^1*(2)*(0) + \mycal{D}_2^0*(3)*(0)
+		\bunkatu_{k+1}^n &= \ket{n-k}\otimes\bunkatu_{k}^k
+		\;\oplus\; \ket{n-k-1}\otimes\bunkatu_{k}^{k+1} \\
+		&\oplus\cdots\oplus \left\{\begin{split}
+			r=0 &\implies \ket{m}\otimes\bunkatu_{k}^{n-m} \\
+			\text{else} &\implies \ket{m+1}\otimes\bunkatu_{k}^{n-(m+1)} \\
+		\end{split}\right. \\ %\}
+		&\text{where } n=mk+r,\;0\le r< k
+	\end{split}\end{equation*} %}
+	そこで、すべての箱から球を一つ取り除いて、空になる箱の数によって分類
+	して漸化式を導くことにする。$\bunkatu_k^{n-k}$の箱球に各箱に球を一つ
+	追加したものは$\bunkatu_k^n$の箱球になる。$\bunkatu_{k-1}^{n-k}$の箱球
+	に各箱に球を一つ追加して球の一つ入った箱を右端に追加したものは
+	$\bunkatu_k^n$の箱球になる。このようにして考えていくと次の式が導かれる。
+	\begin{equation*}\begin{split} %{
+		\bunkatu_k^n &\supseteq 
+		\cup_{p=0}^k \bigl(a_+^{\otimes(k-p)}\bunkatu_{k-p}^{n-k}\bigr)
+			\otimes\ket{1}^{\otimes p} \\
+		&= a_+^{\otimes k}\bunkatu_k^{n-k}
+		\;\cup\; \bigl(a_+^{\otimes (k-1)}\bunkatu_{k-1}^{n-k}\bigr)
+			\otimes\ket{1}
+		\;\cup\; \bigl(a_+^{\otimes (k-2)}\bunkatu_{k-2}^{n-k}\bigr)
+			\otimes\ket{1}^{\otimes 2} \\
+		&\cup \cdots \cup\; \ket{1}^{\otimes k} \\
+	\end{split}\end{equation*} %}
+	異なる$p,q$に対して$\bigl(a_+^{\otimes(k-p)}\bunkatu_{k-p}^{n-k}\bigr)
+	\otimes\ket{1}^{\otimes p}$と$\bigl(a_+^{\otimes(k-q)}
+	\bunkatu_{k-q}^{n-k}\bigr)\otimes\ket{1}^{\otimes q}$の共通は空なので、
+	右辺の合併は直和になる。さらに、$\bunkatu_k^n$の任意の箱球$w$に対して
+	ある$p\in0..k$があって$w\in\bigl(a_+^{\otimes(k-p)}
+	\bunkatu_{k-p}^{n-k}\bigr)\otimes\ket{1}^{\otimes p}$となるから、
+	包含関係$\supseteq$は等号になる。したがって、次の式が導かれる。
+	\begin{equation*}\begin{split} %{
+		\bunkatu_k^n = \oplus_{p=0}^k
+			\bigl(a_+^{\otimes(k-p)}\bunkatu_{k-p}^{n-k}\bigr)
+			\otimes\ket{1}^{\otimes p}
+	\end{split}\end{equation*} %}
+	よって、$\bunkatu_k^n$の大きさ$P_k^n$が次の漸化式を満たすことがわかる。
+	\begin{equation*}\begin{split} %{
+		P_k^n &= \sum_{p=0}^kP_{k-p}^{n-k}
+			= P_k^{n-k} + \sum_{p=1}^kP_{k-p}^{n-k}
+			= P_k^{n-k} + \sum_{p=0}^{k-1}P_{(k-1)-p}^{(n-1)-(k-1)} \\
+			&= P_k^{n-k} + P_{k-1}^{n-1}
 	\end{split}\end{equation*} %}
 
-	逆辞書式順序を次のように変形してみる。
-	\begin{equation*}\xymatrix@R=3ex@C=2ex{
-		3000 \ar[d] \\
-		2100 \ar[d] & 2010 \ar@(u,u)[rrd] & 2001 \ar[d] \\
-		1200 \ar[d] & 1110 \ar[u] & 1101 \ar[d] 
-			& 1020 \ar[d] & 1011 \ar@(u,u)[llu] & 1002 \ar@(r,u)[rrrd] \\
-		0300 \ar[r] & 0210 \ar[u] & 0201 \ar@(d,d)[rrr] & 0120 \ar@(d,d)[rrr]
-			& 0111 \ar[u] & 0102 \ar[u] & 0030 \ar[r] & 0021 \ar@(d,d)[lll]
-			& 0012 \ar[r] & 0003 \\
-		\\
+	箱球の列挙\ref{s1:箱球の列挙}にならって数の分割の列挙を考える。
+	箱球の反転辞書式順序による列挙\ref{s2:辞書式順序による列挙}と同様に
+	すれば、数の分割の反転辞書式順序による列挙が得られるだろう。ただし、
+	箱$j$に球を一つ加えたときに箱$1$から箱$j-1$の初期化の部分が異なる。
+	次の擬似プログラムは数の分割の反転辞書式順序で次の箱球を与える
+	（と思う）。
+	\begin{lstlisting}[caption=数の分割の反転辞書式順序
+	, label=code:数の分割の反転辞書式順序]
+	c: natual[] -> natual[] or null;
+	c = word |-> do {
+		int n = word.length;
+		int i = 0;
+		int value = word[i];
+		for (int last = n - 1; i < last && value == word[i + 1]; ++i) {
+			// find right most box of #balls = value
+		}
+		for (int j = i + 1; j < n; ++j) {
+			if (word[j] + 1 < value) {
+				word[j] += 1;
+				word[i] -= 1;
+				value = word[j];
+				while (1 < j--) {
+					// reset left boxes
+					word[0] += word[j] - value;
+					word[j] = value;
+				}
+				return word;
+			}
+		}
+		return null;
+	}
+	\end{lstlisting}
+	球の総数が$9$のときのこの擬似プログラムによる出力は次のようになる。
+	\begin{equation}\label{eq:6の分割の反転辞書式順序}
+	\begin{array}{llllllll} %{
+		\text{箱の数}1:\quad & 9 \\
+		\text{箱の数}2:\quad & 81 & 72 & 63 & 54 \\
+		\text{箱の数}3:\quad & 711 & 621 & 531 & 441 & 522 & 432 & 333 \\
+		\text{箱の数}4:\quad & 6111 & 5211 & 4311 & 4221 & 3321 & 3222 \\
+		\text{箱の数}5:\quad & 51111 & 42111 & 33111 & 32211 & 22221 \\
+		\text{箱の数}6:\quad & 411111 & 321111 & 222111 \\
+		\text{箱の数}7:\quad & 3111111 & 2211111 \\
+		\text{箱の数}8:\quad & 21111111 \\
+		\text{箱の数}9:\quad & 111111111 \\
+	\end{array}\end{equation} %}
+	数の組成の場合と同様に、箱$j$に球を一つ追加した後に箱$1$から箱$j-1$まで
+	を初期化する部分でグレイコードでなくなる可能性がある。
+	例\eqref{eq:6の分割の反転辞書式順序}では$441\mapsto522$の部分が球を
+	一つ箱から箱へ移動したものでない。$\bunkatu_k^n$にハミング距離を入れた
+	場合、$\hakodama_k^n$の場合と異なり、ハミング距離が$2$だけ異なる箱球
+	はかなり数が限られる。
+	例\eqref{eq:6の分割の反転辞書式順序}の$\bunkatu_3^9$では次のようになる。
+	\begin{equation*}\xymatrix@R=2ex{
+		 &  &  & 441\ar@{-}[dr] &  &  \\
+		711\ar@{-}[r] & 621\ar@{-}[r] & 531\ar@{-}[rr]\ar@{-}[ur]\ar@{-}[dr] 
+			&& 432\ar@{-}[r] & 333 \\
+		 &  &  & 522\ar@{-}[ur]\ar@{-}@(l,d)[ull] &  &  \\
 	}\end{equation*}
-	すると、並びの前後でのHamming距離が$2$となる。
-	この順序をスピン付き逆辞書式順序ということにする\footnote{
-		特に慣用的な名前はないようだ。
-	}。
-%s2:保留}
-\endgroup %{
-%s1:自然数の合成の列挙}
+	この図から$\bunkatu_3^9$のハミング距離でのグレイコード順序は唯一決まり
+	次のようになる。
+	\begin{equation*}\begin{split} %{
+		711 \mapsto 621 \mapsto 522 \mapsto 531 \mapsto 441 \mapsto 432 \mapsto
+		333 \mapsto 0_R
+	\end{split}\end{equation*} %}
+	これは辞書式順序の逆順である。$\bunkatu_+^9$の他の箱球をみると、箱の数
+	が$3$以外はすべて辞書式順序の逆順で並んでいる。辞書式順序の逆順に並べれ
+	ばそれがグレイコードになるかと言うとそうでもないだろう。辞書式順序では
+	桁上げの際に下の桁を初期化する操作が必要だからである。
+
+	任意の$\bunkatu_k^n$に対してハミング距離によるグレイコードは存在するの
+	だろうか。文献\cite{savage.partition}によると、すべての$p=1..n$に対して
+	$\oplus_{k=1}^p\bunkatu_k^n$のハミング距離によるグレイコードが存在する
+	そうだ。ただし、その証明は込み入っているらしい。
+	数の分割について考えることは、ここで一旦止めることにする。
+
+	$\bunkatu_+^n$のグレイコードを球数$n$が小さいところを見てみると次の
+	ようになっている。
+	\begin{equation*}\begin{split} %{
+		\xymatrix@R=2ex@C=2ex{
+			3\ar@{-}[d] \\
+			21\ar@{-}[d] \\
+			111 \\
+		},\quad \xymatrix@R=2ex@C=2ex{
+			4\ar@{-}[d] \\
+			31\ar@{-}[r] & 22\ar@{-}[dl] \\
+			211\ar@{-}[d] \\
+			1111 \\
+		},\quad \xymatrix@R=2ex@C=2ex{
+			5\ar@{-}[d] \\
+			41\ar@{-}[r] & 32\ar@{-}[dl] \\
+			311\ar@{-}[r] & 221\ar@{-}[dl] \\
+			2111\ar@{-}[d] \\
+			11111 \\
+		},\quad \xymatrix@R=2ex@C=2ex{
+			6\ar@{-}[d] \\
+			51\ar@{-}[d] & 42\ar@{-}[r] & 33\ar@{-}[dl] \\
+			411\ar@{-}[ur] & 321\ar@{-}[r] & 222\ar@{-}[dl] \\
+			3111\ar@{-}[d] & 2211\ar@{-}[l] \\
+			21111\ar@{-}[d] \\
+			111111 \\
+		}
+	\end{split}\end{equation*} %}
+	%
+	\begin{equation*}\begin{split} %{
+		\xymatrix@R=2ex@C=2ex{
+			7\ar@{-}[d] \\
+			61\ar@{-}[d] & 52\ar@{-}[r] & 43\ar@{-}[dl] \\
+			511\ar@{-}[ur] & 421\ar@{-}[dl] & 331\ar@{-}[r] & 322\ar@{-}[dl] \\
+			4111\ar@{-}[r] & 3211\ar@{-}[ur] & 2221\ar@{-}[dl] \\
+			31111\ar@{-}[d] & 22111\ar@{-}[l] \\
+			211111\ar@{-}[d] \\
+			1111111
+		},\quad \xymatrix@R=2ex@C=2ex{
+			8\ar@{-}[d] \\
+			71\ar@{-}[r] & 62\ar@{-}[dl] & 53\ar@{-}[r] & 44\ar@{-}[dl] \\
+			611\ar@{-}[d] & 521\ar@{-}[ur] & 431\ar@{-}[r] & 422\ar@{-}[dll] 
+				& 332\ar@{-}[dl] \\
+			5111\ar@{-}[ur] & 4211\ar@{-}[r] & 3311\ar@{-}[urr] 
+				& 3221\ar@{-}[r] & 2222\ar@{-}[dll] \\
+			41111\ar@{-}[d] & 32111\ar@{-}[l] & 22211\ar@{-}[l] \\
+			311111\ar@{-}[r] & 221111\ar@{-}[dl] \\
+			2111111\ar@{-}[d] \\
+			11111111
+		}
+	\end{split}\end{equation*} %}
+%s1:数の分割の列挙}
+	%
+\endgroup %}
 
 \section{べき乗}\label{s1:自然数のべき乗} %{
 	自然数べき乗をする関数$\myop{power}_\sizen:A\times\sizen\to A$を考える。
@@ -932,7 +1050,7 @@
 	\end{split}\end{equation*} %}
 	$A$は積$\mybiop{\myspace}$が定義された集合とする。
 	ビット計算が高速な環境で関数$\myop{power}_\sizen$を実装する方法を
-	考える。次のような例を考えてみる。
+	考える。次の例を考えてみる。
 	\begin{equation*}\begin{matrix} %{
 		a^3 &=& a^{2^0+2^1} &=& aa^2 \\
 		a^4 &=& a^{2^2} &=& (a^2)^2 \\
@@ -942,20 +1060,19 @@
 		a^8 &=& a^{2^3} &=& \bigl((a^2)^2\bigr)^2 \\
 	\end{matrix}\end{equation*} %}
 	べきを二進数に書き直すと、二乗の繰り返しと積でべき乗が書けるのがわかる。
-	Javaで書くとコード\ref{code:自然数べき乗のプログラム}のような
-	プログラムが考えられる。ここで、関数に単位元を要求しているのは$0$乗に
-	対応するためである。
-
-	\begin{lstlisting}[caption=自然数べき乗のプログラム, label=code:自然数べき乗のプログラム]
-power_N = (a:A, n:N, op:(A, A) -> A, unit:A) -> A {
-	for (; 0 < n; n = n >> 1) {
-		if (0 < (n & 1)) {
-			unit = op(unit, x);
+	$\myop{power}_\sizen$は次の擬似プログラムで書けるだろう。
+	\begin{lstlisting}[caption=自然数べき乗のプログラム
+	, label=code:自然数べき乗のプログラム]
+	power_N: (A, natual, (A, A) -> A, A) -> A
+	power_N = (base, n, op, unit) |-> do {
+		for (; 0 < n; n = n >> 1) {
+			if (0 < (n & 1)) {
+				unit = op(unit, base);
+			}
+			base *= base;
 		}
-		x *= x;
+		return unit;
 	}
-	return unit;
-}
 	\end{lstlisting}
+	ここで、関数に単位元unitを要求しているのは$0$乗に対応するためである。
 %s1:べき乗}
-
