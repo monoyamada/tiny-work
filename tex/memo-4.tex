@@ -1,3 +1,8 @@
+\begingroup %{
+	\newcommand{\sosei}{\ensuremath{\mycal{C}}}
+	\newcommand{\bunkatu}{\ensuremath{\mycal{P}}}
+	\newcommand{\grow}{\ensuremath{\gamma}}
+	%
 \section{スターリング数}\label{s1:スターリング数} %{
 	数演算子$a_+a_-$のべき乗を正規積の和に書き直すときに、第二種スターリング数
 	$S_k^n$が現れる。
@@ -12,7 +17,7 @@
 	また、第二種スターリング数を拡張した数列$S_p(n,k)$を次のように定めることが
 	できる。
 	\begin{equation}\label{eq:第二種拡張スターリング数}\begin{split} %{
-		(a_+^pa_-)^n = \sum_{k\in1..n} S_p^(n,k) a_+^{k+(p-1)}a_-^k
+		(a_+^pa_-)^n = \sum_{k\in1..n} S_p(n,k) a_+^{k+(p-1)}a_-^k
 	\end{split}\end{equation} %}
 	同様に、第一種スターリング数を拡張した数列$s_p(n,k)$を次のように定めること
 	ができる。
@@ -22,14 +27,14 @@
 	このように拡張したスターリング数$S_p(n,k),\;s_p(n,k)$の性質を求めることが
 	この節の目標である。
 
-	スターリング数は様々な一般化がある\cite{hsu.stirling}。
+	スターリング数は様々な一般化\cite{hsu.stirling}がある。
 	したがって、第二種スターリング数の拡張\eqref{eq:第二種拡張スターリング数}
 	を'一般化スターリング数'という文献があるが、この節では
 	'第二種スターリング数$S_p$'等と書き、特に名前をつけないことにする。
 
 	この節では次のような記号を用いることにする。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[昇降演算子] 消滅演算子を$a_-$、生成演算子を$a_+$と書く。
+		\item[フォック空間] 消滅演算子を$a_-$、生成演算子を$a_+$と書く。
 		\begin{equation*}\begin{split} %{
 			[a_-,a_+] = 1
 		\end{split}\end{equation*} %}
@@ -37,23 +42,331 @@
 		\begin{equation*}\begin{split} %{
 			l_m &= a_+^{m+1}a_- \\
 		\end{split}\end{equation*} %}
-		$l_m$の積は次のようになる。
+		$l_0$を粒子数作用素といい、$n$粒子数状態を$\ket{n}$と書く。
 		\begin{equation*}\begin{split} %{
-			l_ml_n &= nl_{m+n} + l_m*l_n
+			l_0\ket{n} &= n\ket{n}\quad\text{for all }n\in\sizen
 		\end{split}\end{equation*} %}
+		$\set{\ket{n}}_{n\in\sizen}$で張られる複素ベクトル空間を$\mycal{H}$、
+		$\mycal{H}$の内積に関する双対を$\mycal{H}^\dag$、
+		$\mycal{H}$の自己線形写像全体を$L\mycal{H}$と書く。
+		$L\mycal{H}$の部分空間で$\set{a_+^ma_-^n}_{m,n\in\sizen}$で張られる
+		ベクトル空間を$A\mycal{H}$と書く\footnote{
+			$L\mycal{H}=A\mycal{H}$となると思えるが証明できない。
+			少なくともフォック空間が有限次元の場合
+			\begin{equation*}\begin{split} %{
+				a_+\ket{N} = 0 \quad\text{for some }N\in\sizen
+			\end{split}\end{equation*} %}
+			$L\mycal{H}=A\mycal{H}$が成り立つ。
+		}	。
+		\item[正規積] 生成消滅演算子の通常の積を$m_\myspace$と書き、正規積を
+		$m_*$と書く。$l_m$の積は次のようになる。
+		\begin{equation}\label{eq:lの積}\begin{split} %{
+			l_ml_n &= (n+1)l_{m+n} + l_m*l_n
+		\end{split}\end{equation} %}
+		共形場理論にならってこの関係をVirasoro代数ということにする。
+		$l_m$の通常の積と正規積の間には次の擬似Leibniz則が成り立つ。
+		\begin{equation}\label{eq:lのライプニッツ則}\begin{split} %{
+			l_p(l_m*l_n) &= (m+1)l_{m+p}*l_n + (n+1)l_m*l_{n+p} + l_p*l_m*l_n
+		\end{split}\end{equation} %}
+		正規積の部分が通常のLeibniz則からのズレになっている。
+		\begin{equation*}\begin{split} %{
+			l_p(l_m*l_n) &= (l_pl_m)*l_n + l_m*(l_pl_n) - l_p*l_m*l_n
+		\end{split}\end{equation*} %}
+		%
+		\item[数の組成] 正の自然数$n\in\sizen_+$を$n_1+n_2+\cdots+n_k$となる
+		$k$個の正の自然数$n_1,n_2,\dots,n_k\in\sizen_+$の組で表すこと
+		を数$n$の$k$組成といい、数$n$の$k$組成の集合を$\sosei_k^n$と書く。
+		また、数$n$のすべての組成を$\sosei_+^n=\oplus_{k=1}^n\sosei_k^n$
+		と書き、数のすべての組成を
+		$\sosei_+^+=\oplus_{n\in\sizen_+}\sosei_+^n$と書く。
+		%
+		\item[数の分割] 正の自然数$n\in\sizen_+$を$n_1+n_2+\cdots+n_k$となる
+		$k$個の正の自然数$n_1\ge n_2\ge\cdots\ge n_k\in\sizen_+$の組で表すこと
+		を数$n$の$k$分割といい、数$n$の$k$分割全体の集合を$\bunkatu_k^n$と
+		書く。
+		また、数$n$のすべての分割を$\bunkatu_+^n=\oplus_{k=1}^n\bunkatu_k^n$
+		と書き、数のすべての分割を
+		$\bunkatu_+^+=\oplus_{n\in\sizen_+}\bunkatu_+^n$と書く。
+		組成と分割の違いは、組成は$(n_1,n_2,\dots,n_k)$の数字の並びの順序を
+		考慮したもので、分割は数字の並びの順序を考慮しないものである。
+	\end{description} %}
+
+	第二種スターリング$S_p(n,k)$\eqref{eq:第二種スターリング数}が満たす
+	漸化式を求める。低次の項を見ると次のようになっている。
+	\begin{equation*}\begin{split} %{
+		l_p &= a_+^{p+1}a_- \\
+		l_p^2 &= a_+^{2p+2}a_-^2 + (p+1)a_+^{2p+1}a_- \\
+		l_p^3 &= a_+^{3p+3}a_-^3 + (3p+3)a_+^{3p+2}a_-^2 
+			+ (p+1)(2p+1)a_+^{3p+1}a_- \\
+	\end{split}\end{equation*} %}
+	したがって、自然数$\sigma_p(n,k)$を用いて次のように書けると仮定する。
+	\begin{equation}\label{eq:シグマの定義}\begin{split} %{
+		l_p^n=\sum_{k=1}^n\sigma_p(n,k)a_+^{np+k}a_-^k
+	\end{split}\end{equation} %}
+	すると、次のようになり、
+	\begin{equation*}\begin{split} %{
+		l_p^{n+1} &= \sum_{k=1}^n\sigma_p(n,k)l_pa_+^{np+k}a_-^k \\
+		&= \sum_{k=1}^n\sigma_p(n,k)\bigl(a_+^{(n+1)p+k+1}a_-^{k+1}
+			+ (np+k)a_+^{(n+1)p+k}a_-^k\bigr) \\
+		&= \sum_{k=2}^{n+1}\sigma_p(n,k-1)a_+^{(n+1)p+k}a_-^k
+			+ \sum_{k=1}^n(np+k)\sigma_p(n,k)a_+^{(n+1)p+k}a_-^k \\
+	\end{split}\end{equation*} %}
+	仮定が成り立つことがわかり、$\sigma_p(n,k)$に対する次の漸化式が導かれる。
+	\begin{equation}\label{eq:シグマの漸化式}\begin{split} %{
+		\sigma_p(n+1,k) = \sigma_p(n, k-1) + (np+k)\sigma_p(n,k)
+		\quad\text{for all }n,k\in\sizen
+	\end{split}\end{equation} %}
+	この漸化式の境界条件は次のようになっている。
+	\begin{equation}\label{eq:シグマの境界条件}\begin{split} %{
+		\sigma_p(n,n+1) = 0,\quad \sigma_p(n,0) = 0
+		\quad\text{for all }n\in\sizen
+	\end{split}\end{equation} %}
+	式\eqref{eq:シグマの定義}から$\sigma_p(n,k)$は次のように与えられる。
+	\begin{equation*}\begin{split} %{
+		\sigma_p(n,k) &= \frac{1}{k!}\bra{np+k}l_p^n\ket{k}
+		\quad\text{for all }k\le n\in\sizen
+	\end{split}\end{equation*} %}
+	ここで、任意の$p\in\sizen$に対して$\sigma_p(0,0)=1$としている。
+
+	漸化式\eqref{eq:シグマの漸化式}を縦軸に$n-k$、横軸に$k$をとった次の
+	格子上の経路で書き表す。
+	\begin{equation*}\xymatrix@R=3ex@C=3ex{
+		\sigma_p(0,0)\ar[r]^{1} & \sigma_p(1,1)\ar[r]^{1}\ar[d]^{p+1}
+			& \sigma_p(2,2)\ar[r]^{1}\ar[d]^{2p+2} 
+			& \sigma_p(3,3)\ar[r]^{1}\ar[d]^{3p+3} & \cdots \\
+		& \sigma_p(2,1)\ar[r]^{1}\ar[d]^{2p+1} 
+			& \sigma_p(3,2)\ar[r]^{1}\ar[d]^{3p+2} 
+			& \sigma_p(4,3)\ar[r]^{1}\ar[d]^{4p+3} & \cdots \\
+		& \sigma_p(3,1)\ar[r]^{1}\ar[d]^{3p+1} 
+			& \sigma_p(4,2)\ar[r]^{1}\ar[d]^{4p+2} 
+			& \sigma_p(5,3)\ar[r]^{1}\ar[d]^{5p+3} & \cdots \\
+		& \vdots & \vdots & \vdots & \cdots \\
+	}\end{equation*}
+	この図で、$\sigma_p$の計算に対して右方向への移動
+	$\sigma_p(n,k)\mapsto\sigma_p(n+1,k+1)$からの寄与はなく、
+	下方向への移動$\sigma_p(n,k)\mapsto\sigma_p(n+1,k)$のみ寄与が
+	あることがわかる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		$\ket{m,n}=\ket{m}\otimes\ket{n}$、$\bra{m,n}=\bra{m}\otimes\bra{n}$
+		と書くと、図の経路の和は次のように書くことができる。
+		\begin{equation*}\begin{split} %{
+			\sigma_p(n,k) = m_\myspace\bra{np,k} 
+			\bigl(l_p\otimes\myid + a_+^p\otimes a_+\bigr)^n \ket{0,0}
+		\end{split}\end{equation*} %}
+	\end{todo} %todo:ここまで}
+	
+
+	第二種スターリング数$S_p(n,k)$\eqref{eq:第二種拡張スターリング数}を
+	求める前に、小さいべき$n$について$l_p^n$の様子を見てみる。
+	\begin{equation*}\begin{split} %{
+		l_p^2 &= (p+1)l_{2p} + l_p^{*2} \\
+		l_p^3 &= (p+1)(2p+1)l_{3p} + 3(p+1)l_{2p}*l_p + 2l_p^{*3} \\
+		l_p^4 &= (p+1)(2p+1)(3p+1)l_{4p} + 4(p+1)(2p+1)l_{3p}*l_p \\
+		&+ 3(p+1)^2l_{2p}^{*2} + 12(p+1)l_{2p}*l_p^{*2} + 6l_p^{*4} \\
+	\end{split}\end{equation*} %}
+	この式から、一般の$n\in\sizen$に対して、ある写像
+	$\sigma:\bunkatu_+^+\to\sizen$ によって、$l_p^n$は次のように書けること
+	が予想される\footnote{
+		数の合成$\sosei_k^n$を使わないで数の合成$\bunkatu_k^n$だけを使って
+		次のように予想するのが自然だろうが、組み合わせの数の扱いが煩雑なので、
+		数の合成を使って本文のような形で予想しておく。
+		\begin{equation*}\begin{split} %{
+			l_p^n &= \sum_{w\in\bunkatu_+^n}(\sigma w)(\lambda_pw) \\
+		\end{split}\end{equation*} %}
+	}。
+	\begin{equation}\label{eq:lのべき乗の形の予想}\begin{split} %{
+		l_p^n &= \sum_{w\in\sosei_+^n}(\sigma w)(\lambda_pw) \\
+	\end{split}\end{equation} %}
+	ここで、$\lambda_p$は数の分割$\bunkatu_+^+$から$A\mycal{H}$への写像で、
+	任意の数の分割$(n_1,n_2,\dots,n_k)\in\bunkatu_k^n$に対して次のように
+	定義される。
+	\begin{equation*}\begin{split} %{
+		\lambda_p(n_1,n_2,\dots,n_k)
+		&= (\lambda_p^{n_1}\lambda_p^{n_2}\cdots\lambda_p^{n_k})
+		(l_{n_1p}*l_{n_2p}*\cdots*l_{n_kp}) \\
+	\end{split}\end{equation*} %}
+	ここで、$\lambda_p^n\in\sizen$は任意の$p,n\in\sizen_+$に対して
+	次のように定義される。
+	\begin{equation}\label{eq:数の組成のスケール因子}\begin{split} %{
+		\lambda_p^n &= p^n\frac{\Gamma(n+\frac{1}{p})}{\Gamma(1+\frac{1}{p})}
+		= \left\{\begin{split}
+			2\le n &\implies  \bigl(p+1\bigr)\bigl(2p+1\bigr)
+				\cdots\bigl((n-1)p+1\bigr) \\
+			\text{else} &\implies 1 \\
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation} %}
+	\begin{proof} %{
+		帰納法を使って証明する。ある$n$で式\eqref{eq:lのべき乗の形の予想}が
+		成り立つとすると、次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			l_p^{n+1} &= \sum_{k=1}^n\sum_{w\in\sosei_k^n}
+				(\sigma w)l_p(\lambda_pw) \\
+		\end{split}\end{equation*} %}
+		ここで、任意の$(n_1,n_2,\dots,n_k)\in\sosei_k^n$に対して
+		次の式が成り立つから、
+		\begin{equation*}\begin{split} %{
+			l_p\bigl(\lambda_p(n_1,n_2,\dots,n_k)\bigr)
+			&= (\lambda_p^{n_1}\lambda_p^{n_2}\cdots\lambda_p^{n_k}\lambda_p^1)
+				(l_{n_1p}*l_{n_2p}*\cdots*l_{n_kp}*l_p) \\
+			&+ (\lambda_p^{n_1+1}\lambda_p^{n_2}\cdots\lambda_p^{n_k})
+				(l_{(n_1+1)p}*l_{n_2p}*\cdots*l_{n_kp}) \\
+			&+ (\lambda_p^{n_1}\lambda_p^{n_2+1}\cdots\lambda_p^{n_k})
+				(l_{n_1p}*l_{(n_2+1)p}*\cdots*l_{n_kp}) \\
+			&+\cdots \\
+			&+ (\lambda_p^{n_1}\lambda_p^{n_2}\cdots\lambda_p^{n_k+1})
+				(l_{n_1p}*l_{n_2p}*\cdots*l_{(n_k+1)p}) \\
+		\end{split}\end{equation*} %}
+		線形写像$\grow:\fukuso\sosei_+^+\to\fukuso\sosei_+^+$を任意の
+		$(n_1,n_2,\dots,n_k)\in\sosei_k^n$に対して次のように定義して、
+		\begin{equation}\label{eq:数の組成の自然な成長}\begin{split} %{
+			\grow(n_1,n_2,\dots,n_k) &= (n_1,n_2,\dots,n_k,1) \\
+			&+ (n_1+1,n_2,\dots,n_k) \\
+			&+ (n_1,n_2+1,\dots,n_k) \\
+			&+\cdots \\
+			&+ (n_1,n_2,\dots,n_k+1)
+		\end{split}\end{equation} %}
+		$\lambda_p$を線形写像に拡張すると、次のように書くことができる。
+		\begin{equation*}\begin{split} %{
+			l_p\bigl(\lambda_p(n_1,n_2,\dots,n_k)\bigr)
+			&= \lambda_p\grow(n_1,n_2,\dots,n_k)
+		\end{split}\end{equation*} %}
+		したがって、$l_p^{n+1}$は\grow{}を使って次のように書ける。
+		\begin{equation*}\begin{split} %{
+			l_p^{n+1} &= \sum_{k=1}^n\sum_{w\in\sosei_k^n}
+				(\sigma w)(\lambda_p\grow w) \\
+		\end{split}\end{equation*} %}
+		そこで、$\gamma$を次のように行列で表すと、
+		\begin{equation*}\begin{split} %{
+			\grow w = \sum_{x\in\sosei_+^{n+1}}\grow_w^x x
+			\quad\text{for all }w\in\sosei_+^n
+		\end{split}\end{equation*} %}
+		$l_p^{n+1}$は次のように書ける。
+		\begin{equation*}\begin{split} %{
+			l_p^{n+1} &= \sum_{w\in\sosei_+^n}\sum_{x\in\sosei_+^{n+1}}
+				\grow_w^x(\sigma w)(\lambda_px) \\
+		\end{split}\end{equation*} %}
+		よって、$\sigma$を線形写像に拡張して、$\sosei_+^{n+1}$の元に対して
+		次のように定義すれば、
+		\begin{equation*}\begin{split} %{
+			\sigma x = \sum_{w\in\sosei_+^n}\grow_w^x(\sigma w)
+			\quad\text{for all }x\in\sosei_+^{n+1}
+		\end{split}\end{equation*} %}
+		任意の$w\in\sosei_+^n,\;x\in\sosei_+^{n+1}$に対して
+		$\grow_w^x\in\set{0,1}$だから、
+		$\sosei_+^{n+1}$に対して予想が成り立つことがわかる。
+	\end{proof} %}
+
+	この証明から写像\grow{}\eqref{eq:数の組成の自然な成長}によって、
+	第二種スターリング数$S_p(n,k)$を計算することができることがわかる。
+	この写像を改めて定義しておく。
+
+	\begin{definition}[数の組成の自然な成長]
+	\label{def:数の組成の自然な成長} %{
+		式\eqref{eq:数の組成の自然な成長}で定義された線形写像
+		$\grow:\sizen\sosei_+^+\to\sizen\sosei_+^+$を数の組成の自然な成長
+		ということにする。
+	\end{definition} %def:数の組成の自然な成長}
+
+	自然な成長は論文\cite{Connes:1998qv}で定義された自然な成長の特別な場合に
+	なっている。論文\cite{Connes:1998qv}では根付き平面木に対して自然な成長が
+	定義されているが、ここで定義した数の組成に対する自然な成長
+	\eqref{eq:数の組成の自然な成長}は根以外がリスト状になっている特別な
+	根付き平面木に対する自然な成長となっている。
+	\begin{equation*}\begin{array}{ccccccc} %{
+		l_{2p}*l_p &\xmapsto{l_p-}& l_{2p}*l_p*l_p &+& (2p+1)l_{3p}*l_p 
+			&+& (p+1)l_{2p}*l_{2p} \\
+		\mytree{
+			& \bullet\ar@{-}[dl]\ar@{-}[dr] \\
+			\circ\ar@{-}[d] & & \circ \\
+			\circ
+		} &\xmapsto{\grow}& \mytree{
+			& \bullet\ar@{-}[dl]\ar@{-}[d]\ar@{-}[dr] \\
+			\circ\ar@{-}[d] & \circ & \circ \\
+			\circ
+		} &+& \mytree{
+			& \bullet\ar@{-}[dl]\ar@{-}[dr] \\
+			\circ\ar@{-}[d] & & \circ \\
+			\circ\ar@{-}[d] \\
+			\circ
+		} &+& \mytree{
+			& \bullet\ar@{-}[dl]\ar@{-}[dr] \\
+			\circ\ar@{-}[d] & & \circ\ar@{-}[d] \\
+			\circ & & \circ
+		}
+	\end{array}\end{equation*} %}
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\begin{equation*}\begin{split} %{
+		S_p = (\sigma1)\grow(1) = \begin{pmatrix}
+			1 & 1
+		\end{pmatrix}\begin{pmatrix}
+			2 \\ 11
+		\end{pmatrix}\\
+		\grow\begin{pmatrix}
+			2 \\ 11
+		\end{pmatrix} = \begin{pmatrix}
+			1 & 1 & 0 & 0 \\
+			0 & 1 & 1 & 1 \\
+		\end{pmatrix}\begin{pmatrix}
+			3 \\ 21 \\ 12 \\ 111
+		\end{pmatrix} \\
+		\grow\begin{pmatrix}
+			3 \\ 21 \\ 12 \\ 111
+		\end{pmatrix} = \begin{pmatrix}
+			1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 \\
+			0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\
+			0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 1 & 0 & 1 & 1 & 1 \\
+		\end{pmatrix}\begin{pmatrix}
+			4 \\ 31 \\ 22 \\ 211 \\ 13 \\ 121 \\ 112 \\ 1111
+		\end{pmatrix} \\
+	\end{split}\end{equation*} %}
+4(3),31(3,21),22(21,12),211(21,111),13(12),121(12,111),112(111),1111(111)
+5(4),41(4,31),32(31,22),311(31,211),23(22),221(22,211,121),212(211),2111(211,1111),23(13),14(13),131(13,121),122(121,112),1211(121),212(112),113(112),1121(112,1111),1211(1111),1112(1111),11111(1111)
+	\end{todo} %todo:ここまで}
+	ここで、次の式が成り立つから、
+	\begin{equation*}\begin{array}{rcll} %{
+		l_p(l_{kp}*l_p^{*(n-k)})
+		&=& (l_pl_{kp})*l_p^{*(n-k)} + l_{kp}*(l_pl_p^{*(n-k)})
+		&\lcomment{Leibniz} \\
+		&=& (l_pl_{kp})*l_p^{*(n-k)}  \\
+		&+& \jump{1\le n-k}(n-k)l_{kp}*(l_p^2)*l_p^{*(n-k-1)}
+		&\lcomment{Leibniz} \\
+		&=& \biggl((kp+1)l_{(k+1)p} + l_{kp}*l_p\biggr)*l_p^{*(n-k)} \\
+		&+& \jump{1\le n-k}(n-k)l_{kp}*\biggl((p+1)l_{2p} + l_p^{*2}\biggr)
+			*l_p^{*(n-k-1)}
+		&\lcomment{Virasoro} \\
+		&=& (kp+1)l_{(k+1)p} \\
+		&+& \biggl((kp+1) + \jump{1\le n-k}(n-k)\biggr)l_{kp}*l_p^{*(n-k+1)} \\
+		&+& \jump{1\le n-k}(n-k)(p+1)l_{kp}*l_{2p}*l_p^{*(n-k-1)} \\
+	\end{array}\end{equation*} %}
+	$c_p(n+1,k)$を次のようにおくと、
+	\begin{equation*}\begin{split} %{
+		c_p(n+1,)
+	\end{split}\end{equation*} %}
+
+	\begin{todo}[作用素積展開]\label{todo:作用素積展開} %{
+		これらの記号を用いると、
+		第二種スターリング数の現れる式\ref{eq:第二種拡張スターリング数}は
+		次のようになる。
+		\begin{equation*}\begin{split} %{
+			l_m^n = \sum_{k\in1..n} S_{m+1}(n,k) a_+^{mn}l_0^{*k}
+			\quad\text{for all }m,n\in\sizen
+		\end{split}\end{equation*} %}
+
 		エネルギーテンソル$t_z$も同様に定義しておく。
 		\begin{equation*}\begin{split} %{
 			t_z &= z^{-2}\sum_{m\in\sizen}l_mz^{-m} \\
 		\end{split}\end{equation*} %}
 		ここで定義した$t_z$は共形場と異なり、振動モードを独立に扱っていない
 		ので、$l_m$の添字の範囲は自然数となり、中心拡大も存在しない。
-		\item[正規積] 生成消滅演算子の通常の積を記号なしまたは$m_\myspace$と
-		書き、正規積を$*$または$m_*$と書く。これらの記号を用いると、
-		第二種スターリング数の現れる式\ref{eq:第二種拡張スターリング数}は
-		次のようになる。
+
+		共形場で$T_z=z^{-2}\sum_{m\in\sei}L_mz^{-m}$として、次の散乱振幅を計算
+		することを考える。
 		\begin{equation*}\begin{split} %{
-			l_m^n = \sum_{k\in1..n} S_{m+1}(n,k) a_+^ml_0^{*k}
-			\quad\text{for all }m,n\in\sizen
+			f(t,w,z) &= \bra{w}e^{tv_T}\ket{z} \\
+			v_T &= \frac{1}{2\pi i}\oint_0 dz v_zT_z \\
 		\end{split}\end{equation*} %}
-	\end{description} %}
+	\end{todo} %todo:作用素積展開}
 %s1:スターリング数}
+\endgroup %}
