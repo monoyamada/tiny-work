@@ -1,5 +1,6 @@
 \begingroup %{
 	\newcommand{\sosei}{\ensuremath{\mycal{C}}}
+	\newcommand{\hakodama}{\ensuremath{\mycal{D}}}
 	\newcommand{\bunkatu}{\ensuremath{\mycal{P}}}
 	\newcommand{\grow}{\ensuremath{\gamma}}
 	%
@@ -73,85 +74,186 @@
 			l_p(l_m*l_n) &= (l_pl_m)*l_n + l_m*(l_pl_n) - l_p*l_m*l_n
 		\end{split}\end{equation*} %}
 		%
-		\item[数の組成] 正の自然数$n\in\sizen_+$を$n_1+n_2+\cdots+n_k$となる
-		$k$個の正の自然数$n_1,n_2,\dots,n_k\in\sizen_+$の組で表すこと
+		\item[数の組成] $1$以上の自然数$n\in\sizen_+$を$n=n_1+n_2+\cdots+n_k$
+		となる$k$個の$1$以上の自然数$n_1,n_2,\dots,n_k\in\sizen_+$の組で表すこと
 		を数$n$の$k$組成といい、数$n$の$k$組成の集合を$\sosei_k^n$と書く。
 		また、数$n$のすべての組成を$\sosei_+^n=\oplus_{k=1}^n\sosei_k^n$
 		と書き、数のすべての組成を
 		$\sosei_+^+=\oplus_{n\in\sizen_+}\sosei_+^n$と書く。
 		%
-		\item[数の分割] 正の自然数$n\in\sizen_+$を$n_1+n_2+\cdots+n_k$となる
-		$k$個の正の自然数$n_1\ge n_2\ge\cdots\ge n_k\in\sizen_+$の組で表すこと
-		を数$n$の$k$分割といい、数$n$の$k$分割全体の集合を$\bunkatu_k^n$と
-		書く。
+		\item[数の分割] $1$以上の自然数$n\in\sizen_+$を$n=n_1+n_2+\cdots+n_k$
+		となる$k$個の$1$以上の自然数$n_1\ge n_2\ge\cdots\ge n_k\in\sizen_+$
+		の組で表すことを数$n$の$k$分割といい、数$n$の$k$分割全体の集合を
+		$\bunkatu_k^n$と書く。
 		また、数$n$のすべての分割を$\bunkatu_+^n=\oplus_{k=1}^n\bunkatu_k^n$
 		と書き、数のすべての分割を
 		$\bunkatu_+^+=\oplus_{n\in\sizen_+}\bunkatu_+^n$と書く。
 		組成と分割の違いは、組成は$(n_1,n_2,\dots,n_k)$の数字の並びの順序を
 		考慮したもので、分割は数字の並びの順序を考慮しないものである。
+		\item[球の分配] $0$以上の自然数$n\in\sizen$を$n=n_1+n_2+\cdots+n_k$
+		となる$k$個の$0$以上の自然数$n_1,n_2,\dots,n_k\in\sizen$の組で表すこと
+		を球$n$の$k$個の箱への分配といい、球$n$の$k$個の箱への分配の集合を
+		$\hakodama_k^n$と書く。
+		球の分配と数の組成は$\hakodama_k^n\simeq\sosei_k^{n-k}$という集合同型
+		の関係にある。
 	\end{description} %}
 
 	第二種スターリング$S_p(n,k)$\eqref{eq:第二種スターリング数}が満たす
 	漸化式を求める。低次の項を見ると次のようになっている。
 	\begin{equation*}\begin{split} %{
+		l_p^0 &= 1 \\
 		l_p &= a_+^{p+1}a_- \\
 		l_p^2 &= a_+^{2p+2}a_-^2 + (p+1)a_+^{2p+1}a_- \\
 		l_p^3 &= a_+^{3p+3}a_-^3 + (3p+3)a_+^{3p+2}a_-^2 
 			+ (p+1)(2p+1)a_+^{3p+1}a_- \\
 	\end{split}\end{equation*} %}
-	したがって、自然数$\sigma_p(n,k)$を用いて次のように書けると仮定する。
-	\begin{equation}\label{eq:シグマの定義}\begin{split} %{
-		l_p^n=\sum_{k=1}^n\sigma_p(n,k)a_+^{np+k}a_-^k
+	したがって、ある$n\in\sizen$で次のような$\sigma_p(n,k)\in\sizen$を用いて、
+	\begin{equation*}\begin{split} %{
+		\sigma_p(n, 0) &= \jump{n=0} \\
+	\end{split}\end{equation*} %}
+	$l_p^n$が次のように書けると仮定する。
+	\begin{equation*}\begin{split} %{
+		l_p^n &= \sum_{k=0}^n\sigma_p(n,k)a_+^{np+k}a_-^k
+	\end{split}\end{equation*} %}
+	すると、$l_p^{n+1}$は次のようになる。
+	\begin{equation*}\begin{split} %{
+		l_p^{n+1} &= \sum_{k=0}^n\sigma_p(n,k)l_pa_+^{np+k}a_-^k \\
+		&= \sum_{k=0}^n\sigma_p(n,k)\bigl(a_+^{(n+1)p+k+1}a_-^{k+1}
+			+ (np+k)a_+^{(n+1)p+k}a_-^k\bigr) \\
+		&= \sum_{k=1}^{n+1}\sigma_p(n,k-1)a_+^{(n+1)p+k}a_-^k
+			+ \sum_{k=0}^n(np+k)\sigma_p(n,k)a_+^{(n+1)p+k}a_-^k \\
+		&= \sigma_p(n,n)a_+^{(n+1)p+n+1}a_-^{n+1}
+			+ \sum_{k=1}^n\bigl(\sigma_p(n,k-1) + (np+k)\sigma_p(n,k)\bigr)
+			a_+^{(n+1)p+k}a_-^k \\
+	\end{split}\end{equation*} %}
+	したがって、$\sigma_p(n,-1)=\sigma_p(n,n+1)=0$として、
+	$\sigma_p(n+1,k)$を次のように定義すると、
+	\begin{equation*}\begin{split} %{
+		\sigma_p(n+1,k) &= \sigma_p(n,k-1) + (np+k)\sigma_p(n,k) \\
+		\sigma_p(n+1,0) &= 0 \\
+	\end{split}\end{equation*} %}
+	$l_p^{n+1}$が次のように書けて、$l_p^{n+1}$対しても仮定が成り立つことが
+	わかる。
+	\begin{equation*}\begin{split} %{
+		l_p^{n+1} &= \sum_{k=0}^{n+1}\sigma_p(n+1,k)a_+^{(n+1)p+k}a_-^k
+	\end{split}\end{equation*} %}
+
+	改めて、$\sigma_p$を$S_p$と書き直してまとめておく。
+	$l_p^n$は次のように書け、
+	\begin{equation*}\begin{split} %{
+		l_p^n = \sum_{k=0}^nS_p(n,k)a_+^{np+k}a_-^k
+		\quad\text{for all }p,n\in\sizen
+	\end{split}\end{equation*} %}
+	第二種スターリング数$S_p(n,k)$は次の漸化式を満たす。
+	\begin{equation*}\begin{split} %{
+		S_p(n+1,k) = S_p(n,k-1) + (np+k)S_p(n,k)
+		\quad\text{for all }n,k\in\sizen_+
+	\end{split}\end{equation*} %}
+	ただし、この漸化式は次の境界条件を持つ。
+	\begin{equation*}\begin{split} %{
+		S_p(n,0) &= \jump{n=0} \\
+		S_p(n,k) &= 0 \quad\text{for all }n<k\in\sizen
+	\end{split}\end{equation*} %}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	\begin{equation}\label{eq:第二種スターリング数の定義}\begin{split} %{
+		l_p^n &= \sum_{k=0}^nS_p(n,k)a_+^{np+k}a_-^k
+		\quad\text{for all }n\in\sizen
+	\end{split}\end{equation} %}
+	ここで、$S_p(n,0)$は
+	\begin{equation}\begin{split} %{
+		S_p(n,0) &= \jump{n=0} \\
 	\end{split}\end{equation} %}
 	すると、次のようになり、
 	\begin{equation*}\begin{split} %{
-		l_p^{n+1} &= \sum_{k=1}^n\sigma_p(n,k)l_pa_+^{np+k}a_-^k \\
-		&= \sum_{k=1}^n\sigma_p(n,k)\bigl(a_+^{(n+1)p+k+1}a_-^{k+1}
+		l_p^{n+1} &= \sum_{k=0}^nS_p(n,k)l_pa_+^{np+k}a_-^k \\
+		&= \sum_{k=0}^nS_p(n,k)\bigl(a_+^{(n+1)p+k+1}a_-^{k+1}
 			+ (np+k)a_+^{(n+1)p+k}a_-^k\bigr) \\
-		&= \sum_{k=2}^{n+1}\sigma_p(n,k-1)a_+^{(n+1)p+k}a_-^k
-			+ \sum_{k=1}^n(np+k)\sigma_p(n,k)a_+^{(n+1)p+k}a_-^k \\
+		&= \sum_{k=1}^{n+1}S_p(n,k-1)a_+^{(n+1)p+k}a_-^k
+			+ \sum_{k=0}^n(np+k)S_p(n,k)a_+^{(n+1)p+k}a_-^k \\
+		&= npS_p(n,0)a_+^{(n+1)p}
+		\sum_{k=1}^{n+1}S_p(n,k-1)a_+^{(n+1)p+k}a_-^k
+			+ \sum_{k=0}^n(np+k)S_p(n,k)a_+^{(n+1)p+k}a_-^k \\
 	\end{split}\end{equation*} %}
-	仮定が成り立つことがわかり、$\sigma_p(n,k)$に対する次の漸化式が導かれる。
-	\begin{equation}\label{eq:シグマの漸化式}\begin{split} %{
-		\sigma_p(n+1,k) = \sigma_p(n, k-1) + (np+k)\sigma_p(n,k)
+	仮定が成り立つことがわかり、第二種スターリング$S_p(n,k)$に対する
+	次の漸化式が導かれる。
+	\begin{equation}\label{eq:第二種スターリング数の漸化式}\begin{split} %{
+		S_p(n+1,k) = S_p(n, k-1) + (np+k)S_p(n,k)
 		\quad\text{for all }n,k\in\sizen
 	\end{split}\end{equation} %}
 	この漸化式の境界条件は次のようになっている。
-	\begin{equation}\label{eq:シグマの境界条件}\begin{split} %{
-		\sigma_p(n,n+1) = 0,\quad \sigma_p(n,0) = 0
+	\begin{equation}\label{eq:第二種スターリング数の境界条件}\begin{split} %{
+		S_p(n,n+1) = 0,\quad S_p(n,0) = 0
 		\quad\text{for all }n\in\sizen
 	\end{split}\end{equation} %}
-	式\eqref{eq:シグマの定義}から$\sigma_p(n,k)$は次のように与えられる。
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		下の式は間違っている。
+	\end{todo} %todo:ここまで}
+	式\eqref{eq:第二種スターリング数の定義}から第二種スターリング数$S_p(n,k)$
+	は次のように書くことができることがわかる。
 	\begin{equation*}\begin{split} %{
-		\sigma_p(n,k) &= \frac{1}{k!}\bra{np+k}l_p^n\ket{k}
+		S_p(n,k) = \frac{1}{k!}\bra{np+k}l_p^n\ket{k}
+		= \frac{\bra{np+k}l_p^n\ket{k}}{\bra{kp+k}l_p^k\ket{k}} \\
 		\quad\text{for all }k\le n\in\sizen
 	\end{split}\end{equation*} %}
-	ここで、任意の$p\in\sizen$に対して$\sigma_p(0,0)=1$としている。
+	ここで、任意の$p\in\sizen$に対して$S_p(0,0)=1$としている。
 
-	漸化式\eqref{eq:シグマの漸化式}を縦軸に$n-k$、横軸に$k$をとった次の
-	格子上の経路で書き表す。
+	漸化式\eqref{eq:第二種スターリング数の漸化式}を縦軸に$n-k$、
+	横軸に$k$をとった次の格子上の経路で書き表す。
 	\begin{equation*}\xymatrix@R=3ex@C=3ex{
-		\sigma_p(0,0)\ar[r]^{1} & \sigma_p(1,1)\ar[r]^{1}\ar[d]^{p+1}
-			& \sigma_p(2,2)\ar[r]^{1}\ar[d]^{2p+2} 
-			& \sigma_p(3,3)\ar[r]^{1}\ar[d]^{3p+3} & \cdots \\
-		& \sigma_p(2,1)\ar[r]^{1}\ar[d]^{2p+1} 
-			& \sigma_p(3,2)\ar[r]^{1}\ar[d]^{3p+2} 
-			& \sigma_p(4,3)\ar[r]^{1}\ar[d]^{4p+3} & \cdots \\
-		& \sigma_p(3,1)\ar[r]^{1}\ar[d]^{3p+1} 
-			& \sigma_p(4,2)\ar[r]^{1}\ar[d]^{4p+2} 
-			& \sigma_p(5,3)\ar[r]^{1}\ar[d]^{5p+3} & \cdots \\
+		S_p(0,0)\ar[r]^{1} & S_p(1,1)\ar[r]^{1}\ar[d]^{p+1}
+			& S_p(2,2)\ar[r]^{1}\ar[d]^{2p+2} 
+			& S_p(3,3)\ar[r]^{1}\ar[d]^{3p+3} & \cdots \\
+		& S_p(2,1)\ar[r]^{1}\ar[d]^{2p+1} 
+			& S_p(3,2)\ar[r]^{1}\ar[d]^{3p+2} 
+			& S_p(4,3)\ar[r]^{1}\ar[d]^{4p+3} & \cdots \\
+		& S_p(3,1)\ar[r]^{1}\ar[d]^{3p+1} 
+			& S_p(4,2)\ar[r]^{1}\ar[d]^{4p+2} 
+			& S_p(5,3)\ar[r]^{1}\ar[d]^{5p+3} & \cdots \\
 		& \vdots & \vdots & \vdots & \cdots \\
 	}\end{equation*}
-	この図で、$\sigma_p$の計算に対して右方向への移動
-	$\sigma_p(n,k)\mapsto\sigma_p(n+1,k+1)$からの寄与はなく、
-	下方向への移動$\sigma_p(n,k)\mapsto\sigma_p(n+1,k)$のみ寄与が
-	あることがわかる。
+	この図から、$S_p(n,k)$の計算に対して、
+	右方向への移動$S_p(n,k)\mapsto S_p(n+1,k+1)$からの寄与はなく、
+	下方向への移動$S_p(n,k)\mapsto S_p(n+1,k)$のみ寄与があることがわかる。
+	右方向への移動は正規積からの寄与、下方向への移動は微分からの寄与である。
+	\begin{equation*}\begin{array}{ccccc} %{
+		l_p^{n+1} &=& \underbrace{l_p*l_p^n}_{右方向への移動}
+			&+& \underbrace{l_p^{n+1} - l_p*l_p^n}_{下方向への移動} 
+	\end{array}\end{equation*} %}
+	すべての$S_p(0,0)$から$S_p(n,k)$への経路は、$n-k$個の右への移動と$k$個の
+	下への移動をつなげたものになっている。
+	$k=1$のところをを$n_1$個連続して下に移動し、そこから右に移動して、
+	$k=2$のところをを$n_2$個連続して下に移動するという次のような経路を考える。
+	\begin{equation*}\xymatrix@R=2ex@C=2ex{
+		S_p(0,0)\ar[r] & S_p(1,1)\ar[d]^{p+1} \\
+		& \vdots\ar[d]^{n_1p+1} \\
+		& S_p(n_1+1,1)\ar[r] & S_p(n_1+2,2)\ar[d]^{(n_1+2)p+2} \\
+		& & \vdots\ar[d]^{(n_1+n_2+2)p+2} \\
+		& & S_p(n_1+n_2+2,2)\ar[r] & \vdots \\
+		& & & \vdots\ar[r] & S_p(n-n_k+k,k)
+			\ar[d]^{(n-n_k+k)p+k} \\
+		& & & & \vdots\ar[d]^{(n-1+k)p+k} \\
+		& & & & S_p(n,k) \\
+	}\end{equation*}
+	ここで、$n_1,n_2,\dots,n_k$は$n_1+n_2+\cdots+n_k=n-k$となる$0$以上の
+	自然数である。$S_p(n,k)$はこのような経路の総和になっているから、
+	球の分割を用いて次のように書くことができる。
+	\begin{equation*}\begin{split} %{
+		S_p(n,k) = \sum_{w\in\hakodama_k^{n-k}}(\sigma_pw)
+	\end{split}\end{equation*} %}
+	ここで、$\sigma_p$は球の分割から自然数への写像で次のように定義される。
+	\begin{equation*}\begin{split} %{
+		\sigma_p(n_1,n_2,\dots,n_k)
+		&= 
+	\end{split}\end{equation*} %}
 
 	\begin{todo}[ここまで]\label{todo:ここまで} %{
 		$\ket{m,n}=\ket{m}\otimes\ket{n}$、$\bra{m,n}=\bra{m}\otimes\bra{n}$
 		と書くと、図の経路の和は次のように書くことができる。
 		\begin{equation*}\begin{split} %{
-			\sigma_p(n,k) = m_\myspace\bra{np,k} 
+			S_p(n,k) = m_\myspace\bra{np,k} 
 			\bigl(l_p\otimes\myid + a_+^p\otimes a_+\bigr)^n \ket{0,0}
 		\end{split}\end{equation*} %}
 	\end{todo} %todo:ここまで}

@@ -1,3 +1,107 @@
+\section{区間の演算}\label{s1:区間の演算} %{
+	$0$から$n-1$までの自然数の集合$[n]$の冪集合$P[n]$を
+	$[n]$の両側閉区間$\set{m_1\times m_2\in S^2\bou m_1\le m_2}$の和、
+	または空集合$0_P\in P[n]$で表すことを考える。
+	例えば、$[5]$の部分集合$\set{0,1,4}$は両側閉区間$[0,1]$と$[4,4]$の
+	和集合として表すことができる。
+	そして、集合の合併と共通の操作が区間でどのように表されるかを考える。
+	例えば、二つの閉区間$[a_1,b_1]$と$[a_2,b_2]$の合併$\cup$と共通$\cap$は
+	次のようになる。
+	\begin{equation*}\begin{split} %{
+		[a_1,b_1] \cup [a_2,b_2] &= \begin{cases}
+			[\min(a_1,a_2),\max(b_1,b_2)]
+				, &\text{ iff } a_2 \le b_1 + 1 \text{ or } a_1 \le b_2 + 1 \\
+			[a_1,b_1] \cup [a_2,b_2], &\text{ otherwise } \\
+		\end{cases} \\
+		[a_1,b_1] \cap [a_2,b_2] &= \begin{cases}
+			[\min(a_1,a_2),\max(b_1,b_2)]
+				, &\text{ iff } a_1 \le b_2 \text{ and } a_2 \le b_1 \\
+			0_P, &\text{ otherwise } \\
+		\end{cases} \\
+	\end{split}\end{equation*} %}
+
+	上記の例からわかるように、両側閉区間を用いると合併の条件分岐が煩雑に
+	なる。合併に対する条件分岐を単純化するために、右側が開いた片側閉区間を
+	用いることにする。片側閉区間を用いると合併と共通は次のようになる。
+	\begin{equation*}\begin{split} %{
+		[a_1,b_1) \cup [a_2,b_2) &= \begin{cases}
+			[\min(a_1,a_2),\max(b_1,b_2))
+				, &\text{ iff } a_2 \le b_1 \text{ or } a_1 \le b_2 \\
+			[a_1,b_1] \cup [a_2,b_2], &\text{ otherwise } \\
+		\end{cases} \\
+		[a_1,b_1) \cap [a_2,b_2) &= \begin{cases}
+			[\min(a_1,a_2),\max(b_1,b_2))
+				, &\text{ iff } a_1 < b_2 \text{ and } a_2 < b_1 \\
+			0_P, &\text{ otherwise } \\
+		\end{cases} \\
+	\end{split}\end{equation*} %}
+	片側閉区間を用いて$P[n]$を表すためには、上界を表すために$[n+1]$の元を
+	用いる必要がある。例えば、$\set{n}\in P[n]$を片側閉区間で表すと$[n,n+1)$
+	となる。
+
+	したがって、片側閉区間$[a,b)$を用いて$P[n]$の元を表すことにする。
+	したがって、冪集合$P[n]$の元を
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $[n+1]$の元を文字とし、
+		\item 長さが偶数で、
+		\item 左から右に値が増加する
+	\end{itemize} %}
+	単語によって表すことにする。
+	次のように表すことにする。
+	\begin{equation*}\begin{split} %{
+		R_n &= \set{w\in W[n+1]\bou \zettai{w}=\myop{}}
+	\end{split}\end{equation*} %}
+
+	互いに共通を持たない$k$個の両閉区間$[a_1,b_1],[a_2,b_2],\dots,[a_k,b_k]$
+	の合併を$k$行$2$列の行列の形で次のように書くことにする。
+	\begin{equation*}\begin{split} %{
+		\begin{bmatrix}
+			a_1 & b_1 \\
+			a_2 & b_2 \\
+			\vdots & \vdots \\
+			a_k & b_k \\
+		\end{bmatrix},\quad a_1\le b_1< a_2\le b_2< \cdots < a_k\le b_k
+	\end{split}\end{equation*} %}
+	また、空集合を$[]$または$0_P$と書くことにする。
+
+	集合の合併を$+$、集合の共通を$*$と書くことにする。
+	\begin{equation*}\begin{split} %{
+		[s_1,s_2] + [t_1,t_2]
+		&= \begin{cases}
+			[s_1,s_2] + [t_1,t_2], &\text{iff }s_2<t_1 \text{ or }t_2<s_1 \\
+			[\min(s_1,t_1),\max(s_2,t_2)], &\text{otherwise} \\
+		\end{cases} \\
+		[s_1,s_2] * [t_1,t_2]
+		&= \begin{cases}
+			0_P, &\text{iff }s_2<t_1 \text{ or }t_2<s_1 \\
+			[\max(s_1,t_1),\min(s_2,t_2)], &\text{otherwise} \\
+		\end{cases} \\
+	\end{split}\end{equation*} %}
+%s1:区間の演算}
+
+\section{文字集合をビット配列で表す}\label{s1:文字集合をビット配列で表す} %{
+	文字の冪集合ををビットの配列で表すことを考える。
+	文字集合が$n$バイト=$8n$ビットで表されるならば、文字集合の大きさは
+	$2^{8n}$となる。
+	\begin{equation*}\begin{array}{rcrcrcr} %{
+		1\myop{Byte} &=& 8\myop{Bit} &=& 2^8 &=& 256 \\
+		2\myop{Byte} &=& 16\myop{Bit} &=& 2^{16} &=& 65536 \\
+		3\myop{Byte} &=& 24\myop{Bit} &=& 2^{24} &=& 16777216 \\
+		4\myop{Byte} &=& 32\myop{Bit} &=& 2^{32} &=& 4294967296 \\
+	\end{array}\end{equation*} %}
+	文字の冪集合を64ビット符号無し整数の配列として表そうとすると、
+	必要な配列の長さは次のようになる。
+	\begin{equation*}\begin{array}{rcrcrcr} %{
+		1\myop{Byte}/64 &=& 2^{8-6} &=& 4 \\
+		2\myop{Byte}/64 &=& 2^{16-6} &=& 1024 \\
+		3\myop{Byte}/64 &=& 2^{24-6} &=& 262144 \\
+		4\myop{Byte}/64 &=& 2^{32-6} &=& 67108864 \\
+	\end{array}\end{equation*} %}
+	現在のコンピュータの構造を考えると、$2\myop{Byte}$の文字までなら冪集合を
+	64ビット符号無し整数の配列で表すことができるだろう。$3\myop{Byte}$以上の
+	文字に対しては別の方法を考える必要があるだろう。
+%s1:文字集合をビット配列で表す}
+
 \begingroup %{
 	\newcommand{\hakodama}{\mycal{D}}
 	\newcommand{\sosei}{\mycal{C}}
