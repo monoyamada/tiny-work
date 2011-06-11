@@ -1,20 +1,27 @@
+\begingroup %{
+	\newcommand{\closeclose}[2]{\ensuremath{[{#1},{#2}]}}
+	\newcommand{\closeopen}[2]{\ensuremath{[{#1},{#2})}}
+	\newcommand{\word}[1]{\ensuremath{[{#1}]}}
+	\newcommand{\range}[1]{\ensuremath{({#1})}}
+	%
 \section{区間の演算}\label{s1:区間の演算} %{
-	$0$から$n-1$までの自然数の集合$[n]$の冪集合$P[n]$を
+	$0$から$n-1$までの自然数の集合を$[n]$、その冪集合を$P[n]$と書く。
 	$[n]$の両側閉区間$\set{m_1\times m_2\in S^2\bou m_1\le m_2}$の和、
 	または空集合$0_P\in P[n]$で表すことを考える。
-	例えば、$[5]$の部分集合$\set{0,1,4}$は両側閉区間$[0,1]$と$[4,4]$の
-	和集合として表すことができる。
+	例えば、$[5]$の部分集合$\set{0,1,4}$は両側閉区間\closeclose{0}{1}と
+	\closeclose{4}{4}の和集合として表すことができる。
 	そして、集合の合併と共通の操作が区間でどのように表されるかを考える。
-	例えば、二つの閉区間$[a_1,b_1]$と$[a_2,b_2]$の合併$\cup$と共通$\cap$は
-	次のようになる。
+	例えば、二つの閉区間\closeclose{a_1}{b_1}と\closeclose{a_2}{b_2}の合併
+	$\cup$と共通$\cap$は次のようになる。
 	\begin{equation*}\begin{split} %{
-		[a_1,b_1] \cup [a_2,b_2] &= \begin{cases}
-			[\min(a_1,a_2),\max(b_1,b_2)]
+		\closeclose{a_1}{b_1} \cup \closeclose{a_2}{b_2} &= \begin{cases}
+			\closeclose{\min(a_1,a_2)}{\max(b_1,b_2)}
 				, &\text{ iff } a_2 \le b_1 + 1 \text{ or } a_1 \le b_2 + 1 \\
-			[a_1,b_1] \cup [a_2,b_2], &\text{ otherwise } \\
+			\closeclose{a_1}{b_1} \cup \closeclose{a_2}{b_2}
+				, &\text{ otherwise } \\
 		\end{cases} \\
-		[a_1,b_1] \cap [a_2,b_2] &= \begin{cases}
-			[\min(a_1,a_2),\max(b_1,b_2)]
+		\closeclose{a_1}{b_1} \cap \closeclose{a_2}{b_2} &= \begin{cases}
+			\closeclose{\min(a_1,a_2)}{\max(b_1,b_2)}
 				, &\text{ iff } a_1 \le b_2 \text{ and } a_2 \le b_1 \\
 			0_P, &\text{ otherwise } \\
 		\end{cases} \\
@@ -24,60 +31,129 @@
 	なる。合併に対する条件分岐を単純化するために、右側が開いた片側閉区間を
 	用いることにする。片側閉区間を用いると合併と共通は次のようになる。
 	\begin{equation*}\begin{split} %{
-		[a_1,b_1) \cup [a_2,b_2) &= \begin{cases}
-			[\min(a_1,a_2),\max(b_1,b_2))
+		\closeopen{a_1}{b_1} \cup \closeopen{a_2}{b_2} &= \begin{cases}
+			\closeopen{\min(a_1,a_2)}{\max(b_1,b_2)}
 				, &\text{ iff } a_2 \le b_1 \text{ or } a_1 \le b_2 \\
-			[a_1,b_1] \cup [a_2,b_2], &\text{ otherwise } \\
+			\closeopen{a_1}{b_1} \cup \closeopen{a_2}{b_2}
+				, &\text{ otherwise } \\
 		\end{cases} \\
-		[a_1,b_1) \cap [a_2,b_2) &= \begin{cases}
-			[\min(a_1,a_2),\max(b_1,b_2))
+		\closeopen{a_1}{b_1} \cap \closeopen{a_2}{b_2} &= \begin{cases}
+			\closeopen{\min(a_1,a_2)}{\max(b_1,b_2)}
 				, &\text{ iff } a_1 < b_2 \text{ and } a_2 < b_1 \\
 			0_P, &\text{ otherwise } \\
 		\end{cases} \\
 	\end{split}\end{equation*} %}
 	片側閉区間を用いて$P[n]$を表すためには、上界を表すために$[n+1]$の元を
 	用いる必要がある。例えば、$\set{n}\in P[n]$を片側閉区間で表すと$[n,n+1)$
-	となる。
-
-	したがって、片側閉区間$[a,b)$を用いて$P[n]$の元を表すことにする。
-	したがって、冪集合$P[n]$の元を
+	となる。$I_n\subseteq W[n+1]$を次のように定義する。
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item $[n+1]$の元を文字とし、
-		\item 長さが偶数で、
-		\item 左から右に値が増加する
+		\item $[n+1]$の元を文字とする単語の集合$W[n+1]$の部分集合で、
+		\item 単語の長さが偶数であり、
+		\begin{equation*}\begin{split} %{
+			\zettai{w} = \myop{even} \quad\text{for all }w\in I_n
+		\end{split}\end{equation*} %}
+		\item 単語の文字が左から右への増加列となっている。
+		\begin{equation*}\begin{split} %{
+			i_1<i_2<\cdots<i_k \quad\text{for all }\word{i_1i_2\cdots i_k}\in I_n
+		\end{split}\end{equation*} %}
 	\end{itemize} %}
-	単語によって表すことにする。
-	次のように表すことにする。
+	写像$\phi_I:I_n\to P[n]$を次のように定義すると、$\phi_I$は集合同型と
+	なる。
 	\begin{equation*}\begin{split} %{
-		R_n &= \set{w\in W[n+1]\bou \zettai{w}=\myop{}}
+		\phi_I\word{} &= \emptyset \\
+		\phi_I\word{i_1i_2\cdots i_{2k}} 
+			&= [i_1,i_2) \cup [i_3,i_4) \cup \cdots \cup [i_{2k-1}, i_{2k}) \\
 	\end{split}\end{equation*} %}
-
-	互いに共通を持たない$k$個の両閉区間$[a_1,b_1],[a_2,b_2],\dots,[a_k,b_k]$
-	の合併を$k$行$2$列の行列の形で次のように書くことにする。
+	したがって、次の畳み込みによって$I_n$の二項演算$+$と$*$を定義することが
+	できる。
+	\begin{equation*}\xymatrix@C=10ex{
+		I_n\times I_n \ar[r]^{\phi_I \times \phi_I} \ar@{.>}[d]^{+/*} 
+			& P[n] \times P[n] \ar[d]^{\cup/\cap} \\
+		I_n & P[n] \ar[l]_{\phi_I^{-1}} \\
+	}\end{equation*}
+	$+$と$*$は積となり、$+$を加法、$*$を乗法とする冪等半環となる。
+	$+$の単位元は$[]$、$*$の単位元は$[0(n+1)]$となる。これらの単位元を
+	それぞれ$0_n=[],\;1_n=[0(n+1)]$と書くことにする。また、半環
+	$(I_n,+,0_n,*,1_n)$の元を\range{i_1i_2\cdots i_{2k}}のように書くことに
+	する。
+	
+	$I_n$の積$+$と$*$は次のようになる。
 	\begin{equation*}\begin{split} %{
-		\begin{bmatrix}
-			a_1 & b_1 \\
-			a_2 & b_2 \\
-			\vdots & \vdots \\
-			a_k & b_k \\
-		\end{bmatrix},\quad a_1\le b_1< a_2\le b_2< \cdots < a_k\le b_k
-	\end{split}\end{equation*} %}
-	また、空集合を$[]$または$0_P$と書くことにする。
-
-	集合の合併を$+$、集合の共通を$*$と書くことにする。
-	\begin{equation*}\begin{split} %{
-		[s_1,s_2] + [t_1,t_2]
-		&= \begin{cases}
-			[s_1,s_2] + [t_1,t_2], &\text{iff }s_2<t_1 \text{ or }t_2<s_1 \\
-			[\min(s_1,t_1),\max(s_2,t_2)], &\text{otherwise} \\
+		\range{i_1i_2} + \range{j_1j_2} &= \begin{cases}
+			i_1 < i_2 < j_1 < j_2 &\implies \range{i_1i_2j_1j_2} \\
+			j_1 < j_2 < i_1 < i_2 &\implies \range{j_1j_2i_1i_2} \\
+			\text{else} &\implies \range{\min(i_1,j_1)\max(i_2,j_2)} \\
 		\end{cases} \\
-		[s_1,s_2] * [t_1,t_2]
-		&= \begin{cases}
-			0_P, &\text{iff }s_2<t_1 \text{ or }t_2<s_1 \\
-			[\max(s_1,t_1),\min(s_2,t_2)], &\text{otherwise} \\
+		\range{i_1i_2} * \range{j_1j_2} &= \begin{cases}
+			i_1 < i_2 \le j_1 < j_2 &\implies 0_n \\
+			j_1 < j_2 \le i_1 < i_2 &\implies 0_n \\
+			\text{else} &\implies \range{\max(i_1,j_1)\min(i_2,j_2)} \\
 		\end{cases} \\
 	\end{split}\end{equation*} %}
+	この式をさらに細かく見ると次のようになる。
+	\begin{equation*}\begin{split} %{
+		\range{i_1i_2} + \range{j_1j_2} &= \begin{cases}
+			i_1 < i_2 < j_1 < j_2 &\implies \range{i_1i_2j_1j_2} \\
+			i_1 \le j_1 \le i_2 < j_2 &\implies \range{i_1j_2} \\
+			i_1 \le j_1 < j_2 \le i_2 &\implies \range{i_1i_2} \\
+			j_1 < j_2 < i_1 < i_2 &\implies \range{j_1j_2i_1i_2} \\
+			j_1 \le i_1 \le j_2 < i_2 &\implies \range{j_1i_2} \\
+			j_1 \le i_1 < i_2 \le j_2 &\implies \range{j_1j_2} \\
+		\end{cases} \\	
+		\range{i_1i_2} * \range{j_1j_2} &= \begin{cases}
+			i_1 < i_2 \le j_1 < j_2 &\implies 0_n \\
+			i_1 \le j_1 < i_2 < j_2 &\implies \range{j_1i_2} \\
+			i_1 \le j_1 < j_2 \le i_2 &\implies \range{j_1j_2} \\
+			j_1 < j_2 \le i_1 < i_2 &\implies 0_n \\
+			j_1 \le i_1 < j_2 < i_2 &\implies \range{i_1j_2} \\
+			j_1 \le i_1 < i_2 \le j_2 &\implies \range{i_1i_2} \\
+		\end{cases} \\
+	\end{split}\end{equation*} %}
+	等号と不等号の違いを無視すると、条件分岐は次の文字列の写像として表される。
+	\begin{equation*}\begin{split} %{
+		\word{i_1i_2} \times \word{j_1j_2} &\mapsto \word{i_1i_2j_1j_2}
+			+ \word{i_1j_1i_2j_2} + \word{i_1j_1j_2i_2} \\
+			&\quad+ \word{j_1j_2i_1i_2}
+			+ \word{j_1i_1j_2i_2} + \word{j_1i_1i_2j_2}
+	\end{split}\end{equation*} %}
+	この写像はシャッフル積$\shuffle$になっている。
+
+	\begin{definition}[シャッフル積]\label{def:シャッフル積} %{
+		$A$を集合、$R$を半環、$WA$をを文字とする単語の集合、$RWA$を$R$係数
+		自由半モジュールとする。シャッフル積$\shuffle:RWA\otimes RWA\to RWA$
+		は次のように定義される。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $1_W$を単位元とする。任意の$w\in WA$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				1_W \shuffle w = w = w \shuffle 1_W
+			\end{split}\end{equation*} %}
+			\item ライプニッツ則を満たす。任意の$a_1,a_2\in A,\;w_1,w_2\in WA$
+			に対して次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				(a_1*w_1) \shuffle (a_2*w_2)
+				= a_1*\bigl(w_1 \shuffle (a_2*w_2)\bigr)
+				+ a_2*\bigl((a_1*w_1) \shuffle w_2\bigr)
+			\end{split}\end{equation*} %}
+		\end{itemize} %}
+	\end{definition} %def:シャッフル積}
 %s1:区間の演算}
+
+\section{文字列の微積分}\label{s1:文字列の微積分} %{
+	\begin{todo}[余積とライプニッツ則]\label{todo:余積とライプニッツ則} %{
+		半環$R$を係数とする半モジュール$V$において、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 互いに準同型となる積$m$と余積$\Delta$と、
+			\item 双対空間$V^\dag=\set{f\in V\to R}$
+		\end{itemize} %}
+		が与えられたとき、微分を導くことができるか？
+	\end{todo} %todo:余積とライプニッツ則}
+	$R=(R,+,0_R,m_\myspace,1_R)$を半環とし、集合$X$を基底とする
+	$R$係数自由半モジュールを$RX$と書く。
+	$A$を集合、$WA$を$A$を文字とする単語の集合、$A^\dag=\set{f\in A\to R}$を
+	の双対空間、$WA^\dag=\set{f\in WA\to R}$を$WA$の双対空間とする。
+
+	文字列の結合を$m_*:RWA\otimes RWA\to RWA$と書く。
+%s1:文字列の微積分}
 
 \section{文字集合をビット配列で表す}\label{s1:文字集合をビット配列で表す} %{
 	文字の冪集合ををビットの配列で表すことを考える。
@@ -101,6 +177,7 @@
 	64ビット符号無し整数の配列で表すことができるだろう。$3\myop{Byte}$以上の
 	文字に対しては別の方法を考える必要があるだろう。
 %s1:文字集合をビット配列で表す}
+\endgroup %}
 
 \begingroup %{
 	\newcommand{\hakodama}{\mycal{D}}

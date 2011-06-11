@@ -117,7 +117,7 @@
 \def\obra#1{\mathinner{({#1}|}}
 \def\oket#1{\mathinner{|{#1})}}
 \def\obraket#1{\mathinner{({#1})}}
-\newcommand{\jump}[1]{\ensuremath{[\![#1]\!]}}
+\newcommand{\jump}[1]{\ensuremath{[\![#1]\!]\;}}
 \newcommand{\myor}{\,\operatorname{or}\,}
 \newcommand{\myxor}{\,\operatorname{xor}\,}
 \newcommand{\myand}{\,\operatorname{and}\,}
@@ -136,6 +136,7 @@
 \newcommand{\mapset}{\ensuremath{\myop{map}}}
 \newcommand{\myid}{\ensuremath{\myop{id}}}
 \newcommand{\mydu}{\ensuremath{\myop{du}}}
+\newcommand{\dup}{\ensuremath{\myop{du}}}
 %\newcommand{\curry}{\myop{curring}}
 %\newcommand{\mycat}[1]{{\mathbf{#1}}}
 %
@@ -156,6 +157,7 @@
 \newcommand{\sei}{\ensuremath{\mybf{Z}}}
 \newcommand{\jitu}{\ensuremath{\mybf{R}}}
 \newcommand{\fukuso}{\ensuremath{\mybf{C}}}
+\newcommand{\xto}[1]{\ensuremath{\xrightarrow{#1}}}
 %
 \usepackage{sty/accents}
 \makeatletter
@@ -173,6 +175,21 @@
 %4th digit: space relativ to the tip of the “arrow”
 %
 \makeatletter
+%
+\def\xtotofill@{%
+	\arrowfill@\relbar\relbar\twoheadrightarrow%
+}
+\newcommand*\xtoto[2][]{%
+	\ext@arrow 0395\xtotofill@{#1}{#2}%
+}
+%
+\def\xfromfromfill@{%
+	\arrowfill@\twoheadleftarrow\relbar\relbar%
+}
+\newcommand*\xfromfrom[2][]{%
+	\ext@arrow 0395\xfromfromfill@{#1}{#2}%
+}
+%
 \def\xmapstofill@{%
 	\arrowfill@{\mapstochar\relbar}\relbar\rightarrow%
 }

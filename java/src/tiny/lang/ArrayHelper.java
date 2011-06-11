@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Random;
 
 import tiny.function.BinaryPredicate;
 import tiny.function.Combinadic;
@@ -22,6 +23,17 @@ public class ArrayHelper {
 	public static final float[] EMPTY_FLOAT_ARRAY = {};
 	public static final String[] EMPTY_STRING_ARRAY = {};
 	public static final File[] EMPTY_FILE_ARRAY = {};
+
+	private static final ThreadLocal<Random> RANDMO_HOLDER = new ThreadLocal<Random>() {
+		@Override
+		protected Random initialValue() {
+			return new Random();
+		}
+	};
+
+	public static Random getRandom() {
+		return RANDMO_HOLDER.get();
+	}
 
 	@SuppressWarnings("unchecked")
 	public static <T> T[] newArray(T[] array, int size) {
@@ -54,7 +66,7 @@ public class ArrayHelper {
 		newArray[n] = x;
 		return newArray;
 	}
-	public static<T> T[] addFirst(T x, T[] array) {
+	public static <T> T[] addFirst(T x, T[] array) {
 		final int n = array.length;
 		final T[] newArray = ArrayHelper.newArray(array, n + 1);
 		System.arraycopy(array, 0, newArray, 1, n);
@@ -222,6 +234,11 @@ public class ArrayHelper {
 	}
 	public static void swap(short[] array, int i, int k) {
 		final short tmp = array[k];
+		array[k] = array[i];
+		array[i] = tmp;
+	}
+	public static void swap(char[] array, int i, int k) {
+		final char tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
 	}
@@ -533,14 +550,14 @@ public class ArrayHelper {
 		case 1:
 			return array[begin] < value ? begin + 1 : begin;
 		default:
-			if (false) {
-				final int m = begin + (d >> 1);
-				if (array[m] < value) {
-					return getLowerBound(array, m, end, value);
-				} else {
-					return getLowerBound(array, begin, m, value);
-				}
-			}
+			// if (false) {
+			// final int m = begin + (d >> 1);
+			// if (array[m] < value) {
+			// return getLowerBound(array, m, end, value);
+			// } else {
+			// return getLowerBound(array, begin, m, value);
+			// }
+			// }
 			break;
 		}
 		for (int m = 0; 1 < d; d = end - begin) {
@@ -552,5 +569,167 @@ public class ArrayHelper {
 			}
 		}
 		return array[begin] < value ? end : begin;
+	}
+
+	public static void shuffle(Object[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(Object[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(Object[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+	public static void shuffle(double[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(double[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(double[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+	public static void shuffle(float[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(float[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(float[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+	public static void shuffle(long[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(long[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(long[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+	public static void shuffle(int[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(int[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(int[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+	public static void shuffle(short[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(short[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(short[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+	public static void shuffle(byte[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(byte[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(byte[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+	public static void shuffle(char[] output) {
+		shuffle(output, 0, output.length, getRandom());
+	}
+	public static void shuffle(char[] output, Random random) {
+		shuffle(output, 0, output.length, random);
+	}
+	public static void shuffle(char[] output, int begin, int end, Random random) {
+		for (end -= begin; 0 < --end;) {
+			swap(output, begin + random.nextInt(end), end);
+		}
+	}
+
+	public static void sequence(long[] output, long lowest) {
+		sequence(output, 0, output.length, lowest);
+	}
+	public static void sequence(long[] output, int begin, int end, long lowest) {
+		while (begin < end) {
+			output[begin++] = lowest++;
+		}
+	}
+	public static void sequence(int[] output, int lowest) {
+		sequence(output, 0, output.length, lowest);
+	}
+	public static void sequence(int[] output, int begin, int end, int lowest) {
+		while (begin < end) {
+			output[begin++] = lowest++;
+		}
+	}
+	public static void sequence(short[] output, short lowest) {
+		sequence(output, 0, output.length, lowest);
+	}
+	public static void sequence(short[] output, int begin, int end, short lowest) {
+		while (begin < end) {
+			output[begin++] = lowest++;
+		}
+	}
+	public static void sequence(byte[] output, byte lowest) {
+		sequence(output, 0, output.length, lowest);
+	}
+	public static void sequence(byte[] output, int begin, int end, byte lowest) {
+		while (begin < end) {
+			output[begin++] = lowest++;
+		}
+	}
+	public static void sequence(char[] output, char lowest) {
+		sequence(output, 0, output.length, lowest);
+	}
+	public static void sequence(char[] output, int begin, int end, char lowest) {
+		while (begin < end) {
+			output[begin++] = lowest++;
+		}
+	}
+
+	/**
+	 * [1,2,3] |-> [3,1,2]
+	 * 
+	 * @param array
+	 * @param begin
+	 * @param end
+	 */
+	public static void rotate_right(Object[] array, int begin, int end) {
+		int n = end - begin;
+		switch (n) {
+		case 0:
+		case 1:
+			break;
+		case 2:
+			swap(array, begin, --end);
+			break;
+		case 3: {
+			Object x = array[--end];
+			array[end] = array[end - 1];
+			array[end - 1] = array[begin];
+			array[begin] = x;
+		}
+			break;
+		default: {
+			Object x = array[--end];
+			System.arraycopy(array, begin, end, begin + 1, n);
+			array[begin] = x;
+		}
+			break;
+		}
 	}
 }

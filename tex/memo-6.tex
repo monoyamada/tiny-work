@@ -1,0 +1,702 @@
+\begingroup %{
+	\newcommand{\lu}[2]{\ensuremath{{}^{#1}\!{#2}}}
+	\newcommand{\End}{\ensuremath{\myop{End}}}
+	\newcommand{\Hom}{\ensuremath{\myop{Hom}}}
+	\newcommand{\Tree}{\ensuremath{\mathcal{T}}}
+	\newcommand{\treeu}{\ensuremath{1_\Tree}}
+	\newcommand{\Forget}{\ensuremath{\mathcal{U}}}
+	\newcommand{\Word}{\ensuremath{\mathcal{W}}}
+	\newcommand{\wordu}{\ensuremath{1_{\Word}}}
+	\newcommand{\word}[1]{\ensuremath{[{#1}]}}
+	\newcommand{\push}{\ensuremath{\myop{push}}}
+	\newcommand{\pop}{\ensuremath{\myop{pop}}}
+	\newcommand{\Nothing}{\ensuremath{\myop{None}}}
+	\newcommand{\none}{\ensuremath{\myop{none}}}
+	\newcommand{\Maybe}{\ensuremath{\myop{Maybe}}}
+	\newcommand{\onto}{\ensuremath{\myop{onto}}}
+	\newcommand{\im}{\ensuremath{\myop{im}}}
+	\newcommand{\lin}{\ensuremath{\myop{lin}}}
+	\newcommand{\map}{\ensuremath{\myop{map}}}
+	\newcommand{\defeq}{\ensuremath{\overset{\mathrm{def}}{=}}}
+	%
+\section{群と表現}\label{s1:section name} %{
+	教科書\cite{bk:kikkawa.gun}のノートである。
+	この節では転置を左上に$t$と書くとする。例えば、$x$の転置を$\lu{t}{x}$
+	と書く。
+	この節では単にベクトル空間と書いた場合は複素ベクトル空間を指すものとする。
+
+	三次対称群$S_3$を平面上の三角形の頂点の入れ替えに対応させている。
+	$S_3=\set{1,c_3,c_3^{-1},\sigma_1,\sigma_2,\sigma_3}$を次のような
+	操作に対応させている。
+	\begin{equation}\begin{split} %{
+		\xymatrix@R=4pt@C=2pt{
+			& 1 \ar@{-}[dl] \ar@{-}[dr] \\
+			2 \ar@{-}[rr] & & 3 \\
+		}
+		\begin{array}{ccl}
+			\xmapsto{c_3} &　\xymatrix@R=4pt@C=2pt{
+				& 2 \ar@{-}[dl] \ar@{-}[dr] \\
+				3 \ar@{-}[rr] & & 1 \\
+			} & \text{右回転} \\
+			\xmapsto{\sigma_1} &　\xymatrix@R=4pt@C=2pt{
+				& 1 \ar@{-}[dl] \ar@{-}[dr] \\
+				3 \ar@{-}[rr] & & 2 \\
+			} & \text{ $1$固定の反転} \\
+			\xmapsto{\sigma_2} &　\xymatrix@R=4pt@C=2pt{
+				& 3 \ar@{-}[dl] \ar@{-}[dr] \\
+				2 \ar@{-}[rr] & & 1 \\
+			} & \text{ $2$固定の反転} \\
+			\xmapsto{\sigma_3} &　\xymatrix@R=4pt@C=2pt{
+				& 2 \ar@{-}[dl] \ar@{-}[dr] \\
+				1 \ar@{-}[rr] & & 3 \\
+			} & \text{ $3$固定の反転} \\
+		\end{array}
+	\end{split}\end{equation} %}
+
+	\begin{proposition}[Schurの補題その一]\label{prop:Schurの補題その一} %{
+		群$G$の二つの既約表現$\rho_i:G\to \End V_i$に対して、
+		次の式を満たす線形写像$\phi:V_1\to V_2$が存在するならば、
+		\begin{equation*}\begin{split} %{
+			\phi(\rho g) = (\rho g)\phi \quad\text{for all }g\in G
+		\end{split}\end{equation*} %}
+		$\phi$は同型射または$0$である。
+	\end{proposition} %prop:Schurの補題その一}
+	\begin{proof} %{
+		$\ker\phi$は$V_1$の部分空間となるが、$\rho_1$が既約表現だから、
+		$\ker\phi=V_1$（$\phi=0$）または$\ker\phi=0$（$\phi$が$1:1$）となる。
+		同様に$\im\phi$は$V_2$の部分空間となるが、$\rho_2$が既約表現だから、
+		$\im\phi=V_2$（$\phi$が$\onto$）または$\im\phi=0$（$\phi=0$）となる。
+		そして、$\phi$の条件を可換図で書くと次のようになる。
+		\begin{equation}\label{eq:interwinning}\xymatrix{
+			V_1 \ar[r]^{\phi} \ar[d]^{\rho g} & V_2 \ar[d]^{\rho g} \\
+			V_1 \ar[r]^{\phi} & V_2 \\
+		} \quad\text{for all }g\in G
+		\end{equation}
+		したがって、$\ker\phi=0$のときは$\im\phi=V_2$、$\ker\phi=V_1$のときは
+		$\im\phi=0$となることがわかる。したがって、$\phi$は、$\ker\phi=0$のとき
+		$1:1$かつ$\onto$、$\ker\phi=V_1$のとき$0$となる。
+	\end{proof} %}
+
+	\begin{proposition}[Schurの補題その二]\label{prop:Schurの補題その二} %{
+		群$G$の有限次元の既約表現$\rho:G\to \End V$に対して、
+		次の式を満たす線形写像$\phi:\End V$が存在するならば、
+		\begin{equation*}\begin{split} %{
+			\phi(\rho g) = (\rho g)\phi \quad\text{for all }g\in G
+		\end{split}\end{equation*} %}
+		$\phi=\lambda$となる$\lambda\in\fukuso$が存在する。
+	\end{proposition} %prop:Schurの補題その二}
+	\begin{proof} %{
+		$\phi$は有限次元の線形写像だからある固有値$\lambda$をもち、
+		$\phi$の固有値$\lambda$に属する固有空間$V_\lambda\subseteq V$は
+		空でない。$\phi$が命題の条件を満たすとき、
+		固有空間$V_\lambda$は$\rho G$の作用で閉じる。
+		（$(\rho G)V_\lambda\subseteq V_\lambda$）。
+		\begin{equation*}\begin{split} %{
+			\phi(\rho g)v = (\rho g)\phi v = \lambda(\rho g) v
+			\quad\text{for all }g\in G,\;v\in V_\lambda
+		\end{split}\end{equation*} %}
+		$\rho$は既約表現だから、$V_\lambda$は空か$V$でなくてはならないが、
+		$V_\lambda$は空でないので、$V_\lambda=V$となる。
+	\end{proof} %}
+
+	\begin{definition}[interwinning]\label{def:interwinning} %{
+		可換図\eqref{eq:interwinning}を満たす線形写像をinterwinningという。
+		interwinningの日本語訳はわからない。
+	\end{definition} %def:interwinning}
+
+	環$R$の作用が定義された加群を$R$加群と書く。
+	$V,W$を$R$加群とし、任意の$r_1,r_2\in R,\;v_1,v_2\in V$に対して次の
+	式を満たす写像$\phi:V\to W$を$R$加群準同型という。
+	\begin{equation*}\begin{split} %{
+		\phi(r_1v_1+r_2v_2) = r_1\phi v_1 + r_2\phi v_2
+	\end{split}\end{equation*} %}
+	$V$から$W$への$R$加群準同型全体のつくる集合を$\Hom_R(V,W)$と書く。
+
+	interwinningを定義する可換図\eqref{eq:interwinning}は、群$G$の表現を
+	$\fukuso$線形に拡張すると、$\fukuso G$加群準同型を定義する可換図そのもの
+	になる。したがって、interwinningと$\fukuso G$加群準同型は同じことである。
+
+	\begin{proposition}[Schurの補題の言い換え]\label{prop:Schurの補題の言い換え} %{
+		群$G$の二つの有限次元の既約表現$\rho_i:G\to \End V_i$に対して、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\dim_\fukuso\Hom_{\fukuso G}(V_1,V_2) = \jump{V_1\simeq V_2}
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:Schurの補題の言い換え}
+	\begin{proof} %{
+		Schurの補題その一\ref{prop:Schurの補題その一}から$V_1$と$V_2$が同型
+		でないときは$V_1$から$V_2$へのinterwinningは存在しないので、
+		$\Hom_{\fukuso G}(V_1,V_2)=0$となり、$V_1\simeq V_2$のときは
+		Schurの補題その二\ref{prop:Schurの補題その二}から同型射は単位射の定数倍
+		になるから$\Hom_{\fukuso G}(V_1,V_2)=1$となることがわかる。
+	\end{proof} %}
+
+	既約表現の直交性を述べる準備として、内積について成り立つことを書いておく。
+	有限群$G$の既約表現$\rho:G\to \End V$に対して、$V$の任意の内積
+	$\braket{-,-}$から次のようにして$G$不変な内積$\braket{-,-}_G$を定義する
+	ことができる。
+	\begin{equation*}\begin{split} %{
+		\braket{u,v}_G = \frac{1}{\zettai{G}}\sum_{g\in G}\braket{(\rho g)u, (\rho g)v}
+		\quad\text{for all }u,v\in V
+	\end{split}\end{equation*} %}
+	$V$が有限次元の場合は、行列の転置が定義できるから、$G$不変な内積
+	$\braket{-,-}_G$を用いると、次の式が成り立ち、任意の$g\in G$に対して
+	その表現$\rho g$がユニタリ行列となる。
+	\begin{equation*}\begin{split} %{
+		\braket{(\rho g)u,(\rho g)v}_G 
+		= \braket{u,\lu{t}{(\rho g)}(\rho g)v}_G
+		= \braket{u,v}_G \quad\text{for all }u,v\in V,\;g\in G
+	\end{split}\end{equation*} %}
+	つまり、有限群の任意の有限次元ベクトル空間$V$への表現$\rho$は、
+	それをユニタリ行列とする$V$の内積を定義することができる。
+%s1:section name}
+%
+\section{箙}\label{s1:箙} %{
+	講義録\cite{html:quiver.lecture}のノートである。
+
+	この節では$K$を標数$0$の代数的閉体とする。 箙の定義からはじめる。
+	箙とは結合性を仮定しない圏である。
+	\begin{definition}[箙]\label{def:箙} %{
+		集合$Q_v,Q_e$に写像$\myop{head}/\myop{tail}:E\to V$が定義されている時、
+		組$(Q_v,Q_e,\myop{head},\myop{tail})$を箙という。
+		このとき、$Q_v$を頂点、$Q_e$を辺という。
+	\end{definition} %def:箙}
+	箙の表現とはベクトル空間への関手である。
+	\begin{definition}[箙の表現]\label{def:箙の表現} %{
+		$Q=(Q_v,Q_e)$を箙とする。箙$Q$の$K$表現$V$とは、頂から$K$ベクトル空間
+		の圏$\mybf{Vec}_K$の対象への対応と、
+		\begin{equation*}\begin{split} %{
+			\set{Vx\in\mybf{Vec}_K\bou x\in Q_v}
+		\end{split}\end{equation*} %}
+		辺から次の$\mybf{Vec}_K$の射への対応
+		\begin{equation*}\begin{split} %{
+			\set{Va:(V\myop{tail}a)\to(V\myop{head}a)\bou a\in Q_e}
+		\end{split}\end{equation*} %}
+		の組である。
+	\end{definition} %def:箙の表現}
+
+	\begin{example}[箙の表現の例]\label{eg:箙の表現の例} %{
+		$Q=1\xto{a}2$を箙とする。任意の$m,n\in\sizen$に対して次の対応$V$は
+		$Q$の$K$表現になっている。
+		\begin{equation*}\xymatrix{
+			1 \ar[d]^a \ar@{|->}[r]^V 
+				& K^m \ar[d]^{\text{some $m\times n$ matrix}} \\
+			2 \ar@{|->}[r]^V & K^n \\
+		}\end{equation*}
+	\end{example} %eg:箙の表現の例}
+%s1:箙}
+%
+\section{Fock空間に向けて}\label{s1:Fock空間に向けて} %{
+	$R$を標数$0$の半環、$A$を有限集合、$\Word$を文字列化の関手とする。
+	文字列の連結による積を$m$、その単位元を$\wordu$と書く。
+	文字列の連結による積$m(x\otimes y)$は二項演算を使って書くときは、
+	記号を省略して$xy$と書くことにする。
+
+	次の$R\Word A$に値をもつ再帰式を考える。
+	\begin{equation}\label{eq:三角再帰式の例}\begin{split} %{
+		x = x_0 + axbxc,\quad\text{where }x_0,a,b,c\in R\Word A
+	\end{split}\end{equation} %}
+	この再帰式の状態遷移図は次のようになる。
+	\begin{equation}\label{eq:三角再帰式の状態遷移図その一}
+	\xymatrix@R=1em@C=2em{
+		& & & x \ar@/_1em/[ld]_a \ar[r]^{x_0} & 1 & & \\
+		& & \circ \ar@/_1em/[lld]_a \ar[r]^{x_0} & \circ \ar[r]^b
+			& \circ \ar[d]_a \ar[r]^{x_0} & \circ \ar@/_1em/[lu]_c \\
+		\circ \ar[d]_a \ar[r]^{x_0} & \circ \ar[r]^b
+			& \circ \ar[d]_a \ar[r]^{x_0} & \circ \ar[u]_c
+			& \circ \ar[d]_a \ar[r]^{x_0} & \circ \ar[r]^b
+			& \circ \ar[d]_a \ar[r]^{x_0} & \circ \ar@/_1em/[llu]_c \\
+		\vdots & \vdots \ar[u]^c & \vdots & \vdots \ar[u]^c 
+			& \vdots & \vdots \ar[u]^c & \vdots & \vdots \ar[u]^c \\
+	}\end{equation}
+	この状態遷移図を次のように簡略化して書く。
+	\begin{equation}\label{eq:三角再帰式の状態遷移図その二}
+	\xymatrix@R=2em@C=2em{
+		x \ar[d]^a \ar[r]^{x_0} & 1 \\
+		x_0 \ar[r]^b & x_0 \ar[u]_c \\
+	}\end{equation}
+	この図を次のように再帰を展開していくと、もとの状態遷移図が得られる。
+	\begin{equation*}\begin{split} %{
+		\xymatrix{
+			x \ar[d]^a \ar[r]^{x_0} & 1 \\
+			x_0 \ar[r]^b & x_0 \ar[u]_c \\
+		} \mapsto \xymatrix{
+			& x \ar[dl]_a \ar[r]^{x_0} & 1 \\
+			x \ar[d]^a \ar[r]^{x_0} & 1 \ar[r]^b & x_0 \ar[u]_c \\
+			x_0 \ar[r]^b & x_0 \ar[u]_c \\
+		} \mapsto \xymatrix{
+			& x \ar[dl]_a \ar[r]^{x_0} & 1 \\
+			x \ar[d]^a \ar[r]^{x_0} & 1 \ar[r]^b 
+				& x \ar[d]^a \ar[r]^{x_0} & 1 \ar[ul]_c \\
+			x_0 \ar[r]^b & x_0 \ar[u]_c
+				& x_0 \ar[r]^b & x_0 \ar[u]_c \\
+		} \mapsto \cdots
+	\end{split}\end{equation*} %}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[経路代数] 伝統的なLLやLR文法は経路代数を上手く取り扱うための方法
+			を提供しているに違いない。例えば、$x=a+bxc$から生成される経路代数は
+			$Z_2\otimes\sizen$の可換モノイドのテンソル積で記述することができる。
+			同様のことがより一般的な再帰式に対して成り立つように思える。
+			経路代数を複数の自然数と自然数の有限部分集合のテンソル積で書くことが
+			できれば、経路代数をスタックを用いることなしに記述できる。
+			\item[話の順序] 
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 箙の経路代数をBrzozowski代数で表現する。
+				箙の経路代数からBrzozowski代数への表現の基本的な形は次のようになる。
+				\begin{equation*}\begin{split} %{
+					m \xrightarrow{} n &\mapsto \eta_n\lu{t}\eta_m
+					\quad\text{for all }m,n\in\sizen
+				\end{split}\end{equation*} %}
+				ここで、箙の頂点は自然数で表すものとする。
+				の基本的な対応。
+				\begin{equation*}\begin{split} %{
+					\xymatrix{
+						\circ \ar@(ul,dl)_a
+					} &\mapsto a\eta_0\lu{t}{\eta_0} \\
+					\xymatrix{
+						\circ \ar@<2pt>[r]^a & \circ \ar@<2pt>[l]^b
+					} &\mapsto a\eta_0\lu{t}{\eta_1} + b\eta_1\lu{t}{\eta_0} \\
+					\xymatrix{
+						\circ \ar[r]^a \ar[d]^b & \circ \\
+						\circ \ar[r]^c & \circ \ar[u]^d
+					} &\mapsto a\eta_0\lu{t}{\eta_3} + b\eta_0\lu{t}{\eta_1}
+						+ c\eta_1\lu{t}{\eta_2} + d\eta_2\lu{t}{\eta_3} \\
+				\end{split}\end{equation*} %}
+				ブラケットの再帰が平坦化できることを示す。
+				\begin{equation*}\begin{split} %{
+					\braket{f_1\braket{f_2}f_3} = \braket{f_1f_2f_3}
+				\end{split}\end{equation*} %}
+				\item Brzozowski代数を用いると正規言語となる。
+				したがって、空遷移をもつNFAが作られる。
+				\item 空遷移の考察をする。
+				\item DFAは曖昧さの解決と関係するので、後で考察する。
+			\end{itemize} %}
+			\item[Leavitt経路代数] Brzozowski代数とLeavitt経路代数は同じものを
+			表しているように見える。また、Cuntz-Krieger代数も同じものを表している
+			ように見える。調べてみるべし。
+			特に、どのような箙ならBrzozowski代数で表現できるかが既に調べられて
+			いればラッキーである。
+		\end{description} %}
+	\end{todo} %todo:ここまで}
+
+	また、次の再帰式は、
+	\begin{equation*}\begin{split} %{
+		x = a_{00} + a_{10}xa_{11} + a_{20}xa_{21}xa_{22}
+		\quad\text{where }a_{ij}\in R\Word A
+	\end{split}\end{equation*} %}
+	次のグラフで表す。
+	\begin{equation*}\xymatrix@R=2em@C=2em{
+		a_{00} \ar@/^1em/[rd]^{a_{11}} \\
+		x \ar[r]^{a_{00}} \ar[u]_{a_{10}} \ar[d]^{a_{20}} & 1 \\
+		a_{00} \ar[r]^{a_{21}} & a_{00} \ar[u]_{a_{22}} \\
+	}\end{equation*}
+	頂点$a_{00}$が再帰していく点を表す。
+
+	この状態遷移図において、$\alpha,\beta,\gamma$をそれぞれ$a,b,c$を生成する
+	辺とすると、この状態遷移図から生成される経路代数は次のようになる。
+	\begin{equation*}\begin{split} %{
+		\alpha\gamma = \beta^2 = \gamma\alpha = 0
+	\end{split}\end{equation*} %}
+	そこで、Brzozowski代数を用いて次のようにおいてみると、
+	\begin{equation*}\begin{split} %{
+		\alpha = \lu{t}{\eta_0},\quad \beta = \eta_0\lu{t}{\eta_1}
+			,\quad \gamma = \eta_1\lu{t}{\eta_2}
+	\end{split}\end{equation*} %}
+	経路代数を満たすことがわかる。したがって、次の真空期待値をとると再帰式の
+	形式解が求まる。
+	\begin{equation}\label{eq:三角型再帰式の形式解その一}\begin{split} %{
+		x = \braket{
+			(a\lu{t}\eta_0 + b\eta_0\lu{t}{\eta_1} + c\eta_1\lu{t}{\eta_2})^*
+			\eta_2^*}
+	\end{split}\end{equation} %}
+	Kleeneスターの中の項$
+		a\lu{t}\eta_0 + b\eta_0\lu{t}{\eta_1} + c\eta_1\lu{t}{\eta_2}
+	$はすべて正規積の形で書かれている。
+
+	状態遷移図で書くと次のようになる。
+	\begin{equation*}\begin{split} %{
+		\xymatrix@R=1em@C=1em{
+			& 1 \ar[ld]_a \\
+			\circ \ar[rr]^b \ar@(ul,dl)_{1\xtoto{}1} 
+				& & \circ \ar[lu]_c \ar@(dr,ur)_{1\xtoto{}1} \\
+		} = \xymatrix@R=1em@C=1em{
+			1 \ar@(dr,ur)_{a\lu{t}\eta_0 + b\eta_0\lu{t}{\eta_1} 
+				+ c\eta_1\lu{t}{\eta_2}}
+				\ar@(ul,dl)_{\eta_2} 
+		} 
+	\end{split}\end{equation*} %}
+	$\eta_2$はパース実行時にスタック状態をチェックするタイミングを教えて
+	くれる。スタックに$\lu{t}{\eta_2}$が積まれるタイミングでスタックに
+	$\lu{t}{\eta_0}$または$\lu{t}{\eta_1}$が残っていれば構文エラーである。
+
+	箙に閉じた経路を付け足しても経路代数は'あまり'変わらない。
+	\begin{equation*}\begin{array}{ccccc} %{
+		\xymatrix@R=1em@C=1em{
+			& \bullet \ar[ld]_a \\
+			\circ \ar[rr]^b & & \circ \ar[lu]_c \\
+		} &\mapsto& \xymatrix@R=1em@C=1em{
+			& & \bullet \ar[ld]_a \\
+			& \circ \ar[ld]_a \ar[rr]^b & & \circ \ar[lu]_c \\
+			\circ \ar[rr]^b & & \circ \ar[lu]_c \\
+		} &\mapsto& \xymatrix@R=1em@C=1em{
+			& & \bullet \ar[ld]_a \\
+			& \circ \ar[ld]_a \ar[rr]^b & & \circ \ar[ld]_a \ar[lu]_c \\
+			\circ \ar[rr]^b & & \circ \ar[lu]_c
+			\circ \ar[rr]^b & & \circ \ar[lu]_c
+		} \\
+		\begin{split}
+			\alpha\beta\gamma = 1 \\
+			\alpha^2 = \beta^2 = \gamma^2 = 0 \\
+			\alpha\gamma = \beta\alpha = \gamma\beta = 0 \\
+		\end{split} & & \begin{split}
+			\alpha\beta\gamma = 1 \\
+			\alpha^3 = \beta^2 = \gamma^2 = 0 \\
+			\alpha\gamma = \beta\alpha = 0 \\
+		\end{split} & & \begin{split}
+			\alpha\beta\gamma = 1 \\
+			\alpha^3 = \beta^2 = \gamma^3 = 0 \\
+			\alpha\gamma = 0 \\
+		\end{split}
+	\end{array}\end{equation*} %}
+	このようにして、基本となる三角形の箙を再帰的に頂点$\circ$に追加していく
+	と、無限に追加した極限で$\alpha^n=\gamma^n=0$という有限次のBrzozowski代数
+	が$\alpha^n\neq0,\;\gamma^n\neq0\text{ for }n<\infty$という無限次の
+	Brzozowski代数になって、次の代数に帰着する。
+	\begin{equation*}\begin{split} %{
+		\alpha\beta\gamma = 1,\quad \alpha\gamma = \beta\beta = 0
+	\end{split}\end{equation*} %}
+
+	\begin{note}[インデックス言語]\label{note:インデックス言語} %{
+		この例で、Brzozowski代数をWeyle代数に変更すると、インデックス言語を
+		生成するように思える。
+		\begin{equation}\begin{split} %{
+			\xymatrix@R=1em@C=1em{
+				& & & 1 \ar[ld]_a \\
+				& & \circ \ar[ld]_a \ar[rr]^b & & \circ \ar[ld]_a \ar[lu]_c \\
+				& \circ \ar[ld]_a \ar[rr]^b 
+					& & \circ \ar[ld]_a \ar[lu]_c \ar[rr]^b
+					& & \circ \ar[ld]_a \ar[lu]_c \\
+				\vdots & & \vdots \ar[lu]_c & \vdots & \vdots \ar[lu]_c 
+					& \vdots & \vdots \ar[lu]_c
+			}
+		\end{split}\end{equation} %}
+		この状態遷移図から生成される経路代数は次のようになる。
+		\begin{equation*}\begin{split} %{
+			\alpha\beta\gamma = 1
+		\end{split}\end{equation*} %}
+		そこで、Weyle代数を用いて次のようにおいてみると、
+		\begin{equation*}\begin{split} %{
+			\alpha = \partial_1,\quad \beta = \eta_1\partial_2
+				,\quad \gamma = \eta_2
+		\end{split}\end{equation*} %}
+		経路代数を満たすことがわかる。
+	\end{note} %note:インデックス言語}
+
+	この考え方を一般化してみる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $x=\wordu+f_{10}xf_{11}+f_{20}xf_{21}xf_{22}+\cdots$の形の
+			状態遷移図の集合を$S_0R\Word A$、
+			$x=f_{00}+f_{10}xf_{11}+f_{20}xf_{21}xf_{22}+\cdots$の形の
+			状態遷移図の集合を$SR\Word A$とする。
+			\item 根付き平面木$R\Tree\Word B$から状態遷移図$RS_0R\Word A$への写像
+			\begin{equation*}\begin{split} %{
+				() &\xmapsto{\rho} \bullet \\
+				(b_0) &\xmapsto{\rho} \xymatrix{
+					\bullet \ar@(dr,ur)_{\rho b_0}
+				} \\
+				\bigl(b_0(c_0c_1)b_1\cdots b_m\bigr) &\xmapsto{\rho}
+				\xymatrix{
+					\bullet \ar[r]^{\rho b_0}
+					& \circ\ar[r]^{\rho b_1} \ar@<-2pt>[d]_{\rho c_0}
+					& \cdots\ar[r]^{\rho b_{m-1}} & \circ\ar@(ul,ur)[lll]_{\rho b_m}
+					\\
+					& \circ \ar@<-2pt>[u]_{\rho c_1}
+				}
+			\end{split}\end{equation*} %}
+			\item 根付き平面木というより文字列に自然な成長を定義したものとした
+			方が簡潔かもしれない。
+			\item 必要があれば、状態遷移図$RS_0R\Word A$から$RSR\Word A$へ
+			拡張する。
+			\begin{equation*}\begin{split} %{
+				\xymatrix{
+					\bullet \ar[r]^{\rho b_0}
+					& \circ\ar[r]^{\rho b_1} \ar@<-2pt>[d]_{\rho c_0}
+					& \cdots\ar[r]^{\rho b_{m-1}} & \circ\ar@(ul,ur)[lll]_{\rho b_m}
+					\\
+					& \circ \ar@<-2pt>[u]_{\rho c_1}
+				} \mapsto \xymatrix{
+					1 & x \ar[r]^{\rho b_0} \ar[l]_a
+					& \circ\ar[r]^{\rho b_1} \ar@<-2pt>[d]_{\rho c_0}
+					& \cdots\ar[r]^{\rho b_{m-1}} & \circ\ar@(ul,ur)[llll]_{\rho b_m}
+					\\
+					& & \circ \ar@<-2pt>[u]_{\rho c_1}
+				}
+			\end{split}\end{equation*} %}
+			\item 根付き平面木$\Tree\Word B$の自然な成長を定義する。
+			\item 自然な成長が積となる空間を構成する。
+			多分、$\Tree\Word B$に根$\bullet$を付け加える必要がある。
+		\end{itemize} %}
+	\end{todo} %todo:ここまで}
+
+	論文\cite{Connes:1998qv}で使われている平面木の代数と同じような議論を
+	再帰式を表す箙に対して行なえば良いだろう。
+	まず、次のような状態遷移図の集合$S_aR\Word A$を考える。
+	\begin{equation*}\begin{split} %{
+		\xymatrix{
+			x \ar[r]^a & 1 \\
+		} \quad\text{or}\quad \xymatrix{
+			& x \ar[dl]_{b_1} \ar[r]^a & 1 \\
+			\circ \ar[r]_a & \circ \ar[r]_{b_2} & \circ \ar[r]_a 
+			& \cdots \ar[r]_{b_m} & \circ \ar[r]_a 
+			& \circ \ar[ulll]_{b_{m+1}} \\
+		}\quad 1\le m
+	\end{split}\end{equation*} %}
+	ここで、$a,b_1,b_2,\dots,b_{m+1}$は$R\Word A$のゼロでない元とする。
+	の元を辺$a$でくっつけていけば再帰式が導かれる。
+
+	$S_aR\Word A$の元を根付き平面木として表す。
+	\begin{equation*}\begin{split} %{
+		\underbrace{\mytree{
+			& \word{b_1b_2\cdots b_{m+1}} \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+			\circ & \circ & \cdots & \circ \\
+		}}_{\text{$m$個}}
+	\end{split}\end{equation*} %}
+	つまり、$S_aR\Word A$は$\Word R\Word A$の元を根、$\circ$を葉に持つ
+	根付き平面木の集合となる。この根付き平面木を次のように書くことにする。
+	\begin{equation*}\begin{split} %{
+		(b_1b_2\cdots b_{m+1})
+	\end{split}\end{equation*} %}
+	文字$b_1$と$b_2$の間、 $b_2$と$b_3$の間、、$b_m$と$b_{m+1}$の間が葉を
+	表す。$\Word R\Word A$の元を根または葉でない頂点
+	に持ち、$\circ$を根でない葉に持つ根付き平面木の集合を$\Tree_aR\Word A$
+	とする。$R\Tree_aR\Word A$に二項演算$b_*$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		& b_*:(a_1a_2\cdots a_{m+1})\otimes(b_1b_2\cdots b_{n+1}) \\
+		& \mapsto \bigl(a_1(b_1b_2\cdots b_{n+1})a_2\cdots a_{m+1}\bigr) \\
+		&\; + \bigl(a_1a_2(b_1b_2\cdots b_{n+1})a_3\cdots a_{m+1}\bigr) \\
+		&\; + \cdots \\
+		&\; + \bigl(a_1a_2\cdots a_m(b_1b_2\cdots b_{n+1})a_{m+1}\bigr) \\
+	\end{split}\end{equation*} %}
+	二項演算$b_*$は結合性を満たさないが、任意の$x\in \Tree_aR\Word A$の元に
+	対して次の結合性を満たす。
+	\begin{equation*}\begin{split} %{
+		(x*x)*x = x*(x*x)
+	\end{split}\end{equation*} %}
+	つまり、$b_*$は任意の$x\in \Tree_aR\Word A$の元によって生成される部分空間
+	、$\set{\wordu,x,x^2,\cdots}$で張られる部分空間、では積となる。
+	\begin{todo}[ほんとか? ]\label{todo:ほんとか?} %{
+	\end{todo} %todo:ほんとか?}
+
+	箙の代数に対しておこなえばよいだろう。
+	始頂点かつ終頂点となる頂点を根頂点ということにする。
+	固定された根頂点$\bullet$をもつ箙の集合を$\Gamma_\bullet$と書く。
+	$\Gamma_\bullet$は$\bullet$以外の根頂点を持つことも有りうるとする。
+	$R\Gamma_\bullet$に積$m_*$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		& m_*: \xymatrix@R=2em@C=1em{
+			\bullet \ar[d]_{a_1} \\
+			\circ \ar[r]_{a_2} & \circ \ar[r]_{a_3} & \cdots \ar[r]_{a_{m-1}} 
+			& \circ \ar[lllu]_{a_m} \\
+		} \otimes \xymatrix@R=2em@C=1em{
+			\bullet \ar[d]_{b_1} \\
+			\circ \ar[r]_{b_2} & \circ \ar[r]_{b_3} & \cdots \ar[r]_{b_{n-1}} 
+			& \circ \ar[lllu]_{b_n} \\
+		} \\
+		& \mapsto \xymatrix@R=2em@C=1em{
+			\bullet \ar[d]_{a_1} \\
+			\circledast \ar[r]_{a_2} \ar[d]_{b_1} & \circ \ar[r]_{a_3} 
+			& \cdots \ar[r]_{a_{m-1}} & \circ \ar[lllu]_{a_m} \\
+			\circ \ar[r]_{b_2} & \circ \ar[r]_{b_3} & \cdots \ar[r]_{b_{n-1}} 
+			& \circ \ar[lllu]_{b_n} \\
+		} + \xymatrix@R=2em@C=1em{
+			\bullet \ar[d]_{a_1} \\
+			\circ \ar[r]_{a_2} & \circledast \ar[r]_{a_3} \ar[d]_{b_1}
+			& \cdots \ar[r]_{a_{m-1}} & \circ \ar[lllu]_{a_m} \\
+			& \circ \ar[r]_{b_2} & \circ \ar[r]_{b_3} & \cdots \ar[r]_{b_{n-1}} 
+			& \circ \ar[lllu]_{b_n} \\
+		} \\
+		& + \cdots + \xymatrix@R=2em@C=1em{
+			\bullet \ar[d]_{a_1} \\
+			\circ \ar[r]_{a_2} & \circ \ar[r]_{a_3}
+			& \cdots \ar[r]_{a_{m-1}} & \circledast \ar[lllu]_{a_m} \ar[d]_{b_1} \\
+			& & & \circ \ar[r]_{b_2} & \circ \ar[r]_{b_3} & \cdots \ar[r]_{b_{n-1}} 
+			& \circ \ar[lllu]_{b_n} \\
+		}
+	\end{split}\end{equation*} %}
+
+	次の再帰式を考える。
+	\begin{equation}\label{eq:再帰式の例その一}\begin{split} %{
+		x = f_{00} + f_{10}xf_{11} + f_{20}xf_{21}xf_{22}
+		\quad\text{where }f_{ij}\in R\Word A
+	\end{split}\end{equation} %}
+	この再帰式は次の状態遷移図で書き表されるだろう。
+	\begin{equation}\label{eq:状態遷移の例その一}\xymatrix{
+		& \circ \ar[r]^{x\xtoto{}1} & \circ \ar[d]^{f_{11}} \\
+		& x \ar[r]^{f_{00}} \ar[u]^{f_{10}} \ar[ld]_{f_{20}} & 1 \\
+		\circ \ar[r]_{x\xtoto{}1} & \circ \ar[r]_{f_{21}}
+			& \circ \ar[r]_{x\xtoto{}1} & \circ \ar[ul]_{f_{22}} \\
+	}\end{equation}
+	ここで、辺$x\xtoto{}1$は再帰を表す。この状態遷移図の再帰を表す辺を次の
+	Brzozowski代数を用いてまとめていく。
+	\begin{equation*}\begin{split} %{
+		\eta_i^t\eta_j = \jump{i=j} \quad\text{for all }i,j\in\sizen
+	\end{split}\end{equation*} %}
+	\begin{todo}[状態遷移図の操作]\label{todo:状態遷移図の操作} %{
+		素な図形操作にまとめること。そして、
+		その素な図形操作を代数的に証明すること。
+		状態遷移を箙としてみると、始状態と終状態で特徴付けられるだろう。
+		慣習として状態遷移と箙は辺の向きが逆になる。状態遷移は任意の頂点$v$に
+		対して、終状態からの経路が少なくとも一つ、始状態への経路も少なくとも
+		一つ存在する箙として定義されるだろう。したがって、状態遷移の任意の
+		互いに異なる頂点$v_1,v_2$に対して\begin{equation*}\xymatrix@R=1em@C=1em{
+			& u \ar@{->>}[dl] \ar@{->>}[dr] \\
+			v_1 \ar@{->>}[dr] & & v_2 \ar@{->>}[dl] \\
+			& w \\
+		}\end{equation*}
+		となる経路が少なくとも一つづつ存在する。その二つの経路をBrzozowski代数
+		の元を用いてつなげると一つの経路にまとまる。そうやってBrzozowski代数で
+		経路をまとめていくと、最終的には終状態$1$と始状態$x$の間の経路に
+		まとまる。
+		\begin{equation*}\xymatrix{
+			1 \ar@<2pt>[r]^{\phi_{1}} & x \ar@<2pt>[l]^{\phi_{x}}
+		}\end{equation*} %}
+		そして、終状態と始状態が異なるときは、Fermionicな振動子$\theta,\theta^t$
+		を用いると辺が一つにまとまる。
+		\begin{equation*}\xymatrix{
+			1 \ar@(ur,dr)^{\theta\phi_{1}+\phi_{x}\theta^t}
+		}\end{equation*} %}
+		証明すべきは、状態遷移図が有限個のBosonicなBrzozowski代数と$0$または$1$
+		個のFermionicなBrzozowski代数のテンソル積で書けることだろう。
+		すると、文字を$R\Word A$係数Brzozowski代数のテンソル積とする文字列
+		の問題に帰着する。
+	\end{todo} %todo:状態遷移図の操作}
+	まず、辺$f_{10}$と$f_{20}$をまとめる。
+	\begin{equation*}\xymatrix@C=6em{
+		\circ \ar@(u,u)[rrr]^{f_{11}\eta_1} \ar[rd]_{f_{21}\eta_{20}} 
+			& \circ \ar[l]_{x\xtoto{}1} 
+			& x \ar[l]_{f_{10}\eta_1^t+f_{20}\eta_{20}^t} \ar[r]^{f_{00}} & 1 \\
+		& \circ \ar[r]_{x\xtoto{}1} & \circ \ar[ur]_{f_{22}} \\
+	}\end{equation*} %}
+	再帰を表す辺をまとめるときに、まとめる再帰の辺の前後の辺に対して
+	互いに簡約するBrzozowski代数の元を掛けておいて、再帰に入る前の情報を
+	保存できるようにしておく。再帰を抜けてきたところで、スタックに入っている
+	最後のBrzozowski代数の元の情報から次の状態遷移を決定する。
+	スタックには$\eta^t$が積まれていき、スタックに最後に積まれた$\eta^t$
+	をポップして$\eta$と積をとって$0$でないものが次の状態遷移となる。
+	残りの再帰もまとめると次のようになる。
+	\begin{equation*}\xymatrix@C=6em{
+		\circ \ar@(u,u)[rrr]^{f_{11}\eta_1+f_{22}\eta_{21}}
+			\ar@<-1ex>[r]_{f_{21}\eta_{20}\eta_{21}^t} 
+			& \circ \ar@<-1ex>[l]_{x\xtoto{}1} 
+			& x \ar[l]_{f_{10}\eta_1^t+f_{20}\eta_{20}^t} \ar[r]^{f_{00}} & 1 \\
+	}\end{equation*} %}
+	そして、再帰が収束するならば、辺$x\xtoto{}1$は辺$f_{00}$に帰着するので、
+	次のようになるだろう。
+	\begin{equation}\label{eq:二状態の状態遷移の例その一}\xymatrix@C=6em{
+		x \ar@(dl,ul)^{f_{10}\eta_1^t+f_{20}\eta_{20}^t} \ar@<1ex>[r]^{f_{00}} 
+			& 1\ar@(ur,dr)^{f_{11}\eta_1+f_{22}\eta_{21}}
+			\ar@<1ex>[l]^{f_{21}\eta_{20}\eta_{21}^t} \\
+	}\end{equation} %}
+	この状態遷移図は正規表現なので再帰式\eqref{eq:再帰式の例その一}の解が
+	求まり次のようになる。
+	\begin{equation}\label{eq:再帰式の解の例その一}\begin{split} %{
+		x &= f_{00} + f_{10}xf_{11} + f_{20}xf_{21}xf_{22} \\
+		&= \braket{X} \\
+		X &= F_0^*F_{01} + F_0^*F_{01}F_1^*F_{10}F_0^*F_{01} 
+			+ F_0^*F_{01}(F_1^*F_{10}F_0^*F_{01})^2 + \cdots \\
+		&= F_0^*F_{01}Y^* \\
+		Y &= F_1^*F_{10}F_0^*F_{01} \\
+		F_0 &= f_{10}\eta_1^t+f_{20}\eta_{20}^t \\
+		F_1 &= f_{11}\eta_1+f_{22}\eta_{21} \\
+		F_{01} &= f_{00} \\
+		F_{10} &= f_{21}\eta_{20}\eta_{21}^t \\
+	\end{split}\end{equation} %}
+	再帰式\eqref{eq:再帰式の例その一}から状態遷移図
+	\eqref{eq:状態遷移の例その一}はドラゴンブック\cite{aho:dragon}の
+	'firsts-follows'の方法で求まる。状態遷移図からそのまま
+	解\eqref{eq:再帰式の解の例その一}が得られる。
+
+	Fock空間での解\eqref{eq:再帰式の解の例その一}の$X$をBrzozowski微分して
+	いけば、入力文字列が文法のどのパターンに一致するかを判定するプログラム
+	になる。しかし、入力文字列のどの部分が文法のどの字句に対応しているかを
+	判定するプログラムを書くためには再帰処理以外の考察が必要になる。
+	曖昧さの問題を解決する必要がある。
+	曖昧さの問題は再帰とは独立に考えることができる。
+	曖昧さの問題は正規言語の範囲で定式化できる。
+
+	インデック言語を考えてみる。インデックス言語の文法
+	$x=\sum_{n\in\sizen}a^nb^nc^n$の状態遷移は次のようになる。
+	\begin{equation*}\xymatrix@R=1em@C=1em{
+		& & & x \ar[dl]_a \\
+		& & \ar[dl]_a \circ \ar[rr]^b & & \circ \ar[ul]_c \\
+		& \circ \ar[dl]_a \ar[rr]^b & & \circ \ar[rr]^b & & \circ \ar[ul]_c \\
+		\cdots & & & & & & \cdots \ar[ul]_c \\
+	}\end{equation*}
+	解は$x=\braket{(a\eta_a^t)^*(b\eta_a\eta_b^t)^*(c\eta_b)^*}$となる。
+
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[再帰図の定義] 状態遷移図を簡易に記述した図として定義する。
+		\item[再帰図と箙の関係] 再帰図を簡約すると箙になる。
+		再帰図から生成された経路は箙から生成された経路の部分空間となる。
+		再帰図から生成された経路も箙から生成された経路もモノイドとなるから、
+		箙から生成された経路から再帰図から生成された経路への射影は経路の積と
+		コンパチブルになるはずである。
+	\end{description} %}
+
+	\begin{todo}[箙の表現]\label{todo:箙の表現} %{
+		新たに再帰図を定義する必要がないかもしれない。
+		再帰図というのは頂点数が無限個の箙の一種として定義できるかもしれない。
+	\end{todo} %todo:箙の表現}
+	\begin{equation*}\begin{array}{ccl} %{
+		\xymatrix{
+			& y_1 \ar[d]_{\gamma_{10}} & y_2 \ar[l]_{x\xfromfrom{}1} \\
+			& x & 1 \ar[l]_{\gamma_{00}} 
+				\ar[rd]^{\gamma_{22}} \ar[u]_{\gamma_{11}} \\
+			z_1 \ar[ru]^{\gamma_{20}} & z_2 \ar[l]^{x\xfromfrom{}1} 
+				& z_3 \ar[l]^{\gamma_{21}} & z_4 \ar[l]^{x\xfromfrom{}1} \\
+		} &\xmapsto{\rho}& \begin{split}
+			x &= (\rho\gamma_{00}) 
+				+ (\rho\gamma_{10})x(\rho\gamma_{11}) \\
+				&\;+ (\rho\gamma_{20})x(\rho\gamma_{21})x(\rho\gamma_{22})
+		\end{split} \\
+		\\
+		\bar{\downarrow}\;\text{trancate}
+			& & \underline{\uparrow}\;\text{project} \\
+		\\
+		\xymatrix{
+			x \ar@<-1ex>[r]_{\gamma_{21}} \ar@(ul,dl)_{\gamma_{10}+\gamma_{20}} 
+				& 1 \ar@<-1ex>[l]_{\gamma_{00}} 
+					\ar@(dr,ur)_{\gamma_{11}+\gamma_{22}}
+		} &\xmapsto{\rho}& \begin{split}
+			x &= \bigl(y(\rho\gamma_{21})\bigr)^*y\\
+			y &= (\rho\gamma_{10}+\rho\gamma_{20})^*(\rho\gamma_{00})
+				(\rho\gamma_{11}+\rho\gamma_{22})^*
+		\end{split}
+	\end{array}\end{equation*} %}
+
+	箙から生成された経路を次のように射影すればよいかな？
+	\begin{equation*}\begin{split} %{
+		x &= \braket{\hat{x}} \\
+		\hat{x} &= \bigl(\hat{y}(\rho\gamma_{21})\bigr)^*\hat{y} \\
+		\hat{y} &= (\rho\gamma_{10}+\rho\gamma_{20})^*(\rho\gamma_{00})
+			(\rho\gamma_{11}+\rho\gamma_{22})^* \\
+	\end{split}\end{equation*} %}
+	$R\Word A$係数Fock空間への表現$\rho$を次のように定義する。
+	\begin{equation*}\begin{array}{ccc} %{
+		\rho\gamma_{00} = \rho_{00},
+		& \rho\gamma_{10} = \rho_{10}\eta_{1}^t,
+		& \rho\gamma_{11} = \rho_{10}\eta_{1} \\
+		\rho\gamma_{20} = \rho_{20}\eta_{20}^t,
+		& \rho\gamma_{21} = \rho_{21}\eta_{20}\eta_{21}^t,
+		& \rho\gamma_{22} = \rho_{22}\eta_{21} \\
+		\eta_1^t\eta_1 = 1,
+		& \eta_{2i}^t\eta_{2j} = \jump{i=j},
+		& \eta_{2i}^t\eta_1 = \eta_1^t\eta_{2i} = 0
+	\end{array}\end{equation*} %}
+	ここで、$\rho_{ij}\in R\Word A$とした。
+%s1:Fock空間に向けて}
+\endgroup %}

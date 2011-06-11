@@ -1,20 +1,21 @@
 package indices;
 
 import tiny.primitive.LongArray;
+import tiny.primitive.LongArrayList;
 import tiny.primitive.LongPushable;
 
 public class IndexRangeHelper {
 	protected static final int INDEX_BITS = Integer.SIZE;
 	public static final int INDEX_MASK = Integer.MAX_VALUE;
 	public static final long EMPTY_RANGE = 0;
-	protected static final ThreadLocal<SimpleLongArray> RANGE_ARRAY = new ThreadLocal<SimpleLongArray>() {
+	protected static final ThreadLocal<LongArrayList> RANGE_ARRAY = new ThreadLocal<LongArrayList>() {
 		@Override
-		protected SimpleLongArray initialValue() {
-			return new SimpleLongArray();
+		protected LongArrayList initialValue() {
+			return new LongArrayList();
 		}
 	};
 
-	protected static SimpleLongArray getRangeArray() {
+	protected static LongArrayList getRangeArray() {
 		return IndexRangeHelper.RANGE_ARRAY.get();
 	}
 
@@ -57,8 +58,8 @@ public class IndexRangeHelper {
 		return EMPTY_RANGE;
 	}
 	public static LongArray and(long[] xs, long y) {
-		SimpleLongArray buffer = getRangeArray();
-		buffer.popAll();
+		LongArrayList buffer = getRangeArray();
+		buffer.removeAll();
 		and(buffer, xs, y);
 		return buffer;
 	}

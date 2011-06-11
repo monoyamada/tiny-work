@@ -1,7 +1,6 @@
 package tiny.function;
 
-public interface Popable<Value>  {
+public interface Popable  {
 	public boolean isEmpty();
-	public Value peekValue(Value def);
 	public boolean pop();
 }

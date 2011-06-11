@@ -1,5 +1,15 @@
 \tip {
 	\title {
+		Brzozowski derivative
+	} \body {
+		derivativeを日本語に訳すと導分になるのだろうか。
+		derivativeを微分と訳すことが多いが、Brzozowski derivativeは
+		シャッフル積に対してのみライプニッツ則を満たし、連結積に対しては
+		ライプニッツ積を満たさないために微分という言葉は適当でないと思う。
+		derivateiveに対する適当な日本語が思いつかない。
+	}
+} \tip {
+	\title {
 		コードページ
 	} \body {
 		文字の符号化方法を数字で表したものをコードページという。

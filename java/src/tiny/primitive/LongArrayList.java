@@ -2,7 +2,7 @@ package tiny.primitive;
 
 import tiny.lang.ArrayHelper;
 
-public class LongArrayList extends AbLongList implements LongPushable {
+public class LongArrayList extends AbLongList implements LongStack {
 	private long[] array;
 	private int size;
 
@@ -86,7 +86,7 @@ public class LongArrayList extends AbLongList implements LongPushable {
 	}
 	@Override
 	protected Number doGetValue(int index) {
-		return null;
+		return Long.valueOf(this.doGet(index));
 	}
 	public boolean isFull() {
 		return Integer.MAX_VALUE <= this.getLength();
@@ -104,5 +104,34 @@ public class LongArrayList extends AbLongList implements LongPushable {
 		final long[] newArray = new long[this.size];
 		System.arraycopy(this.array, 0, newArray, 0, this.size);
 		return newArray;
+	}
+	@Override
+	public boolean isEmpty() {
+		return this.size < 1;
+	}
+	@Override
+	public boolean pop() {
+		int n = this.size;
+		if (n < 1) {
+			return false;
+		}
+		this.remove(n - 1);
+		return true;
+	}
+	@Override
+	public long peek(long def) {
+		int n = this.size;
+		if (n < 1) {
+			return def;
+		}
+		return this.doGet(n - 1);
+	}
+	@Override
+	public Number peekValue(Number def) {
+		int n = this.size;
+		if (n < 1) {
+			return def;
+		}
+		return this.doGetValue(n - 1);
 	}
 }

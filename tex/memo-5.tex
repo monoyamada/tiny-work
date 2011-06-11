@@ -1,0 +1,2203 @@
+\begingroup %{
+	\newcommand{\Tree}{\ensuremath{\mathcal{T}}}
+	\newcommand{\treeu}{\ensuremath{1_\Tree}}
+	\newcommand{\Forget}{\ensuremath{\mathcal{U}}}
+	\newcommand{\Word}{\ensuremath{\mathcal{W}}}
+	\newcommand{\wordu}{\ensuremath{1_{\Word}}}
+	\newcommand{\word}[1]{\ensuremath{[{#1}]}}
+	\newcommand{\push}{\ensuremath{\myop{push}}}
+	\newcommand{\pop}{\ensuremath{\myop{pop}}}
+	\newcommand{\Nothing}{\ensuremath{\myop{None}}}
+	\newcommand{\none}{\ensuremath{\myop{none}}}
+	\newcommand{\Maybe}{\ensuremath{\myop{Maybe}}}
+	\newcommand{\onto}{\ensuremath{\myop{onto}}}
+	\newcommand{\lin}{\ensuremath{\myop{lin}}}
+	\newcommand{\map}{\ensuremath{\myop{map}}}
+	\newcommand{\defeq}{\ensuremath{\overset{\mathrm{def}}{=}}}
+	%
+\section{多項式再帰の状態遷移}\label{s1:多項式再帰の状態遷移} %{
+	文字列を係数とする多項式によって定義された再帰式を状態遷移図を使って
+	形式解を求める方法を考える。まず、数学的な定義にこだわらずに、
+	簡単な例を使ってその様子を見た後で、数学的な定義に
+	基づいてその内容を調べることにする。
+
+\subsection{簡単な例}\label{s2:簡単な例} %{
+	$R$を標数$0$の半環、$A$を集合とする。$R$係数自由半モジュール$R\Word A$
+	に定義された文字列の連結による積を$m$、シャッフル積を$m_\shuffle$と書く。
+	$R\Word A$上の$x$を変数とする多項式全体のつくる集合を$R\Word A[x]$と
+	書く。
+	
+	次の$R\Word A[x]$の再帰式を考える。
+	\begin{equation}\label{eq:再帰式の例}\begin{split} %{
+		x &= f_0 + f_1x + f_2x^2
+		,\quad f_0,f_1,f_2\in R\Word A
+	\end{split}\end{equation} %}
+	この再帰式は次のような状態遷移によって表されるだろう。
+	\begin{equation*}\begin{split} %{
+		x &= f_0 + f_1x + f_2x^2 \\
+		x^2 &= (f_0 + f_1x + f_2x^2)x \\
+			&= f_0x + f_1x^2 + f_2x^3 \\
+		\cdots \\
+		x^{n+1} &= f_0x^n + f_1x^{n+1} + f_2x^{n+2} \\
+		\cdots \\
+	\end{split}\end{equation*} %}
+	状態遷移図を書くと次のようになる。
+	\begin{equation}\label{eq:再帰式の例の状態遷移図}\xymatrix{
+		1 & x \ar@(ur,ul)_{f_1} \ar[l]^{f_0} \ar@<1ex>[r]^{f_2}
+		& x^2 \ar@(ur,ul)_{f_1} \ar@<1ex>[l]^{f_0} \ar@<1ex>[r]^{f_2}
+		& x^3 \ar@(ur,ul)_{f_1} \ar@<1ex>[l]^{f_0} \ar@<1ex>[r]^{f_2}
+		& \cdots \ar@<1ex>[l]^{f_0}
+	}\end{equation}
+	この状態遷移をBrzozowski代数$\set{\eta,\eta^t}$を用いて表すと
+	次のようになるだろう。
+	\begin{equation}\label{eq:再帰式の例の形式解}\begin{split} %{
+		x &= \bra{0}\bigl(f_0\eta + f_1 + f_2\eta^t\bigr)^*\ket{0}f_0
+	\end{split}\end{equation} %}
+	ここで、Fock空間は次のように定義している\footnote {
+		ここで定義したFock空間は、$H=\set{\eta}$として、$R\Word\set{\eta}$から
+		$R\Word A$への線形写像全体のつくる空間$\simeq R\Word A\otimes R\Word H$
+		から構成するのが素直なやり方だろう。
+		ここでは、定義の羅列を避けるために、ぼんやりとFock空間を定義しておく。
+	}。
+	\begin{equation*}\begin{split} %{
+		\bra{0}\text{ and }\ket{0}\text{ are commutative with }\Word A \\
+		\begin{array}{cc}
+			(f\eta)(g\eta) = fg\eta^2, & (f\eta^t)(g\eta^t) = fg\eta^{2t} \\
+			(f\eta^t)(g\eta) = fg, & (f\eta)(g\eta^t) = fg\eta\eta^t
+		\end{array} \quad\text{for all }f,g\in R\Word A \\
+		\bra{0}\eta = 0 = \eta^t\ket{0} \\
+	\end{split}\end{equation*} %}
+	通常の昇降演算子のダガー$-^\dag$の使い方と転置$-^t$の使い方を逆転している
+	ことに注意すること。
+	再帰式\eqref{eq:再帰式の例}の形式解が\eqref{eq:再帰式の例の形式解}で
+	与えられることを証明する。
+	\begin{proof} %{
+		形式解\eqref{eq:再帰式の例の形式解}を摂動の次数
+		を表す係数$t\in R$を用いて書き直すと次のようになる。
+		\begin{equation*}\begin{split} %{
+			\theta &= f_0\eta + f_1 + f_2\eta^t \\
+			x_t &= \bra{0}\bigl(t\theta\bigr)^*\ket{0}f_0 \\
+			&= f_0 + tf_1f_0 + t^2(f_1^2+f_2f_0)f_0 + \cdots \\
+		\end{split}\end{equation*} %}
+		摂動係数は次のような変換で導入することができる。
+		\begin{equation*}\begin{split} %{
+			(f_0,f_1,f_2) &\mapsto (f_0, tf_1, t^2f_2)
+		\end{split}\end{equation*} %}
+		したがって、もとの再帰式\eqref{eq:再帰式の例}には次のように摂動係数
+		$t\in R$が入る。
+		\begin{equation}\label{eq:摂動係数つき再帰式の例}\begin{split} %{
+			x_t &= f_0 + tf_1x_t + t^2f_2x_t^2
+		\end{split}\end{equation} %}
+		この式の解を摂動係数について冪展開して$x_t=x_0+tx_1+t^2x_2+\cdots$
+		とすると次の漸化式が得られる。
+		\begin{equation}\label{eq:再帰式の例の漸化式}\begin{split} %{
+			x_0 &= f_0 \\
+			x_1 &= f_1x_0 \\
+			x_2 &= f_1x_1 + f_2x_0^2 \\
+			\cdots \\
+			x_{n+1} &= f_1x_n + f_2\sum_{p=0}^{n-1}x_px_{n-p-1} \\
+			\cdots \\
+		\end{split}\end{equation} %}
+		帰納法により任意の$n\in\sizen$で$\bra{0}\theta^n\ket{0}f_0=x_n$
+		が成り立つことを証明する。$\braket{0|0}f_0=x_0$と
+		$\bra{0}\theta\ket{0}f_0=x_1$が成り立つことは計算してみればわかる。
+		ある$n\in\sizen$で命題が成り立つと仮定する。この時、漸化式
+		\eqref{eq:再帰式の例の漸化式}の$x_p$に$\bra{0}\theta^p\ket{0}f_0$を代入
+		した次の式が成り立つことが示されれば、$n+1$でも命題が成り立ち、帰納法
+		により任意の$n\in\sizen$に対して命題が証明される。
+		\begin{equation*}\begin{split} %{
+			\bra{0}\theta^{n+1}\ket{0}f_0 
+			&= f_1\bra{0}\theta^{n}\ket{0}f_0 + f_2\sum_{p=0}^{n-1}
+				\bra{0}\theta^{p}\ket{0}f_0\bra{0}\theta^{n-p-1}\ket{0}f_0 \\
+		\end{split}\end{equation*} %}
+		この式から右端の$f_0$を取り去ると次の式が得られるが、
+		\begin{equation*}\begin{split} %{
+			\bra{0}\theta^{n+1}\ket{0} 
+			&= f_1\bra{0}\theta^{n}\ket{0} + f_2\sum_{p=0}^{n-1}
+				\bra{0}\theta^{p}\ket{0}f_0\bra{0}\theta^{n-p-1}\ket{0} \\
+		\end{split}\end{equation*} %}
+		この式の左辺は次のようになるから、
+		\begin{equation*}\begin{split} %{
+			\text{lhs} &= \bra{0}(f_0\eta+f_1+f_2\eta^t)\theta^n\ket{0} 
+				+ f_1\bra{0}\theta^n\ket{0} + f_2\bra{0}\eta^t\theta^n\ket{0} 
+		\end{split}\end{equation*} %}
+		証明すべき式は次のようになる。
+		\begin{equation}\label{eq:再帰式の例の証明すべき式}\begin{split} %{
+			\bra{0}\eta^t\theta^n\ket{0} &= \sum_{p=0}^{n-1}
+				\bra{0}\theta^{p}\ket{0}f_0\bra{0}\theta^{n-p-1}\ket{0}
+		\end{split}\end{equation} %}
+		この式は状態遷移図\eqref{eq:再帰式の例の状態遷移図}から明らかで、
+		次の状態遷移の分割の仕方を表している。
+		\begin{equation*}\begin{split} %{
+			(x^2\xtoto{n\text{ steps}}x) &= \sum_{p=0}^{n-1}
+				(x^2\underset{\set{x^2,x^3,\dots}}{\xtoto{p\text{ steps}}}x^2)
+				\underbrace{(x^2\xtoto{1\text{ step}}x)}_{f_0}
+				(x\xtoto{n-p-1\text{ steps}}x) \\
+			(x^2\xtoto{n\text{ steps}}x)
+				&= \text{$x^2$から$x$への$n$ステップの状態遷移による寄与} \\
+			(x^2\underset{\set{x^2,x^3,\dots}}{\xtoto{p\text{ steps}}}x^2)
+				&= \text{$x^2$から$x^2$への$x$を通らない$p$ステップの状態遷移による寄与} \\
+			(x\xtoto{n\text{ steps}}x)
+				&= \text{$x$から$x$への$n-p-1$ステップの状態遷移による寄与} \\
+		\end{split}\end{equation*} %}
+		証明すべき式\eqref{eq:再帰式の例の証明すべき式}は命題
+		\ref{prop:Brzozowski代数による漸化式}で$m=0$とした場合である。
+		したがって、$n+1$に対しても命題が成り立つことがわかる。
+	\end{proof} %}
+
+	\begin{proposition}[Brzozowski代数による漸化式]
+	\label{prop:Brzozowski代数による漸化式} %{
+		任意の$m,n\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\braket{\eta^{(m+1)t}\theta^{m+n}}
+			&= \sum_{p=0}^n\braket{\theta^p}f_0\braket{\eta^{mt}\theta^{m+n-p}}
+		\end{split}\end{equation*} %}
+		ここで、$\braket{\cdots}=\bra{0}\cdots\ket{0}$とおいた。
+	\end{proposition} %prop:Brzozowski代数による漸化式}
+	\begin{proof} %{
+		$\theta_m^n=\braket{\eta^{mt}\theta^n}$とおく。この記号を用いると
+		証明すべき式は次のようになる。
+		\begin{equation*}\begin{split} %{
+			\theta_{m+1}^n = \sum_{p=0}^n\theta_0^pf_0\theta_m^{n-p}
+		\end{split}\end{equation*} %}
+		この式を帰納法で証明する。まず、$n=0$のとき、
+		$\theta_{m+1}^0=\braket{\eta^{(m+1)t}\theta^{m+1}}=f_0^{m+1}$
+		となるが、
+		$\theta_0^0f_0\theta_m^0=f_0\braket{\eta^{mt}\theta^m}=f_0^{m+1}$
+		となるから、任意の$m\sizen$で命題が成り立つことがわかる。
+		ある$n\in\sizen$で任意の$m\in\sizen$で命題が成り立つと仮定する。
+		この時、次の式が成り立つが、
+		\begin{equation*}\begin{split} %{
+			\theta_{m+1}^{n+1}
+			&= f_0\theta_m^{n+1} + f_1\theta_{m+1}^n + f_2\theta_{m+2}^{n-1}
+		\end{split}\end{equation*} %}
+		帰納法の仮定より、次の式と
+		\begin{equation*}\begin{split} %{
+			f_1\theta_{m+1}^n &= f_1\sum_{p=0}^n\theta_0^pf_0\theta_m^{n-p} \\
+			&= \theta_0^1f_0\theta_m^n 
+				+ f_1\sum_{p=1}^n\theta_0^pf_0\theta_m^{n-p}
+		\end{split}\end{equation*} %}
+		次の式が成り立つから、
+		\begin{equation*}\begin{split} %{
+			\theta_{m+2}^{n-1} 
+			&= \sum_{p=0}^{n-1}\theta_0^pf_0\theta_{m+1}^{n-p-1} \\
+			&= \sum_{p=1}^n\theta_0^{p-1}f_0\theta_{m+1}^{n-p} \\
+			&= \sum_{p=1}^n\sum_{q=0}^{n-p}\theta_0^{p-1}f_0\theta_0^qf_0
+				\theta_m^{n-p-q} \\
+			&= \sum_{p=1}^n\sum_{q=1}^p\theta_0^{p-q}f_0\theta_0^{q-1}f_0
+				\theta_m^{n-p} \\
+		\end{split}\end{equation*} %}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			f_1\theta_{m+1}^n + f_2\theta_{m+2}^{n-1}
+			&= \theta_0^1f_0\theta_m^n 
+				+ \sum_{p=1}^n(
+					f_1\theta_0^p + f_2\sum_{q=1}^p\theta_0^{p-q}f_0\theta_0^{q-1}
+				)f_0\theta_m^{n-p} \\
+			&= \theta_0^1f_0\theta_m^n  
+				+ \sum_{p=1}^n\theta_0^{p+1}f_0\theta_m^{n-p} \\
+			&= \sum_{p=0}^n\theta_0^{p+1}f_0\theta_m^{n-p} \\
+		\end{split}\end{equation*} %}
+		ここで、帰納法の仮定より成り立つ任意の$p\le n$に対する次の式を使った。
+		\begin{equation*}\begin{split} %{
+			\theta_0^{p+1} &= f_1\theta_0^p + f_2\theta_1^{p-1} \\
+			&= f_1\theta_0^p 
+				+ f_2\sum_{q=0}^{p-1}t\theta_0^qf_0\theta_0^{p-q-1} \\
+		\end{split}\end{equation*} %}
+		以上より次の式が成り立ち、命題が$n+1$に対しても成り立つことがわかる。
+		\begin{equation*}\begin{split} %{
+			\theta_{m+1}^{n+1}
+			&= f_0\theta_m^{n+1} + \sum_{p=0}^n\theta_0^{p+1}f_0\theta_m^{n-p} \\
+			&= f_0\theta_m^{n+1} 
+				+ \sum_{p=1}^{n+1}\theta_0^pf_0\theta_m^{n-p+1} \\
+			&= \sum_{p=0}^{n+1}\theta_0^pf_0\theta_m^{n-p+1} \\
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+
+	再帰式
+	\begin{equation*}\begin{split} %{
+		x_t = f_0 + tf_1x_t + t^2f_2x_t^2
+	\end{split}\end{equation*} %}
+	の解がBrzozowski代数を用いて
+	\begin{equation*}\begin{split} %{
+		x_t = \braket{\bigl(t(f_0\eta + f_1 + f_2\eta^t)\bigr)^*}f_0
+	\end{split}\end{equation*} %}
+	と書けることがわかったが、摂動係数のとり方を変えた次のような再帰式の解
+	はどのようになるだろうか。
+	\begin{equation}\label{eq:再帰部分の摂動係数}\begin{split} %{
+		x_t = f_0 +t(f_1x_t + f_2x_t^2)
+	\end{split}\end{equation} %}
+	$f_0$と$f_1$が現れる度に$t$の冪が一つ上がればよいから次のようになる
+	だろう。
+	\begin{equation*}\begin{split} %{
+		x_t = \braket{\bigl(f_0\eta + t(f_1 + f_2\eta^t)\bigr)^*}f_0
+	\end{split}\end{equation*} %}
+	式\label{eq:再帰部分の摂動係数}の解について誤った方向に進んでしまった
+	ので、その間違いを書いておく。微分方程式との類似から、
+	式\label{eq:再帰部分の摂動係数}の解が次の形で得られるのではないかと
+	予想した。
+	\begin{equation}\label{eq:再帰部分の摂動級数}\begin{split} %{
+		\tau &= (f_1\eta_\shuffle + f_2\eta_\shuffle^2)\eta_\shuffle^t \\
+		x_t &= \bra{f_0}(t\tau)^*\eta_\shuffle\ket{0} \\
+	\end{split}\end{equation} %}
+	この式は係数の半環$R$が冪等の時のみ再帰式\eqref{eq:再帰部分の摂動係数}の
+	解になるようだ。少なくとも、$R$が冪等でないときは解にならない。
+	ここで、$\alpha\eta_\shuffle^t$は$\eta_\shuffle$を
+	$\alpha\in R\Word A[\eta]$に置換する線形作用素である。
+	\begin{equation*}\begin{split} %{
+		\alpha\eta_\shuffle^t(f_0\eta_\shuffle f_1\eta_\shuffle f_2)
+		= f_0\alpha f_1\eta_\shuffle f_2 +  f_0\eta_\shuffle f_1\alpha f_2
+			+ (f_0\eta_\shuffle f_1\eta_\shuffle f_2)\alpha\eta_\shuffle^t \\
+		\quad\text{for all }f_0,f_1,f_2\in R\Word A,\;\alpha\in R\Word A[\eta]
+	\end{split}\end{equation*} %}
+	$\eta_\shuffle$と$\eta_\shuffle^t$は通常のWeyl代数だが、$R\Word A$係数の
+	扱いが異なる。
+	\begin{equation*}\begin{split} %{
+		\alpha\eta_\shuffle^t \beta\eta_\shuffle^t \neq fg\eta_\shuffle^{2t}
+		\quad\text{for }\alpha,\beta\in R\Word A[\eta_\shuffle]
+		\text{ in general}
+	\end{split}\end{equation*} %}
+	式\eqref{eq:再帰部分の摂動係数}の解を摂動係数について冪展開して
+	$x_t=x_0+tx_1+t^2x_2+\cdots$とすると次の漸化式が得られる。
+	\begin{equation}\label{eq:再帰部分の漸化式}\begin{split} %{
+		x_0 &= f_0 \\
+		x_1 &= f_1x_0 + f_2x_0^2 \\
+		x_2 &= f_1x_1 + f_2(x_0x_1 + x_1x_0) \\
+		\cdots \\
+		x_{n+1} &= f_1x_n + f_2\sum_{p=0}^nx_px_{n-p} \\
+		\cdots \\
+	\end{split}\end{equation} %}
+	一方、$\bra{f_0}(t\tau)^n\eta_\shuffle\ket{0}$を$n=3$まで計算すると、
+	三次の項の係数が異なることがわかる。
+	\begin{equation*}\begin{array}{ccccc} %{
+		\bra{f_0}\eta_\shuffle\ket{0} &=& f_0 &=& x_0 \\
+		\bra{f_0}\tau\eta_\shuffle\ket{0} &=& f_1x_0 + f_2x_0^2 &=& x_1 \\
+		\bra{f_0}(\tau\eta_\shuffle)^2\ket{0}
+			&=& f_1x_1 + f_2(x_1x_0 + x_0x_1) &=& x_2 \\
+		\bra{f_0}(\tau\eta_\shuffle)^3\ket{0}
+			&=& f_1x_2 + f_2(x_2x_0 + x_0x_2 + 2x_1^2) &\neq& x_3 \\
+	\end{array}\end{equation*} %}
+	$2x_1^2$のところを$x_1^2$に変えたものが漸化式\eqref{eq:再帰部分の漸化式}
+	の$x_3$である。多分$\bra{f_0}\tau^*\eta_\shuffle\ket{0}$は再帰式
+	$x=f_0+f_1x+f_2x^2$の係数を過剰勘定(over count)したものになるだろう。
+	ちなみに、微分方程式
+	\begin{equation*}\begin{split} %{
+		\partial_tx_t &= f_0 + f_1x_t + f_2x_t^2
+	\end{split}\end{equation*} %}
+	の形式解は次のようになる。
+	\begin{equation*}\begin{split} %{
+		\bra{f_0}\exp(t\tau)\eta_\shuffle\ket{0}
+		&= f_0 + t\int_0^tds(f_1x_s+f_2x_s^2)
+	\end{split}\end{equation*} %}
+	この式の左辺がFock空間を用いた形式解で、右辺がPicard逐次近似の式である。
+	係数$R$が冪等半環の場合、積分は恒等写像になってしまうので右辺は再帰式
+	$f_0+t(f_1x_t+f_2x_t^2)$になり、指数関数$\exp$はKleeneスターになる。
+	したがって、$R$が冪等半環であれば、
+	$\bra{f_0}\exp(t\tau)\eta_\shuffle\ket{0}
+	=\bra{f_0}(t\tau)^*\eta_\shuffle\ket{0}$
+	が再帰式$f_0+t(f_1x_t+f_2x_t^2)$の解を与えると予想される。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[空遷移] $\braket{(f_0\eta^t+f_1+f_2\eta)^*}$で
+			$f_2=\wordu$の時にどうなるかを調べること。
+			$f_2=\wordu$の場合の状態遷移図は次のようになることが予想される。
+			\begin{equation*}\xymatrix{
+				1 & x^+ \ar@(ur,ul)_{f_1+f_0} \ar[l]^{f_0}
+			}\end{equation*}
+			代数的にこのことを導くこと。
+			もう少し一般化すると、$f_i=\sum_{w\in \Word A}f_{iw}w$として、
+			$f_0\eta^t+f_1+f_2\eta=\sum_{w\in\Word A}w\phi_w$というように
+			書き直せる。ここで、$\phi_w=f_{0w}\eta^t+f_{1w}+f_{2w}\eta$とする。
+			プログラミングの言葉ではNFAをDFAに書き換えることに相当する。
+			このとき、和の中の$\wordu\phi_{\wordu}$という項が$0$でないとき、
+			この項を消去してしまうことができると予想される。
+			\item[一般化] 線形とは限らない一般の自己写像の空間$\map R\Word A$
+			に次の畳み込みによって半環の構造を定義する。
+			\begin{equation*}\begin{split} %{
+				(\phi_1\square\phi_2)f = (\phi_1 f)\square(\phi_2 f)
+				\quad\text{for all }\phi_1,\phi_2\in\map R\Word A,\;f\in R\Word A
+			\end{split}\end{equation*} %}
+			さらに、$1:1$埋め込み$f\mapsto\text{$f$への恒等写像}$によって
+			$R\Word A$上の半代数の構造が定義できる。単位射は$\wordu$への恒等写像
+			となる。再帰式の右辺の多項式などはすべてこの半代数に含まれる。
+			%
+			\item[代数多様体] algebraic varietyを翻訳したもの。
+			\item[アフィン代数多様体] affine algebraic varietyを翻訳したもの。
+			\item[algebraic variety] アフィン代数多様体を一般化したものを
+			代数多様体という。
+			\item[affine algebraic variety] 
+			アフィン代数的集合$V$がある真部分集合$V_1,V_2,\dots,V_m\subset Vf$
+			の直和として書けるとき$Vf=V_1+V_2+\cdots+V_m$、$V$を可約、
+			書けないとき、$V$を既約なアフィン代数的集合という。
+			既約なアフィン代数的集合をアフィン代数多様体という。
+			\item[affine algebraic set] $K$を代数的閉体とする。
+			$K$上の$r$個の$n$変数多項式$f=(f_1,f_2,\dots,f_r)$のゼロ点の集合を
+			アフィン代数的集合という。
+			多項式$f$によって定められるアフィン代数的集合を$Vf$と書くと、
+			$Vf=\set{x\in k^n\bou f_0x=f_1x=\cdots=f_rx=0}$となる。
+			\item[代数的閉体] $K$を体とする。$K$上の一次以上の任意の一変数多項式
+			$a_0+a_1x+a_2x^2+\cdots+a_mx^m$が$(x-b_1)(x-b_2)\cdots(x-b_m)$と
+			一次式の積として書けるとき、$K$を代数的閉体という。よく使う体では、
+			複素数が代数的閉体である。
+		\end{description} %}
+	\end{todo} %todo:ここまで}
+%s2:簡単な例}
+%s1:多項式再帰の状態遷移}
+
+\section{プログラミングでの文字列操作}\label{s1:プログラミングでの文字列操作} %{
+	プログラミングにおける文字列操作の用語を書いておく。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[スタック] LIFOとも言う。
+		\begin{equation*}\begin{split} %{
+			a\times\word{b_1\cdots b_m}
+			\overset{\push}{\underset{\pop}{\rightleftarrows}}
+			\word{ab_1\cdots b_m}
+		\end{split}\end{equation*} %}
+		\item[キュー] FIFOとも言う。
+		\begin{equation*}\begin{split} %{
+			a\times\word{b_1\cdots b_m} \xrightarrow{\myop{enqueue}}
+			\word{ab_1\cdots b_m} \xrightarrow{\myop{dequeue}}
+			\word{ab_1\cdots b_{m-1}}\times b_m
+		\end{split}\end{equation*} %}
+	\end{description} %}
+%s1:プログラミングでの文字列操作}
+\section{圏論}\label{s1:圏論} %{
+	\mycal{C}を圏とする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[monic] 射$h:B\to C$が次の式を満たすとき、$h$をmonicという。
+		\begin{equation*}\begin{split} %{
+			fh = gh \implies f = g 
+			\quad\text{for all }A\in\mycal{C},\;f,g\in \homset(A,B)
+		\end{split}\end{equation*} %}
+		集合の圏の場合、monicは$1:1$写像になる。
+		\item[epi] 射$f:A\to B$が次の式を満たすとき、$f$をepiという。
+		\begin{equation*}\begin{split} %{
+			fg = fh \implies g = h 
+			\quad\text{for all }C\in\mycal{C},\;g,h\in \homset(B,C)
+		\end{split}\end{equation*} %}
+		集合の圏の場合、epiは$\onto$写像になる。
+		\item[冪等射] 射$f:A\to A$が$f^2=f$となるとき、$f$を冪等射という。
+		\item[分裂射] 冪等射$f:A\to A$がある射$g,h:A\to A$があって$f=hg$かつ
+		$gh=\myid$となるとき、$f$を分裂射という。
+		\item[始対象] 任意の対象への射が唯一存在する対象を始対象という。
+		英語ではinitial objectという。
+		\item[終対象] 任意の対象からの射が唯一存在する対象を終対象という。
+		英語ではterminal objectという。final objectとは言わない。
+		\item[ゼロ対象] 始対象かつ終対象な対象をゼロ対象という。
+		英語ではzero objectまたはnull objectという。 
+	\end{description} %}
+	始対象と終対象は次のような例がある。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 集合の圏における空集合$\mybf{0}$は始対象とみなすことができる。
+		また、要素が一つだけからなる集合$\mybf{1}$は終対象となる。
+		空集合からの写像というものは考えることができないが、空集合から集合の圏
+		のすべての対象に射を表す矢印を一本づつ引いておけば都合が良いという
+		程度に考えておけばよいだろう。
+		\item 空でない集合の圏には始対象がない。
+		\item 半群の圏における要素を持たない半群は始対象とみなすことができる。
+		また、要素が一つだけからなる半群は終対象となる。
+		\item モノイドの圏における自明なモノイドはゼロ対象となる。
+		自明なモノイドとは単位元だけからなるモノイドである。
+		\item 半環の圏における自明な環はゼロ対象となる。
+		自明な半環とは乗法と加法の単位元を兼ねた元だけからなる半環$\set{0=1}$
+		である。
+	\end{itemize} %}
+\subsection{直積と直和}\label{s2:直積と直和} %{
+	圏論における直積と直和をおさらいする。
+
+	圏論における対象$A$と$B$の直積$C$とは、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 任意の対象$X$からの任意の射$f_A:X\to A$と$f_B:X\to B$に対して、
+		\item 次の図を可換にする$f$が唯一存在するような
+		\item 射$\pi_1:C\to A$と$\pi_2:C\to B$
+	\end{itemize} %}
+	が存在するとき、対象$C$を$A$と$B$の直積とい$A\times B$と書く。
+	また、射$\pi_1$と$\pi_2$を直積$A\times B$の標準射影という。
+	\begin{equation*}\begin{split} %{
+		\xymatrix{
+			& X \ar@{.>}[d]^{f} \ar[ld]_{f_A} \ar[rd]^{f_B} \\
+			A & C \ar[l]_{\pi_1} \ar[r]^{\pi_2} & B
+		} & \xymatrix{
+		}
+	\end{split}\end{equation*} %}
+
+	集合の圏の場合、標準射影は
+	$\pi_1(x_1\times x_2)=x_1,\;\pi_2(x_1\times x_2)=x_2$となり、
+	射$f_1:Y\to X_1,\;f_2:Y\to X_2$から作られる直積$X_1\times X_2$の射は
+	$(f_1\times f_2)\dup$となる。ここで、$\dup$は重複化の余積で
+	$(f_1\times f_2)\dup y=(f_1y)\times(f_2y)$となる。
+
+	圏論における直和は圏論における直積の圏論的な双対である。
+	\begin{equation*}\begin{split} %{
+		\xymatrix{
+			& X \\
+			A \ar[r]^{\iota_1} \ar[ru]^{f_A} & C \ar@{.>}[u]_{f} 
+			& B \ar[l]_{\iota_2} \ar[lu]_{f_B}
+		} & \xymatrix{
+		}
+	\end{split}\end{equation*} %}
+	対象$C$を$A$と$B$の直和とい$A\amalg B$もしくは$A\oplus B$もしくは
+	$A+B$等と書く。直積と異なり、直和の場合は分野ごとに様々な異なる呼び名
+	で呼ばれ、その記法も様々なものが使われている。また、単に直積と書かれて
+	いる場合でも、それが必ずしも圏論的な直和を意味しないこともある。
+	射$\iota_1$と$\iota_2$を直和$A\amalg B$の標準入射という。
+
+	集合の圏の場合、集合の合併(disjoint union)が直和となる。
+	標準入射は$\iota_1x=x\in X_1\amalg X_2,\;\iota_2x=x\in X_1\amalg X_2$
+	となり、射$f_1:X_1\to Y,\;f_2:X_2\to Y$から作られる直積$X_1\amalg X_2$
+	の射は
+	\begin{equation*}\begin{split} %{
+		(f_1\amalg f_2)x = \begin{cases}
+			x\in X_1, &\implies f_1x \\
+			x\in X_2, &\implies f_2x \\
+		\end{cases}\quad\text{for all }x\in X_1\amalg X_2
+	\end{split}\end{equation*} %}
+	となる。
+%s2:直積と直和}
+%s1:圏論}
+\section{再帰とwhile文}\label{s1:再帰とwhile文} %{
+	再帰プログラムをwhileプログラムに書き直すことを考える。
+
+	次の再帰プログラムfncを考えてみる。
+	\begin{lstlisting}[caption=再帰によるfnc, label=code:再帰によるfnc]
+	fnc: w: (X or Y) -> Z = {
+		if w in Y {
+			return unit w;
+		}
+		return push (id, fnc) pop w;
+	}
+	\end{lstlisting}
+	ここで、関数unitとpushとpopは既知で次の型の関数だとする。
+	\begin{equation*}\begin{array}{ccccc} %{
+		\myop{unit} &:& Y &\to& Z \\
+		\push &:& A\times Z &\to& Z \\
+		\pop &:& X &\to& A\times (X \cup Y) \\
+	\end{array}\end{equation*} %}
+	記号はpushとpopとしているが、集合$X\cup Y$は文字列とは限らないとする。
+	この関数は次のような状態遷移で書けるだろう。
+	\begin{equation}\label{eq:fncの状態遷移図}\xymatrix@C=16ex{
+		w \ar@{|->}[r]^{\pop} \ar@{|->}[d]^{w\in Y\implies \myop{unit}}
+			& a_1\times w_1 \ar@{|->}[r]^{\myid\times\pop}
+				\ar@{|->}[d]^{w_1\in Y\implies \myid\times\myop{unit}}
+			& a_1\times a_2\times w_2 \ar@{|->}[r]^{\myid\times\myid\times\pop} 
+				\ar@{|->}[d]^{w_2\in Y\implies \myid\times\myid\times\myop{unit}}
+			& \cdots \\
+		z & a_1\times z_1 \ar@{|->}[l]_{\myop{push}} 
+			& a_1\times a_2\times z_2 \ar@{|->}[l]_{\myid\times\push} 
+			& \cdots \ar@{|->}[l]_{\myid\times\myid\times\push} \\
+	}\end{equation}
+	ここで簡単のために$X$と$Y$の共通は無い$X\cap Y=\emptyset$とし、
+	直和集合を$X+Y$と書く。このとき、任意の写像$f:X+Y\to Z$に対して
+	次の図を可換にする写像$f_X$と$f_Y$が一意に定まる。
+	\begin{equation}\label{eq:写像の直和分解}\xymatrix{
+		X \ar[r]^{\iota} \ar@{.>}[rd]_{f_X} & X + Y \ar[d]^{f} 
+			& Y\ar[l]_{\iota} \ar@{.>}[ld]^{f_Y} \\
+		& Z \\
+	},\qquad fz = \begin{cases}
+		z\in X, &\implies f_Xz \\
+		z\in Y, &\implies f_Yz \\
+	\end{cases} \quad\text{for all }z\in X+Y
+	\end{equation}
+	したがって、集合の圏から半環$R$係数の半モジュールの圏への関手$R$を
+	考えると、半環への標準入射$\iota_R$を用いて任意の写像$f:X+Y\to Z$に
+	対して次の可換図が成り立ち、
+	\begin{equation*}\xymatrix{
+		X+Y \ar[r]^{\iota_R} \ar[d]^f & R(X+Y) \ar[d]^{Rf} \\
+		Z \ar[r]^{\iota_R} & RZ \\
+	}\end{equation*}
+	写像の直和分解\eqref{eq:写像の直和分解}を用いると、$Rf=Rf_X+Rf_Y$と
+	書くことができる。
+	\begin{equation*}\begin{array}{rclrcll} %{
+		(Rf_X)x &=& f_Xx, & (Rf_Y)x &=& 0 & \quad\text{for all }x\in RX \\
+		(Rf_X)y &=& 0, & (Rf_Y)y &=& f_Yy & \quad\text{for all }y\in RY \\
+	\end{array}\end{equation*} %}
+	この$1:1$対応を用いて、if-elseより扱いが容易な加法を用いて関数fncを
+	変形していくことにする。
+	\begin{equation}\label{eq:線形化したfnc}\begin{split} %{
+		\myop{fnc} = \myop{unit} + \push(\myid\otimes\myop{fnc})\pop \\
+		\myop{unit}X = 0,\qquad \myop{split}Y = 0
+	\end{split}\end{equation} %}
+	この式のテンソル積$\myid\otimes\myop{fnc}$の部分を簡単な形に書き直すこと
+	を考える。任意の集合$W$に対して$A^*W$を次のようにおく。
+	\begin{equation*}\begin{split} %{
+		A^0W &= W \\
+		AW &= A\times W \\
+		A^2W &= A\times A\times W \\
+		\cdots \\
+		A^*W &= \sum_{n\in\sizen}A^nW \simeq (\Word A)\times W \\
+	\end{split}\end{equation*} %}
+	$A^*$はKleeneスターの漸化式$A^*W=W+A^*(A\times W)$を満たす。
+	$A^*$へ拡張した写像をそれぞれ次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\myop{fnc}_*A^*(X+Y) &= A^*\bigl(\myop{fnc}(X+Y)\bigr) \\
+		\myop{unit}_*A^*Y &= A^*\bigl(\myop{unit}Y\bigr) \\
+		\push_* A^*(A\times Z) &= A^*\bigl(\push (A\times Z)\bigr) \\
+		\pop_* A^*Y &= A^*(\pop Y) \\
+	\end{split}\end{equation*} %}
+	これらの関数を$RA^*\bigl((X+Y)\cup Z\bigr)$に線形化する。
+	すると、線形化した写像fnc\eqref{eq:線形化したfnc}は
+	$RA^*\bigl((X+Y)\cup Z\bigr)$からの写像として次のように書くことができる。
+	\begin{equation}\label{eq:スタック化したfnc}\begin{split} %{
+		\myop{fnc} &= \pi_Z\myop{fnc}_*\iota_* \\
+		\myop{fnc}_* &= \myop{unit}_* + \push_*\myop{fnc}_*\pop_* \\
+	\end{split}\end{equation} %}
+	ここで、$\iota_*$は$W$から$A^*W$への標準入射$\iota_*w=w$、
+	$\pi_W$は$A^*W$から$W$への射影$\pi_W w=\jump{w\in W}w$とした。
+	式\eqref{eq:スタック化したfnc}は簡単に解けて
+	$\myop{fnc}_*=\sum_{n\in\sizen}\push_*^n\myop{unit}_*\pop_*^n$
+	となることがわかるが、
+	\begin{equation*}\begin{split} %{
+		\pi_Z\sum_{n\in\sizen}\push_*^n\myop{unit}_*\pop_*^n\iota_*
+		= \pi_Z\push_*^*\myop{unit}_*\pop_*^*\iota_* 
+	\end{split}\end{equation*} %}
+	より、Kleeneスターを用いて
+	$\myop{fnc}_*=\push_*^*\myop{unit}_*\pop_*^*$としても、
+	最終結果$\myop{fnc}=\pi_Z\myop{fnc}_*\iota_*$は変わらないことがわかる。
+	したがって、次の式が成り立つことがわかる。
+	\begin{equation}\label{eq:スタック化したfnc}\begin{split} %{
+		\myop{fnc} &= \pi_Z\push_*^*\myop{unit}_*\pop_*^*\iota_*
+	\end{split}\end{equation} %}
+	この式をwhileプログラムに翻訳すると次のように書ける。
+	\begin{lstlisting}[caption=whileによるfnc, label=code:whileによるfnc]
+	fnc: w: (X or Y) -> Z = {
+		buffer = new Array A;
+		while w in X {
+			(buffer, w) = (push_right, id) (id, pop) (buffer, w);
+		}
+		w = unit w;
+		while not empty buffer {
+			(buffer, w) = (id, push) (pop_right, id) (buffer, w);
+		}
+		return w;
+	}
+	\end{lstlisting}
+	つまり、関数fncを再帰によるプログラム\eqref{code:再帰によるfnc}から
+	再帰を用いないプログラム\eqref{code:whileによるfnc}に書き直したことに
+	なる。Haskellなどのプログラミング言語では、末尾再帰は一般の再帰に比べて
+	高速に処理する\footnote{
+		gccなどもコンパイルオプション-O -foptimize-sibling-calls、もしくは-O2
+		で末尾再帰をwhile文に変換するようだ。ただし、C言語自体には末尾再帰の
+		最適化に関する仕様はない。
+	}。関数fncを末尾再帰を用いて書くと次のように書ける。
+	\begin{lstlisting}[caption=末尾再帰によるfnc, label=code:末尾再帰によるfnc]
+	fnc: w: (X or Y) -> Z = {
+		return fnc_2 fnc_1 (new Array A, w);
+	}
+	fnc_1: (as: Array A, w: (X or Y)) -> (Array A, Z) = {
+		if w in X {
+			return (id, unit) (as, w);
+		}
+		return fnc_1 (push_right, id) (id, pop) (as, w)
+	}
+	fnc_2: (as: Array A, z: Z) -> Z = {
+		if empty as {
+			return z;
+		}
+		return fnc_2 (id, push) (pop_right, id) (as, z);
+	}
+	\end{lstlisting}
+	whileプログラム\eqref{code:whileによるfnc}が二つのwhileブロックを持つこと
+	に対応して、末尾再帰プログラム\eqref{code:末尾再帰によるfnc}は二つの
+	末尾再帰関数を持つ。
+
+	次に、クイックソートと同じ形をしている次の関数gncを考えてみる。
+	\begin{lstlisting}[caption=再帰によるgnc, label=code:再帰によるgnc]
+	gnc: w: (X or Y) -> Z = {
+		if w in X {
+			return unit w;
+		}
+		return join (gnc, fnc) split w
+	}
+	\end{lstlisting}
+	ここで、関数unitとjoinとsplitは既知で次の型の関数だとする。
+	\begin{equation*}\begin{array}{ccccc} %{
+		\myop{unit} &:& Y &\to& Z \\
+		\myop{join} &:& Z\times Z &\to& Z \\
+		\myop{split} &:& X &\to& (X+Y)\times (X+Y) \\
+	\end{array}\end{equation*} %}
+	線形化すると、関数は次のように書ける。
+	\begin{equation*}\begin{split} %{
+		\myop{gnc} &= \myop{unit}
+		+ \myop{join}(\myop{gnc}\otimes\myop{gnc})\myop{split}
+	\end{split}\end{equation*} %}
+	この写像をテイラー展開して、級数を並べ替えて順に適用すると、
+	再帰なしのプログラムになる。級数の並べ方によって、様々なプログラム
+	として表現される。ここでは、二分木を左から順に辿る方法を考えてみる。
+	\begin{equation}\label{eq:gncの二分木での表現}\begin{split} %{
+		X \xmapsto{\myop{split}} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Y & & X \\
+		} \xmapsto{\myop{unit}\otimes\myid} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & X \\
+		} \xmapsto{\myid\otimes\myop{split}} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& X & & Y \\
+		} 
+		\\
+		\xmapsto{\myid\otimes\myop{split}\otimes\myid} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& \circ \ar@{-}[dl] \ar@{-}[dr] & & Y \\
+			Y & & Y \\
+		} \xmapsto{\myid\otimes\myop{unit}\otimes\myid\otimes\myid} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& \circ \ar@{-}[dl] \ar@{-}[dr] & & Y \\
+			Z & & Y \\
+		} \xmapsto{\myid\otimes\myid\otimes\myop{unit}\otimes\myid} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& \circ \ar@{-}[dl] \ar@{-}[dr] & & Y \\
+			Z & & Z \\
+		} 
+		\\
+		\xmapsto{\myid\otimes\myop{join}\otimes\myid} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& Z & & Y \\
+		} \xmapsto{\myid\otimes\myid\otimes\myop{unit}} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& Z & & Z \\
+		} \xmapsto{\myid\otimes\myop{join}} \mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			Z & & Z \\
+		} \xmapsto{\myop{join}} Z
+	\end{split}\end{equation} %}
+	操作手順は次のようになる。
+	\begin{procedure}[二分木を左から辿る手順]\label{proc:二分木を左から辿る手順} %{
+	\begin{description} %{
+		\item[頂点が$\circ$] 子供にjoinを作用させる。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[頂点が根] 終了する。$
+				\mytree{
+					& \text{here:}\circ \ar@{-}[dl] \ar@{-}[dr] \\
+					Z & & Z \\
+				} \xmapsto{\myop{join}} Z
+			$
+			\item[頂点が左の子供] 右の兄弟に移る。$
+				\mytree{
+					& & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+					& \text{here:}\circ \ar@{-}[dl] \ar@{-}[dr] & & X+Y \\
+					Z & & Z \\
+				} \xmapsto{\myop{join}} \mytree{
+					& & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+					& Z & & \text{next:}(X+Y) \\
+				}
+			$
+			\item[頂点が右の子供] 親に移る。$
+				\mytree{
+					& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+					Z & & \text{here:}\circ \ar@{-}[dl] \ar@{-}[dr] \\
+					& Z & & Z \\
+				} \xmapsto{\myid\otimes\myop{join}} \mytree{
+					& \text{next:}\circ \ar@{-}[dl] \ar@{-}[dr] \\
+					Z & & Z \\
+				}
+			$
+		\end{description} %}
+		\item[頂点がX] 頂点にsplitを作用させて左の子供に移る。$
+			\text{here:}X \xmapsto{\myop{split}} \mytree{
+				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				\text{next:}(X+Y) & & X+Y \\
+			}
+		$
+		\item[頂点がY] 頂点にunitを作用させる。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[頂点が根] 終了する。$
+				Y \xmapsto{\myop{unit}} Z
+			$
+			\item[頂点が左の子供] 右の兄弟に移る。$
+				\mytree{
+					& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+					\text{here:}Y & & X+Y \\
+				} \xmapsto{\myop{unit}\otimes\myid} \mytree{
+					& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+					Z & & \text{next:}(X+Y) \\
+				}
+			$
+			\item[頂点が右の子供] 親に移る。$
+				\mytree{
+					& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+					Z & & \text{here}:Y \\
+				} \xmapsto{\myid\otimes\myop{unit}} \mytree{
+					& \text{next}:\circ \ar@{-}[dl] \ar@{-}[dr] \\
+					Z & & Z \\
+				}
+			$
+		\end{description} %}
+	\end{description} %}
+	\end{procedure} %proc:二分木を左から辿る手順}
+	この操作をプログラムに書き直すために、二分木を文字列で表すことにする。
+	葉でない頂点をシングルトン$\mybf{1}=\set{@}$で表して、次のように二つの
+	文字列、$\Word(Z+\mybf{1})$と$\Word(X+Y)$を用いて二分木を表すことにする。
+	\begin{equation*}\begin{split} %{
+		\mytree{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			z_1\in Z & & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& \circ \ar@{-}[dl] \ar@{-}[dr] & & w_2\in(X+Y) \\
+			z_2\in Z & & w_1\in(X+Y) \\
+		} \simeq \word{@z_1@@z_2}\otimes\word{w_1w_2}
+	\end{split}\end{equation*} %}
+	写像gncを二分木で表した例\eqref{eq:gncの二分木での表現}を文字列で再現
+	すると次のようになる。
+	\begin{equation*}\begin{split} %{
+		\wordu\otimes\word{\underbar{X}} 
+		\xmapsto{\myop{split}_*} \word{@}\otimes\word{\underbar{Y}X}
+		\xmapsto{\myop{unit}_*} \word{@Z}\otimes\word{\underbar{X}}
+		\xmapsto{\myop{split}_*} \word{@Z@}\otimes\word{\underbar{X}Y}
+		\\
+		\xmapsto{\myop{split}_*} \word{@Z@@}\otimes\word{\underbar{Y}YY}
+		\xmapsto{\myop{unit}_*} \word{@Z@@Z}\otimes\word{\underbar{Y}Y}
+		\xmapsto{\myop{unit}_*} \word{@Z@\underbar{@}ZZ}\otimes\word{Y}
+		\\
+		\xmapsto{\myop{join}_*} \word{@Z@Z}\otimes\word{\underbar{Y}}
+		\xmapsto{\myop{unit}_*} \word{@Z\underbar{@}ZZ}\otimes\wordu
+		\xmapsto{\myop{join}_*} \word{\underbar{@}ZZ}\otimes\wordu
+		\xmapsto{\myop{join}_*} \word{Z}\otimes\wordu
+	\end{split}\end{equation*} %}
+	この手順をプログラムにすると次のようになるだろう。
+	\begin{lstlisting}[caption=二分木を左から辿るgnc, label=code:二分木を左から辿るgnc]
+	gnc: w: (X + Y) -> Z = {
+		left = new Array (Z + None);
+		right = new Array (Z + Y);
+		while not w in Z {
+			if w in Y {
+				w = unit w;
+				while (w in Z) and (not empty left) { // reduce
+					if (right_most left) == none {
+						left = push_right (left, w);
+						(right, w) = pop_left right;
+					} else {
+						(left, w) = (id, join) (pop_right, id) (left, w);
+						(left, v) = pop_right left; // discard @
+					}
+				}
+			} else { // shift
+				left = push_right (left, none);
+				(w, right) = (id, push_left) (split, id) (w, right)
+			}
+		}
+		return w;
+	}
+	\end{lstlisting}
+	このプログラムはコンパイラ理論のシフト還元構文解析\cite{aho:dragon}p.235
+	と同じ構造をしている。シフト操作はsplitによる木の成長、還元操作はunit
+	にひき続いて行われるjoinによる木の縮小に対応する。
+	クイックソートの場合、写像joinは結合性を満たすので、もっと簡潔な
+	プログラムを書くことができるが、ここでは、joinの結合性もsplitの余結合性
+	も仮定しないで話を進めることにする。
+
+	関数gncをスタックからの写像として定義し直す。
+	\begin{equation}\label{eq:gncのスタックによる表現}\begin{split} %{
+		\myop{gnc} &= \pi \myop{gnc}_* \iota \\
+		\myop{gnc}_* &= \myop{unit}_* 
+			+ \myop{join}_*\myop{gnc}_*^2\myop{split}_* \\
+	\end{split}\end{equation} %}
+	それぞれの写像は次のように定義される。
+	\begin{equation*}\begin{array}{rcrcl} %{
+		\pi &:& RZ^+\otimes (X+Y)^* &\to& RZ \\
+			&& \word{z_1z_2\cdots z_m}\otimes w &\mapsto&
+			\jump{m=1}\jump{w=\wordu}z_m \\
+		\iota &:& X+Y &\to& Z^*\otimes (X+Y)^+ \\
+			&& w &\mapsto& \wordu\otimes\word{w} \\
+		\myop{gnc}_* &:& Z^*\otimes (X+Y)^+ &\to& Z^+\otimes (X+Y)^* \\
+			&& \word{z_1z_2\cdots z_m}\otimes\word{w_1w_2\cdots w_n} &\mapsto& 
+			\word{z_1z_2\cdots z_m(\myop{gnc}w_1)}\otimes\word{w_2\cdots w_n} \\
+		\myop{unit}_* &:& Z^*\otimes (X+Y)^+ &\to& Z^+\otimes (X+Y)^* \\
+			&& \word{z_1z_2\cdots z_m}\otimes\word{w_1w_2\cdots w_n} &\mapsto& 
+			\jump{w_1\in Y}
+			\word{z_1z_2\cdots z_m(\myop{unit}w_1)}\otimes\word{w_2\cdots w_n} \\
+		\myop{split}_* &:& Z^*\otimes (X+Y)^+ &\to& Z^*\otimes (X+Y)^{2+} \\
+			&& w\otimes\word{w_1w_2\cdots w_n} &\mapsto& 
+			\jump{w_1\in X}
+			w\otimes\word{(\myop{split}w_1)w_2\cdots w_n} \\
+		\myop{join}_* &:& Z^{2+}\otimes (X+Y)^* &\to& Z^+\otimes (X+Y)^* \\
+			&& \word{z_1\cdots z_{m-1}z_m}\otimes w &\mapsto& 
+			\word{z_1\cdots (\myop{join}(z_{m-1}\times z_m))}\otimes w \\ 
+	\end{array}\end{equation*} %}
+	スタックの描像では、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\myop{gnc}_*$と$\myop{unit}_*$は右のスタックの左端の要素を
+		右のスタックの右端の要素へ移動し、
+		\item $\myop{split}_*$は右のスタックの左端の要素を二つに分割し、
+		\item $\myop{join}_*$は左のスタックの右端の二つの要素を一つにまとめる
+	\end{itemize} %}
+	操作となっている。
+	
+	さらに、関数gncのスタックによる式\eqref{eq:gncのスタックによる表現}を
+	次のように書き換える。
+	\begin{equation}\label{eq:gncの遅延評価による表現}\begin{split} %{
+		\myop{gnc}_* &= \myop{unit}_*
+		+ \myop{gnc}_*^2\widehat{\myop{join}}_*\myop{split}_*
+	\end{split}\end{equation} %}
+	関数$\widehat{\myop{join}}_*$は左のスタックにシングルトン$J=\set{j}$の
+	要素を追加する操作である。
+	\begin{equation*}\begin{split} %{
+		\widehat{\myop{join}}_*: (Z+J)^*\otimes(X+Y)^* &\to (Z+J)^+\otimes(X+Y)^* \\
+		\word{u_1u_2\cdots u_m}\otimes\word{w_1w_2\cdots w_n}
+		&\mapsto \word{u_1u_2\cdots u_mj}\otimes\word{w_1w_2\cdots w_n} \\
+	\end{split}\end{equation*} %}
+	そして、$(Z+J)^*$に次の同値関係を定義する。
+	\begin{equation*}\begin{split} %{
+		\word{u_1u_2\cdots u_mjz_1z_2u_{m+1}u_{m+2}\cdots u_{m+n}}
+		\sim \word{u_1u_2\cdots u_mu_{m+1}u_{m+2}\cdots u_{m+n}} \\
+		\quad\text{for all }u_1,u_2,\dots,u_{m+n}\in (Z+J),\;z_1,z_2\in Z
+	\end{split}\end{equation*} %}
+	つまり、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 分割$\myop{split}_*$をした時に左のスタックに$j\in J$を目印として
+		追加しておき、
+		\item その後に$Z$の要素が二つ続けて追加されたら$\myop{join}$の操作を
+		行う
+	\end{itemize} %}
+	ようにする。プログラミングの言葉では、操作$\myop{join}$を遅延評価する
+	ことに相当する。関数gncを式\eqref{eq:gncの遅延評価による表現}のように
+	変形する理由は、次の漸化式から、
+	\begin{equation*}\begin{split} %{
+		\myop{gnc}_* &= \myop{unit}_*
+			+ \myop{gnc}_*^2\widehat{\myop{join}}_*\myop{split}_* \\
+		\myop{gnc}_*^2 &= \myop{gnc}_*(\myop{unit}_*
+			+ \myop{gnc}_*\widehat{\myop{join}}_*\myop{split}_*) \\
+		&= \myop{gnc}_*\myop{unit}_*
+			+ \myop{gnc}_*^3\widehat{\myop{join}}_*\myop{split}_* \\
+		\cdots \\
+		\myop{gnc}_*^{n+1} &= \myop{gnc}_*^n\myop{unit}_*
+			+ \myop{gnc}_*^{n+2}\widehat{\myop{join}}_*\myop{split}_* \\
+		\cdots \\
+	\end{split}\end{equation*} %}
+	次の状態遷移図を得るためである。
+	\begin{equation*}\xymatrix{
+		1 & \myop{gnc}_* \ar[l]^{\myop{unit}_*}
+			\ar@<1ex>[r]^{\myop{join}_*\myop{split}_*} 
+		& \myop{gnc}_*^2 \ar@<1ex>[l]^{\myop{unit}_*} 
+			\ar@<1ex>[r]^{\myop{join}_*\myop{split}_*} 
+		& \myop{gnc}_*^3 ｗ \ar@<1ex>[l]^{\myop{unit}_*} 
+			\ar@<1ex>[r]^{\myop{join}_*\myop{split}_*} 
+		& \cdots \ar@<1ex>[l]^{\myop{unit}_*} 
+	}\end{equation*}
+	この状態遷移から関数gncの二分木による手順
+	\ref{proc:二分木を左から辿る手順}またはwhileプログラム
+	\eqref{code:二分木を左から辿るgnc}を直接得ることができる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 二分木とスタックの関係について。$\myop{join}$の操作を$j$で
+			表した二分木
+			\begin{equation*}\mytree{
+				& j \ar@{-}[dl] \ar@{-}[dr] \\
+				z_1 & & j \ar@{-}[dl] \ar@{-}[dr] \\
+				& z_2 & & z_3 \\
+			}\end{equation*} %}
+			を文字列化すると、次の三種類の方法が考えられる。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 行きがけ順$\word{jz_1jz_2z_3}$
+				\item 帰りがけ順$\word{z_1z_2z_3jj}$
+				\item 通りがけ順$\word{z_1jz_2jz_3}$ \\
+			\end{itemize} %}
+			\item 二分木を操作する手順を線形代数に翻訳すること。
+			なるべく手順\ref{proc:二分木を左から辿る手順}をなぞるように線形代数
+			を変換していく。$\myop{gnc}_*$を線形に展開すると次のようになる。
+			\begin{equation*}\begin{split} %{
+				\myop{gnc}_* &= \sum_{n\in\sizen}(\myop{join}_*\myop{gnc}_*)^n
+					\myop{unit}_*\myop{split}_*^n \\
+				&= \braket{(\alpha\myop{join}_*\myop{gnc}_*)^*)\myop{unit}_*
+					(\alpha^\dag\myop{split}_*)^*} \\
+			\end{split}\end{equation*} %}
+			ここで、ディラックのカッコの中を$
+				g=(\alpha\myop{join}_*\myop{gnc}_*)^*\myop{unit}_*
+					(\alpha^\dag\myop{split}_*)^*
+			$とおくと、$\myop{gnc}_*=\braket{g}$は次のようになる。
+			\begin{equation*}\begin{split} %{
+				\braket{g} &= \myop{unit}_* + \braket{g\alpha^\dag}\myop{split}_* \\
+				\braket{g\alpha^\dag} &= \myop{join}_*\braket{g}\myop{unit}_*
+					+ \braket{g\alpha^{\dag2}}\myop{split}_* \\
+			\end{split}\end{equation*} %}
+			\item 二次の常微分方程式は広田の総線形化法によって厳密解がわかる。
+			言語または再帰関数に応用するには、割り算を導入する必要がある。
+			また、非可換な対象に対しても広田の総線形化法が有効かどうかは
+			考えてみる必要がある。
+		\end{itemize} %}
+	\end{todo} %todo:ここまで}
+%s1:再帰とwhile文}
+\section{根付き平面木の代数}\label{s1:根付き平面木の代数} %{
+	頂点が集合$A$の元をラベルとしてもつ根付き平面木の集合を$\Tree A$と書き、
+	根が$\bullet$、その他の頂点が集合$A$の元をラベルとしてもつ根付き平面木
+	の集合を$\Tree_\bullet A$と書く。根付き平面木を次のように文字列として
+	表すことにする。
+	\begin{equation*}\begin{split} %{
+		\mytree{
+			& a \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
+			t_1 & t_2 & \cdots & t_m \\
+		} &\mapsto a\word{t_1t_2\cdots t_m}
+		\quad\text{for all }a\in A,\;t_1,t_2,\dots,t_m\in\Tree A \\
+		\mytree{
+			& \bullet \ar@{-}[dl]\ar@{-}[d]\ar@{-}[drr] \\
+			t_1 & t_2 & \cdots & t_m \\
+		} &\mapsto \bullet\word{t_1t_2\cdots t_m}
+		\quad\text{for all }t_1,t_2,\dots,t_m\in\Tree A
+	\end{split}\end{equation*} %}
+	$\Tree_\bullet A$は$\Tree A$を文字列化したものに集合同型である。
+	\begin{equation*}\begin{split} %{
+		\Tree_\bullet A\simeq \Word\Tree A
+	\end{split}\end{equation*} %}
+	$\Tree_\bullet A$には$\Word\Tree A$から誘導される文字列の連結による積
+	$m$が定義できることはすぐわかるが、
+	\begin{equation*}\begin{split} %{
+		m(\bullet\word{s_1s_2\cdots s_m}\times\bullet\word{t_1t_2\cdots t_n})
+		= \bullet\word{s_1s_2\cdots s_mt_1t_2\cdots t_n} \\
+		\quad\text{for all }s_1,s_2,\dots,s_m,t_1,t_2,\dots,t_n\in\Tree A
+	\end{split}\end{equation*} %}
+	文字列の連結による積のみでは生成系が構成できない。かといって、他の積を
+	見つけるのは難しいので$A$の作用から考えてみることにする。
+	まず、$A$の$\Tree_\bullet A$への作用$\iota_\myspace$を任意の$a\in A$に
+	対して次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(\iota_\myspace a)\treeu &= \bullet\word{a} \\
+		(\iota_\myspace a)\bullet\word{t_1t_2\cdots t_m}
+		&= \bullet\word{at_1t_2\cdots t_m}
+		\quad\text{for all }t_1,t_2\dots,t_m\in\Tree A
+	\end{split}\end{equation*} %}
+	次に、$A$の$\Tree_\bullet A$への作用$\iota_\perp$を任意の$a\in A$に対して
+	次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(\iota_\perp a)\treeu &= \bullet\word{a} \\
+		(\iota_\perp a)\bullet\word{t_1t_2\cdots t_m}
+		&= \bullet\word{a\word{t_1t_2\cdots t_m}}
+		\quad\text{for all }t_1,t_2\dots,t_m\in\Tree A
+	\end{split}\end{equation*} %}
+	これらの作用は、行きがけ順に根以外の頂点のラベルを出力した時、作用の順に
+	出力される。
+	\begin{equation*}\begin{split} %{
+		(\iota_\square a_1)(\iota_\square a_2)\cdots(\iota_\square a_m)t
+		\xmapsto{\text{preorder}} a_1a_2\cdots a_m\cdots
+		\quad\text{where }\square=\set{\myspace,\perp}
+	\end{split}\end{equation*} %}
+	\begin{proof} %{
+		ある$m\ge0$で命題が成り立つとすると、
+		$(\iota_\myspace a)(\iota_\square a_1)(\iota_\square a_2)\cdots(\iota_\square a_m)t$
+		と
+		$(\iota_\perp a)(\iota_\square a_1)(\iota_\square a_2)\cdots(\iota_\square a_m)t$
+		は共に先頭に$a$が出力されるから、帰納法の仮定より$m+1$でも命題が
+		成り立つ。
+	\end{proof} %}
+	また、頂点数が$2$以上の任意の木$t\in\Tree_\bullet A$に対して、あるラベル
+	$a\in A$とある木$s_1,s_2\in\Tree_\bullet A$が存在して、
+	$t=m\bigl((\iota_\perp a)\times\myid\bigr)(s_1\times s_2)$と書くことが
+	できる。
+	\begin{proof} %{
+		頂点数がの時は次のようになり、命題が成り立つことがわかる。
+		\begin{equation*}\begin{split} %{
+			\mytree{
+				\bullet \ar@{-}[d] \\
+				a \\
+			} = (\iota_\perp a) \bullet 
+			= m\bigl((\iota_\perp a)\times\myid\bigr)(\bullet\times \bullet)
+		\end{split}\end{equation*} %}
+		頂点数$m\ge2$で命題が成り立つとする。任意の頂点数$m+1$の木を$t$とする。
+		$t$の根が唯一つだけの子供$a$を持つとすると、それはある頂点数$m$の木に
+		$\iota_\perp a$を作用させた木になる。
+		\begin{equation*}\begin{split} %{
+			\mytree{
+				\bullet \ar@{-}[d] \\
+				a \ar@{-}[d] \\
+				s \\
+			} = (\iota_\perp a) \mytree{
+				\bullet \ar@{-}[d] \\
+				s \\
+			}　= m\bigl((\iota_\perp a)\times \myid\bigr)\left(\mytree{
+				\bullet \ar@{-}[d] \\
+				s \\
+			}\times \bullet \right)
+		\end{split}\end{equation*} %}
+		根が二つ以上の子供を持てば次の式のようになる。
+		\begin{equation*}\begin{split} %{
+			\mytree{
+				& \bullet \ar@{-}[dl] \ar@{-}[d] \ar@{-}[drr] \\
+				a \ar@{-}[d] & r_1 & \cdots & r_p \\
+				s \\
+			} &= m \left(\mytree{
+				\bullet \ar@{-}[d] \\
+				a \ar@{-}[d] \\
+				s \\
+			}\times \mytree{
+				\bullet \ar@{-}[d] \ar@{-}[drr] \\
+				r_1 & \cdots & r_p \\
+			}\right) = m\bigl((\iota_\perp a)\times \myid\bigr)\left(\mytree{
+				\bullet \ar@{-}[d] \\
+				s \\
+			}\times \mytree{
+				\bullet \ar@{-}[d] \ar@{-}[drr] \\
+				r_1 & \cdots & r_p \\
+			}\right)
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+%s1:根付き平面木の代数}
+\section{モナド}\label{s1:モナド} %{
+	随伴関手からモナドを定義してみる。
+	随伴関手とは、$\mybf{C},\mybf{D}$を圏として関手
+	$\mybf{C}\overset{F}{\underset{G}{\rightleftarrows}}\mybf{D}$
+	に対して同型射
+	$\phi:\homset(F\mybf{C},\mybf{D})\simeq\homset(\mybf{C},G\mybf{D})$
+	が存在する時、関手$F,G$を随伴関手、組$(F,G,\phi)$を随伴（adjunction）
+	という。
+%s1:モナド}
+\section{根付き平面木とスタック}\label{s1:根付き平面木とスタック} %{
+	根付き平面木を再帰ではなくwhileループで走査することを考える。
+	一般にプログラミング言語ではwhileループに比べて関数の再帰実行が圧倒的に
+	遅いためである。
+
+	次の図は根付き平面木の走査を書いたものである。
+	\begin{equation*}\xymatrix@C=4em{ %
+		a \ar[d]_{1} \\
+	 	b \ar@<-1ex>[d]_{2} \ar[r]_{4} & c \ar[ul]_{5} \\
+		d \ar@<-1ex>[u]_{3} \\
+	}\end{equation*}
+	この走査を再帰関数\myop{traverse}を使って書くと次のようになる。
+	\begin{lstlisting}[caption=再帰による根付き平面木の走査, label=code:根付き平面木の走査]
+	traverse: (node:Node
+		, child:Node -> (Node + Null), sibling:Node -> (Node + Null)
+		, pre:Node -> Node, post:Node -> Node) -> Node = {
+		x = child pre node;
+		while x != null {
+			x = traverse x;
+		}
+		return sibling post none;
+	}
+	\end{lstlisting}
+	関数\myop{traverse}は右隣の兄弟ノードを返すようにしている。
+	また、関数preとpostはそれぞれ行きがけ順と帰りがけ順の走査をするための
+	マーキングとして入れている恒等写像である。
+	\myop{traverse}をスタックを使って書き直すと次のようになるだろう。
+	\begin{lstlisting}[caption=スタックによる根付き平面木の走査, label=code:スタック版]
+	traverse: (root:Node
+		, child:Node -> (Node + Null), sibling:Node -> (Node + Null)
+		, pre:Node -> Node, post:Node -> Node) -> Node = {
+		stack = new Stack;
+		node = child pre root;
+		while node != null {
+			next = child pre node;
+			if next != null {
+				push (stack, next);
+				node = next;
+				continue;
+			}
+			node = sibling post node;
+			if node == null and not empty stack {
+				node = sibling post pop stack;
+			}
+		}
+		return sibling post root;
+	}
+	\end{lstlisting}
+	多くの問題では、再帰を使うことによってプログラムを簡潔に書くことが
+	できるのに対して、それを同値なwhile文によるプログラムに書き直すことは
+	難しい。一般の再帰をwhile文で書き直すことは難しいであろうが、根付き平面木
+	の走査をwhile文に書き直すことを目標に考えてみる。
+
+\subsection{方針}\label{s2:方針} %{
+	まず、文字列の走査に対する再帰をwhile文に書き直すことを考える。
+	次のプログラムは配列を走査する典型的なwhile文である。
+	\begin{lstlisting}[caption=文字列の変換, label=code:文字列の変換]
+	transform: (word: Array A, f: A -> B) -> Array B = {
+		if empty word {
+			return new Array B;
+		}
+		return push (f, transform) pop word;
+	}
+	/*
+	where push and pop are defined as the followings:
+	push (a, ()) = (a)
+	push (a, (a1, a2, ...)) = (a, a1, a2, ...)
+	pop () = none
+	pop (a1, a2, ...) = (a1, (a2, ...))
+	*/
+	\end{lstlisting}
+	このプログラムで用いられているpushとpopという操作を代数的に定義することを
+	考える。$A$を集合、$\Word{A}$の文字列の連結を$m$とする。
+	写像$\push:A\times \Word{A}$は次のように定義できる。
+	\begin{equation*}\begin{split} %{
+		\push(a\times w) &= m\bigl(\word{a}\times w\bigr)
+		\quad\text{for all }a\in A,\;w\in \word{A} \\
+	\end{split}\end{equation*} %}
+	問題は$\push$の逆写像にあたる$\pop:\Word{A}\to A\times \Word{A}$である。
+	$\Word A$の単位元$\wordu$に対してプログラミング言語でのnullやnoneなど
+	に相当するものが必要になる。Haskellから用語を借りてnoneに対応するものを
+	定義する。要素$\none$だけからなる集合を$\Nothing=\set{\none}=\mybf{1}$
+	とおき、関手$\Maybe:\mybf{Set}\to\mybf{Set}$を任意の
+	$X\xrightarrow{f}Y\in\mybf{Set}$に対して次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(\Maybe f)x &= fx  \quad\text{for all }x\in X \\
+		(\Maybe f)\none &= \none \\
+	\end{split}\end{equation*} %}
+	次のように写像$\push:\Maybe(A\times\Word{A})\to\Word{A}$を拡張する。
+	\begin{equation*}\begin{split} %{
+		\push\none &= \wordu \\
+	\end{split}\end{equation*} %}
+	$\push\none$がプログラミング言語におけるデフォルトコンストラクターに
+	対応するようにした。そして、写像$\pop:\Word{A}\to\Maybe(A\times\Word{A})$
+	を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\pop w &= \begin{cases}
+			w=\wordu &\implies \none \\
+			\text{else } w=\word{a_1a_2\cdots a_m} 
+				&\implies a_1\times\word{a_2\cdots a_m} \\
+		\end{cases}
+	\end{split}\end{equation*} %}
+	すると次の式が成り立ち、$\push$と$\pop$が互いに逆射になる。
+	\begin{equation*}\begin{split} %{
+		\pop\push &= \myid\times\myid:\Maybe(A\times\Word{A})
+			\to\Maybe(A\times\Word{A}) \\
+		\push\pop &= \myid: \Word{A}\to\Word{A} \\
+	\end{split}\end{equation*} %}
+	そして関手$\Word$は$\push$と$\pop$を使って
+	任意の$A\xrightarrow{f}B\in\mybf{Set}$に対して次のように書くことが
+	できることがわかる。
+	\begin{equation}\label{eq:文字列関手の摂動その一}\begin{split} %{
+		\Word f = \push_B\biggl(\Maybe\bigl(f\times(\Word f)\bigr)\biggr)\pop_A
+	\end{split}\end{equation} %}
+	この式はプログラム\eqref{code:文字列の変換}を代数的に表したものになって
+	いる。この式をwhile文に変形することを考える。
+	作用素のKleeneスターに持ち込んでwhile文に書き直すという方針で考えてみる。
+	式\eqref{eq:文字列関手の摂動その一}は、$B$の要素を$\Word B$の文字列に
+	プッシュする$\push_B$の呼び出しが$\Word B$の単位元が単位元の変換
+	$\push_B\pop_A$によって生成されるまで待たされることになっている。
+	例えば、入力の文字数が$2$の場合は次のようになる。
+	\begin{equation}\label{eq:文字列関手の摂動その二}\begin{split} %{
+		\word{a_1a_2}
+		\xmapsto{(f\times \myid)\pop_A} (fa_1)\times \word{a_2}
+		\xmapsto{(\myid\times f\times \myid)(\myid\times \pop_A)} 
+			(fa_1)\times (fa_2)\times \wordu
+		\\
+		\xmapsto{(\myid\times \myid\times \pop_A)} 
+			(fa_1)\times (fa_2)\times \none
+		\xmapsto{
+			(\myid\times \myid\times \push_A)} (fa_1)\times (fa_2)\times \wordu
+		\\
+		\xmapsto{(\myid\times \push_A)} (fa_1)\times \word{(fa_2)}
+		\xmapsto{\push_A} \times \word{(fa_1)(fa_2)}
+	\end{split}\end{equation} %}
+	一行目の最後から二行目の先頭への遷移では$\Maybe(f\times(\Word A))$の
+	$\Maybe$が効いて$f\times\myid$が$\myid$に化けている。
+
+\subsubsection{シングルトンとMaybe}\label{s3:シングルトンとMaybe} %{
+	次の例は再帰（sum\_1）を末尾再帰（sum\_3）に変換し、さらに末尾再帰を
+	while文（sum\_4）に書き直した例である。
+	\begin{lstlisting}[caption=末尾再帰への変換, label=code:末尾再帰への変換]
+	sum_1: n: Natural -> n: Natural = {
+		if n == 0 {
+			return n;
+		}
+		return n + sum_1 (n - 1);
+	}
+	sum_2: n: Natural -> n: Natural = {
+		return sum_3 (n, 0);
+	}
+	sum_3: (n: Natural, result: Natual) -> n: Natural = {
+		if n == 0 {
+			return result;
+		}
+		return sum_3 (n - 1, result + n);
+	}
+	sum_4: (n: Natural, result: Natual) -> n: Natural = {
+		while 0 < n-- {
+			result += n;
+		}
+		return result;
+	}
+	\end{lstlisting}
+	この例と関手の摂動計算\eqref{eq:文字列関手の摂動その二}は全く同じ構造を
+	している。次の写像$\myop{add}$と$\myop{decr}$が$\push$と$\pop$に
+	対応する。
+	\begin{equation*}\begin{split} %{
+		\myop{add}: \Maybe(\sizen\times\sizen) &\to \sizen \\
+		m\times n &\mapsto m + n \quad\text{for all } m,n\in\sizen \\
+		\none &\mapsto 0 \\
+	\end{split}\end{equation*} %}
+	\begin{equation*}\begin{split} %{
+		\myop{decr}: \sizen &\to \Maybe(\sizen\times\sizen) \\
+		n &\mapsto n\times (n - 1) \quad\text{for all }n\in\sizen_+ \\
+		0 &\mapsto \none \\
+	\end{split}\end{equation*} %}
+	キモは関手$\Maybe$にあるが、これは次の事情によっていると思われる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 集合の圏では、空集合$\mybf{0}$が始対象、元が唯一つだけの集合
+		$\Nothing$が終対象となる。
+		\item モノイドの圏では、自明のモノイド$\mybf{1}_\Word$
+		（単位元だけからなるモノイド）が始対象かつ終対象となる。
+		\item 空集合の文字列化$\Word\mybf{0}$は自明なモノイドになる。また、
+		自明のモノイドのモノイド構造の忘却$\Forget\mybf{1}_\Word$は
+		$\Nothing$になる。したがって、空集合からの単位射
+		$u:\mybf{0}\to\Forget\Word\mybf{0}=\Nothing$は集合の圏で始対象から
+		終対象へ直通する射となる。
+	\end{itemize} %}
+	ここで定義した関手$\Maybe$はHaskellのMaybeと異なることに注意する。
+	Haskellの圏は単なる集合ではなく、付加的な情報を持ったものを対象として
+	いる。型情報を持った集合と想像している。
+	集合の圏では元が一つだけの集合（シングルトン）は唯一$\mybf{1}$だけだが、
+	Haskellの圏では付加的な情報があるために複数のシングルトンがあり得る。
+	ここでは、データ構造として文字列しか扱っていないので集合の圏で十分で
+	あるが、複数のデータ構造を扱うようになると集合の圏では不便になるの
+	だろう。実際のプログラミングでも多数のシングルトンを扱う。
+%s3:シングルトンとMaybe}
+
+\subsubsection{始対象と終対象}\label{s3:始対象と終対象} %{
+	始対象が使えるか？
+	始対象$I$とは、圏$\mybf{C}$の任意の対象$C$に対して射$I\to C$が唯一つ必ず
+	存在する対象$I\in\mybf{C}$を$\mybf{C}$の始対象という。集合の圏では空集合
+	が始対象となり\footnote{
+		写像の定義、集合の元を別の集合の元に対応づける、からは空集合から
+		空でない集合へのへの写像も、その逆の空でない集合から空集合への写像は
+		定義できない。したがって、空集合から空でない集合への射を写像として
+		定義することはできない。空集合を始対象とすることは、そうしておくと
+		便利な人工的な定義と思った方が良いように考えている。
+	}、モノイドの圏では単位元のみからなるモノイドが始対象と
+	なる。文字列化の関手$\Word$と忘却関手$\Forget$を用いると、
+	同型射$\Forget\Word\mybf{0}\simeq\mybf{1}$が得られる。ここで、$\mybf{1}$
+	は要素が一つだけの集合とする。$\mybf{1}$は終対象になる。つまり、任意の
+	集合から$\mybf{1}$への写像は唯一つかつ必ず存在する。
+
+	集合の圏$\mybf{Set}$からモノイドの圏$\mybf{Monoid}$への関手$\Word{}$
+	を次のように定める。
+	\begin{equation*}\begin{split} %{
+		(\Word{f})\word{} &= \word{} \\
+		(\Word{f})\word{a_1a_2\cdots a_m} &= \word{(fa_1)(fa_2)\cdots (fa_m)} \\
+		&\quad\text{for all }A,B\in\mybf{Set},\;f\in\homset(A,B) \text{ and }
+		a_1,a_2,\dots,a_m\in A \\
+	\end{split}\end{equation*} %}
+	忘却関手を\Forget{}と書くと、任意の$A\in\mybf{Set}$に対して単位射
+	$u_A:A\to \Forget{}\Word{A}$が次のように定まり、
+	\begin{equation*}\begin{split} %{
+		u_Aa &= \word{a} \quad\text{for all }a\in A
+	\end{split}\end{equation*} %}
+	任意の$G\in\mybf{Monoid}$に対して余単位射
+	$\epsilon_G:\Word{}\Forget{}{G}\to G$が次のように定まる。
+	\begin{equation*}\begin{split} %{
+		\epsilon_G\word{g_1g_2\dots g_m} = g_1g_2\cdots g_m
+		\quad\text{for all }g_1,g_2,\dots,g_m\in G
+	\end{split}\end{equation*} %}
+	特に、$A\in\mybf{Set}$に対して$G=\Word{A}$とすると余単位射
+	$\epsilon_{\Word{A}}:\Word{}\Forget{}\Word{A}\to \Word{A}$は$A$の
+	二次元配列を一次元配列に平坦化する写像となることがわかる。
+	\begin{equation*}\begin{split} %{
+		\epsilon_{\Word{A}}
+		\word{\word{a_1a_2\cdots a_m}\word{b_1b_2\cdots b_n}}
+		= \word{a_1a_2\cdots a_mb_1b_2\cdots b_n} \\
+		\quad\text{for all }a_1,a_2,\dots,a_m,b_1,b_2,\dots,b_n\in A
+	\end{split}\end{equation*} %}
+%s3:始対象と終対象}
+%s2:方針}
+%s1:根付き平面木スタック}
+\section{トークン分解のモデル}\label{s1:トークン分解のモデル} %{
+	トークン分解を線形代数で記述する方法を考える。
+	バックトレースの操作を代数化することがキモになる。
+
+	一般に言語は品詞と文字列の組み合わせで'意味'をなす。
+	例えば、英語の'set'という文字列は名詞として用いた場合は集合の意味になり、
+	動詞として用いた場合は設置するという意味になる。
+	\begin{equation*}\begin{array}{lcl} %{
+		\text{X is (a) set.} &\iff& \text{Xは集合である。} \\
+		\text{we set X.}　&\iff& \text{Xを設置した。}
+	\end{array}\end{equation*} %}
+	ここでは、単語列に対して文法を適用することで、品詞と単語のペアリングを
+	行っていると考える。この例では、次の文法と、
+	\begin{equation*}\begin{split} %{
+		E &= SVO \\
+		S &= N \\
+		O &= N \\
+	\end{split}\end{equation*} %}
+	次のボキャブラリーによって、
+	\begin{equation*}\begin{split} %{
+		N &= \set{\text{set}, \text{X}, \text{we},\dots} \\
+		V &= \set{\text{set}, \text{is},\dots} \\
+	\end{split}\end{equation*} %}
+	入力の単語列をペアリングされた列に書き直している\footnote{
+		もちろん実際の英語はもっと複雑である。SやOは一つの単語とは限らない。
+	}。
+
+	$R$を環、$A,B$を有限集合とする。
+	次のBNFを例として使って考えてみる。
+	\begin{equation}\label{eq:トークン分解のモデルの例その一}\begin{split} %{
+		b_1 &= a_1a_1 \\
+		b_2 &= a_1a_1 \\
+		b_3 &= a_1a_2 \\
+	\end{split}\end{equation} %}
+	$a_1,a_2\in A,\;b_1,b_2,b_3\in B$である。
+	$B$から$R\Word{A}$への写像が与えられたと考える。
+	$R\Word{A}$から$B$への写像が与えられたとは考えることはできない。
+	この例では$b_1,b_2\in B$が$\word{a_1a_2}\in \Word{A}$に対応している。
+	$\Word{A}$から$B$への写像が与えられたとは考えるためにはすべての$\Word{A}$
+	に対して$B$の元が一意に定まる必要がある。
+	$B$から$R\Word{A}$への写像$\phi$が与えられると、文字列の普遍性により
+	一意的に$\Word{B}$から$R\Word{A}$へのモノイド準同型写像$\phi$
+	（便宜的に同じ記号を使う）が定まる。さらに$\phi$を線形に拡張して
+	$\phi:R\Word{B}\to R\Word{A}$が一意的に定まる。
+	\begin{equation*}\begin{split} %{
+		\phi(\word{b_1b_2} + \word{b_2b_3}) = \word{a_1^4} + \word{a_1^3a_2}
+	\end{split}\end{equation*} %}
+	
+
+	形式的には$\phi$は次のように書ける。
+	\begin{equation*}\begin{split} %{
+		\phi &= u\epsilon + \sum_{n=1}^\infty \phi_1^n \\
+		\phi_1 &= a_1a_1(b_1^t + b_2^t) + a_1a_2b_3^t \\
+	\end{split}\end{equation*} %}
+%s1:トークン分解のモデル}
+\endgroup %}
+\begingroup %{
+	\newcommand{\Word}[1]{\ensuremath{\mathcal{W}{#1}}}
+	\newcommand{\wordu}[1]{\ensuremath{1_{\Word{#1}}}}
+	\newcommand{\word}[1]{\ensuremath{[{#1}]}}
+	\newcommand{\wordg}[1]{\ensuremath{\bigl[{#1}\bigr]}}
+	\newcommand{\wordgg}[1]{\ensuremath{\biggl[{#1}\biggr]}}
+	\newcommand{\mydef}{\ensuremath{\overset{\mathrm{def}}{=}}}
+	\newcommand{\lin}[1]{\ensuremath{\myop{lin}{#1}}}
+	\newcommand{\push}[1]{\ensuremath{\myop{push}{#1}}}
+	\newcommand{\pop}[1]{\ensuremath{\myop{pop}{#1}}}
+	\newcommand{\lfnc}[2]{\ensuremath{\lambda_{#1}{#2}}}
+	\newcommand{\moji}[1]{\ensuremath{\myop{\mathbf{#1}}}}
+	%
+\section{文字列の連結}\label{s1:文字列の連結} %{
+	$R$を次の性質を持つ半環とする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[可換] 非可換の場合は議論が煩雑になる。
+		\item[標数が$0$] 標数とは乗法の単位元$1_R$の$n$個の和$n1_R$
+		\begin{equation*}\begin{split} %{
+			n1_R &= \underbrace{1_R+1_R+\cdots+1_R}_{n\text{個}}
+		\end{split}\end{equation*} %}
+		が$0$となる最小の自然数$n$のことをいう。次の例は標数$2$の例である。
+		\begin{equation*}\begin{split} %{
+			1 + 1 \mod 2 = 0
+		\end{split}\end{equation*} %}
+		標数が$0$でないと$1/n$などの
+		$m^tmw=(\zettai{w}+1)w$などの作用素の逆が定義できなくなるので、標数$0$の
+		半環に限って議論する。
+		\item[割り算を持つ] $0$以外の任意の元は乗法の逆元を持つ。
+	\end{description} %}
+	$R$の例としては実数とブーリアンを考えている。自然数の掛け算と割り算しか
+	使わないので、有限級数しか扱わなければ有理数なども対象になるが、
+	無限級数を扱うので有理数の範囲内に収まらないと思われる。
+	この節で単に'線形写像'と書いた場合は$R$線形写像を指すものとする。
+
+	$A$を有限集合とする。
+	$\Word{A}=(\Word{A},m,\wordu{})$を$A$の元を文字とする文字列の集合に、
+	文字列の連結を積$m$、長さ$0$の文字列$\wordu{}$を$m$の単位元とする
+	モノイドの構造を付与したものとする。
+	また、積$m$は二項演算子の形で用いるときは次のように略記するものとする。
+	\begin{equation*}\begin{split} %{
+		fg \mydef m(f\otimes g)
+		\quad\text{for all }f,g\in R\Word{A}
+	\end{split}\end{equation*} %}
+
+	$R\Word{A}^t$を$R\Word{A}$の双対空間とする。
+	\begin{equation*}\begin{split} %{
+		R\Word{A}^t &= \set{\phi\in R\Word{A}\to R\bou \text{linear}}
+	\end{split}\end{equation*} %}
+	$R\Word{A}$から$R\Word{A}^t$への線形写像$-^t$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		w_1^tw_2 = \jump{w_1=w_2}
+		\quad\text{for all }w_1,w_2\in \Word{A}
+	\end{split}\end{equation*} %}
+	線形写像$-^t$を転置ということにする。
+	転置は$R$線形写像で複素共役などの係数の変換は含まないものとする。
+	\begin{equation*}\begin{split} %{
+		(rf)^t = rf^t \quad\text{for all }r\in R,\;f\in R\Word{A}
+	\end{split}\end{equation*} %}
+	また、次の完全性の式が成り立ち、
+	\begin{equation}\label{eq:基底の完全性}\begin{split} %{
+		\sum_{w\in\Word{A}}ww^t = \myid:R\Word{A}\to R\Word{A} \\
+	\end{split}\end{equation} %}
+	二次形式は実であるとする。
+	\begin{equation}\label{eq:転置の実性}\begin{split} %{
+		f^tg = g^tf \quad\text{for all }f,g\in R\Word{A}
+	\end{split}\end{equation} %}
+
+	$\Word{A}$は積$m$について生成系$\set{\word{a}}_{a\in A}$を持つ。
+	この生成系を線形写像の形に翻訳しておく。$R\Word{A}$の自己線形写像全体
+	のつくる集合を$\lin{R\Word{A}}$と書く。\lin{R\Word{A}}は写像の合成を積、
+	恒等写像を単位元とするモノイドとして考える。
+	線形写像$\iota:RA\to \lin{R\Word{A}}$を次のように定義する。
+	\begin{equation}\label{eq:文字の連結作用素}\begin{split} %{
+		(\iota v) f &= \sum_{a\in A}v_am(\word{a}\otimes f)
+		\quad\text{for all }v\in RA,\;f\in R\Word{A} 
+	\end{split}\end{equation} %}
+	特に$\wordu{}$への作用は標準入射になっている。$\iota$を文字を使って
+	書くと次のようになる。
+	\begin{equation*}\begin{split} %{
+		(\iota a)\wordu{} &= \word{a} \\
+		(\iota a)\word{a_1a_2\cdots a_m} &= \word{aa_1a_2\cdots a_m}
+		\quad\text{for all }a_1,a_2,\dots,a_m\in A
+	\end{split}\end{equation*} %}
+	像$\iota A\mydef\set{\iota a}_{a\in A}\subseteq\lin{R\Word{A}}$または
+	$\iota A$の元の一次結合を文字の（左）連結ということにする。
+
+	文字の連結の転置を求める。完全性の式\eqref{eq:基底の完全性}
+	を使うと任意の$a\in A,\;w\in \Word{A}$に対して次の式が導かれる。
+	\begin{equation*}\begin{split} %{
+		(\iota a)^tw = \sum_{x\in\Word{A}}xx^t(\iota a)^tw
+		= \sum_{x\in\Word{A}}x\bigl((\iota a)x\bigr)^tw
+		= \sum_{x\in\Word{A}}x\jump{w=(\iota a)x}
+	\end{split}\end{equation*} %}
+	したがって、$a^t$の作用は次のようになることがわかる。
+	\begin{equation*}\begin{split} %{
+		(\iota a)^t\wordu{} &= 0 \\
+		(\iota a)^t\word{a_1a_2\cdots a_m} &= \jump{a=a_1}\word{a_2\cdots a_m}
+		\quad\text{for all }a_1,a_2,\dots,a_m\in A
+	\end{split}\end{equation*} %}
+	文字の連結は次の直交関係を満たす。
+	\begin{equation*}\begin{split} %{
+		(\iota a_1)^t(\iota a_2) = \jump{a_1=a_2}
+		\quad\text{for all }a_1,a_2\in A
+	\end{split}\end{equation*} %}
+	$\iota A^t$を
+	$\iota A^t=\set{(\iota a)^t}_{a\in A}\subseteq\lin{R\Word{A}}$とおく。
+
+	以下では混乱の恐れがない場合は$\iota$を省略する。
+
+	文字の連結を使うと完全性の式\eqref{eq:基底の完全性}から次の単位元\wordu{}
+	とそれ以外への直交分解が得られる。
+	\begin{equation*}\begin{split} %{
+		\myid &= \sum_{w\in\Word{A}}ww^t
+		= \wordu{}\wordu{}^t + \sum_{a\in A}\sum_{w\in\Word{A}}aw(aw)^t \\
+		&= \wordu{}\wordu{}^t + \sum_{a\in A}a\sum_{w\in\Word{A}}ww^ta^t
+		= \wordu{}\wordu{}^t + \sum_{a\in A}aa^t
+	\end{split}\end{equation*} %}
+	ここで、線形写像$u:R\to R\Word{A}$と$\epsilon:R\Word{A}\to R$を
+	次のように定義する。
+	\begin{equation}\label{eq:連結の単位射と余単位射}\begin{split} %{
+		ur &= r\wordu{} \quad\text{for all }r\in R \\
+		\epsilon f &= \wordu{}^tf \quad\text{for all }f\in R\Word{A} \\
+	\end{split}\end{equation} %}
+	そして、長さ$0$の単語への射影$\pi_0$と長さ$1$以上の単語への射影を
+	$\pi_+$を次のように定義する。
+	\begin{equation}\label{eq:単位元への射影}\begin{split} %{
+		\pi_0 = u\epsilon,\qquad \pi_+ = \sum_{a\in A}aa^t \\
+	\end{split}\end{equation} %}
+	すると、単位元\wordu{}とそれ以外への直交分解は次のように書き換えられる。
+	\begin{equation}\label{eq:文字の連結による完全性}\begin{split} %{
+		\myid = \pi_0 + \pi_+ \\
+	\end{split}\end{equation} %}
+	集合$\set{\pi_0}\oplus(\iota A)\oplus(\iota A^t)$は\lin{R\Word{A}}の
+	生成系となっている。例えば、次のように
+	$\set{\pi_0}\oplus(\iota A)\oplus(\iota A^t)$
+	の元の積で任意の写像を表すことができる。
+	\begin{equation*}\begin{split} %{
+		\pi_0\wordu{} &= \wordu{} \\
+		a_1a_2\cdots a_m\pi_0\wordu{} &= \word{a_1a_2\cdots a_m} \\
+		b_n^tb_{n-1}^t\cdots b_1^t\word{b_1b_2\cdots b_n} &= \wordu{} \\
+		a_1a_2\cdots a_mb_n^tb_{n-1}^t\cdots b_1^t\word{b_1b_2\cdots b_n}
+		&= \word{a_1a_2\cdots a_m} \\
+	\end{split}\end{equation*} %}
+	ここで定義した線形写像$u$は積$m$に関する単位射になっている。
+	$u$と$\epsilon$は次の式を満たす。
+	\begin{equation*}\begin{split} %{
+		\epsilon u = \myid: R\to R \\
+		ua = 0 = a^t\epsilon \quad\text{for all }a\in A
+	\end{split}\end{equation*} %}
+
+	余積$m^t:R\Word{A}\to R\Word{A}\otimes R\Word{A}$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(f\otimes g)^tm^th \simeq_R \bigl(m(f\otimes g)\bigr)^th
+		\quad\text{for all }f,g,h\in R\Word{A}
+	\end{split}\end{equation*} %}
+	ここで、同型$\simeq_R$は任意の$R$係数半モジュール$V$に対して成り立つ
+	半モジュール同型$R\otimes V \simeq V\simeq V\otimes R$を表すものとする。
+	余積$m^t$を文字列$\Word{A}$を使って具体的に書くと次のようになる。
+	\begin{equation}\label{eq:連結の転置の具体的な形}\begin{split} %{
+		m^tw &= \sum_{w_1,w_2\in \Word{A}}\jump{w=m(w_1\otimes w_2)}
+			w_1\otimes w_2 \quad\text{for all }w\in \Word{A}
+	\end{split}\end{equation} %}
+	特に、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		m^t\wordu{} &= \wordu{}\otimes \wordu{} \\
+		m^t\word{a} &= \wordu{}\otimes \word{a} + \word{a}\otimes \wordu{}
+		\quad\text{for all }a\in A
+	\end{split}\end{equation*} %}
+	式\eqref{eq:連結の転置の具体的な形}から$\epsilon$
+	\eqref{eq:連結の単位射と余単位射}が余積$m^t$に対する余単位射になることが
+	わかる。
+
+	積$m$と余積$m^t$から$mm^t:R\Word{A}\to R\Word{A}$と
+	$m^tm:R\Word{A}\otimes R\Word{A}\to R\Word{A}\otimes R\Word{A}$の
+	二つのエルミート作用素が得られる。
+	$mm^t$は基底$\Word{A}$で対角化されていて次の式を満たす。
+	\begin{equation}\label{eq:文字数作用素}\begin{split} %{
+		mm^t = \nu + 1
+	\end{split}\end{equation} %}
+	ここで、$\nu$は文字列の長さを与える線形写像$\nu:R\Word{A}\to\sizen$で次の
+	ように定義される。
+	\begin{equation*}\begin{split} %{
+		\nu w = \zettai{w}w \quad\text{for all }w\in \Word{A}
+	\end{split}\end{equation*} %}
+	$mm^t$は正定値の正則な線形写像となることがわかる（$0<\myop{spec}mm^t$）。
+	$R$が環でない場合は$m^tm$に対してコンパクトな式は得られていないが、
+	$R$が環の場合は次の式が成り立つ。
+	\begin{equation}\label{eq:Brzozowski則}\begin{split} %{
+		m^tm = (\myid\otimes m)(m^t\otimes \myid)
+			+ (m\otimes \myid)(\myid\otimes m^t)
+			- (\myid\otimes \myid)
+	\end{split}\end{equation} %}
+
+	積$m$と余積$m^t$を用いて文字の連結を表すことができる。
+	次の式から、
+	\begin{equation*}\begin{split} %{
+		a^tf = \sum_{w\in \Word{A}}ww^ta^tf 
+		= \sum_{w\in \Word{A}}w\bigr(m(\word{a}\otimes w)\bigl)^tf
+		\simeq_R \sum_{w\in \Word{A}}w(\word{a}\otimes w)^tw^tf \\ 
+		\quad\text{for all }a\in A,\;f\in R\Word{A}
+	\end{split}\end{equation*} %}
+	式$a^t=m(u\word{a}^t\otimes\myid)m^t$が成り立つことがわかる。この式を転置
+	をとったものを合わせて次のようになる。
+	\begin{equation*}\begin{split} %{
+		\iota a &= m(\word{a}\epsilon\otimes \myid)m^t \\
+		(\iota a)^t &= m(u\word{a}^t\otimes \myid)m^t \\
+	\end{split}
+	\quad\text{for all }a\in A
+	\end{equation*} %}
+
+	$m,m^t$と$\iota A$の交換関係を調べる。まず、任意の$a\in A$に対して
+	$am=m(a\otimes \myid)$が成り立つことはすぐわかる。次に$m^ta$を
+	調べる。式\eqref{eq:Brzozowski則}から任意の$a\in A$と$f\in R\Word{A}$
+	に対して次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		m^taf &= m^tm(\word{a}\otimes f) \\
+		&= (\myid\otimes a)(\wordu{}\otimes f)
+			+ (m\otimes \myid)\bigl(\word{a}\otimes (m^tf)\bigr) \\
+		&= (\myid\otimes a)(\wordu{}\otimes f)
+			+ (a\otimes \myid)\bigl(m^tf) \\
+	\end{split}\end{equation*} %}
+	この式を導く過程で、減算（式\eqref{eq:Brzozowski則}）を用いているが
+	最終結果には減算が含まれないので、任意の標数０の可換半環$R$で
+	この式は成り立つ。ここで、任意の$g\in R\Word{A}$に対して
+	$\wordu{}\otimes g=(\pi_0\otimes \myid)m^tg$となることを使うと、
+	次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split} %{
+		m^taf &= (\pi_0\otimes a + \myid\otimes a)m^tf
+	\end{split}\end{equation*} %}
+	以上より次の交換関係が得られる。
+	\begin{equation}\label{eq:文字の連結と文字列の積}\begin{split} %{
+		am &= m(a\otimes \myid) \\
+		m^ta &= (\pi_0\otimes a + a\otimes \myid)m^t \\
+	\end{split}
+	\quad\text{for all }a\in A
+	\end{equation} %}
+	この式の転置をとると次の式が得られる。
+	\begin{equation}\label{eq:文字の連結と文字列の積その二}\begin{split} %{
+		m^ta^t &= (a^t\otimes \myid)m \\
+		a^tm &= m(\pi_0\otimes a^t + a^t\otimes \myid) \\
+	\end{split}
+	\quad\text{for all }a\in A
+	\end{equation} %}
+
+	次に$m$と$m^t$の代数的な双対を考える。$m$の代数的な双対とは次の式を満たす
+	余積$\Delta$である。
+	\begin{equation}\label{eq:連結に代数的双対な余積}\begin{split} %{
+		\Delta m = m^{\otimes2}\sigma_{23}\Delta^{\otimes2}
+	\end{split}\end{equation} %}
+	この式は積について中置記法を用いた方が覚えやすい。
+	\begin{equation}\label{eq:連結に代数的双対な余積その二}\begin{split} %{
+		\Delta(fg) = (\Delta f)(\Delta g)
+		\quad\text{for all }f,g\in R\Word{A}
+	\end{split}\end{equation} %}
+	ここで、テンソル積に対する積$m$を次のように定義した。
+	\begin{equation*}\begin{split} %{
+		(f\otimes g)(h\otimes i)
+		= (m\otimes m)\sigma_{23}(f\otimes h\otimes g\otimes i)
+		\quad\text{for all }f,g,h,i\in R\Word{A}
+	\end{split}\end{equation*} %}
+	$m^t$の代数的な双対は$\Delta$の転置によって求まる。
+	式\eqref{eq:連結に代数的双対な余積その二}から$m$に代数的な双対の余積
+	$\Delta$はが文字列の連結の形で求まる。
+	\begin{equation}\label{eq:連結に代数的双対な余積の具体形}\begin{split} %{
+		\Delta\word{a_1a_2\cdots a_m} 
+		= (\Delta\word{a_1})(\Delta\word{a_2})\cdots(\Delta\word{a_m})
+	\end{split}\end{equation} %}
+	文字との連結の形では次のようになる。
+	\begin{equation}\label{eq:連結に代数的双対な余積その三}\begin{split} %{
+		\Delta a = (\Delta a)\Delta \quad\text{for all }a\in A
+	\end{split}\end{equation} %}
+	ここで、$\Delta:RA\to \lin{R\Word{A}}\otimes\lin{R\Word{A}}$を次のように
+	おいた。
+	\begin{equation*}\begin{split} %{
+		(\Delta a)(f\otimes g) = (\Delta\word{a})(f\otimes g) 
+		\quad\text{for all }a\in A,\;f,g\in R\Word{A}
+	\end{split}\end{equation*} %}
+	式\eqref{eq:連結に代数的双対な余積その三}の転置をとると次のようになる。
+	\begin{equation*}\begin{split} %{
+		a^t\Delta^t = \Delta^t(\Delta a)^t \quad\text{for all }a\in A
+	\end{split}\end{equation*} %}
+
+	特に$\Delta\word{a}=\wordu{}\otimes\word{a}+\word{a}\otimes\wordu{}$とした
+	場合の$\Delta$を$m_\shuffle^t$と書く。$m_\shuffle$はシャッフル積と
+	呼ばれる。
+	\begin{equation*}\begin{split} %{
+		m_\shuffle^ta &= (\myid\otimes a + a\otimes \myid)m_\shuffle^t
+		\quad\text{for all }a\in A \\
+		m_\shuffle^t(fg) &= (m_\shuffle^tf)(m_\shuffle^tg)
+		\quad\text{for all }f,g\in R\Word{A}
+	\end{split}\end{equation*} %}
+	この式の転置は次のようになる。
+	\begin{equation*}\begin{split} %{
+		a^tm_\shuffle &= m_\shuffle(\myid\otimes a^t + a^t\otimes \myid)
+		\quad\text{for all }a\in A \\
+		m^tm_\shuffle &= (m^tf)\shuffle(m^tg)
+		\quad\text{for all }f,g\in R\Word{A}
+	\end{split}\end{equation*} %}
+	この式の一つ目の式はライプニッツ則と呼ばれる式である。
+
+	$m$に代数的双対な余積\eqref{eq:連結に代数的双対な余積その二}について
+	もう少し調べる。次の式により$\Delta$を文字数に関する摂動計算によって
+	求めることができる。
+	\begin{equation}\label{eq:連結に代数的双対な余積の摂動計算}\begin{split} %{
+		\Delta = \Delta(\pi_0+\pi_+) 
+		= \Delta\pi_0+\sum_{a\in A}(\Delta a)\Delta a^t \\
+	\end{split}\end{equation} %}
+	例えば次のようになる。
+	\begin{equation*}\begin{split} %{
+		\Delta\word{a} &= (\Delta a)\Delta\wordu{} \\
+		\Delta\word{a_1a_2} &= (\Delta a_1)(\Delta a_2)\Delta\wordu{} \\
+	\end{split}\end{equation*} %}
+	摂動計算\eqref{eq:連結に代数的双対な余積の摂動計算}は式
+	\eqref{eq:連結に代数的双対な余積の具体形}に他ならないが、
+	転置をとると積$\Delta^t$の摂動計算が得られる。
+	\begin{equation}\label{eq:連結に代数的双対な積の摂動計算}\begin{split} %{
+		\Delta^t = \pi_0\Delta^t + \sum_{a\in A}a\Delta^t (\Delta a)^t \\
+	\end{split}\end{equation} %}
+	この式をシャッフル積$m_\shuffle$に適用すると次のようになる。
+	\begin{equation*}\begin{split} %{
+		(a_1f_1)\shuffle (a_2f_2)
+		= a_1\bigl(f_1\shuffle (a_2f_2)\bigr)
+		+ a_2\bigl((a_1f_1)\shuffle f_2\bigr) \\
+		\quad\text{for all }a_1,a_2\in A,\;f_1,f_2\in R\Word{A}
+	\end{split}\end{equation*} %}
+	通常、シャッフル積はこの式で定義される。
+
+	文字の連結$\iota$\eqref{eq:文字の連結作用素}と同様に積$\Delta^t$によって
+	線形写像$\iota_\Delta:RA\to \lin{R\Word{A}}$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(\iota_\Delta a)f &= \Delta^t(\word{a}\otimes f)
+		\quad\text{for all }a\in A,\;f\in R\Word{A}
+	\end{split}\end{equation*} %}
+	積$\Delta^t$の摂動計算\eqref{eq:連結に代数的双対な積の摂動計算}を用いると
+	$\iota_\Delta$は次のようになる。
+	\begin{equation}\label{eq:シャッフル積の摂動計算その一}\begin{split} %{
+		(\iota_\Delta a)f &= \pi_0(\iota_\Delta a)f 
+			+ \sum_{b\in A}b\Delta^t(\Delta b)^t(\word{a}\otimes f) \\
+	\end{split}\end{equation} %}
+	一般の余積$\Delta$の場合、これ以上の計算は困難なので、シャッフル積の場合を
+	考える。シャッフル積の場合、$\iota_\Delta$を$\iota_\shuffle$と書くと、
+	摂動計算\eqref{eq:シャッフル積の摂動計算その一}より次の式が導かれる。
+	\begin{equation*}\begin{split} %{
+		\iota_\shuffle a &= a + \sum_{b\in A}b(\iota_\shuffle a)b^t
+		\quad\text{for all }a\in A
+	\end{split}\end{equation*} %}
+	この式の右から文字の連結を書けると次の交換関係が導かれる。
+	\begin{equation*}\begin{split} %{
+		(\iota_\shuffle a)b &= ab + b(\iota_\shuffle a)
+		\quad\text{for all }a,b\in A
+	\end{split}\end{equation*} %}
+	この交換関係から文字のシャッフル積$\iota_\shuffle$が次のような形で表される
+	ことがわかる。
+	\begin{equation}\label{eq:文字のシャッフル積その一}\begin{split} %{
+		\iota_\shuffle a = m(\myid\otimes a)m^t \quad\text{for all }a\in A
+	\end{split}\end{equation} %}
+	この式と\eqref{eq:文字の連結と文字列の積}を使うと、
+	$m(\pi_0\otimes\myid)m=\myid$より次の正準交換関係が導かれる。
+	\begin{equation}\label{eq:文字のシャッフル積その二}\begin{split} %{
+		(\iota_\shuffle a)^tb &= \jump{a=b} + b(\iota_\shuffle a)^t
+	\end{split}\end{equation} %}
+	また、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		(\iota_\shuffle a)^t(\iota_\shuffle b) = \jump{a=b}(\nu + 1)
+		+ (\iota_\shuffle b)(\iota_\shuffle a)^t \\
+	\end{split}\end{equation*} %}
+	ここで、$\nu$は\label{eq:文字数作用素}で定義された文字数を数える線形写像
+	である。
+	\begin{proof} %{
+		式\eqref{eq:文字のシャッフル積その一}\eqref{eq:文字のシャッフル積その二}
+		\eqref{eq:文字の連結と文字列の積}\eqref{eq:Brzozowski則}を用いて代数的
+		に証明できるはずであるが、難しいので、ここでは文字数に関する帰納法で
+		証明しておく。文字数$0$の時に命題が成り立つことはわかる。文字数$n\ge0$
+		のとき命題が成り立つとする。次の二つの式が成り立つから、
+		\begin{equation*}\begin{split} %{
+			(\iota_\shuffle a)^t(\iota_\shuffle b)c
+			&= \jump{a=b}c + \jump{a=c}(\iota_\shuffle b) + bc(\iota_\shuffle a)^t
+			+ c(\iota_\shuffle a)^t(\iota_\shuffle b) \\
+			(\iota_\shuffle b)(\iota_\shuffle a)^tc
+			&= \jump{a=c}(\iota_\shuffle b) + bc(\iota_\shuffle a)^t
+			+ c(\iota_\shuffle b)(\iota_\shuffle a)^t \\
+			&\quad\text{for all }a,b,c\in A
+		\end{split}\end{equation*} %}
+		帰納法の仮定より、任意の文字数$n$の文字列$w$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			(\iota_\shuffle a)^t(\iota_\shuffle b)cw
+			&= \jump{a=b}cw + \jump{a=c}(\iota_\shuffle b)w 
+			+ bc(\iota_\shuffle a)^tw
+			+ c(\iota_\shuffle a)^t(\iota_\shuffle b)w \\
+			&= \jump{a=b}cw + \jump{a=c}(\iota_\shuffle b)w 
+			+ bc(\iota_\shuffle a)^tw \\
+			&\quad + \jump{a=b}(n+1)cw
+			+ c(\iota_\shuffle b)(\iota_\shuffle a)^tw \\
+			&= (n+2)\jump{a=b}cw + (\iota_\shuffle b)(\iota_\shuffle a)^tcw \\
+			&\quad\text{for all }a,b,c\in A
+		\end{split}\end{equation*} %}
+		したがって、文字数が$n+1$の文字列に対しても命題が成り立つことがわかる。
+	\end{proof} %}
+	以上の交換関係をまとめると次のようになる。
+	\begin{equation}\begin{split} %{
+		(\iota_\shuffle a)b &= ab + b(\iota_\shuffle a) \\
+		(\iota_\shuffle a)^tb &= \jump{a=b} + b(\iota_\shuffle a)^t \\
+		(\iota_\shuffle a)^t(\iota_\shuffle b) &= \jump{a=b}(\nu + 1)
+			+ (\iota_\shuffle b)(\iota_\shuffle a)^t \\
+	\end{split}
+		\quad\text{for all }a,b\in A
+	\end{equation} %}
+
+	\begin{todo}[やること]\label{todo:やること} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[Hopf代数] antipodeをヒルベルト空間の観点から説明している。
+			\url{http://mathoverflow.net/questions/63923/shuffle-hopf-algebra-how-to-prove-its-properties-in-a-slick-way}
+			およびその元ネタ
+			\url{http://arxiv.org/abs/math/0408405}
+			\item[エルミート作用素] $m_\shuffle m_\shuffle^t$を低次の状態について
+			計算しみると次のようになる。
+			\begin{equation*}\begin{split} %{
+				\wordu{} &\mapsto \wordu{} \\
+				\word{a} &\mapsto 2\word{a} \\
+				\word{ab} &\mapsto 3(\word{ab} + \word{ba}) \\
+				\word{abc} &\mapsto 8\word{abc} + 4(\word{bac} + \word{acb}) 
+					+ 2(\word{cab} + \word{bca})\\
+			\end{split}\end{equation*} %}
+			係数は何を意味するのだろうか。文字列の並べ替えを互換の積で表したときの
+			最小の互換の数が関係しているようだ。\word{abc}では係数$8$の項は互換が
+			$0$個、係数$4$の項は互換が$1$個、係数$2$の項は互換が$2$個の積に
+			なっている。
+			\item[ゼータ関数] シャッフル積とオートマトンとゼータ関数は関係する
+			らしい。\url{http://www.f.waseda.jp/uenoki/04haru.pdf}もしくは
+			\url{http://xxx.lanl.gov/abs/math/0403458}
+			\item[ブラッシュアップ] 文字のシャッフル積の表式
+			\eqref{eq:文字のシャッフル積}を導きだす方法をもっと簡潔にすること。
+			多分、交換関係を経ずとも表式を得ることができる。
+			\item[Hopf代数との関係] $R$を半環に限定しているためにアンチポード
+			$(-)^\nu$を使わないで議論しているが、アンチポードに相当するものが
+			存在すると思われる。
+			\item[関数] （複素）関数とは写像$\mybf{1}=\set{1}\to\fukuso$の集合
+			$\fukuso\mybf{1}$のことである。複素数の演算から畳み込みによって
+			$\fukuso\mybf{1}$に演算が定義される。定義された演算を用いて
+			$\fukuso\mybf{1}$の自己写像が定義される。関数の定義とは
+			$\fukuso\mybf{1}$の一点を定めることである。例えば$x^2$とは写像
+			$\myop{end}\fukuso\mybf{1}$を定めたと解釈する。
+			写像の合成$fg$は$\myop{end}\fukuso\mybf{1}$の合成と考え、
+			値の代入$f3.14$は$\fukuso\mybf{1}$の一点$1\mapsto3.14$の$f$による
+			変換と考える。この考え方を構文解析に適用すると、入力文字列の集合
+			を$\Word{A}$、品詞の集合を$B$、写像$B\to R\Word{A}$の集合を
+			$R\Word{A}B$として、文法定義は
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 自己写像$\myop{end}R\Word{A}B$の部分空間を定める部分と
+				\item $R\Word{A}B$の一点を定める部分
+			\end{itemize} %}
+			とに分割して考えることができる。例えば、BNF
+			\begin{equation*}\begin{split} %{
+				E &= U + EOE \\
+				U &= V + LER \\
+				V &= ('a'..'z')^+ \\
+				L &= '(' \\
+				R &= ')' \\
+				O &= '*' \\
+			\end{split}\end{equation*} %}
+			では次のように解釈する。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $A$をASCII文字、$B$を文字集合$\set{E,U,V,L,R,O}$、係数を
+				ブーリアンと考える。
+				\item $E=\dots$と$U=\dots$で$\myop{end}R\Word{A}B$の元を二つ定め、
+				その二つの元から生成される$\myop{end}R\Word{A}B$の部分空間を定める。
+				\item $V=\dots,\;L=\dots,\;R=\dots,\;O=\dots$で$R\Word{A}B$の元を
+				一つ定める。
+			\end{itemize} %}
+		\end{description} %}
+	\end{todo} %todo:やること}
+%s1:文字列の連結}
+\section{メモ}\label{s1:メモ} %{
+	式4.10
+	\begin{equation*}\begin{split} %{
+			E &= T + EpT \\
+			T &= F + TmF \\
+			F &= v + lEr \\
+	\end{split}\end{equation*} %}
+	式4.11
+	\begin{equation*}\begin{split} %{
+			E &= TE_1 \\
+			E_1 &= 1 + pTE_1 \\
+			T &= FT_1 \\
+			T_1 &= 1 + mFT_1 \\
+			F &= v + lEr \\
+	\end{split}\end{equation*} %}
+	例4.19
+	\begin{equation*}\begin{split} %{
+		S &= a + iEtSS_1 \\
+		S_1 &= 1_W + eS \\
+		E &= b \\
+	\end{split}\end{equation*} %}
+	写像$\myop{first}:RWA\to RWA\otimes RWA$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\myop{first}f &= 1_W\otimes (1_W^t f) 
+			+ \sum_{a\in A}a\otimes (a^\dag f) \\
+	\end{split}\end{equation*} %}
+	すると、例4.19は次のようになる。
+	\begin{equation*}\begin{split} %{
+		\myop{first}S &= a\otimes 1_W + i\otimes EtSS_1 \\
+		\myop{first}S_1 &= 1_W\otimes 1_W + e\otimes S \\
+		\myop{first}E &= b\otimes 1_W \\
+	\end{split}\end{equation*} %}
+%s1:メモ}
+\section{構文解析}\label{s1:構文解析} %{
+	構文解析とはプログラミング言語や自然言語処理における文字列分解の方法の
+	一種だが、単に複数の単語に分解するのではなく、与えられた文法に従い
+	分解した単語に単語の種類を表すタグをつけて分解する方法を特に構文解析
+	という。例えば、次のようなBNFによる文法を与えると、
+	\begin{equation*}\begin{split} %{
+		E &= E_1 E_2 \\
+		E_1 &= \word{a} \\
+		E_2 &= \word{aa} \\
+	\end{split}\end{equation*} %}
+	構文解析の出力$\myop{tokenize}E$は次のようになる。
+	\begin{equation*}\begin{split} %{
+		(\myop{tokenize}E) w &= \begin{cases}
+			w=\word{aaa} &\implies \mytree {
+				& E \ar@{-}[ld] \ar@{-}[rd] \\
+				E_1 \ar@{-}[d] & & E_2 \ar@{-}[d] \\
+				\word{a} & & \word{aa} \\
+			} \\
+			\text{else} &\implies 0 \\
+		\end{cases}
+	\end{split}\end{equation*} %}
+	プログラミングでよく使われる文字列を複数の文字列に分解することは
+	タグが一種類だけの特別な場合になる。
+
+	文法は上手く作らないと曖昧さが生じる。例えば、次のようなBNFによる文法を
+	与えると、
+	\begin{equation*}\begin{split} %{
+		E &= E_1E_2 \\
+		E_1 &= \word{} + \word{a} \\
+		E_2 &= \word{aa} + \word{aaa} \\
+	\end{split}\end{equation*} %}
+	構文解析の出力$\myop{tokenize}E$は次のようになる。
+	\begin{equation*}\begin{split} %{
+		(\myop{tokenize}E) w &= \begin{cases}
+			w=\word{aa} &\implies \mytree {
+				& E \ar@{-}[ld] \ar@{-}[rd] \\
+				E_1 \ar@{-}[d] & & E_2 \ar@{-}[d] \\
+				\word{} & & \word{aa} \\
+			} \\
+			w=\word{aaa} &\implies \mytree {
+				& E \ar@{-}[ld] \ar@{-}[rd] \\
+				E_1 \ar@{-}[d] & & E_2 \ar@{-}[d] \\
+				\word{} & & \word{aaa} \\
+			} + \mytree {
+				& E \ar@{-}[ld] \ar@{-}[rd] \\
+				E_1 \ar@{-}[d] & & E_2 \ar@{-}[d] \\
+				\word{a} & & \word{aa} \\
+			} \\
+			w=\word{aaaa} &\implies \mytree {
+				& E \ar@{-}[ld] \ar@{-}[rd] \\
+				E_1 \ar@{-}[d] & & E_2 \ar@{-}[d] \\
+				\word{a} & & \word{aaa} \\
+			} \\
+			\text{else} &\implies 0 \\
+		\end{cases}
+	\end{split}\end{equation*} %}
+	入力文字列が\word{aaa}の場合、与えあられた文法にマッチすることは分かるが、
+	\word{}\word{aaa}と区切ればよいのか、\word{a}\word{aa}と区切ればよいのか
+	決められない。これは、dangling-elseと呼ばれる問題の簡単な場合である。
+	C言語の場合、if-else文においてdangling-elseが避けられるように文法が
+	定義されているが、前置演算子++、中置演算子+, 後置演算子++において
+	同じような問題が生じる。C言語の式$x+++y$がコンパイラによって$(x++)+y$と
+	解釈されるのか$x+(++y)$と解釈されるのかを知っている人は少ないだろう。
+	自然言語を対象とする場合は、確率を用いて解釈することができれであろうが、
+	プログラミング言語を処理する場合は確率を用いることは避けなければならない。
+
+	構文解析は中間バッファを必要とする場合がある。
+	例えば、次のようなBNFによる文法を与えると、
+	\begin{equation}\label{eq:入力の最後でやっとトークン分解が確定する例}\begin{split} %{
+		E &= E_1E_2 \\
+		E_1 &= \word{a} \\
+		E_2 &= \word{aa}^* \\
+	\end{split}\end{equation} %}
+	構文解析の出力$\myop{tokenize}E$は次のようになり、どこまで続くかわからない
+	入力文字列の最後まで読まないと文字列分解に手を付けられない例である。
+	\begin{equation*}\begin{split} %{
+		(\myop{tokenize}E) w &= \begin{cases}
+			w=\word{a}^{2n} &\implies \mytree {
+				E \ar@{-}[d] \\
+				E_2 \ar@{-}[d] \\
+				\word{aa}^n \\
+			} \\
+			w=\word{a}^{2n+1} &\implies \mytree {
+				& E \ar@{-}[ld] \ar@{-}[rd] \\
+				E_1 \ar@{-}[d] & & E_2 \ar@{-}[d] \\
+				\word{a} & & \word{aa}^n \\
+			} \\
+			\text{else} &\implies 0 \\
+		\end{cases}\quad\text{for all }n\in\sizen
+	\end{split}\end{equation*} %}
+
+	構文解析を線形代数で取り扱うことを考える。
+	まず、いくつかの例についてLLとLRという構文解析の手法を用いて線形代数として
+	書き直す方法を探ってみる。
+
+\subsection{ボトムアップ構文解析}\label{s2:ボトムアップ構文解析} %{
+	例から入ることにする。
+	次のようなBNFによって文法が与えられたとする。
+	この文法は二項演算$o$を表す式をモデルとしている。
+	\begin{equation*} %{
+		\begin{split}
+			E &= V + EOE + LER \\
+		\end{split} \qquad \begin{split}
+			L &= \word{(} \\
+			R &= \word{)} \\
+			O &= \word{o} \\
+			V &= \word{v} \\
+		\end{split}
+	\end{equation*} %}
+	このBNFを次のように読み替える。
+	\begin{equation*} %{
+		\begin{split}
+			\word{V} &\mapsto E \\
+			\word{EOE} &\mapsto E \\
+			\word{LER} &\mapsto E \\
+		\end{split} \qquad \begin{split}
+			\word{(} &\mapsto L \\
+			\word{)} &\mapsto R \\
+			\word{o} &\mapsto O \\
+			\word{v} &\mapsto V
+		\end{split}
+	\end{equation*} %}
+	集合$A,B$を$A=\set{(,),o,v},\;B=\set{E,V,O,L,R}$とおき、
+	写像$WA\to B$と写像$WB\to B$の逆写像がBNFによって与えられた考える。
+	この例の場合、入力単語$\word{(vov)ov}$は次のようにしてトークン分解される。
+	\begin{equation*}\begin{array}{ccccccc} %{
+		& & \word{(vov)ov} &\mapsto& \word{Lvov)ov} &\mapsto& \word{LVov)ov} \\
+		&\mapsto& \word{LEOv)ov} &\mapsto& \word{LEOV)ov} 
+			&\mapsto& \word{LEOE)ov} \\
+		&\mapsto& \word{LE)ov} &\mapsto& \word{LERov}
+			&\mapsto& \word{Eov} \\
+		&\mapsto& \word{EOv} &\mapsto& \word{EOV}
+			&\mapsto& \word{EOE} \\
+		&\mapsto& \word{E}
+	\end{array}\end{equation*} %}
+
+	\begin{note}[構文解析用語との対応]\label{note:構文解析用語との対応} %{
+		教科書\cite{aho:dragon}で使われている用語とここで用いられている記号との
+		対応を付けておく。
+		\begin{equation*}\begin{split} %{
+			A &\Leftrightarrow \text{終端記号} \\
+			B &\Leftrightarrow \text{変数} \\
+			A \cup B &\Leftrightarrow \text{文法記号} \\
+			B \to W(A \cup B) &\Leftrightarrow \text{導出} \\
+			B \to \bool W(A \cup B) &\Leftrightarrow \text{生成規則} \\
+			WA \to B &\Leftrightarrow \text{還元動作} \\
+			WB \to B &\Leftrightarrow \text{シフト動作} \\
+		\end{split}\end{equation*} %}
+	\end{note} %note:構文解析用語との対応}
+%s2:ボトムアップ構文解析}
+
+\subsection{用語}\label{s2:用語} %{
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[構文解析] 
+		\item[上向き構文解析] 構文解析を行うに当たって、文法を表す平面木を
+		葉から根に向かって順の走査してく方法である。
+		\item[下向き構文解析] 構文解析を行うに当たって、文法を表す平面木を
+		根から行きがけ順、中がけ順、帰りがけ順のどれからの方法で順に走査していく
+		方法である。
+		\item[予言的構文解析] 構文解析を行う際に入力文字列を一時的に保存していく
+		メモリを必要としない構文解析の手法を一般に予言的構文解析という。
+		上向き構文解析だろうが下向き構文解析だろうが、入力文字列の一時保存用の
+		メモリが必要か必要でないかは同じであろうが、歴史的な経緯で予言的構文解析
+		という言葉は下向き構文解析に対して用いられることが多いようである。
+		\item[ボトムアップ構文解析] 上向き構文解析のこと。
+		\item[トップダウン構文解析] 下向き構文解析のこと。
+		\item[シフト-レディース構文解析] 上向き構文解析のこと。
+		\item[再帰下降構文解析] 下向き構文解析のこと。
+		\item[字句解析] 構文解析との違いがわからない。
+		構文解析と字句解析と分けて考えられるものだろうか？
+		\item[Syntactic Analysis] 構文解析のこと。
+		\item[Lexical Analysis] 字句解析のこと。
+		\item[バックトラック] 構文解析を行う際に入力文字列を一時的に保存していく
+		メモリのこと。バックトラックを必要とするということと予言的構文解析で
+		ないことは同値である。
+	\end{description} %}
+%s2:用語}
+%s1:構文解析}
+
+\section{スタックマシン}\label{s1:スタックマシン} %{
+	型なしラムダ計算をスタックマシンで表現することを考える。
+	ラムダ記法からスタックマシンに変換する理由は、ラムダ記法のままでは
+	変数のルックアップが多くなってしまうため、プログラムの実行速度が
+	遅くなる。それに対して、スタックマシン、特にスタックを配列で表現した
+	スタックマシンでは、変数のルックアップをスタックの番地に変換してしまう
+	ことで実行速度を上げることを狙う。変数名を文字列からスタックの番地に
+	変換することに対応する。
+
+	カッコを省略した場合のラムダ式の結合順序を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\lfnc{abc}{M} &= \lfnc{a}{\bigr(\lfnc{b}{(\lfnc{c}{M}})\bigr)}
+		\quad\text{for all }a,b,c\in\text{variable},\;M\in\text{expression} \\
+		M_1M_2M_3 &= (M_1M_2)M_3
+		\quad\text{for all }M_1,M_2,M_3\in\text{expression} \\
+	\end{split}\end{equation*} %}
+	ラムダ式はこのような結合順序で書かれることが多いが、関数適用に関する
+	結合順序は左からカッコが掛かっていくことに注意する。貪欲評価を基本とする
+	プログラミング言語に慣れた頭で考えると右からカッコが掛かっていると間違える
+	ことが多い。ラムダ式の記述では遅延評価が基本となる。
+
+	よく使われるラムダ式についてスタックへの変換を考えてみる。
+
+	$SKI$コンビネータはそれぞれ次のように書ける。
+	\begin{equation*}\begin{array}{rclcrcl} %{
+		I &=& \lfnc{a}{a} &:& x &\mapsto& x \\
+		K &=& \lfnc{ab}{a} &:& (x,y) &\mapsto& x \\
+		S &=& \lfnc{abc}{(ac)(bc)} &:& (x,y,z) &\mapsto& (xz)(yz) \\
+	\end{array}\end{equation*} %}
+	$K,I$コンビネータは関数適用を含まないので省略して、$S$コンビネータを
+	三番地記法で書くと次のようになるだろう。
+	\begin{equation*}\begin{split} %{
+		I &\mapsto \begin{array}{rcl}
+			\text{stack} &:& \young(12,x) \\
+		\end{array} \\
+		& \quad\text{copy }1\text{ to }2 \\
+		K &\mapsto \begin{array}{rcl}
+			\text{stack} &:& \young(123,xy) \\
+		\end{array} \\
+		& \quad\text{copy }1\text{ to }3 \\
+		%
+		S &\mapsto \begin{array}{rcl}
+			\text{stack} &:& \young(123456,xyz) \\
+		\end{array} \\
+		& \quad\text{apply }1\text{ to }3\text{ and write result to }4 \\
+		& \quad\text{apply }2\text{ to }3\text{ and write result to }5 \\
+		& \quad\text{apply }4\text{ to }5\text{ and write result to }6 \\
+	\end{split}\end{equation*} %}
+	最初にパラメータからスタックに値をコピーして、それからスタック内の変数に
+	関数適用してその結果をスタックの右端に書きこんでいく。
+	スタックの右端の値が計算の最終結果になるようにしている。
+
+	$S$コンビネータを次のような木で表し、この木をパースしてスタックマシンに
+	変換することを考える。
+	\begin{equation*}\begin{array}{ccccc} %{
+		S &\mapsto& \mytree{
+			& \lambda \ar@{-}[dl] \ar@{-}[dr] \\
+			a & & \lambda \ar@{-}[dl] \ar@{-}[dr] \\
+			& b & & \lambda \ar@{-}[dl] \ar@{-}[dr] \\
+			& & c & & \myspace \ar@{-}[dl] \ar@{-}[dr] \\
+			& & & \myspace \ar@{-}[dl] \ar@{-}[d] & & \myspace \ar@{-}[d] \ar@{-}[dr] \\
+			& & a & c & & b & c \\
+		} &\mapsto& \begin{split}
+			\quad\text{apply }1\text{ to }3\text{ and write result to }4 \\
+			\quad\text{apply }2\text{ to }3\text{ and write result to }5 \\
+			\quad\text{apply }4\text{ to }5\text{ and write result to }6 \\
+		\end{split}
+	\end{array}\end{equation*} %}
+%s1:スタックマシン}
+\section{カッコ言語のパース}\label{s1:カッコ言語のパース} %{
+	次の文法で定義された言語をパースすることを考える。
+	\begin{equation*}\begin{split} %{
+		E &= V^+ + (E) \\
+		V &= \text{sequence of any alphabet except ( and )} \\
+	\end{split}\end{equation*} %}
+	パースの結果を次のような根付き平面木で表すことにする。
+	\begin{equation*}\begin{array}{ccc} %{
+		a (b c) d &\mapsto& \mytree {
+			& E \ar@{-}[ld] \ar@{-}[ld] \ar@{-}[rd] \\
+			a & E \ar@{-}[ld] \ar@{-}[rd] & d \\
+			b & & c \\
+		}
+	\end{array}\end{equation*} %}
+	ここで、パースの結果を平面木ではなく、平面木を作る手前の
+	トークン分解とスタック操作列で出力することを考える。
+	\begin{equation*}\begin{array}{ccccc} %{
+		a (b c) d &\mapsto&  \begin{array}{l}
+			\text{tokens} = \word{abcd} \\
+			\left\{\begin{array}{lllll}
+				\text{push-child} &\text{pattern}& E \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 1 \\
+				\text{pop} \\
+				\text{push-child} &\text{pattern}& E \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 2 \\
+				\text{pop} \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 3 \\
+				\text{pop} \\
+				\text{pop} \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 4 \\
+				\text{pop} \\
+			\end{array}\right.%\}
+		\end{array} \\
+		&\mapsto& \mytree {
+			& E \ar@{-}[ld] \ar@{-}[ld] \ar@{-}[rd] \\
+			a & E \ar@{-}[ld] \ar@{-}[rd] & d \\
+			b & & c \\
+		}
+	\end{array}\end{equation*} %}
+	スタック操作は次のように定義している。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item push-child pattern $p$ with token $t$ \\
+		$t$番目のトークンを品詞$p$として頂点スタックに追加する。
+		トークンが省略された場合には、無名の品詞としておく。
+		その際、頂点スタックが空でなければ、頂点スタックの最後の頂点を、
+		新規に追加する頂点の親とする。頂点スタックが空であれば、
+		新規に追加する頂点を根とする。
+		\item pop \\
+		頂点スタックから最後の頂点を取り除く。
+	\end{itemize} %}
+	さらに、push-childに続いて即popの操作が行われる場合は、頂点スタックを
+	増減する必要がないので、二つの操作を簡略化した操作new-childを追加して
+	おく。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item new-child pattern $p$ with token $t$ \\
+		$t$番目のトークンを品詞$p$として作成する。
+		トークンが省略された場合には、無名の品詞としておく。
+		その際、頂点スタックが空でなければ、頂点スタックの最後の頂点を、
+		新規に追加する頂点の親とする。頂点スタックが空であれば、
+		新規に追加する頂点を根とする。
+	\end{itemize} %}
+	一旦ファイルをすべて読み終わった段階で、スタック操作の最適化すると
+	次のようになるだろう。
+	\begin{equation*}\begin{array}{ccccc} %{
+		a (b c) d &\mapsto&  \begin{array}{l}
+			\text{tokens} = \word{abcd} \\
+			\left\{\begin{array}{lllll}
+				\text{push-child} &\text{pattern}& E \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 1 \\
+				\text{pop} \\
+				\text{push-child} &\text{pattern}& E \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 2 \\
+				\text{pop} \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 3 \\
+				\text{pop} \\
+				\text{pop} \\
+				\text{push-child}  &\text{pattern}& V &\text{with token}& 4 \\
+				\text{pop} \\
+			\end{array}\right.%\}
+		\end{array} \\
+		&\mapsto& \begin{array}{l}
+			\text{tokens} = \word{abcd} \\
+			\left\{\begin{array}{lllll}
+				\text{push-child} &\text{pattern}& E \\
+				\text{new-child}  &\text{pattern}& V &\text{with token}& 1 \\
+				\text{push-child} &\text{pattern}& E \\
+				\text{new-child}  &\text{pattern}& V &\text{with token}& 2 \\
+				\text{new-child}  &\text{pattern}& V &\text{with token}& 3 \\
+				\text{pop} \\
+				\text{new-child}  &\text{pattern}& V &\text{with token}& 4 \\
+			\end{array}\right.%\}
+		\end{array} \\
+		&\mapsto& \mytree {
+			& E \ar@{-}[ld] \ar@{-}[ld] \ar@{-}[rd] \\
+			a & E \ar@{-}[ld] \ar@{-}[rd] & d \\
+			b & & c \\
+		}
+	\end{array}\end{equation*} %}
+%s1:カッコ言語のパース}
+\endgroup %}
