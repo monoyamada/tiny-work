@@ -19,15 +19,513 @@
 	\newcommand{\map}{\ensuremath{\myop{map}}}
 	\newcommand{\defeq}{\ensuremath{\overset{\mathrm{def}}{=}}}
 	%
-\section{群と表現}\label{s1:section name} %{
+\section{表現論}\label{s1:表現論} %{
+\subsection{環上の代数}\label{s2:環上の代数} %{
+	\begin{definition}[環の標数]\label{def:環の標数} %{
+		$R=(R,\myspace,1_R,+,0_R)$を環とする。乗法の単位元$1_R$の$n$個の和
+		\begin{equation*}\begin{split} %{
+			n1_R &= \underbrace{1_R+1_R+\cdots+1_R}_{n\text{個}}
+		\end{split}\end{equation*} %}
+		が加法の単位元$0_R$となる最小の自然数$n$のことを$R$の標数という。
+	\end{definition} %def:環の標数}
+
+	\begin{example}[整数の剰余環]\label{eg:整数の剰余環} %{
+		$0$から$n-1$までの自然数の部分集合$[n]=0..(n-1)$に対して、二項演算
+		$+_n$と$\cdot_n$を次のように定義する。
+		\begin{equation*}\begin{array}{rcll} %{
+			a +_n b &=& a + b & \pmod{n} \\
+			a \cdot_n b &=& a\cdot b & \pmod{n}
+		\end{array}\end{equation*} %}
+		ここで、右辺の$+$と$\cdot$は通常の自然数の加法と乗法とする。
+		すると、$[n]$に
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $+_n$を加法、$0$をその単位元、
+			\item $\cdots_n$を乗法、$1$をその単位元
+		\end{itemize} %}
+		とする可換半環の構造が定義できる。さらに、任意の$a\in[n]$に対して
+		$n-a$が$+_n$の逆元となる。
+		\begin{proof} %{
+			$a+(n-a)=n=0\pmod{n}$
+		\end{proof} %}
+		したがって、$([n],+_n,0,\cdots_n,1)$は可換環となる。
+		この環を$n$を法とする整数の剰余環といい、$\sei/n\sei=$と書く。
+		$\sei/n\sei=$は標数$n$の可換環である。
+	\end{example} %eg:整数の剰余環}
+
+	\begin{note}[整数の剰余体]\label{note:整数の剰余体} %{
+		一般には、整数の剰余環$\sei/n\sei$は乗法に関する逆元を持たない。
+		例えば、$n=4$の場合、$2\cdot 2=4=0\pmod{4}$となる。
+		一般に、環において$0$でない元$a$に対して$ba=0$となる$0$でない元$b$を
+		$a$の左ゼロ元という。
+		環の元$a$が左ゼロ元を持てば、$a$の逆元は存在しない。
+		\begin{proof} %{
+			$b$が$a$の左ゼロ元ならば、$ba=0$となるが、この式に$a$の逆元を
+			右から掛ければ、$b=0$となり、$b\neq0$と矛盾する。
+		\end{proof} %}
+		したがって、$\sei/4\sei$において$2$の逆元は存在しない。
+
+		$\sei/n\sei$が体となる必要十分条件は$n$が素数になることである。
+		つまり、任意の$0$でない自然数$a$に対して、$a\cdot b = 1 \pmod{n}$
+		となる自然数$b$が存在するための必要十分条件は$n$が素数になることで
+		ある。任意の素数$p$に対して、体$\sei/p\sei$は標数$p$の体となる。
+	\end{note} %note:整数の剰余体}
+
+	\begin{definition}[代数的に閉じた体]\label{def:代数的に閉じた体} %{
+		$K$を体とする。$K$を係数とする任意の多項式が根を持つとき、
+		$K$を代数的に閉じているという。ここで、多項式$f$の根とは式$fx=0$の
+		解のことである。
+	\end{definition} %def:代数的に閉じた体}
+
+	\begin{definition}[環上の代数]\label{def:環上の代数} %{
+		可換環$R$上の加群$V$がモノイドであるとき\footnote{
+			モノイドから制限を弱めて、
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 半群の構造をもつ加群を代数といい、
+				\item 積が単位元を持つときは単位的代数という
+			\end{itemize} %}
+			こともあるようだ。ここでは、単位的代数を単に代数ということにする。
+		}、$V$を$R$上の代数または$R$-代数という。
+	\end{definition} %def:環上の代数}
+
+	\begin{definition}[群環]\label{def:群環} %{
+		$R$を可換環、$G$を群とする。$G$から$R$への写像全体のつくる集合$RG^\dag$
+		に加法$+$と乗法$\myspace$を次の畳み込みで定義する。
+		\begin{equation*}\begin{split} %{
+			(f_1+f_2)x &= (f_1x) + (f_2x) \\
+			(f_1f_2)x &= \sum_{x_1,x_2\in G}\jump{x=x_1x_2}(f_1x_1)(f_2x_2) \\
+		\end{split}
+			\quad\text{for all }f_1,f_2\in RG^\dag,\;x\in G
+		\end{equation*} %}
+		加法$+$の単位元は$0\in R$への恒等写像$\iota_R0$、
+		\begin{equation*}\begin{split} %{
+			(\iota_Rr)x = r \quad\text{for all }r\in R,\;x\in G
+		\end{split}\end{equation*} %}
+		乗法$\myspace$の単位元は$G$の単位元$1_G$の双対元$1_G^\dag$
+		\begin{equation*}\begin{split} %{
+			x^\dag y = \jump{x=y} \quad\text{for all }x,y\in G
+		\end{split}\end{equation*} %}
+		となる。そして、スカラー積を次のように定義すれば、$RG^\dag$は
+		$R$-代数となる。
+		\begin{equation*}\begin{split} %{
+			rf = (\iota_Rr)f \quad\text{for all }r\in R,\;f\in RG^\dag
+		\end{split}\end{equation*} %}
+		通常は、$RG^\dag$そのものではなく、有限個の$G$の元に対してのみ
+		$fx\neq0$となり、その他の無限個の$G$の元に対しては$fx=0$となるものに
+		制限したものを考える。つまり、有限の台に制限したものを考える。
+		これを$G$の$R$上の群環といい、$RG$と書く。
+	\end{definition} %def:群環}
+
+	\begin{definition}[行列代数]\label{def:行列代数} %{
+		$R$を可換環、$M_nR$を$R$係数の$n$行$n$列の行列全体の集合とする。
+		通常の行列の加法、乗法、係数のスカラー積で$M_nR$は代数となる。
+		この代数を$R$上の$n$次行列代数という。
+		有限次元の$R$-加群$V$の線形変換全体$\End_RV$は、
+		\begin{equation*}\begin{split} %{
+			\End_RV=\set{f:V\to V\bou f\text{ is $R$-linear}}
+		\end{split}\end{equation*} %}
+		$R$上の$\dim V$次行列代数$M_{\dim V}R$と同型なので、
+		$M_{\dim V}R$の代わりに$\End_RV$と書くこともある。
+	\end{definition} %def:行列代数}
+
+	\begin{definition}[代数の準同型]\label{def:代数の準同型} %{
+		$R$を可換環、$V,W$を$R$-代数とする。$V$から$W$への$R$-線形写像$\phi$が、
+		\begin{equation*}\begin{split} %{
+			\phi(v_1+v_2) &= (\phi v_1) + (\phi v_2)
+				\quad\text{for all }v_1,v_2\in V \\
+			\phi(rv) &= r(\phi v)
+				\quad\text{for all }v\in V,\;r\in R \\
+		\end{split}\end{equation*} %}
+		次の式を満たすとき、$\phi$を$V$から$W$への代数の準同型という。
+		\begin{equation*}\begin{split} %{
+			\phi 1_V &= 1_W \\
+			\phi(v_1v_2) &= (\phi v_1)(\phi v_2) 
+				\quad\text{for all }v_1,v_2\in V \\
+		\end{split}\end{equation*} %}
+	\end{definition} %def:代数の準同型}
+
+	\begin{definition}[部分代数]\label{def:部分代数} %{
+		$R$を可換環、$V$を$R$-代数とする。$V$の部分加群$W$が
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 単位元を含み、
+			\item 積について閉じている
+		\end{itemize} %}
+		とき、$W$を部分代数という。
+	\end{definition} %def:部分代数}
+
+	\begin{definition}[イデアル]\label{def:イデアル} %{
+		$R$を可換環、$V$を$R$-代数とする。$V$の部分代数$W$が
+	\end{definition} %def:イデアル}
+%s2:環上の代数}
+%s1:表現論}
+\section{FORMAL LANGUAGES AND GROUPS AS MEMORY}\label{s1:FORMAL LANGUAGES AND GROUPS AS MEMORY} %{
+	論文\cite{arxiv:kambites:chomsky}についてのメモを書いておく。
+
+	\begin{definition}[群の単語問題]\label{def:群の単語問題} %{
+		群を生成元とその間の関係式で表したとき、群の元は生成元の文字列として
+		書き表される。その時、群の二つの元が等しいか等しくないかを調べる
+		方法を求めることを群の単語問題という。
+	\end{definition} %def:群の単語問題}
+
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[Chomsky-Shutzenbergerの表現定理] 
+		Chomsky-Sch{\"u}tzenbergerの定理と呼ばれるものは他にもあるようなので、
+		ここでは、Chomsky-Sch{\"u}tzenbergerの表現定理として書いておく。
+		定理の内容は、任意の文脈自由言語は正規言語とDyck言語を組み合わせて
+		表現できるということを主張している。
+		文献\cite{chomsky:schutzenberger}には本人達のオリジナルの証明がある。
+		%
+		\item[構文モノイド] syntactic monoidを構文モノイドと訳しておく。
+		%
+		\item[再帰式における曖昧さ] 曖昧さは再帰式特有の現象ではなく、
+		正規言語においても現れる現象だが、再帰式の場合は容易に曖昧さが生じて
+		しまうという特徴を持つ。例えば、再帰式$x=a+xbx$の解は、
+		$x=a+(aba)ba+ab(aba)+\cdots$となるが、入力文字列$(ab)^2a$に対して、
+		$(aba)ba$と分解すべきか、$ab(aba)$と分解すべきかを決めることができない。
+		これは、文字列の結合による積が結合的になっていることに起因する。
+		一般に、自然数係数の再帰式の解が任意の$w\in\Word A$に対してある
+		$n_w\in\sizen$があって$x=\sum_{w\in\Word A}n_ww$と書けたとすると、
+		$1<n_w$となる$n_w$なる文字列の解釈に曖昧さが生じる。
+		二項演算の優先順位をカッコ$(,\;)$で表せば、$n_w$はカッコを入れる方法の
+		数となる。具象構文解析木から文字列への写像
+		$\myop{print}:\Tree A\to \Word A$を用いると、$\myop{print}$が$1:1$
+		でないことに起因する。PEG（Persing Expression Grammar）は、演算子に
+		優先順位を
+		曖昧さを
+		次の方法で取り除いている。
+	\end{description} %}
+
+	\begin{todo}[構成手順]\label{todo:構成手順} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[経路の和] $\Gamma=(\Gamma_V,\Gamma_E)$を有限の箙とする。
+			箙$\Gamma$から$V=R\Word\Gamma_E\otimes R\mycal{B}\Gamma_V$への写像
+			$\phi$を次のように定義する。
+			\begin{equation*}\begin{split} %{
+				\phi: s \xto{a} t \mapsto \phi_a\otimes(\eta_t\lu{t}{\eta_s})
+			\end{split}\end{equation*} %}
+			右辺の$\phi_a$は箙の構造を忘れた単なる文字$a$を表すものとする。
+			また、$R\mycal{B}\Gamma_V$は$\Gamma_V$を添字としてもつ$R$係数の
+			Brzozowski代数とする。そして、$V$の積を次のように定義する。
+			\begin{equation*}\begin{split} %{
+				(w_1\otimes\alpha_1)\otimes(w_2\otimes\alpha_2)
+					\mapsto (w_1w_2)\otimes(\alpha_1\alpha_2) \\
+				\quad\text{for all }w_1,w_2\in\Word\Gamma_V
+					,\;\alpha_1,\alpha_2\in\mycal{B}\Gamma_V
+			\end{split}\end{equation*} %}
+			以降、$V$の中のテンソル積の記号$\otimes$は省略する。
+			$S=\sum_{a\in\Gamma_E}\phi a$として、頂点$u$から頂点$v$への経路の和
+			$\braket{v|u}$は次のように書くことができる。
+			\begin{equation*}\begin{split} %{
+				\braket{v|u} &= \braket{\lu{t}{\eta_{v}}S^*\eta_{u}}
+			\end{split}\end{equation*} %}
+			すると、任意の$s\xto{a}t\in\Gamma$に対して次のようになる。
+			\begin{equation*}\begin{split} %{
+				\lu{t}{\phi_a}\braket{v|u}
+				&= \braket{\lu{t}{\eta_{v}}\lu{t}{\phi_a}S^*\eta_{u}}
+					= \braket{\lu{t}{\eta_{v}}\lu{t}{\phi_a}SS^*\eta_{u}}
+					= \jump{v=t}\braket{\lu{t}{\eta_{s}}SS^*\eta_{u}} \\
+				&= \jump{v=t}\braket{s|u} \\
+			\end{split}\end{equation*} %}
+			したがって、写像$\phi$によって、経路代数$R\Gamma$から
+			$\End_RR\Word\Gamma_E$への逆順表現が得られる。この表現は、
+			すべての頂点が$u$から$v$の経路内に含まれるときのみ$1:1$になる。多分。
+		\end{description} %}
+	\end{todo} %todo:構成手順}
+%s1:FORMAL LANGUAGES AND GROUPS AS MEMORY}
+%
+\section{群と表現}\label{s1:群と表現} %{
 	教科書\cite{bk:kikkawa.gun}のノートである。
 	この節では転置を左上に$t$と書くとする。例えば、$x$の転置を$\lu{t}{x}$
 	と書く。
-	この節では単にベクトル空間と書いた場合は複素ベクトル空間を指すものとする。
+	この節では単にベクトル空間と書いた場合は複素ベクトル空間を指すものと
+	する。
 
-	三次対称群$S_3$を平面上の三角形の頂点の入れ替えに対応させている。
-	$S_3=\set{1,c_3,c_3^{-1},\sigma_1,\sigma_2,\sigma_3}$を次のような
-	操作に対応させている。
+	\begin{proposition}[Schurの補題その一]\label{prop:Schurの補題その一} %{
+		群$G$の二つの既約表現$\rho_i:G\to \End_\fukuso V_i,\;i=1,2$に対して、
+		次の式を満たす線形写像$\phi\in\Hom_\fukuso(V_1,V_2)$が存在するならば、
+		\begin{equation*}\begin{split} %{
+			\phi(\rho_1g) = (\rho_2g)\phi \quad\text{for all }g\in G
+		\end{split}\end{equation*} %}
+		$\phi$は同型射または$0$である。
+	\end{proposition} %prop:Schurの補題その一}
+	\begin{proof} %{
+		$\ker\phi$は$V_1$の部分空間となるが、$\rho_1$が既約表現だから、
+		$\ker\phi=V_1$（$\phi=0$）または$\ker\phi=0$（$\phi$が$1:1$）となる。
+		同様に$\im\phi$は$V_2$の部分空間となるが、$\rho_2$が既約表現だから、
+		$\im\phi=V_2$（$\phi$が$\onto$）または$\im\phi=0$（$\phi=0$）となる。
+		そして、$\phi$の条件を可換図で書くと次のようになる。
+		\begin{equation}\label{eq:intertwiner}\xymatrix{
+			V_1 \ar[r]^{\phi} \ar[d]^{\rho_1g} & V_2 \ar[d]^{\rho_2g} \\
+			V_1 \ar[r]^{\phi} & V_2 \\
+		} \quad\text{for all }g\in G
+		\end{equation}
+		したがって、$\ker\phi=0$のときは$\im\phi=V_2$、$\ker\phi=V_1$のときは
+		$\im\phi=0$となることがわかる。したがって、$\phi$は、$\ker\phi=0$のとき
+		$1:1$かつ$\onto$、$\ker\phi=V_1$のとき$0$となる。
+	\end{proof} %}
+
+	\begin{proposition}[Schurの補題その二]\label{prop:Schurの補題その二} %{
+		群$G$の有限次元の既約表現$\rho:G\to \End_\fukuso V$に対して、
+		次の式を満たす線形写像$\phi\in\End_\fukuso V$が存在するならば、
+		\begin{equation*}\begin{split} %{
+			\phi(\rho g) = (\rho g)\phi \quad\text{for all }g\in G
+		\end{split}\end{equation*} %}
+		ある$\lambda\in\fukuso$が存在して、$\phi=\lambda$となる。
+	\end{proposition} %prop:Schurの補題その二}
+	\begin{proof} %{
+		$\phi$は有限次元の線形写像だからある固有値$\lambda$をもち、
+		$\phi$の固有値$\lambda$に属する固有空間$V_\lambda\subseteq V$は
+		空でない。$\phi$が命題の条件を満たすとき、
+		固有空間$V_\lambda$は$\rho G$の作用で閉じる。
+		（$(\rho G)V_\lambda\subseteq V_\lambda$）。
+		\begin{equation*}\begin{split} %{
+			\phi(\rho g)v = (\rho g)\phi v = \lambda(\rho g) v
+			\quad\text{for all }g\in G,\;v\in V_\lambda
+		\end{split}\end{equation*} %}
+		$\rho$は既約表現だから、$V_\lambda$は空か$V$でなくてはならないが、
+		$V_\lambda$は空でないので、$V_\lambda=V$となる。
+	\end{proof} %}
+
+	次に、可約表現は既約表現の直和として書けることを示す。そのための準備を
+	行う。Schurの補題\ref{prop:Schurの補題その一}の証明の中に現れた可換図
+	\eqref{eq:intertwiner}を可約な表現も含む形に拡張したものを
+	intertwinerという。
+
+	\begin{definition}[intertwiner]\label{def:intertwiner} %{
+		$G$を群とし、$(\rho_1,V_1)$と$(\rho_2,V_2)$を$G$の表現とする。
+		次の可換図を満たす線形写像$\phi\in\Hom_\fukuso(V_1,V_2)$を
+		$\rho_1$から$\rho_2$へのintertwinerまたはintetwining作用素という。
+		intertwinerの日本語訳はわからない。
+		\begin{equation*}\xymatrix{
+			V_1 \ar[r]^{\phi} \ar[d]^{\rho_1g} & V_2 \ar[d]^{\rho_2g} \\
+			V_1 \ar[r]^{\phi} & V_2 \\
+		}\end{equation*}
+	\end{definition} %def:intertwiner}
+
+	群$G$の表現$(\rho,V)$が与えられると、ベクトル空間$V$は群環$\fukuso G$を
+	係数とする加群として見ることもできる。群環$\fukuso G$の積を次のように
+	定義し、
+	\begin{equation*}\begin{split} %{
+		\sum_{g\in G}(c_gg)\sum_{h\in G}(d_hh)
+		&= \sum_{g,h\in G}(c_gd_h)(gh)
+		\quad\text{for all }c_g,d_g\in\fukuso,\;g\in G \\
+	\end{split}\end{equation*} %}
+	写像$-\myspace-:\fukuso G\times V\to V$を次のように定義すれば、
+	\begin{equation*}\begin{split} %{
+		\sum_{g\in G}(c_gg)v &= \sum_{g\in G}c_g\bigl((\rho g)v\bigr)
+		\quad\text{for all }c_g\in\fukuso,\;g\in G,\;v\in V \\
+	\end{split}\end{equation*} %}
+	写像$-\myspace-$は$\fukuso G$の$V$への作用となる。
+	\begin{equation*}\begin{split} %{
+		(f_1f_2)v &= f_1(f_2v) \quad\text{for all }f_1,f_2\in\fukuso G,\;v\in V
+	\end{split}\end{equation*} %}
+	逆に、$\fukuso G$加群$V$が与えられれば、$V$の基底を定めることで、
+	$G$の$V$への表現が定まる。したがって、少なくとも\footnote{
+		無限次元のベクトル空間の場合は保留しておく。
+	}、有限次元の$\fukuso G$加群全体と$G$有限次元表現全体は集合同型になる。
+
+	群$G$の表現$(\rho_1,V_1)$と$(\rho_2,V_2)$に対して、
+	$\rho_1$から$\rho_2$へのintertwiner全体のつくる集合はベクトル空間となる。
+	さらに、$V_1$と$V_2$を$\fukuso G$加群としてみると、
+	$\rho_1$から$\rho_2$へのintertwinerの定義は、
+	$V_1$から$V_2$への$\fukuso G$加群準同型の定義そのものとなる。
+	したがって、$\fukuso G$加群の圏$\myop{Mod}_{\fukuso G}$を考えると、
+	$\myop{Mod}_{\fukuso G}$の射がintertwinerに対応する。
+	$V_1$から$V_2$への$\fukuso G$加群準同型全体のつくるベクトル空間を
+	$\Hom_{\fukuso G}(V_1,V_2)$
+	\footnote{
+		慣習的に$\Hom_G(V_1,V_2)$と書かれるようだが、
+		ここでは、長たらしく$\Hom_{\fukuso G}(V_1,V_2)$と書くことにする。
+	}と書く。少なくとも、$V_1$と$V_2$が有限次元の場合、
+	$\Hom_{\fukuso G}(V_1,V_2)$は$\rho_1$から$\rho_2$へのintertwinerの
+	つくるベクトル空間と同型となる。
+
+	加群の構造だけで話をする場合には、既約の代わりの単純という言葉を使う。
+
+	\begin{definition}[単純な加群]\label{def:単純な加群} %{
+		$R$を環、$V$を$R$加群とする。$V$が$0$以外の真部分加群
+		（$V$自身でない部分加群）を持たないとき、$V$を単純な$R$加群という。
+	\end{definition} %def:単純な加群}
+
+	群環上の加群に限らず、代数上の加群であれば、Schurの補題が成り立つ。
+
+	\begin{proposition}[Schurの補題その三]\label{prop:Schurの補題その三} %{
+		$R$を代数、$V$を$R$加群とする。$V$が有限次元かつ単純であれば、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\Hom_R(V_1,V_2) \simeq \begin{cases}
+				\fukuso, &\text{ iff }V_1 \simeq_R V_2 \\
+				0, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:Schurの補題その三}
+	\begin{proof} %{
+		Schurの補題\ref{prop:Schurの補題その一}と\ref{prop:Schurの補題その二}
+		と同様に、$\phi\in\Hom_R(V_1,V_2)$の核$\ker\phi$と像$\im\phi$を
+		調べることで命題が証明できる。
+	\end{proof} %}
+
+	\begin{proposition}[単純な加群は巡回的]\label{prop:単純な加群は巡回的} %{
+		$R$を環、$V$を$R$加群とする。$V$が単純であれば、
+		$0$でない任意の元$v\in V$に対して、$V=Rv=\set{rv\bou r\in R}$となる。
+	\end{proposition} %prop:単純な加群は巡回的}
+	\begin{proof} %{
+		$Rv\subseteq V$は$R$部分加群となるが、$V$が単純ならば$Rv=V$となる。
+	\end{proof} %}
+
+	環$R$を$R$加群としてみることで、単純な環が定義される。
+	
+	\begin{definition}[単純な環]\label{def:単純な環} %{
+		$R$を代数、$V$を$R$加群とする。$V$が単純であれば、
+	\end{definition} %def:単純な環}
+
+	加群には単純と似た言葉で分解不可能という言葉がある。
+
+	\begin{definition}[分解不可能な加群]\label{def:分解不可能な加群} %{
+		$R$を環、$V$を$R$加群とする。$V$が$0$でない部分加群$V_1$と$V_2$
+		で$V=V_1\oplus V_2$と書くことができないとき、$V$を分解不可能な$R$加群
+		という。
+	\end{definition} %def:分解不可能な加群}
+
+	定義より、すべての単純な加群は分解不可能な加群となるが、
+	その逆は成り立つとは限らない。
+	\begin{equation*}\begin{split} %{
+		\text{単純な加群}\subseteq \text{分解不可能な加群}
+	\end{split}\end{equation*} %}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	intertwinerの作り方を考える。
+	$G$を有限群、$(\rho_1,V_1),\;(\rho_2,V_2)$を$G$の表現とする。
+	任意の線形写像$\phi\in\Hom_\fukuso(V_1,V_2)$に対して
+	$\widebar{\phi}\in\Hom_\fukuso(V_1,V_2)$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\widebar{\phi} = \frac{1}{\zettai{G}}\sum_{g\in G}
+			(\rho_2 g^{-1})\phi(\rho_1 g)
+	\end{split}\end{equation*} %}
+	すると、次の式が成り立ち、
+	\begin{equation*}\begin{split} %{
+		\widebar{\phi}(\rho_1h) 
+			&= \frac{1}{\zettai{G}}\sum_{g\in G}(\rho_2 g^{-1})\phi(\rho_1 g)(\rho_1h) \\
+			&= \frac{1}{\zettai{G}}\sum_{g\in G}(\rho_2 g^{-1})\phi\bigl(\rho_1(gh)\bigr) \\
+			&= \frac{1}{\zettai{G}}\sum_{g\in G}(\rho_2h)\bigl(\rho_2(gh)^{-1}\bigr)\phi\bigl(\rho_1(gh)\bigr) \\
+			&= (\rho_2h)\widebar{\phi} \quad\text{for all }h\in G
+	\end{split}\end{equation*} %}
+	$\widebar{\phi}$はintertwinerとなる。可換図で書くと次のようになる。
+	\begin{equation*}\begin{split} %{
+		\sum_{g\in G}\xymatrix{
+			V_1 \ar[r]^{\rho_1 g} \ar@{.>}[d]^{\widebar{\phi}}
+				& V_1 \ar[d]^{\phi} \\
+			V_2 & V_2 \ar[l]^{\rho_2g^{^1}} \\
+		} &\implies \xymatrix{
+			V_1 \ar[r]^{\rho_1 g} \ar[d]^{\widebar{\phi}}
+				& V_1 \ar[d]^{\widebar{\phi}} \\
+			V_2 \ar[r]^{\rho_2g} & V_2 \\
+		} \quad\text{for all }g\in G
+	\end{split}\end{equation*} %}
+	命題の形でまとめておく。
+
+	\begin{proposition}[intertwinerの作り方]\label{prop:intertwinerの作り方} %{
+		$G$を有限群、$(\rho_1,V_1),\;(\rho_2,V_2)$を$G$の表現とする。
+		任意の線形写像$\phi\in\Hom_\fukuso(V_1,V_2)$に対して、
+		次のように定義した線形写像$\widebar{\phi}\in\Hom_\fukuso(V_1,V_2)$は
+		$\rho_1$から$\rho_2$へのintertwinerとなる。
+		\begin{equation*}\begin{split} %{
+			\widebar{\phi} = \frac{1}{\zettai{G}}\sum_{g\in G}
+				(\rho_2 g^{-1})\phi(\rho_1 g)
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:intertwinerの作り方}
+	
+	表現の行列成分を表すことを考える。
+	有限群$G$の表現$\rho:G\to \End V$に対して、$V$の任意の内積$\braket{-,-}$
+	から次のようにして$G$不変な内積$\braket{-,-}_G$を定義することができる。
+	\begin{equation*}\begin{split} %{
+		\braket{u,v}_G = \frac{1}{\zettai{G}}\sum_{g\in G}
+			\braket{(\rho g)u, (\rho g)v} \quad\text{for all }u,v\in V
+	\end{split}\end{equation*} %}
+	$V$が有限次元の場合は、行列の転置が定義できるから、$G$不変な内積
+	$\braket{-,-}_G$を用いると、次の式が成り立ち、任意の$g\in G$に対して
+	その表現$\rho g$がユニタリ行列となる。
+	\begin{equation*}\begin{split} %{
+		\braket{(\rho g)u,(\rho g)v}_G 
+		= \braket{u,\lu{t}{(\rho g)}(\rho g)v}_G
+		= \braket{u,v}_G \quad\text{for all }u,v\in V,\;g\in G
+	\end{split}\end{equation*} %}
+	つまり、有限群の任意の有限次元ベクトル空間$V$への表現$\rho$は、
+	それをユニタリ行列とする$V$の内積を定義することができる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	環$R$の作用が定義された加群を$R$加群と書く。
+	$V,W$を$R$加群とし、任意の$r_1,r_2\in R,\;v_1,v_2\in V$に対して次の
+	式を満たす写像$\phi:V\to W$を$R$加群準同型という。
+	\begin{equation*}\begin{split} %{
+		\phi(r_1v_1+r_2v_2) = r_1\phi v_1 + r_2\phi v_2
+	\end{split}\end{equation*} %}
+	$V$から$W$への$R$加群準同型全体のつくる集合を$\Hom_R(V,W)$と書く。
+
+	intertwinerを定義する可換図\eqref{eq:intertwiner}は、群$G$の表現を
+	$\fukuso$線形に拡張すると、$\fukuso G$加群準同型を定義する可換図そのもの
+	になる。したがって、intertwinerと$\fukuso G$加群準同型は同じことである。
+
+	\begin{proposition}[Schurの補題の言い換え]\label{prop:Schurの補題の言い換え} %{
+		群$G$の二つの有限次元の既約表現$\rho_i:G\to \End V_i$に対して、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\dim_\fukuso\Hom_{\fukuso G}(V_1,V_2) = \jump{V_1\simeq V_2}
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:Schurの補題の言い換え}
+	\begin{proof} %{
+		Schurの補題その一\ref{prop:Schurの補題その一}から$V_1$と$V_2$が同型
+		でないときは$V_1$から$V_2$へのintertwinerは存在しないので、
+		$\Hom_{\fukuso G}(V_1,V_2)=0$となり、$V_1\simeq V_2$のときは
+		Schurの補題その二\ref{prop:Schurの補題その二}から同型射は単位射の定数倍
+		になるから$\Hom_{\fukuso G}(V_1,V_2)=1$となることがわかる。
+	\end{proof} %}
+
+
+	この命題とSchurの補題を組み合わせて既約表現の直交性が導かれる。
+
+	\begin{proposition}[既約表現の直交性]\label{prop:既約表現の直交性} %{
+		$G$を有限群、$(\rho_1,V_1)$と$(\rho_2,V_2)$を$G$の有限次元の既約表現
+		とする。このとき$(\rho_1,V_1)$と$(\rho_2,V_2)$は次の性質を持つ。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $V_1\not\simeq V_2$のとき、任意の$i,j\in1..(\dim V_1)$
+			と$k,l\in1..(\dim V_2)$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				\frac{1}{\zettai{G}}\sum_{g\in G}(\rho_1g)_{ij}(\rho_2g^{-1})_{kl}
+				= 0
+			\end{split}\end{equation*} %}
+			\item $(\rho_1,V_1)=(\rho_2,V_2)=(\rho,V)$のとき、
+			任意の$i,j,k,l\in1..(\dim V)$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				\frac{1}{\zettai{G}}\sum_{g\in G}(\rho g)_{ij}(\rho g^{-1})_{kl}
+				= \frac{\jump{i=l}\jump{j=k}}{\zettai{\dim V}}
+			\end{split}\end{equation*} %}
+		\end{enumerate} %}
+	\end{proposition} %prop:既約表現の直交性}
+	\begin{proof} %{
+	\end{proof} %}
+
+	講義録\cite{bump.lecture}から。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[指標の考え方] 群$G$から複素数$\fukuso$への写像全体を考える。
+		その中で特に、共役類
+		\begin{equation*}\begin{split} %{
+			g_1\sim g_2 \iff \text{ there exists }h\in G\text{ such that }
+				g_1 = hg_2h^{-1}
+		\end{split}\end{equation*} %}
+		に対して同一の値を与える写像全体を考えると指標が導かれる。
+	\end{description} %}
+%
+\subsection{三次対称群}\label{s2:三次対称群} %{
+	教科書\cite{bk:kikkawa.gun}では群の例として三次対称群が使われることが
+	多い。三次対称群について成り立つことを順不同にまとめておく。
+
+	三次対称群$S_3$は平面上の正三角形の頂点の入れ替えに対応させることが
+	できる。$S_3=\set{1,c_3,c_3^{-1},\sigma_1,\sigma_2,\sigma_3}$とおき、
+	次の操作に対応させる。
 	\begin{equation}\begin{split} %{
 		\xymatrix@R=4pt@C=2pt{
 			& 1 \ar@{-}[dl] \ar@{-}[dr] \\
@@ -52,104 +550,277 @@
 			} & \text{ $3$固定の反転} \\
 		\end{array}
 	\end{split}\end{equation} %}
+	これらの操作を巡回置換の記号を使って書くと次のようになる。
+	\begin{equation*}\begin{split} %{
+		c_3 = (1, 2, 3)
+		,\quad \sigma_1 = (2, 3)
+		,\quad \sigma_2 = (1, 3)
+		,\quad \sigma_3 = (1, 2)
+	\end{split}\end{equation*} %}
+	また、文字集合$A_3=\set{a_1,a_2,a_3}$に対するBrzozowski代数を用いて、
+	三次対称群の元を書くこともできる。
+	線形写像$a_{ij}\in\End\fukuso A_3$を次のようにおく。
+	\begin{equation*}\begin{split} %{
+		a_{ij} = a_i\lu{t}{a_j}
+	\end{split}\end{equation*} %}
+	$a_{ij}$の積は$a_{ij}a_{kl}=\jump{j=k}a_{il}$となる。また、
+	$a_{ij}$の転置は$\lu{t}{a_{ij}}=a_{ji}$となる。さらに、
+	文字集合が有限であることから、$a_{11}+a_{22}+a_{33}=1$が
+	成り立つ\footnote{
+		文字集合が無限の場合は、単純に射影$a_{ii}$の和が恒等写像
+		とすることはできないかもしれない。
+	}。三次対称群の元は$a_{ij}$を用いて次のように書ける。
+	\begin{equation*}\begin{split} %{
+		c_3 &= a_{21} + a_{32} + a_{13} \\
+		\sigma_1 &= a_{11} + a_{23} + a_{32} \\
+		\sigma_2 &= a_{22} + a_{31} + a_{13} \\
+		\sigma_3 &= a_{33} + a_{12} + a_{21} \\
+	\end{split}\end{equation*} %}
+	$\sigma_i$は対称行列で、次の代数を満たす。
+	\begin{equation*}\begin{array}{ccccccc} %{
+		\sigma_1\sigma_1 &=& \sigma_2\sigma_2 &=& \sigma_3\sigma_3 &=& 1 \\
+		\sigma_1\sigma_2 &=& \sigma_2\sigma_3 &=& \sigma_3\sigma_1 &=& c_3 \\
+		\sigma_2\sigma_1 &=& \sigma_3\sigma_2 &=& \sigma_1\sigma_3 &=& c_3^{-1} \\
+	\end{array}\end{equation*} %}
+	ここで、恒等写像$\myid$を$1$と書いた。
+	任意の置換は互換の積で書き表されることからも、$c_3$が$\sigma_i$の積で
+	書けることはわかる。また、$\sigma_i$の共役類は$\set{\sigma_i}_{i\in1..3}$
+	で閉じていて、唯一つの類$\set{\sigma_i}_{i\in1..3}$となる。
+	\begin{equation*}\begin{split} %{
+		\sigma_i\sigma_i\sigma_i = \sigma_i \quad\text{for all }i\in1..3 \\
+		\sigma_2\sigma_3\sigma_2 = \sigma_3\sigma_2\sigma_3 = \sigma_1 \\
+		\sigma_3\sigma_1\sigma_3 = \sigma_1\sigma_3\sigma_1 = \sigma_2 \\
+		\sigma_1\sigma_2\sigma_1 = \sigma_2\sigma_1\sigma_2 = \sigma_3 \\
+	\end{split}\end{equation*} %}
+	このことを群表と類表を使ってみると次のようになる。
+	\begin{equation}\label{eq:三次対称群の群表}\begin{array}{c|ccccccc} %{
+		\text{群表} & 1 & c_3 & c_3^2 & \sigma_1 & \sigma_2 & \sigma_3 \\\hline
+		1 & 1 & c_3 & c_3^2 & \sigma_1 & \sigma_2 & \sigma_3 \\
+		c_3 & c_3 & c_3^2 & 1 & \sigma_3 & \sigma_1 & \sigma_2 \\
+		c_3^2 & c_3^2 & 1 & c_3 & \sigma_2 & \sigma_3 & \sigma_1 \\
+		\sigma_1 & \sigma_1 & \sigma_2 & \sigma_3 & 1 & c_3 & c_3^2 \\
+		\sigma_2 & \sigma_2 & \sigma_3 & \sigma_1 & c_3^2 & 1 & c_3 \\
+		\sigma_3 & \sigma_3 & \sigma_1 & \sigma_2 & c_3 & c_3^2 & 1 \\
+	\end{array}\end{equation} %}
+	\begin{equation}\label{eq:三次対称群の類表}\begin{array}{c|ccccccc} %{
+		\text{類表} & 1 & c_3 & c_3^2 & \sigma_1 & \sigma_2 & \sigma_3 \\\hline
+		1-1 & 1 & c_3 & c_3^2 & \sigma_1 & \sigma_2 & \sigma_3 \\
+		c_3-c_3^2 & 1 & c_3 & c_3^2 & \sigma_2 & \sigma_3 & \sigma_1 \\
+		c_3^2-c_3 & 1 & c_3 & c_3^2 & \sigma_3 & \sigma_1 & \sigma_2 \\
+		\sigma_1-\sigma_1 & 1 & c_3^2 & c_3 & \sigma_1 & \sigma_3 & \sigma_2 \\
+		\sigma_2-\sigma_2 & 1 & c_3^2 & c_3 & \sigma_3 & \sigma_2 & \sigma_1 \\
+		\sigma_3-\sigma_3 & 1 & c_3^2 & c_3 & \sigma_2 & \sigma_1 & \sigma_3 \\
+	\end{array}\end{equation} %}
+	この類表から三次対称群$S_3$は次の３つの類に類別されることがわかる。
+	\begin{equation*}\begin{split} %{
+		C_1 = \set{1}
+		,\quad C_2 = \set{c_3,c_3^2}
+		,\quad C_3 = \set{\sigma_1,\sigma_2,\sigma_3}
+	\end{split}\end{equation*} %}
+%s2:三次対称群}
+%
+\subsection{群の作用}\label{s2:群の作用} %{
+	\begin{definition}[群の作用]\label{def:群の作用} %{
+		$G$を群、$X$を集合とする。$G$から$X$の自己写像$\End X$への
+		写像$\mu:G\to \End X$が次の性質を満たすとき、$\mu$を$G$の$X$への
+		作用という。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 単位元が自明に作用する。
+			\begin{equation*}\begin{split} %{
+				(\mu 1_G) = \myid
+			\end{split}\end{equation*} %}
+			\item 積と作用がコンパチブルである。
+			\begin{equation*}\begin{split} %{
+				(\mu g_1)(\mu g_2) = \bigl(\mu(g_1g_2)\bigr)
+				\quad\text{for all }g_1,g_2\in G
+			\end{split}\end{equation*} %}
+		\end{itemize} %}
+	\end{definition} %def:群の作用}
 
-	\begin{proposition}[Schurの補題その一]\label{prop:Schurの補題その一} %{
-		群$G$の二つの既約表現$\rho_i:G\to \End V_i$に対して、
-		次の式を満たす線形写像$\phi:V_1\to V_2$が存在するならば、
+	集合$X$の自己写像全体$\End X$は写像の合成を積とするモノイドだが、
+	群$G$の$X$への作用$\mu$を定めることができれば、$\mu G\subseteq \End X$は
+	$\End X$の部分群となり、$\mu$は$G$から$\End X$への群準同型となる。
+
+	\begin{definition}[作用の軌道]\label{def:作用の軌道} %{
+		$G$を群、$X$を集合、$\mu$を$G$の$X$への作用とする。
+		次の同値類$\sim\subseteq X\times X$を作用$\mu$の軌道という。
 		\begin{equation*}\begin{split} %{
-			\phi(\rho g) = (\rho g)\phi \quad\text{for all }g\in G
+			x_1\sim x_2 \iff \text{ there exists } g\in G \text{ such that }
+			x_1 = (\mu g) x_2
 		\end{split}\end{equation*} %}
-		$\phi$は同型射または$0$である。
-	\end{proposition} %prop:Schurの補題その一}
+		また、任意の$x\in X$に対して$X$の部分集合
+		$(\mu G)x=\set{(\mu g)x\bou g\in G}$を$x$の$\mu$による軌道という。
+	\end{definition} %def:作用の軌道}
 	\begin{proof} %{
-		$\ker\phi$は$V_1$の部分空間となるが、$\rho_1$が既約表現だから、
-		$\ker\phi=V_1$（$\phi=0$）または$\ker\phi=0$（$\phi$が$1:1$）となる。
-		同様に$\im\phi$は$V_2$の部分空間となるが、$\rho_2$が既約表現だから、
-		$\im\phi=V_2$（$\phi$が$\onto$）または$\im\phi=0$（$\phi=0$）となる。
-		そして、$\phi$の条件を可換図で書くと次のようになる。
-		\begin{equation}\label{eq:interwinning}\xymatrix{
-			V_1 \ar[r]^{\phi} \ar[d]^{\rho g} & V_2 \ar[d]^{\rho g} \\
-			V_1 \ar[r]^{\phi} & V_2 \\
-		} \quad\text{for all }g\in G
-		\end{equation}
-		したがって、$\ker\phi=0$のときは$\im\phi=V_2$、$\ker\phi=V_1$のときは
-		$\im\phi=0$となることがわかる。したがって、$\phi$は、$\ker\phi=0$のとき
-		$1:1$かつ$\onto$、$\ker\phi=V_1$のとき$0$となる。
+		関係$\sim$が同値関係になることを証明する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 反射律 \\
+			$G$の単位元$1_G$によって、任意の$x\in X$に対して$(\mu 1_G)x=x$と
+			なるので、$x\sim x$が成り立つ。
+			\item 対称律 \\
+			$x_1\sim x_2$ならば、ある$g\in G$があって$x_1=gx_2$となるが、
+			このとき、$x_2=g^{-1}x_1$となるから$x_2\sim x_1$となる。
+			\item 推移律 \\
+			$x_1\sim x_2$かつ$x_2\sim x_3$ならば、ある$g,h\in G$があって
+			$x_1=gx_2$かつ$x_2=hx_3$となるが、このとき、$x_1=ghx_3$となるから
+			$x_1\sim x_3$となる。
+		\end{itemize} %}
 	\end{proof} %}
 
-	\begin{proposition}[Schurの補題その二]\label{prop:Schurの補題その二} %{
-		群$G$の有限次元の既約表現$\rho:G\to \End V$に対して、
-		次の式を満たす線形写像$\phi:\End V$が存在するならば、
-		\begin{equation*}\begin{split} %{
-			\phi(\rho g) = (\rho g)\phi \quad\text{for all }g\in G
-		\end{split}\end{equation*} %}
-		$\phi=\lambda$となる$\lambda\in\fukuso$が存在する。
-	\end{proposition} %prop:Schurの補題その二}
+	\begin{definition}[等方部分群]\label{def:等方部分群} %{
+		$G$を群、$X$を集合、$\mu$を$G$の$X$への作用とする。
+		任意の$x\in X$に対して$G$の部分群$G_x=\set{g\in G\bou (\mu g)x=x}$
+		を$x$の等方部分群、または$x$の固定部分群という。
+	\end{definition} %def:等方部分群}
 	\begin{proof} %{
-		$\phi$は有限次元の線形写像だからある固有値$\lambda$をもち、
-		$\phi$の固有値$\lambda$に属する固有空間$V_\lambda\subseteq V$は
-		空でない。$\phi$が命題の条件を満たすとき、
-		固有空間$V_\lambda$は$\rho G$の作用で閉じる。
-		（$(\rho G)V_\lambda\subseteq V_\lambda$）。
-		\begin{equation*}\begin{split} %{
-			\phi(\rho g)v = (\rho g)\phi v = \lambda(\rho g) v
-			\quad\text{for all }g\in G,\;v\in V_\lambda
-		\end{split}\end{equation*} %}
-		$\rho$は既約表現だから、$V_\lambda$は空か$V$でなくてはならないが、
-		$V_\lambda$は空でないので、$V_\lambda=V$となる。
+		任意の$x\in X$に対して、$G$の部分集合
+		$G_x=\set{g\in G\bou (\mu g)x=x}$が群になることを証明する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $1_G\in G_x$ \\
+			作用の定義から$G$の単位元$1_G$は$G_x$に含まれる。
+			\item $m(G_x\times G_x)\subseteq G_x$
+			\begin{equation*}\begin{split} %{
+				\bigl(\mu(g_1g_2)\bigr)x = \mu(g_1)\mu(g_2)x = x
+				\quad\text{for all }g_1,g_2\in G_x
+			\end{split}\end{equation*} %}
+			\item $g\in G_x\implies g^{-1}\in G_x$
+			\begin{equation*}\begin{split} %{
+				(\mu g^{-1})x = (\mu g^{-1})(\mu g)x = (\mu 1_G)x = x
+				\quad\text{for all }g\in G_x
+			\end{split}\end{equation*} %}
+		\end{itemize} %}
 	\end{proof} %}
 
-	\begin{definition}[interwinning]\label{def:interwinning} %{
-		可換図\eqref{eq:interwinning}を満たす線形写像をinterwinningという。
-		interwinningの日本語訳はわからない。
-	\end{definition} %def:interwinning}
-
-	環$R$の作用が定義された加群を$R$加群と書く。
-	$V,W$を$R$加群とし、任意の$r_1,r_2\in R,\;v_1,v_2\in V$に対して次の
-	式を満たす写像$\phi:V\to W$を$R$加群準同型という。
+	軌道$\mu:G\to\End X$によって集合$X$は類別される。
 	\begin{equation*}\begin{split} %{
-		\phi(r_1v_1+r_2v_2) = r_1\phi v_1 + r_2\phi v_2
+		(\mu G)x_1 \neq (\mu G)x_2 
+		\implies (\mu G)x_1 \cap (\mu G)x_2 = \emptyset
 	\end{split}\end{equation*} %}
-	$V$から$W$への$R$加群準同型全体のつくる集合を$\Hom_R(V,W)$と書く。
+	この式が成り立つことは$\sim$が同値関係であることからわかる。
+	$x\in (\mu G)x_1 \cap (\mu G)x_2$が存在すれば、軌道の定義より、
+	任意の$y_1\in (\mu G)x_1,y_2\in (\mu G)x_2$に対して
+	$x = g_1y_1$かつ$x = g_2y_2$となる$g_1,g_2\in G $が存在する。
+	したがって、$y_1=g_1^{-1}g_2y_2$となり、$(\mu G)x_1=(\mu G)x_2$
+	となることがわかる。
 
-	interwinningを定義する可換図\eqref{eq:interwinning}は、群$G$の表現を
-	$\fukuso$線形に拡張すると、$\fukuso G$加群準同型を定義する可換図そのもの
-	になる。したがって、interwinningと$\fukuso G$加群準同型は同じことである。
+	\begin{definition}[推移的な作用]\label{def:推移的な作用} %{
+		$G$を群、$X$を集合、$\mu$を$G$の$X$への作用とする。
+		作用$\mu$の軌道が唯一つしかないことき、作用$\mu$を推移的という。
+	\end{definition} %def:推移的な作用}
 
-	\begin{proposition}[Schurの補題の言い換え]\label{prop:Schurの補題の言い換え} %{
-		群$G$の二つの有限次元の既約表現$\rho_i:G\to \End V_i$に対して、
-		次の式が成り立つ。
+	群$G$の集合$X$への作用$\mu$が推移的であることは、
+	任意の$x,y\in X$に対してある$g\in G$が存在して、
+	$x=(\mu g)y$と書けることと同値である。したがって、任意の$x\in X$に対して
+	$X=Gx$となる。
+
+	\begin{example}[群自身への左作用]\label{eg:群自身への左作用} %{
+		群$G$の群自身$G$への作用$\mu$を群の左からの積で定義すると、
 		\begin{equation*}\begin{split} %{
-			\dim_\fukuso\Hom_{\fukuso G}(V_1,V_2) = \jump{V_1\simeq V_2}
+			(\mu g)h = gh \quad\text{for all }g,h\in G
 		\end{split}\end{equation*} %}
-	\end{proposition} %prop:Schurの補題の言い換え}
-	\begin{proof} %{
-		Schurの補題その一\ref{prop:Schurの補題その一}から$V_1$と$V_2$が同型
-		でないときは$V_1$から$V_2$へのinterwinningは存在しないので、
-		$\Hom_{\fukuso G}(V_1,V_2)=0$となり、$V_1\simeq V_2$のときは
-		Schurの補題その二\ref{prop:Schurの補題その二}から同型射は単位射の定数倍
-		になるから$\Hom_{\fukuso G}(V_1,V_2)=1$となることがわかる。
-	\end{proof} %}
+		群の定義より、任意の$g_1,g_2\in G$に対して$g_1=(g_1g_2^{-1})g_2$
+		となるから、$\mu$は推移的となる。
+		また、任意の$g\in G$に対して写像$\mu g:G\to G$は同型射となる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $1:1\quad\because\quad
+				gh_1 = gh_2 \implies h_1 = h_2 \quad\text{for all }h_1,h_2\in G
+			$
+			\item $\myop{onto}\quad\because\quad
+				h = g(g^{-1}h) \quad\text{for all }h\in G
+			$
+		\end{itemize} %}
+	\end{example} %eg:群自身への左作用}
 
-	既約表現の直交性を述べる準備として、内積について成り立つことを書いておく。
-	有限群$G$の既約表現$\rho:G\to \End V$に対して、$V$の任意の内積
-	$\braket{-,-}$から次のようにして$G$不変な内積$\braket{-,-}_G$を定義する
-	ことができる。
+	\begin{example}[群自身への共役による作用]\label{eg:群自身への共役による作用} %{
+		群$G$の群自身$G$への作用$\mu$を群の共役で定義すると、
+		\begin{equation*}\begin{split} %{
+			(\mu g)h = ghg^{-1} \quad\text{for all }g,h\in G
+		\end{split}\end{equation*} %}
+		この作用が推移的となるのは、$G$が単位元$1_G$のみからなる自明な群の
+		ときに限られる。なぜなら、$\mu$が推移的だとすると、任意の元$h\in G$が
+		単位元$1_G$と共役になり、ある元$g\in G$があって$h=g1_Gg^{-1}$となるが、
+		この式の右辺は$1_G$だから$h=1_G$となる。
+	\end{example} %eg:群自身への作用}
+
+	有限群の共役類は次のようにして求まる。まず、次のように群表を書く。
+	\begin{equation*}\begin{array}{c|cccc} %{
+		& g_1 & g_2 & \cdots & g_n \\ \hline
+		g_1 & g_1g_1 & g_1g_2 & \cdots & g_1g_n \\
+		g_2 & g_2g_1 & g_2g_2 & \cdots & g_2g_n \\
+		\vdots & \vdots & \vdots & \cdots & \vdots \\
+		g_n & g_ng_1 & g_ng_2 & \cdots & g_ng_n \\
+	\end{array}\end{equation*} %}
+	群表の$i$行に元$g_i^{-1}$を右からかければ、各列の元は同一の類に含まれる
+	ことがわかる。
+	\begin{equation*}\begin{array}{c|cccc} %{
+		& g_1 & g_2 & \cdots & g_n \\ \hline
+		g_1-g_1^{-1} & g_1g_1g_1^{-1} & g_1g_2g_1^{-1} & \cdots & g_1g_ng_1^{-1} \\
+		g_2-g_2^{-1} & g_2g_1g_2^{-1} & g_2g_2g_2^{-1} & \cdots & g_2g_ng_2^{-1} \\
+		\vdots & \vdots & \vdots & \cdots & \vdots \\
+		g_n-g_n^{-1} & g_ng_1g_n^{-1} & g_ng_2g_n^{-1} & \cdots & g_ng_ng_n^{-1} \\
+	\end{array}\end{equation*} %}
+	この表のことを類表という。
+	例えば、三次対称群では、群表は\eqref{eq:三次対称群の群表}、
+	類表は\eqref{eq:三次対称群の類表}のようになる。
+
+	\begin{todo}[作用の種類]\label{todo:作用の種類} %{
+		Wikipediaに群の作用の代表的な種類が載っている。
+		\url{http://ja.wikipedia.org/wiki/%E7%BE%A4%E4%BD%9C%E7%94%A8}
+	\end{todo} %todo:作用の種類}
+%s2:群の作用}
+%
+\subsection{ヒルベルト空間}\label{s2:ヒルベルト空間} %{
+	\begin{definition}[内積]\label{def:内積} %{
+		複素ベクトル空間$V$に次の性質を満たす写像
+		$\beta:V\otimes V\to \fukuso$が定義されている時、$\beta$を内積
+		または正定値エルミート形式という。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 双線形
+			\begin{equation*}\begin{split} %{
+				\beta\bigl((v_1+v_2)\otimes v_3\bigr) 
+				& = \beta(v_1\otimes v_3) + \beta(v_2\otimes v_3) \\
+				\beta\bigl(v_1\otimes(v_2 + v_3)\bigr)
+				& = \beta(v_1\otimes v_2) + \beta(v_1\otimes v_3) \\
+			\end{split}
+			\quad\text{for all }v_1,v_2,v_3\in V
+			\end{equation*} %}
+			\item 係数の複素共役
+			\begin{equation*}\begin{split} %{
+				\beta\bigl((av_1)\otimes v_2\bigr)
+				&= \widebar{a}\beta\bigl(v_1\otimes v_2\bigr) \\
+				\beta\bigl(v_1\otimes (av_2)\bigr)
+				&= a\beta\bigl(v_1\otimes v_2\bigr) \\
+			\end{split}
+			\quad\text{for all }v_1,v_2,v_3\in V
+			\end{equation*} %}
+			\item 転置の複素共役
+			\begin{equation*}\begin{split} %{
+				\beta(v_1\otimes v_2)
+				&= \overline{\beta(v_2\otimes v_1)}
+			\end{split}
+			\quad\text{for all }v_1,v_2\in V
+			\end{equation*} %}
+		\end{itemize} %}
+	\end{definition} %def:内積}
+
+	$n$次元ヒルベルト空間では、任意の基底$\set{e_i}_{i=1..n}$から、
+	次の線形変換で直交基底$\set{d_i}_{i=1..n}$を得ることができる。
 	\begin{equation*}\begin{split} %{
-		\braket{u,v}_G = \frac{1}{\zettai{G}}\sum_{g\in G}\braket{(\rho g)u, (\rho g)v}
-		\quad\text{for all }u,v\in V
+		\begin{pmatrix}
+		d_1 \\ d_2 \\ \vdots \\ d_n
+		\end{pmatrix} &= \left(1 - \begin{pmatrix}
+		0 & 0 & \cdots & 0 & 0 \\
+		\beta(e_2\otimes e_1) & 0 & \cdots & 0 & 0 \\
+		\vdots & \vdots & \cdots & \vdots & \vdots \\
+		\beta(e_n\otimes e_1) & \beta(e_n\otimes e_2) & \cdots 
+			& \beta(e_n\otimes e_{n-1}) & 0 \\
+		\end{pmatrix}\right) \begin{pmatrix}
+		e_1 \\ e_2 \\ \vdots \\ e_n
+		\end{pmatrix}
 	\end{split}\end{equation*} %}
-	$V$が有限次元の場合は、行列の転置が定義できるから、$G$不変な内積
-	$\braket{-,-}_G$を用いると、次の式が成り立ち、任意の$g\in G$に対して
-	その表現$\rho g$がユニタリ行列となる。
-	\begin{equation*}\begin{split} %{
-		\braket{(\rho g)u,(\rho g)v}_G 
-		= \braket{u,\lu{t}{(\rho g)}(\rho g)v}_G
-		= \braket{u,v}_G \quad\text{for all }u,v\in V,\;g\in G
-	\end{split}\end{equation*} %}
-	つまり、有限群の任意の有限次元ベクトル空間$V$への表現$\rho$は、
-	それをユニタリ行列とする$V$の内積を定義することができる。
-%s1:section name}
+	この線形変換をGram-Schmidtの直交化法という。
+%s2:ヒルベルト空間}
+%s1:群と表現}
 %
 \section{箙}\label{s1:箙} %{
 	講義録\cite{html:quiver.lecture}のノートである。
@@ -157,33 +828,118 @@
 	この節では$K$を標数$0$の代数的閉体とする。 箙の定義からはじめる。
 	箙とは結合性を仮定しない圏である。
 	\begin{definition}[箙]\label{def:箙} %{
-		集合$Q_v,Q_e$に写像$\myop{head}/\myop{tail}:E\to V$が定義されている時、
-		組$(Q_v,Q_e,\myop{head},\myop{tail})$を箙という。
-		このとき、$Q_v$を頂点、$Q_e$を辺という。
+		共通を持たない集合$V,E$に写像$\myop{source}/\myop{target}:E\to V$が
+		定義されている時、組$\Gamma=(V,E,\myop{source},\myop{target})$を
+		箙といい、$V,E$をそれぞれ$\Gamma$の頂点、辺という。
 	\end{definition} %def:箙}
+
+	\begin{definition}[経路の名称]\label{def:経路の名称} %{
+		箙の経路には名前の付いた経路がある。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[自明な経路] 自明な経路とは頂点$v$から$v$への辺だけで構成される
+			経路である。
+			\item[向き付けられた閉路] 向き付けられた閉路とは頂点$v$から$v$への
+			自明でない経路のことである。
+			向き付けられた閉路を持たない箙をacyclicな箙という。
+			acyclicは非循環という訳が使われるようだが、向き付けられた閉路を
+			持たないといった方が簡単な気がする。
+		\end{description} %}
+	\end{definition} %def:自明な辺}
+
 	箙の表現とはベクトル空間への関手である。
 	\begin{definition}[箙の表現]\label{def:箙の表現} %{
-		$Q=(Q_v,Q_e)$を箙とする。箙$Q$の$K$表現$V$とは、頂から$K$ベクトル空間
-		の圏$\mybf{Vec}_K$の対象への対応と、
+		$\Gamma=(V,E)$を箙とする。箙$\Gamma$の$K$表現$\rho$とは、
+		$\Gamma$の各頂点から$K$ベクトル空間への対応と、
 		\begin{equation*}\begin{split} %{
-			\set{Vx\in\mybf{Vec}_K\bou x\in Q_v}
+			\set{\rho v\in\mybf{Vec}_K\bou v\in V}
 		\end{split}\end{equation*} %}
-		辺から次の$\mybf{Vec}_K$の射への対応
+		$\Gamma$の各辺から次の$K$線形写像への対応
 		\begin{equation*}\begin{split} %{
-			\set{Va:(V\myop{tail}a)\to(V\myop{head}a)\bou a\in Q_e}
+			\set{\rho e\in\Hom_K(\rho s, \rho t)\bou s\xto{e}t\in \Gamma}
 		\end{split}\end{equation*} %}
 		の組である。
 	\end{definition} %def:箙の表現}
 
 	\begin{example}[箙の表現の例]\label{eg:箙の表現の例} %{
-		$Q=1\xto{a}2$を箙とする。任意の$m,n\in\sizen$に対して次の対応$V$は
-		$Q$の$K$表現になっている。
+		$\Gamma=1\xto{a}2$を箙とする。
+		任意の$m,n\in\sizen$に対して次の対応$\rho$は$\Gamma$の$K$表現
+		になっている。
 		\begin{equation*}\xymatrix{
 			1 \ar[d]^a \ar@{|->}[r]^V 
 				& K^m \ar[d]^{\text{some $m\times n$ matrix}} \\
 			2 \ar@{|->}[r]^V & K^n \\
 		}\end{equation*}
 	\end{example} %eg:箙の表現の例}
+
+	\begin{definition}[箙の自明な表現]\label{def:箙の自明な表現} %{
+		すべての頂点を$\mybf{0}\in\myop{Vec}_K$に対応させる表現を自明な表現
+		という。
+	\end{definition} %def:箙の自明な表現}
+
+	\begin{definition}[箙の部分表現]\label{def:箙の部分表現} %{
+		箙$\Gamma$の二つの表現$\rho,\rho_0$が次の性質を満たすとき、$\rho_0$を
+		$\rho$の部分表現という。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\Gamma$の任意の頂点$v$に対して$\rho_0v$は$\rho v$の部分空間
+			となり、
+			\item $\Gamma$の任意の辺$e$に対して次の可換図が成り立つ。
+			\begin{equation*}\xymatrix{
+				\rho s \ar[r]^{\rho e} & \rho t \\
+				\rho_0 s \ar[r]^{\rho_0 e} \ar[u]^{\iota_s} 
+					& \rho_0 t \ar[u]^{\iota_t} \\
+			}\quad\text{where }s\xto{e}t
+			\text{ and }\iota_s,\iota_t\text{ are embedding}
+			\end{equation*}
+		\end{itemize} %}
+	\end{definition} %def:箙の部分表現}
+
+	\begin{definition}[箙の既約表現]\label{def:箙の既約表現} %{
+		箙の表現$\rho$が、自明な表現または$\rho$自身しか部分表現を持たないとき、
+		$\rho$を既約表現という。既約表現のことを単純ともいう。
+	\end{definition} %def:箙の既約表現}
+
+	\begin{definition}[箙の表現の準同型（morphism）]\label{def:箙の表現の準同型} %{
+		箙$\Gamma=(V,E)$の二つの$K$表現$\rho_1,\rho_2$に対して
+		任意の$\Gamma$の辺$e$に対して次の図を可換にする$K$線形写像の集合
+		$\phi=\set{\phi_v\in\Hom(\rho_1v,\rho_2v)}_{v\in V}$を
+		$\rho_1$から$\rho_2$への準同型という。
+		\begin{equation*}\xymatrix{
+			\rho_1s \ar[r]^{\rho_1 e} \ar[d]^{\phi_s} & \rho_1t \ar[d]^{\phi_t} \\
+			\rho_2s \ar[r]^{\rho_2 e} & \rho_2t \\
+		} \quad\text{where }s\xto{e}t\in\Gamma
+		\end{equation*}
+		また、箙$\Gamma$の任意の頂点$v$で$\phi_v$が可逆になるとき、
+		$\phi$を同型という。
+	\end{definition} %def:箙の表現の準同型}
+
+	\begin{definition}[箙の経路代数]\label{def:箙の経路代数} %{
+		$K$を体とする。箙$\Gamma$の辺の集合を$E$とする。
+		$K\Word E$に対して双線形二項演算$m$を定義する。
+		\begin{equation*}\begin{split} %{
+			m(\word{e_2}\otimes\word{e_1}) = \begin{cases}
+				\myop{source}e_2 = \myop{target}e_1 &\implies \word{e_2e_1} \\
+				\text{else} &\implies 0 \\
+			\end{cases}
+		\end{split}\end{equation*} %}
+		$m$はグラフの経路の連結だから積になる。したがって、$E$の経路を基底とする
+		$K\Word E$の部分集合は$m$によって半群となる。この半群を箙$\Gamma$の
+		経路代数といい、$K\Gamma$と書く。
+	\end{definition} %def:箙の経路代数}
+
+	\begin{proposition}[有限頂点の場合に成り立つ事柄]\label{prop:有限頂点の場合に成り立つ事柄} %{
+		次の事柄が成り立つ。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $\Gamma$の頂点数が有限 $\iff$ $K\Gamma$は単位元を持つ。
+			\begin{equation*}\begin{split} %{
+				1 = \sum_{v\in\Gamma\text{'s vertices}}
+			\end{split}\end{equation*} %}
+			\item $\Gamma$が有限かつ向き付けられた閉路を持たない $\iff$ 
+			$K\Gamma$は有限次元になる。
+			\item $\Gamma$の頂点数が有限 $\implies$ $\Gamma$の$K$表現の準同型を
+			射とする圏は$K\Gamma$加群の圏と同値になる。
+		\end{enumerate} %}
+	\end{proposition} %prop:有限頂点の場合に成り立つ事柄}
+
 %s1:箙}
 %
 \section{Fock空間に向けて}\label{s1:Fock空間に向けて} %{
@@ -191,6 +947,97 @@
 	文字列の連結による積を$m$、その単位元を$\wordu$と書く。
 	文字列の連結による積$m(x\otimes y)$は二項演算を使って書くときは、
 	記号を省略して$xy$と書くことにする。
+
+	次の$R\Word A$上の再帰式を考える。
+	\begin{equation}\label{再帰式の例その一}\begin{split} %{
+		x &= f_{00} + f_{10}xf_{11} + f_{20}xf_{21}xf_{22}
+		\quad\text{where }f_{ij}\in R\Word A
+	\end{split}\end{equation} %}
+	$R\Word A$係数の状態遷移図は次のようになる。
+	\begin{equation}\label{eq:状態遷移の例その一}\xymatrix{
+		& \circ \ar[r]^{x\xtoto{}1} & \circ \ar[d]^{f_{11}} \\
+		& x \ar[r]^{f_{00}} \ar[u]^{f_{10}} \ar[ld]_{f_{20}} & 1 \\
+		\circ \ar[r]_{x\xtoto{}1} & \circ \ar[r]_{f_{21}}
+			& \circ \ar[r]_{x\xtoto{}1} & \circ \ar[ul]_{f_{22}} \\
+	}\end{equation}
+	この状態遷移図から次の$R\Word A(\mycal{B}_1\otimes\mycal{B}_2)$係数の
+	状態遷移図が得られる。
+	\begin{equation}\label{eq:状態遷移の例その一}\xymatrix@C=8em{
+		x \ar@<1ex>[r]^{f_{00}\bigl((\eta_1\lu{t}{\eta_0})\otimes1\bigr)}
+			\ar@(ul,dl)_{f_{10}(1\otimes\lu{t}{\eta_{11}}) 
+				+ f_{20}(1\otimes\lu{t}{\eta_{21}})} 
+		& 1 \ar@<1ex>[l]^{f_{21}\bigl((\eta_0\lu{t}{\eta_1})\otimes(\eta_{21}\lu{t}{\eta_{22}})\bigr)}
+			\ar@(dr,ur)_{f_{11}(1\otimes\eta_{11}) + f_{22}(1\otimes\eta_{22})}
+	}\end{equation}
+	ここで、$\mycal{B}_1$は$\set{\eta_i,\lu{t}{\eta_i}}_{i=0,1}$、
+	$\mycal{B}_2$は$\set{\eta_{ij},\lu{t}{\eta_{ij}}}_{i,j\in\sizen}$
+	で生成される$R$係数のBrzozowski代数で次の関係式を満たす。
+	\begin{equation*}\begin{split} %{
+		\lu{t}{\eta_{i}}\eta_{j} &= \jump{i=j} \\
+		\lu{t}{\eta_{ij}}\eta_{kl} &= \jump{i=k \text{ and } j=l} \\
+	\end{split}\end{equation*} %}
+	そして、再帰式\eqref{eq:再帰式の例その一}の形式解がFock空間を用いて次の
+	ように書けることがわかる。
+	\begin{equation*}\begin{split} %{
+		x &= (\bra{0}\lu{t}{\eta_1}\otimes\bra{0})X^*
+			(\eta_0\ket{0}\otimes\ket{0}) \\
+	\end{split}\end{equation*} %}
+	ここで、$X\in R\Word A(\mycal{B}_1\otimes\mycal{B}_2)
+		\simeq\mycal{B}_1\otimes(R\Word A\mycal{B}_2)$
+	は次のように定義した。
+	\begin{equation*}\begin{split} %{
+		X &= X_0 + X_1 + X_{01} + X_{10} \\
+		X_0 &= (\eta_0\lu{t}{\eta_0})\otimes(f_{11}\eta_{11} 
+			+ f_{22}\eta_{22}) \\
+		X_1 &= (\eta_1\lu{t}{\eta_1})\otimes(f_{10}\lu{t}{\eta_{11}}
+			+ f_{20}\lu{t}{\eta_{21}}) \\
+		X_{01} &= (\eta_0\lu{t}{\eta_1})\otimes(
+			f_{21}\eta_{21}\lu{t}{\eta_{22}}) \\
+		X_{10} &= (\eta_1\lu{t}{\eta_0})\otimes f_{00} \\
+	\end{split}\end{equation*} %}
+	$X^*$は$R\Word A(\mycal{B}_1\otimes\mycal{B}_2)$を文字とする正規表現
+	なので、$X^*$を$R\Word A$についてBrzozowski微分していけばDFAを得ることが
+	できる。ただし、通常は$A$が入力文字とはならず、$A$から入力文字列
+	$\Word\Sigma$への写像が与えられて、$R\Word\Sigma$についてBrzozowski微分
+	する必要がある。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[文字列分解] 文字列分解するためにBrzozowski微分
+			$\mycal{B}=\set{\eta_i,\lu{t}{\eta_i}}_{i\in\sizen}$に中心
+			$\mycal{B}_0=\set{h_i}_{i\in\sizen}$を付け加えて、交換関係を次のように
+			変更するのが良いかもしれない。
+			\begin{equation*}\begin{split} %{
+				\lu{t}{\eta_i}\eta_j &= \jump{i=j}h_i
+			\end{split}\end{equation*} %}
+			%
+			\item[Chomsky-Sch{}tzerbargerの定理] 
+			Chomsky-Sch{\"u}tzerbergerの定理の証明\cite{arxiv:kambites:chomsky}
+			にならって、任意の文脈自由言語が
+			$\mycal{B}_1\otimes(R\Word A\mycal{B}_2)$の正規言語で書き表されること
+			が証明できないだろうか。
+			Chomsky-Sch{\"u}tzerbergerの定理でのDyck言語をFock空間
+			$\mycal{F}A=\mycal{B}_1\otimes(R\Word A\mycal{B}_2)$に表現して、
+			その表現が忠実になっていることが証明できれば、任意の文脈自由言語が
+			Fock空間$\mycal{F}A$で書くことができるのがわかる。
+			%
+			\item[多変数の場合]　一般の文脈自由文法の場合に適用するためには多変数
+			の再帰式に対しての手法が必要になる。例えば、二項演算$f_0$と演算順序
+			を表すカッコ$f_{10},f_{11}$をもった言語の文法は次のようになる。
+			\begin{equation*}\begin{split} %{
+				x_0 &= x_1 + x_1f_0 x_0 \\
+				x_1 &= f_{00} + f_{10}x_0f_{11} \\
+			\end{split}\end{equation*} %}
+			この場合は、$x_1$を$x_0$に代入してしまえば、一変数の再帰式になるが、
+			なるべくなら元の式の形を保ったまま正規表現で表したい。
+			\begin{equation*}\begin{split} %{
+				x_0 &= \braket{\lu{t}{\eta_{01}}X_0^*\eta_{00}} \\
+				x_1 &= \braket{\lu{t}{\eta_{11}}X_1^*\eta_{10}} \\
+				X_0 &= \eta_{01}\lu{t}{\eta_{00}}x_1
+				+ \eta_{10}\lu{t}{\eta_{01}}f_0
+			\end{split}\end{equation*} %}
+		\end{description} %}
+	\end{todo} %todo:ここまで}
 
 	次の$R\Word A$に値をもつ再帰式を考える。
 	\begin{equation}\label{eq:三角再帰式の例}\begin{split} %{
@@ -235,6 +1082,53 @@
 
 	\begin{todo}[ここまで]\label{todo:ここまで} %{
 		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[文脈自由言語]　曖昧さのない文脈自由言語は正規言語とDyck言語
+			の二つの言語でつくることができる。一次Dyck言語は$\set{a,\bar{a}}$
+			で木
+			\begin{equation}\mytree{
+				\bullet\ar@{-}[d] \\ \circ
+			}\end{equation}
+			を成長させて
+			\begin{equation*}\begin{split} %{
+				\myop{grow}\left(\mytree{
+					\bullet\ar@{-}[d] \\ \circ
+				}\otimes\bullet\right) &= \mytree{
+					\bullet\ar@{-}[d] \\ \circ
+				} \\
+				\myop{grow}\left(\mytree{
+					\bullet\ar@{-}[d] \\ \circ
+				}\otimes\mytree{
+					\bullet\ar@{-}[d] \\ \circ
+				}\right) &= \mytree{
+					& \bullet \ar@{-}[ld] \ar@{-}[rd] \\ \circ & & \circ
+				} + \mytree{
+					\bullet \ar@{-}[d] \\ \circ \ar@{-}[d] \\ \circ
+				} \\
+			\end{split}\end{equation*} %}
+			行きがけ順に辺の左と右を出力して
+			\begin{equation*}\begin{split} %{
+				\myop{print}\mytree{
+					\square \ar@{-}[d] \\ \circ
+				} = a\bar{a}
+			\end{split}\end{equation*} %}
+			列挙したものである。また、$m$種類の木
+			\begin{equation*}\begin{split} %{
+				t_1 = \mytree{
+					a_1\ar@{-}[d] \\ \circ
+				},\quad t_2 = \mytree{
+					a_2\ar@{-}[d] \\ \circ
+				},\dots,\quad t_m = \mytree{
+					a_m\ar@{-}[d] \\ \circ
+				}
+			\end{split}\end{equation*} %}
+			に対して自然な成長をさせて、それを列挙したものを$m$次のDyck言語
+			という。
+			\begin{equation*}\begin{split} %{
+				\biggl(\myop{grow}\bigl((t_1 + t_2 + \cdots + t_m)\otimes-\bigr)
+					\biggr)^*\bullet
+			\end{split}\end{equation*} %}
+			つまり、Dyck言語はBrzozowski代数の真空期待値をとったものである。
+			%
 			\item[経路代数] 伝統的なLLやLR文法は経路代数を上手く取り扱うための方法
 			を提供しているに違いない。例えば、$x=a+bxc$から生成される経路代数は
 			$Z_2\otimes\sizen$の可換モノイドのテンソル積で記述することができる。
@@ -386,7 +1280,7 @@
 		\begin{equation*}\begin{split} %{
 			\alpha\beta\gamma = 1
 		\end{split}\end{equation*} %}
-		そこで、Weyle代数を用いて次のようにおいてみると、
+		そこで、Weyl代数を用いて次のようにおいてみると、
 		\begin{equation*}\begin{split} %{
 			\alpha = \partial_1,\quad \beta = \eta_1\partial_2
 				,\quad \gamma = \eta_2

@@ -1,0 +1,542 @@
+\begingroup %{
+	\newcommand{\End}{\ensuremath{\myop{End}}}
+	\newcommand{\Hom}{\ensuremath{\myop{Hom}}}
+	\newcommand{\onto}{\ensuremath{\myop{onto}}}
+	\newcommand{\im}{\ensuremath{\myop{im}}}
+	\newcommand{\spanall}{\ensuremath{\myop{span}}}
+	\newcommand{\spanfin}{\ensuremath{\myop{finite-span}}}
+	\newcommand{\defeq}{\ensuremath{\overset{\mathrm{def}}{=}}}
+	\newcommand{\be}{\ensuremath{\mathbf{e}}}
+	\newcommand{\bE}{\ensuremath{\mathbf{E}}}
+	%
+\section{線形代数}\label{s1:線形代数} %{
+	複素係数の線形代数について書く。
+	ベクトル空間や加群の理論の基礎となる部分を中心に書く。
+
+\subsection{記法}\label{s2:記法} %{
+	行列の基底を次のように複素係数上のBrzozowski代数
+	$\set{\be_i,\be_i^t\bou i\in\sizen}$を用いて表すことにする\footnote{
+		作用素環の分野では、Brzozowski代数と同じものが、
+		Levitte代数またはLevitte経路代数という名前で用いられている。
+	}。
+	\begin{equation*}\begin{split} %{
+		\be_i^t = (0, \dots, 0, \underset{\text{$i$番目}}{1}, 0, \cdots)
+	\end{split}\end{equation*} %}
+	$\be_i$は$i$番目の成分だけが$1$でその他の成分はすべて$0$の縦ベクトルを
+	表す。Brzozowski代数は次のようになる。
+	\begin{equation*}\begin{split} %{
+		\be_i^t\be_j = \jump{i=j} \quad\text{for all }i,j\in\sizen
+	\end{split}\end{equation*} %}
+	$\bE_n$はベクトル空間$\fukuso^n$の基底となり、$\bE_n^t$は$\fukuso^n$の
+	双対空間の基底となる。
+	\begin{equation*}\begin{split} %{
+		\fukuso\bE_n &\defeq \spanall_\fukuso\bE_n = \fukuso^n \\
+		\fukuso\bE_n^t &\defeq \spanall_\fukuso\bE_n^t = \Hom_\fukuso(\fukuso^n, \fukuso) \\
+	\end{split}\end{equation*} %}
+
+	$\fukuso\bE_n$を一般化して、$\bE_*=\set{\be_i\bou i\in\sizen}$の線形結合で
+	有限個の項のみが$0$でないものを集めたものを$\fukuso\bE_*$とする。
+	\begin{equation*}\begin{split} %{
+		\fukuso\bE_* = \spanfin_\fukuso\bE_*
+	\end{split}\end{equation*} %}
+	任意の$n\in\sizen$に対して$\fukuso\bE_n$は$\fukuso\bE_*$の線形部分空間
+	となる。$\fukuso\bE_*$に対する操作を定義することで、各$\bE_n$に対する
+	操作をまとめて定義してしまう。
+
+	$\fukuso\bE_*$から$\fukuso\bE_*^t$への線形写像$-^t$と
+	エルミート共役$-^\dag$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		(\sum_{i\in\sizen}r_i\be_i)^t &= \sum_{i\in\sizen}r_i\be_i^t \\
+		(\sum_{i\in\sizen}r_i\be_i)^\dag &= \sum_{i\in\sizen}r_i^c\be_i^t \\
+	\end{split}\end{equation*} %}
+	ここで、$r\in\fukuso$に対して$r^c$は複素共役を表す。
+	エルミート共役$-^\dag$は可換群の準同型となっているが、係数$\fukuso$の
+	作用と可換でないので、ベクトル空間の線形写像ではない。
+
+	線形写像
+	$\sigma:\fukuso\bE_*\otimes\fukuso\bE_*^t\otimes\fukuso\bE_*\to\fukuso\bE_*$
+	を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\sigma(\be_i\otimes\be_j^t\otimes\be_k) = \jump{j=k}\be_i
+		\quad\text{for all }\be_i,\be_j,\be_k\in\fukuso\bE_*
+	\end{split}\end{equation*} %}
+	すると、線形写像$\tau:\fukuso\bE_*\otimes\fukuso\bE_*^t\otimes\fukuso\bE_*\otimes\fukuso\bE_*^t \to \fukuso\bE_*\otimes\fukuso\bE_*^t$
+	を次のように定義すると、
+	\begin{equation*}\begin{split} %{
+		\tau(\be_i\otimes\be_j^t\otimes\be_k\otimes\be_l^t) 
+		= \jump{j=k}\be_i\otimes\be_l^t
+		\quad\text{for all }\be_i,\be_j,\be_k,\be_l\in\fukuso\bE_*
+	\end{split}\end{equation*} %}
+	$\sigma(\myid\otimes\myid\otimes\sigma)=\sigma(\tau\otimes\myid)$となる。
+	また、$\tau$は結合性を満たし、$\sum_{i\in\sizen}\be_i\otimes\be_i^t$が
+	形式的な単位元となる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+%s2:記法}
+%s1:線形代数}
+\section{ベクトル空間}\label{s1:ベクトル空間} %{
+	この節では複素係数のベクトル空間を考える。
+
+	\begin{definition}[ベクトル空間]\label{def:ベクトル空間} %{
+		可換群$V=(V,+,0)$に次の性質を満たす写像$-\myspace-:\fukuso\times V\to V$
+		が定義されているとき、$V$をベクトル空間という。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[分配性]$
+				r(v_1+v_2) = (rv_1) + (rv_2)
+				\quad\text{for all }r\in\fukuso,\;v_1,v_2\in V
+			$
+			\item[分配性]$
+				(r_1+r_2)v = (r_1v) + (r_2v)
+				\quad\text{for all }r_1,r_2\in\fukuso,\;v\in V
+			$
+			\item[結合性]$
+				(r_1r_2)v = r_1(r_2v)
+				\quad\text{for all }r_1,r_2\in\fukuso,\;v\in V
+			$
+			\item[単位性]$
+				1v = v \quad\text{for all }v\in V
+			$
+		\end{description} %}
+	\end{definition} %def:ベクトル空間}
+
+	\begin{definition}[ベクトル空間の基底]\label{def:ベクトル空間の基底} %{
+		ベクトル空間$V$の部分集合$E=\set{e_1,e_2,\dots,e_m}\subseteq V$が
+		次の性質を満たすとき、$E$を$V$の基底という。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[線形独立]$
+			r_1e_1 + r_2e_2 + \cdots r_me_m = 0
+			\implies r_1 = r_2 = \cdots = r_m = 0
+			$
+			\item[生成系]任意の$v\in V$に対して、
+			ある$v_1,v_2,\dots,v_m\in\fukuso$があって、
+			$v = v_1e_1 + v_2e_2 + \cdots v_me_m$と書ける。
+		\end{description} %}
+	\end{definition} %def:ベクトル空間の基底}
+
+	ベクトル空間の基底は存在しても一意には定まらないが、基底の元の個数
+	は一意に定まる。
+
+	\begin{proposition}[ベクトル空間の次元定理]\label{prop:ベクトル空間の次元定理} %{
+		ベクトル空間$V$に有限の大きさの基底$E$が存在すれば、$V$の任意の基底の
+		大きさは$E$の大きさに等しくなる。式で書くと次のようになる。
+		\begin{equation*}\begin{split} %{
+			\zettai{E}<\infty &\implies 
+			\text{any base $F$ of $V$ satisfies }\zettai{F}=\zettai{E}
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:ベクトル空間の次元定理}
+	\begin{proof} %{
+		$V$の基底$E$と$F$をそれぞれ$E=\set{e_1,e_2,\dots,e_{\zettai{E}}}$
+		と$F=\set{f_1,f_2,\dots,f_{\zettai{F}}}$とする。
+
+		まず、$\zettai{E}<\zettai{F}$と仮定して矛盾を導く。
+		$E$が$V$の基底であることから$f=Me$となる$\zettai{F}$行$\zettai{E}$列の
+		行列$M$が存在する。ここで、ベクトル$e,f$と行列$M$を次のようにおいた。
+		\begin{equation*}\begin{split} %{
+			e = \begin{pmatrix}
+			e_1 \\ e_2 \\ \vdots \\ e_m
+			\end{pmatrix},\quad f = \begin{pmatrix}
+			f_1 \\ f_2 \\ \vdots \\ f_n
+			\end{pmatrix},\quad M = \begin{pmatrix}
+			M_{11} & M_{12} & \cdots & M_{1\zettai{E}} \\
+			M_{21} & M_{22} & \cdots & M_{2\zettai{E}} \\
+			\vdots & \vdots & \cdots & \vdots \\
+			M_{\zettai{F}1} & M_{\zettai{F}2} & \cdots & M_{\zettai{F}\zettai{E}} \\
+			\end{pmatrix}
+		\end{split}\end{equation*} %}
+		仮定より$\zettai{E}<\zettai{F}$だから、次の$\zettai{F}$個のベクトルは
+		線形従属となる。
+		\begin{equation*}\begin{split} %{
+			M_1 &= (M_{11}, M_{12}, \dots, M_{1\zettai{E}}) \\
+			M_2 &= (M_{21}, M_{22}, \dots, M_{2\zettai{E}}) \\
+			\vdots \\
+			M_{\zettai{F}} &= (M_{\zettai{F}1}, M_{\zettai{F}2}, \dots, M_{\zettai{F}\zettai{E}}) \\
+		\end{split}\end{equation*} %}
+		したがって、$r_1M_1+r_2M_2+\cdots+r_{\zettai{F}}M_{\zettai{F}}=0$となる
+		$r_1,r_2,\dots,r_{\zettai{F}}\in\fukuso$が存在する。
+		$r^t=(r_1,r_2,\dots,r_{\zettai{F}})$とおくと、
+		次の式が成り立つことになる。
+		\begin{equation*}\begin{split} %{
+			r^tf = r^tMe = 0
+		\end{split}\end{equation*} %}
+		この式は$F$が$V$の基底であることに矛盾する。
+		したがって、$\zettai{E}\ge\zettai{F}$でなければならない。
+
+		基底$E$と$F$を入れ替えて同様の考察により、$\zettai{E}=\zettai{F}$
+		となることがわかる。
+	\end{proof} %}
+
+	\begin{note}[次元定理の加群との対比]\label{note:次元定理の加群との対比} %{
+		ベクトル空間の次元定理でのキモは、線形連立方程式$Mx=0$の解が存在する
+		ための条件
+		\begin{equation}\label{eq:代数的閉体の線形連立方程式の解}\begin{split} %{
+			\text{行列$M$の階数} \le \text{変数$x$の次元}
+		\end{split}\end{equation} %}
+		にある。一般の環上の加群で次元定理が成り立たない理由は、代数的に閉な体
+		でない、より一般的な体や環では条件\eqref{eq:代数的閉体の線形連立方程式の解}
+		だけでは線形連立方程式の解が保証されないためである。
+
+		ベクトル空間では、すべての基底が等しい元の数をもつから、ベクトル空間の
+		次元というものが定義できる。
+	\end{note} %note:次元定理の加群との対比}
+
+	\begin{definition}[ベクトル空間の次元]\label{def:ベクトル空間の次元} %{
+		ベクトル空間$V$の基底の元の数を$V$の次元といい、$\dim V$と書く。
+	\end{definition} %def:ベクトル空間の次元}
+
+	\begin{note}[無限次元ベクトル空間]\label{note:無限次元ベクトル空間} %{
+		無限次元ベクトル空間の場合は、有限次元の場合と異なるように見える。
+		例えば、Weyl代数$\set{\eta,\eta^\dag}$
+		\begin{equation*}\begin{split} %{
+			\eta^\dag\eta = 1
+		\end{split}\end{equation*} %}
+		をFock空間で表現した場合、粒子数状態
+		$N=\set{\eta^n\ket{0}\bou n\in\sizen}$
+		とコヒーレント状態$C=\set{\exp(z\eta)\ket{0}\bou z\in\fukuso}$
+		では、集合の濃度が$\zettai{N}=\zettai{\sizen}<\zettai{C}=\zettai{\fukuso}$
+		となって異なるが、集合$N$も$C$も（少なくとも表面的には）
+		同一のFock空間の基底として扱う。
+
+		無限次元のベクトル空間の場合は、有限次元のベクトル空間の
+		定義\ref{def:ベクトル空間}以外に、有限性を課す条件が付け加えられる。
+		例えば、二乗ノルムの有限性であったり、非ゼロ成分の有限性であったりする。
+		無条件に無限次元ベクトル空間を取り扱うことは難しいように思われる。
+	\end{note} %note:無限次元ベクトル空間}
+
+	線形写像を定義しておく。
+
+	\begin{definition}[線形写像]\label{def:線形写像} %{
+		ベクトル空間$V$からベクトル空間$W$への写像$\phi$で次の性質を満たすものを
+		線形写像またはベクトル準同型という。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[加法] $
+			\phi(v_1 + v_1) = (\phi v_1) + (\phi v_2)
+			\quad\text{for all }v_1,v_2\in V
+			$
+			\item[係数] $
+			\phi(rv) = r(\phi v) \quad\text{for all }r\in\fukuso,\;v\in V
+			$
+		\end{description} %}
+		線形写像全体のつくる集合を$\Hom_\fukuso(V,W)$と書く。
+		特に、$V$から$V$への線形写像全体のつくる集合を$\End_\fukuso(V)$と書く。
+	\end{definition} %def:線形写像}
+
+	\begin{definition}[線形同型]\label{def:線形同型} %{
+		$V$と$W$をベクトル空間とする。線形写像$\phi\in\Hom_\fukuso(V,W)$が
+		$1:1$かつ$\onto$であるとき、$V$から$W$への（線形）同型射という。
+		$V$から$W$への同型射が存在するとき、$V$と$W$は（線形）同型であるといい、
+		$V\simeq_\fukuso W$と書く。
+	\end{definition} %def:線形同型}
+
+	\begin{note}[線形写像はベクトル空間]\label{note:線形写像はベクトル空間} %{
+		線形写像の集合$\Hom_\fukuso(V,W)$は、
+		写像$+:\Hom_\fukuso(V,W)\times\Hom_\fukuso(V,W)\to\Hom_\fukuso(V,W)$
+		を次の畳み込みで定義すると可換群になる。
+		\begin{equation*}\begin{split} %{
+			(\phi_1+\phi_2)v \defeq (\phi_1 v) + (\phi_2 v)
+			\quad\text{for all }\phi_1,\phi_2\in\Hom_\fukuso(V,W),\;v\in V
+		\end{split}\end{equation*} %}
+		$+$の単位元は$0$への恒等写像$\iota0$
+		\begin{equation*}\begin{split} %{
+			(\iota0)v = 0 \quad\text{for all }v\in V
+		\end{split}\end{equation*} %}
+		である。そして、$\Hom_\fukuso(V,W)$の元への係数$\fukuso$の作用を次の
+		ように定義すると、$\Hom_\fukuso(V,W)$もまたベクトル空間となる。
+		\begin{equation*}\begin{split} %{
+			(r\phi)v = r(\phi v) \quad\text{for all }r\in\fukuso,\;v\in V
+		\end{split}\end{equation*} %}
+	\end{note} %note:線形写像はベクトル空間}
+
+	$n$次元ベクトル空間は$\fukuso^n$がすべてである。
+
+	\begin{proposition}[有限次元ベクトル空間の一意性]\label{prop:有限次元ベクトル空間の一意性} %{
+		ベクトル空間$V$が有限次元ならば、$V\simeq_\fukuso\fukuso^{\dim V}$
+	\end{proposition} %prop:有限次元ベクトル空間の一意性}
+	\begin{proof} %{
+		線形写像$\phi:V\to\fukuso^{\dim V}$を$V$の
+		基底$\set{e_1,e_2,\dots,e_{\dim V}}$に対して次のように定義すればよい。
+		\begin{equation*}\begin{split} %{
+			\phi e_i = E_i \quad\text{for all }i\in1..(\dim V)
+		\end{split}\end{equation*} %}
+		ここで、$E_i$は$i$番目の成分が$1$でその他の成分は$0$のベクトルとした。
+		\begin{equation*}\begin{split} %{
+			E_i &= (0, \dots, 0, \underbrace{i}_{\text{$i$番目}}, 0, \dots, 0)^t
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+
+	部分空間を定義する。
+
+	\begin{definition}[線形部分空間]\label{def:線形部分空間} %{
+		ベクトル空間で加法と係数の積で閉じている部分集合を線形部分空間または
+		部分ベクトル空間という。
+		$V$をベクトル空間、$W$を$V$の部分集合とする。$W$が次の性質を満たすとき、
+		$W$は$V$の線形部分空間となる。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[加法] $
+			v_1 + v_2\in W,\;\quad\text{for all }v_1,v_2\in W
+			$
+			\item[係数] $
+			rv \in W,\;\quad\text{for all }r\in\fukuso,\;v\in V
+			$
+		\end{description} %}
+	\end{definition} %def:線形部分空間}
+
+	よく使う特別な線形部分空間を定義の形で書いておく。
+
+	\begin{definition}[特別な線形部分空間]\label{def:特別な線形部分空間} %{
+		$V$をベクトル空間とする。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[自明な線形部分空間] ゼロ元だけからなる$V$の部分集合$\set{0}$は
+			$V$の線形部分空間となる。$\set{0}$を自明な線形部分空間という。
+			\item[真の線形部分空間（proper subspace）] 
+			$V$自身は$V$の線形部分空間だが、
+			$V$自身でない線形部分空間を$V$の真の線形部分空間という。
+		\end{description} %}
+	\end{definition} %def:特別な線形部分空間}
+
+	ベクトル空間の直和を定義する。
+
+	\begin{definition}[ベクトル空間の直和]\label{def:ベクトル空間の直和} %{
+		ベクトル空間$V_1$と$V_2$が$V_1\oplus V_2=\set{0}$を満たすとき、
+		集合$\set{v_1+v_2\bou v_1\in V_1\text{ and } v_2\in V_2}$を
+		$V_1$と$V_2$の直和といい、$V_1\oplus V_2$と書く。
+	\end{definition} %def:ベクトル空間の直和}
+
+	\begin{proposition}[ベクトル空間の直和]\label{prop:ベクトル空間の直和} %{
+		$V$をベクトル空間とする。$V_1$と$V_2$を$V_1\cup V_2=\set{0}$となる
+		$V$の有限次元部分空間とする。このとき$V_1$と$V_2$の直和$V_1\oplus V_2$は
+		次の性質を満たす。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $V_1\oplus V_2$は$V$の部分空間となる。
+			\item 任意の$v\in V$は、ある$v_1\in V_1$と$v_2\in V_2$があって、
+			$v=v_1+v_2$と一意的に書ける。
+		\end{enumerate} %}
+	\end{proposition} %prop:ベクトル空間の直和}
+	\begin{proof} %{
+		各項目ごとに命題を証明する。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$v,w\in V_1\oplus V_2$に対して、次のようにおく。
+			\begin{equation*}\begin{array}{cc} %{
+				v = v_1 + v_2, & v_i\in V_i \\
+				w = w_1 + w_2, & w_i\in V_i \\
+			\end{array}\end{equation*} %}
+			すると、次の性質が成り立つので、命題が成り立つことがわかる。
+			\begin{description}\setlength{\itemsep}{-1mm} %{
+				\item[加法] $V_1$と$V_2$がベクトル空間だから、$
+				v + w = (v_1 + w_1) + (v_2 + w_2) \in V_1\oplus V_2
+				$が成り立つ。
+				\item[係数] 任意の$r\in\fukuso$に対して$
+				rv = (rv_1) + (rv_2) \in V_1\oplus V_2
+				$が成り立つ。
+			\end{description} %}
+			%
+			\item ある$v\in V_1\oplus V_2$が、ある$v_1,w_1\in V_1$と
+			$v_2,w_2\in V_2$があって、
+			\begin{equation*}\begin{split} %{
+				v = v_1 + v_2 = w_1 + w_2 \\
+			\end{split}\end{equation*} %}
+			と書けたとする。すると、$v_1+v_2=w_1+w_2$より$v_1-w_1=w_2-v_2$となる。
+			ここで、$v_1-w_1\in V_1$かつ$w_2-v_2\in V_2$となるが、
+			$V_1\cup V_2=\set{0}$なので、$v_1-w_1=0=w_2-v_2$となる。
+			したがって、$v_1=w_1$かつ$v_2=w_2$となることがわかり命題が成り立つこと
+			がわかる。
+		\end{enumerate} %}
+	\end{proof} %}
+
+	よく使う命題を書いておく。
+
+	\begin{proposition}[rank-nullity定理]\label{prop:rank-nullity定理} %{
+		$V$と$W$を有限次元ベクトル空間とする。
+		任意の線形写像$\phi\in\Hom_\fukuso(V,W)$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			V \simeq_\fukuso \ker\phi \oplus \im\phi
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:rank-nullity定理}
+	\begin{proof} %{
+		いくつかのステップに分けて証明する。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $\ker\phi$は$V$の部分空間となる。
+			\begin{equation*}\begin{split} %{
+				v_1,v_2\in\ker\phi &\implies v_1+v_2\in\ker\phi　\\
+				& \because \phi(v_1+v_2) = (\phi v_1) + (\phi v_2) = 0 \\
+				v\in\ker\phi &\implies rv\in\ker\phi \quad\text{for all }r\in\fukuso \\
+				& \because \phi(rv) = r(\phi v) = 0 \\
+			\end{split}\end{equation*} %}
+			%
+			\item $\im\phi$は$W$の部分空間となる。
+			\begin{equation*}\begin{split} %{
+				(\phi v_1) + (\phi v_2) & \in\im\phi \quad\text{for all }v_1,v_2\in V \\
+				& \because (\phi v_1) + (\phi v_2) = \phi(v_1 + v_2) \in \im\phi \\
+				r(\phi v) &\in\im\phi \quad\text{for all }r\in\fukuso,\;v\in V \\
+				& \because r\phi(v) = (\phi rv) \in \im\phi \\
+			\end{split}\end{equation*} %}
+			\begin{equation*}\begin{split} %{
+			\end{split}\end{equation*} %}
+			%
+			\item $p=\dim\ker\phi$として、$\ker\phi$の基底を
+			$E_{\ker}=\set{e_1,e_2,\dots,e_p}$とする。そして、$V$の基底を
+			$E=\set{e_1,e_2,\dots,e_p,d_1,d_2,\dots,d_q}$とする。
+			ここで、$\dim V=p+q$とする。各$d_i$は次の式を満たす。
+			\begin{equation*}\begin{split} %{
+				\phi d_i \neq 0 \quad\text{for all }i\in1..q
+			\end{split}\end{equation*} %}
+			なぜなら、$\phi d_i=0$ならば$d_i\in\ker\phi$となり$E_{\ker}$の線形結合
+			で書かれるために、$E$は$V$の基底とならない。
+			$E_{\im}=\set{d_1,d_2,\dots,d_q}$とおき、
+			$E_{\im}$で張られる$V$の部分空間を$V_{\im}$と書く。
+			$\ker\phi\cap V_{\im}=\set{0}$で$\ker\phi\cup V_{\im}=V$だから、
+			$V=\ker\phi\oplus V_{\im}$となる。そして、次のことが成り立つので、
+			$\phi$を$V_{\im}$に制限したもの$\phi_{\im}:V_{\im}\to\im\phi$は
+			同型射となることがわかる。
+			\begin{description}\setlength{\itemsep}{-1mm} %{
+				\item[生成系] 任意の$v\in V$は、ある$v_{\ker}\in\ker\phi$と
+				$v_{\im}\in V_{\im}$があって、$v=v_{\ker}+v_{\im}$と一意的に書ける。
+				そして、$\phi v_{\ker}=0$だから、$\phi v=\phi v_{\im}$となる。
+				したがって、$\im\phi=\phi V_{\im}$となる。
+				%
+				\item[線形独立] 線形独立な任意の$v,w\in V_{\im}$
+				\begin{equation*}\begin{split} %{
+					rv + sw = 0 \iff r = s = 0
+				\end{split}\end{equation*} %}
+				に対して、$\phi v,\phi w\in\im\phi$も線形独立となる。
+				なぜなら、任意の$r,s\in\fukuso$に対して$
+					r(\phi v) + s(\phi w) = \phi(rv + sw)
+				$が成り立つが、$\phi(rv+sw)=0$が成り立つのは$r=s=0$または
+				$rv+sw\in\ker\phi$のときだけである。
+				しかし、$rv+sw\in\ker\phi$となることは$E$が$V$の生成系であることに
+				矛盾する。したがって、$\phi(rv+sw)=0$が成り立つのは$r=s=0$のとき
+				だけである。よって、$\phi v,\phi w\in\im\phi$は線形独立となる。
+				\begin{equation*}\begin{split} %{
+					r\phi v + s\phi w = 0 \iff r = s = 0
+				\end{split}\end{equation*} %}
+			\end{description} %}
+			%
+			\item $V$から$\ker\phi\oplus\im\phi$への同型射$\widehat{\phi}$は
+			基底$E$を用いて次のように与えられる。
+			\begin{equation*}\begin{array}{rcll} %{
+				\widehat{\phi}e_i &=& e_i & \text{for all }i\in1..p \\
+				\widehat{\phi}d_i &=& \phi d_i & \text{for all }i\in1..q
+			\end{array}\end{equation*} %}
+		\end{enumerate} %}
+	\end{proof} %}
+
+	この命題は次の短完全系列の形に書き換えられる。
+	\begin{equation*}\begin{split} %{
+		0 \to \ker\phi \xto{\myid} V \xto{\phi} \im\phi \to 0
+	\end{split}\end{equation*} %}
+	そして、指数定理のたぐいの式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		(\dim\ker\phi) - (\dim V) + (\dim\im\phi) = 0
+	\end{split}\end{equation*} %}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 自由ベクトル空間を定義する。
+			\item 有限の台をもつ自由ベクトル空間として無限次元ベクトル空間を
+			定義する。
+			\item 無限次元ベクトル空間に対するrank-nullity定理を証明する。
+		\end{itemize} %}
+	\end{todo} %todo:ここまで}
+
+\subsection{直和}\label{s2:直和} %{
+%s2:直和}
+
+\subsection{無限次元ベクトル空間}\label{s2:無限次元ベクトル空間} %{
+	\begin{proposition}[ベクトル空間の次元定理]\label{prop:ベクトル空間の次元定理} %{
+		$V$をベクトル空間、$E$と$F$をの基底とする。
+		このとき、$\zettai{E}=\zettai{F}$が成り立つ。
+	\end{proposition} %prop:ベクトル空間の次元定理}
+	\begin{proof} %{
+		$\zettai{F}<\zettai{E}$として、背理法により証明する。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[有限次元の場合] $n<m$として、$E=\set{e_1,e_2,\dots,e_m}$、
+			$F=\set{f_1,f_2,\dots,f_n}$とする。
+			$F$が$V$の基底であることから$e=Mf$となる$m$行$n$列の行列$M$が
+			存在する。ここで、次のようにおいた。
+			\begin{equation*}\begin{split} %{
+				e = \begin{pmatrix}
+				e_1 \\ e_2 \\ \vdots \\ e_m
+				\end{pmatrix},\quad f = \begin{pmatrix}
+				f_1 \\ f_2 \\ \vdots \\ f_n
+				\end{pmatrix},M = \begin{pmatrix}
+				M_{11} & M_{12} & \cdots & M_{1n} \\
+				M_{21} & M_{22} & \cdots & M_{2n} \\
+				\vdots & \vdots & \cdots & \vdots \\
+				M_{m1} & M_{m2} & \cdots & M_{mn} \\
+				\end{pmatrix}
+			\end{split}\end{equation*} %}
+			仮定より$n<m$だから、次の$m$個のベクトルは線形従属となる。
+			\begin{equation*}\begin{split} %{
+				M_1 &= (M_{11}, M_{12}, \dots, M_{1n}) \\
+				M_2 &= (M_{21}, M_{22}, \dots, M_{2n}) \\
+				\vdots \\
+				M_m &= (M_{m1}, M_{m2}, \dots, M_{mn}) \\
+			\end{split}\end{equation*} %}
+			したがって、$r_1M_1+r_2M_2+\cdots+r_mM_m=0$となる
+			$r_1,r_2,\dots,r_m\in\fukuso$が存在する。
+			$r^t=(r_1,r_2,\dots,r_m)$とおくと、次の式が成り立つことになる。
+			\begin{equation*}\begin{split} %{
+				r^te = r^tMf = 0
+			\end{split}\end{equation*} %}
+			この式は$E$が$V$の基底であることに矛盾する。
+			%
+			\item[無限次元の場合] $E=\set{e_i\bou i\in\sizen}$、
+			$F=\set{f_1,f_2,\dots,f_n}$とする。$E$がの基底であることから、
+			各$j\in1..n$に対して自然数の有限部分集合$I_j\subset\sizen$が
+			存在して、次の式が成り立つようにできる。
+			\begin{equation*}\begin{split} %{
+				f_1 &= \sum_{i\in I_1}M_{1i}e_i \\
+				f_2 &= \sum_{i\in I_2}M_{2i}e_i \\
+				\vdots \\
+				f_n &= \sum_{i\in I_n}M_{ni}e_i \\
+			\end{split}\end{equation*} %}
+			各$j\in1..n$に対して$I_j$の大きさは有限だから、
+			その合併$I=\cup_{j=1}^nI_j$の大きさも有限になる。
+			したがって、$I$に含まれないある$k\in\sizen$が存在する。
+			$F$が$V$の基底であることから、$e_k\in E$は$F$の元の線形結合で書ける。
+			また、すべての$F$の元は$\set{e_i\bou i\in I}\subset E$の元の
+			線形結合で書けるので、$e_k$は$\set{e_i\bou i\in I}$の線形結合で
+			書けることになる。このことは、$E$の元が線形独立であることに矛盾する。
+		\end{description} %}
+	\end{proof} %}
+%s2:無限次元ベクトル空間}
+
+\subsection{群の完全系列}\label{s2:群の完全系列} %{
+	\begin{definition}[群の完全系列]\label{def:群の完全系列} %{
+		$G_0,G_1,G_2,\dots,G_m$を群とする。準同型写像の系列
+		\begin{equation*}\begin{split} %{
+			G_0 \xto{f_1} G_1 \xto{f_2} \cdots \xto{f_m} G_m
+		\end{split}\end{equation*} %}
+		が、$\im f_1=\ker f_2,\;\im f_2=\ker f_3,\dots,\im f_{m-1}=\ker f_m$
+		となるとき、この準同型写像の系列を群の完全系列という。
+	\end{definition} %def:群の完全系列}
+
+	\begin{definition}[群の短完全系列]\label{def:群の短完全系列} %{
+		$G_1,G_2,G_3$を群とする。完全系列を短完全系列という。
+		\begin{equation*}\begin{split} %{
+			\mybf{1} \to G_1 \xto{f} G_2 \xto{g} G_3 \to \mybf{1}
+		\end{split}\end{equation*} %}
+		ここで、$\mybf{1}$は自明な群（単位元だけからなる群）とする。
+		左端の射$\mybf{1}\to G_1$は単位元を単位元に移す準同型で、
+		右端の射$G_3\to\mybf{1}$はすべてを単位元に移す準同型であるが、
+		通常は写像の記号は省略される。群の圏で考えると、自明な群$\mybf{1}$
+		はゼロ対象（始対象かつ終対象）である。左端の射は始対象からの射、
+		右端の射は終対象への射である。
+	\end{definition} %def:群の短完全系列}
+
+	群が可換群の場合は通常、自明な群を表す記号として$\mybf{1}$の代わりに
+	$0$が使われる。
+	\begin{equation*}\begin{split} %{
+		0 \to G_1 \xto{f} G_2 \xto{g} G_3 \to 0
+	\end{split}\end{equation*} %}
+	$0\to G_1\xto{f} G_2$は$f$が$1:1$であること意味する。
+	\begin{equation*}\begin{split} %{
+		0\to G_1\xto{f} G_2 \iff \ker f = 0 \iff f \text{ is }1:1
+	\end{split}\end{equation*} %}
+	$G_2 \xto{g} G_3 \to 0$は$f$が$1:1$であること意味する。
+	\begin{equation*}\begin{split} %{
+		G_2 \xto{g} G_3 \to 0 \iff \im g = G_3 \iff g \text{ is }\onto
+	\end{split}\end{equation*} %}
+%s2:群の完全系列}
+%s1:ベクトル空間}
+\endgroup %}
