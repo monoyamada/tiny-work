@@ -5,76 +5,14 @@
 	\newcommand{\im}{\ensuremath{\myop{im}}}
 	\newcommand{\spanall}{\ensuremath{\myop{span}}}
 	\newcommand{\spanfin}{\ensuremath{\myop{finite-span}}}
+	\newcommand{\rank}{\ensuremath{\myop{rank}}}
+	\newcommand{\dom}{\ensuremath{\myop{dom}}}
+	\newcommand{\codom}{\ensuremath{\myop{cod}}}
 	\newcommand{\defeq}{\ensuremath{\overset{\mathrm{def}}{=}}}
 	\newcommand{\be}{\ensuremath{\mathbf{e}}}
 	\newcommand{\bE}{\ensuremath{\mathbf{E}}}
+	\newcommand{\lead}{\ensuremath{\myop{lead}}}
 	%
-\section{線形代数}\label{s1:線形代数} %{
-	複素係数の線形代数について書く。
-	ベクトル空間や加群の理論の基礎となる部分を中心に書く。
-
-\subsection{記法}\label{s2:記法} %{
-	行列の基底を次のように複素係数上のBrzozowski代数
-	$\set{\be_i,\be_i^t\bou i\in\sizen}$を用いて表すことにする\footnote{
-		作用素環の分野では、Brzozowski代数と同じものが、
-		Levitte代数またはLevitte経路代数という名前で用いられている。
-	}。
-	\begin{equation*}\begin{split} %{
-		\be_i^t = (0, \dots, 0, \underset{\text{$i$番目}}{1}, 0, \cdots)
-	\end{split}\end{equation*} %}
-	$\be_i$は$i$番目の成分だけが$1$でその他の成分はすべて$0$の縦ベクトルを
-	表す。Brzozowski代数は次のようになる。
-	\begin{equation*}\begin{split} %{
-		\be_i^t\be_j = \jump{i=j} \quad\text{for all }i,j\in\sizen
-	\end{split}\end{equation*} %}
-	$\bE_n$はベクトル空間$\fukuso^n$の基底となり、$\bE_n^t$は$\fukuso^n$の
-	双対空間の基底となる。
-	\begin{equation*}\begin{split} %{
-		\fukuso\bE_n &\defeq \spanall_\fukuso\bE_n = \fukuso^n \\
-		\fukuso\bE_n^t &\defeq \spanall_\fukuso\bE_n^t = \Hom_\fukuso(\fukuso^n, \fukuso) \\
-	\end{split}\end{equation*} %}
-
-	$\fukuso\bE_n$を一般化して、$\bE_*=\set{\be_i\bou i\in\sizen}$の線形結合で
-	有限個の項のみが$0$でないものを集めたものを$\fukuso\bE_*$とする。
-	\begin{equation*}\begin{split} %{
-		\fukuso\bE_* = \spanfin_\fukuso\bE_*
-	\end{split}\end{equation*} %}
-	任意の$n\in\sizen$に対して$\fukuso\bE_n$は$\fukuso\bE_*$の線形部分空間
-	となる。$\fukuso\bE_*$に対する操作を定義することで、各$\bE_n$に対する
-	操作をまとめて定義してしまう。
-
-	$\fukuso\bE_*$から$\fukuso\bE_*^t$への線形写像$-^t$と
-	エルミート共役$-^\dag$を次のように定義する。
-	\begin{equation*}\begin{split} %{
-		(\sum_{i\in\sizen}r_i\be_i)^t &= \sum_{i\in\sizen}r_i\be_i^t \\
-		(\sum_{i\in\sizen}r_i\be_i)^\dag &= \sum_{i\in\sizen}r_i^c\be_i^t \\
-	\end{split}\end{equation*} %}
-	ここで、$r\in\fukuso$に対して$r^c$は複素共役を表す。
-	エルミート共役$-^\dag$は可換群の準同型となっているが、係数$\fukuso$の
-	作用と可換でないので、ベクトル空間の線形写像ではない。
-
-	線形写像
-	$\sigma:\fukuso\bE_*\otimes\fukuso\bE_*^t\otimes\fukuso\bE_*\to\fukuso\bE_*$
-	を次のように定義する。
-	\begin{equation*}\begin{split} %{
-		\sigma(\be_i\otimes\be_j^t\otimes\be_k) = \jump{j=k}\be_i
-		\quad\text{for all }\be_i,\be_j,\be_k\in\fukuso\bE_*
-	\end{split}\end{equation*} %}
-	すると、線形写像$\tau:\fukuso\bE_*\otimes\fukuso\bE_*^t\otimes\fukuso\bE_*\otimes\fukuso\bE_*^t \to \fukuso\bE_*\otimes\fukuso\bE_*^t$
-	を次のように定義すると、
-	\begin{equation*}\begin{split} %{
-		\tau(\be_i\otimes\be_j^t\otimes\be_k\otimes\be_l^t) 
-		= \jump{j=k}\be_i\otimes\be_l^t
-		\quad\text{for all }\be_i,\be_j,\be_k,\be_l\in\fukuso\bE_*
-	\end{split}\end{equation*} %}
-	$\sigma(\myid\otimes\myid\otimes\sigma)=\sigma(\tau\otimes\myid)$となる。
-	また、$\tau$は結合性を満たし、$\sum_{i\in\sizen}\be_i\otimes\be_i^t$が
-	形式的な単位元となる。
-
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-	\end{todo} %todo:ここまで}
-%s2:記法}
-%s1:線形代数}
 \section{ベクトル空間}\label{s1:ベクトル空間} %{
 	この節では複素係数のベクトル空間を考える。
 
@@ -130,61 +68,50 @@
 		と$F=\set{f_1,f_2,\dots,f_{\zettai{F}}}$とする。
 
 		まず、$\zettai{E}<\zettai{F}$と仮定して矛盾を導く。
-		$E$が$V$の基底であることから$f=Me$となる$\zettai{F}$行$\zettai{E}$列の
-		行列$M$が存在する。ここで、ベクトル$e,f$と行列$M$を次のようにおいた。
+		$E$が$V$の基底であることから、
 		\begin{equation*}\begin{split} %{
-			e = \begin{pmatrix}
-			e_1 \\ e_2 \\ \vdots \\ e_m
-			\end{pmatrix},\quad f = \begin{pmatrix}
-			f_1 \\ f_2 \\ \vdots \\ f_n
-			\end{pmatrix},\quad M = \begin{pmatrix}
-			M_{11} & M_{12} & \cdots & M_{1\zettai{E}} \\
-			M_{21} & M_{22} & \cdots & M_{2\zettai{E}} \\
-			\vdots & \vdots & \cdots & \vdots \\
-			M_{\zettai{F}1} & M_{\zettai{F}2} & \cdots & M_{\zettai{F}\zettai{E}} \\
-			\end{pmatrix}
+			\mathbf{e} &= (e_1,e_2,\dots,e_m) \\
+			\mathbf{f} &= (f_1,f_2,\dots,f_n) \\
 		\end{split}\end{equation*} %}
-		仮定より$\zettai{E}<\zettai{F}$だから、次の$\zettai{F}$個のベクトルは
-		線形従属となる。
-		\begin{equation*}\begin{split} %{
-			M_1 &= (M_{11}, M_{12}, \dots, M_{1\zettai{E}}) \\
-			M_2 &= (M_{21}, M_{22}, \dots, M_{2\zettai{E}}) \\
-			\vdots \\
-			M_{\zettai{F}} &= (M_{\zettai{F}1}, M_{\zettai{F}2}, \dots, M_{\zettai{F}\zettai{E}}) \\
-		\end{split}\end{equation*} %}
-		したがって、$r_1M_1+r_2M_2+\cdots+r_{\zettai{F}}M_{\zettai{F}}=0$となる
-		$r_1,r_2,\dots,r_{\zettai{F}}\in\fukuso$が存在する。
-		$r^t=(r_1,r_2,\dots,r_{\zettai{F}})$とおくと、
-		次の式が成り立つことになる。
-		\begin{equation*}\begin{split} %{
-			r^tf = r^tMe = 0
-		\end{split}\end{equation*} %}
-		この式は$F$が$V$の基底であることに矛盾する。
-		したがって、$\zettai{E}\ge\zettai{F}$でなければならない。
+		とおくと、$\mathbf{f}=\mathbf{e}M$となる$\zettai{E}$行$\zettai{F}$列の
+		行列$M$が存在する。仮定より$\zettai{E}<\zettai{F}$だから、$Mr=0$となる
+		$0$でない解$r\neq0\in\fukuso^{\zettai{F}}$が存在する。
+		したがって、$\mathbf{f}r=\mathbf{e}Mr=0$となるが、この式は$F$が$V$の基底
+		であることに矛盾する。したがって、$\zettai{E}\ge\zettai{F}$でなくては
+		ならない。
 
 		基底$E$と$F$を入れ替えて同様の考察により、$\zettai{E}=\zettai{F}$
 		となることがわかる。
 	\end{proof} %}
 
 	\begin{note}[次元定理の加群との対比]\label{note:次元定理の加群との対比} %{
-		ベクトル空間の次元定理でのキモは、線形連立方程式$Mx=0$の解が存在する
-		ための条件
-		\begin{equation}\label{eq:代数的閉体の線形連立方程式の解}\begin{split} %{
-			\text{行列$M$の階数} \le \text{変数$x$の次元}
+		ベクトル空間の次元定理でのキモは、連立線型方程式$Mx=0$の解空間の満たす
+		次の性質である。
+		\begin{equation}\label{eq:代数的閉体の連立線型方程式の解}\begin{split} %{
+			\dim\im M + \dim\ker M = \dim\dom M \\
 		\end{split}\end{equation} %}
-		にある。一般の環上の加群で次元定理が成り立たない理由は、代数的に閉な体
-		でない、より一般的な体や環では条件\eqref{eq:代数的閉体の線形連立方程式の解}
-		だけでは線形連立方程式の解が保証されないためである。
-
-		ベクトル空間では、すべての基底が等しい元の数をもつから、ベクトル空間の
-		次元というものが定義できる。
+		ここで、$\dim\im M$は行列$M$の階数、$\dim\dom M$は行列$M$の列数の
+		ことである。行列の階数については節\ref{s2:行列の階数}をみること。
+		一般の環上の加群で次元定理が成り立たない理由は、代数的に閉な体
+		でないより一般的な体や環では行列の性質
+		\eqref{eq:代数的閉体の連立線型方程式の解}が成り立つとは限らない。
 	\end{note} %note:次元定理の加群との対比}
+
+	ベクトル空間では、すべての基底が等しい元の数をもつから、ベクトル空間の
+	次元というものが定義できる。
 
 	\begin{definition}[ベクトル空間の次元]\label{def:ベクトル空間の次元} %{
 		ベクトル空間$V$の基底の元の数を$V$の次元といい、$\dim V$と書く。
 	\end{definition} %def:ベクトル空間の次元}
 
 	\begin{note}[無限次元ベクトル空間]\label{note:無限次元ベクトル空間} %{
+		以下は間違いである。
+		コヒーレント状態は基底ではなく、群のユニタリ表現を与える内積の作り方に
+		相当するものだろう。
+		\begin{equation*}\begin{split} %{
+			\frac{1}{\zettai{G}}\sum_{g\in G}\braket{g^{-1}v_1,gv_2}
+		\end{split}\end{equation*} %}
+
 		無限次元ベクトル空間の場合は、有限次元の場合と異なるように見える。
 		例えば、Weyl代数$\set{\eta,\eta^\dag}$
 		\begin{equation*}\begin{split} %{
@@ -254,13 +181,13 @@
 	\end{proposition} %prop:有限次元ベクトル空間の一意性}
 	\begin{proof} %{
 		線形写像$\phi:V\to\fukuso^{\dim V}$を$V$の
-		基底$\set{e_1,e_2,\dots,e_{\dim V}}$に対して次のように定義すればよい。
+		基底$\set{f_1,f_2,\dots,f_{\dim V}}$に対して次のように定義すればよい。
 		\begin{equation*}\begin{split} %{
-			\phi e_i = E_i \quad\text{for all }i\in1..(\dim V)
+			\phi f_i = \be_i \quad\text{for all }i\in1..(\dim V)
 		\end{split}\end{equation*} %}
-		ここで、$E_i$は$i$番目の成分が$1$でその他の成分は$0$のベクトルとした。
+		ここで、$\be_i$は$i$番目の成分が$1$でその他の成分は$0$のベクトルとした。
 		\begin{equation*}\begin{split} %{
-			E_i &= (0, \dots, 0, \underbrace{i}_{\text{$i$番目}}, 0, \dots, 0)^t
+			\be_i &= (0, \dots, 0, \underbrace{i}_{\text{$i$番目}}, 0, \dots, 0)^t
 		\end{split}\end{equation*} %}
 	\end{proof} %}
 
@@ -268,9 +195,9 @@
 
 	\begin{definition}[線形部分空間]\label{def:線形部分空間} %{
 		ベクトル空間で加法と係数の積で閉じている部分集合を線形部分空間または
-		部分ベクトル空間という。
+		単に部分空間という。
 		$V$をベクトル空間、$W$を$V$の部分集合とする。$W$が次の性質を満たすとき、
-		$W$は$V$の線形部分空間となる。
+		$W$は$V$の部分空間となる。
 		\begin{description}\setlength{\itemsep}{-1mm} %{
 			\item[加法] $
 			v_1 + v_2\in W,\;\quad\text{for all }v_1,v_2\in W
@@ -281,18 +208,18 @@
 		\end{description} %}
 	\end{definition} %def:線形部分空間}
 
-	よく使う特別な線形部分空間を定義の形で書いておく。
+	よく使う特別な部分空間を定義の形で書いておく。
 
-	\begin{definition}[特別な線形部分空間]\label{def:特別な線形部分空間} %{
+	\begin{definition}[特別な部分空間]\label{def:特別な部分空間} %{
 		$V$をベクトル空間とする。
 		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[自明な線形部分空間] ゼロ元だけからなる$V$の部分集合$\set{0}$は
-			$V$の線形部分空間となる。$\set{0}$を自明な線形部分空間という。
-			\item[真の線形部分空間（proper subspace）] 
-			$V$自身は$V$の線形部分空間だが、
-			$V$自身でない線形部分空間を$V$の真の線形部分空間という。
+			\item[自明な部分空間] ゼロ元だけからなる$V$の部分集合$\set{0}$は
+			$V$の部分空間となる。$\set{0}$を自明な部分空間という。
+			\item[真の部分空間（proper subspace）] 
+			$V$自身は$V$の部分空間だが、$V$自身でない部分空間を$V$の真の
+			部分空間という。
 		\end{description} %}
-	\end{definition} %def:特別な線形部分空間}
+	\end{definition} %def:特別な部分空間}
 
 	ベクトル空間の直和を定義する。
 
@@ -337,12 +264,13 @@
 			\end{split}\end{equation*} %}
 			と書けたとする。すると、$v_1+v_2=w_1+w_2$より$v_1-w_1=w_2-v_2$となる。
 			ここで、$v_1-w_1\in V_1$かつ$w_2-v_2\in V_2$となるが、
-			$V_1\cup V_2=\set{0}$なので、$v_1-w_1=0=w_2-v_2$となる。
+			命題の仮定より$V_1\cap V_2=\set{0}$なので、$v_1-w_1=0=w_2-v_2$となる。
 			したがって、$v_1=w_1$かつ$v_2=w_2$となることがわかり命題が成り立つこと
 			がわかる。
 		\end{enumerate} %}
 	\end{proof} %}
 
+	ベクトル空間の直積と直和の関係は節\ref{s2:直積と直和}を見ること。
 	よく使う命題を書いておく。
 
 	\begin{proposition}[rank-nullity定理]\label{prop:rank-nullity定理} %{
@@ -438,8 +366,394 @@
 		\end{itemize} %}
 	\end{todo} %todo:ここまで}
 
-\subsection{直和}\label{s2:直和} %{
-%s2:直和}
+\subsection{行列の階数}\label{s2:行列の階数} %{
+	この節では、同一の行数の行列$A$と$B$を行について連結したものを$[A,B]$
+	と書くことにする。
+	\begin{equation*}\begin{split} %{
+		[A, B] &= \left[\begin{pmatrix}
+			A_{11} & \cdots & A_{1p} \\
+			A_{21} & \cdots & A_{2p} \\
+			\vdots & \cdots & \vdots \\
+			A_{m1} & \cdots & A_{mp} \\
+		\end{pmatrix}, \begin{pmatrix}
+			B_{11} & \cdots & B_{1q} \\
+			B_{21} & \cdots & B_{2q} \\
+			\vdots & \cdots & \vdots \\
+			B_{m1} & \cdots & B_{mq} \\
+		\end{pmatrix}\right] \\
+		&= \begin{pmatrix}
+			A_{11} & \cdots & A_{1p} & B_{11} & \cdots & B_{1q} \\
+			A_{21} & \cdots & A_{2p} & B_{21} & \cdots & B_{2q} \\
+			\vdots & \cdots & \vdots & \vdots & \cdots & \vdots \\
+			A_{m1} & \cdots & A_{mp} & B_{m1} & \cdots & B_{mq} \\
+		\end{pmatrix}
+	\end{split}\end{equation*} %}
+	この行列の書き方を縦ベクトル表示または列ベクトル表示ということにする。
+
+	\begin{definition}[行列の階数]\label{def:行列の階数} %{
+		$m$行$n$列の行列$A$を$n$個の縦ベクトル表示で$A=[A_1,A_2,\dots,A_n]$
+		と書いたとき、$\dim\spanall_\fukuso\set{A_1,A_2,\dots,A_n}$を
+		$A$の階数という
+	\end{definition} %def:行列の階数}
+
+	ここでは、行列の列ベクトルを用いて行列の階数を定義したが、
+	行ベクトルを用いて定義しても同じことになる。
+
+	\begin{proposition}[行列の階数]\label{prop:行列の階数} %{
+		行列の縦ベクトルで張られるベクトル空間の次元と横ベクトルで張られる
+		ベクトル空間の次元は等しい。
+	\end{proposition} %prop:行列の階数}
+	\begin{proof} %{
+		$m$行$n$列の行列$A$を縦ベクトル表示で$A=[A_1,A_2,\dots,A_n]$と書く。
+		行列の階数が$r\;(\le \min(m,n))$ならば、ある$r$個のベクトル
+		$C_1,C_2,\dots,C_r\in\fukuso^m$が存在して
+		各縦ベクトル$A_i$が$\set{C_i\bou i\in1..r}$の線形結合で書くことが
+		できる。つまり、ある$\set{R_{ji}\in\fukuso\bou j\in1..r,\;i\in1..n}$
+		が存在して次のように書くことできる。
+		\begin{equation*}\begin{split} %{
+			A_i = \sum_{j\in1..r}C_jR_{ji} \quad\text{for all }i\in1..n
+		\end{split}\end{equation*} %}
+		$C=[C_1,C_2,\dots,C_r]$とすると、$A=CR$と書ける。
+		したがって、$A$の各横ベクトルは$R$の横ベクトルの
+		線形結合で書かれることがわかる。$R$は$r$行$n$列の行列だから
+		\begin{equation*}\begin{split} %{
+			\text{$A$の横ベクトルで張られるベクトル空間の次元} \\
+			\le r = \text{$A$の縦ベクトルで張られるベクトル空間の次元}
+		\end{split}\end{equation*} %}
+		となる。$A$を転置して同様の議論を行うと
+		\begin{equation*}\begin{split} %{
+			\text{$A^t$の横ベクトルで張られるベクトル空間の次元} \\
+			\le \text{$A^t$の縦ベクトルで張られるベクトル空間の次元}
+		\end{split}\end{equation*} %}
+		が成り立つことがわかる。したがって、次の式が成り立ち命題が証明される。
+		\begin{equation*}\begin{split} %{
+			\text{$A$の横ベクトルで張られるベクトル空間の次元} \\
+			= \text{$A$の縦ベクトルで張られるベクトル空間の次元}
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+
+	この命題で使われた行列の分解には名前がついている。
+
+	\begin{definition}[階数因子化]\label{def:階数因子化} %{
+		階数$r$の行列$A$を
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 各縦ベクトルが線形独立な$r$列の行列$C$と
+			\item $r$行の行列$R$で
+		\end{itemize} %}
+		$A=CR$と書くことを階数因子化（rank factorization）という。
+	\end{definition} %def:階数因子化}
+
+	\begin{proposition}[階数因子化]\label{prop:階数因子化} %{
+		$A=CR$を行列$A$の階数因子化とすると次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\rank A = \rank C = \rank R
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:階数因子化}
+	\begin{proof} %{
+		命題\ref{prop:行列の階数}の証明からわかる。
+	\end{proof} %}
+
+	任意の行列$A\in\Hom_\fukuso(\fukuso^m,\fukuso^n)$に対して
+	次の性質が成り立つことが予想される。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\rank A = \dim\im A$
+		\item $\dom A\simeq_\fukuso \ker A\otimes \im A$
+	\end{itemize} %}
+	結果から言えば、予想は成り立つ。その証明は次のようになる。
+	$A=CR$と階数因子化すると、次の線形写像の系列が得られる。
+	\begin{equation*}\begin{split} %{
+		\dom A = \dom R \xto{R} \codom R = \dom C \xto{C} \codom C = \codom A
+	\end{split}\end{equation*} %}
+	階数因子化の定義より、$C$は$1:1$であるが
+	（命題\ref{prop:行列の階数と単射}）、$\rank R=\rank R^\dag$より、
+	$\rank R^\dag$も$1:1$になる。
+	\begin{equation*}\begin{split} %{
+		\dom R \xfrom[1:1]{R^\dag} \codom R = \dom C \xto[1:1]{C} \codom C
+	\end{split}\end{equation*} %}
+	そして、次の式より、
+	\begin{equation*}\begin{split} %{
+		R^\dag x = 0 \implies RR^\dag x = 0 \text{ and } \\
+		RR^\dag x = 0 \implies x^\dag RA^\dag x = \zettai{\zettai{R^\dag x}} = 0
+		\implies R^\dag x = 0
+	\end{split}\end{equation*} %}
+	$\ker RR^\dag=\ker R=\set{0}$となることがわかる。したがって、
+	$RR^t$は同型射となり（命題\ref{prop:核と同型射}）、
+	直和分解$\dom R\simeq_\fukuso \ker R\oplus \im R$が得られる
+	（命題\ref{prop:単射と直和}）。
+	また、$\rank A=\dim \codom R$と、$C$が$1:1$であることから、
+	$\rank A=\dim\im A$となることがわかる。
+
+	\begin{proposition}[行列の階数と単射]\label{prop:行列の階数と単射} %{
+		任意の行列$A\in\Hom_\fukuso(\fukuso^m,\fukuso^n)$に対して
+		$\rank A=m$のとき、$A$は$1:1$になる。
+	\end{proposition} %prop:行列の階数と単射}
+	\begin{proof} %{
+		行列$A$を縦ベクトル表示して$A=[A_1,A_2,\dots,A_m]$と書くと、
+		$A$の作用は次のように書けるが、
+		\begin{equation*}\begin{split} %{
+			Ax = x_1A_1 + x_2A_2 + \cdots x_mA_m
+			\quad\text{for all }x=(x_1,x_2,\dots,x_m)^t\in\fukuso^m
+		\end{split}\end{equation*} %}
+		$\rank A=m$ならば、$Ax=0\iff x=0$となることが、
+		$A_1,A_2,\dots,A_m\in\fukuso^n$が線形独立であることがわかる。
+	\end{proof} %}
+
+	\begin{proposition}[核と同型射]\label{prop:核と同型射} %{
+		$V$を有限次元ベクトル空間とする。
+		任意の$\phi\in\End_\fukuso V$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\ker\phi=\set{0} \iff \phi\text{は同型射}
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:核と同型射}
+	\begin{proof} %{
+		必要と十分に分けて証明する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\phi\text{は同型射}\implies\ker\phi=\set{0}$\\
+			線形写像の定義より、$0\in\ker\phi$となるが、$\phi$は同型射なので
+			$1:1$でなくてはならないので、$\ker\phi=\set{0}$となる。
+			%
+			\item $\ker\phi=\set{0}\implies\phi\text{は同型射}$\\
+			$\ker\phi=\set{0}$だから、次の式が成り立つことがわかる。
+			\begin{equation*}\begin{split} %{
+				\phi v_1 = \phi v_2 \iff \phi(v_1 - v_2) = 0 \iff v_1 = v_2
+				\quad\text{for all }v_1,v_2\in V
+			\end{split}\end{equation*} %}
+			したがって、$\phi$は$1:1$になることがわかる。
+			$V$が有限次元なので、$1:1$の線形写像は同型射となる。
+		\end{itemize} %}
+	\end{proof} %}
+
+	\begin{proposition}[単射と直和]\label{prop:単射と直和} %{
+		$V$と$W$を有限次元ベクトル空間とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\phi\in\Hom_\fukuso(V,W)$が$1:1$で、
+			\item $\psi\phi$が同型射となる$\psi\in\Hom_\fukuso(W,V)$がある
+		\end{itemize} %}
+		とき、$W$は$\ker\psi$と$\im\psi$の直和で書かれる。
+		\begin{equation*}\begin{split} %{
+			\xymatrix{
+				& W \ar[rd]^{\psi} \\
+				V \ar[ru]^{\phi}_{1:1} \ar@{<->}[rr]^{\simeq_\fukuso} & & V
+			} \implies W \simeq_\fukuso \ker\psi \oplus \im\psi
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:単射と直和}
+	\begin{proof} %{
+		いくつかのステップに分けて命題を証明する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\im\phi\cap \ker\psi = \set{0}$ \\
+			$w\in(\im\phi\cap \ker\psi)$とすると、$\psi w=0$となるが、
+			$\phi$が単射であることから、$w=\phi v$となる$v\in V$が一意に存在して、
+			$\psi\phi v=0$となる。
+			一方、$\psi\phi$が同型射であることから、$\ker(\psi\phi)=\set{0}$
+			だから（命題\ref{prop:核と同型射}）、$v=0$となることがわかる。
+			したがって、$\phi v=0$となり、$\im\phi\cap \ker\psi = \set{0}$となる
+			ことがわかる。
+			%
+			\item $W = \im\phi\oplus \ker\psi$ \\
+			$\psi\phi$が同型射であることから、任意の$w\in W$に対して、
+			$\psi w=\psi\phi v$となる$v\in V$が一意に存在する。
+			したがって、$\psi(w-\phi v)=0 \iff w-\phi v\in\ker\psi$より、
+			$w=\phi v + w_{\ker}$となる$w_{\ker}\in\ker\psi$が一意に存在する。
+			以上より、任意の$w\in W$に対して、$w=w_{\im} + w_{\ker}$となる
+			$w_{\im}\in\im\phi$と$w_{\ker}\in\ker\psi$が一意に定まることがわかる。
+			%
+			\item $W\simeq_\fukuso \im\psi\oplus \ker\psi$ \\
+			$\phi$が単射だから、$\im\phi\simeq_\fukuso V$が成り立ち、
+			$\psi\phi$が同型射であることから、$\psi$は$\onto$となり、
+			$\im\psi=V$が成り立つ。したがって、$\im\phi\simeq_\fukuso\im\phi$
+			となり、次の式が成り立つ。
+			\begin{equation*}\begin{split} %{
+				W = \im\phi\oplus \ker\psi
+				\iff W\simeq_\fukuso \im\psi\oplus \ker\psi
+			\end{split}\end{equation*} %}
+		\end{itemize} %}
+	\end{proof} %}
+
+	$A\in\Hom_\fukuso(\fukuso^m,\fukuso^n)$、$y\in\fukuso^n$が与えられた
+	ときの、連立線型方程式$Ax=y$の解$x\in\fukuso^m$が存在する条件を考える。
+	$A$を縦ベクトル表示$A=[A_1,A_2,\dots,A_m]$で書くと、$Ax=y$という式は
+	$\sum_{i\in1..m}x_iA_i=y$と書かれる。したがって、$Ax=y$の解の集合を
+	$A^{-1}y=\set{x\in\fukuso^m\bou Ax=y}$と書くと、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		A^{-1}y\neq\emptyset \iff y\in\spanall_\fukuso\set{A_1,A_2,\dots,A_m}
+	\end{split}\end{equation*} %}
+	通常、この条件式は行列の階数を用いて次のように書かれる。
+	\begin{equation*}\begin{split} %{
+		A^{-1}y\neq\emptyset \iff \rank A = \rank[A, y]
+	\end{split}\end{equation*} %}
+
+	解空間$A^{-1}y$の次元を考えてみる。$x_1,x_2\in A^{-1}y$とすると、
+	$A(x_1-x_2)=0$となる。したがって、次の式が成り立つ。
+	\begin{equation*}\begin{split} %{
+		A^{-1}y = x_0 + \ker A \quad\text{for all }x_0\in A^{-1} y
+	\end{split}\end{equation*} %}
+	$x_0$を$Ax=y$の特殊解といい、任意の$Ax=y$の解は特殊解$x_0$に$\ker A$の元を
+	加算したものになる。$\ker A$はベクトル空間だから、$A^{-1}y$の次元という
+	言い方は妥当なものになっている\footnote{
+		$A^{-1}y\subseteq\fukuso^m$はベクトル空間ではないが、
+		アフィン空間になる。
+	}。任意の$y\in\codom A$に対して、$\dim A^{-1}y=\dim\ker A$となる。
+	したがって、行列$A$の階数を用いて解空間の次元を書くと、
+	任意の$y\in\dom A$に対して、$\dim A^{-1}y=\dim\codom A-\rank A$
+	となることがわかる。
+
+	以下では、ガウス消去法によって行列の階数を求める方法を書く。
+	ガウス消去法を定義するために、いくつかの事柄を定義しておく。
+
+	有限次元ベクトル$v=(v_1,v_2,\dots)$に対して、$\lead$を次のようにおく。
+	\begin{equation*}\begin{split} %{
+		\lead v = \begin{cases}
+			\infty, &\text{ iff } v = 0 \\
+			\myop{argmin}_{i\in\sizen_+}\jump{v_i\neq 0}, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation*} %}
+
+	\begin{definition}[上半三角行列]\label{def:上半三角行列} %{
+		正方行列$A$が次のようなに下半分の成分がすべて$0$になっているとき、
+		$A$を上半三角行列という。
+		\begin{equation*}\begin{split} %{
+			A = \begin{pmatrix}
+			* & * & \cdots & * & * \\
+			& * & \cdots & * & * \\
+			& & \ddots & \vdots & \vdots \\
+			& & & * & * \\
+			0 & & & & * \\
+			\end{pmatrix}
+		\end{split}\end{equation*} %}
+		ここで、$*$は任意の複素数を表すものとする。
+	\end{definition} %def:上半三角行列}
+
+	ここでは、上半三角行列の定義を拡張して、正方行列以外の行列でも
+	対角成分の左下（対角成分を含まない）がすべて$0$になっているものを
+	上半三角行列ということにする。
+	上半三角行列は、ベクトル$R_i\in\fukuso^m,\i\in1..n$と$\lead$を用いると、
+	次のように書くことができる。
+	\begin{equation*}\begin{split} %{
+		[R_1,R_2,\dots,R_n]^t \text{ is upper triangle}
+		\iff i\le\lead R_i \quad\text{for all }i\in1..n
+	\end{split}\end{equation*} %}
+
+	\begin{definition}[階段行列（row echelon form matrix）]\label{def:階段行列} %{
+		$0$でない有限次元ベクトル$R_i,\;i\in1..n$を用いて行列を
+		$A=[R_1,R_2,\dots,R_n,0,\dots,0]^t$と表す。
+		$\lead R_1<\lead R_2<\cdots< \lead R_n$となるとき、$A$を階段行列という。
+	\end{definition} %def:階段行列}
+
+	階段行列は上半三角行列となる。逆は必ずしも成り立たない。
+	\begin{equation*}\begin{split} %{
+		A \text{ is echelon form} \implies A \text{ is upper triangle}
+	\end{split}\end{equation*} %}
+
+	与えられた行列$A$に可逆な変換$\phi$を左から掛けて階段行列$\phi A$
+	を作れば、$\phi A$の有限な$\lead$を持つ列ベクトルの数が行列$A$の階数
+	となる。
+	\begin{equation*}\begin{split} %{
+		\phi \text{ is invertible and } \phi A \text{ is an echelon form} \\
+		\implies \rank A = \sum_{i}\jump{\lead R_i<\infty}
+		\text{ where } \phi A = [R_1,R_2,\dots]^t \\
+	\end{split}\end{equation*} %}
+	ガウス消去法は任意の行列を可逆な変換を左から掛けて階段行列に変換する
+	方法である。
+
+	\begin{procedure}[ガウス消去法]\label{proc:ガウス消去法} %{
+		$A$を$n$行$m$列の行列とする。
+		\begin{equation*}\begin{split} %{
+			A\in \Hom_\fukuso(\fukuso^m,\fukuso^n)
+		\end{split}\end{equation*} %}
+		$A$を可逆な線形写像の系列で階段行列に変換する。
+		\begin{equation*}\begin{split} %{
+			A=A^{(0)} \xto{\phi_1} A^{(1)} \xto{\phi_2} A^{(2)}
+			\xto{\phi_3}\cdots \xto{\phi_n} A^{(n)}
+		\end{split}\end{equation*} %}
+		$A^{(i)}$は$1$行から$i$行までが階段行列になっている。
+		$A^{(i)}$を次のように横ベクトル$A_j^{(i)}\in\fukuso^m,\;j\in1..n$で
+		表すと、
+		\begin{equation*}\begin{split} %{
+			A^{(i)} = [A_1^{(i)},A_2^{(i)},\dots,A_n^{(i)}]^t
+		\end{split}\end{equation*} %}
+		$A^{(i)}$は次のような形
+		\begin{equation*}\begin{split} %{
+			\lead A_1^{(i)} < \lead A_2^{(i)} <\cdots< \lead A_i^{(i)} < \infty
+		\end{split}\end{equation*} %}
+		または、ある$1\le j \le i$があって、次のような形になっている。
+		\begin{equation*}\begin{split} %{
+			\lead A_1^{(i)} < \lead A_2^{(i)} <\cdots< \lead A_{j-1}^{(i-1)} 
+			< \lead A_j^{(i)} = \cdots = \lead A_n^{(i)} = \infty \\
+		\end{split}\end{equation*} %}
+		$\phi_i$は$A^{(i-1)}$に対する次の手続きで構成される。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[$i..n$行の中で$\lead$が有限かつ最も小さい横ベクトルを見つける]
+			\item[見つからない] $i..n$行の横ベクトルはすべて$0$である。
+			階段行列にすることは完了しているので、終了する。
+			\item[一つだけ見つかった] 見つかった横ベクトルが$j$行だとすると、
+			$i$行と$j$行を入れ替えるたものを$A^{(i)}$とする。
+			\item[二つ以上見つかった] 見つかった横ベクトルが
+			$J=\set{j_1,j_2,\dots,j_p}$行だとすると、$i$行と$j_1$行を入れ替えて、
+			$J-\set{j_1}$行の横ベクトルから$\lead$を与える成分を消去する\footnote{
+				ここでは、議論を簡単にするために、最小の$\lead$を与える
+				$J=\set{j_1,j_2,\dots,j_p}$行の横ベクトルから$j_1$行の横ベクトルを
+				選んで、それをピボットとしたが、数値計算をする場合には、
+				$\lead$の値の絶対値が最も大きいものをピボットとした方が
+				割り算をする際の精度誤差を小さくできる。
+			}。
+			$l=\lead A_{i_1}^{(i-1)}$とすると、次のようにして$J-\set{j_1}$行の
+			横ベクトルから$\lead$を与える成分を消去する。
+			\begin{equation*}\begin{split} %{
+				A_{j_2}^{(i)} &= A_{j_2}^{(i-1)} 
+					- \frac{A_{j_2l}^{(i-1)}}{A_{j_1l}^{(i-1)}}A_{j_1}^{(i-1)} \\
+				\vdots \\
+				A_{j_p}^{(i)} &= A_{j_p}^{(i-1)} 
+					- \frac{A_{j_pl}^{(i-1)}}{A_{j_1l}^{(i-1)}}A_{j_1}^{(i-1)} \\
+			\end{split}\end{equation*} %}
+			こうして作られた行列$A^{(i)}$は、$(i+1)..n$行の横ベクトルはすべて
+			$\lead$が$\lead A_i^{(i)}$より大きくなる。
+		\end{description} %}
+	\end{procedure} %proc:ガウス消去法}
+%s2:行列の階数}
+
+\subsection{直積と直和}\label{s2:直積と直和} %{
+	ベクトル空間の直和は直積から定義することもできる。
+	$V_1$と$V_2$をベクトル空間とする。直積$V_1\times V_2$に次のような
+	演算を定義したものを$V_1\coprod V_2$と書く。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[加法] 任意の$v_1,w_1\in V_1,\;v_2,w_2\in V_2$に対して
+		\begin{equation*}\begin{split} %{
+			(v_1\times v_2) + (w_1\times w_2) \defeq (v_1 + w_1)\times (v_2 + w_2)
+		\end{split}\end{equation*} %}
+		\item[係数] 任意の$v_1\in V_1,\;v_2\in V_2,\;r\in\fukuso$に対して
+		\begin{equation*}\begin{split} %{
+			r(v_1\times v_2) \defeq (rv_1\times rv_2)
+		\end{split}\end{equation*} %}
+	\end{description} %}
+	$V_1\coprod V_2$はベクトル空間となる。線形写像
+	$\iota_i:V_i\to V_1\coprod V_2,\;i\in1..2$を次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\iota_1 v &= v\amalg 0  \quad\text{for all }v\in V_1 \\
+		\iota_2 v &= 0\amalg v  \quad\text{for all }v\in V_2 \\
+	\end{split}\end{equation*} %}
+	$\iota_1$と$\iota_2$はともに$1:1$となる。
+	$\iota_1$と$\iota_2$を標準入射ということにする。
+	また、直積の標準射影$\pi_i:V_1\coprod V_2\to V_i,\;i\in1..2$を
+	次のように定義する。
+	\begin{equation*}\begin{split} %{
+		\pi_1 (v_1\amalg v_2) &= v_1 \quad\text{for all }v_1\in V_1,\;v_2\in V_2 \\
+		\pi_2 (v_1\amalg v_2) &= v_2 \quad\text{for all }v_1\in V_1,\;v_2\in V_2 \\
+	\end{split}\end{equation*} %}
+	すると、標準入射と標準射影は次の関係を満たす。
+	\begin{equation*}\begin{split} %{
+		\pi_i\iota_i = \myid \quad\text{for all }i\in 1..2 \\
+		\iota_1\pi_1 + \iota_2\pi_2 = \myid \\
+	\end{split}\end{equation*} %}
+	ここで、$\End_\fukuso(V_1\coprod V_2)$の加法$+$はベクトル空間の間の
+	線形写像に対して次のように定義されたものとする。
+	\begin{equation*}\begin{split} %{
+		(f+g)v \defeq (fv) + (gv)
+		\quad\text{for all }f,g\in\Hom_\fukuso(V,W),\;v\in V
+	\end{split}\end{equation*} %}
+
+	ベクトル空間の直和の定義
+	\ref{def:ベクトル空間の直和}と一致する。
+%s2:直積と直和}
 
 \subsection{無限次元ベクトル空間}\label{s2:無限次元ベクトル空間} %{
 	\begin{proposition}[ベクトル空間の次元定理]\label{prop:ベクトル空間の次元定理} %{

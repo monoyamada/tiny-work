@@ -1,0 +1,259 @@
+\begingroup %{
+	\newcommand{\Hom}{\ensuremath{\myop{Hom}}}
+	\newcommand{\dom}{\ensuremath{\myop{dom}}}
+	\newcommand{\cod}{\ensuremath{\myop{cod}}}
+	\newcommand{\onto}{\ensuremath{\myop{onto}}}
+	\newcommand{\op}{\ensuremath{\myop{op}}}
+%
+\section{圏の基礎事項}\label{s1:圏の基礎事項} %{
+	圏論で共通に用いられる記号や定義を書くことにする。
+
+\subsection{ここで用いる記号}\label{s2:ここで用いる記号} %{
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[圏の対象] 圏$\mycal{C}$の対象$c$を$c\in\mycal{C}$と書く。
+		\item[圏の射] 圏$\mycal{C}$の射$f$を$f\in\Hom\mycal{C}$と書く。
+		また、射の領域と余領域を明示する場合は、$a\xto{f}b\in\Hom\mycal{C}$
+		または$f\in\mycal{C}(a,b)$と書くことにする。
+		\item[恒等射]　対象$c$の恒等射を$1_c$と書く。圏の中では$1_c$は対象$c$
+		への射影のように振舞う。
+		\item[圏的双対]　圏の射の向きを逆にしたものも圏になる。圏\mycal{C}
+		の矢印を逆にした圏を$\mycal{C}$の双対圏といい、$\mycal{C}^{\op}$と書く。
+		内積での双対と区別するために圏的双対という言葉を使うこともある。
+		\item[同型射] 射$x\xto{f}y$が同型射の場合、$f:x\simeq y$とか
+		$x\overset{f}{\simeq}y$などと書く。
+	\end{description} %}
+	よく使う圏は次のような記号を共通して使うことにする。
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{ccl} \hline
+			名前 & 記号 & 説明 \\ \hline\hline
+			離散な圏 & & 射が恒等射だけの圏\quad$
+				\mycal{C}(a,b) = \begin{cases}
+					\set{1_a}, &\text{ iff } a=b \\
+					\emptyset, &\text{ otherwise } \\
+				\end{cases}
+			$ \\
+			自明な圏 & & 対象が一つだけの離散な圏 \\
+			集合の圏 & \mybf{Set} & 集合を対象、写像を射とする圏 \\
+			半群の圏 & \mybf{Smgrp} & 半群を対象、半群準同型を射とする圏 \\
+			モノイドの圏 & \mybf{Mon} & モノイドを対象、モノイド準同型を射とする圏 \\
+			群の圏 & \mybf{Grp} & 群を対象、群準同型を射とする圏 \\
+		\end{tabular}\end{center}
+		\caption{よく使う圏}
+	\end{table} %}
+%s2:ここで用いる記号}
+\subsection{小さな圏と大きな圏}\label{s2:小さな圏と大きな圏} %{
+	集合の圏$\mybf{Set}$からすべての対象を取り出すような操作を考えると、
+	すべての集合を取り出すということになり、数学的に矛盾する。
+	'すべての集合の集合'という文言は数学的に矛盾を生じるらしい
+	（ラッセルのパラドクス）。しかし、集合の操作：
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 集合の元を使う
+		\item 集合演算を使う
+	\end{itemize} %}
+	が使いたい場面が出てくる。そうしたときに、集合の操作ができる環境を
+	明確にしておく。
+
+	\begin{definition}[小さなhom]\label{def:小さなhom} %{
+		圏$\mycal{C}$の任意の対象$a,b$に対して$\Hom(a,b)$が集合になるとき、
+		$\mycal{C}$は小さなhomを持つという。
+	\end{definition} %def:小さなhom}
+
+	\begin{definition}[小さな圏]\label{def:小さな圏} %{
+		小さなhomを持つ圏$\mycal{C}$の対象全体が集合となるとき、$\mycal{C}$を
+		小さな圏という。小さくない圏を大きな圏という。
+	\end{definition} %def:小さな圏}
+
+	正直なところ、大きな圏と小さな圏で何が異なるのかわからない。
+%s2:小さな圏と大きな圏}
+\subsection{射}\label{s2:射} %{
+	写像の$1:1$と$\onto$という性質に同様な性質は射についても定義されるが、
+	対象の内部構造（集合の元に相当）に触れずに定義される。
+
+	\begin{definition}[単射]\label{def:単射} %{
+		射$c\xto{f}\circ$が次の式を満たすとき、$f$を単射または左キャンセル可能
+		という。
+		\begin{equation*}\begin{split} %{
+			\xymatrix{
+				\circ \ar@<1ex>[r]^{g_1} \ar@<-1ex>[r]_{g_2} & c \ar[r]^f & \circ
+			} \implies g_1 = g_2 \quad\text{for all }\xymatrix{
+				\circ \ar@<1ex>[r]^{g_1} \ar@<-1ex>[r]_{g_2} & c
+			}
+		\end{split}\end{equation*} %}
+	\end{definition} %def:単射}
+
+	\begin{definition}[全射]\label{def:全射} %{
+		射$c\xto{f}\circ$が次の式を満たすとき、$f$を全射または右キャンセル可能
+		という。
+		\begin{equation*}\begin{split} %{
+			\xymatrix{
+				\circ & c \ar@<1ex>[l]^{g_1} \ar@<-1ex>[l]_{g_2} & \circ \ar[l]_f
+			} \implies g_1 = g_2 \quad\text{for all }\xymatrix{
+				\circ & c \ar@<1ex>[l]^{g_1} \ar@<-1ex>[l]_{g_2}
+			}
+		\end{split}\end{equation*} %}
+	\end{definition} %def:全射}
+
+	\begin{definition}[全単射]\label{def:全単射} %{
+		単射かつ全射となる射を全単射または双射という。
+	\end{definition} %def:全単射}
+
+	単射と全射は圏的双対になっている。集合の圏では単射と$1:1$は同値、
+	全射と$\onto$は同値になる。
+
+	\begin{proposition}[単射と一対一写像]\label{prop:単射と一対一写像} %{
+		集合の圏の射$f$について次の式が成り立つ。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $f$が単射 $\iff$ $f$が$1:1$
+		\end{itemize} %}
+	\end{proposition} %prop:単射と一対一写像}
+	\begin{proof} %{
+		$X\xto{f}\circ$とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $f$が単射 $\Rightarrow$ $f$が$1:1$ \\
+			シングルトン$\mybf{1}=\set{0}$とする。
+			$f$が単射なら、任意の$g_1,g_2:\mybf{1}\to X$に対して、
+			\begin{equation*}\begin{split} %{
+				fg_10 = fg_20 \implies g_10 = g_20
+			\end{split}\end{equation*} %}
+			となるが、この式は$f$が$1:1$である定義そのものである。
+			%
+			\item $f$が単射 $\Leftarrow$ $f$が$1:1$ \\
+			$Y$を任意の集合とする。
+			$f$が$1:1$なら、任意の$g_1,g_2:Y\to X$に対して、
+			\begin{equation*}\begin{split} %{
+				fg_1 = fg_2 &\iff fg_1y = fg_2y \quad\text{for all }y\in Y \\
+				&\implies g_1y = g_2y \quad\text{for all }y\in Y
+					\quad \because f \text{が} 1:1 \\
+				&\iff g_1 = g_2
+			\end{split}\end{equation*} %}
+			となり、$f$は単射となる。
+		\end{itemize} %}
+	\end{proof} %}
+
+	\begin{proposition}[全射と上への写像]\label{prop:全射と上への写像} %{
+		集合の圏の射$f$について次の式が成り立つ。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $f$が全射 $\iff$ $f$が$\onto$
+		\end{itemize} %}
+	\end{proposition} %prop:全射と上への写像}
+	\begin{proof} %{
+		$X\xto{f}Y$とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $f$が全射 $\Rightarrow$ $f$が$\onto$ \\
+			２値集合$\mybf{2}=\set{0,1}$とする。
+			$g_1,g_2:Y\to\mybf{2}$を次のように定義する。
+			\begin{equation*}\begin{split} %{
+				g_1 y = 1,\quad
+				g_2 y = \begin{cases}
+					1, &\text{ iff } y\in fX \\
+					0, &\text{ otherwise } \\
+				\end{cases}
+			\end{split}\end{equation*} %}
+			すると、$g_1f=g_2f$が成り立つから、$f$が全射なら、$g_1=g_2$
+			となる必要がある。$g_1=g_2$となるのは$fX=X$となる時だけなので、
+			$f$は全射になる必要がある。
+			%
+			\item $f$が全射 $\Leftarrow$ $f$が$\onto$ \\
+			$Z$を任意の集合とする。
+			$f$が$\onto$なら、任意の$g_1,g_2:X\to Z$に対して、
+			\begin{equation*}\begin{split} %{
+				g_1f = g_2f &\iff g_1fx = g_2fx \quad\text{for all }x\in X \\
+				&\implies g_1y = g_2y \quad\text{for all }y\in Y
+					\quad \because f \text{が} \onto \\
+				&\iff g_1 = g_2
+			\end{split}\end{equation*} %}
+			となり、$f$は全射となる。
+		\end{itemize} %}
+	\end{proof} %}
+
+	集合の圏では全単射は唯一つ逆射をもつが、一般の圏ではそうはいかない。
+	まず、逆射を定義する。
+
+	\begin{definition}[逆射]\label{def:逆射} %{
+		射$a\xto{f}b$に対して射$a\xfrom{g}b$が、
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[左逆射] $gf=1_a$となるとき、$g$を$f$の左逆射または引きこみ
+			（retraction）といい、
+			\item[右逆射] $fg=1_b$となるとき、$g$を$f$の右逆射または切断
+			（section）といい、
+			\item[逆射]　左逆射かつ右逆射となるとき、$g$を$f$の両逆射または単に
+			逆射といい、そのような$g$が存在するとき、$f$を可逆という。
+		\end{description} %}
+	\end{definition} %def:逆射}
+
+	ここで定義した切断はベクトル束の切断と同じものである。
+	ベクトル束$E$から多様体$M$への射影を$\pi$として$\sigma:M\to E$が任意の
+	$x\in M$で$\pi_x\sigma_xx=x$となるとき、$\sigma$を$E$の切断という。
+	大域的に書くと$p\sigma=1_M$となり、ここで定義した切断に一致する。
+	ここでは、引きこみや切断という単語は使わずに、左逆射を持つとか
+	右逆射を持つということにする。
+
+	逆射が存在すれば、それは一意に定まる。
+
+	\begin{proposition}[逆射の一意性]\label{prop:逆射の一意性} %{
+		射の逆射が存在するならば、唯一つだけである。
+	\end{proposition} %prop:逆射の一意性}
+	\begin{proof} %{
+		射$a\xto{f}b$に対して$a\xfrom{g}b$と$a\xfrom{h}b$が逆射だとする。
+		すると、$gf=1_a$が成り立つが、この式の右から$h$を掛けると、$g=h$
+		となり、命題が証明される。
+	\end{proof} %}
+
+	逆射を使って同型射を定義する。例\ref{eg:全単射だが同型射でない例}
+	のように、全単射だけでは集合同型に対応する対象間の同値関係を得ることが
+	できないので、全単射より強い条件を課した同型射を定義する。
+
+	\begin{definition}[同型射]\label{def:同型射} %{
+		逆射をもつ射を同型射という。射$f$の逆射は$f^{-1}$と書く。
+		また、圏の対象$X$から$Y$への同型射がある場合は、$X$と$Y$は同型といい、
+		$X\simeq Y$と書く。
+	\end{definition} %def:同型射}
+
+	\begin{example}[全単射だが同型射でない例]\label{eg:全単射だが同型射でない例} %{
+		自然数$\sizen$と非負の有理数$\bun_+$をその乗法によって可換モノイドとして
+		みて、モノイドの圏$\mybf{Mon}$で考える。
+		$\sizen$から$\bun_+$への標準入射$i:n\mapsto n$は、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 単射となり、
+			\item 全射となる。なぜなら、任意の正の有理数は、二つの自然数$p$と$q$で
+			一意に$p/q$と書ける。したがって、$\bun_+$から任意の可換群
+			$g\in\mybf{Mon}$への射$\bun_+\xto{f}g$は、$f(p/q)=(fp)(fq)^{-1}$
+			となり、$(i\sizen)\subset\bun_+$の値によって決まってしまう。
+		\end{itemize} %}
+		したがって、標準入射$i$は全単射となるが、明らかに可逆ではない。
+		集合の圏の場合と異なり、モノイドの圏で全単射と同型射の違いが生じた
+		理由は、モノイドの圏では、代数構造の制約により、集合の圏に比べて
+		射の空間が小さくなっているためである。
+		\begin{equation*}\begin{split} %{
+			\mybf{Mon}(\sizen,\bun_+) \subset \mybf{Set}(\sizen,\bun_+)
+		\end{split}\end{equation*} %}
+		今の場合は、$\onto$でなくても全射となっている。
+	\end{example} %eg:全単射だが同型射でない例}
+
+	大雑把な射の分類は次のようになる。
+	\begin{equation*}\begin{matrix} %{
+		\text{右逆射を持つ} &\Leftarrow& \text{同型射}
+			&\Rightarrow& \text{左逆射を持つ} \\
+		\Downarrow && \Downarrow && \Downarrow \\
+		\text{単射} &\Leftarrow& \text{全単射} &\Rightarrow& \text{全射} \\
+	\end{matrix}\end{equation*} %}
+%s2:射}
+\subsection{関手}\label{s2:関手} %{
+	\begin{definition}[関手]\label{def:関手} %{
+		圏$C$から圏$\mycal{B}$への関数$T$
+		\begin{equation*}\begin{split} %{
+			T(c_1\xto{f}c_2) = (Tc_1)\xto{Tf}(Tc_2)
+		\end{split}\end{equation*} %}
+		が射について次のような性質を満たすとき、$T$を$\mycal{C}$から$\mycal{B}$
+		への関手という。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[恒等射] $T1_c=1_{Tc}\quad\text{for all }c\in\mycal{C}$
+			\item[結合性] $T(gf)=(Tg)(Tf)\quad\text{for all }\circ\xto{f}\circ\xto{g}\circ\in\Hom\mycal{C}$
+		\end{description} %}
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 
+		\end{itemize} %}
+	\end{definition} %def:関手}
+%s2:関手}
+%s1:圏の基礎事項}
+\endgroup %}
