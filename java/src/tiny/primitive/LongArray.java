@@ -27,4 +27,6 @@ public interface LongArray extends Array<Number> {
 	public long getLast(long defaultValue);
 	public int getFirstIndex(long value);
 	public int getLastIndex(long value);
+	public int toArray(long[] output);
+	public long[] toArray();
 }

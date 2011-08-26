@@ -1,6 +1,7 @@
 package tiny.primitive;
 
 import tiny.function.AbArray;
+import tiny.lang.ArrayHelper;
 import tiny.lang.Messages;
 
 public abstract class AbLongArray extends AbArray<Number> implements LongArray {
@@ -65,4 +66,28 @@ public abstract class AbLongArray extends AbArray<Number> implements LongArray {
 		return Long.valueOf(this.doGet(index));
 	}
 	protected abstract long doGet(int index);
+	@Override
+	public int toArray(long[] output) {
+		if (output == null || output.length < 1) {
+			return 0;
+		}
+		int n = this.getLength();
+		if (output.length < n) {
+			n = output.length;
+		}
+		for (int i = 0; i < n; ++i) {
+			output[i] = this.doGet(i);
+		}
+		return n;
+	}
+	@Override
+	public long[] toArray() {
+		int n = this.getLength();
+		if (n < 1) {
+			return ArrayHelper.EMPTY_LONG_ARRAY;
+		}
+		long[] output = new long[n];
+		this.toArray(output);
+		return output;
+	}
 }

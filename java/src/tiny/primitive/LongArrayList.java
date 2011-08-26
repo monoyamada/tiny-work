@@ -97,6 +97,16 @@ public class LongArrayList extends AbLongList implements LongStack {
 	public LongArrayList pushValue(Number value) {
 		return this.push(value.longValue());
 	}
+	@Override
+	public int toArray(long[] output) {
+		int n = this.size < output.length ? this.size : output.length;
+		if (n < 1) {
+			return 0;
+		}
+		System.arraycopy(this.array, 0, output, 0, n);
+		return n;
+	}
+	@Override
 	public long[] toArray() {
 		if (this.size < 1) {
 			return ArrayHelper.EMPTY_LONG_ARRAY;

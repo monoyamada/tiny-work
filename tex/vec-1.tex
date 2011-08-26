@@ -1,0 +1,560 @@
+\begingroup %{
+	\newcommand{\Hom}{\myop{Hom}}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Auto}{\myop{Auto}}
+	\newcommand{\Pow}{\mycal{P}}
+	\newcommand{\id}{\myop{id}}
+	\newcommand{\onto}{\myop{onto}}
+	\newcommand{\im}{\myop{im}}
+	\newcommand{\spanall}{\myop{span}}
+	\newcommand{\rank}{\myop{rank}}
+	\newcommand{\ofm}{only finitely many }
+
+\section{ベクトル空間}\label{s1:ベクトル空間} %{
+\subsection{ベクトル空間の定義}\label{s2:ベクトル空間の定義} %{
+	加群もベクトル空間も共通する部分が多いので、加群を定義して、
+	その特別な場合として、ベクトル空間を定義する。
+
+	\begin{definition}[加群]\label{def:加群} %{
+		$R$を環、$G=(G,+,0)$を可換群とする。$G$に
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $R$の作用$\rhd$が定義され、
+			\begin{equation*}\begin{split}
+				r_1\rhd(r_2\rhd g) = (r_1r_2)\rhd g
+				\quad\text{for all }r_1,r_2\in R,\;g\in G
+			\end{split}\end{equation*}
+			\item その作用が分配則を満たす
+			\begin{equation*}\begin{split}
+				r\rhd(g_1 + g_2) = (r\rhd g_1) + (r\rhd g_2)
+				\quad\text{for all }r\in R,\;g_1,g_2\in G
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		とき、組$(G,+,0,R,\rhd)$を$R$上の加群という。
+	\end{definition} %def:加群}
+
+	\begin{definition}[ベクトル空間]\label{def:ベクトル空間} %{
+		体$K$上の加群を$K$上のベクトル空間という。
+	\end{definition} %def:ベクトル空間}
+
+	ここでは、単にベクトル空間といった場合には、複素数上のベクトル空間
+	ということにする。
+
+	基本的なベクトル空間を挙げておく。
+
+	\begin{example}[ベクトル空間としての複素数]
+	\label{eg:ベクトル空間としての複素数} %{
+		複素数で、複素数の加法をベクトル空間の加法、複素数の乗法を係数の
+		作用とすれば、複素数自身がベクトル空間となる。
+	\end{example} %eg:ベクトル空間としての複素数}
+
+	\begin{definition}[自明なベクトル空間]\label{def:自明なベクトル空間} %{
+		複素数をベクトル空間としてみたときは、ゼロ元だけからなる複素数の部分集合
+		もベクトル空間となる。このベクトル空間を自明なベクトル空間といい、
+		$\mybf{1}=\set{0}$と書く。
+	\end{definition} %def:自明なベクトル空間}
+
+	\begin{definition}[有限直積によるベクトル空間]
+	\label{def:有限直積によるベクトル空間} %{
+		複素数の有限直積$\fukuso^n$に加法と係数の作用を次のように定義する。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[加法] 加法$-+-:\fukuso^n\times\fukuso^n\to\fukuso^n$を
+			次のように定義する。
+			\begin{equation*}\begin{split}
+				(r_1\times r_2\times\cdots\times r_n) 
+				+ (s_1\times s_2\times\cdots\times s_n) \\
+				:= (r_1+s_1)\times(r_2+s_2)\times\cdots\times(r_n+s_n) 
+			\end{split}\end{equation*}
+			%
+			\item[加法の単位元]$0\times0\times\cdots\times0$が加法の単位元になる。
+			%
+			\item[係数の作用] 複素数の作用
+			$-\rhd-:\fukuso\times\fukuso^n\to\fukuso^n$を次のように定義する。
+			\begin{equation*}\begin{split}
+				r\rhd(s_1\times s_2\times\cdots\times s_n)
+				:= (rs_1)\times(rs_2)\times\cdots\times(rs_n)
+			\end{split}\end{equation*}
+		\end{description} %}
+		加法と係数の作用は分配則を満たすから組$(\fukuso^n,+,0,\fukuso,\rhd)$
+		はベクトル空間となる。ベクトル空間$\fukuso^n$と書いた場合には、
+		このベクトル空間$(\fukuso^n,+,0,\fukuso,\rhd)$を指すものとする。
+	\end{definition} %def:有限直積によるベクトル空間}
+
+	ベクトル空間の基底系を定義するために、線形独立を定義する。
+	そのために、まずベクトルの線形結合を定義する。
+
+	\begin{definition}[線形結合]\label{def:線形結合} %{
+		$V$をベクトル空間、$E$を$V$の部分集合とする。
+		$E$の元の任意の和
+		\begin{equation*}\begin{split}
+			\sum_{e\in E}r_ee \quad\text{for all }\set{r_e\in\fukuso\bou e\in E}
+		\end{split}\end{equation*}
+		を$E$の線形結合という。
+	\end{definition} %def:線形結合}
+
+	\begin{definition}[線形独立]\label{def:線形独立} %{
+		$V$をベクトル空間、$E$を$V$の部分集合とする。
+		任意の$\set{r_e\in\fukuso\bou e\in E}$に対して次の式が成り立つとき、
+		$E$を互いに線形独立な部分集合という。
+		\begin{equation*}\begin{split}
+			\sum_{e\in E}r_ee = 0
+			\implies r_e = 0 \quad\text{for all }e\in E \\
+		\end{split}\end{equation*}
+		また逆に、$E$が線形独立な部分集合でないとき、線形従属な部分集合という。
+	\end{definition} %def:線形独立}
+
+	以上の準備でベクトル空間の基底を定義する。
+
+	\begin{definition}[基底系]\label{def:基底系} %{
+		$V$をベクトル空間、$E$を$V$の部分集合とする。
+		$E$が次の性質を満たすとき、$E$を$V$の基底系という。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[線形独立] $E$は線形独立な部分集合である。
+			\item[$V$を覆う] $V$の任意の元が$E$の元の線形結合で書くことができる。
+		\end{description} %}
+	\end{definition} %def:基底系}
+
+	\begin{proposition}[有限次元ベクトル空間の次元定理]
+	\label{prop:有限次元ベクトル空間の次元定理} %{
+		$V$をベクトル空間とする。
+		$V$が有限の大きさの基底系$E$を持てば、任意の基底系の大きさは
+		$|E|$となる。
+	\end{proposition} %prop:有限次元ベクトル空間の次元定理}
+	\begin{proof} $F$を$V$の基底系とする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[$|F|<|E|$の矛盾] $n_F:=|F|,\;n_E:=|E|$とし、$n_F<n_E$と仮定する。
+		$E$が基底系だから、$F$の任意の元は$E$の線形結合で書ける。
+		$E,F$の元を次のようにおくと、
+		\begin{equation*}\begin{split}
+			E=\set{e_1,e_2,\dots,e_{n_E}},\quad F=\set{f_1,f_2,\dots,f_{n_F}} \\
+			\mybf{e} = (e_1,e_2,\dots,e_{n_E})^t
+			,\quad \mybf{f} = (f_1,f_2,\dots,f_{n_F})^t
+		\end{split}\end{equation*}
+		ある$A_1,A_2,\dots,A_{n_F}\in\fukuso^{n_E}$があって、
+		次のように書くとこができる。
+		\begin{equation*}\begin{split}
+			\mybf{e} = [A_1, A_2,\dots, A_{n_F}]\mybf{f} 
+		\end{split}\end{equation*}
+		仮定より$n_F<n_E$だから、$A$の横ベクトルは線形従属になり、
+		ある$\mybf{g}\neq0\in\fukuso^{n_E}$があって次のように書くことができる
+		（命題\ref{prop:転置のランク} ）。
+		\begin{equation*}\begin{split}
+			\mybf{g}^t[A_1, A_2,\dots, A_{n_F}] = 0
+		\end{split}\end{equation*}
+		したがって、$\mybf{g}^t\mybf{e}=0$となってしまい、$E$が線形独立
+		であることに矛盾する。したがって、$|E|\le|F|$となる必要がある。
+		%
+		\item[$|E|<|F|$の矛盾] $|F|$が有限の場合は、$|E|$と$|F|$の役割を
+		入れ替えて上記の議論を繰り返せば、$|E|<|F|$という仮定が$E$と$F$
+		が基底系となることと矛盾することが導かれる。$|F|$が無限の場合は、
+		$|E|<|F_0|$となる$|F|$の有限部分集合$F_0$をを取り出せば、
+		$|E|<|F_0|$という仮定が$E$と$F$が基底系となることと矛盾することが
+		導かれる。
+	\end{description} %}
+	\end{proof}
+	別の証明も書いておく。証明は上記のものに比べて長くなるのだが、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 場合分けが必要ないことと、
+		\item $V\simeq_\fukuso W
+		\implies \psi\phi=\id_V \text{ and } \phi\psi=\id_W$
+		という流れで書けること
+	\end{itemize} %}
+	が利点になる。
+	\begin{proof} $F$を$V$の基底系とする。
+		$n_F:=|F|,\;n_E:=|E|$とし、$E,F$の元を次のようにおく。
+		\begin{equation*}\begin{split}
+			E=\set{e_1,e_2,\dots,e_{n_E}},\quad F=\set{f_1,f_2,\dots,f_{n_F}} \\
+			\mybf{e} = (e_1,e_2,\dots,e_{n_E})^t
+			,\quad \mybf{f} = (f_1,f_2,\dots,f_{n_F})^t
+		\end{split}\end{equation*}
+		$E$と$F$が共に$V$の基底系だから、互いに線形結合で次のように書くことが
+		できる。つまり、ある$n_E\times n_F$行列$T_{ef}$と
+		$n_F\times n_E$行列$T_{fe}$があって、次のように書くことができる。
+		\begin{equation*}\begin{split}
+			\mybf{e} = T_{ef}\mybf{f},\quad \mybf{f} = T_{fe}\mybf{e}
+		\end{split}\end{equation*}
+		この式を満たすためには、
+		$\mybf{e}=T_{ef}T_{fe}\mybf{e}$かつ$\mybf{f}=T_{fe}T_{ef}\mybf{f}$
+		となる必要がある。
+		もし、$T_{ef}T_{fe}$が恒等写像でないならば、
+		$(T_{ef}T_{fe}-\id)\mybf{e}=0$より、$\mybf{e}$が線形独立でなくなるので、		$T_{ef}T_{fe}$は恒等写像となる必要がある。
+		$T_{fe}T_{ef}$についても同様である。
+		$\rank T_{ef},\;\rank T_{fe}\le\min(n_E,n_F)$だから、
+		$\rank T_{ef}T_{fe},\;\rank T_{fe}T_{ef}\le\min(n_E,n_F)$となり、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $T_{ef}T_{fe}=\id_{n_E}$となるためには、
+			$n_E\le n_F$となる必要があり、
+			\item $T_{fe}T_{ef}=\id_{n_F}$となるためには、
+			$n_F\le n_E$となる必要がある
+		\end{itemize} %}
+		から、$n_E=n_F$となる必要があることがわかる。
+		つまり、$E$と$F$が$V$の基底系であるための条件が$|E|=|F|$となることが
+		わかる。
+	\end{proof}
+
+	基底系の大きさでベクトル空間の次元を定義する。
+
+	\begin{definition}[ベクトル空間の次元]\label{def:ベクトル空間の次元} %{
+		$V$をベクトル空間とする。$V$が有限の大きさの基底系$E$をもつとき、
+		その大きさ$|E|$を$V$の次元といい、$\dim V$と書く。
+	\end{definition} %def:ベクトル空間の次元}
+%s2:ベクトル空間の定義}
+\subsection{無限次元ベクトル空間}\label{s2:無限次元ベクトル空間} %{
+	Zornの補題を使って、すべてのベクトル空間に基底が存在することを証明する。
+	Zornの補題は、補題という名前がついているが、選択公理と同値であることが
+	知られている。
+
+	\begin{definition}[半順序集合]\label{def:半順序集合} %{
+		集合$X$に$\le$の関係が定義されているとき、$X=(X,\le)$を半順序集合
+		という。半順序集合は、英語では
+		\underline{p}artially \underline{o}rdered \underline{set}を省略して
+		posetとも書かれる。任意の$S\subseteq X$に対して次の記号を使う。
+		\begin{equation*}\begin{split}
+			S\le x \iff (s\le x \quad\text{for all }s\in S) \\
+			x\le S \iff (x\le s \quad\text{for all }s\in S) \\
+		\end{split}
+			\quad\text{for all }x\in X
+		\end{equation*}
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[チェイン] 部分集合$C\subseteq X$が全順序集合となるとき、
+			$C$を$X$のチェインという。
+			\item[上界] 部分集合$S\subseteq X$に対して、$S\le u$となる$u\in X$
+			を$S$の上界という。
+			\item[極大元]　$m\in X$が$m<x$となる$x\in X$がないとき、
+			$m$を$X$の極大元という。
+			\item[最大元]　$m\in X$が任意の$x\in X$に対して$x\le m$となるとき、
+			$m$を$X$の最大元という。
+		\end{description} %}
+	\end{definition} %def:半順序集合}
+
+	極大と最大を絵に書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\xymatrix@R=2ex@C=1ex{
+			& \circ \ar[rd] \ar[ld] \\
+			\circ \ar[rd] & & \circ \ar[rd] \ar[ld] \\
+			& \text{極大} & & \text{極大} \\
+		}\quad\xymatrix@R=2ex@C=1ex{
+			& \circ \ar[rd] \ar[ld] \\
+			\circ \ar[rd] & & \circ \ar[ld] \\
+			& \text{最大} \\
+		}
+	\end{split}\end{equation*}
+
+	\begin{example}[べき集合]\label{eg:べき集合} %{
+		集合$X$のべき集合$\Pow X$は集合の包含関係$\subseteq$で半順序集合となる。
+		$\emptyset$が$\Pow X$の最小元、$X$が$\Pow X$の最大元となる。
+		任意の部分集合の列$S_1\subseteq S_2\subseteq \cdots$はチェイン
+		$C=\set{S_1,S_2,\dots}$になり、$C$の上界は$X$で抑えられる。
+		最小元と最大元を持つ半順序集合は束と言われる。べき集合は束の例である。
+	\end{example} %eg:べき集合}
+
+	\begin{proposition}[Zornの補題]\label{prop:Zornの補題} %{
+		$X$を空でない半順序集合とする。$X$のすべてのチェインが上界を持つならば、
+		$X$は極大元を持つ。
+	\end{proposition} %prop:Zornの補題}
+
+	よく見受けられる、’すべてのベクトル空間’が基底系を持つことの証明を
+	書いておく。定義\ref{def:ベクトル空間}のようにベクトル空間を定義した
+	場合は、次の証明は正しくない。ベクトル空間の定義が異なることに起因する
+	食い違いである。ベクトル空間を
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 体の余直積に加法と体の作用を定義したもの、
+		\item または、そうして作られたものの余直積に加法と体の作用を定義した
+		もの（再帰定義）
+	\end{itemize} %}
+	として定義した場合、次の証明は正しい。
+
+	\begin{proposition}[ベクトル空間の基底系]
+	\label{prop:ベクトル空間の基底系} %{
+		すべてのベクトル空間は基底系を持つ。
+	\end{proposition} %prop:ベクトル空間の基底系}
+	\begin{proof} $V$をベクトル空間とする。$V$が自明なベクトル空間$\set{0}$
+	なら基底系$\emptyset$をもつから、$V$は自明なベクトル空間でないとする。
+	$\mycal{E}$を$V$の線形独立な部分集合の族\footnote{
+		数学では'...集合の集合'という言葉を嫌い、'...集合の族'という言い方を
+		することがある。族の英訳はcollectionとかfamilyになる。
+		collecitonを使うかfamilyを使うかは方言によるようだ。
+	}とする。
+	\begin{equation*}\begin{split}
+		\mycal{E} = \set{E\subseteq V\bou E \text{ is a linearly independent}}
+	\end{split}\end{equation*}
+	$V$が自明なベクトル空間でないと仮定しているから、$\mycal{E}$は空でない。
+	集合の包含関係$\subseteq$を順序として、$\mycal{E}=(\mycal{E},\subseteq)$
+	を半順序集合として考える。
+	$\mycal{E}$の任意のチェイン$C$が上界を持つことを示す。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\widebar{C}:=\cup_{S\in C}S$とする。
+		%
+		\item $\widebar{C}\in\mycal{E}$となることを示す。 \\
+		任意の$v\in\widebar{C}$は、次のように$S_1,S_2,\dots,S_n\in C$
+		となる$\mycal{E}$の元で表すことができる（注意\ref{note:証明の注意}）。
+		\begin{equation*}\begin{split}
+			\begin{array}{ccccccccc}
+				&v& = &v_1& + &v_2& + \cdots + &v_n& \\
+				&\rotatebox{270}{$\in$}& &\rotatebox{270}{$\in$}& 
+					&\rotatebox{270}{$\in$}& &\rotatebox{270}{$\in$}& \\
+				&C&  &S_1& \subseteq &S_2& \subseteq \cdots \subseteq &S_n& \\
+			\end{array}
+		\end{split}\end{equation*}
+		したがって、$v\in S_n$となり、$\widebar{C}$は線形独立な$V$の部分集合
+		となることがわかる。
+		%
+		\item $\widebar{C}$の定義より、任意の$S\in C$に対して
+		$S\subseteq\widebar{C}$となる。
+	\end{itemize} %}
+	したがって、$\widebar{C}$が$C$の上界となる。
+	Zornの補題より、$\mycal{E}$は極大元$E_m\in\mycal{E}$を持つ。
+	任意の$v\in V$が$v\in \spanall_\fukuso E_m$となることを示す。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $v\in E_m$ならば、$v\in\spanall_\fukuso E_m$が成り立つ。
+		\item $f\not\in E_m$ならば、$v\not\in\spanall_\fukuso E_m
+		\implies E_m\subset E_m\cup\set{v}\in\mycal{E}$
+		となり、$E_m$が$\mycal{E}$の極大元であることに矛盾する。
+		したがって、この場合も$v\in\spanall_\fukuso E_m$が成り立つ。
+	\end{itemize} %}
+	したがって、$E_m$が$V$の基底系になることがわかる。
+	\end{proof}
+	\begin{note}[証明の注意]\label{note:証明の注意} %{
+		この部分に$V$が余直積であることが使われている。
+		任意の$V$の元はある基底系の有限和で書かれるということを仮定している。
+	\end{note} %note:証明の注意}
+
+	\begin{definition}[可算集合]\label{def:可算集合} %{
+		$X$を集合とする。自然数から$X$への$\onto$写像があるとき、
+		$X$を可算集合という。
+	\end{definition} %def:可算集合}
+
+	\begin{proposition}[対角線論法]\label{prop:対角線論法} %{
+		$\mybf{2}=\set{0,1}$とする。
+		集合$\mybf{2}^\sizen:=\mybf{Set}(\sizen,\mybf{2})$は可算集合ではない。
+	\end{proposition} %prop:対角線論法}
+	\begin{proof} $\mybf{2}^\sizen$が可算集合だと仮定すると、
+		$\mybf{2}^\sizen=\set{f_n\in\mybf{2}\bou n\in\sizen}$と書くことが
+		できる。
+		$g\in\mybf{2}^\sizen$を次のように定義する。
+		\begin{equation*}\begin{split}
+			gn = \begin{cases}
+				0, &\text{ iff } f_nn=1 \\
+				1, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+		すると、すべての$n\in\sizen$に対して$g\neq f_n$、
+		かつ$g\in\mybf{2}^\sizen$となり、
+		$\mybf{2}^\sizen=\set{f_n\in\mybf{2}^\sizen\bou n\in\sizen}$と矛盾する。
+		したがって、$\mybf{2}^\sizen$は可算集合でない。
+	\end{proof}
+
+	対角線論法を絵にしてみる。$\sizen^\sizen:=\set{f:\sizen\to\sizen}$とする。
+	任意の写像$\phi:\sizen\to\sizen^\sizen$に対して$f\not\in\im\phi$となる
+	$f\in\sizen^\sizen$を次のようにして見つけることができる。
+	\begin{equation*}\begin{split}
+		\begin{array}{c|cccc}
+			& 0 & 1 & 2 & \cdots \\ \hline
+			\phi(0,-) & \underline{\phi(0,0)} & \phi(0,1) & \phi(0,2) & \cdots \\
+			\phi(1,-) & \phi(1,0) & \underline{\phi(1,1)} & \phi(1,2) & \cdots \\
+			\phi(2,-) & \phi(2,0) & \phi(2,1) & \underline{\phi(2,2)} & \cdots \\
+			\vdots & \vdots & \vdots & \vdots & \cdots \\ \hline
+			f & \jump{\phi(0,0)=0} & \jump{\phi(1,1)=0} & \jump{\phi(2,2)=0} & \cdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	表の対角線に着目して異なる写像を見つける方法なので対角線論法と
+	言われている。
+
+	命題\ref{prop:対角線論法}は対角線論法を紹介する材料として$\mybf{2}^\sizen$
+	を考えたが、$\mybf{2}^\sizen$はの自然数のべき集合である。対角線論法により
+	自然数のべき集合は自然数からの$\onto$写像がないことがわかる。
+	次のゲーデル関数$g:\sizen\to\sizen\times\sizen$により、自然数から
+	負でない有理数への$\onto$写像が定義できる。
+	\begin{equation*}\begin{split}
+		g^{-1}(x\times y) = \frac{(x+y)(x+y+1)}{2} + y 
+		,\qquad \begin{array}{c|cccc}
+			x\backslash y & 0 & 1 & 2 & \cdots \\ \hline
+			0 & g0 & g2 & g5 & \cdots \\
+			1 & g1 & g4 & g8 & \cdots \\
+			2 & g3 & g7 & g12 & \cdots \\
+			\vdots & \vdots & \vdots & \vdots & \cdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	したがって、自然数のべき集合は有理数よりも密度が濃いことになる。
+	有理数より密度が濃い集合は実数ぐらいしか思い浮かばない。
+	自然数のべき集合は無限長の二値配列全体の集合と集合同型である。
+	半開区間$[0,1)$内の実数を次のように２進数で書き表すことができることが
+	示せれば、半開区間$[0,1)$内の実数と自然数のべき集合が集合同型となることが
+	わかる。
+	\begin{equation*}\begin{split}
+		\frac{r_1}{2} + \frac{r_2}{2^2} + \cdots = (r_1,r_2,\dots)\begin{pmatrix}
+			2^{-1} \\ 2^{-2} \\ \vdots
+		\end{pmatrix}
+		\quad\text{where } r_n\in\mybf{2} \text{ for all }n\in\sizen
+	\end{split}\end{equation*}
+
+	\begin{proposition}[自由アーベル群の割り算]
+	\label{prop:自由アーベル群の割り算} %{
+		$I$を集合、$\sei I^\dag$をから生成される自由アーベル群とする。
+		\begin{equation*}\begin{split}
+			\sei I^\dag = \set{f:I\to\sei
+			\bou f\alpha\neq0 \text{ for only finitely mainy }\alpha\in I}
+		\end{split}\end{equation*}
+		任意の$v\in\sei I^\dag$に対して、式$v=nx$が解$x\in\sei I^\dag$を
+		持つような$n\in\sei$は有限個しかない。
+	\end{proposition} %prop:自由アーベル群の割り算}
+	\begin{proof} 自由群の定義より、ある有限集合$J\subseteq I$があって、
+		$v\alpha\neq0 \text{ for only }\alpha\in J$と書くことができる。
+		したがって、すべての$\set{v\alpha\in\sei\bou \alpha\in J}$を割り切る
+		整数は有限個しかない。
+	\end{proof}
+
+	\begin{note}[記録]\label{note:記録} %{
+		ノート
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $
+			G := \prod_{n\in\sizen}\sei := \set{f:\sizen\to\sei}
+			$とする。
+			$\prod_{n\in\sizen}\sei$は非加算集合だから、
+			ある非加算集合$I$を用いて、任意の$v\in G$が
+			$
+			v = \sum_{\alpha\in I}v_\alpha e_\alpha
+			\quad\text{ where } v_\alpha\in\sizen,\;e_\alpha\in G
+			$と書けると仮定する。
+			%
+			\item $
+			\sei\sizen^\dag := \set{f:\sizen\to\sei\bou \text{finitely many}}$
+			とする。$\sei\sizen^\dag$は可算集合だから、
+			$\sei\sizen^\dag\subset G$となる。
+			%
+			\item 線形写像$\lambda:G\to\sei\sizen^\dag$を定義する。
+			ある可算集合$J\subset I$が存在して、$
+			n^\dag = \sum_{\alpha\in J}e_\alpha\lambda_{\alpha n}
+			\quad \text{there exists }n\in\sizen\lambda_{\alpha n}\neq0
+			\text{ for all }\alpha\in I
+			$と書けると仮定する。
+			\item $G$の真の部分群$H$を$
+			H := \set{\sum_{\alpha\in J}n_\alpha e_\alpha\in G
+			\bou n_\alpha\in\sei\text{ for all }\alpha\in I}
+			$と定義する。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $\sei\sizen^\dag\subseteq H\subset G$
+				\item $G/H$は$\set{e_\alpha\bou \alpha\in(I-J)}$で張られる部分空間
+			\end{itemize} %}
+			%
+		\end{itemize} %}
+	\end{note} %note:記録}
+	
+	\begin{note}[加算な生成系を持つアーベル群]
+	\label{note:加算な生成系を持つアーベル群} %{
+		ノート\cite{schroeer.baer}の中にある
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item any abelian group with a countable number of generators is countable
+		\end{itemize} %}
+		という文言がわからない。わかることは、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 有限生成のアーベル群は加算集合になることと、
+			\item 加算集合から生成された自由アーベル群は$\sei$-加群として
+			加算な基底系を持つこと
+		\end{itemize} %}
+		ぐらいだ。
+	\end{note} %note:加算な生成系を持つアーベル群}
+
+	\begin{todo}[基底を持たないベクトル空間]
+	\label{todo:基底を持たないベクトル空間} %{
+		ノート\cite{schroeer.baer}
+		ここで定義したベクトル空間（定義\ref{def:ベクトル空間}）は
+		テイラー級数$K[[x]]$に対応し、有限和で定義したベクトル空間は
+		多項式$K[x]$に対応する。
+	\end{todo} %todo:基底を持たないベクトル空間}
+%s2:無限次元ベクトル空間}
+%s1:ベクトル空間}
+\section{線形代数}\label{s1:線形代数} %{
+	\begin{definition}[行列の縦横表示]\label{def:行列の縦横表示} %{
+		$A$を$m\times n$行列とする。
+		$A$を縦ベクトル$C_1,C_2,\dots,C_n\in\fukuso^m$で
+		$A=[C_1,C_2,\dots,C_n]$と書くことを$A$の縦ベクトル表示といい、
+		$C_1,C_2,\dots,C_n$を$A$の縦ベクトル集合という。
+		$A$を横ベクトル$R_1,R_2,\dots,R_m\in\fukuso^n$で
+		$A=[R_1,R_2,\dots,R_m]^t$と書くことを$A$の横ベクトル表示といい、
+		$R_1,R_2,\dots,R_m$を$A$の横ベクトル集合という。
+		\begin{equation*}\begin{split}
+			[C_1,C_2,\dots,C_n] = A = \begin{bmatrix}
+				R_1 \\ R_2 \\ \vdots \\ R_m
+			\end{bmatrix}
+		\end{split}\end{equation*}
+	\end{definition} %def:行列の縦横表示}
+
+	\begin{definition}[ランク（rank）]\label{def:ランク} %{
+		行列$A$の縦ベクトル集合の張るベクトル空間の次元を$A$のランクといい、
+		$\rank A$と書く。
+		\begin{equation*}\begin{split}
+			A &:= [A_1,A_2,\dots,A_n] \\
+			\rank A &:= \dim\spanall_\fukuso\set{A_1,A_2,\dots,A_n} \\
+		\end{split}\end{equation*}
+	\end{definition} %def:ランク}
+
+	\begin{proposition}[転置のランク]\label{prop:転置のランク} %{
+		任意の行列$A$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\rank A^t = \rank A
+		\end{split}\end{equation*}
+	\end{proposition} %prop:転置のランク}
+	\begin{proof} %{
+		$A$を$m\times n$行列として、
+		縦ベクトル表示で$A=[A_1,A_2,\dots,A_n]$と書く。
+		行列のランクが$r$ならば、ある$r$個のベクトル
+		$C_1,C_2,\dots,C_r\in\fukuso^m$が存在して、
+		各縦ベクトル$A_i$を$\set{C_i\bou i\in1..r}$の線形結合で書くことが
+		できる。つまり、ある$\set{R_{ji}\in\fukuso\bou j\in1..r,\;i\in1..n}$
+		が存在して次のように書くことできる。
+		\begin{equation*}\begin{split} %{
+			A_i = \sum_{j\in1..r}C_jR_{ji} \quad\text{for all }i\in1..n
+		\end{split}\end{equation*} %}
+		$C=[C_1,C_2,\dots,C_r]$とすると、$A=CR$と書ける。
+		したがって、$A$の各横ベクトルは$R$の横ベクトルの
+		線形結合で書かれることがわかる。$R$は$r$行$n$列の行列だから
+		\begin{equation*}\begin{split} %{
+			\text{$A$の横ベクトルで張られるベクトル空間の次元} \\
+			\le r = \text{$A$の縦ベクトルで張られるベクトル空間の次元}
+		\end{split}\end{equation*} %}
+		となる。$A$を転置して同様の議論を行うと
+		\begin{equation*}\begin{split} %{
+			\text{$A^t$の横ベクトルで張られるベクトル空間の次元} \\
+			\le \text{$A^t$の縦ベクトルで張られるベクトル空間の次元}
+		\end{split}\end{equation*} %}
+		が成り立つことがわかる。したがって、次の式が成り立ち命題が証明される。
+		\begin{equation*}\begin{split} %{
+			\text{$A$の横ベクトルで張られるベクトル空間の次元} \\
+			= \text{$A$の縦ベクトルで張られるベクトル空間の次元}
+		\end{split}\end{equation*} %}
+	\end{proof} %}
+
+	\begin{definition}[ランク因子化（rank factorization）]
+	\label{def:ランク因子化} %{
+		$A$を行列、$r:=\rank A$とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 各縦ベクトルが線形独立な$r$列の行列$C$と
+			\item $r$行の行列$R$で
+		\end{itemize} %}
+		$A=CR$と書くことをランク因子化という。
+	\end{definition} %def:ランク因子化}
+
+	\begin{proposition}[ランク因子化]\label{prop:ランク因子化} %{
+		$A=CR$を行列$A$のランク因子化とすると次の式が成り立つ。
+		\begin{equation*}\begin{split} %{
+			\rank A = \rank C = \rank R
+		\end{split}\end{equation*} %}
+	\end{proposition} %prop:ランク因子化}
+	\begin{proof} %{
+		命題\ref{prop:転置のランク}の証明からわかる。
+	\end{proof} %}
+
+	命題\ref{prop:転置のランク}は、次の線形写像の像についての式になる。
+	\begin{equation*}\begin{split}
+		\dim\im A = \dim\im A^\dag
+		\quad\text{for all }m,n\in\sizen_+,\;A\in\Hom_\fukuso(\fukuso^m,\fukuso^n)
+	\end{split}\end{equation*}
+	この式をポンチ絵で次のように書いてみる。
+	\begin{equation*}\xymatrix@R=1em{
+		\fukuso^m \ar@<2pt>[r]^A & \fukuso^n \ar@<2pt>[l]^{A^\dag} \\
+		\im A^\dag \ar@<2pt>[r] & \im A \ar@<2pt>[l] \\
+		\ker A \ar[rd] & \ker A^\dag \ar[ld] \\
+		0 & 0 \\
+	}\end{equation*}
+%s1:線形代数}
+\endgroup %}

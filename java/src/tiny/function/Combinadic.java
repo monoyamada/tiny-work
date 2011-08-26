@@ -7,13 +7,16 @@ import tiny.lang.ArrayHelper;
 
 public class Combinadic {
 	public static int getCombinationSize(int setSize, int chooseSize) {
+		return getCombinationSize(setSize, chooseSize, true);
+	}
+	public static int getCombinationSize(int setSize, int chooseSize, boolean opt) {
 		if (chooseSize == 0 || setSize <= chooseSize) {
 			return 1;
 		} else if (chooseSize + 1 == setSize || chooseSize == 1) {
 			return setSize;
 		} else if (chooseSize + 2 == setSize || chooseSize == 2) {
 			return (setSize * (setSize - 1)) >> 1;
-		} else if (true) {
+		} else if (opt) {
 			// maybe faster in the case of Java.
 			long upper = setSize;
 			long lower = chooseSize;
@@ -23,8 +26,8 @@ public class Combinadic {
 			}
 			return (int) (upper / lower);
 		}
-		return Combinadic.getCombinationSize(setSize - 1, chooseSize - 1)
-				+ Combinadic.getCombinationSize(setSize - 1, chooseSize);
+		return Combinadic.getCombinationSize(setSize - 1, chooseSize - 1, opt)
+				+ Combinadic.getCombinationSize(setSize - 1, chooseSize, opt);
 	}
 	public static void getCombination(int[] array, int setSize, int chooseSize,
 			int index) {

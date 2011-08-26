@@ -42,7 +42,8 @@
 \usepackage{sty/youngtab}
 \usepackage{sty/jumoline}
 \usepackage{ifthen}
-\usepackage[dvipdfm]{color}
+%{
+\usepackage[dvipdfm,dvips]{color}
 \usepackage[dvipdfm,dvips]{graphicx}
 \usepackage[dvipdfm %
   , colorlinks=true %
@@ -51,12 +52,12 @@
   , bookmarkstype=toc %
   , pdfkeywords={TeX; dvipdfmx; hyperref; color;} %
 	]{hyperref}
-\ifnum 42146=\euc"A4A2 
+\ifnum 42146=\euc"A4A2
   \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}% platex-utf8 でも OK
 \else
   \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}%"
 \fi
-%
+%}
 %theorem
 %
 %\newtheorem[S]{theorem}{定理}[section]
@@ -90,8 +91,9 @@
 %\newshadetheorem{note}{ノート}[section]
 %\newshadetheorem{procedure}{手順}[section]
 \usepackage[amsmath,thmmarks,hyperref]{sty/ntheorem}
-\theoremstyle{changebreak}
+%\theoremstyle{changebreak}
 \theoremsymbol{\textparagraph}
+%\theoremsymbol{\ensuremath{\textparagraph}}
 \newtheorem{definition}{定義}[section]
 \newtheorem{proposition}{命題}[section]
 \newtheorem{procedure}{手続き}[section]
@@ -110,9 +112,9 @@
 \newcommand{\kakko}[1]{\left({#1}\right)}
 \newcommand{\bakko}[1]{\left[{#1}\right]}
 \newcommand{\bou}{\;\vert\;}
-\newcommand{\myop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\myop}[1]{{\ensuremath{\operatorname{#1}}}}
 \newcommand{\mybf}[1]{{\ensuremath{\mathbf{#1}}}}
-\newcommand{\mycal}[1]{\ensuremath{{\mathcal{#1}}}}
+\newcommand{\mycal}[1]{{\ensuremath{{\mathcal{#1}}}}}
 
 \def\obra#1{\mathinner{({#1}|}}
 \def\oket#1{\mathinner{|{#1})}}
@@ -134,9 +136,9 @@
 %
 %\newcommand{\homset}{\ensuremath{\myop{hom}}}
 %\newcommand{\mapset}{\ensuremath{\myop{map}}}
-\newcommand{\myid}{\ensuremath{\myop{id}}}
+%\newcommand{\myid}{\ensuremath{\myop{id}}}
 %\newcommand{\mydu}{\ensuremath{\myop{du}}}
-\newcommand{\dup}{\ensuremath{\myop{du}}}
+%\newcommand{\dup}{\ensuremath{\myop{du}}}
 %\newcommand{\curry}{\myop{curring}}
 %\newcommand{\mycat}[1]{{\mathbf{#1}}}
 %
@@ -160,6 +162,8 @@
 \newcommand{\bun}{\ensuremath{\mathbf{Q}}}
 \newcommand{\xto}[2][]{\ensuremath{\xrightarrow[{#1}]{#2}}}
 \newcommand{\xfrom}[2][]{\ensuremath{\xleftarrow[{#1}]{#2}}}
+\newcommand{\xsimeq}[2][]{\ensuremath{\overset{#2}{\underset{#1}{\simeq}}}}
+\newcommand{\udset}[3]{\ensuremath{\overset{#1}{\underset{#2}{#3}}}}
 %
 \usepackage{sty/accents}
 \makeatletter

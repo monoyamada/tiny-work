@@ -1,5 +1,12 @@
 source("utils.R");
 
+bit2integer <- function(xs, zero=0) {
+	for (i in 1:length(xs)) {
+		zero = zero + xs[i] * 2^(i - 1);
+	}
+	zero;
+}
+
 split.value <- function(xs, value) {
 	sign3 <- function(x) {
 		if (x == 0) {
