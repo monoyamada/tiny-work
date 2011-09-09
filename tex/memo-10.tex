@@ -1,0 +1,464 @@
+\begingroup %{
+	\newcommand{\Word}{\mycal{W}}
+	\newcommand{\Tensor}{\mycal{T}}
+	\newcommand{\Gro}{\mycal{G}}
+	\newcommand{\ofm}{only finitely many }
+	\newcommand{\id}{\myop{id}}
+	\newcommand{\im}{\myop{im}}
+	%
+\section{分数の構成}\label{s1:分数の構成} %{
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[なんちゃって無限長] $10$進数表示での$1/7=0.(142857)^*$や
+		文字列でのKleeneスター$a(bc)^*d=[ad]+[abcd]+[abcbcd]+\cdots$などの、
+		無限長の文字列であるけれども、無限の部分は有限長の文字列の繰り返し
+		になっているものをなんちゃって無限長ということにする。
+		有理数の場合は、文字$\braket{k}:=\set{0,1,\dots,k-1}$のなんちゃって
+		無限長の文字列は分数として二つの自然数の比として書くことができ、
+		オートマトンの場合は、なんちゃって文字列は有限次元ベクトル空間で
+		状態遷移が表現できる。
+		この辺りを統一的に見ることができないものだろうか？
+		カギとなりそうな道具を並べてみる。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[モノイド] 何はともあれ代数構造
+			\item[分数] モノイドに逆元の導入する。その際、分数のゲージ対称性
+			$\frac{a}{b}=\frac{ga}{gb}$が必然なのかたまたまなのかを調べる。
+			\item[内積と逆元] 内積と逆元の関係を調べる。
+		\end{description} %}
+	\end{description} %}
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[直積と直和]
+		集合$S$による自然数の直積$\prod_S\sizen$と直和$\coprod_S\sizen$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			\prod_S\sizen &:= \set{f:S\to \sizen} \\
+			\coprod_S\sizen &:= \set{f:S\to \sizen\bou fs\neq 0 \text{ \ofm } s\in S} \\
+		\end{split}\end{equation*}
+		%
+		\item[文字列] 集合$A$から生成される自由モノイドを$\Word A$と書く。
+		空の文字列を$1_\Word$と書き、文字$a_1,a_2,\dots,a_m\in A$で作られる
+		文字列を$[a_1a_2\cdots a_m]$または$[a_1,a_2,\dots,a_m]$と書く。
+		文字列の連結による積を前置演算子として$m_\myspace$、二項演算子として
+		は省略して書く。
+		\begin{equation*}\begin{split}
+			[a_1a_2\cdots a_m][b_1b_2\cdots b_n]
+			:= [a_1a_2\cdots a_mb_1b_2\cdots b_n] \\
+			\quad\text{for all }a_1,a_2,\dots,a_m,b_1,b_2,\dots,b_n\in A
+		\end{split}\end{equation*}
+		また、文字の文字列への'作用'$\myspace$を次のように定義する。
+		\begin{equation*}\begin{split}
+			aw := [a]w,\quad wa :=  w[a]
+			\quad\text{for all }a\in A,\; w\in \Word A
+		\end{split}\end{equation*}
+		$\Word$を集合の圏からモノイドの圏への関手としてみて、任意の写像
+		$f:A\to B$に対して$\Word f$を次のように定義する。
+		\begin{equation*}\begin{split}
+			(\Word f)1_\Word = 1_\Word,\quad
+			(\Word f)[a_1a_2\cdots a_m] = [(fa_1)(fa_2)\cdots (fa_m)]
+		\end{split}\end{equation*}
+		また、$\Word_+A := \Word A - \set{1_\Word}$とし、$\Word_+$を集合の圏
+		から半群の圏への関手としてみる。
+		%
+		\item[文字列のベクトル空間] $A$を有限集合とし、$\Word A$から生成される
+		自由ベクトル空間代数を$\Tensor A$と書き、
+		$\Word_+ A$から生成される自由ベクトル空間を$\Tensor_+ A$と書く。
+		文字列の連結による積を線形に拡張して$\Tensor A$の積とし、$\Word A$と
+		同じ記号を用いる。
+	\end{description} %}
+
+\subsection{グロタンディーク群}\label{s2:グロタンディーク群} %{
+	$M=(M,m_\myspace)$を可換半群とする。
+	直積$M\times M$に積$m_\myspace$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(m_1,m_2)(n_1,n_2) = (m_1n_1,m_2n_2)
+		\quad\text{for all }m_1,m_2,n_1,n_2\in M
+	\end{split}\end{equation*}
+	さらに、$M\times M$に同値関係$\sim$を次のように定義する。
+	\begin{equation}\label{eq:グロタンディーク群を導く同値関係}\begin{split}
+		(m_1,n_1) \sim (m_2,n_2)
+		\iff \exists\; g\in M\bou m_1n_2g = m_2n_1g \\
+		\quad\text{for all }m_1,m_2,n_1,n_2\in M
+	\end{split}\end{equation}
+	\begin{proof} $\sim$が同値関係となることを示す。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[反射律] 次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\bigl(mng=mng \text{ for all }g\in M\bigr)\implies (m,n) \sim (m,n) \\
+			\quad\text{for all }m,n\in M
+		\end{split}\end{equation*}
+		\item[対称律] 次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			(m_1,n_1)\sim(m_2,n_2) \iff (m_2,n_2)\sim(m_1,n_1) \\
+			\quad\text{for all }m_1,m_2,n_1,n_2\in M
+		\end{split}\end{equation*}
+		\item[推移律] 次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			&(m_1,n_1)\sim(m_2,n_2) \text{ and } (m_2,n_2)\sim(m_3,n_3) \\
+			&\implies \exists\;g,h\in M\bou
+				m_1n_2g = m_2n_1g \text{ and } m_2n_3h = m_3n_2h \\
+			&\implies \exists\;g,h\in M\bou
+				m_1n_3(m_2n_2gh) = m_3n_1(m_2n_2gh) \\
+			&\implies (m_1,n_1)\sim(m_3,n_3)
+			\quad\text{for all }m_1,m_2,n_1,n_2\in M
+		\end{split}\end{equation*}
+	\end{description} %}
+	\end{proof}
+	すると、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		f_1\sim g_1 \text{ and } f_2\sim g_2 \implies f_1f_2\sim g_1g_2
+		\quad\text{for all }f_1,f_2,g_1,g_2\in M\times M
+	\end{split}\end{equation*}
+	$\sim$による商を$\pi:=-/\sim$として、
+	任意の切断$\sigma:\pi(M\times M)\to M\bou \pi\sigma=\id$に対して、
+	次の可換図によって$\pi(M\times M)$に積$m_\myspace$を定義することができる。
+	\begin{equation*}\xymatrix@C=4em{
+		M\times M\times M\times M \ar[r]^{m_\myspace} & M\times M \ar[d]^\pi \\
+		\pi(M\times M)\times \pi(M\times M) \ar@{.>}[r]^{m_\myspace}
+			\ar[u]^{\sigma\times\sigma} & \pi(M\times M) \\
+	}\end{equation*}
+	このようにして作られた可換半群$G=\bigl(\pi(M\times M),m_\myspace\bigr)$は
+	次の性質を満たす。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[単位元] 任意の$m\in M$に対して、$\pi(m,m)$が単位元となる。
+		\item[逆元] 任意の$m,n\in M$に対して、$\pi(m,n)$と$\pi(n,m)$は互いに
+		逆になる。
+	\end{description} %}
+	可換群$G$を$M$のグロタンディーク群という。
+
+	\begin{definition}[グロタンディーク群]\label{def:グロタンディーク群} %{
+		$M=(M,m_\myspace)$を可換半群とする。$M\times M$に積$m_\myspace$を
+		次のように定義し、
+		\begin{equation*}\begin{split}
+			(m_1,n_1)(m_2,n_2) := (m_1m_2,n_1n_2)
+			\quad\text{for all }m_1,m_2,n_1,n_2\in M
+		\end{split}\end{equation*}
+		同値関係$\sim$を次のように定義する。
+		\begin{equation*}\begin{split}
+			(m_1,n_1)\sim(m_2,n_2) \iff m_1n_2=m_2n_1
+			\quad\text{for all }m_1,m_2,n_1,n_2\in M
+		\end{split}\end{equation*}
+		すると、$(M\times M)/\sim$は可換群となる。この可換群を
+		$M$のグロタンディーク群といい、$\Gro M$と書く。
+
+		また、任意の$m,n\in M$に対して$(m,n)$を代表元として持つ$\Gro M$の元を
+		$(m,n)_\Gro$と書くことにする。
+
+		グロタンディーク群を構成する方法の詳細は上記を見ること。
+	\end{definition} %def:グロタンディーク群}
+
+	\begin{note}[グロタンディーク群でのゲージ変換]
+	\label{note:グロタンディーク群でのゲージ変換} %{
+		有理数の割り算で成り立つ関係$m_1/n_1=m_2/n_2\implies m_1n_2=m_2n_1$
+		をモデルとした次の二項関係$R\subset M\times M\times M\times M$は、
+		\begin{equation*}\begin{split}
+			(m_1,n_1,m_2,n_2)\in R \iff m_1n_2 = m_2n_1 \\
+			\quad\text{for all }m_1,m_2,n_1,n_2\in M
+		\end{split}\end{equation*}
+		一般には同値関係とならない。例えば、自然数の乗法$(\sizen,m_\myspace)$
+		を考えると、$\sizen$はゼロ元$0$を含むので、
+		\begin{equation*}\begin{split}
+			(m,n,0,0)\in R \quad\text{for all }m,n\in \sizen
+		\end{split}\end{equation*}
+		となり、任意の$(m,n)\in\sizen^2$は$(0,0)\in\sizen^2$と$R$の関係になる
+		が、$(1,2)\in\sizen^2$と$(2,1)\in\sizen^2$は$R$の関係にはならない。
+
+		グロタンディーク群を定義するための同値関係$\sim$
+		\eqref{eq:グロタンディーク群を導く同値関係}での、
+		\begin{equation*}\begin{split}
+			(m_1,n_1) \sim (m_2,n_2)
+			\iff \exists\; g\in M\bou m_1n_2g = m_2n_1g \\
+			\quad\text{for all }m_1,m_2,n_1,n_2\in M
+		\end{split}\end{equation*}
+		ゲージ変換$g\in M$の不定性は、$\sim$が同値関係となるために必要な
+		ものとなっている。
+	\end{note} %note:グロタンディーク群でのゲージ変換}
+
+	半群$M$とそのグロタンディーク群$\Gro M$との元の対応関係を考える。
+	半群$M$にゼロ元が存在した場合は、$\Gro M$は自明な群となる。
+
+	\begin{proposition}[ゼロ元を持つ半群のグロタンディーク群]
+	\label{prop:ゼロ元を持つ半群のグロタンディーク群} %{
+		半群$M$にゼロ元$0_M$が存在した場合は、$\Gro M=\set{(0_M,0_M)_\Gro}$
+		となる。
+	\end{proposition} %prop:ゼロ元を持つ半群のグロタンディーク群}
+	\begin{proof} 次の式によって、$\Gro M$の任意の元が$(0_M,0_M)_\Gro$に
+	等しくなることがわかる。
+	\begin{equation*}\begin{split}
+		m0_M = 0_M = n0_M \implies (m,n)_\Gro = (0_M, 0_M)_\Gro
+		\quad\text{for all }m,n\in M
+	\end{split}\end{equation*}
+	\end{proof}
+
+	埋め込み$\sizen\subset\sei$や$\sizen\subset\bun$に対応する写像を定義
+	しておく。ただし、半群がキャンセル可能でないと$1:1$となる保証はない。
+
+	\begin{proposition}[グロタンディーク群への埋込み]
+	\label{グロタンディーク群への埋込み} %{
+		$M$を半群とする。任意の$p\in M$に対して写像$i_p,i_p^c:M\to\Gro M$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			i_pm := (m,p)_\Gro,\quad i_p^cm := (p,m)_\Gro
+			\quad\text{for all }m\in M
+		\end{split}\end{equation*}
+		$i_p$と$i_p^c$は互いに次の逆元の関係になる。
+		\begin{equation*}\begin{split}
+			(i_pm)(i_p^cm) = (p,p)_\Gro \quad\text{for all }m\in M
+		\end{split}\end{equation*}
+		また、次の性質が成り立つ。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $p$が冪等元$p^2=p$とならば、$i_p$と$i_p^c$は半群準同型となる。
+			\item $M$がキャンセル可能ならば、$i_p$と$i_p^c$は$1:1$となる。
+		\end{enumerate} %}
+	\end{proposition} %prop:グロタンディーク群への埋込み}
+	\begin{proof} \quad
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$m,n\in M$に対して$(i_pm)(i_pn)=(mn,p^2)=i_{p^2}(mn)$
+			となる。
+			\item $M$がキャンセル可能ならば、任意の$m,n\in M$に対して次の式が
+			成り立つ。
+			{\setlength\arraycolsep{2pt}
+			\begin{equation*}\begin{array}{rcll}
+				i_pm = i_pn &\iff& \exists\; g\in M\bou mpg = npg \\
+				&\implies& mp = np & \text{// $M$ is a cancellative} \\
+				&\implies& m = n & \text{// $M$ is a cancellative} \\
+			\end{array}\end{equation*}
+			}
+		\end{enumerate} %}
+	\end{proof}
+
+	モノイド$M=(M,m_\myspace,u)$では、$i_u:M\to\Gro M$が準同型になる。
+	さらに、$M$がキャンセル可能ならば、$i_u$は$1:1$になり、
+	$i_u$が埋め込み$\sizen\subset\sei$や$\sizen\subset\bun$に相当する。
+	$M$がキャンセル可能でない場合は、命題\ref{グロタンディーク群への埋込み}
+	の写像が$1:1$になる保証はない。例えば、ブーリアンの$\myop{or}$による
+	モノイド$(\set{0,1},\myop{or},0)$はキャンセル可能ではなく、逆元を定義
+	できない。
+
+	\begin{proposition}[グロタンディーク群への標準入射]
+	\label{prop:グロタンディーク群への標準入射} %{
+		$M$をキャンセル可能な可換モノイド、$u$を$M$の単位元とする。
+		写像$i_\Gro,i_\Gro^c:M\to\Gro M$を次のように定義する。
+		\begin{equation*}\begin{split}
+			i_\Gro m := (m,u)_\Gro,\quad i_\Gro^cm := (u,m)_\Gro
+			\quad\text{for all }m\in M
+		\end{split}\end{equation*}
+		すると、$i_\Gro$と$i_\Gro^c$は$1:1$のモノイド準同型となり、
+		次の関係を満たす。
+		\begin{equation*}\begin{split}
+			(i_\Gro m)(i_\Gro^c m) = (u,u)_\Gro \quad\text{for all }m\in M
+		\end{split}\end{equation*}
+		$i_\Gro$のことを分子入射、$i_\Gro^c$のことを分母入射ということにする。
+	\end{proposition} %prop:グロタンディーク群への標準入射}
+	\begin{proof} 命題\ref{グロタンディーク群への埋込み}で
+	$i_\Gro=i_u$かつ$i_\Gro^c=i_u^c$とおいたものになっている。
+	\end{proof}
+
+	\begin{example}[自然数から整数]\label{eg:自然数から整数} %{
+		自然数の加法$\sizen=(\sizen,m_+,0)$のグロタンディーク群の元を
+		引き算の記号を用いて$m-n:=(m,n)_\Gro$と書くと、次のようになり、
+		通常の整数の引き算に一致する。
+		\begin{equation*}\begin{split}
+			m_1-n_1 = m_2-n_2 \iff m_1 + n_2 = m_2 + n_1
+			\quad\text{for all }m_1,m_2,n_1,n_2\in \sizen
+		\end{split}\end{equation*}
+		この場合のゲージ変換は次のようになる。
+		\begin{equation*}\begin{split}
+			m - n = (m + g) - (n + g) \quad\text{for all }m,n,g\in \sizen
+		\end{split}\end{equation*}
+	\end{example} %eg:自然数から整数}
+
+	\begin{example}[自然数から有理数]\label{eg:自然数から有理数} %{
+		自然数の乗法$\sizen_+=(\sizen_+,m_\myspace,1)$のグロタンディーク群の元を
+		割り算の記号を用いて$m/n:=(m,n)_\Gro$と書くと、次のようになり、
+		通常の有理数の割り算に一致する。
+		\begin{equation*}\begin{split}
+			m_1/n_1 = m_2/n_2 \iff m_1n_2 = m_2n_1
+			\quad\text{for all }m_1,m_2,n_1,n_2\in \sizen_+
+		\end{split}\end{equation*}
+		この場合のゲージ変換は次のようになる。
+		\begin{equation*}\begin{split}
+			m / n = (m g) / (n g) \quad\text{for all }m,n,g\in \sizen_+
+		\end{split}\end{equation*}
+		割り算の場合には、引き算の場合（例\ref{eg:自然数から整数}）と異なり、
+		$0$を含めたモノイド$(\sizen,m_\myspace,1)$のグロタンディーク群は自明な
+		群になってしまう（命題\ref{prop:ゼロ元を持つ半群のグロタンディーク群}）。
+		意味のある割り算を導き出すためには、$0$を除いたモノイド
+		$(\sizen_+,m_\myspace,1)$のグロタンディーク群を使う必要がある。
+		直感的には、任意の$m\in\sizen_+$に対して$m/0=\infty$となるから、
+		割り算での$0$割りが禁止されているが、後述のグロタンディーク群の普遍性
+		（命題\ref{prop:グロタンディーク群の普遍性}）から、
+		ゼロ元を含む可換モノイドに意味のある方法で逆元を付加することが
+		できないことがわかる。
+	\end{example} %eg:自然数から有理数}
+
+	\begin{proposition}[グロタンディーク群の普遍性]
+	\label{prop:グロタンディーク群の普遍性} %{
+		キャンセル可能な可換モノイド$M$から可換群$G$へのモノイド準同型$f$
+		に対して次の図を可換にする群準同型$f_*$が唯一つ定まる。
+		また、逆に、任意の群準同型$f_*$に対して次の図を可換にするモノイド準同型
+		$f$が唯一つ定まる。
+		\begin{equation}\label{eq:グロタンディーク群の普遍性}\xymatrix{
+			M \ar[r]^{i_\Gro} \ar[rd]_f & \Gro M \ar@{.>}[d]^{f_*} \\
+			& G
+		}\end{equation}
+	\end{proposition} %prop:グロタンディーク群の普遍性}
+	\begin{proof} モノイド$M=(M,m_\myspace,1_M)$とし、群$G=(G,m_\myspace,1_G)$
+	とする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $f_*$が存在することを証明する。
+		$f_*$を次のように定義し、
+		\begin{equation*}\begin{split}
+			f_*(m,1_M)_\Gro := fm,\quad f_*(1_M,m)_\Gro := (fm)^{-1}
+			\quad\text{for all }m\in M
+		\end{split}\end{equation*}
+		$f_*$が群準同型となるように、$\Gro M$全体に次のように拡張する。
+		\begin{equation}\label{eq:グロタンディーク群の普遍性その二}\begin{split}
+			f_*(m,n)_\Gro
+			:= \bigl(f_*(m,1_M)_\Gro\bigr)\bigl(f_*(1_M,n)_\Gro\bigr)
+			= (fm)(fn)^{-1} \\
+			\quad\text{for all }m,n\in M
+		\end{split}\end{equation}
+		すると、$f_*$は群準同型かつ$f_*i_\Gro=f$となる。
+		%
+		\item $f_*$が唯一つ定まることを証明する。
+		$g_*$を群準同型かつ$g_*i_\Gro=f$とする。$g_*$は群準同型だから、
+		任意の$m\in M$に対して次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			1_G = g_*(m,m)_\Gro
+			=\bigl(g_*(m,1_M)_\Gro\bigr)\bigl(g_*(1_M,m)_\Gro\bigr) \\
+			\implies g_*(m,1_M)_\Gro=\bigl(g_*(1_M,m)_\Gro\bigr)^{-1}
+		\end{split}\end{equation*}
+		任意の$m,n\in M$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			g_*(m,n)_\Gro
+			=\bigl(g_*(m,1_M)_\Gro\bigr)\bigl(g_*(1_M,n)_\Gro\bigr) \\
+			=\bigl(g_*(m,1_M)_\Gro\bigr)\bigl(g_*(n,1_M)_\Gro\bigr)^{-1} \\
+		\end{split}\end{equation*}
+		そして、$g_*i_\Gro=f$より、次の式成り立つことがわかるが、
+		\begin{equation*}\begin{split}
+			g_*(m,n)_\Gro = (fm)(fn)^{-1} \quad\text{for all }m,n\in M
+		\end{split}\end{equation*}
+		この式は$f_*$の定義式\eqref{eq:グロタンディーク群の普遍性その二}である。
+		%
+		\item $f_*$から$f$が唯一つ定まることを証明する。
+		与えられた群準同型$f_*:\Gro M\to G$に対して写像$f:M\to G$を次のように
+		定義すると、
+		\begin{equation*}\begin{split}
+			fm = f_*(m,1_M) \quad\text{for all }m\in M
+		\end{split}\end{equation*}
+		$f$はモノイド準同型となり、$f_*$は式\eqref{eq:グロタンディーク群の普遍性}
+		を満たす。したがって、$f$は唯一つ定まることがわかる。
+	\end{itemize} %}
+	\end{proof}
+
+	この命題を圏の言葉で書くと、群からモノイドへの忘却関手を$\mycal{U}$
+	として、任意の$M\in\mybf{Mon},\;G\in\mybf{Grp}$に対して次の集合同型
+	$\phi:\mybf{Mon}(M, \mycal{U}G)\simeq\mybf{Grp}(\Gro M, G)$が成り立つ
+	\footnote{
+		$\phi$が集合同型となること以外にも、$\phi$が自然変換となっていることも
+		示される。つまり、$(\Gro,\mycal{U},\phi^{-1})$が随伴となる。
+		$\phi$が自然変換となっていることは、分子入射$i_\Gro$が単射であることと、
+		可換図\eqref{eq:グロタンディーク群の普遍性}から示される。
+	}。
+	\begin{equation*}\begin{split}
+		(\phi f)(m,n)_\Gro = (fm)(fn)^{-1} \quad\text{for all }m,n\in M
+	\end{split}\end{equation*}
+%s2:グロタンディーク群}
+\subsection{半群のゼロ元}\label{s2:ゼロ元} %{
+	\begin{definition}[ゼロ元]\label{def:ゼロ元} %{
+		半群$M=(M,m_\myspace)$とする。$M$の元$z$が任意の$m\in M$に対して
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[左ゼロ元] $zm=z$となるとき、$z$を$M$の左ゼロ元、
+			\item[右ゼロ元] $mz=z$となるとき、$z$を$M$の右ゼロ元、
+		\end{description} %}
+		という。右ゼロ元かつ左ゼロ元となる元を両側ゼロ元または単にゼロ元という。
+	\end{definition} %def:ゼロ元}
+
+	ゼロ元も単位元と同じ唯一性を持つ。
+
+	\begin{proposition}[ゼロ元の唯一性]\label{prop:ゼロ元の唯一性} %{
+		半群が左ゼロ元と右ゼロ元をともに持つならば、それは両側ゼロ元に一致する。
+		そして、半群が両側ゼロ元を持つならば、それ以外には左ゼロ元も右ゼロ元も
+		持たない。
+	\end{proposition} %prop:ゼロ元の唯一性}
+	\begin{proof} 半群$M=(M,m_\myspace)$とする。
+	$z_L$を左ゼロ元と$z_R$を右ゼロ元とすると次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		z_L = z_Lz_R = z_R
+	\end{split}\end{equation*}
+	\end{proof}
+
+	半群のゼロ元に関しては次の場合に限られる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 左ゼロ元を持たないが、複数の右ゼロ元を持つかもしれない。
+		\item 右ゼロ元を持たないが、複数の左ゼロ元を持つかもしれない。
+		\item 両側ゼロ元を唯一つだけ持ち、それ以外には左ゼロ元も右ゼロ元も
+		持たない。
+	\end{itemize} %}
+
+	半群$G$が単位元かつゼロ元となる元$0_G$を持つ場合は、$G$は単位元$0_G$
+	だけからなる自明な群となる。
+	\begin{equation*}\begin{split}
+		g \udset{\text{$0_G$ is a unit}}{}{=} g0_G
+		\udset{\text{$0_G$ is a zero}}{}{=} 0_G
+		\quad\text{for all }g\in G
+	\end{split}\end{equation*}
+
+	環においては、加法の単位元は乗法のゼロ元になる。
+	したがって、環の乗法は必ずゼロ元を持つ。
+
+	\begin{proposition}[環の乗法のゼロ元]\label{prop:環の乗法のゼロ元} %{
+		環の加法の単位元は乗法のゼロ元となる。
+	\end{proposition} %prop:環の乗法のゼロ元}
+	\begin{proof} $R=(R,m_+,0_R,m_\myspace,1_R)$を環とする。
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\bigl(rs = (r + 0_R)s = rs + 0_Rs \text{ for all }r,s\in R\bigr)
+		\implies (0_Rr = 0 \text{ for all }r\in R)
+	\end{split}\end{equation*}
+	\end{proof}
+%s2:ゼロ元}
+\subsection{キャンセル可能な半群}\label{s2:キャンセル可能な半群} %{
+	\begin{definition}[キャンセル可能な半群]\label{def:キャンセル可能な半群} %{
+		$M=(M,m_\myspace)$を半群とする。
+		次の性質が成り立つとき、$M$を左キャンセル可能といい、
+		\begin{equation*}\begin{split}
+			mm_1 = mm_2 \implies m_1 = m_2 \quad\text{for all }m_1,m_2,m\in M
+		\end{split}\end{equation*}
+		次の性質が成り立つとき、$M$を右キャンセル可能という。
+		\begin{equation*}\begin{split}
+			m_1m = m_2m \implies m_1 = m_2 \quad\text{for all }m_1,m_2,m\in M
+		\end{split}\end{equation*}
+		また、$M$が左キャンセル可能かつ右キャンセル可能なとき、
+		両側キャンセル可能または単にキャンセル可能という。
+	\end{definition} %def:キャンセル可能な半群}
+
+	有限半群$M$がキャンセル可能ならば、$M$は群になってしまう。
+
+	\begin{proposition}[キャンセル可能な有限半群]\label{prop:キャンセル可能な有限半群} %{
+		キャンセル可能な有限半群は群となる。
+	\end{proposition} %prop:キャンセル可能な有限半群}
+	\begin{proof} $M$を有限半群とする。
+	$M$がキャンセル可能ならば、任意の元$g\in M$に対して次の写像$g-:M\to M$
+	\begin{equation*}\begin{split}
+		(g-)h = gh \quad\text{for all }h\in M
+	\end{split}\end{equation*}
+	が$1:1$となる。したがって、$SM$を$M$の置換群とすると、$g-\in SM$となる。
+	写像$\phi:M\to SM$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\phi g = g-
+	\end{split}\end{equation*}
+	$M$がキャンセル可能だから、$\phi$は$1:1$になる。
+	\begin{equation*}\begin{split}
+		\phi g_1 = \phi g_2
+		\implies (g_1g = g_2g \text{ for all }g\in M)
+		\implies g_1 = g_2 \\
+		\quad\text{for all }g_1,g_2\in M
+	\end{split}\end{equation*}
+	そして、$(g-)^n=\id$となるから、$M$は単位元$\phi^{-1}(g-)^n$を持ち、
+	$\phi^{-1}(g-)^{n-1}$が$g$の逆元となる。
+	任意の$g\in M$に対して同様の議論が成り立ち、$\phi M$が$SM$の部分群となる
+	ことがわかる。$\phi$は$1:1$だから、$M$と$\phi M$を同一視しても構わない。
+	\end{proof}
+%s2:キャンセル可能な半群}
+%s1:分数の構成}
+\endgroup %}

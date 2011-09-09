@@ -1,0 +1,1204 @@
+\begingroup %{
+	\newcommand{\Hom}{\myop{Hom}}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Auto}{\myop{Auto}}
+	\newcommand{\Pow}{\mycal{P}}
+	\newcommand{\Word}{\mycal{W}}
+	\newcommand{\Forget}{\mycal{U}}
+	\newcommand{\id}{\myop{id}}
+	\newcommand{\dup}{\myop{du}}
+	\newcommand{\onto}{\myop{onto}}
+	\newcommand{\im}{\myop{im}}
+	\newcommand{\spanall}{\myop{span}}
+	\newcommand{\rank}{\myop{rank}}
+	\newcommand{\tr}{\myop{tr}}
+	\newcommand{\ofm}{only finitely many }
+	\newcommand{\bunsub}[1][0]{{\bun_{#1}^\circ}}
+	\newcommand{\jitusub}[1][0]{{|\jitu|_{#1}}}
+
+\section{数と文字列}\label{s1:数と文字列} %{
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[直積と直和]
+		集合$S$による自然数の直積$\prod_S\sizen$と直和$\coprod_S\sizen$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			\prod_S\sizen &:= \set{f:S\to \sizen} \\
+			\coprod_S\sizen &:= \set{f:S\to \sizen\bou fs\neq 0 \text{ \ofm } s\in S} \\
+		\end{split}\end{equation*}
+		%
+		\item[数の記号] 数の集合を次のように書く。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 自然数の集合を$\sizen$、$0$でない自然数の集合を$\sizen_+$と
+			書き、自然数の部分集合を次のように書く。
+			\begin{equation*}\begin{split}
+				\braket{m} &:= \set{p\in\sizen\bou 0\le p< m} \\
+				\braket{m+} &:= \set{p\in\sizen\bou 1\le p< m + 1} \\
+				m..n &:= \set{p\in\sizen\bou m\le p\le n} \\
+			\end{split}\end{equation*}
+			\item 有理数の集合を$\bun$と書き、有理数の部分集合を次のように書く。
+			\begin{equation*}\begin{split}
+				|\bun| &:= \set{q\in\bun\bou 0\le q} \\
+				\bunsub[0] &:= \bun\cap[0,1) \\
+				\bunsub[1] &:= \bun\cap(0,1] \\
+			\end{split}\end{equation*}
+			\item 実数の集合を$\jitu$と書き、実数の部分集合を次のように書く。
+			\begin{equation*}\begin{split}
+				|\jitu| &:= \set{q\in\jitu\bou 0\le q} \\
+				\jitusub[0] &:= \jitu\cap[0,1) \\
+				\jitusub[1] &:= \jitu\cap(0,1] \\
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		%
+		\item[割り算] 負でない実数または有理数$x$の自然数部分を$\pi_\sizen x$
+		と書く。また、自然数$n$を$m\ge1$で割った余りを$\pi_mn$と書く。
+		$\pi_m$と$\pi_\sizen$は次の関係になっている。
+		\begin{equation*}\begin{split}
+			n = \pi_mn + m\pi_\sizen m^{-1}n
+			\quad\text{for all }n\in\sizen,\;m\in\sizen_+
+		\end{split}\end{equation*}
+		%
+		\item[文字列] 集合$A$から生成される自由モノイドを$\Word A$と書く。
+		空の文字列を$1_\Word$と書き、文字$a_1,a_2,\dots,a_m\in A$で作られる
+		文字列を$[a_1a_2\cdots a_m]$または$[a_1,a_2,\dots,a_m]$と書く。
+		文字列の連結による積を前置演算子として$m_*$、二項演算子として$*$
+		と書く。
+		\begin{equation*}\begin{split}
+			[a_1a_2\cdots a_m] * [b_1b_2\cdots b_n]
+			:= [a_1a_2\cdots a_mb_1b_2\cdots b_n] \\
+			\quad\text{for all }a_1,a_2,\dots,a_m,b_1,b_2,\dots,b_n\in A
+		\end{split}\end{equation*}
+		また、文字の文字列への'作用'$*$を次のように定義する。
+		\begin{equation*}\begin{split}
+			a*w := [a]*w,\quad w*a :=  w * [a]
+			\quad\text{for all }a\in A,\; w\in \Word A
+		\end{split}\end{equation*}
+		$\Word$を集合の圏からモノイドの圏への関手としてみて、任意の写像
+		$f:A\to B$に対して$\Word f$を次のように定義する。
+		\begin{equation*}\begin{split}
+			(\Word f)1_\Word = 1_\Word,\quad
+			(\Word f)[a_1a_2\cdots a_m] = [(fa_1)(fa_2)\cdots (fa_m)]
+		\end{split}\end{equation*}
+		また、$\Word_+A := \Word A - \set{1_\Word}$とし、$\Word_+$を集合の圏
+		から半群の圏への関手としてみる。
+	\end{description} %}
+\subsection{自然数のk進表示}\label{s2:自然数のk進表示} %{
+	任意の自然数$n$を自然数$k\ge2$を用いて、次のような数列
+	$n_0,n_1,n_2,\dots\in\braket{k}$で表示することを$n$の$k$進表示という。
+	\begin{equation}\label{eq:自然数のk進表示}\begin{split}
+		n = \sum_{i\in\sizen}n_ik^i
+	\end{split}\end{equation}
+	右辺の級数は無限ではなく、ある$p\in\sizen\bou k^p\le n<k^{p+1}$以降
+	の係数はすべて$0$になり、次のように書ける。
+	\begin{equation*}\begin{split}
+		n = \sum_{i=0}^{\pi_\sizen\log_k n}n_ik^i
+	\end{split}\end{equation*}
+	しかし、$0$でない係数の範囲を明示するのは煩雑なので、
+	式\eqref{eq:自然数のk進表示}のように、$0$でない係数の上限を明示せずに
+	書くことにする。
+
+	自然数$n$の$k$進表示は、割り算の商と余りを使って、次のように書くことが
+	できて、
+	\begin{equation*}\begin{split}
+		n = n_0 + k\sum_{i\in\sizen}n_{i+1}k^i = \pi_kn + k\pi_\sizen k^{-1}n
+	\end{split}\end{equation*}
+	その係数$n_0,n_1,\dots\in\braket{k}$は次のようになることがわかる。
+	\begin{equation*}\begin{split}
+		n_0 &= \pi_kn \\
+		n_1 &= \pi_k\pi_\sizen k^{-1}n \\
+		\vdots \\
+		n_i &= \pi_k(\pi_\sizen k^{-1})^in \\
+		\vdots \\
+	\end{split}\end{equation*}
+	ここで、次の式が成り立つので、
+	\begin{equation*}\begin{split}
+		(\pi_\sizen k^{-1})^in = \pi_\sizen k^{-i}n
+		\quad\text{for all }n,i\in\sizen
+	\end{split}\end{equation*}
+	$k$進数表示は次のように書くことができることがわかる。
+	\begin{equation}\label{eq:自然数のk進表示その二}\begin{split}
+		n = \sum_{i\in\sizen}k^i\pi_k\pi_\sizen k^{-i}n 
+		\quad\text{for all }n\in\sizen
+	\end{split}\end{equation}
+
+	自然数の$k$進数表示を、集合$\braket{k}$から生成される自由モノイド
+	$\Word\braket{k}$への写像として解釈すると、次の写像
+	$\nu_k:\sizen\to\Word\braket{k}$によっても自然数の$k$進数表示を定義する
+	ことができる。
+	\begin{equation}\label{eq:自然数のk進表示符号化}\begin{split}
+		\nu_k n = \left\{\begin{split}
+			n = 0 &\implies 1_\Word \\
+			1\le n < k &\implies [n] \\
+			\text{else} &\implies (\pi_kn) * (\nu_k\pi_\sizen k^{-1}n) \\
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation}
+	写像$\nu_k$を自然数の$k$進表示への符号化ということにする。
+	写像$\nu_k^\dag:\Word\braket{k}\to\sizen$を次のように定義すると、
+	\begin{equation}\label{eq:自然数のk進表示復号化}\begin{split}
+		\nu_k^\dag1_\Word &= 0 \\
+		\nu_k^\dag(m*w) &= m + k\nu_k^\dag w
+		\quad\text{for all }m\in\braket{k},\;w\in \Word\braket{k}
+	\end{split}\end{equation}
+	$\nu_k^\dag\nu_k=\id_{\sizen}$が成り立つ。
+	したがって、写像$\nu_k^\dag$を自然数の$k$進数表示への復号化ということに
+	する。自然数の$k$進表示は可逆な符号化になっている。
+
+	\begin{proof} $\nu_k^\dag\nu_k=\id_\sizen$を証明する。
+	自然数の部分集合
+	\begin{equation*}\begin{split}
+		\braket{k}\subset\braket{k^2}\subset\braket{k^3}\subset\cdots\subset\sizen
+	\end{split}\end{equation*}
+	についての帰納法で証明する。まず、任意の$n\in\braket{k}$に対して
+	$\nu_k^\dag\nu_kn=n$が成り立つことがわかる。ある$p\in\sizen_+$で、
+	任意の$n\in\braket{k^p}$に対して$\nu_k^\dag\nu_kn=n$が成り立つとする。
+	すると、任意の$n\in\sizen$に対して次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\nu_k^\dag\nu_kn 
+		= \nu_k^\dag\bigl((\pi_kn) * (\nu_k\pi_\sizen k^{-1}n)\bigr)
+		= \pi_kn + k\nu_k^\dag\nu_k\pi_\sizen k^{-1}n
+	\end{split}\end{equation*}
+	任意の$n\in\braket{k^{p+1}}$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\nu_k^\dag\nu_kn = \pi_kn + k\nu_k^\dag\nu_k\pi_\sizen k^{-1}n
+	\end{split}\end{equation*}
+	$\pi_\sizen k^{-1}n\in\braket{k^{p}}$だから、帰納法の仮定より、
+	\begin{equation*}\begin{split}
+		\nu_k^\dag\nu_kn = \pi_kn + k\pi_\sizen k^{-1}n = n
+	\end{split}\end{equation*}
+	となり、任意の$\braket{k^{p+1}}$の元に対しても$\nu_k^\dag\nu_k=\id$
+	が成り立つことがわかる。
+	\end{proof}
+
+	一方、文字列の右端に並ぶ$0$による冗長性によって、
+	$\nu_k\nu_k^\dag\neq\id_{\Word\braket{k}}$となることに注意する。
+	\begin{equation*}\begin{split}
+		m = \nu_k^\dag[m] = \nu_k^\dag[m,0] = \nu_k^\dag[m,0,0] = \cdots
+		\quad\text{for all }m\in\braket{k}
+	\end{split}\end{equation*}
+	集合同型になる$k$進表示符号化については後の節
+	\ref{s2:集合同型な自然数のk進表示}で考えることにする。
+
+\subsubsection{自然数のk進表示での加法}\label{s3:自然数のk進表示での加法} %{
+	k進表示での加法がどのように表されるか考える。小学校以来使ってきた表による
+	加法の処理を導き出すことが目標である。
+
+	次の畳み込みによって$\Word\braket{k}$に加法$+$を定義すると、
+	復号化$\nu_k^\dag$が加法について準同型になる。
+	\begin{equation*}\xymatrix@C=8ex{
+		\Word\braket{k}\times \Word\braket{k}
+			\ar@{.>}[r]^{+} \ar[d]_{\nu_k^\dag\times\nu_k^\dag} 
+			& \Word\braket{k} \ar[rd]^{\nu_k^\dag} \\
+		\sizen\times \sizen \ar[r]^{+} & \sizen \ar[u]^{\nu_k}
+			& \sizen \ar[l]_\simeq \\
+	}\end{equation*}
+	式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		w_1 + w_2 := \nu_k(\nu_k^\dag w_1 + \nu_k^\dag w_2)
+		\quad\text{for all }w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	左の文字から順に摂動計算すると次のようになり、
+	\begin{equation*}\begin{split}
+		\nu_k^\dag(m_1*w_1) + \nu_k^\dag(m_2*w_2)
+		&= \pi_kx_0 + kx_1 \\
+		x_0 &= m_1 + m_2 \\
+		x_1 &= \nu_k^\dag w_1 + \nu_k^\dag w_2 + \pi_\sizen k^{-1}(m_1 + m_2) \\
+		\Downarrow \\
+		\nu_k\bigl(\nu_k^\dag(m_1*w_1) + \nu_k^\dag(m_2*w_2)\bigr)
+		&= \nu_k(\pi_kx_0 + kx_1) \\
+		&= \pi_k(\pi_kx_0 + kx_1) * \nu_k\pi_\sizen(k^{-1}\pi_kx_0 + x_1) \\
+		&= (\pi_kx_0) * (\nu_kx_1) \\
+		&\quad\text{for all }m_1,m_2\in\braket{k},\;w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	次の摂動計算が得られる。
+	\begin{equation*}\begin{split}
+		(m_1*w_1) + (m_2*w_2) &= (\pi_kx_0) * (\nu_kx_1) \\
+		x_0 &= m_1 + m_2 \\
+		x_1 &= \nu_k^\dag w_1 + \nu_k^\dag w_2 + \pi_\sizen k^{-1}x_0 \\
+		&\quad\text{for all }m_1,m_2\in\braket{k},\;w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	文字を使って書くとが馴染みのある形になる。
+	\begin{equation*}\begin{split}
+		[m_1m_2\cdots m_p] + [n_1n_2\cdots n_p] &= [x_1x_2\cdots x_{p+1}] \\
+		x_1 = \pi_k y_1 &\quad y_1 = m_1 + n_1 \\
+		x_2 = \pi_k y_2 &\quad y_2 = m_2 + n_2 + \pi_\sizen k^{-1}y_1 \\
+		\vdots \\
+		x_i = \pi_k y_i &\quad y_i = m_i + n_i + \pi_\sizen k^{-1}y_{i-1} \\
+		\vdots \\
+		x_{p+1} = \pi_k y_i &\quad y_i = \pi_\sizen k^{-1}y_p \\
+		&\quad\text{for all }m_1,\dots,m_p,n_1,\dots,n_p\in\braket{k}
+	\end{split}\end{equation*}
+	$\pi_\sizen k^{-1}y_{i-1}$という項が桁上げの操作を表している。
+%s3:自然数のk進表示での加法}
+%s2:自然数のk進表示}
+\subsection{有理数のk進表示}\label{s2:有理数のk進表示} %{
+	自然数の$k$進表示を有理数に拡張する。ここでは議論を単純化するために、
+	負でない有理数$|\bun|$
+	\begin{equation*}\begin{split}
+		|\bun| := \set{q\in\bun\bou 0\le q}
+	\end{split}\end{equation*}
+	に限定して議論する。$q\in|\bun|$の$k$進表示は、次のように、数列
+	$n_i\in\braket{k}\bou i\in\sei$を用いて$k$の多項式で書き表すことである。
+	\begin{equation}\label{eq:有理数のk進表示}\begin{split}
+		q = \sum_{i\in\sei}n_ik^i
+	\end{split}\end{equation}
+	自然数の$k$進表示\eqref{eq:自然数のk進表示}との違いは、和の範囲が
+	自然数から整数に変わっているところである。
+
+	小数点以下の有理数$\bunsub$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\bunsub := \set{q\in|\bun|\bou 0\le q<1}
+	\end{split}\end{equation*}
+	任意の$q\in|\bun|$は、次のように一意に自然数$\pi_\sizen q$と
+	小数点以下の有理数$q-\pi_\sizen q$に分解される。
+	\begin{equation*}\begin{split}
+		q = \pi_\sizen q + (q- \pi_\sizen q)
+	\end{split}\end{equation*}
+	有理数の$k$進表示では、自然数の部分$\pi_\sizen q$が$k$の正のべきの部分
+	を与え、小数点以下の部分$q-\pi_\sizen q$が$k$の負のべきの部分を与える。
+	\begin{equation*}\begin{split}
+		\pi_\sizen q = \sum_{i\in\sizen}n_ik^i,\quad
+		q-\pi_\sizen q = \sum_{i\in\sizen_+}n_{-i}k^{-i}
+	\end{split}\end{equation*}
+	そして、有理数の$k$進表示が自然数と異なるのは、小数点以下の部分が
+	有限多項式とは限らないことである。例えば、$1/3$の$10$進表示は次のように
+	無限級数となる。
+	\begin{equation*}\begin{split}
+		\frac{1}{3} = 3(10^{-1} + 10^{-2} + \cdots)
+	\end{split}\end{equation*}
+	ここからは、有理数の$k$進表示のキモとなる$\bunsub$の$k$進表示を
+	考えることにする。
+
+	$2/7$を$10$進表示したときは次のようになる。
+	{\setlength\arraycolsep{4pt}
+	\begin{equation*}\begin{array}{rclcl}
+		\cfrac{2}{7} 
+		&=& \cfrac{1}{10}\cfrac{20}{7} 
+			&=& \cfrac{2}{10} + \cfrac{1}{10}\cfrac{6}{7} \\
+		&=& \cfrac{2}{10} + \cfrac{1}{10^2}\cfrac{60}{7}
+			&=& \cfrac{2}{10} + \cfrac{8}{10^2} + \cfrac{1}{10^2}\cfrac{4}{7} \\
+		&=& \cfrac{2}{10} + \cfrac{8}{10^2} + \cfrac{1}{10^3}\cfrac{40}{7}
+			&=& \cfrac{2}{10} + \cfrac{8}{10^2} + \cfrac{5}{10^3} + \cfrac{1}{10^3}\cfrac{5}{7} \\
+	\end{array}\end{equation*}
+	}
+	この例から、$0<m<n\in\sizen$として、分数$m/n\in\bunsub$の小数点以下$l$次
+	までの$k$進表示を次のようにおくと、
+	\begin{equation*}\begin{split}
+		\frac{m}{n} = \frac{q_1}{k} + \frac{q_2}{k^2} + \cdots + \frac{q_p}{k^p}
+			+ \frac{1}{k^p}\frac{m_p}{n}
+		\quad\text{where} \\
+		q_0=0,q_1,q_2,\dots\in\braket{k} \\
+		m_0=m,m_1,m_2,\dots\in\braket{n} \\
+	\end{split}\end{equation*}
+	次の式より、
+	\begin{equation*}\begin{split}
+		\frac{m_p}{n} = \frac{1}{k}\frac{km_p}{n}
+		= \frac{1}{k}\left(\pi_\sizen\frac{km_p}{n} + \frac{1}{n}\pi_nkm_p\right)
+	\end{split}\end{equation*}
+	数列$q_i$と$m_i$は次の漸化式を満たす。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		m_{p+1} &=& \pi_nkm_p & \quad\text{$km_p$を$n$で割った余り} \\
+		q_{p+1} &=& \pi_\sizen n^{-1}km_p & \quad\text{$km_p$を$n$で割った商} \\
+	\end{array}\end{equation*}
+	}
+	この漸化式を使って$\bunsub$の$k$進表示を順に求めることができる。
+	また、$m_i\in\braket{n}$だから、$\set{m_0,m_1,\dots,m_n}$の中には
+	一組以上の重複した値がある。例えば、$0\le i<i+j\le n$として、
+	$m_i=m_{i+j}$とすると、任意の$h\in\sizen$に対して$m_{i+h}=m_{i+j+h}$
+	となるから、数列$m_i$には次のように$m_i,m_{i+1},\dots,m_{i+j-1}$が繰り返し
+	現れることになる。
+	\begin{equation*}\begin{split}
+		m_0=m,m_1,\dots,m_{i-1}
+		,\underbrace{m_i,m_{i+1},\dots,m_{i+j-1}}_{\text{繰り返し}}
+		,\underbrace{m_i,m_{i+1},\dots,m_{i+j-1}}_{\text{繰り返し}}
+		,\dots
+	\end{split}\end{equation*}
+	したがって、$m/n$の$k$進表示は次のような形になる。
+	\begin{equation*}\begin{split}
+		\cfrac{m}{n} 
+		&= \left(\cfrac{q_1}{k} + \cdots + \cfrac{q_{i-1}}{k^{i-1}}\right)
+		+ \left(\cfrac{q_i}{k^i} + \cdots + \cfrac{q_{i+j-1}}{k^{i+j-1}}\right)
+			\left(1 + \cfrac{1}{k} + \cfrac{1}{k^2} + \cdots\right) \\
+		&= \left(\cfrac{q_1}{k} + \cdots + \cfrac{q_{i-1}}{k^{i-1}}\right)
+		+ \left(\cfrac{q_i}{k^i} + \cdots + \cfrac{q_{i+j-1}}{k^{i+j-1}}\right)
+			\cfrac{k}{k-1} \\
+	\end{split}\end{equation*}
+	$[0,1)$の範囲の実数に対しても$k$のべき級数展開\eqref{eq:有理数のk進表示}
+	は一意に定まるので、実数の$k$進表示を定義することができるが、
+	有理数の場合のように係数が有限の周期をもつとは限らない。係数が有限の周期
+	をもつことが、有理数を$k$進表示したときの特徴となる。
+%s2:有理数のk進表示}
+\subsection{集合同型な自然数のk進表示}\label{s2:集合同型な自然数のk進表示} %{
+	符号化が集合同型となるような$\Word\braket{k}$の部分空間を考えてみる。
+	符号化$\nu_k$の余領域を$\Word\braket{k}$ではなく、右端の文字が$0$でない
+	文字列の集合にしても、$k$進表示の符号化$\nu_k$の定義
+	\eqref{eq:自然数のk進表示符号化}と復号化$\nu_k^\dag$の定義
+	\eqref{eq:自然数のk進表示復号化}はそのまま使うことができて、
+	$\nu_k$と$\nu_k^\dag$は互いに逆になる。このことをもう少し詳しく記述する。
+
+	\begin{definition}[文字としての数]\label{def:文字としての数} %{
+		任意の$m\in\sizen_+$に対して、集合$\braket{m}$と$\braket{m+}$を次の
+		ように定義する。
+		\begin{equation*}\begin{split}
+			\braket{m} &:= \set{0,1,\dots,k-1} \\
+			\braket{m+} &:= \set{1,2,\dots,k} \\
+		\end{split}\end{equation*}
+	\end{definition} %def:文字としての数}
+
+	\begin{definition}[数を表す文字列]\label{def:数を表す文字列} %{
+		$A$を空でない集合とし、任意の$a\in A$に対して
+		$\mycal{X}_aA\subset\Word A$を右端の文字が$a$でない文字列の集合とする。
+		$\mycal{X}_aA$をBNF記法で書くと次のようになる。
+		\begin{equation*}\begin{split}
+			\mycal{X}_aA = 1_\Word + (\Word A)(A - \set{a})
+		\end{split}\end{equation*}
+	\end{definition} %def:数を表す文字列}
+
+	$k$進表示の符号化$\nu_k$の余領域を$\Word\braket{k}$から
+	$\mycal{X}_0\braket{k}$に縮小すると、$\nu_k$が同型写像となる。
+
+	\begin{proposition}[同型写像となるk進表示]
+	\label{prop:同型写像となるk進表示} %{
+		写像$\nu_k:\sizen\to\mycal{X}_0\braket{k}$を$k$進表示符号化
+		\eqref{eq:自然数のk進表示符号化}によって定義すると、
+		\begin{equation*}\begin{split}
+			\nu_k n := [n_0n_1\cdots n_p] \text{ where }
+			n = n_0 + n_1k + \cdots + n_pk^p \text{ with } \\
+			n_0,n_1,\dots,n_{p-1}\in\braket{k}
+			\text{ and } n_p\in\braket{k} - \set{0}
+		\end{split}\end{equation*}
+		$\nu_k$は同型写像となる。
+	\end{proposition} %prop:同型写像となるk進表示}
+	\begin{proof} まず、自然数を$k$のべきで展開する仕方が一意であることを証明
+	する。$n\in\sizen$が次のように二通りの$k$のべきで展開されたとすると、
+	\begin{equation*}\begin{split}
+		x_0 + x_1k + \cdots x_pk^p = n = y_0 + y_1k + \cdots y_qk^q \text{ where} \\
+		[x_0x_1\cdots x_p],[y_0y_1\cdots y_q]\in\mycal{X}_0\braket{k}
+	\end{split}\end{equation*}
+	$x_0=\pi_kn=y_0$より、$x_0=y_0$が導かれる。
+	$n-\pi_\sizen k^{-1}n$に対して同様の議論を繰り返せば
+	$[x_0x_1\cdots x_p]=[y_0y_1\cdots y_q]$となることがわかる。
+
+	自然数を$k$のべきで展開する仕方の一意性により、$\nu_k$が同型写像
+	となることがわかる。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[1:1] 定義より、任意の$m,n\in\sizen$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				\nu_km = [x_0x_1\cdots x_p] = \nu_kn 
+				\implies m = x_0 + x_1k + \cdots x_pk^p = n
+			\end{split}\end{equation*}
+			\item[onto] 定義より、任意の
+			$[n_0n_1\cdots n_p]\in\mycal{X}_0\braket{k}$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				\nu_k(n_0 + n_1k \cdots + n_pk^p) = [n_0n_1\cdots n_p]
+			\end{split}\end{equation*}
+		\end{description} %}
+	\end{proof}
+	$\nu_k$の逆写像$\nu_k^{-1}:\mycal{X}_0\braket{k}\to\sizen$は、
+	通常の$k$進表示の復号化$\nu_k^\dag$\eqref{eq:自然数のk進表示復号化}を
+	$\mycal{X}_0\braket{k}\subset\Word\braket{k}$に制限したものになる。
+	\begin{equation*}\begin{split}
+		\nu_k^{-1}1_\Word &= 0 \\
+		\nu_k^{-1}[m_0\cdots m_{p-1}m_p]
+			&= m_0 + \cdots + m_{p-1}k^{p-1} + m_pk^p \\
+			&\quad\text{for all } m_1,\dots,m_{p-1}\in\braket{k}
+			,\;m_p\in\braket{k}-\set{0} \\
+	\end{split}\end{equation*}
+
+	$\mycal{X}_0\braket{k}$と$\Word\braket{k}$の関係をもう少し調べてみる。
+
+	任意の$m\in\braket{k}$に対して、文字列の連結を積とする部分モノイド
+	$m^*\subset\Word\braket{k}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		m^* := \set{1_\Word,[m],[m,m],[m,m,m],\dots}
+	\end{split}\end{equation*}
+	そして、任意の$m\in\braket{k}$に対して$\Word\braket{k}$の二項関係
+	$\sim_m$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		w_1 \sim_m w_2 
+		\iff \exists\; w\in m^* \bou w_1*w = w_2 \text{ or }w_1 = w_2*w
+	\end{split}\end{equation*}
+	$\sim_m$は同値関係となる。$\mycal{X}_0\braket{k}$は$\Word\braket{k}$を
+	同値関係$\sim_0$で割った商集合となる。
+	\begin{equation*}\begin{split}
+		\mycal{X}_0\braket{k} = \Word\braket{k}/\sim_0
+	\end{split}\end{equation*}
+
+	自由モノイドの普遍性と自然数の加法との関係は次の可換図で表すことができる。
+	\begin{equation*}\xymatrix{
+		\braket{k} \ar[r]^{i_\Word} \ar[rd]_{i_\sizen}
+			& \Word\braket{k} \ar@{.>}[d]^{\tr} \ar@{.>}[rd]^{\nu_k\tr} \\
+		& \sizen \ar[r]^{\nu_k} & \mycal{X}_0\braket{k} \\
+	}\end{equation*}
+	ここで、$i_\Word:\braket{k}\to\Word\braket{k}$は自由モノイドへの標準入射、
+	$i_\sizen:\braket{k}\to\sizen$は任意の$m\in\braket{K}$に対して
+	$i_\sizen m=m$とする。そして、準同型
+	$\tr:(\Word\braket{k},*,1_\Word)\to(\sizen,+,0)$は次のように定義される。
+	\begin{equation*}\begin{split}
+		\tr1_\Word &= 0 \\
+		\tr[m_1m_2\cdots m_p] &= m_1 + m_2 + \cdots + m_p
+		\quad\text{for all }m_1,m_2,\dots,m_p\in\braket{k}
+	\end{split}\end{equation*}
+	二項関係$\sim_\tr$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		w_1\sim_\tr w_2 \iff \tr w_1 = \tr w_2
+		\quad\text{for all }w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	$\sim_\tr$は同値関係となる。そして、$\sim_\tr$は$\sim_0$と次のような関係
+	になる。
+	\begin{equation*}\begin{split}
+		w_1\sim_0 w_2 \implies w_1\sim_\tr w_2
+		\quad\text{for all }w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+
+	集合$\mycal{X}_0\braket{k}$は同型写像によって他の形でも表すことができる。
+	写像$\phi_k:\mycal{X}_0\braket{k}\to\Word\braket{k+}$を次のように定義
+	する。
+	\begin{equation*}\begin{split}
+		\begin{array}{rrrcr}
+			\,1_\Word & [1] & [2] & \cdots & [k-1] \\
+			\,[0,1] & [1,1] & [2,1] & \cdots & [k-1,1] \\
+			\,[0,2] & [1,2] & [2,2] & \cdots & [k-1,2] \\
+			\vdots \\
+		\end{array} \xto{\phi_k} \begin{array}{rrrcr}
+			\,1_\Word & [1] & [2] & \cdots & [k-1] \\
+			\,[k] & [1,1] & [2,1] & \cdots & [k-1,1] \\
+			\,[k,1] & [1,2] & [2,2] & \cdots & [k-1,2] \\
+			\vdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	式で書くと、任意の$[m_0m_1\cdots m_p]\in\mycal{X}_0\braket{k}$に対して
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\phi_k[m_0m_1\cdots m_p] := [n_0n_1\cdots n_q] \text{ where} \\
+		m_0 + m_1k + \cdots + m_pk^p = n_0 + n_1k + \cdots + n_qk^q \text{ with } \\
+		n_0,n_1,\dots,n_q\in\braket{k+}
+	\end{split}\end{equation*}
+	$\phi_k$は同型写像になっているように見える。
+	$\phi_k$は文字$0$を含まない$w\in\mycal{X}_0\braket{k}$に対しては
+	$\phi_kw=w$となり、文字$0$を含む文字列に対してのみ自明でない写像となる。
+	基本的には文字$0$を文字$k$に差し替えるのだが、差し替えの際に右の桁の
+	値を一つ下げる。'桁下げ'が起きると、値を下げられた桁が$0$になることが
+	あるので、'桁下げ'は連鎖的に引き起こされる。例えば次のようになる。
+	\begin{equation*}\begin{split}
+		\phi_k[011] = [kk]
+	\end{split}\end{equation*}
+	この'桁下げ'の操作が$\phi_k$が同型写像を示すときに困難を引き起こす。
+	$\phi_k$が同型写像になることを直接示すのではなく、
+	任意の自然数$n$が次のように一意的に$k$のべきて展開できることが示されれば、
+	\begin{equation*}\begin{split}
+		n = n_0 + n_1k + \cdots + n_pk^p
+		\text{ where }n_0,n_1,\dots,n_p\in\braket{k+}
+	\end{split}\end{equation*}
+	写像の合成$\phi_k\nu_k$が同型写像となり、$\nu_k$が同型写像であることから、
+	$\phi_k$が同型写像となることがわかる。$\rho_k:=\phi_k\nu_k$とすると、
+	$\rho_k$は任意の$n\in\sizen$に対して次の式で定義される。
+	\begin{equation*}\begin{split}
+		\rho_k n := \left\{\begin{split}
+			n = 0 &\implies 1_\Word \\
+			\pi_kn = 0 &\implies k * \rho_k(\pi_\sizen k^{-1}n - 1)
+				\quad //\; 1\le \pi_\sizen k^{-1}n  \\
+			\text{else} &\implies (\pi_kn) * \rho_k\pi_\sizen k^{-1}n \\
+		\end{split}\right. %\}
+	\end{split}\end{equation*}
+	命題\ref{prop:同型写像となるk進表示}と同様の議論により、$\rho_k$が
+	同型写像となることがわかる。このことを命題の形でまとめておく。
+
+	\begin{proposition}[同型写像となるk進表示その二]
+	\label{prop:同型写像となるk進表示その二} %{
+		写像$\rho_k:\sizen\to\Word\braket{k+}$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\rho_k n := [n_0n_1\cdots n_p] \text{ where }
+			n = n_0 + n_1k + \cdots + n_pk^p \text{ with } \\
+			n_0,n_1,\dots,n_p\in\braket{k+}
+		\end{split}\end{equation*}
+		$\rho_k$は同型写像となる。
+	\end{proposition} %prop:同型写像となるk進表示その二}
+	\begin{proof} 命題\ref{prop:同型写像となるk進表示}と同様の議論による。
+	\end{proof}
+
+	この命題を用いると、同型写像\eqref{eq:k進表示から導かれるゲーデル関数}
+	を導くことができる。
+
+	$\Word\braket{(k+1)+}$の文字列を文字$k+1$で分離する写像
+	$\sigma_{k+1}:\Word\braket{(k+1)+}\to\Word_+\Word\braket{k+}$を次のように
+	定義する。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		\sigma_{k+1} w &=& [w] & \quad\text{for all }w\in \Word\braket{k+} \\
+		\sigma_{k+1} \bigl(w_1 * (k+1) * \cdots * (k+1) * w_p\bigr) 
+		&=& [w_1w_2\cdot w_p] 
+		& \quad\text{for all }w_1,\dots,w_p\in \Word\braket{k+} \\
+	\end{array}\end{equation*}
+	}
+	$\sigma_{k+1}$は明らかに同型写像である。したがって、
+	命題\ref{prop:同型写像となるk進表示その二}と合わせると、
+	次の同型写像の系列が得られる。
+	\begin{equation}\label{eq:k進表示から導かれるゲーデル関数}\begin{split}
+		\sizen \xto[\simeq]{\rho_{k+1}} \Word\braket{(k+1)+}
+		\xto[\simeq]{\sigma_{k+1}} \Word_+\Word\braket{k+}
+		\xto[\simeq]{\Word_+\rho_k^{-1}} \Word_+\sizen
+	\end{split}\end{equation}
+	同型写像$(\Word_+\rho_k^{-1})\sigma_{k+1}\rho_{k+1}$はゲーデル関数
+	\ref{def:ゲーデル関数}の一種になっている。
+%s2:集合同型な自然数のk進表示}
+\subsection{連分数表示}\label{s2:連分数表示} %{
+	負でない有理数$q$を次のように書くことを$q$の連分数表示という。
+	\begin{equation*}\begin{split}
+		q = n_0 + \cfrac{1}{n_1 + \cfrac{1}{n_2 + \cfrac{1}{n_3 + \cdots}}}
+	\end{split}\end{equation*}
+	$(0,1)$の範囲内の有理数は、ある互いに素な正の自然数\footnote{
+		正の自然数$mn$と$n$が最大公約数が$1$となるとき、$m$と$n$を互いに素
+		という。
+	}$m$と$n$で分数$m/n$として表すことができる。
+	$m/n$を連分数表示する手続きは次のようになる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{ccccc}
+		\cfrac{m}{n} &=& \cfrac{1}{\cfrac{n}{m}}
+		&=& \cfrac{1}{\pi_\sizen\cfrac{n}{m} + \cfrac{\pi_mn}{m}} \\
+		&=& \cfrac{1}{\pi_\sizen\cfrac{n}{m} + \cfrac{1}{\cfrac{m}{\pi_mn}}}
+		&=& \cfrac{1}{\pi_\sizen\cfrac{n}{m} + \cfrac{1}{\pi_\sizen\cfrac{m}{\pi_mn}+ \cfrac{\pi_{\pi_mn}m}{\pi_mn}}} \\
+		&=& \cdots \\
+	\end{array}\end{equation*}
+	}
+	有理数を連分数で表す操作は、$2\le x$となる自然数で$1/x$という形の分数が
+	二項目に現れるまで次の操作を繰り返していく。
+	\begin{equation*}\begin{split}
+		\cfrac{n}{m} = \pi_\sizen\cfrac{n}{m} + \cfrac{\pi_mn}{m}
+		\quad\text{for all }2\le m<n\in\sizen_+
+	\end{split}\end{equation*}
+	二項目の分子の部分は$n\mapsto m\mapsto \pi_mn$と遷移していくが、
+	$\pi_mn<m<n$だから、分子の部分が強く単調減少していく。したがって、
+	有理数を連分数で表す操作は有限回で終了することがわかる。
+
+	連分数表示をもう少し詳しく見てみる。
+	$\bunsub[1]:=\bun\cap(0,1]$として、写像
+	$\rhd:\sizen_+\times\bunsub[1]\to\bunsub[1]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		m\rhd q := \cfrac{1}{m + q}
+		\quad\text{for all }m\in\sizen_+,\;q\in\bunsub[1]
+	\end{split}\end{equation*}
+	さらに、$\rhd$を$\Word\sizen_+$の$\bunsub[1]$への作用として拡張する。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		1_\Word\rhd q &=& q & \quad\text{for all }q\in\bunsub[1] \\
+		(w_1*w_2)\rhd q &=& w_1\rhd(w_2\rhd q)
+		& \quad\text{for all }q\in\bunsub[1],\;w_1,w_2\in\Word\sizen_+
+	\end{array}\end{equation*}
+	}
+	$\bunsub[1]$の連分数表示は、写像$\phi:\bunsub[1]\to\Word\sizen_+$で
+	$(-\rhd1)\phi=\id$となるもので与えられる。例えば、$\phi$は次のようになる。
+	\begin{equation*}\begin{split}
+		\phi\cfrac{1}{2} = \phi\cfrac{1}{1 + 1} = [1]
+		,\quad \phi\cfrac{1}{3} = \phi\cfrac{1}{2 + 1} = [2]
+		,\quad \phi\cfrac{2}{3} = \phi\cfrac{1}{1 + \cfrac{1}{1 + 1}} = [1,1]
+	\end{split}\end{equation*}
+	$\phi$を再帰を使って書くと次のようになる。
+	\begin{equation}\label{eq:連分数表示の符号化}\begin{split}
+		\phi\cfrac{m}{n} := \left\{\begin{split}
+			m = n &\implies 1_\Word \\
+			\pi_mn = 0 &\implies [\cfrac{n}{m} - 1] \\
+			\text{else} &\implies (\pi_\sizen\cfrac{n}{m}) * \phi\cfrac{\pi_mn}{m} \\
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation}
+	再帰の分子の部分が$m\mapsto\pi_mn$と推移するが、$\pi_mn<m$だから、
+	再帰の分子の部分は$1$に向かって単調減少していく。したがって、$\phi(m/n)$の
+	再帰は$m$回以下の繰り返しで終了する。また、条件$(-\rhd1)\phi=\id$が
+	成り立つことは、任意の$m<n\in\sizen_+$に対して次の式、
+	\begin{equation*}\begin{split}
+		(-\rhd1)\phi\cfrac{m}{n} = \begin{cases}
+			\cfrac{m}{n}, &\text{ iff } \pi_mn = 0 \\
+			[\pi_\sizen\cfrac{n}{m}]\rhd(\phi\cfrac{\pi_mn}{m})\rhd1, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation*}
+	と次の式から、
+	\begin{equation*}\begin{split}
+		(\phi\cfrac{\pi_mn}{m})\rhd1 = \cfrac{\pi_mn}{m}
+		\implies [\pi_\sizen\cfrac{n}{m}]\rhd(\phi\cfrac{\pi_mn}{m})\rhd1
+		= \cfrac{1}{\pi_\sizen\cfrac{n}{m} + \cfrac{\pi_mn}{m}}
+		= \cfrac{m}{n}
+	\end{split}\end{equation*}
+	$\phi(m/n)$の文字列の長さについての帰納法で証明できる。
+	さらに、$-\rhd1$が$1:1$となることか、$\phi$が$\onto$になることが示されば、
+	$\phi$と$-\rhd1$が互いに逆な同型写像となることが示される。
+	\begin{equation*}\begin{split}
+		\xymatrix @R=4pt {
+			\bunsub[1] \ar@<1ex>[r]^{\phi} & \Word\sizen_+ \ar@<1ex>[l]^{-\rhd1} \\
+			& \bullet \ar@<-1ex>[ld] \\
+			\bullet \ar@<1ex>[r] & \bullet \ar@<1ex>[l] \\
+		}\quad\text{$-\rhd1$が$1:1$もしくは$\phi$が$\onto$でない場合}
+	\end{split}\end{equation*}
+	ここでは、$-\rhd1$が$1:1$であることを示す。次の式が成り立つことから、
+	\begin{equation*}\begin{split}
+		\big((n*w)\rhd1\big)^{-1} = n + w\rhd1
+	\end{split}\end{equation*}
+	任意の$m_1,m_2\in\sizen_+$
+	と$w_1,w_2\in\Word\sizen_+$に対して次の式が成り立つことがわかり、
+	\begin{equation*}\begin{split}
+		(m_1*w_1)\rhd1 = (m_2*w_2)\rhd1
+		\implies m_1 + w_1\rhd1 = m_2 + w_2\rhd1 \\
+		\implies \left\{\begin{split}
+			w_1=1_\Word &\implies m_1+1=m_2+w_2\rhd1 \\
+				&\implies w_2=1_\Word \text{ and } m_1=m_2 \\
+			w_2=1_\Word &\implies m_1+w_1\rhd1=m_2+1 \\
+				&\implies w_1=1_\Word \text{ and } m_1=m_2 \\
+			\text{else} &\implies w_1\rhd1<1 \text{ and } w_2\rhd1<1 \\
+				&\implies m_1=m_2 \text{ and } w_1\rhd1=w_2\rhd1
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation*}
+	$-\rhd1$が$1:1$になることが、文字数について帰納的に示される。
+	このことを命題の形でまとめておく。
+
+	\begin{proposition}[連分数表示の同型性]\label{prop:連分数表示の同型性} %{
+		次の集合同型が成り立つ。
+		\begin{equation*}\label{eq:連分数表示の同型性}\begin{split}
+			\bunsub[1] \xto[\simeq]{\phi} \Word\sizen_+\xto[\simeq]{-\rhd1} \bunsub[1]
+		\end{split}\end{equation*}
+	\end{proposition} %prop:連分数表示の同型性}
+	\begin{proof} 上記
+	\end{proof}
+
+	この命題と集合同型$\sizen\simeq\Word_+\sizen$
+	\eqref{eq:k進表示から導かれるゲーデル関数}から、
+	自然数と有理数の間の次の集合同型が導かれる。
+	\begin{equation*}\begin{split}
+		\sizen 
+		\xto[\simeq]{\Word_+\rho_k^{-1}\sigma_{k+1}\rho_{k+1}} \Word_+\sizen
+		\xto[\simeq]{\Word_+(1+)} \Word_+\sizen_+
+		\xto[\simeq]{-\rhd1} \bunsub[1] - \mybf{1}
+	\end{split}\end{equation*}
+	ここで、写像$(1+):\sizen\to\sizen_+$を$(1+)m=m+1$とした。
+	この集合同型は次のようになって、
+	\begin{equation*}\begin{split}
+		0\mapsto \cfrac{1}{2},\quad 1\mapsto \cfrac{1}{3}
+	\end{split}\end{equation*}
+	バランスが悪いので、もう少し改良することにする。
+	写像$\psi:\Word_+\sizen\to\Word\sizen_+$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\left\{\begin{array}{rrrc}
+			\,[0] & [1] & [2] & \cdots \\
+			\,[0,0] & [1,0] & [2,0] & \cdots \\
+			\,[0,1] & [1,1] & [2,1] & \cdots \\
+		\end{array}\right\}\xto{\psi} \left\{\begin{array}{rrrc}
+			1_\Word & [1] & [2] & \cdots \\
+			\,[1,1] & [1,1] & [2,1] & \cdots \\
+			\,[1,2] & [1,2] & [2,2] & \cdots \\
+		\end{array}\right\}
+	\end{split}\end{equation*}
+	$\psi$を式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\psi w = \begin{cases}
+			1_\Word, &\text{ iff } w = [0] \\
+			[n], &\text{ iff } w = [n] \text{ with } n\in\sizen_+ \\
+			[(n_1+1)\cdots(n_p+1)], &\text{ otherwise } w = [n_1\cdots n_p] \\
+		\end{cases}
+	\end{split}\end{equation*}
+	$\psi$は同型写像になるので、
+	連分数表示の同型性\ref{prop:連分数表示の同型性}より、
+	次の集合同型が成り立つことがわかる。
+	\begin{equation}\label{eq:自然数と有理数の集合同型}\begin{split}
+		\sizen 
+		\xto[\simeq]{(\Word_+\rho_k^{-1})\sigma_{k+1}\rho_{k+1}} \Word_+\sizen
+		\xto[\simeq]{\psi} \Word\sizen_+
+		\xto[\simeq]{-\rhd1} \bunsub[1]
+	\end{split}\end{equation}
+	この集合同型は次のようになる。
+	\begin{equation*}\begin{array}{rrcr}
+		0\mapsto 1, & 1\mapsto \cfrac{1}{2}, & \dots,
+			& k - 1\mapsto \qquad\cfrac{1}{k} \\
+		k\mapsto \cfrac{2}{3}, & k + 1 \mapsto \cfrac{3}{7}, &\dots,
+			& 2k - 1\mapsto \cfrac{3}{3k + 1} \\
+		2k\mapsto \cfrac{3}{4}, & 2k + 1 \mapsto \cfrac{4}{9}, &\dots,
+			& 3k - 1\mapsto \cfrac{4}{4k + 1} \\
+	\end{array}\end{equation*}
+	\begin{equation*}\begin{split}
+	\end{split}\end{equation*}
+%s2:連分数表示}
+\subsection{ユークリッドの互除法}\label{s2:ユークリッドの互除法} %{
+	ユークリッドの互除法とは、二つの自然数の最大公約数を求める方法である。
+	$1\le m<n$の最大公約数$\gcd(m,n)$は、$(m,n)$の長方形を埋め尽くす最大の
+	正方形としてみることができる。例えば、$(6,9)$の長方形は辺が$3$の正方形
+	$6$枚で埋め尽くされる。
+
+	ユークリッドの互除法は次の命題を繰り返し適用して最大公約数を求める方法
+	である。
+
+	\begin{proposition}[ユークリッドの互除法]
+	\label{prop:ユークリッドの互除法} %{
+		任意の自然数$1\le m<n$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\gcd(m,n) = \begin{cases}
+				m, &\text{ iff } \pi_mn = 0 \\
+				\gcd(\pi_mn,m), &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:ユークリッドの互除法}
+	\begin{proof} $\pi_mn=0$のときに命題が成り立つことはすぐわかるので、
+	$\pi_mn\neq0$とする。
+	$g:=\gcd(m,n)$、$h:=\gcd(\pi_mn,m)$とする。
+	$n$を$m$で割った商を$q$とすると、$n=qm+\pi_mn$と書ける。
+	次の二つの式から命題が成り立つことがわかる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		n=qm+\pi_mn &\implies& \pi_mn = n-qm\in g\sizen_+ \\
+		&\implies& h = \gcd(\pi_mn,m) \in g\sizen_+ 
+			& \because\; \gcd(g,m)=g=\gcd(g,n) \\
+		n=qm+\pi_mn &\implies& n\in h\sizen_+ \\
+		&\implies& g = \gcd(m,n) \in h\sizen_+
+			& \because\; \gcd(h,m)=g=\gcd(h,\pi_mn) \\
+	\end{array}\end{equation*}
+	}
+	\end{proof}
+
+	この命題から、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 全順序集合$A=(A,\le)$に対して、直積の部分集合
+		$A<A\subset A\times A$を次のように定義し、
+		\begin{equation*}\begin{split}
+			A<A := \set{(a,b)\in A\times A \bou a<b}
+		\end{split}\end{equation*}
+		\item 写像$\gamma:\sizen_+<\sizen_+\to\sizen<\sizen_+$を次のように
+		定義すると、
+		\begin{equation*}\begin{split}
+			\gamma(m,n) := (\pi_mn,m)
+		\end{split}\end{equation*}
+	\end{itemize} %}
+	任意の自然数$1\le m<n$に対して、$m$と$n$の最大公約数$\gcd(m,n)$は次の
+	ようにして求まる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation}\label{eq:ユークリッドの互除法}\begin{array}{ccccccc}
+		\bigl(m,n\bigr) &\xto{\gamma}& \bigl(\pi_mn,m\bigr)
+		&\xto{\gamma}& \cdots &\xto{\gamma}& \bigl(0,\gcd(m,n)\bigr) \\
+		\sizen_+<\sizen_+ && \sizen_+<\sizen_+ && \cdots && \sizen<\sizen_+ \\
+	\end{array}\end{equation}
+	}
+	この系列に現れる数列$(m_i,n_i)\bou i\in0..p$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		(m_0,n_0) &:= (m,n) \\
+		(m_1,n_1) &:= (\pi_{m_0}n_0,m_0) \\
+		\vdots \\
+		(m_p,n_p) &:= (\pi_{m_{p-1}}n_{p-1},m_{p-1}) = \bigl(0, \gcd(m,n)\bigr) \\
+	\end{split}\end{equation*}
+	定義より、$m_{i+1}<m_i$かつ$n_{i+1}<n_i$となって、数列$(m_i,n_i)$は両方
+	の成分共に強い単調減少になっていることがわかる。したがって、系列
+	\eqref{eq:ユークリッドの互除法}は長さは$m+1$以下になる。したがって、
+	割り算の余りを高々$m$回求めれば、$m$と$n$の最大公約数が求まる。
+	この最大公約数の求め方をユークリッドの互除法という。
+
+	ユークリッドの互除法を行列を使って書いてみる。
+	任意の自然数$1\le m<n$に対して、$n$を$m$で割った商を$q$とすると、
+	$n=qm+\pi_mn$と書け、写像$(n,m)\mapsto(m,\pi_mn)$は次のような行列で
+	書くことができる。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			m \\
+			\pi_mn \\
+		\end{pmatrix} = \begin{pmatrix}
+			0 & 1 \\
+			1 & -q \\
+		\end{pmatrix} \begin{pmatrix}
+			n \\
+			m \\
+		\end{pmatrix} \iff \begin{pmatrix}
+			n \\
+			m \\
+		\end{pmatrix} = \begin{pmatrix}
+			q & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix}
+			m \\
+			\pi_mn \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	したがって、次のように定義された漸化式$(n_i,m_i)\in\sizen_+>\sizen$に
+	よってもユークリッドの互除法が得られる。
+	\begin{equation}\label{eq:行列によるユークリッドの互除法}\begin{split}
+		\begin{pmatrix}
+			n_i \\
+			m_i \\
+		\end{pmatrix} &= \begin{pmatrix}
+			\pi_\sizen\frac{n_i}{m_i} & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix}
+			n_{i+1} \\
+			m_{i+1} \\
+		\end{pmatrix},\quad \begin{pmatrix}
+			n_0 \\
+			m_0 \\
+		\end{pmatrix} = \begin{pmatrix}
+			n \\
+			m \\
+		\end{pmatrix}
+	\end{split}\end{equation}
+	この漸化式はある$p\le m$があって次の形で終了する。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			n \\
+			m \\
+		\end{pmatrix} = \begin{pmatrix}
+			q_1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \cdots \begin{pmatrix}
+			q_p & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix}
+			\gcd(m, n) \\
+			0 \\
+		\end{pmatrix} \text{ where} \\
+		q_1,\dots,q_{p-1}\in\sizen_+,\;q_p\in\sizen_+-\set{1}
+	\end{split}\end{equation*}
+	最後の$q_p$だけが$2$以上になるのは、次の式より、
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			q & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix}
+			n \\
+			0 \\
+		\end{pmatrix} = \begin{pmatrix}
+			qn \\
+			n \\
+		\end{pmatrix} \quad\text{for all }q,m\in\sizen_+
+	\end{split}\end{equation*}
+	$(qn,n)\in\sizen_+>\sizen\implies q=1$となるからである。
+	また、漸化式\eqref{eq:行列によるユークリッドの互除法}の定義より、
+	任意の$(n,m)\in\sizen_+>\sizen$と$g\in\sizen_+$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			n \\
+			m \\
+		\end{pmatrix} = \begin{pmatrix}
+			q_1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \cdots \begin{pmatrix}
+			q_p & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix}
+			\gcd(m, n) \\
+			0 \\
+		\end{pmatrix} \\
+		\implies g\begin{pmatrix}
+			n \\
+			m \\
+		\end{pmatrix} = \begin{pmatrix}
+			q_1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \cdots \begin{pmatrix}
+			q_p & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix}
+			g\gcd(m, n) \\
+			0 \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	右辺のベクトルに$g$が掛かるのは、ユークリッドの互除法が最大公約数を
+	求める方法なので当然だが、右辺の行列の系列は約数$g$に依存しない。
+	このことは、後述の連分数表示\eqref{eq:行列による連分数表示の符号化}と
+	関係する。
+
+	\begin{example}[ユークリッドの互除法の例]
+	\label{eg:ユークリッドの互除法の例} %{
+		$(6,9)$の最大公約数$3$は次のようにして求まる。
+		\begin{equation*}\begin{split}
+			\begin{pmatrix}
+				9 \\
+				6 \\
+			\end{pmatrix} = \begin{pmatrix}
+				1 & 1 \\
+				1 & 0 \\
+			\end{pmatrix} \begin{pmatrix}
+				6 \\
+				3 \\
+			\end{pmatrix} = \begin{pmatrix}
+				1 & 1 \\
+				1 & 0 \\
+			\end{pmatrix}\begin{pmatrix}
+				2 & 1 \\
+				1 & 0 \\
+			\end{pmatrix} \begin{pmatrix}
+				3 \\
+				0 \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+	\end{example} %eg:ユークリッドの互除法の例}
+
+	ユークリッドの互除法\eqref{eq:行列によるユークリッドの互除法}と
+	連分数表示$\phi$\eqref{eq:連分数表示の符号化}は$\pi_mn=0$となるときを
+	除いて同じ行列の系列で表される。$\phi$はメビウス変換の形で書くと
+	次のようになる。
+	\begin{equation}\label{eq:行列による連分数表示の符号化}\begin{split}
+		\cfrac{n_i}{m_i}
+		&= \begin{pmatrix}
+			q_{i+1} & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \cfrac{n_{i+1}}{m_{i+1}}
+		\quad\text{ where } q_{i+1} = \begin{cases}
+			\cfrac{n_i}{m_i} - 1, &\text{ iff } \pi_{m_i}n_i = 0 \\
+			\pi_\sizen\cfrac{n_i}{m_i}, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation}
+	$\phi$の場合は、最後の$\pi_mn=0$のところを含めて考えると、
+	漸化式の定義域が$(n_i,m_i)\in\sizen_+\ge\sizen_+$となり、
+	ユークリッドの互除法の場合と異なる定義域となる。
+
+	\begin{example}[連分数表示の例]\label{eg:連分数表示の例} %{
+		ユークリッドの互除法の例\ref{eg:ユークリッドの互除法の例}との対比で、
+		$9/6$の連分数表示$\phi$は次のようにして求まる。
+		\begin{equation*}\begin{split}
+			\cfrac{9}{6} = \begin{pmatrix}
+				1 & 1 \\
+				1 & 0 \\
+			\end{pmatrix} \cfrac{6}{3} = \begin{pmatrix}
+				1 & 1 \\
+				1 & 0 \\
+			\end{pmatrix}\begin{pmatrix}
+				1 & 1 \\
+				1 & 0 \\
+			\end{pmatrix} \cfrac{3}{3} \implies \cfrac{6}{9} = \cfrac{1}{1 + \cfrac{1}{1 + 1}}
+		\end{split}\end{equation*}
+		文字列で書くと$\phi(6/9)=[1,1]$となる。
+	\end{example} %eg:連分数表示の例}
+
+	ユークリッドの互除法\eqref{eq:行列によるユークリッドの互除法}をそのまま
+	使って連分数表示を定義することもできる。その場合は、最後の$\pi_mn=0$の
+	ところで異なる連分数表示を与える。
+
+	$\bunsub[0]=\bun\cap[0,1)$とし、$\mycal{X}_1\sizen_+\subset\Word\sizen$を
+	右端の文字が$1$でない文字列の集合とする。$\mycal{X}_1\sizen_+$を
+	BNF形式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\mycal{X}_1\sizen_+ = 1_\Word + \Word\sizen_+(\sizen_+-\set{1})
+	\end{split}\end{equation*}
+	写像$\unrhd:\mycal{X}_1\sizen_+\times\bunsub[0]\to\bunsub[0]$を
+	次のように定義する。
+	\begin{equation}\label{eq:連分数表示の復号化その二}\begin{split}
+		1_\Word\unrhd q &:= q \\
+		(n*w)\unrhd q &:= \cfrac{1}{n + w\unrhd q} 
+		\quad\text{for all }n\in\sizen_+,\;w\in\mycal{X}_1\sizen_+
+	\end{split}\end{equation}
+	写像$\psi:\bunsub[0]\to\mycal{X}_1\sizen_+$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\psi\cfrac{m}{n} := \left\{\begin{split}
+			m = 0 &\implies 1_\Word \\
+			\text{else} &\implies (\pi_\sizen\cfrac{n}{m}) * \phi\cfrac{\pi_mn}{m} \\
+		\end{split}\right. %\}
+		\quad\text{for all }m<n\in\sizen
+	\end{split}\end{equation*}
+	この定義から、任意の$q\in\bunsub[0]-\set{0}$に対して$\psi q$の右端の文字
+	が$2$以上になることは見えにくいが、次の式から、
+	$\psi q$の右端の文字が$2$以上になることがわかる。
+	\begin{equation*}\begin{split}
+		0 < m < n \text{ and } \pi_mn = 0
+		\implies 2\le \pi_\sizen\frac{n}{m}
+	\end{split}\end{equation*}
+	そして、次の式から$(-\unrhd0)\psi=\id$が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		(\psi\cfrac{m}{n})\unrhd0 := \left\{\begin{split}
+			m = 0 &\implies 0 \\
+			\text{else} &\implies \cfrac{1}{(\pi_\sizen\cfrac{n}{m}) + (\phi\cfrac{\pi_mn}{m})\unrhd0} \\
+		\end{split}\right. %\}	
+	\end{split}\end{equation*}
+	したがって、$\psi(-\unrhd0)=\id$となることを信じれば、次の集合同型が
+	成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\bunsub[0] \xto[\simeq]{\psi} \mycal{X}_1\sizen_+\xto[\simeq]{-\unrhd0} \bunsub[0]
+	\end{split}\end{equation*}
+	また、写像$\alpha:\bunsub[1]\to\bunsub[0]$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\alpha q = \begin{cases}
+			0, &\text{ iff } q = 1 \\
+			q, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation*}
+	$\alpha$は同型写像となり、写像$\beta:\Word\sizen_+\to\mycal{X}_1\sizen_+$
+	を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\beta w = \begin{cases}
+			1_\Word, &\text{ iff } 1_\Word \\
+			x * (n + 1), &\text{ otherwise } w = x * n
+			\text{ with } x\in \Word\sizen_+ \\
+		\end{cases}
+	\end{split}\end{equation*}
+	$\beta$は同型写像となる。したがって、集合同型
+	\eqref{eq:自然数と有理数の集合同型}から、次の集合同型が成り立つことが
+	わかる。
+	\begin{equation*}\xymatrix@C=10em{
+		\sizen \ar[r]^{r_k}_\simeq
+			& \Word\sizen_+ \ar[d]^{\beta}_\simeq \ar[r]^{-\rhd1}_\simeq
+			&  \bunsub[1]\ar[d]^{\alpha}_\simeq \\
+		& \mycal{X}_1\sizen_+ \ar[r]^{-\unrhd0}_\simeq & \bunsub[0] \\
+	}\end{equation*}
+	ここで、$r_k:=(\Word_+\rho_k^{-1})\sigma_{k+1}\rho_{k+1}$とおいた。
+	さらに、カントルのペアリング関数$g\sizen\simeq\sizen\times\sizen$
+	\ref{eg:カントルのペアリング関数}を用いると、次の集合同型が成り立つことが
+	わかる。
+	\begin{equation*}\begin{split}
+		\sizen \xto[\simeq]{g} \sizen\times\sizen
+		\xto[\simeq]{\id\times r_k} \sizen\times\Word\sizen_+
+		\xto[\simeq]{\id\times\alpha(-\rhd1)} \sizen\times\bunsub[0]
+		\xto[\simeq]{+} |\bun|
+	\end{split}\end{equation*}
+	このことを命題の形でまとめておく。
+
+	\begin{proposition}[自然数と有理数の集合同型]
+	\label{prop:自然数と有理数の集合同型} %{
+		次の集合同型が成り立つ。
+		\begin{equation*}\begin{split}
+			\bunsub[0] \simeq \sizen \simeq |\bun|
+		\end{split}\end{equation*}
+	\end{proposition} %prop:自然数と有理数の集合同型}
+	\begin{proof} 上記
+	\end{proof}
+
+	$\phi:\bunsub[1]\to\Word\sizen_+$と
+	$\psi:\bunsub[0]\to\mycal{X}_1\sizen_+$の二つの連分数表示の違いは
+	次のようになる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{ccccccccccc}
+		\phi $:\quad$
+		\cfrac{9}{6} &=& \begin{pmatrix}
+			1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \cfrac{6}{3} &=& \begin{pmatrix}
+			1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix}\begin{pmatrix}
+			1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \cfrac{3}{3}
+		&\implies& \cfrac{6}{9} &=& \cfrac{1}{1 + \cfrac{1}{1 + 1}} \\
+		\psi $:\quad$
+		\begin{pmatrix} 9 \\6 \end{pmatrix} &=& \begin{pmatrix}
+			1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix} 6 \\3 \end{pmatrix} &=& \begin{pmatrix}
+			1 & 1 \\
+			1 & 0 \\
+		\end{pmatrix}\begin{pmatrix}
+			2 & 1 \\
+			1 & 0 \\
+		\end{pmatrix} \begin{pmatrix} 3 \\0 \end{pmatrix}
+		&\implies& \cfrac{6}{9} &=& \cfrac{1}{1 + \cfrac{1}{2}} \\
+	\end{array}\end{equation*}
+	}
+	この二つの違いは、次の連分数表示の曖昧さに由来する。
+	\begin{equation*}\begin{split}
+		\cfrac{1}{1 + \cfrac{1}{1}} = \cfrac{1}{2}
+	\end{split}\end{equation*}
+	$\phi$は左辺の表示方法をとり、$\psi$は右辺の表示方法をとることで
+	この曖昧さを回避している。
+%s2:ユークリッドの互除法}
+\subsection{一次分数変換}\label{s2:一次分数変換} %{
+	\begin{definition}[一次分数変換]\label{def:一次分数変換} %{
+		$a,b,c,d\in\jitu$で定義される次の写像$\mu$を一次分数変換または
+		メビウス変換といい、
+		\begin{equation*}\begin{split}
+			x \mapsto \cfrac{ax+b}{cx+d}
+		\end{split}\end{equation*}
+		行列を用いて次のように書く。
+		\begin{equation*}\begin{split}
+			\mu x = \begin{pmatrix}
+				a & b \\
+				c & d \\
+			\end{pmatrix}x
+		\end{split}\end{equation*}
+	\end{definition} %def:一次分数変換}
+
+	分数に対して一次分数変換を施すと行列で書く意味が見えてくる。
+	射影$p:\jitu\times(\jitu-\set{0})\to\jitu$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		p(x,y) := \cfrac{x}{y} 
+	\end{split}\end{equation*}
+	次の式から、
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+				a & b \\
+				c & d \\
+		\end{pmatrix}\cfrac{x}{y}
+		= \cfrac{a\cfrac{x}{y} + b}{c\cfrac{x}{y} + d}
+		= \cfrac{ax + by}{cx + dy}
+	\end{split}\end{equation*}
+	次の関係が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			a & b \\
+			c & d \\
+		\end{pmatrix}\cfrac{x}{y} = p \begin{pmatrix}
+				a & b \\
+				c & d \\
+		\end{pmatrix}\begin{pmatrix}
+			x \\
+			y \\
+		\end{pmatrix}
+		\text{ iff } cx + dy \neq 0
+	\end{split}\end{equation*}
+	分母が$0$になる場合を無視すると、次の可換図のイメージになる。
+	\begin{equation*}\xymatrix{
+		\jitu^2 \ar[r]^p \ar[d]^f & \jitu \ar[d]^{\hat{f}} \\
+		\jitu^2 \ar[r]^p & \jitu \\
+	} \quad\text{for all linear trans. } f \text{ and corresponding mebius trans. }\hat{f}
+	\end{equation*}
+%s2:一次分数変換}
+\subsection{カントルの対角線論法}\label{s2:カントルの対角線論法} %{
+	\begin{proposition}[カントルの対角線論法]
+	\label{prop:カントルの対角線論法} %{
+		$S$を大きさ$2$以上の集合とする。
+		$\onto$写像$\sizen\to\prod_\sizen S$は存在しない。
+	\end{proposition} %prop:カントルの対角線論法}
+	\begin{proof} $\braket{2}=\set{0,1}$として$\onto$写像
+	$\sizen\to\prod_\sizen\braket{2}$が存在しないことが証明できれば、
+	命題が証明される。
+
+	任意の$\phi:\sizen\to\prod_\sizen\braket{2}$に対して、
+	$f\neq\im\phi$となる$f\in\sizen\to\braket{2}$を次のようにして見つける
+	ことができる。
+	\begin{equation*}\begin{split}
+		\begin{array}{c|cccc}
+			& 0 & 1 & 2 & \cdots \\ \hline
+			\phi0 & \underline{(\phi0)0} & (\phi0)1 & (\phi0)2 & \cdots \\
+			\phi1 & (\phi1)0 & \underline{(\phi1)1} & (\phi1)2 & \cdots \\
+			\phi2 & (\phi2)0 & (\phi2)1 & \underline{(\phi2)2} & \cdots \\
+			\vdots & \vdots & \vdots & \vdots & \cdots \\ \hline
+			f & \jump{(\phi0)0=0} & \jump{(\phi1)1=0} & \jump{(\phi2)2=0} & \cdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		f n := \jump{(\phi n)n=0} \quad\text{for all }n\in\sizen
+	\end{split}\end{equation*}
+	したがって、$\sizen$から$\prod_\sizen\braket{2}$への$\onto$写像が
+	存在しないことがわかる。
+	\end{proof}
+%s2:カントルの対角線論法}
+%s1:数と文字列}
+
+\section{ゲーデル関数}\label{s1:ゲーデル関数} %{
+	\begin{definition}[ゲーデル関数]\label{def:ゲーデル関数} %{
+		同型写像$\sizen^n\to\sizen \quad(2\le n)$を一般にゲーデル関数という
+		\footnote{
+			ゲーデル関数はゲーデル数と訳されることもあるようだが、
+			ここでは、教科書\cite{takahashi:keisan}にならってゲーデル関数という
+			ことにする。
+		}。
+	\end{definition} %def:ゲーデル関数}
+
+	\begin{example}[カントルのペアリング関数]
+	\label{eg:カントルのペアリング関数} %{
+		写像$g:\sizen^2\to\sizen$を次のように定義する。
+		\begin{equation*}\begin{split}
+			g(x, y) = \frac{1}{2}(x+y)(x+y+1) + y
+			\quad\text{for all }x,y\in\sizen
+		\end{split}\end{equation*}
+		次の表からわかるように、$g$は同型写像になる。
+		\begin{equation*}\begin{array}{c|cccccc}
+			x\backslash y & 0 & 1 & 2 & 3 & 4 & \cdots \\ \hline
+			0 & 0 & 2 & 5 & 9 & 14 & \cdots \\
+			1 & 1 & 4 & 8 & 13 & \cdots \\
+			2 & 3 & 7 & 12 & \cdots \\
+			3 & 6 & 11 & \cdots \\
+			4 & 10 & \cdots \\
+			\vdots & \cdots \\
+		\end{array}\end{equation*}
+		$g$をカントルのペアリング関数という。
+	\end{example} %eg:カントルのペアリング関数}
+%s1:ゲーデル関数}
+\endgroup %}

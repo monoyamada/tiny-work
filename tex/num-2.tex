@@ -1,0 +1,665 @@
+\begingroup %{
+	\newcommand{\Hom}{\myop{Hom}}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Auto}{\myop{Auto}}
+	\newcommand{\Pow}{\mycal{P}}
+	\newcommand{\Word}{\mycal{W}}
+	\newcommand{\Forget}{\mycal{U}}
+	\newcommand{\id}{\myop{id}}
+	\newcommand{\dup}{\myop{du}}
+	\newcommand{\onto}{\myop{onto}}
+	\newcommand{\im}{\myop{im}}
+	\newcommand{\spanall}{\myop{span}}
+	\newcommand{\rank}{\myop{rank}}
+	\newcommand{\tr}{\myop{tr}}
+	\newcommand{\ofm}{only finitely many }
+	%\newcommand{\bunsub}{{\mybf{P}}}
+	\newcommand{\bunsub}{{|\bun|_0}}
+
+\section{数と文字列}\label{s1:数と文字列} %{
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[自然数の部分集合] $0$から$m-1$までの自然数の部分集合を$\braket{m}$
+		と書く。
+		\begin{equation*}\begin{split}
+			\braket{m} := \set{p\in\sizen\bou 0\le p< m}
+		\end{split}\end{equation*}
+		また、$m$から$n$までの自然数の集合を$m..n$と書くこともある。
+		\begin{equation*}\begin{split}
+			m..n := \set{p\in\sizen\bou m\le p\le n}
+		\end{split}\end{equation*}
+		%
+		\item[自然数の割り算]　負でない実数または有理数$x$の自然数部分を
+		$\pi_\sizen x$と書く。
+		また、自然数$n$を$m\ge1$で割った余りを$\pi_mn$と書く。
+		$\pi_m$と$\pi_\sizen$は次の関係になっている。
+		\begin{equation*}\begin{split}
+			n = \pi_mn + m\pi_\sizen m^{-1}n
+			\quad\text{for all }n\in\sizen,\;m\in\sizen_+
+		\end{split}\end{equation*}
+	\end{description} %}
+\subsection{自然数のk進表示}\label{s2:自然数のk進表示} %{
+	任意の自然数$n$を自然数$k\ge2$を用いて、次のような数列
+	$n_0,n_1,n_2,\dots\in\braket{k}$で表示することを$n$の$k$進表示という。
+	\begin{equation}\label{eq:自然数のk進表示}\begin{split}
+		n = \sum_{i\in\sizen}n_ik^i
+	\end{split}\end{equation}
+	右辺の級数は無限ではなく、ある$p\in\sizen\bou k^p\le n<k^{p+1}$以降
+	の係数はすべて$0$になり、次のように書ける。
+	\begin{equation*}\begin{split}
+		n = \sum_{i=0}^{\pi_\sizen\log_k n}n_ik^i
+	\end{split}\end{equation*}
+	しかし、$0$でない係数の範囲を明示するのは煩雑なので、
+	式\eqref{eq:自然数のk進表示}のように、$0$でない係数の上限を明示せずに
+	書くことにする。
+
+	自然数$n$の$k$進表示は、割り算の商と余りを使って、次のように書くことが
+	できて、
+	\begin{equation*}\begin{split}
+		n = n_0 + k\sum_{i\in\sizen}n_{i+1}k^i = \pi_kn + k\pi_\sizen k^{-1}n
+	\end{split}\end{equation*}
+	その係数$n_0,n_1,\dots\in\braket{k}$は次のようになることがわかる。
+	\begin{equation*}\begin{split}
+		n_0 &= \pi_kn \\
+		n_1 &= \pi_k\pi_\sizen k^{-1}n \\
+		\vdots \\
+		n_i &= \pi_k(\pi_\sizen k^{-1})^in \\
+		\vdots \\
+	\end{split}\end{equation*}
+	ここで、次の式が成り立つので、
+	\begin{equation*}\begin{split}
+		(\pi_\sizen k^{-1})^in = \pi_\sizen k^{-i}n
+		\quad\text{for all }n,i\in\sizen
+	\end{split}\end{equation*}
+	$k$進数表示は次のように書くことができることがわかる。
+	\begin{equation}\label{eq:自然数のk進表示その二}\begin{split}
+		n = \sum_{i\in\sizen}k^i\pi_k\pi_\sizen k^{-i}n 
+		\quad\text{for all }n\in\sizen
+	\end{split}\end{equation}
+
+	自然数の$k$進数表示を、集合$\braket{k}$から生成される自由モノイド
+	$\Word\braket{k}$への写像として解釈すると、次の写像
+	$\nu_k:\sizen\to\Word\braket{k}$によっても自然数の$k$進数表示を定義する
+	ことができる。
+	\begin{equation}\label{eq:自然数のk進表示符号化}\begin{split}
+		\nu_k n = \left\{\begin{split}
+			n = 0 &\implies 1_\Word \\
+			1\le n < k &\implies [n] \\
+			\text{else} &\implies (\pi_kn) * (\nu_k\pi_\sizen k^{-1}n) \\
+		\end{split}\right. \\ %\}
+	\end{split}\end{equation}
+	写像$\nu_k$を自然数の$k$進表示への符号化ということにする。
+	写像$\nu_k^\dag:\Word\braket{k}\to\sizen$を次のように定義すると、
+	\begin{equation}\label{eq:自然数のk進表示復号化}\begin{split}
+		\nu_k^\dag1_\Word &= 0 \\
+		\nu_k^\dag(m*w) &= m + k\nu_k^\dag w
+		\quad\text{for all }m\in\braket{k},\;w\in \Word\braket{k}
+	\end{split}\end{equation}
+	$\nu_k^\dag\nu_k=\id_{\sizen}$が成り立つ。
+	したがって、写像$\nu_k^\dag$を自然数の$k$進数表示への復号化ということに
+	する。自然数の$k$進表示は可逆な符号化になっている。
+
+	\begin{proof} $\nu_k^\dag\nu_k=\id_\sizen$を証明する。
+	自然数の部分集合
+	\begin{equation*}\begin{split}
+		\braket{k}\subset\braket{k^2}\subset\braket{k^3}\subset\cdots\subset\sizen
+	\end{split}\end{equation*}
+	についての帰納法で証明する。まず、任意の$n\in\braket{k}$に対して
+	$\nu_k^\dag\nu_kn=n$が成り立つことがわかる。ある$p\in\sizen_+$で、
+	任意の$n\in\braket{k^p}$に対して$\nu_k^\dag\nu_kn=n$が成り立つとする。
+	すると、任意の$n\in\sizen$に対して次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\nu_k^\dag\nu_kn 
+		= \nu_k^\dag\bigl((\pi_kn) * (\nu_k\pi_\sizen k^{-1}n)\bigr)
+		= \pi_kn + k\nu_k^\dag\nu_k\pi_\sizen k^{-1}n
+	\end{split}\end{equation*}
+	任意の$n\in\braket{k^{p+1}}$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\nu_k^\dag\nu_kn = \pi_kn + k\nu_k^\dag\nu_k\pi_\sizen k^{-1}n
+	\end{split}\end{equation*}
+	$\pi_\sizen k^{-1}n\in\braket{k^{p}}$だから、帰納法の仮定より、
+	\begin{equation*}\begin{split}
+		\nu_k^\dag\nu_kn = \pi_kn + k\pi_\sizen k^{-1}n = n
+	\end{split}\end{equation*}
+	となり、任意の$\braket{k^{p+1}}$の元に対しても$\nu_k^\dag\nu_k=\id$
+	が成り立つことがわかる。
+	\end{proof}
+
+	一方、文字列の右端に並ぶ$0$による冗長性によって、
+	$\nu_k\nu_k^\dag\neq\id_{\Word\braket{k}}$となることに注意する。
+	\begin{equation*}\begin{split}
+		m = \nu_k^\dag[m] = \nu_k^\dag[m,0] = \nu_k^\dag[m,0,0] = \cdots
+		\quad\text{for all }m\in\braket{k}
+	\end{split}\end{equation*}
+	集合同型になる$k$進表示符号化については後の節
+	\ref{s2:集合同型な自然数のk進表示}で考えることにする。
+
+\subsubsection{自然数のk進表示での加法}\label{s3:自然数のk進表示での加法} %{
+	k進表示での加法がどのように表されるか考える。小学校以来使ってきた表による
+	加法の処理を導き出すことが目標である。
+
+	次の畳み込みによって$\Word\braket{k}$に加法$+$を定義すると、
+	復号化$\nu_k^\dag$が加法について準同型になる。
+	\begin{equation*}\xymatrix@C=8ex{
+		\Word\braket{k}\times \Word\braket{k}
+			\ar@{.>}[r]^{+} \ar[d]_{\nu_k^\dag\times\nu_k^\dag} 
+			& \Word\braket{k} \ar[rd]^{\nu_k^\dag} \\
+		\sizen\times \sizen \ar[r]^{+} & \sizen \ar[u]^{\nu_k}
+			& \sizen \ar[l]_\simeq \\
+	}\end{equation*}
+	式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		w_1 + w_2 := \nu_k(\nu_k^\dag w_1 + \nu_k^\dag w_2)
+		\quad\text{for all }w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	左の文字から順に摂動計算すると次のようになり、
+	\begin{equation*}\begin{split}
+		\nu_k^\dag(m_1*w_1) + \nu_k^\dag(m_2*w_2)
+		&= \pi_kx_0 + kx_1 \\
+		x_0 &= m_1 + m_2 \\
+		x_1 &= \nu_k^\dag w_1 + \nu_k^\dag w_2 + \pi_\sizen k^{-1}(m_1 + m_2) \\
+		\Downarrow \\
+		\nu_k\bigl(\nu_k^\dag(m_1*w_1) + \nu_k^\dag(m_2*w_2)\bigr)
+		&= \nu_k(\pi_kx_0 + kx_1) \\
+		&= \pi_k(\pi_kx_0 + kx_1) * \nu_k\pi_\sizen(k^{-1}\pi_kx_0 + x_1) \\
+		&= (\pi_kx_0) * (\nu_kx_1) \\
+		&\quad\text{for all }m_1,m_2\in\braket{k},\;w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	次の摂動計算が得られる。
+	\begin{equation*}\begin{split}
+		(m_1*w_1) + (m_2*w_2) &= (\pi_kx_0) * (\nu_kx_1) \\
+		x_0 &= m_1 + m_2 \\
+		x_1 &= \nu_k^\dag w_1 + \nu_k^\dag w_2 + \pi_\sizen k^{-1}x_0 \\
+		&\quad\text{for all }m_1,m_2\in\braket{k},\;w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	文字を使って書くとが馴染みのある形になる。
+	\begin{equation*}\begin{split}
+		[m_1m_2\cdots m_p] + [n_1n_2\cdots n_p] &= [x_1x_2\cdots x_{p+1}] \\
+		x_1 = \pi_k y_1 &\quad y_1 = m_1 + n_1 \\
+		x_2 = \pi_k y_2 &\quad y_2 = m_2 + n_2 + \pi_\sizen k^{-1}y_1 \\
+		\vdots \\
+		x_i = \pi_k y_i &\quad y_i = m_i + n_i + \pi_\sizen k^{-1}y_{i-1} \\
+		\vdots \\
+		x_{p+1} = \pi_k y_i &\quad y_i = \pi_\sizen k^{-1}y_p \\
+		&\quad\text{for all }m_1,\dots,m_p,n_1,\dots,n_p\in\braket{k}
+	\end{split}\end{equation*}
+	$\pi_\sizen k^{-1}y_{i-1}$という項が桁上げの操作を表している。
+%s3:自然数のk進表示での加法}
+%s2:自然数のk進表示}
+\subsection{有理数のk進表示}\label{s2:有理数のk進表示} %{
+	自然数の$k$進表示を有理数に拡張する。ここでは議論を単純化するために、
+	負でない有理数$|\bun|$
+	\begin{equation*}\begin{split}
+		|\bun| := \set{q\in\bun\bou 0\le q}
+	\end{split}\end{equation*}
+	に限定して議論する。$q\in|\bun|$の$k$進表示は、次のように、数列
+	$n_i\in\braket{k}\bou i\in\sei$を用いて$k$の多項式で書き表すことである。
+	\begin{equation}\label{eq:有理数のk進表示}\begin{split}
+		q = \sum_{i\in\sei}n_ik^i
+	\end{split}\end{equation}
+	自然数の$k$進表示\eqref{eq:自然数のk進表示}との違いは、和の範囲が
+	自然数から整数に変わっているところである。
+
+	小数点以下の有理数$\bunsub$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\bunsub := \set{q\in|\bun|\bou 0\le q<1}
+	\end{split}\end{equation*}
+	任意の$q\in|\bun|$は、次のように一意に自然数$\pi_\sizen q$と
+	小数点以下の有理数$q-\pi_\sizen q$に分解される。
+	\begin{equation*}\begin{split}
+		q = \pi_\sizen q + (q- \pi_\sizen q)
+	\end{split}\end{equation*}
+	有理数の$k$進表示では、自然数の部分$\pi_\sizen q$が$k$の正のべきの部分
+	を与え、小数点以下の部分$q-\pi_\sizen q$が$k$の負のべきの部分を与える。
+	\begin{equation*}\begin{split}
+		\pi_\sizen q = \sum_{i\in\sizen}n_ik^i,\quad
+		q-\pi_\sizen q = \sum_{i\in\sizen_+}n_{-i}k^{-i}
+	\end{split}\end{equation*}
+	そして、有理数の$k$進表示が自然数と異なるのは、小数点以下の部分が
+	有限多項式とは限らないことである。例えば、$1/3$の$10$進表示は次のように
+	無限級数となる。
+	\begin{equation*}\begin{split}
+		\frac{1}{3} = 3(10^{-1} + 10^{-2} + \cdots)
+	\end{split}\end{equation*}
+	ここからは、有理数の$k$進表示のキモとなる$\bunsub$の$k$進表示を
+	考えることにする。
+
+	$2/7$を$10$進表示したときは次のようになる。
+	{\setlength\arraycolsep{4pt}
+	\begin{equation*}\begin{array}{rclcl}
+		\cfrac{2}{7} 
+		&=& \cfrac{1}{10}\cfrac{20}{7} 
+			&=& \cfrac{2}{10} + \cfrac{1}{10}\cfrac{6}{7} \\
+		&=& \cfrac{2}{10} + \cfrac{1}{10^2}\cfrac{60}{7}
+			&=& \cfrac{2}{10} + \cfrac{8}{10^2} + \cfrac{1}{10^2}\cfrac{4}{7} \\
+		&=& \cfrac{2}{10} + \cfrac{8}{10^2} + \cfrac{1}{10^3}\cfrac{40}{7}
+			&=& \cfrac{2}{10} + \cfrac{8}{10^2} + \cfrac{5}{10^3} + \cfrac{1}{10^3}\cfrac{5}{7} \\
+	\end{array}\end{equation*}
+	}
+	この例から、$0<m<n\in\sizen$として、分数$m/n\in\bunsub$の小数点以下$l$次
+	までの$k$進表示を次のようにおくと、
+	\begin{equation*}\begin{split}
+		\frac{m}{n} = \frac{q_1}{k} + \frac{q_2}{k^2} + \cdots + \frac{q_l}{k^l}
+			+ \frac{1}{k^l}\frac{m_l}{n}
+		\quad\text{where} \\
+		q_0=0,q_1,q_2,\dots\in\braket{k} \\
+		m_0=m,m_1,m_2,\dots\in\braket{n} \\
+	\end{split}\end{equation*}
+	次の式より、
+	\begin{equation*}\begin{split}
+		\frac{m_l}{n} = \frac{1}{k}\frac{km_l}{n}
+		= \frac{1}{k}\left(\pi_\sizen\frac{km_l}{n} + \frac{1}{n}\pi_nkm_l\right)
+	\end{split}\end{equation*}
+	数列$q_i$と$m_i$は次の漸化式を満たす。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		m_{l+1} &=& \pi_nkm_l & \quad\text{$km_l$を$n$で割った余り} \\
+		q_{l+1} &=& \pi_\sizen n^{-1}km_l & \quad\text{$km_l$を$n$で割った商} \\
+	\end{array}\end{equation*}
+	}
+	この漸化式を使って$\bunsub$の$k$進表示を順に求めることができる。
+	また、$m_i\in\braket{n}$だから、$\set{m_0,m_1,\dots,m_n}$の中には
+	一組以上の重複した値がある。例えば、$0\le i<i+j\le n$として、
+	$m_i=m_{i+j}$とすると、任意の$h\in\sizen$に対して$m_{i+h}=m_{i+j+h}$
+	となるから、数列$m_i$には次のように$m_i,m_{i+1},\dots,m_{i+j-1}$が繰り返し
+	現れることになる。
+	\begin{equation*}\begin{split}
+		m_0=m,m_1,\dots,m_{i-1}
+		,\underbrace{m_i,m_{i+1},\dots,m_{i+j-1}}_{\text{繰り返し}}
+		,\underbrace{m_i,m_{i+1},\dots,m_{i+j-1}}_{\text{繰り返し}}
+		,\dots
+	\end{split}\end{equation*}
+	したがって、$m/n$の$k$進表示は次のような形になる。
+	\begin{equation*}\begin{split}
+		\cfrac{m}{n} 
+		&= \left(\cfrac{q_1}{k} + \cdots + \cfrac{q_{i-1}}{k^{i-1}}\right)
+		+ \left(\cfrac{q_i}{k^i} + \cdots + \cfrac{q_{i+j-1}}{k^{i+j-1}}\right)
+			\left(1 + \cfrac{1}{k} + \cfrac{1}{k^2} + \cdots\right) \\
+		&= \left(\cfrac{q_1}{k} + \cdots + \cfrac{q_{i-1}}{k^{i-1}}\right)
+		+ \left(\cfrac{q_i}{k^i} + \cdots + \cfrac{q_{i+j-1}}{k^{i+j-1}}\right)
+			\cfrac{k}{k-1} \\
+	\end{split}\end{equation*}
+	$[0,1)$の範囲の実数に対しても$k$のべき級数展開\eqref{eq:有理数のk進表示}
+	は一意に定まるので、実数の$k$進表示を定義することができるが、
+	有理数の場合のように係数が有限の周期をもつとは限らない。係数が有限の周期
+	をもつことが、有理数を$k$進表示したときの特徴となる。
+%s2:有理数のk進表示}
+\subsection{集合同型な自然数のk進表示}\label{s2:集合同型な自然数のk進表示} %{
+	符号化が集合同型となるような$\Word\braket{k}$の部分空間を考えてみる。
+	符号化$\nu_k$の余領域を$\Word\braket{k}$ではなく、右端の文字が$0$でない
+	文字列の集合にしても、$k$進表示の符号化$\nu_k$の定義
+	\eqref{eq:自然数のk進表示符号化}と復号化$\nu_k^\dag$の定義
+	\eqref{eq:自然数のk進表示復号化}はそのまま使うことができて、
+	$\nu_k$と$\nu_k^\dag$は互いに逆になる。このことをもう少し詳しく記述する。
+
+	\begin{definition}[文字としての数]\label{def:文字としての数} %{
+		任意の$m\in\sizen_+$に対して、集合$\braket{m}$と$\braket{m+}$を次の
+		ように定義する。
+		\begin{equation*}\begin{split}
+			\braket{m} &:= \set{0,1,\dots,k-1} \\
+			\braket{m+} &:= \set{1,2,\dots,k} \\
+		\end{split}\end{equation*}
+	\end{definition} %def:文字としての数}
+
+	\begin{definition}[数を表す文字列]\label{def:数を表す文字列} %{
+		$A$を空でない集合とし、任意の$a\in A$に対して
+		$\mycal{X}_aA\subset\Word A$を右端の文字が$a$でない文字列の集合とする。
+		$\mycal{X}_aA$をBNF記法で書くと次のようになる。
+		\begin{equation*}\begin{split}
+			\mycal{X}_aA = 1_\Word + (\Word A)(A - \set{a})
+		\end{split}\end{equation*}
+	\end{definition} %def:数を表す文字列}
+
+	$k$進表示の符号化$\nu_k$の余領域を$\Word\braket{k}$から
+	$\mycal{X}_0\braket{k}$に縮小すると、$\nu_k$が同型写像となる。
+
+	\begin{proposition}[同型写像となるk進表示]
+	\label{prop:同型写像となるk進表示} %{
+		写像$\nu_k:\sizen\to\mycal{X}_0\braket{k}$を$k$進表示符号化
+		\eqref{eq:自然数のk進表示符号化}によって定義すると、
+		\begin{equation*}\begin{split}
+			\nu_k n := [n_0n_1\cdots n_l] \text{ where }
+			n = n_0 + n_1k + \cdots + n_lk^l \text{ with } \\
+			n_0,n_1,\dots,n_{l-1}\in\braket{k} \text{ and } n_l\in\braket{k} - \set{0}
+		\end{split}\end{equation*}
+		$\nu_k$は同型写像となる。
+	\end{proposition} %prop:同型写像となるk進表示}
+	\begin{proof} まず、自然数を$k$のべきで展開する仕方が一意であることを証明
+	する。$n\in\sizen$が次のように二通りの$k$のべきで展開されたとすると、
+	\begin{equation*}\begin{split}
+		x_0 + x_1k + \cdots x_pk^p = n = y_0 + y_1k + \cdots y_qk^q \text{ where} \\
+		[x_0x_1\cdots x_p],[y_0y_1\cdots y_q]\in\mycal{X}_0\braket{k}
+	\end{split}\end{equation*}
+	$x_0=\pi_kn=y_0$より、$x_0=y_0$が導かれる。
+	$n-\pi_\sizen k^{-1}n$に対して同様の議論を繰り返せば
+	$[x_0x_1\cdots x_p]=[y_0y_1\cdots y_q]$となることがわかる。
+
+	自然数を$k$のべきで展開する仕方の一意性により、$\nu_k$が同型写像
+	となることがわかる。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[1:1] 定義より、任意の$m,n\in\sizen$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				\nu_km = [x_0x_1\cdots x_l] = \nu_kn 
+				\implies m = x_0 + x_1k + \cdots x_lk^l = n
+			\end{split}\end{equation*}
+			\item[onto] 定義より、任意の
+			$[n_0n_1\cdots n_l]\in\mycal{X}_0\braket{k}$に対して次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				\nu_k(n_0 + n_1k \cdots + n_lk^l) = [n_0n_1\cdots n_l]
+			\end{split}\end{equation*}
+		\end{description} %}
+	\end{proof}
+	$\nu_k$の逆写像$\nu_k^{-1}:\mycal{X}_0\braket{k}\to\sizen$は、
+	通常の$k$進表示の復号化$\nu_k^\dag$\eqref{eq:自然数のk進表示復号化}を
+	$\mycal{X}_0\braket{k}\subset\Word\braket{k}$に制限したものになる。
+	\begin{equation*}\begin{split}
+		\nu_k^{-1}1_\Word &= 0 \\
+		\nu_k^{-1}[m_0\cdots m_{l-1}m_l]
+			&= m_0 + \cdots + m_{l-1}k^{l-1} + m_lk^l \\
+			&\quad\text{for all } m_1,\dots,m_{l-1}\in\braket{k}
+			,\;m_l\in\braket{k}-\set{0} \\
+	\end{split}\end{equation*}
+
+	集合$\mycal{X}_0\braket{k}$は同型写像によって他の形でも表すことができる。
+	写像$\phi_k:\mycal{X}_0\braket{k}\to\Word\braket{k+}$を次のように定義
+	する。
+	\begin{equation*}\begin{split}
+		\begin{array}{rrrcr}
+			\,1_\Word & [1] & [2] & \cdots & [k-1] \\
+			\,[0,1] & [1,1] & [2,1] & \cdots & [k-1,1] \\
+			\,[0,2] & [1,2] & [2,2] & \cdots & [k-1,2] \\
+			\vdots \\
+		\end{array} \xto{\phi_k} \begin{array}{rrrcr}
+			\,1_\Word & [1] & [2] & \cdots & [k-1] \\
+			\,[k] & [1,1] & [2,1] & \cdots & [k-1,1] \\
+			\,[k,1] & [1,2] & [2,2] & \cdots & [k-1,2] \\
+			\vdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	式で書くと、任意の$[m_0m_1\cdots m_p]\in\mycal{X}_0\braket{k}$に対して
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\phi_k[m_0m_1\cdots m_p] := [n_0n_1\cdots n_q] \text{ where} \\
+		m_0 + m_1k + \cdots + m_pk^p = n_0 + n_1k + \cdots + n_qk^q \text{ with } \\
+		n_0,n_1,\dots,n_q\in\braket{k+}
+	\end{split}\end{equation*}
+	$\phi_k$は同型写像になっているように見える。
+	$\phi_k$は文字$0$を含まない$w\in\mycal{X}_0\braket{k}$に対しては
+	$\phi_kw=w$となり、文字$0$を含む文字列に対してのみ自明でない写像となる。
+	基本的には文字$0$を文字$k$に差し替えるのだが、差し替えの際に右の桁の
+	値を一つ下げる。'桁下げ'が起きると、値を下げられた桁が$0$になることが
+	あるので、'桁下げ'は連鎖的に引き起こされる。例えば次のようになる。
+	\begin{equation*}\begin{split}
+		\phi_k[011] = [kk]
+	\end{split}\end{equation*}
+	この'桁下げ'の操作が$\phi_k$が同型写像を示すときに困難を引き起こす。
+	$\phi_k$が同型写像になることを直接示すのではなく、
+	任意の自然数$n$が次のように一意的に$k$のべきて展開できることが示されれば、
+	\begin{equation*}\begin{split}
+		n = n_0 + n_1k + \cdots + n_pk^p
+		\text{ where }n_0,n_1,\dots,n_p\in\braket{k+}
+	\end{split}\end{equation*}
+	写像の合成$\phi_k\nu_k$が同型写像となり、$\nu_k$が同型写像であることから、
+	$\phi_k$が同型写像となることがわかる。$\rho_k:=\phi_k\nu_k$とすると、
+	$\rho_k$は任意の$n\in\sizen$に対して次の式で定義される。
+	\begin{equation*}\begin{split}
+		\rho_k n := \left\{\begin{split}
+			n = 0 &\implies 1_\Word \\
+			\pi_kn = 0 &\implies k * \rho_k(\pi_\sizen k^{-1}n - 1)
+				\quad //\; 1\le \pi_\sizen k^{-1}n  \\
+			\text{else} &\implies (\pi_kn) * \rho_k\pi_\sizen k^{-1}n \\
+		\end{split}\right. %\}
+	\end{split}\end{equation*}
+	命題\ref{prop:同型写像となるk進表示}と同様の議論により、$\rho_k$が
+	同型写像となることがわかる。このことを命題の形でまとめておく。
+
+	\begin{proposition}[同型写像となるk進表示その二]
+	\label{prop:同型写像となるk進表示その二} %{
+		写像$\rho_k:\sizen\to\Word\braket{k+}$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\rho_k n := [n_0n_1\cdots n_l] \text{ where }
+			n = n_0 + n_1k + \cdots + n_lk^l \text{ with } \\
+			n_0,n_1,\dots,n_{l-1}\in\braket{k+}
+		\end{split}\end{equation*}
+		$\rho_k$は同型写像となる。
+	\end{proposition} %prop:同型写像となるk進表示その二}
+	\begin{proof} 命題\ref{prop:同型写像となるk進表示}と同様の議論による。
+	\end{proof}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	集合同型な自然数の$k$進表示を考える前に、右端の文字が$0$でない文字列の集合
+	について成り立つ幾つかの事柄を述べておく。
+	まず、右端の文字が$0$でない文字列の集合を一般化した次の集合を定義する。
+
+	$A$を集合とし、$a\in A$から生成される自由モノイドを$a^*$と書き、
+	\begin{equation*}\begin{split}
+		a^* := \set{1_\Word,[a],[aa],[aaa],\dots}
+	\end{split}\end{equation*}
+	$\Word A$の二項関係$\sim_a$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		w_1\sim_a w_2 \iff \exists\;w\in a*\bou w_1*w = w_2 \text{ or }
+		w_1 = w_2*w
+	\end{split}\end{equation*}
+	$\sim_a$は同値関係となる。$\Word A$を同値関係$\sim_a$で割った商集合
+	が$\mycal{X}_aA$となる。
+	\begin{equation*}\begin{split}
+		\mycal{X}_aA = \Word A/\sim_a
+	\end{split}\end{equation*}
+
+	\begin{proposition}[数を表す文字列]\label{prop:数を表す文字列} %{
+		$A$が可算集合のとき、集合同型$\mycal{X}_aA\simeq\Word_+A$が成り立つ。
+	\end{proposition} %prop:数を表す文字列}
+	\begin{proof} 写像$\phi_k:\mycal{X}_0\braket{k}\to\Word_+\braket{k}$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\begin{array}{rrrcr}
+			\,1_\Word & [1] & [2] & \cdots & [k-1] \\
+			\,[0,1] & [1,1] & [2,1] & \cdots & [k-1,1] \\
+			\,[0,2] & [1,2] & [2,2] & \cdots & [k-1,2] \\
+			\vdots \\
+		\end{array} \xto{\phi_k} \begin{array}{rrrcr}
+			\,[0] & [1] & [2] & \cdots & [k-1] \\
+			\,[0,0] & [1,0] & [2,0] & \cdots & [k-1,0] \\
+			\,[0,1] & [1,1] & [2,1] & \cdots & [k-1,1] \\
+			\vdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\phi_k1_\Word &= [0] \\
+		\phi_k[m] &= [m] \quad\text{for all }m\in\braket{k}-\set{0} \\
+		\phi_k[m_1\cdots m_{l-1}m_l] &= [m_1\cdots m_{l-1}(m_l-1)] \\
+		&\quad\text{for all }m_1,\dots,m_{l-1}\in\braket{k},\;m_l\in\braket{k}-\set{0} \\
+	\end{split}\end{equation*}
+	$\phi_k$は集合同型射になる。そして、$k$を無限大にして同様の議論により、
+	集合同型$\mycal{X}_0\sizen\to\Word_+\sizen$が成り立つことがわかる。
+	したがって、可算集合の定義
+	\begin{equation*}\begin{split}
+		A \text{ is a countable} \iff \exists\; A\xto{1:1}\sizen
+	\end{split}\end{equation*}
+	より、任意の可算集合$A$に対して命題が成り立つことがわかる。
+	\end{proof}
+
+	以上の準備のもとに、集合同型な自然数の$k$進表示を定義する。
+
+	式\eqref{eq:集合同型その一}から$\phi_k$は同型写像となることがわかる。
+	これを命題の形でまとめておく。
+
+	\begin{proposition}[集合同型となるk進表示]
+	\label{prop:集合同型となるk進表示} %{
+		写像$\nu_k:\sizen\to\mycal{X}_0\braket{k}$を次のように定義し、
+		\begin{equation*}\begin{split}
+			\nu_k0 &= 1_\Word \\
+			\nu_kn &= [n_1n_2\cdots n_l] \quad\text{for all }n\in\sizen_+
+			\text{ where } n = n_0 + n_1 + \cdots + n_lk^l \text{ with } \\
+			& n_1,n_2,\dots,n_{l-1}\in\braket{k}\text{ and } n_l\in\braket{k}-\set{0}
+		\end{split}\end{equation*}
+		写像$\rho_k:\sizen\to\Word\braket{k+}$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\rho_k0 &= 1_\Word \\
+			\rho_kn &= [n_1n_2\cdots n_l] \quad\text{for all }n\in\sizen_+
+			\text{ where } n = n_0 + n_1 + \cdots + n_lk^l \text{ with } \\
+			& n_1,n_2,\dots,n_l\in\braket{k+}
+		\end{split}\end{equation*}
+
+		次の集合同型が成り立つ。
+		\begin{equation*}\begin{split}
+			\Word\braket{k+} \xfrom[\simeq]{\rho_k} \sizen
+			\xto[\simeq]{\nu_k} \mycal{X}_0\braket{k}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:集合同型となるk進表示}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	任意の$m\in\braket{k}$に対して、単語の連結を積とする部分モノイド
+	$m^*\subset\Word\braket{k}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		m^* := \set{1_\Word,[m],[m,m],[m,m,m],\dots}
+	\end{split}\end{equation*}
+	そして、任意の$m\in\braket{k}$に対して$\Word\braket{k}$の二項関係
+	$\sim_m$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		w_1 \sim_m w_2 
+		\iff \exists\; w\in m^* \bou w_1*w = w_2 \text{ or }w_1 = w_2*w
+	\end{split}\end{equation*}
+	$\sim_m$は同値関係となる。右端の文字が$0$でない単語の集合は
+	$\Word\braket{k}$を同値関係$\sim_0$で割ったもの
+	$\Word_0\braket{k}:=\Word\braket{k}/\sim_0$となる。
+	そして、$\nu_k$と$\nu_k^\dag$を
+	\begin{equation*}\begin{split}
+		\sizen\udset{\nu_k}{\nu_k^\dag}{\rightleftarrows}\Word_0\braket{k}
+	\end{split}\end{equation*}
+	と定義し直すと、$\nu_k^\dag\nu_k=\id_\sizen$かつ
+	$\nu_k\nu_k^\dag=\id_{\Word_0\braket{k}}$となる。
+
+	自由モノイドの普遍性と自然数の加法との関連は次のようになる。
+	\begin{equation*}\xymatrix{
+		\braket{k} \ar[r]^{i_\Word} \ar[rd]_{i_\sizen}
+			& \Word\braket{k} \ar@{.>}[d]^{\tr} \ar@{.>}[rd]^{\nu_k\tr} \\
+		& \sizen \ar[r]^{\nu_k} & \Word_0\braket{k} \\
+	}\end{equation*}
+	ここで、$i_\Word:\braket{k}\to\Word\braket{k}$は自由モノイドへの標準入射、
+	$i_\sizen:\braket{k}\to\sizen$は任意の$m\in\braket{K}$に対して
+	$i_\sizen m=m$とする。そして、準同型
+	$\tr:(\Word\braket{k},*,1_\Word)\to(\sizen,+,0)$は次のように定義される。
+	\begin{equation*}\begin{split}
+		\tr1_\Word &= 0 \\
+		\tr[m_1m_2\cdots m_p] &= m_1 + m_2 + \cdots + m_p
+		\quad\text{for all }m_1,m_2,\dots,m_p\in\braket{k}
+	\end{split}\end{equation*}
+
+	ここで導いた準同型$\nu_k\tr:\Word\braket{k}\to\Word_0\braket{k}$と
+	射影$-/\sim_0:\Word\braket{k}\to\Word_0\braket{k}$との関係は以下のように
+	なる。二項関係$\sim_\tr$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		w_1\sim_\tr w_2 \iff \tr w_1 = \tr w_2
+		\quad\text{for all }w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+	$\sim_\tr$は同値関係となる。そして、$\sim_\tr$は$\sim_0$と次のような関係
+	になる。
+	\begin{equation*}\begin{split}
+		w_1\sim_0 w_2 \implies w_1\sim_\tr w_2
+		\quad\text{for all }w_1,w_2\in\Word\braket{k}
+	\end{split}\end{equation*}
+%s2:集合同型な自然数のk進表示}
+%s1:数と文字列}
+
+\section{自然数と有理数}\label{s1:自然数と有理数} %{
+	この節では、自然数と有理数の対応を調べる。
+
+	この節では、次のような記号を用いることにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[自然数の部分集合] $0$から$m-1$までの自然数の部分集合を$\braket{m}$
+		と書き、$1$から$m$までの自然数の部分集合を$\braket{m+}$と書く。
+		\begin{equation*}\begin{split}
+			\braket{m} &:= \set{p\in\sizen\bou 0\le p< m} \\
+			\braket{m+} &:= \set{p\in\sizen\bou 1\le p< m + 1} \\
+		\end{split}\end{equation*}
+		\item[有理数の部分集合] 負でない有理数の部分集合を$|\bun|$と書き、
+		$0$以上$1$未満の有理数の部分集合を$\bunsub$と書く。
+		\begin{equation*}\begin{split}
+			|\bun| &:= \set{q\in\bun\bou 0\le q} \\
+			\bunsub &:= \set{q\in\bun\bou 0\le q < 1} \\
+		\end{split}\end{equation*}
+	\end{description} %}
+\subsection{可算無限集合と単語}\label{s2:可算無限集合と単語} %{
+	この節では、$k$を$2$以上の自然数とする。
+
+	自然数の$k$進表示は次のように書き換えることで集合同型となる。
+	\begin{equation*}\begin{split}
+		\rho_k:\sizen &\to \Word\braket{k+} \\
+		n &\mapsto \left\{\begin{split}
+			0 &\implies 1_\Word \\
+			\text{else} &\implies [n_0n_1\cdots] \text{ where }
+				n = n_0 + n_1k + n_2k^2 + \cdots\\
+		\end{split}\right. \\
+	\end{split}\end{equation*}
+	写像$\rho_k$は自然数の$k$進表示を$\Word\braket{k}$から$\Word\braket{k+}$
+	への写像として書き直したものである。文字を$\braket{k+}$とすることで、
+	単語の右端に$0$が並ぶことがなくなり、$\rho_k$が同型写像となっている。
+	\begin{equation*}\begin{split}
+		\rho_k:\sizen\simeq\Word\braket{k+}
+	\end{split}\end{equation*}
+	自然数の$k$進表示を$\rho_k$で表した場合には、加法の演算が厄介になるが、
+	この節では、自然数を単に可算無限集合として取り扱うことにする。
+
+	写像$\myop{split}:\Word\braket{(k+1)+}\to\Word_+\Word\braket{k+}$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+			\myop{split}\;w &:= \left\{\begin{split}
+				\sharp_{k+1}w = 0 &\implies [w] \\
+				\text{else }w = w_1*(k+1)*w_2 
+				&\implies (\myop{split}w_1)*(\myop{split}w_2)
+			\end{split}\right. \\ %\}
+	\end{split}\end{equation*}
+	ここで、$\sharp_aw$を単語$w$に含まれる文字$a$の個数とする。
+	$\myop{split}$は文字$n+1$で単語を分解する写像である。
+	写像$\myop{join}:\Word_+\Word\braket{k+}\to\Word\braket{(k+1)+}$を
+	次のように定義すると、
+	\begin{equation*}\begin{split}
+		\myop{join}\;[w_1\cdots w_p] &\implies w_1*(p+1)*\cdots*(p+1)w_p
+		\quad\text{for all }w_1,\dots,w_p\in\Word\braket{k+}
+	\end{split}\end{equation*}
+	$\myop{split}\;\myop{join}=\id$かつ$\myop{join}\;\myop{split}=\id$となり、
+	集合同型$\Word\braket{(k+1)+}\simeq\Word^2\braket{k+}$が成り立つことが
+	わかる。したがって、次の同型写像によって集合同型
+	$\sizen\simeq\Word_+\sizen$が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\sizen \xto{\rho_{k+1}} \Word\braket{(k+1)+} \xto{\myop{split}} 
+		\Word_+\Word\braket{k+} \xto{\Word_+\rho_k} \Word_+\sizen
+	\end{split}\end{equation*}
+%s2:可算無限集合と単語}
+%s1:自然数と有理数}
+\section{ゲーデル関数}\label{s1:ゲーデル関数} %{
+	\begin{definition}[ゲーデル関数]\label{def:ゲーデル関数} %{
+		同型写像$\sizen^n\to\sizen \quad(2\le n)$を一般にゲーデル関数という
+		\footnote{
+			ゲーデル関数はゲーデル数と訳されることもあるようだが、
+			ここでは、教科書\cite{takahashi:keisan}にならってゲーデル関数という
+			ことにする。
+		}。
+	\end{definition} %def:ゲーデル関数}
+
+	\begin{example}[カントルのペアリング関数]
+	\label{eg:カントルのペアリング関数} %{
+		写像$g:\sizen^2\to\sizen$を次のように定義する。
+		\begin{equation*}\begin{split}
+			g(x, y) = \frac{1}{2}(x+y)(x+y+1) + y
+			\quad\text{for all }x,y\in\sizen
+		\end{split}\end{equation*}
+		次の表からわかるように、$g$は同型写像になる。
+		\begin{equation*}\begin{array}{c|cccccc}
+			x\backslash y & 0 & 1 & 2 & 3 & 4 & \cdots \\ \hline
+			0 & 0 & 2 & 5 & 9 & 14 & \cdots \\
+			1 & 1 & 4 & 8 & 13 & \cdots \\
+			2 & 3 & 7 & 12 & \cdots \\
+			3 & 6 & 11 & \cdots \\
+			4 & 10 & \cdots \\
+			\vdots & \cdots \\
+		\end{array}\end{equation*}
+		$g$をカントルのペアリング関数という。
+	\end{example} %eg:カントルのペアリング関数}
+%s1:ゲーデル関数}
+\endgroup %}

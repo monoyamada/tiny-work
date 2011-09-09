@@ -4,6 +4,7 @@
 	\newcommand{\Auto}{\myop{Auto}}
 	\newcommand{\Pow}{\mycal{P}}
 	\newcommand{\Word}{\mycal{W}}
+	\newcommand{\Forget}{\mycal{U}}
 	\newcommand{\id}{\myop{id}}
 	\newcommand{\dup}{\myop{du}}
 	\newcommand{\onto}{\myop{onto}}
@@ -12,7 +13,276 @@
 	\newcommand{\rank}{\myop{rank}}
 	\newcommand{\ofm}{only finitely many }
 	\newcommand{\bunsub}{{\mybf{P}}}
+	\newcommand{\q}[1]{\pi_\sizen{#1}^{-1}}
 
+\section{ベクトル空間のバックアップ}\label{s1:ベクトル空間のバックアップ} %{
+\subsection{無限次元ベクトル空間}\label{s2:無限次元ベクトル空間} %{
+	Zornの補題を使って、すべてのベクトル空間に基底が存在することを証明する。
+	Zornの補題は、補題という名前がついているが、選択公理と同値であることが
+	知られている。
+
+	\begin{definition}[半順序集合]\label{def:半順序集合} %{
+		集合$X$に$\le$の関係が定義されているとき、$X=(X,\le)$を半順序集合
+		という。半順序集合は、英語では
+		\underline{p}artially \underline{o}rdered \underline{set}を省略して
+		posetとも書かれる。任意の$S\subseteq X$に対して次の記号を使う。
+		\begin{equation*}\begin{split}
+			S\le x \iff (s\le x \quad\text{for all }s\in S) \\
+			x\le S \iff (x\le s \quad\text{for all }s\in S) \\
+		\end{split}
+			\quad\text{for all }x\in X
+		\end{equation*}
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[チェイン] 部分集合$C\subseteq X$が全順序集合となるとき、
+			$C$を$X$のチェインという。
+			\item[上界] 部分集合$S\subseteq X$に対して、$S\le u$となる$u\in X$
+			を$S$の上界という。
+			\item[極大元]　$m\in X$が$m<x$となる$x\in X$がないとき、
+			$m$を$X$の極大元という。
+			\item[最大元]　$m\in X$が任意の$x\in X$に対して$x\le m$となるとき、
+			$m$を$X$の最大元という。
+		\end{description} %}
+	\end{definition} %def:半順序集合}
+
+	極大と最大を絵に書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\xymatrix@R=2ex@C=1ex{
+			& \circ \ar[rd] \ar[ld] \\
+			\circ \ar[rd] & & \circ \ar[rd] \ar[ld] \\
+			& \text{極大} & & \text{極大} \\
+		}\quad\xymatrix@R=2ex@C=1ex{
+			& \circ \ar[rd] \ar[ld] \\
+			\circ \ar[rd] & & \circ \ar[ld] \\
+			& \text{最大} \\
+		}
+	\end{split}\end{equation*}
+
+	\begin{example}[べき集合]\label{eg:べき集合} %{
+		集合$X$のべき集合$\Pow X$は集合の包含関係$\subseteq$で半順序集合となる。
+		$\emptyset$が$\Pow X$の最小元、$X$が$\Pow X$の最大元となる。
+		任意の部分集合の列$S_1\subseteq S_2\subseteq \cdots$はチェイン
+		$C=\set{S_1,S_2,\dots}$になり、$C$の上界は$X$で抑えられる。
+		最小元と最大元を持つ半順序集合は束と言われる。べき集合は束の例である。
+	\end{example} %eg:べき集合}
+
+	\begin{proposition}[Zornの補題]\label{prop:Zornの補題} %{
+		$X$を空でない半順序集合とする。$X$のすべてのチェインが上界を持つならば、
+		$X$は極大元を持つ。
+	\end{proposition} %prop:Zornの補題}
+
+	よく見受けられる、’すべてのベクトル空間’が基底系を持つことの証明を
+	書いておく。定義\ref{def:ベクトル空間}のようにベクトル空間を定義した
+	場合は、次の証明は正しくない。ベクトル空間の定義が異なることに起因する
+	食い違いである。ベクトル空間を
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 体の余直積に加法と体の作用を定義したもの、
+		\item または、そうして作られたものの余直積に加法と体の作用を定義した
+		もの（再帰定義）
+	\end{itemize} %}
+	として定義した場合、次の証明は正しい。
+
+	\begin{proposition}[ベクトル空間の基底系]
+	\label{prop:ベクトル空間の基底系} %{
+		すべてのベクトル空間は基底系を持つ。
+	\end{proposition} %prop:ベクトル空間の基底系}
+	\begin{proof} $V$をベクトル空間とする。$V$が自明なベクトル空間$\set{0}$
+	なら基底系$\emptyset$をもつから、$V$は自明なベクトル空間でないとする。
+	$\mycal{E}$を$V$の線形独立な部分集合の族\footnote{
+		数学では'...集合の集合'という言葉を嫌い、'...集合の族'という言い方を
+		することがある。族の英訳はcollectionとかfamilyになる。
+		collecitonを使うかfamilyを使うかは方言によるようだ。
+	}とする。
+	\begin{equation*}\begin{split}
+		\mycal{E} = \set{E\subseteq V\bou E \text{ is a linearly independent}}
+	\end{split}\end{equation*}
+	$V$が自明なベクトル空間でないと仮定しているから、$\mycal{E}$は空でない。
+	集合の包含関係$\subseteq$を順序として、$\mycal{E}=(\mycal{E},\subseteq)$
+	を半順序集合として考える。
+	$\mycal{E}$の任意のチェイン$C$が上界を持つことを示す。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\widebar{C}:=\cup_{S\in C}S$とする。
+		%
+		\item $\widebar{C}\in\mycal{E}$となることを示す。 \\
+		任意の$v\in\widebar{C}$は、次のように$S_1,S_2,\dots,S_n\in C$
+		となる$\mycal{E}$の元で表すことができる（注意\ref{note:証明の注意}）。
+		\begin{equation*}\begin{split}
+			\begin{array}{ccccccccc}
+				&v& = &v_1& + &v_2& + \cdots + &v_n& \\
+				&\rotatebox{270}{$\in$}& &\rotatebox{270}{$\in$}& 
+					&\rotatebox{270}{$\in$}& &\rotatebox{270}{$\in$}& \\
+				&C&  &S_1& \subseteq &S_2& \subseteq \cdots \subseteq &S_n& \\
+			\end{array}
+		\end{split}\end{equation*}
+		したがって、$v\in S_n$となり、$\widebar{C}$は線形独立な$V$の部分集合
+		となることがわかる。
+		%
+		\item $\widebar{C}$の定義より、任意の$S\in C$に対して
+		$S\subseteq\widebar{C}$となる。
+	\end{itemize} %}
+	したがって、$\widebar{C}$が$C$の上界となる。
+	Zornの補題より、$\mycal{E}$は極大元$E_m\in\mycal{E}$を持つ。
+	任意の$v\in V$が$v\in \spanall_\fukuso E_m$となることを示す。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $v\in E_m$ならば、$v\in\spanall_\fukuso E_m$が成り立つ。
+		\item $f\not\in E_m$ならば、$v\not\in\spanall_\fukuso E_m
+		\implies E_m\subset E_m\cup\set{v}\in\mycal{E}$
+		となり、$E_m$が$\mycal{E}$の極大元であることに矛盾する。
+		したがって、この場合も$v\in\spanall_\fukuso E_m$が成り立つ。
+	\end{itemize} %}
+	したがって、$E_m$が$V$の基底系になることがわかる。
+	\end{proof}
+	\begin{note}[証明の注意]\label{note:証明の注意} %{
+		この部分に$V$が余直積であることが使われている。
+		任意の$V$の元はある基底系の有限和で書かれるということを仮定している。
+	\end{note} %note:証明の注意}
+
+	\begin{definition}[可算集合]\label{def:可算集合} %{
+		$X$を集合とする。自然数から$X$への$\onto$写像があるとき、
+		$X$を可算集合という。
+	\end{definition} %def:可算集合}
+
+	\begin{proposition}[対角線論法]\label{prop:対角線論法} %{
+		$\mybf{2}=\set{0,1}$とする。
+		集合$\mybf{2}^\sizen:=\mybf{Set}(\sizen,\mybf{2})$は可算集合ではない。
+	\end{proposition} %prop:対角線論法}
+	\begin{proof} $\mybf{2}^\sizen$が可算集合だと仮定すると、
+		$\mybf{2}^\sizen=\set{f_n\in\mybf{2}\bou n\in\sizen}$と書くことが
+		できる。
+		$g\in\mybf{2}^\sizen$を次のように定義する。
+		\begin{equation*}\begin{split}
+			gn = \begin{cases}
+				0, &\text{ iff } f_nn=1 \\
+				1, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+		すると、すべての$n\in\sizen$に対して$g\neq f_n$、
+		かつ$g\in\mybf{2}^\sizen$となり、
+		$\mybf{2}^\sizen=\set{f_n\in\mybf{2}^\sizen\bou n\in\sizen}$と矛盾する。
+		したがって、$\mybf{2}^\sizen$は可算集合でない。
+	\end{proof}
+
+	対角線論法を絵にしてみる。$\sizen^\sizen:=\set{f:\sizen\to\sizen}$とする。
+	任意の写像$\phi:\sizen\to\sizen^\sizen$に対して$f\not\in\im\phi$となる
+	$f\in\sizen^\sizen$を次のようにして見つけることができる。
+	\begin{equation*}\begin{split}
+		\begin{array}{c|cccc}
+			& 0 & 1 & 2 & \cdots \\ \hline
+			\phi(0,-) & \underline{\phi(0,0)} & \phi(0,1) & \phi(0,2) & \cdots \\
+			\phi(1,-) & \phi(1,0) & \underline{\phi(1,1)} & \phi(1,2) & \cdots \\
+			\phi(2,-) & \phi(2,0) & \phi(2,1) & \underline{\phi(2,2)} & \cdots \\
+			\vdots & \vdots & \vdots & \vdots & \cdots \\ \hline
+			f & \jump{\phi(0,0)=0} & \jump{\phi(1,1)=0} & \jump{\phi(2,2)=0} & \cdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	表の対角線に着目して異なる写像を見つける方法なので対角線論法と
+	言われている。
+
+	命題\ref{prop:対角線論法}は対角線論法を紹介する材料として$\mybf{2}^\sizen$
+	を考えたが、$\mybf{2}^\sizen$はの自然数のべき集合である。対角線論法により
+	自然数のべき集合は自然数からの$\onto$写像がないことがわかる。
+	次のゲーデル関数$g:\sizen\to\sizen\times\sizen$により、自然数から
+	負でない有理数への$\onto$写像が定義できる。
+	\begin{equation*}\begin{split}
+		g^{-1}(x\times y) = \frac{(x+y)(x+y+1)}{2} + y 
+		,\qquad \begin{array}{c|cccc}
+			x\backslash y & 0 & 1 & 2 & \cdots \\ \hline
+			0 & g0 & g2 & g5 & \cdots \\
+			1 & g1 & g4 & g8 & \cdots \\
+			2 & g3 & g7 & g12 & \cdots \\
+			\vdots & \vdots & \vdots & \vdots & \cdots \\
+		\end{array}
+	\end{split}\end{equation*}
+	したがって、自然数のべき集合は有理数よりも密度が濃いことになる。
+	有理数より密度が濃い集合は実数ぐらいしか思い浮かばない。
+	自然数のべき集合は無限長の二値配列全体の集合と集合同型である。
+	半開区間$[0,1)$内の実数を次のように２進数で書き表すことができることが
+	示せれば、半開区間$[0,1)$内の実数と自然数のべき集合が集合同型となることが
+	わかる。
+	\begin{equation*}\begin{split}
+		\frac{r_1}{2} + \frac{r_2}{2^2} + \cdots = (r_1,r_2,\dots)\begin{pmatrix}
+			2^{-1} \\ 2^{-2} \\ \vdots
+		\end{pmatrix}
+		\quad\text{where } r_n\in\mybf{2} \text{ for all }n\in\sizen
+	\end{split}\end{equation*}
+
+	\begin{proposition}[自由アーベル群の割り算]
+	\label{prop:自由アーベル群の割り算} %{
+		$I$を集合、$\sei I^\dag$をから生成される自由アーベル群とする。
+		\begin{equation*}\begin{split}
+			\sei I^\dag = \set{f:I\to\sei
+			\bou f\alpha\neq0 \text{ for only finitely mainy }\alpha\in I}
+		\end{split}\end{equation*}
+		任意の$v\in\sei I^\dag$に対して、式$v=nx$が解$x\in\sei I^\dag$を
+		持つような$n\in\sei$は有限個しかない。
+	\end{proposition} %prop:自由アーベル群の割り算}
+	\begin{proof} 自由群の定義より、ある有限集合$J\subseteq I$があって、
+		$v\alpha\neq0 \text{ for only }\alpha\in J$と書くことができる。
+		したがって、すべての$\set{v\alpha\in\sei\bou \alpha\in J}$を割り切る
+		整数は有限個しかない。
+	\end{proof}
+
+	\begin{note}[記録]\label{note:記録} %{
+		ノート
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $
+			G := \prod_{n\in\sizen}\sei := \set{f:\sizen\to\sei}
+			$とする。
+			$\prod_{n\in\sizen}\sei$は非加算集合だから、
+			ある非加算集合$I$を用いて、任意の$v\in G$が
+			$
+			v = \sum_{\alpha\in I}v_\alpha e_\alpha
+			\quad\text{ where } v_\alpha\in\sizen,\;e_\alpha\in G
+			$と書けると仮定する。
+			%
+			\item $
+			\sei\sizen^\dag := \set{f:\sizen\to\sei\bou \text{finitely many}}$
+			とする。$\sei\sizen^\dag$は可算集合だから、
+			$\sei\sizen^\dag\subset G$となる。
+			%
+			\item 線形写像$\lambda:G\to\sei\sizen^\dag$を定義する。
+			ある可算集合$J\subset I$が存在して、$
+			n^\dag = \sum_{\alpha\in J}e_\alpha\lambda_{\alpha n}
+			\quad \text{there exists }n\in\sizen\lambda_{\alpha n}\neq0
+			\text{ for all }\alpha\in I
+			$と書けると仮定する。
+			\item $G$の真の部分群$H$を$
+			H := \set{\sum_{\alpha\in J}n_\alpha e_\alpha\in G
+			\bou n_\alpha\in\sei\text{ for all }\alpha\in I}
+			$と定義する。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $\sei\sizen^\dag\subseteq H\subset G$
+				\item $G/H$は$\set{e_\alpha\bou \alpha\in(I-J)}$で張られる部分空間
+			\end{itemize} %}
+			%
+		\end{itemize} %}
+	\end{note} %note:記録}
+	
+	\begin{note}[加算な生成系を持つアーベル群]
+	\label{note:加算な生成系を持つアーベル群} %{
+		ノート\cite{schroeer.baer}の中にある
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item any abelian group with a countable number of generators is countable
+		\end{itemize} %}
+		という文言がわからない。わかることは、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 有限生成のアーベル群は加算集合になることと、
+			\item 加算集合から生成された自由アーベル群は$\sei$-加群として
+			加算な基底系を持つこと
+		\end{itemize} %}
+		ぐらいだ。
+	\end{note} %note:加算な生成系を持つアーベル群}
+
+	\begin{todo}[基底を持たないベクトル空間]
+	\label{todo:基底を持たないベクトル空間} %{
+		ノート\cite{schroeer.baer}
+		ここで定義したベクトル空間（定義\ref{def:ベクトル空間}）は
+		テイラー級数$K[[x]]$に対応し、有限和で定義したベクトル空間は
+		多項式$K[x]$に対応する。
+	\end{todo} %todo:基底を持たないベクトル空間}
+%s2:無限次元ベクトル空間}
+
+
+%s1:ベクトル空間のバックアップ}
 \section{方向性}\label{s1:方向性} %{
 	$\sizen\simeq\bun\cap[0,1)$を示すために必要な道具。
 	\begin{equation*}\begin{split}
@@ -66,11 +336,11 @@
 		\begin{equation*}\begin{split}
 			m..n := \set{p\in\sizen\bou m\le p\le n}
 		\end{split}\end{equation*}
-		\item[割り算の余り] 自然数$n$を$m$で割った余りを$\mu_mn$と書く。
-		また、$n$を$m$で割った商を$\pi_\sizen(n/m)$と書く。
-		$\mu_m$と$\pi_\sizen$は次のような関係にある。
+		\item[割り算の余り] 自然数$n$を$m\ge1$で割った余りを$\pi_mn$と書く。
+		また、$n$を$m$で割った商を$\q{m}n$と書く。
+		$\pi_m$と$\q{m}$は次のような関係にある。
 		\begin{equation*}\begin{split}
-			n = \mu_mn + m\pi_\sizen m^{-1}n
+			n = \pi_mn + m\q{m}n
 			\quad\text{for all }n\in\sizen,\;m\in\sizen_+
 		\end{split}\end{equation*}
 		\item[有理数] $[0,1)$の範囲の有理数を次のように書くことにする。
@@ -115,25 +385,24 @@
 	自然数$n$の$k$進数表示は、割り算の商と余りを使って、次のように書くことが
 	できて、
 	\begin{equation*}\begin{split}
-		n = n_0 + k\sum_{i\in\sizen}n_{i+1}k^i
-		= \mu_kn + k\pi_\sizen k^{-1}n
+		n = n_0 + k\sum_{i\in\sizen}n_{i+1}k^i = \pi_kn + k\q{k}n
 	\end{split}\end{equation*}
 	その係数$n_0,n_1,\dots\in N_k$は次のようになることがわかる。
 	\begin{equation*}\begin{split}
-		n_0 &= \mu_kn \\
-		n_1 &= \mu_k\pi_\sizen k^{-1}n \\
+		n_0 &= \pi_kn \\
+		n_1 &= \pi_k\q{k}n \\
 		\vdots \\
-		n_i &= \mu_k(\pi_\sizen k^{-1})^in \\
+		n_i &= \pi_k(\q{k})^in \\
 		\vdots \\
 	\end{split}\end{equation*}
 	ここで、次の式が成り立つので、
 	\begin{equation*}\begin{split}
-		(\pi_\sizen k^{-1})^in = \pi_\sizen k^{-i}n
+		(\q{k})^in = \pi_\sizen k^{-i}n
 		\quad\text{for all }n,i\in\sizen
 	\end{split}\end{equation*}
 	まとめて、$k$進数表示は次のように書くことができる。
 	\begin{equation}\label{eq:自然数のk進数表示その二}\begin{split}
-		n = \sum_{i\in\sizen}k^i\mu_k\pi_\sizen k^{-i}n 
+		n = \sum_{i\in\sizen}k^i\pi_k\pi_\sizen k^{-i}n 
 		\quad\text{for all }n\in\sizen
 	\end{split}\end{equation}
 
@@ -157,20 +426,31 @@
 	}
 	$y_i$の三項目が桁上げによる効果を表している。
 
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-	\end{todo} %todo:ここまで}
-
-	自然数の$k$進数表示を$N_k$を文字とする単語の集合への写像として解釈する
-	と、次の写像$\nu_k:\sizen\to\Word N_k$によっても自然数の$k$進数表示を
+	自然数の$k$進数表示を、集合$\Forget N_k$を文字とする単語の集合
+	$\Word\Forget N_k$への写像として解釈すると、
+	次の写像$\nu_k:\sizen\to\Word\Forget N_k$によっても自然数の$k$進数表示を
 	定義することができる。
 	\begin{equation*}\begin{split}
 		\nu_k n = \left\{\begin{split}
 			n = 0 &\implies 1_\Word \\
 			1\le n < k &\implies [n] \\
-			\text{else} &\implies (\nu_k\pi_kn) * (\nu_k\pi_\sizen k^{-1}n) \\
+			\text{else} &\implies (\nu_k\mu_kn) * (\nu_k\pi_\sizen k^{-1}n) \\
 		\end{split}\right. \\ %\}
 	\end{split}\end{equation*}
 	写像$\nu_k$を自然数の$k$進数表示への符号化ということにする。
+
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	自然数の$k$進数表示を、集合$\set{0,1,2,\dots,k-1}$を文字とし、
+	右端の文字が$0$でない単語の集合$\mycal{N}_k$
+	\begin{equation*}\begin{split}
+		\mycal{N}_k := 1_\Word + \bigl(1..(k-1)\bigr)\bigl(0..(k-1)\bigr)^*
+	\end{split}\end{equation*}
+	への写像として解釈すると、
+	次の写像$\nu_k:\sizen\to\mycal{N}_k$によっても自然数の$k$進数表示を
+	定義することができる。
 
 	写像$\nu_k^\dag:\Word\sizen_k\to\sizen$を次のように定義すると、
 	\begin{equation*}\begin{split}
@@ -201,9 +481,6 @@
 		m = \nu_k^\dag[m] = \nu_k^\dag[m,0] = \nu_k^\dag[m,0,0] = \cdots
 		\quad\text{for all }m\in\sizen_k
 	\end{split}\end{equation*}
-	符号化$\nu_k$の余領域を$\Word N_k$ではなく、単語の右端が$0$でない
-	単語の集合にすると、$\nu_k$と$\nu_k^\dag$は互いに逆になるが、
-	ここではそれは考えないことにする。
 
 	\begin{note}[写像の空間でのk進数表示]\label{note:写像の空間でのk進数表示} %{
 		空間$\mybf{Set}(\sizen,\sizen)$に、加法$+$と係数の作用$\myspace$を
@@ -857,36 +1134,6 @@
 \end{itemize} %}
 
 \subsection{数の手続き}\label{s2:数の手続き} %{
-\subsubsection{ゲーデル関数（Godel numbering）}\label{s3:ゲーデル関数} %{
-	\begin{definition}[ゲーデル関数]\label{def:ゲーデル関数} %{
-		同型写像$\sizen^n\to\sizen \quad(2\le n)$を一般にゲーデル関数という
-		\footnote{
-			巷の日本語ではゲーデル数と訳されるようである。
-			ここでは、教科書\cite{takahashi:keisan}にならってゲーデル関数という
-			ことにする。巷の訳はセンスが悪いと思う。
-		}。
-	\end{definition} %def:ゲーデル関数}
-
-	\begin{example}[カントルのペアリング関数]
-	\label{eg:カントルのペアリング関数} %{
-		写像$g:\sizen^2\to\sizen$を次のように定義する。
-		\begin{equation*}\begin{split}
-			g(x, y) = \frac{1}{2}(x+y)(x+y+1) + y
-			\quad\text{for all }x,y\in\sizen
-		\end{split}\end{equation*}
-		次の表からわかるように、$g$は同型写像になる。
-		\begin{equation*}\begin{array}{c|cccccc}
-			x\backslash y & 0 & 1 & 2 & 3 & 4 & \cdots \\ \hline
-			0 & 0 & 2 & 5 & 9 & 14 & \cdots \\
-			1 & 1 & 4 & 8 & 13 & \cdots \\
-			2 & 3 & 7 & 12 & \cdots \\
-			3 & 6 & 11 & \cdots \\
-			4 & 10 & \cdots \\
-			\vdots & \cdots \\
-		\end{array}\end{equation*}
-		$g$をカントルのペアリング関数という。
-	\end{example} %eg:カントルのペアリング関数}
-%s3:ゲーデル関数}
 \subsubsection{有理数のk進法表記}\label{s3:有理数のk進法表記} %{
 	この節では、$k$を$2$以上の自然数とする。
 	まず、自然数の$k$進法表記を定義してから、有理数の$k$進法表記を定義する。
