@@ -1,30 +1,1923 @@
 \begingroup %{
 	\newcommand{\Word}{\mycal{W}}
+	\newcommand{\W}{\Word}
+	\newcommand{\What}{\widehat{\Word}}
+	\newcommand{\Group}{\mycal{G}}
+	\newcommand{\G}{\Group}
 	\newcommand{\Tensor}{\mycal{T}}
-	\newcommand{\Gro}{\mycal{G}}
+	\newcommand{\T}{\Tensor}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Vect}{\mybf{Vec}}
+	\newcommand{\Alg}{\mybf{Alg}}
+	\newcommand{\Mod}[1]{{#1}\myhere\mybf{Mod}}
+	\newcommand{\Rep}[1]{{#1}\myhere\mybf{Rep}}
+	\newcommand{\Ab}{\mybf{Ab}}
+	\newcommand{\dup}{\myop{du}}
 	\newcommand{\ofm}{only finitely many }
 	\newcommand{\id}{\myop{id}}
 	\newcommand{\im}{\myop{im}}
+	\newcommand{\onto}{\myop{onto}}
+	\newcommand{\such}{{\;\myop{s.t.}\;}}
 	%
-\section{分数の構成}\label{s1:分数の構成} %{
+	\newcommand{\tran}{\mathbf{t}}
+	\newcommand{\brzo}{\mathbf{b}}
+	\newcommand{\shuf}{\mathbf{s}}
+	%
+\section{Algebra and Language theory}\label{s1:Algebra and Language theory} %{
+	文献\cite{Cohn75algebraand} 6. Power series のメモを書いておく。
+
+	概要を掴むために、不定元を$x$とする複素数上の多項式環$\fukuso[x]$と、
+	形式級数の集合$\fukuso[[x]]$を考える。形式級数では、無限長の文字列
+	$x^\infty$と無限和が許されているとする\footnote{
+		複素数ではなく有理数を考えた場合、無限和を許すと有理数上のベクトル空間
+		とみなすことができなくなり、実数上のベクトル空間として考えなくては
+		いけなくなる。したがって、係数を自然数や有理数に限定したい場合には、
+		無制限に無限和を許すことができなくなる。
+	}。
+
+	代数学の基本定理により、任意の$\fukuso[x]$の元は次のように一次式の積で
+	書ける。
+	\begin{equation*}\begin{split}
+		f\in\fukuso[x]
+		\implies f\propto (x-a_1)^{n_1}\cdots(x-a_p)^{n_p}
+		\quad\text{where} \\
+		a_1,\dots,a_p\in\fukuso,\; n_1,\dots,n_p\in\sizen
+	\end{split}\end{equation*}
+	一方、$\fukuso[[x]]$では次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(1 - ax)\bigl(1 + ax + (ax)^2 + \cdots\bigr) = 1
+		\quad\text{for all } a\in \fukuso
+	\end{split}\end{equation*}
+	したがって、部分集合$\fukuso[x]-x\fukuso[x]$の任意の元は$\fukuso[[x]]$
+	に逆元を持つ。部分集合$\fukuso[x]-x\fukuso[x]$は、部分集合
+	$x_\perp:=\set{1 - ax\bou a\neq 0\in\fukuso}$を文字とする自由モノイド
+	$\W x_\perp$としても得ることができる\footnote{
+		複素数の位相を考えると、$\W x_\perp$は閉集合ではなく開集合になって
+		いる。したがって、$\W x_\perp$をモノイドと言ってよいものかなのかは
+		疑問が残る。
+	}。ただし、$\W x_\perp$は加法については閉じていない。
+	\begin{equation*}\begin{split}
+		(1 - ax) - (1 - bx) = -(a + b)x\not\in \W x_\perp
+		\quad\text{for all } a,b\in\fukuso
+	\end{split}\end{equation*}
+	$\W x_\perp$は余単位射$\epsilon$を使って次のように書くこともできる。
+	\begin{equation*}\begin{split}
+		\W x_\perp = \set{f\in\fukuso[x]\bou \epsilon f\neq 0}
+	\end{split}\end{equation*}
+
+	可換環$\fukuso[x]$の$\W x_\perp$による分数化を$\fukuso[x,x_\perp^{-1}]$
+	とすると、
+	\begin{equation*}\begin{split}
+		\fukuso[x,x_\perp^{-1}] &:= (\fukuso[x]\times \W x_\perp) / \sim \\
+		(f_1\times g_1)(f_2\times g_2) &:= (f_1f_2)\times(g_1g_2) \\
+		& \quad\text{for all }f_1,f_2\in\fukuso[x],\;g_1,g_2\in \W x_\perp \\
+		f_1\times g_1 \sim f_2\times g_2 &\iff \exists\; h\in \W x_\perp
+		\; \text{ s.t. } f_1g_2h = f_2g_1h \\
+		& \quad\text{for all }f_1,f_2\in\fukuso[x],\;g_1,g_2\in \W x_\perp \\
+	\end{split}\end{equation*}
+	$\fukuso[x,x_\perp^{-1}]$の元を分数の書き方で書くことにする。
+	$\fukuso[x,x_\perp^{-1}]$の普遍性により、代数準同型
+	$\phi:\fukuso[x,x_\perp^{-1}]\to\fukuso[[x]]$で、次の式を満たすものが
+	唯一つ定まり、
+	\begin{equation*}\begin{split}
+		\phi\frac{f}{1} = f \quad\text{for all } f\in \fukuso[x]
+	\end{split}\end{equation*}
+	$\phi$は次のようになることがわかる。
+	\begin{equation*}\begin{split}
+		\phi\frac{f}{g} = f(1 - g)^*
+		\quad\text{for all }f\in\fukuso[x],\; g\in \W x_\perp \\
+	\end{split}\end{equation*}
+	代数準同型$\psi:\fukuso[x]\to\fukuso[x,x_\perp^{-1}]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\psi f = \frac{f}{1} \quad\text{for all } f\in \fukuso[x]
+	\end{split}\end{equation*}
+	$\psi$と$\phi$が共に$1:1$ならば、次の部分代数の系列が得られる。
+	\begin{equation*}\begin{split}
+		\fukuso[x] \xto[1:1]{\psi} \fukuso[x,x_\perp^{-1}]
+		\xto[1:1]{\phi} \fukuso[[x]]
+	\end{split}\end{equation*}
+
+	\begin{note}[ローラン級数]\label{note:ローラン級数} %{
+		部分群$\set{1,x,x^2,\dots}\subset \fukuso[x]$による分数化をすると、
+		多項式$\fukuso[x,x^{-1}]$が得られる。多項式$\fukuso[x,x^{-1}]$を
+		形式級数まで拡張すると、Laurant級数$\fukuso[[x,x^{-1}]]$が得られる。
+		$1/x\in\fukuso[x,x^{-1}]$は$\fukuso[[x]]$には含まれていない。
+		\begin{equation*}\begin{split}
+			\frac{1}{x} = \frac{1}{1 - (1 - x)} = (1 - x)^*
+			= \lim_{n\to\infty}\left(n - \frac{n(n + 1)}{2}x + \cdots\right)
+			\not\in \fukuso[[x]]
+		\end{split}\end{equation*}
+		したがって、次の部分代数の系列が得られる。
+		\begin{equation*}\xymatrix@R=1ex{
+			& \fukuso[x,x^{-1}] \ar[r] & \fukuso[[x,x^{-1}]] \\
+			\fukuso[x] \ar[rd] \ar[ru] \\
+			& \fukuso[x,x_\perp^{-1}] \ar[r] & \fukuso[[x]] \ar[uu] \\
+		}\end{equation*}
+		すると、$x_\perp^{-1}$の元は異なる二つの形式級数を持つことになる。
+		\begin{equation*}\begin{split}
+			- \frac{1}{ax}\left(\frac{1}{ax}\right)^* = \frac{1}{1 - ax} = (ax)^*
+			\quad\text{for all } a\neq 0\in \fukuso
+		\end{split}\end{equation*}
+		収束性を考えていないために現れてしまった矛盾（？）と考えることが
+		できる。$x$を不定元ではなく、$\fukuso$に値をもつ変数だと考えたときの
+		通常の冪級数展開は次のようになる。
+		\begin{equation*}\begin{split}
+			\frac{1}{1 - ax} = \left\{\begin{split}
+				|ax| < 1 &\implies (ax)^* \\
+				1 < |ax| &\implies - \frac{1}{ax}\left(\frac{1}{ax}\right)^* \\
+				\text{else} &\implies \pm\infty \\
+			\end{split}\right. \\ %\}
+		\end{split}\end{equation*}
+	\end{note} %note:ローラン級数}
+
+	\begin{note}[環の局所化]\label{note:環の局所化} %{
+		Chonの局所化 from nLab \\
+		Given a ring R and a family S of morphisms in the category of 
+		(say left) finitely generated projective $R$-modules, we say that 
+		a morphism of rings $f:R\to T$ is $S$-inverting if the extension of 
+		scalars from $R$ to $T$ sends all morphisms from $S$ into invertible
+		morphisms in the category of left $T$-modules. P. M. Cohn has shown
+		that there is a universal object $R\to Q_SR$ in the category of 
+		$S$-inverting morphisms. Ring $Q_SR$ (and more precisely the universal 
+		morphism itself) are called the universal or Cohn localization of 
+		ring $R$ at $S$. 
+
+		Cohn localization induces a hereditary torsion theory, but it lacks
+		good flatness properties at the level of full module category. 
+		However for the category of finite-dimensional projectives has all 
+		good properties – it is not any worse than Ore localization.
+
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item \url{http://arxiv.org/abs/math/0104158}
+			\item \url{http://oai.cwi.nl/oai/asset/10210/10210A.pdf}
+			\item \url{http://www.maths.ed.ac.uk/~aar/papers/desalgebra.pdf}
+			\item \url{http://www.maths.ed.ac.uk/~aar/books/nlat.pdf}
+			\item \url{http://www.uib.no/People/mbr085/witt/bergenwitt.pdf}
+			\item \url{http://arxiv.org/abs/math/9812122}
+		\end{itemize} %}
+	\end{note} %note:環の局所化}
+
+	\begin{note}[生成子]\label{note:生成子} %{
+		$\set{1-ax\in R[x]\bou a\in R}$は次のような特徴を持つ。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 余積の逆像との関係 \\
+			余積$\epsilon$の逆像$\epsilon^{-1}1$は次のような形になる。
+			\begin{equation*}\begin{split}
+				\epsilon^{-1}1 = \set{1 + xf\in R[x]\bou f\in R[x]}
+			\end{split}\end{equation*}
+			$\epsilon^{-1}1$は乗法によってモノイドとなる。
+			特に、$R$が複素数の場合は、$\epsilon^{-1}1$は一次式に因数分解される
+			ために話が簡単になる。
+			\begin{equation*}\begin{split}
+				1 + xf = (1 - a_1x)\cdots(1 - a_mx)
+			\end{split}\end{equation*}
+			%
+			\item 局所化との関係 \\
+			分数を形式級数に形式的なテイラー展開によって埋め込もうとすると、
+			次のように$|1-m|<1$以外は発散してしまう。
+			\begin{equation*}\begin{split}
+				\frac{1}{m - x} &= \frac{1}{1 - (x + 1 - m)} = (x + 1 - m)^* \\
+				&= \lim_{n\to\infty}\left(\frac{1- (1-m)^{n+1}}{m} + Ox\right)
+			\end{split}\end{equation*}
+			次のようにテイラー展開することも可能だが、その場合は係数が体である
+			必要がある。
+			\begin{equation*}\begin{split}
+				\cfrac{1}{m - x} = \cfrac{1}{m}\cfrac{1}{1 - \cfrac{x}{m}}
+				= \cfrac{1}{m}\left(\cfrac{x}{m}\right)^*
+			\end{split}\end{equation*}
+			特に、$\sizen[x]$を局所化によって$\sizen[[x]]$に埋め込もうとすると、
+			$\epsilon^{-1}1$による局所化の一択になってしまう気がする。
+			%
+			\item 同型射$\Vect(V,\fukuso)\simeq\Alg(\T V,\fukuso)$ \\
+			同型射$\kappa:\Vect(V,\fukuso)\simeq\Alg(\T V,\fukuso)$は次のように
+			書ける。
+			\begin{equation*}\begin{split}
+				\kappa f = \bra{1}\frac{1}{1 - f}
+				\quad\text{for all } f\in \Vect(V,\fukuso)
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		Kleene閉包は特別な環の拡張方法になっている。
+	\end{note} %note:生成子}
+	\begin{note}[クリーネスターの余積]\label{note:クリーネスターの余積} %{
+		$R$を半環、$V$を$R$-自由半代数、$\T V$を$V$のテンソル代数とする。
+		任意の$t\in \T V$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			m^\tran t^* 
+			= t^*\otimes 1 + t^*\rhd(m^\tran t)\lhd t^* - tt^*\otimes t^*
+		\end{split}\end{equation*}
+		特に、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			m^\tran v^* = v^*\otimes v^* \quad\text{for all } v\in\T V
+		\end{split}\end{equation*}
+		原理的には次の式を実直に計算すれば導けると思うが、
+		\begin{equation*}\begin{split}
+			m^\tran m =(m\otimes\id)(\id\otimes m^\tran) 
+			+ (\id\otimes m)(m^\tran\otimes\id) - \id\otimes \id
+		\end{split}\end{equation*}
+		ここでは、この式と合わせて次の式を使うことにする。
+		\begin{equation*}\begin{split}
+			t^* = 1 + tt^* \quad\text{for all } t\in \T A
+		\end{split}\end{equation*}
+		以下にその計算を書いておく。
+		\begin{equation*}\begin{split}
+			m^\tran t^* &= m^\tran(1 + tt^*) \\
+			&= 1\otimes 1 + (m^\tran t)\lhd t^* + t\rhd (m^\tran t^*)
+			- t\otimes t^* \\
+			&= (t\rhd)^*(1\otimes 1 + (m^\tran t)\lhd t^* - t\otimes t^*) \\
+			&= t^*\otimes 1 + t^*\rhd(m^\tran t)\lhd t^* - tt^*\otimes t^* \\
+		\end{split}\end{equation*}
+	\end{note} %note:クリーネスターの余積}
+	\begin{note}[シャッフル積の普遍性]\label{note:シャッフル積の普遍性} %{
+		シャッフル積の普遍性に関連した文献を探してみた。
+		量子群関係でシャッフル積が取り上げられていることが多いようである。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $m$を文字列の連結
+			\item $m^\tran$を$m$の畳み込みによる余積、
+			\item $m_\shuffle$をシャッフル積、
+			\item $m_\shuffle^\tran$を$m$の双対の余積
+		\end{itemize} %}
+		とすると、$m_\shuffle$と$m^\tran$が双対となり、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $m_\shuffle$が可換環の積、
+			\item $m^\tran$が可換環の微分
+		\end{itemize} %}
+		に見えてくる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item \url{http://arxiv.org/abs/0908.0083} \\
+			動機が量子群だが、シャッフル積の普遍性も書かれている。
+		\end{itemize} %}
+	\end{note} %note:シャッフル積の普遍性}
+%s1:Algebra and Language theory}
+\section{グロタンディーク群}\label{s1:グロタンディーク群} %{
+	短完全系列の定義を圏論の言葉と群の言葉で書くと次のようになる。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[なんちゃって無限長] $10$進数表示での$1/7=0.(142857)^*$や
-		文字列でのKleeneスター$a(bc)^*d=[ad]+[abcd]+[abcbcd]+\cdots$などの、
-		無限長の文字列であるけれども、無限の部分は有限長の文字列の繰り返し
-		になっているものをなんちゃって無限長ということにする。
-		有理数の場合は、文字$\braket{k}:=\set{0,1,\dots,k-1}$のなんちゃって
-		無限長の文字列は分数として二つの自然数の比として書くことができ、
-		オートマトンの場合は、なんちゃって文字列は有限次元ベクトル空間で
-		状態遷移が表現できる。
-		この辺りを統一的に見ることができないものだろうか？
-		カギとなりそうな道具を並べてみる。
-		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[モノイド] 何はともあれ代数構造
-			\item[分数] モノイドに逆元の導入する。その際、分数のゲージ対称性
-			$\frac{a}{b}=\frac{ga}{gb}$が必然なのかたまたまなのかを調べる。
-			\item[内積と逆元] 内積と逆元の関係を調べる。
-		\end{description} %}
+		\item[圏の言葉] 次の射の合成を短完全系列という。
+		\begin{equation*}\begin{split}
+			A \xto{\myop{mono}} B \xto{\myop{epi}} C
+		\end{split}\end{equation*}
+		\item[群の言葉] 次の準同型の合成を短完全系列という。
+		\begin{equation*}\begin{split}
+			\mybf{1} \xto{} A \xto{f} B \xto{g} C \xto{} \mybf{1}
+			\quad\text{where}\quad \im f = \ker g
+		\end{split}\end{equation*}
+		ここで、$\mybf{1}$は単位元だけからなる自明の群で、すべての群において、
+		自明な群からの準同型と自明な群への準同型は唯一つ定まるから記号は省略
+		して書く。
 	\end{description} %}
+	小さい群の圏では両者は一致する。
+	短完全系列を使ってグロタンディーク群は定義される。
+
+	$\mycal{C}$をアーベル群の部分圏とする。
+	$\mycal{C}$を同型射によって類別した類を$\mycal{C}/\simeq$とし、
+	任意の対象$X\in\mycal{C}$に対して$[X]$を$X$を代表元とする
+	$\mycal{C}/\simeq$の元とする。
+	$F\mycal{C}$を$\mycal{C}/\simeq$を基底系とする$\sei$-加群とする。
+	\begin{equation*}\begin{split}
+		f\in F\mycal{C} \implies f = \sum_{[X]\in F\mycal{C}}f_X[X]
+		\quad\text{where}\quad
+		f_X\in\sei \text{ for all } [X]\in F\mycal{C} \\
+		\text{and}\quad
+		f_X\neq 0 \text{ for only finitely many } [X]\in F\mycal{C}
+	\end{split}\end{equation*}
+	$\mycal{C}$の短完全系列からなる$F\mycal{C}$の部分集合を$h\mycal{C}$とし、
+	\begin{equation*}\begin{split}
+		h\mycal{C} :=
+		\set{[X] - [Y] + [Z]\in F\mycal{C}\bou 0\to X\to Y\to Z\to 0\in \mycal{C}}
+	\end{split}\end{equation*}
+	$h\mycal{C}$から生成される$F\mycal{C}$の部分群を$H\mycal{C}$とする。
+	\begin{equation*}\begin{split}
+		f\in H\mycal{C} \implies f = \sum_{h\in h\mycal{C}}f_hh
+		\quad\text{where}\quad
+		f_h\in\sei \text{ for all } h\in h\mycal{C} \\
+		\text{and}\quad
+		f_h\neq 0 \text{ for only finitely many } h\in h\mycal{C}
+	\end{split}\end{equation*}
+	商群$K\mycal{C}:=F\mycal{C}/H\mycal{C}$をグロタンディーク群という。
+
+	圏$\mycal{C}$が（有限の）直和を持つとき、短完全系列は次のようになり、
+	\begin{equation*}\begin{split}
+		0\to X\to X\oplus Y\to Y\to 0
+	\end{split}\end{equation*}
+	グロタンディーク群を構成するために使われた同値関係は、
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		[X\oplus Y] = [X] + [Y]
+	\end{split}\end{equation*}
+
+	$A$を複素数上の代数とする。圏$\mycal{C}$として、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $A$の表現全体のつくる集合を対象、
+		\item $A$の表現間のintertwinerを射
+	\end{itemize} %}
+	とする圏$\Rep{A}$を考える。
+	\begin{todo}[表現の圏]\label{todo:表現の圏} %{
+		指標$\xi$を関手$\xi:\Rep{A}\to X$として捉えたい。
+		圏$X$はどのような圏を考えればよいのだろうか。
+	\end{todo} %todo:表現の圏}
+%s1:グロタンディーク群}
+\section{クリーネ閉包}\label{s1:クリーネ閉包} %{
+\subsection{一般論}\label{s2:一般論} %{
+\subsection{写像と線形写像}\label{s2:写像と線形写像} %{
+	$S$を集合、$\fukuso S$をから生成された自由ベクトル空間とすると、
+	任意のベクトル空間$V$に対して次の普遍性が成り立つ。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			S \ar[r]^{i} \ar[rd]_{f} & \fukuso S \ar[d]^{\alpha_Vf} \\
+			& V
+		}\quad \begin{split}
+			is = s \quad\text{for all }s\in S \\
+			\alpha_V: \mybf{Set}(S, V)\simeq \Vect(\fukuso S, V) \\
+		\end{split}
+	\end{split}\end{equation*}
+%s2:写像と線形写像}
+\subsubsection{テンソル代数}\label{s3:テンソル代数} %{
+	$V$を有限次元ベクトル空間、$\T V$を$V$から生成されたテンソル代数とする
+	と、任意の代数$W$に対して次の普遍性が成り立つ。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			V \ar[r]^{i} \ar[rd]_{f} & \T V \ar[d]^{\kappa_Wf} \\
+			& W
+		}\quad \begin{split}
+			iv = v \quad\text{for all }v\in V \\
+			\kappa_W: \Vect(V, W)\simeq \Alg(\T A,W)
+		\end{split}
+	\end{split}\end{equation*}
+	一方、$\Vect(\T V,W)$は次の畳み込みにより$W$-加群となる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		(f + g)v &=& fv + gv
+		&\quad\text{for all }f,g\in\Vect(\T V,W),\; v\in \T V \\
+		(wf)v &=& wfv
+		&\quad\text{for all }f\in\Vect(\T V,W),\; w\in W,\;v\in \T V \\
+	\end{array}\end{equation*}
+	}
+	そして、次の畳み込みにより、余積
+	$\Delta_W:\Vect(\T V,W)\to\Vect(\T V,W)\otimes_W\Vect(\T V,W)$
+	が定義される。
+	\begin{equation*}\begin{split}
+		\xymatrix {
+			\T A\otimes \T A \ar[r]^m \ar@{.>}[d]_{\Delta_Wf}
+				& \T A \ar[d]^{f} \\
+			W\otimes_W W & W \ar[l]_{\simeq_W} \\
+		} \quad\text{for all }f\in \Vect(\T V,W)
+	\end{split}\end{equation*}
+	積$m$の単位射を$u$とすると、余単位射$\epsilon_W:\Vect(\T V,W)\to W$は
+	次のように書ける。
+	\begin{equation*}\begin{split}
+		\epsilon_Wf = fu1 \quad\text{for all }f\in\Vect(\T V, W)
+	\end{split}\end{equation*}
+	$\Alg(\T V,W)\subseteq\Vect(\T V,W)$は次の$W$-加群同型を満たす。
+	\begin{equation*}\begin{split}
+		\Alg(\T V,W) \simeq \set{f\in\Vect(\T V,W)\bou \Delta_Wf = f\otimes_Wf}
+	\end{split}\end{equation*}
+%s3:テンソル代数}
+\subsubsection{可換環の局所化}\label{s3:可換環の局所化} %{
+	$M=(M,m,1_M)$を可換モノイドとする。
+	$M^2:=M\times M$に積$m$を次のように定義すると、$(M^2,m)$は
+	可換モノイドとなる。
+	\begin{equation*}\begin{split}
+		(m_1\times n_1)(m_2\times n_2) := (m_1m_2)\times(n_1n_2)
+		\quad\text{for all }m_1,m_2,n_1,n_2\in M
+	\end{split}\end{equation*}
+	$M^2$に次の同値関係$\sim$を定義すると、
+	\begin{equation*}\begin{split}
+		m_1\times n_1\simeq m_2\times n_2
+		\iff \exists\; g\in M\such m_1n_2g = m_2n_1g \\
+		\quad\text{for all }m_1,m_2,n_1,n_2\in M
+	\end{split}\end{equation*}
+	$\sim$は積$m$とコンパチになり、商集合$\G M:= M^2/\sim$が可換群
+	$(\G M,m,1_\G)$となる。ここで、$1_G$は単位元で、
+	$1_G:=(1_M\times1_M)/\sim$と書ける。モノイド準同型$i_\G:M\to\G M$
+	を次のように定義する。
+	\begin{equation*}\begin{split}
+		i_\G m = m\times 1_M \quad\text{for all }m\in M
+	\end{split}\end{equation*}
+	すると、任意の群$G$に対して次の普遍性が成り立つ。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			M \ar[rd]_{f} \ar[r]^{i_\G} & \G M \ar[d]^{\gamma_Gf} \\
+			& G
+		}\quad \gamma_G:\mybf{Mon}(M, G)\simeq \mybf{Grp}(\G M, G)
+	\end{split}\end{equation*}
+	この可換モノイドから可換群の構成方法を分数化ということにする。
+
+	環に対して分数化を行うことができる。ただし、モノイド$M$がゼロ元$0$を持つ
+	場合、分数化した群$\G M$は$0\times 0$だけからなる自明な群になってしまう。
+	したがって、意味のある（元の環から分数化した体への埋め込みが存在する）
+	環$R$の分数化は分母に次の性質をもつ部分集合$S\subset R$を持ってくる
+	必要がある。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $S$は乗法について閉じている。
+		\item $S$は乗法のゼロ因子とゼロ元を持たない。
+	\end{itemize} %}
+	このような性質をもつ$S\subset R$があれば、$R\times S$を分数化した
+	ものを$S^{-1}R$と書けば、$S^{-1}R$は次の性質をもつ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $R$から$S^{-1}R$への環準同型$i_S$が存在し、
+		\begin{equation*}\begin{split}
+			i_Sr = (r\times 1_R)/\sim \quad\text{for all } r\in R
+		\end{split}\end{equation*}
+		\item $i_S$を$S$に制限したものは$1:1$になる。
+	\end{itemize} %}
+	特に、$R$がゼロ因子を持たない場合は、$S=R-\set{0}$とすると、$S^{-1}R$
+	は体となり、$i_S$は$1:1$となる。このとき、任意の体$F$に対して
+	次の普遍性が成り立つ。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			R \ar[rd]_{f} \ar[r]^{i_S} & S^{-1}R \ar[d]^{S^{-1}_Ff} \\
+			& F
+		}\quad 
+		\begin{split}
+			R \text{ dose not have zero divisors.} \\
+			S := R - \set{0} \\
+			S^{-1}_F:\mybf{CRng}(R, F)\simeq \mybf{CRng}(S^{-1}R, F)
+		\end{split}
+	\end{split}\end{equation*}
+%s3:可換環の局所化}
+\subsubsection{Hopf代数}\label{s3:Hopf代数} %{
+	Hopf代数$H=(H,m,u,\Delta,\epsilon,S)$が与えられたとき、
+	$H$の群的な元からなる部分集合を
+	$G:=\set{h\in H\bou \Delta h=h\otimes h\text{ and } h\neq 0}$とする。
+	すると、次の式から$G$は部分双代数となり、
+	\begin{equation*}\begin{split}
+		\Delta(g_1g_2) &= (g_1g_2)\otimes(g_1g_2)
+		\quad\text{for all }g_1,g_2\in G \\
+	\end{split}\end{equation*}
+	次の式から$G$は部分Hopf代数となることがわかる。
+	\begin{equation*}\begin{split}
+		(Sg)g = u1 = g(Sg) \quad\text{for all } g\in G
+	\end{split}\end{equation*}
+	特に、任意の$g\in G$に対して$Sg$が$g$の逆元となり、$G$は群となることが
+	わかる。
+%s3:Hopf代数}
+%s2:一般論}
+\subsection{文字列}\label{s2:文字列} %{
+	ここから、文字列に特化する。$A$を有限集合、$\fukuso A$を$A$から生成された
+	自由ベクトル空間、テンソル代数$\T A:=\T\fukuso A$を$\fukuso A$から
+	生成されたテンソル代数とする。
+	
+	集合$A$から代数$\T A$への構成は、次の普遍的な構成となっている。
+	\begin{equation*}\begin{split}
+		A \xto{\text{自由ベクトル空間}} \fukuso A \xto{テンソル代数} \T A
+	\end{split}\end{equation*}
+	同様な構成として、次の集合$A$から代数$\fukuso\W A$への構成も
+	普遍的な構成となっている。
+	\begin{equation*}\begin{split}
+		A \xto{\text{自由モノイド}} \W A \xto{自由ベクトル空間} \fukuso\W A
+	\end{split}\end{equation*}
+	したがって、代数同型$\T A\simeq \fukuso\W A$が成り立ち、$\T A$の基底系
+	として、文字列$\W A$を用いることができることがわかる。
+	線形写像$\ket{-}:\fukuso\W A\simeq\T A$を次のように定義する。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		\ket{1} &:=& u1 \\
+		\ket{a_1\cdots a_m} &:=& a_1\otimes\cdots a_m
+		& \quad\text{for all }a_1,\dots,a_m\in A
+	\end{array}\end{equation*}
+	}
+	ここで、$u:\fukuso\to\T A$は代数$(\T A,m)$の単位射とする。
+	テンソル代数の積$m$は次のように文字列の連結として書くことができる。
+	\begin{equation*}\begin{split}
+		\ket{w_1}\ket{w_2} = \ket{w_1w_2} \quad\text{for all }w_1,w_2\in\W A
+	\end{split}\end{equation*}
+	線形写像$-\myspace-:\fukuso A\otimes \T A\to \T A$を次のように定義する。
+	\begin{equation*}\begin{split}
+		vt = m\bigl((i_\T v)\otimes t\bigr)
+		\quad\text{for all }v\in\fukuso A,\; t\in \T A
+	\end{split}\end{equation*}
+	文字列で書くと次のようになる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		a\ket{1} &=& \ket{a} & \quad\text{for all } a\in A \\
+		a\ket{a_1\cdots a_m} &=& \ket{aa_1\cdots a_m}
+			& \quad\text{for all }a,a_1,\dots,a_m\in A \\
+	\end{array}\end{equation*}
+	}
+
+	$\T A^\tran:=\Vect(\T A,\fukuso)$を$\T A$の双対空間とする。
+	線形写像$-^\tran:\T A\to\T A^\tran$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\ket{w_1}^\tran\ket{w_2} := \jump{w_1 = w_2}
+		\quad\text{for all }w_1,w_2\in \W A
+	\end{split}\end{equation*}
+	$-^\tran$を転置ということにする。転置の像をブラを用いて書くことにする。
+	\begin{equation*}\begin{split}
+		\bra{w} := \ket{w}^\tran \quad\text{for all }w\in \W A
+	\end{split}\end{equation*}
+	すると、余積$\Delta$は次のように積$m$のブラへの作用として書くことが
+	できる。
+	\begin{equation*}\begin{split}
+		\bra{w}m = \sum_{w_1,w_2\in\W A}\jump{w_1 = w_2}
+		\bra{w_1}\otimes \bra{w_2} \quad\text{for all }w\in \W A
+	\end{split}\end{equation*}
+	ここで、線形写像$\T^\tran A\otimes \T A^\tran:\T A\otimes \T A
+	\to \fukuso\otimes \fukuso\simeq_\fukuso \fukuso$を次のように定義
+	している。
+	\begin{equation*}\begin{split}
+		(f_1\otimes f_2)(t_1\otimes t_2) := (f_1t_1)\otimes(f_2t_2)
+		\simeq_\fukuso (f_1t_1)(f_2t_2) \\
+		\quad\text{for all }f_1,f_2\in \T A^\tran,\;t_1,t_2\in \T A
+	\end{split}\end{equation*}
+
+	$\fukuso A$の$\T A$への作用は次のように書くことができる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		\bra{1}a &=& 0  &\quad\text{for all }a\in A \\
+		\bra{a_1a_2\cdots a_m}a &=& \jump{a=a_1}\bra{a_2\cdots a_m}
+		&\quad\text{for all }a,a_1,a_2,\dots,a_m\in A
+	\end{array}\end{equation*}
+	}
+	積$m$の転置をとったもの$m^\tran$を次のように定義し、
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		m^\tran\ket{w} &=& \sum_{w_1,w_2\in\W A}\jump{w_1 = w_2}
+			\ket{w_1}\otimes \ket{w_2} & \quad\text{for all }w\in \W A \\
+		(\bra{w_1}\otimes\bra{w_2})m^\tran &=& \bra{w_1w_2}
+			& \quad\text{for all }w_1,w_2\in \W A \\
+	\end{array}\end{equation*}
+	}
+	$\fukuso A^\tran:=\Vect(\fukuso A,\fukuso)$の作用を次のように定義する。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		a^\tran\ket{1} &=& 0  &\quad\text{for all }a\in A \\
+		a^\tran\ket{a_1a_2\cdots a_m} &=& \jump{a=a_1}\ket{a_2\cdots a_m}
+		&\quad\text{for all }a,a_1,a_2,\dots,a_m\in A \\
+		\bra{1}a^\tran &=& \bra{a}  &\quad\text{for all }a\in A \\
+		\bra{a_1a_2\cdots a_m}a^\tran &=& \bra{aa_1a_2\cdots a_m}
+		&\quad\text{for all }a,a_1,a_2,\dots,a_m\in A
+	\end{array}\end{equation*}
+	}
+	線形写像$i_\End:T A\to\End(\T A)$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		i_\End\ket{a_1\cdots a_m} = a_1\cdots a_m
+		\quad\text{for all }a_1,\dots,a_m\in A
+	\end{split}\end{equation*}
+	$i_\End$は$1:1$の代数準同型$(\T A,m,\ket{0})\to(\End(\T A),\circ,\id)$
+	となる。同様に、$i_\End^\tran:T A\to\End(\T A)$を次のように定義すと、
+	\begin{equation*}\begin{split}
+		i_\End^\tran\ket{a_1\cdots a_m} = a_m^\tran\cdots a_i^\tran
+		\quad\text{for all }a_1,\dots,a_m\in A
+	\end{split}\end{equation*}
+	$i_\End^\tran$は$1:1$の代数逆順準同型
+	$(\T A,m,\ket{0})\to(\End(\T A),\circ,\id)^{\myop{op}}$
+	となる。
+
+	定義より$\T A$は無限長の文字列を含まないが、$\T A^\tran$は無限長の
+	文字列を含む。
+	例えば、集合同型$\kappa:\fukuso A^\tran\simeq \Alg(\T A,\fukuso)$
+	は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\kappa f = f^* = \id + f + f^2 + \cdots
+		\quad\text{for all }f\in \fukuso A^\tran
+	\end{split}\end{equation*}
+	$\kappa f$は無限長の文字列を含んでいる。
+	標語的に書くと次の関係になっている。
+	\begin{equation*}\begin{split}
+		(\T A)^\tran\subset\T A^\tran
+	\end{split}\end{equation*}
+	$\T A^\tran$の中で有限長の文字列で書けない部分を考える。
+
+	\begin{todo}[アイデア]\label{todo:アイデア} %{
+		余積$\Delta$の圏的双対になるシャッフル積$\shuffle$を$(\T A)^\tran$
+		に定義する。シャッフル積は可換かつ、$(\T A)^\tran$にゼロ因子を持たない
+		から、その分数化群$\G_\shuffle(\T A)^\tran$を定義することが
+		できる。もし、$1:1$の群準同型
+		$\fukuso A^\tran\to\G_\shuffle(\T A)^\tran$
+		を示すことができれば、埋め込み
+		$\Alg(\T A,\fukuso)\to\G_\shuffle(\T A)^\tran$
+		が得られる。そして、$\Alg(\T A,\fukuso)$から$\T A^\tran$全体に
+		$\G_\shuffle(\T A)^\tran$への埋め込みを拡張することを考える。
+		多分、$\T A^\tran$はシャッフル積について体にはならないから、
+		$\T A^\tran$は$\G_\shuffle(\T A)^\tran$の部分代数へ埋め込まれる。
+	\end{todo} %todo:アイデア}
+%s2:文字列}
+
+	\begin{todo}[できるとは限らない]\label{todo:できるとは限らない} %{
+	したがって、$\Alg(\T A,W)$に次の式によって積$\shuffle_W$が定義できて、
+	\begin{equation*}\begin{split}
+		(\kappa_W f)\shuffle_W(\kappa_W g) := \kappa_W(f + g)
+		\quad\text{for all }f,g\in \Vect(V,W)
+	\end{split}\end{equation*}
+	$\bigl(\Alg(\T A,W),\shuffle_W,\kappa_W0\bigr)$は可換群となる。
+	\end{todo} %できるとは限らない}
+
+	$\Alg(\T V,W)$の中で、$\Delta_W$と$\shuffle_W$は互いに双対になっている。
+	\begin{equation*}\begin{split}
+		\Delta_W(-\shuffle_W-) = (\shuffle_W\otimes_W\shuffle_W)
+		\bigl((\kappa_Wf)\shuffle_W(\kappa_Wg)\bigr)
+		= (\Delta_W\kappa_Wf)\shuffle_W(\Delta_W\kappa_Wg) \\
+		\quad\text{for all }f,g\in \Vect(\T V,W)
+	\end{split}\end{equation*}
+
+	Kleeneの定理
+	\begin{equation*}\begin{split}
+		\text{$L$が有理言語である}
+		\iff \text{$L$は有限オートマトンで受理される}
+	\end{split}\end{equation*}
+	は何らかの普遍性を含んでいるように思われる。
+
+	この節では次のような記号を使うことにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[連結による積] $m_\myspace(w_1\otimes w_2)=w_1w_2$および
+		$w^2=ww$
+		\item[シャッフル積] $m_\shuffle(w_1\otimes w_2)=w_1\shuffle w_2$および
+		$w^{\shuffle2}=w\shuffle w$
+		\item[転置] $w^\tran$
+		\item[Brzozowski微分] $w^\brzo$
+		\item[シャッフル微分] $w^\shuf$
+	\end{description} %}
+
+\subsection{多項式}\label{s2:多項式} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 多項式を分数化して体とすると、双対空間の余積が無限和となる。
+		\begin{equation*}\begin{split}
+			\bra{1}m = \sum_{n\in\sei}\bra{n+1}\otimes\bra{n}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+
+	有理言語と有理数との対比を書くと表\ref{tab:言語理論と代数との対応}
+	のようになる。
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{lll} \hline
+			言語理論 & テンソル代数 & 実数 \\ \hline
+			文法の定義 & 双対空間の一点を指定 & 実数の値を指定 \\
+			状態遷移図の作成 & 余積を計算 & $10$進表記を計算 \\
+			有限状態遷移 & 余積の和が周期的に終わる 
+				& 小数点以下が周期的に終わる \\
+		\end{tabular}\end{center}
+		\caption{言語理論と代数との対応}
+		\label{tab:言語理論と代数との対応}
+	\end{table} %}
+	’周期的に終わる’というのは、文字列としては無限長の文字列となるかも
+	しれないが、無限の部分は有限長の周期の繰り返しになるということである。
+	有理数をを$10$進表記した場合には、次のように小数点以下の無限大に続く
+	ところが周期的になっている。
+	\begin{equation*}\begin{split}
+		\frac{44}{175} = \frac{1}{4} + \frac{1}{7} 
+		= 0.25\underbrace{142857}_{\text{repeat}}
+	\end{split}\end{equation*}
+	そして、有理数の場合は次の普遍性が成り立っている。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\sizen \ar[rd]_{f} \ar[r]^{i} & \bun \ar@{.>}[d]^{f_*} \\
+			& F \\
+		}\quad\begin{array}{l}
+			\text{there exists a unique ring morphism } f_* \\
+			\text{for all field } F \text{ and all monoid morphism } f
+		\end{array}
+	\end{split}\end{equation*}
+	有理数の普遍性は、整数が可換環であるという性質を使って証明しているため
+	に、その方法を文字列のような非可換環に対してそのまま適用できない。
+	一方、整数がゼロ因子を持たないことが、有理数が整数の拡張になる理由だが、
+	文字列もやはりゼロ因子を持たない。可換か非可換かという違いがあるが、
+	自然数と文字列との間に共通点は多い。特に、文字集合がシングルトンに
+	なった場合は、文字列集合は自然数と半環同型となる。
+	\begin{equation*}\begin{split}
+		[x^n] &\mapsto n \\
+		[x^m][x^n] = [x^{m + n}] &\mapsto m + n \\
+		[x^m]*[x^n] = [x^{mn}] &\mapsto mn \\
+	\end{split}\end{equation*}
+	文字集合がシングルトンの場合で、Kleene閉包を考えてみる。
+
+	文字集合がシングルトンの場合は、複素係数の多項式$\fukuso[x]$が
+	文字列代数に対応する。
+	\begin{equation*}\begin{split}
+		f\in\fukuso[x] \implies f = f_0 + f_1x + \cdots + f_mx^m
+	\end{split}\end{equation*}
+	有理数の$10$進表記は、自然数で成り立つ次の性質に基づいている。
+
+	\begin{proposition}[自然数の割り算]\label{prop:自然数の割り算} %{
+		任意の$m,n\in\sizen_+$に対して、
+		\begin{equation}\label{eq:自然数の割り算}\begin{split}
+			m = qn + r
+		\end{split}\end{equation}
+		となる$q\in\sizen,\;r<n\in\sizen$が唯一つ定まる
+	\end{proposition} %prop:自然数の割り算}
+
+	自然数の割り算の場合、自然数の全順序$\le$によって、
+	式\eqref{eq:自然数の割り算}の解$q,r$が一意に決まるようにしている
+	ことろがキモである。$r<n$の条件を外すと解は一意に決まらない。
+	多項式に分数を導入する前に、多項式の割り算を定義しておく。
+
+	$\fukuso_n[x]$を最高位の冪が$n$である多項式の集合とする。
+	\begin{equation*}\begin{split}
+		f\in\fukuso_n[x] \implies f = \sum_{k=0}^n f_kx^k
+		\text{ with } f_n \neq 0
+	\end{split}\end{equation*}
+	$0\in\fukuso[x]$はどの$\fukuso_n[x]$にも含まれない。$\fukuso_*[x]$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\fukuso_*[x] := \sum_{n\in\sizen}\fukuso_n[x] = \fukuso[x] - \set{0}
+	\end{split}\end{equation*}
+	最高位を表す写像$\deg:\fukuso_*[x]\to\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\deg\sum_{n\in\sizen} f_nx^n = \max\set{n\in\sizen\bou f_n\neq 0}
+	\end{split}\end{equation*}
+	$\fukuso_n[x]$と$\deg$には次の関係が成り立つ。
+	\begin{equation*}\begin{split}
+		f\in \fukuso_{\deg f}[x] \quad\text{for all } f\in\fukuso_*[x]
+	\end{split}\end{equation*}
+	実用上、$\deg$の定義域に$0$を含めておく。
+	\begin{equation*}\begin{split}
+		\deg f = \begin{cases}
+			-\infty, &\text{ iff } f = 0 \\
+			\max\set{n\in\sizen\bou f_n\neq 0}
+			, &\text{ otherwise } f = \sum_{n\in\sizen} f_nx^n \\
+		\end{cases}
+	\end{split}\end{equation*}
+	以上の準備のもと、$\fukuso[x]$での割り算を定義する。
+
+	任意の$f\in\fukuso[x]$と$g\in\fukuso_*[x]$に対して、次の式を満たす
+	$q,r\in\fukuso[x]$が唯一つ定まる。
+	\begin{equation*}\begin{split}
+		f = qg + r \quad\text{and}\quad \deg r < \deg g
+	\end{split}\end{equation*}
+	この定義は通常の多項式の割り算の定義である。例えば、次のように表計算
+	によって割り算が計算できる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rrrrrrrrrr}
+		& & f_3g_2^{-1}x &+& h_2g_2^{-1} \\ \cline{3-9}
+		g_2x^2 + g_1x^1 + g_0x^0
+		&\slash& f_3x^3 &+& f_2x^2 &+& f_1x^1 &+& f_0x^0 \\
+		&& f_3x^3 &+& f_3g_2^{-1}g_1x^2 &+& f_3g_2^{-1}g_0x^1 \\ \cline{3-9}
+		&& && h_2x^2 &+& (f_1-f_3g_2^{-1}g_0)x^1 &+& f_0x^0 \\
+		&& && h_2x^2 &+& h_2g_2^{-1}g_1x^1 &+& h_2g_2^{-1}g_0x^0 \\ \cline{5-9}
+		&& && && h_1x^1 &+& (f_0-h_2g_2^{-1}g_0)x^0 \\
+	\end{array}
+	\end{equation*}
+	}
+	ここで、次のようにおいた。
+	\begin{equation*}\begin{split}
+		h_2 &= f_2 - f_3g_2^{-1}g_1 \\
+		h_1 &= f_1 - f_3g_2^{-1}g_0 - h_2g_2^{-1}g_1 \\
+	\end{split}\end{equation*}
+	多項式の割り算をもとに、多項式の分数のべき展開を考える。
+
+	\begin{problem}[多項式の分数のべき展開]
+	\label{prob:多項式の分数のべき展開} %{
+		$f\in\fukuso_[x],\;g\in\fukuso_*[x]$として、$f/g$を次のように
+		べき級数展開したとき、
+		\begin{equation*}\begin{split}
+			\frac{f}{g} = \sum_{n\in\sei} h_nx^n
+			\quad\text{ where } h_n\in\fukuso \text{ for all }n\in\sei
+		\end{split}\end{equation*}
+		数列$\set{h_n}$は有理数の$10$進表記のような周期性を持つか？
+	\end{problem} %prob:多項式の分数のべき展開}
+
+	簡単な例を考える。$a\in\fukuso$として$1/(x-a)$は次のようにべき展開
+	され、
+	\begin{equation*}\begin{split}
+		\frac{1}{x-a} = \frac{1}{x}\sum_{n\in\sizen}\left(\frac{a}{x}\right)^n
+	\end{split}\end{equation*}
+	$n\in\sizen_+$として$1/(x-a)^n$は次のようにべき展開される。
+	\begin{equation*}\begin{split}
+		\left(\frac{1}{x-a}\right)^n = \frac{1}{x}\sum_{k\in\sizen}
+		c^k_n\left(\frac{a}{x}\right)^k \quad\text{where}\\
+		c^k_n = \sum_{p_1,\dots,p_n\in\sizen}\jump{k=p_1+\cdots+p_n}
+		= \binom{k+n-1}{n-1}
+	\end{split}\end{equation*}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	\begin{definition}[周期的な無限長文字列その一]
+	\label{def:周期的な無限長文字列その一} %{
+		$A$を有限とは限らない集合とする。$\What A$を
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 有限長または、
+			\item 右側が有限長の文字列の繰り返しになっている
+		\end{itemize} %}
+		文字列全体のつくる集合とする。$\What_LA$で無限長になる文字列は
+		次のような文字列の形をしている。
+		\begin{equation*}\begin{split}
+			[abc\underbrace{def}\underbrace{def}\underbrace{def}\cdots]
+		\end{split}\end{equation*}
+		$\What_LA$を左有限文字列（集合）ということにする。
+	\end{definition} %def:周期的な無限長文字列その一}
+
+	集合$A$から生成された自由モノイド$\W A$は$\What_L A$の部分集合
+	となっている。写像$-^\infty:\W A\to\What_L A$を次のように定義する。
+	\begin{equation*}\begin{split}
+		1_\W^\infty &= 1_\W \\
+		[a_1\cdots a_m]^\infty &= [a_1\cdots a_ma_1\cdots a_m\cdots]
+		\quad\text{for all }a_1,\dots,a_m\in A
+	\end{split}\end{equation*}
+	すると、次のように$\What A$は$\W A$の組で書くことができる。
+	\begin{equation*}\begin{split}
+		w\in\What A \implies \exists\;w_1,w_2\in\W A
+		\quad\text{such that}\quad w = w_1w_2^\infty
+	\end{split}\end{equation*}
+	$-^\infty$は次の性質を満たす。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		(xw)^\infty &=& x(wx)^\infty &\quad\text{for all }w,x\in\W A \\
+		(w^2)^\infty &=& w^\infty &\quad\text{for all }w\in \W A
+	\end{array}\end{equation*}
+	}
+	左有限文字列を使って問題を定式化する。
+
+	\begin{definition}[周期的な無限長文字列その二]
+	\label{def:周期的な無限長文字列その二} %{
+		$A$を有限とは限らない集合、$\W A$を$A$から生成される自由モノイドと
+		する。写像$\rho:\W A\to\W A$が与えられたとき、$\What_L^\rho A$を
+		$\W A$の文字列または、次のような無限長の文字列全体のつくる集合とする。
+		\begin{equation*}\begin{split}
+			xw(\rho w)(\rho^2 w)\cdots \quad\text{for all }x,w\in\W A
+		\end{split}\end{equation*}
+		$\What_L^\rho A$を左有限文字列（集合）ということにする。
+	\end{definition} %def:周期的な無限長文字列その二}
+
+	\begin{definition}[def name]\label{def:def name} %{
+	\end{definition} %def:def name}
+
+	有理数の場合と異なり、多項式の場合は、$1/g$が周期構造を持てば、
+	$f/g$も周期構造を持つことになる。この違いは桁上げの有無の違いである
+	（表\ref{tab:有理数と多項式の乗法の違い}）\footnote{
+		有理数を$\set{10^n\bou n\in\sei}$を基底とする$\sizen$-半加群として
+		みると、有理数は通常の乗法を加法で自由半加群とならないのに対して、
+		多項式を$\set{x^n\bou n\in\sei}$を基底とする$\fukuso$-自由ベクトル空間
+		としてみることができることの違いである。
+	}。
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{cc} \hline
+			有理数 & 多項式 \\ \hline
+			$(3\cdot10^n)(4\cdot10^n)=2\cdot10^n+10^{n+1}$
+			& $(ax^n)(bx^n)=(ab)x^n$ \\
+		\end{tabular}\end{center}
+		\caption{有理数と多項式の乗法の違い}
+		\label{tab:有理数と多項式の乗法の違い}
+	\end{table} %}
+	もし、次のように$1/g$が周期的に終われば、
+	\begin{equation*}\begin{split}
+		\frac{1}{g} 
+		&= g^{(1)} + \frac{g^{(2)}}{x^m}\sum_{n\in\sizen}\frac{1}{x^{nk}}
+		\quad\text{where}\quad
+		g^{(1)} = \sum_{k=0}^{m-1} \frac{g^{(1)}_k}{x^k},\quad
+		g^{(2)} = \sum_{k=0}^n \frac{g^{(2)}_k}{x^k}
+	\end{split}\end{equation*}
+	$f/g$は周期の開始位置$m$をずらしで足し上げたものになる。
+
+	一般に、$\fukuso$の無限数列で、右側が周期になっているものを考える。
+	\begin{equation*}\begin{split}
+		(c_1,c_2,)
+	\end{split}\end{equation*}
+	
+	複素係数の多項式の場合、一次式の積に因数分解できる。
+	\begin{equation*}\begin{split}
+		f \propto (x - a_1)^{n_1}\cdots(x - a_m)^{n_1}
+		\quad\text{with some }a_1,\dots,a_m\in\fukuso
+	\end{split}\end{equation*}
+	比例係数は$f$の最高次のべきの係数である。したがって、$1/f$は次のような
+	形で書くことができる。
+	\begin{equation*}\begin{split}
+		\frac{1}{f} \propto \frac{1}{(x - a_1)^{n_1}\cdots(x - a_m)^{n_1}}
+	\end{split}\end{equation*}
+	そして、任意の$a\neq b\in\fukuso$と$m,n\in\sizen_+$に対して、
+	次の式を満たす$p,q\in\fukuso[x]$は唯一つ定まるから（中国の余剰定理）、
+	\begin{equation*}\begin{split}
+		(x-a)^mp + (x-b)^nq = 1
+		\quad\text{with } \deg p < n \text{ and } \deg q < m
+	\end{split}\end{equation*}
+	次の式を満たす$p,q\in\fukuso[x]$が唯一つ定まることがわかる。
+	\begin{equation*}\begin{split}
+		\frac{1}{(x-a)^m(x-b)^n} = \frac{q}{(x-a)^m} + \frac{p}{(x-b)^n}
+		\quad\text{with } \deg p < n \text{ and } \deg q < m
+	\end{split}\end{equation*}
+	そして、$1/(x-a)^m$が周期的な無限であれば、$p/(x-a)^m$も周期的な無限
+
+	簡単な例から考えてみる。$a,b\in\fukuso$として$1/(ax+b)$は次のようになる。
+	\begin{equation*}\begin{split}
+		\frac{1}{ax + b} = \frac{ax}{ax + b}\frac{1}{ax}
+		= \frac{1}{ax} - \frac{1}{ax + b}\frac{b}{ax}
+		= \frac{1}{ax}\sum_{n\in\sizen}\left(-\frac{b}{ax}\right)^n
+	\end{split}\end{equation*}
+	したがって、厳密な意味での周期は存在しないことがわかる。しかし、
+	$\fukuso-\set{0}$の因子の違いを無視すれば、
+
+	\begin{todo}[微分は後]\label{todo:微分は後} %{
+	\end{todo} %todo:微分は後}
+
+	線形写像$x^\brzo:\Vect(\fukuso[x],\fukuso[x])$を次のように定義する。
+	\begin{equation*}\begin{split}
+		x^\brzo x^0 &= 0 \\
+		x^\brzo x^{m+1} &= x^m \quad\text{for all }m\in\sizen \\
+	\end{split}\end{equation*}
+	$x^\brzo$はBrzozowski微分の多項式版である。$x^\brzo$と自然数の割り算の式
+	\begin{equation*}\begin{split}
+		m = qn + r \quad\text{with}\quad 0\le r < n
+	\end{split}\end{equation*}
+	を関係付けることを考える。
+
+	上の式で$g$を$x$とすれば、$x^\brzo$が割り算と関係付けられる。
+	\begin{equation*}\begin{split}
+		f = qx + r \text{ with } 0\le \deg r < 1
+		\implies q = x^\brzo f
+	\end{split}\end{equation*}
+	多項式から冪が$0$の係数を取り出す線形写像
+	$\pi_0:\fukuso[x]\to\fukuso_0[x]$を次のように定義すれば、
+	\begin{equation*}\begin{split}
+		\pi_0\sum_{n\in\sizen}f_nx^n = f_0x^0
+	\end{split}\end{equation*}
+	割り算の式は次のようになる。
+	\begin{equation*}\begin{split}
+		f = (xx^\brzo + \pi_0) f \quad\text{for all }f\in\fukuso[x]
+	\end{split}\end{equation*}
+
+	\begin{note}[係数が非負の場合]\label{note:係数が非負の場合} %{
+		加法の逆元を持たない半環$R\in\set{|\jitu|,|\bun|,\sizen}$上の
+		多項式$R[x]$では、$\deg$は次の性質を満たすから、
+		\begin{equation*}\begin{split}
+			\deg(f + g) &= \max(\deg f, \deg g) \\
+			\deg(fg) &= (\deg f)(\deg g) \\
+		\end{split}
+			\quad\text{for all }f,g\in R_*[x]
+		\end{equation*}
+		$\deg0=-\infty$と定義してしまうと、$\deg$は次の半環準同型となる。
+		\begin{equation*}\begin{split}
+			\deg:(R[x],+,0,m_\myspace,1)
+			\simeq(\sizen\cup\set{-\infty},\max,-\infty,+,0)
+		\end{split}\end{equation*}
+	\end{note} %note:係数が非負の場合}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+	$x^\brzo$は多項式の冪を一つ下げる操作だから、次のような写像の列となり、
+	\begin{equation*}\begin{split}
+		(x^n) \xto{x^\brzo} (x^{n-1}) \xto{x^\brzo}\cdots\xto{x^\brzo} (x^0)
+		\xto{x^\brzo} 0
+	\end{split}\end{equation*}
+	任意の$f\in\fukuso[x]$は、$x^\brzo$を($f$の最高位の冪+1)回作用させると、
+	$0$になる。
+	$\fukuso[x]$では$x^\brzo$の固有値は$0$だけである。
+	\begin{proof} もし、ある$k\in\fukuso$に対して$x^\brzo f=kf$となる
+	$f\in\fukuso[x]$が存在するならば、次の式が導かれる。
+	\begin{equation*}\begin{split}
+		x^\brzo f=kf
+		\implies \sum_{n\in\sizen} f_{n+1}x^n = k\sum_{n\in\sizen}f_nx^n
+		%\implies f_{n+1} = kf_n \text{ for all }n\in\sizen
+		\implies f = f_0 \sum_{n\in\sizen}(kx)^n
+	\end{split}\end{equation*}
+	$\fukuso[x]$は無限級数を含まないので、$k\neq0$に対して
+	$x^\brzo f=kf$となる$f\in\fukuso[x]$が存在しないことがわかる。
+	\end{proof}
+	$\fukuso[x]$のGrothendieck群は負の冪も許した多項式$\fukuso[x,x^{-1}]$
+	となる。
+	\begin{equation*}\begin{split}
+		f\in\fukuso[x,x^{-1}] \implies f = f_{-n}x^{-n} + \cdots + f_{-1}x^{-1} + f_0 + f_1x + \cdots + f_mx^m
+	\end{split}\end{equation*}
+	$\fukuso[x,x^{-1}]$にノルム$|-|:\fukuso[x,x^{-1}]\to|\jitu|$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		|\sum_{i=-n}^mf_ix^i| = \max_{i=-n}^m|f_n|
+	\end{split}\end{equation*}
+	このノルムによってコーシー列が定義され、形式級数
+%s2:多項式}
+\subsection{テンソル代数}\label{s2:テンソル代数} %{
+	$A$を有限集合、$\fukuso A$を$A$から生成される自由ベクトル空間とする。
+	以下、係数はすべて複素数で考える。
+
+	$\fukuso A$の$n$次テンソル積を$T^nA$と書く。
+	\begin{equation*}\begin{split}
+		T^nA := \underbrace{\fukuso A\otimes\cdots\otimes \fukuso A}_{
+			n\text{ times}} \quad\text{for all }n\in\sizen_+
+	\end{split}\end{equation*}
+	そして、$T^0A=\fukuso$とする。$\fukuso A$のテンソル積全体で張られる
+	ベクトル空間を$\T A$と書く。
+	\begin{equation*}\begin{split}
+		\T A \subset \sum_{n\in\sizen} T^nA
+	\end{split}\end{equation*}
+	ここで、$\T A$は無限次のテンソル積は含まれないとする。
+	$\T A$に無限次のテンソル積は含まない理由は以下の通りである。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 無限次のテンソル積を定義するためには極限が必要である。
+		\item テンソル積の連結を考えるとき、無限次のテンソル積を含むと
+		単純な連結のイメージが使えなくなる。
+	\end{itemize} %}
+	$\T_0A:=T^0A$、$\T_+A$を$\T_0A$の補空間とする。
+	\begin{equation*}\begin{split}
+		\T_0A := \T A\cap T^0A = T^0A
+		,\quad T_+A := \T A\cap \sum_{n\in\sizen_+}T^nA
+	\end{split}\end{equation*}
+
+	$\T A$のテンソル積も定義できるから、$\T A$にテンソル積の連結によって
+	双線形写像$m_\myspace:\T A\otimes \T A\to \T A$を次のように定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 次数$0$以上のテンソル積同士に対しては次のように定義する。
+		\begin{equation*}\begin{split}
+			m_\myspace\bigl((u_1\otimes\cdots\otimes u_m)
+				\otimes(v_1\otimes\cdots\otimes v_n)\bigr)
+			= u_1\otimes\cdots\otimes u_m\otimes v_1\otimes\cdots\otimes v_n \\
+			\quad\text{for all } u_1,\dots, u_m, v_1,\dots, v_n\in \fukuso A
+		\end{split}\end{equation*}
+		%
+		\item 少なくとも片方が複素数となる場合は次のように定義する。
+		\begin{equation*}\begin{split}
+			m_\myspace(c\otimes t) = t = m_\myspace(t\otimes c)
+			\quad\text{for all }t\in\T A,\; c\in \fukuso
+		\end{split}\end{equation*}
+	\end{itemize} %}
+	$m_\myspace$はカッコを外して、同値関係
+	$\fukuso\otimes \T A\simeq \T A\simeq \T A\otimes \fukuso$を適用するだけ
+	の操作である。$m_\myspace$が結合的になり、単位元$1$を持つことがわかる。
+	したがって、$(\T A,+,0,m_\myspace,1)$は代数となる。
+	この代数を$\fukuso A$から生成されたテンソル代数という。
+
+	埋め込み$i_\T:\fukuso A\to \T A$を次のように定義すると、
+	\begin{equation}\label{eq:テンソル空間への標準埋め込み}\begin{split}
+		i_\T v = v \quad\text{for all } v\in \fukuso A
+	\end{split}\end{equation}
+	任意の代数$V=(V,m_+,0,m_\myspace,u_V)$と線形写像$f:\fukuso A\to V$に
+	対して、次の図を可換にする代数準同型$f_*:\T A\to V$が唯一つ定まる。
+	\begin{equation}\label{eq:テンソル代数の普遍性}\xymatrix{
+		\fukuso A \ar[rd]_{f} \ar[r]^{i_\T} & \T A \ar@{.>}[d]^{f_*} \\
+		& V \\
+	}\end{equation}
+	逆に、任意の代数準同型$f_*:\T A\to V$に対して、上図を可換にする
+	線形写像$f:\fukuso A\to V$が唯一つ定まる。
+	\begin{proof} 証明の概略を書いておく。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[存在] 任意の$v\in\fukuso A$に対して$f_*v:=fv$と定義し、 
+		任意の$c\in\fukuso$に対して$f_*c:=u_Vc$と定義し、
+		任意の$v_1,\dots,v_m\in\fukuso A$に対して
+		$f_*(v_1\otimes\cdots\otimes v_m):=(f_*v_1)\cdots(f_*v_m)$と定義すると、
+		$f_*$は図を可換にする代数準同型となる。
+		%
+		\item[唯一] 生成系をもつ半群から半群への半群準同型は、生成系に対する
+		写像の値が定まれば、残りの写像の値は一意に定まる。
+		今の場合には、積$m_\myspace$に対する生成系が$\fukuso A$となっている
+		から、$\fukuso A$に対する写像の値が定まれば、残りの写像の値は一意に
+		定まる。
+		%
+		\item[代数準同型から線形写像] 任意の$v\in\fukuso A$に対して$fv:=f_*v$
+		と定義すれば、$f$は図を可換にする線形写像となる。
+	\end{description} %}
+	\end{proof}
+	したがって、この対応によって集合同型
+	$\kappa_V:\Vect(\fukuso A,V)\simeq\Alg(\T A,V)$が成り立つことがわかる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation}\label{eq:テンソル代数の普遍性その二}\begin{array}{rcll}
+		(\kappa_Vf)c &=& u_Vc &\quad\text{for all }c\in \fukuso \\
+		(\kappa_Vf)(v_1\otimes\cdots\otimes v_m) &=& (fv_1)\cdots(fv_m) 
+			&\quad\text{for all } v_1,\dots,v_m\in\fukuso A
+	\end{array}\end{equation}
+	}
+	この集合同型を用いて$\Alg(\T A,V)$に積を定義することを考える。
+
+	$\Vect(\fukuso A,V)$に次のようにしてベクトル空間の構造を定義する。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rrcll}
+		\text{加法} & (f+g)v &:=& fv+gv 
+		& \quad\text{for all }f,g\in\Vect(\fukuso A,V),\; v\in\fukuso A \\
+		\text{係数} & (cf)v &:=& cfv
+		& \quad\text{for all }f\in\Vect(\fukuso A,V),\; c\in \fukuso \\
+	\end{array}\end{equation*}
+	}
+	$\Alg(\T A,V)$にも同様にしてベクトル空間の構造を定義する。
+	そして、$\kappa_V$が集合同型であることを利用して、$\Alg(\T A,V)$の積
+	$m_{\bowtie_V}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(\kappa_Vf)\bowtie_V(\kappa_Vg) := \kappa_V(f + g)
+		\quad\text{for all } f,g\in\Vect(\fukuso A,V)
+	\end{split}\end{equation*}
+	$0$を$\fukuso A$から$0\in V$への恒等写像とすると、$\kappa_V0$が
+	$m_{\bowtie_V}$の単位元となり、任意の$f\in\Vect(\fukuso A,V)$
+	に対して、$\kappa_V f$の逆元は$\kappa_V(-f)$となる。
+	
+	このようにして、$\Vect(\fukuso A,V)$にベクトル空間の構造、
+	$\Alg(\T A,V)$に代数の構造を定義すると、$\kappa_V$は次の可換群の同型
+	となる。
+	\begin{equation*}\begin{split}
+		\kappa_V: \bigl(\Vect(\fukuso A,V),+,0\bigr)
+		\simeq \bigl(\Alg(\T A,V),\bowtie_V,\kappa_V0\bigr)
+	\end{split}\end{equation*}
+
+	\begin{observation}[変数の代入]\label{obs:変数の代入} %{
+		文字集合$A$に文字$x\not\in A$を付け加えた$A\cup\set{x}$を考えて、
+		テンソル代数の普遍性\eqref{eq:テンソル代数の普遍性}を利用すると、
+		任意の線形写像$f:A\cup\set{x}\to\T A$に対して
+		次の図を可換にする代数準同型$f_*:\T(A\cup\set{x})\to\T A$が
+		唯一に定まることがわかる。
+		\begin{equation*}\xymatrix{
+			\fukuso(A\cup\set{x}) \ar[rd]_{f} \ar[r]^{i_\T} 
+				& \T(A\cup\set{x}) \ar@{.>}[d]^{f_*} \\
+			& \T A \\
+		}\end{equation*}
+		多項式との類似で$\T A[x]:=\T(A\cup\set{x})$とおき、次の場合を
+		考えてみる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $fA=0$のときは、$\kappa f=(f_xx^\tran)^*$と書かれる。
+			これは通常のKleeneスターによく似ている。
+			%
+			\item $fA=A$のときは、
+			$\kappa f=(\sum_{a\in A}aa^\tran + f_xx^\tran)^*$
+			は文字$x$を$f_x$で置き換える操作になる。つまり、多項式で変数への
+			値の代入に相当する操作になる。
+		\end{itemize} %}
+	\end{observation} %obs:変数の代入}
+
+	\begin{observation}[無限長の文字列の連結]
+	\label{obs:無限長の文字列の連結} %{
+		無限次のテンソル積の連結は無限長の文字列の連結と同じことである。
+		例えば、ネイピア数の逆数$1/e$と円周率の逆数$1/\pi$を$10$進表記して、
+		小数点以下の文字列を連結しようとしてもできない。しかし、$1/4$の
+		$10$進表記の小数点以下の文字列との連結は定義できる。
+		\begin{equation*}\begin{split}
+			e^{-1} &= 0.3678794411714423\cdots \\
+			\pi^{-1} &= 0.3183098861837907\cdots \\
+			\frac{1}{4} + \frac{e^{-1}}{100} &= 0.253678794411714423\cdots \\
+			\frac{1}{4} + \frac{\pi^{-1}}{100} &= 0.3183098861837907\cdots \\
+		\end{split}\end{equation*}
+		$\W A$を有限集合$A$から生成された自由モノイドとし、$\What A$
+		を無限長の文字列も含む$A$から生成された文字列の集合とする。
+		\begin{equation*}\begin{split}
+			\W A\subset \What A
+		\end{split}\end{equation*}
+		$\W A$で定義された文字列の連結による積を$m$とする。
+		$m$を$\What A$に拡張することは単純にはできないが、
+		$\What A$への作用$\rhd:\W A\times\What A\to\What A$として拡張すること
+		は簡単にできる。
+		\begin{equation*}\begin{split}
+			(w_1w_2)\rhd x = w_1\rhd (w_2\rhd x)
+			\quad\text{for all }w_1,w_2\in\W A,\; x\in \What A
+		\end{split}\end{equation*}
+	\end{observation} %obs:無限長の文字列の連結}
+%s2:テンソル代数}
+\subsection{ブラケット記法}\label{s2:ブラケット記法} %{
+	$\W A=(\W A,m_\myspace,1_\W)$を$A$から生成される自由モノイドとする。
+	$\W A$から$\T A$への写像$\ket{-}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\ket{1_\W} &= 1 \\
+		\ket{a_1\cdots a_m} &= a_1\otimes\cdots\otimes a_m
+		\quad\text{for all }a_1,\dots,a_m\in A
+	\end{split}\end{equation*}
+	$\ket{-}$は$(\W A,m_\myspace,1_\W)$から$(\T,m_\myspace,1)$へのモノイド同型
+	となる。
+	$\ket{1_\W}$は単に$\ket{1}$と書き、真空ということにする。
+
+	線形写像$i:\fukuso A\to \End(\T A)$を埋め込み$i_\T$
+	\eqref{eq:テンソル空間への標準埋め込み}を使って、次のように定義する。
+	\begin{equation*}\begin{split}
+		(iv)t = m_\myspace\bigl((i_\T v)\otimes t\bigr)
+	\end{split}\end{equation*}
+	すると、$\T A$の定義から、$\T A$の任意の元は真空に$\fukuso A$の元を
+	順次作用させていくことで得ることができる。
+	\begin{equation*}\begin{split}
+		t\in \T A &\implies \exists\; v_1,\dots,v_m\in\fukuso A
+		\text{ such that } t = (iv_1)\cdots(iv_m)\ket{1}
+	\end{split}\end{equation*}
+	$i$を文字列で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		(ia)\ket{1} = \ket{a},\; (ia)\ket{a_1\cdots a_m} = \ket{aa_1\cdots a_m}
+		\quad\text{for all }a,a_1,\dots,a_m\in A
+	\end{split}\end{equation*}
+	$i(\fukuso A)$から生成された代数は$\T A$と代数同型な$\End(\T A)$の
+	部分代数となる。
+	以降は$i$を省略して、$vt:=(iv)t$のように書くことにする。
+
+	$\T A$の双対空間を$\T A^\tran:=\Vec(\T A,\fukuso)$と書く。
+	線形写像$-^\tran:\T A\to \T A^\tran$を基底系$\W A$を使って次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		(\ket{w_1}^\tran)\ket{w_2} = \jump{w_1 = w_2}
+		\quad\text{for all }w_1,w_2\in\W A
+	\end{split}\end{equation*}
+	$-^\tran$は$1:1$の線形写像となる。$-^\tran$を転置といい、ブラでケットを
+	転置した結果を表すことにする。
+	\begin{equation*}\begin{split}
+		\bra{w} := \ket{w}^\tran \quad\text{for all } w\in\W A
+	\end{split}\end{equation*}
+
+	有限次元ベクトル空間の場合と同様に、$\T A^\tran$から$\T A$への転置も
+	定義したいが、$\T A^\tran$と$\T A$の違いについて考える必要がある。
+
+	$\T A$には無限長の文字列は含まれていないが、$\T A^\tran$は無限長の
+	文字列を含む（含んでも構わない）。$\T A^\tran$の元は写像を適用した結果の
+	値が有限であればよい。
+	\begin{equation*}\begin{split}
+		f\in \T A^\tran \implies
+		|ft| < \infty \quad\text{for all } t\in \T A
+	\end{split}\end{equation*}
+	したがって、次のような$\T A^\tran$の元も許される。
+	\begin{equation}\label{eq:双対空間に現れる無限長文字列の例}\begin{split}
+		\sum_{n\in\sizen}\bra{w^n} = \bra{1} + \bra{w} + \bra{w^2} + \cdots
+		\quad\text{for some } w\in \W A
+	\end{split}\end{equation}
+	もちろん、$\T A^\tran$に無限長の文字列を含めないという選択もできるが、
+	その場合は、実用面以外にもテンソル代数の普遍性
+	\eqref{eq:テンソル代数の普遍性}が成り立たなくなるという不利益がある。
+	ここでは、$\T A^\tran$に無限長の文字列を含めることにする。
+
+	$\T A^\tran$に無限長の文字列を含めると、$\T A^\tran$から$\T A$への
+	$1:1$の写像がなくなる。
+
+	\begin{note}[積による収束域の違い]\label{note:積による収束域の違い} %{
+		複素数上の関数では、$\sum_{n\in\sizen}x^n$という形式級数は、
+		$|x|<1$の円内だけで有限の値を持つ。それに対して、例
+		\eqref{eq:双対空間に現れる無限長文字列の例}の形式級数は$\T A$全域で
+		有限の値を持つ。この違いは、乗法の定義に拠っている。
+		{\setlength\arraycolsep{2pt}
+		\begin{equation*}\begin{array}{lrcl}
+			\text{複素数上の関数} & (fg)x &=& (f\otimes g)\dup x \\
+			\text{$\T A$上の関数} & (fg)x &=& (f\otimes g)\Delta x \\
+		\end{array}\end{equation*}
+		}
+		$\T A^\tran$にも複素数上の関数のような乗法を定義することはできるが、
+		形式言語を扱う際には実用的ではないのでデフォルトの乗法とはしない。
+		その逆も言える。
+	\end{note} %note:積による収束域の違い}
+%s2:ブラケット記法}
+\subsection{値域が複素数の場合}\label{s2:値域が複素数の場合} %{
+	可換群の同型$\kappa_V$を$V$が複素数の場合について詳しく見てみる。
+	記号を省略して次のように書くことにする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\fukuso A^\tran:=\mybf{Vec}(\fukuso A,\fukuso)$、
+		$\T A^\tran:=\mybf{Vec}(\T A,\fukuso)$、
+		\item $\End(\T A):=\mybf{Vec}(\T A,\T A)$、
+		\item $\kappa:=\kappa_\fukuso$、$\bowtie:=\bowtie_\fukuso$
+	\end{itemize} %}
+\subsubsection{双対空間の基底系}\label{s3:双対空間の基底系} %{
+	$A$から生成された自由モノイド$\W A$は$\T A$の基底系となる。
+	このとき、積$m_\myspace$は文字列の連結に対応し、単位射$u$は
+	次のように空文字列に対応する。
+	\begin{equation*}\begin{split}
+		uc = c1_\W \quad\text{for all }c\in \fukuso
+	\end{split}\end{equation*}
+	$\T A^\tran$にも基底系を定義することを考える。
+	線形写像$-^\tran:\T A\to \T A^\tran$を次のように定義する。
+	\begin{equation*}\begin{split}
+		w_1^\tran w_2 = \jump{w_1 = w_2} \quad\text{for all }\Word A
+	\end{split}\end{equation*}
+	$-^\tran$を転置ということにする。$-^\tran$は$1:1$の線形写像となる。
+	そして、$\W A^\tran$は$\T A^\tran$の基底系となる。
+	\begin{equation*}\begin{split}
+		\W A^\tran:=\set{w^\tran\in\T A^\tran\bou w\in\W A}
+	\end{split}\end{equation*}
+	転置は係数の複素共役を含まない操作となっていることに注意する。
+	煩雑さを避けるために、転置には複素共役の操作を含めていない。
+
+	有限次元ベクトル空間の場合と同様に、転置を$\T A^\tran\to \T A$にも
+	定義したいが、その前に$\T A^\tran$の収束を調べておく。
+
+	$\T A$は有限和しか許されないが、$\T A^\tran$は適用した結果の値が
+	有限であれば構わないので、有限和という制限はなくなる。
+	\begin{equation*}\begin{split}
+		f\in \T A^\tran \implies
+		|ft| < \infty \quad\text{for all } t\in \T A
+	\end{split}\end{equation*}
+	例えば、次のような形式級数も$\T A^\tran$の元として許される。
+	\begin{equation*}\begin{split}
+		\sum_{n\in\sizen} [a^n]^\tran \quad\text{for some } a\in A
+	\end{split}\end{equation*}
+	通常の複素数上の関数ではこのような形式級数は許されない。
+	$\T A^\tran$においても、次のような上限が抑えられない形式級数は許されない。
+	\begin{equation*}\begin{split}
+		\sum_{n\in\sizen} n[a^n]^\tran \quad\text{for some } a\in A
+	\end{split}\end{equation*}
+	$\T A^\tran$が通常の複素数上の関数と異なる根本的な原因は乗法の定義にある。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{lrcl}
+		\text{通常の関数} & (fg)x &=& (fx)(gx) \\
+		\text{ここでの場合} & (fg)x &=& (f\otimes g)\Delta x \\
+	\end{array}\end{equation*}
+	}
+	$\T A^\tran$にも通常の関数のような乗法を定義することはできるが、
+	形式言語を扱う際には直感的ではないのでデフォルトの乗法とはしない。
+	その逆も言える。
+
+	ここで問題となるのは、$\T A$よりも$\T A^\tran$の方が大きな空間となっている
+	ことである。転置の記号を使うと次の関係になっている。
+	\begin{equation}\label{eq:形式級数の可否}\begin{split}
+		(\T A)^\tran \subset \T A^\tran
+	\end{split}\end{equation}
+	そのために、$1:1$となる転置$\T A^\tran\to\T A$を定義することが
+	できない。ここでは、$\T A^\tran$からの転置をあきらめて、
+	線形写像$-^\tran:(\T A)^\tran\to \T A$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(t^\tran)^\tran = t \quad\text{for all }t\in \T A
+	\end{split}\end{equation*}
+	このように定義すると、$(-)^\tran(-)^\tran=\id_{\T A}$は自明となるが、
+	任意の$\T A^\tran$の元に対して$-^t$を適用することは許されない。
+
+	$\T A^\tran$において無限和を許すためには、基底系$\W A^\tran$にも
+	無限長の文字列を含める必要がある。しかし、定義より$\W A^\tran$には
+	有限長の文字列しか含まれていない。一つの方法として、$\W A$を部分モノイド
+	として含むような無限長の文字列を許す集合を定義する方法がある。
+	この方法では射有限（profinite）モノイドを構成することになる。
+	ここでは、次のような観察でお茶を濁すことにする。
+
+	\begin{observation}[写像空間での極限]\label{obs:写像空間での極限} %{
+		有限な値の数列$\set{f_n\in\fukuso\bou n\in\sizen}$
+		と$\set{g_n\in\fukuso\bou n\in\sizen}$が与えられると、
+		$\T A^\tran$では次の形式級数を定義することができる。
+		\begin{equation*}\begin{split}
+			f_a = \sum_{n\in\sizen} f_n[a^n]^\tran,\quad
+			g_a = \sum_{\in\sizen0} g_n[a^n]^\tran
+			\quad\text{for all } a\in A
+		\end{split}\end{equation*}
+		そして、積$f_ag_b$を形式的に計算すると次のようになり、
+		\begin{equation*}\begin{split}
+			f_ag_b = \sum_{m,n\in\sizen} f_mg_n[a^mb^n]^\tran
+		\end{split}\end{equation*}
+		$a\neq b$である限り有限になることがわかる。しかし、$a=b$の場合は、
+		\begin{equation*}\begin{split}
+			f_ag_a = \sum_{n\in\sizen} (fg)_n[a^n]^\tran \quad\text{where}\quad
+			(fg)_n = \sum_{k\in0..n} f_{n-k}g_k
+		\end{split}\end{equation*}
+		となり、任意の$n\in\sizen$で$(fg)_n$が有限でなければ、この形式的な
+		計算が成り立たなくなることがわかる。$n$が有限の場合は$(fg)_n$が
+		有限になることは明らかなので、極限$(fg)_\infty:=\lim_{n\to\infty}(fg)_n$
+		が有限かどうかが問題となる。一般にはこの極限は有限でない。例えば、
+		任意の$n\in\sizen$で$f_n=g_n=1$とすると、$(fg)_n=n+1$となり、
+		$(fg)_\infty$は発散する。
+	\end{observation} %obs:観察}
+
+	$\T A$と$\T A^\tran$の違いは有限和に制限するかしないかの違いであって、
+	それぞれの基底系$\W A$と$\W A^\tran$は集合同型
+	$-^\tran:\W A\simeq \W A^\tran$が成り立つことに注意する。
+	これは、有理数でも実数でも連分数によって自然数の文字列で
+	表すことができるが、有理数の場合は有限長の文字列、実数の場合は無限長の
+	文字列となる現象に似ている。
+%s3:双対空間の基底系}
+\subsubsection{指数写像}\label{s3:指数写像} %{
+	線形写像$\widehat{-}:\fukuso A^\tran\to \T A^\tran$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		\widehat{f} = \sum_{a\in A}(fa)[a]^\tran
+		\quad\text{for all }f\in \fukuso A^\tran
+	\end{split}\end{equation*}
+	$\kappa$は$m_\myspace$についてのKleeneスターで書くことができる。
+	\begin{equation*}\label{eq:写像空間への指数写像}\begin{split}
+		\kappa f = 1_\W^\tran + \widehat{f} + \widehat{f}^2 + \cdots
+		= \widehat{f}^* \quad\text{for all }f\in\fukuso A^\tran \\
+	\end{split}\end{equation*}
+	したがって、$\mybf{Alg}(\T A,\fukuso)\subseteq\T A^\tran$で定義された
+	積$\bowtie$は次の式を満たすことがわかる。
+	\begin{equation*}\label{eq:写像空間への指数写像その二}\begin{split}
+		\widehat{f}^*\bowtie\widehat{g}^* = (\widehat{f} + \widehat{g})^*
+		\quad\text{for all }f,g\in\fukuso A^\tran
+	\end{split}\end{equation*}
+	積$\bowtie$を文字列の積として表すことは、$\T A^\tran$に入る余積の構造
+	から求めることにする。
+%s3:指数写像}
+\subsubsection{双対空間の余積}\label{s3:双対空間の余積} %{
+	$\T A^\tran$に余積$\Delta$を次の畳み込みで定義する。
+	\begin{equation}\label{eq:連結に双対な余積}\xymatrix{
+		\Tensor V\otimes \Tensor V \ar[r]^{m_\myspace}
+			\ar@{.>}[d]^{\Delta f} & V \ar[d]^{f} \\
+		\fukuso\otimes \fukuso & \fukuso \ar[l]_{\simeq_\fukuso} \\
+	} \quad\text{for all } f\in \T A
+	\end{equation}
+	この畳み込みを式で書くと次のようになり、
+	\begin{equation*}\begin{split}
+		(\Delta f)(t_1\otimes t_2) \simeq_\fukuso f(t_1t_2)
+		\quad\text{for all } f\in \T A^\tran,\; t_1,t_2\in \T A
+	\end{split}\end{equation*}
+	文字列では次のようになる。
+	\begin{equation*}\begin{split}
+		\Delta_\myspace w^\tran = \sum_{w_1,w_2\in\W A} \jump{w = w_1w_2}
+			w_1^\tran\otimes w_2^\tran \quad\text{for all }w\in \W A
+	\end{split}\end{equation*}
+%s3:双対空間の余積}
+
+\subsubsection{ブラケット表記}\label{s3:ブラケット表記} %{
+	転置を使った作用素の定義を行うので、状態$\T A$の転置と作用素の転置を
+	区別するために、ブラケット記法を使うことにする。
+	
+	ケットを次の線形写像$\fukuso\W_+A\to\T A$として定義する。
+	\begin{equation*}\begin{split}
+		\ket{a_1\cdots a_m} = a_1\otimes\cdots\otimes a_m
+		\quad\text{for all }a_1,\dots,a_m\in A
+	\end{split}\end{equation*}
+	$\fukuso A$のケットへの作用を次のように定義する。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		a\ket{1} &=& \ket{a} & \quad\text{for all } a\in A \\
+		a\ket{a_1\cdots a_m} &=& \ket{aa_1\cdots a_m}
+		& \quad\text{for all } a,a_1,\dots,a_m\in A
+	\end{array}\end{equation*}
+	}
+	ブラを次の線形写像$\fukuso\W_+A\to(\T A)^\tran$として定義する。
+	\begin{equation*}\begin{split}
+		\braket{a_1\cdots a_m\bou b_1\cdots b_n} = 
+		\jump{m=n}\jump{a_1=b_1}\cdots\jump{a_m=b_m} \\
+		\quad\text{for all }a_1,\dots,a_m,b_1,b_n\in A
+	\end{split}\end{equation*}
+
+	ケット$\ket{1}$は空の文字列$1_\W$を表すことにする。
+	$\fukuso A$のケットへの'作用'を次のように定義すると、
+	\begin{equation*}\begin{split}
+		v\ket{1} = \ket{v} \quad\text{for all } v\in \fukuso A
+	\end{split}\end{equation*}
+
+	ブラで$(\T A)^\tran$の元を表し、写像の適用を次のように定義する。
+	\begin{equation*}\begin{split}
+		\braket{w_1|w_2} &= \jump{w_1 = w2}
+		\quad\text{for all } w_1,w_2\in \W A \\
+	\end{split}\end{equation*}
+	ブラは係数が有限であれば形式級数を許すが、ケットは有限和しか許さない
+	ものとする。
+
+
+	$\fukuso A$のブラへの作用が次のように定まる。
+	\begin{equation*}\begin{split}
+		\bra{a_1t}a_2 = \left\{\begin{split}
+			a_1 = a_2 &\implies \bra{t} \\
+			\text{else} &\implies 0 \\
+		\end{split}\right. %\}
+		\quad\text{for all }a_1,a_2\in\fukuso A,\; t\in \T A
+	\end{split}\end{equation*}
+	これを転置したものを次のように定義する。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		a_1^\tran\ket{a_2t} &=& \left\{\begin{split}
+			a_1 = a_2 &\implies \ket{t} \\
+			\text{else} &\implies 0 \\
+		\end{split}\right. %\}
+		& \quad\text{for all }a_1,a_2\in\fukuso A,\; t\in \T A \\
+		\bra{t}a^\tran &=& \bra{at}
+		& \quad\text{for all }a\in\fukuso A,\; t\in \T A \\
+	\end{array}\end{equation*}
+	}
+%s3:ブラケット表記}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		$\T A^\tran$で話を進めると記号がゴチャゴチャするので、転置を用いて
+		$\End(\T A)$に話を一本化する。
+	\end{todo} %todo:ここまで}
+
+
+	$\T A^\dag$に余積$\Delta_\myspace$を次の畳み込みで定義する。
+	\begin{equation}\label{eq:連結に双対な余積の定義}\begin{split}
+		(\Delta f)(t_1\otimes t_2) \simeq_\fukuso f(t_1t_2)
+		\quad\text{for all }f\in \T A^\tran,\; t_1,t_2\in \T A
+	\end{split}\end{equation}
+	$\Delta_\myspace$を文字列で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\Delta_\myspace w^\tran = \sum_{w_1,w_2\in\W A} \jump{w = w_1w_2}
+			w_1^\tran\otimes w_2^\tran \quad\text{for all }w\in \W A
+	\end{split}\end{equation*}
+	余積に対応した作用素も定義しておく。
+
+	$\myop{End}(\T A^\tran):=\mybf{Vec}(\T A^\tran,\T A^\tran)$とする。
+	$\myop{End}(\T A^\tran)$に加法と複素数の作用を次のように定義すると
+	ベクトル空間となる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{lrcll}
+		\text{加法} & (\phi + \psi)f &:=& \phi f + \psi f
+		& \quad\text{for all }\phi,\psi\in\myop{End}(\T A^\tran)
+			,\; f\in \T A^\tran \\
+		\text{係数} & (c\phi)f &:=& c\phi f
+		& \quad\text{for all }\phi\in\myop{End}(\T A^\tran),\; f\in \T A^\tran
+			,\; c\in \fukuso \\
+	\end{array}\end{equation*}
+	}
+	そして、写像の合成を線形に拡張すると、$\myop{End}(\T A^\tran)$は
+	代数となる。
+
+	線形写像$-\myspace:\T A\to \myop{End}(\T A^\tran)$
+	を次の畳み込みによって定義する。
+	\begin{equation}\label{eq:連結に双対な余積の定義}\begin{split}
+		(t_1\myspace f)t_2 := f(t_1t_2)
+		\quad\text{for all }f\in \T A^\tran,\; t_1,t_2\in \T A
+	\end{split}\end{equation}
+	$1:1$のモノイド逆順準同型
+	$-\myspace:(\T A,m_\myspace)\to\bigl(\myop{End}(\T A^\tran),\circ\bigr)^{\myop{op}}$
+
+	\begin{todo}[kokomade]\label{todo:kokomade} %{
+	\end{todo} %todo:kokomade}
+	これはリー環のHausdorffの公式
+	\begin{equation*}\begin{split}
+		(\exp X)(\exp Y) = \exp\left(X + Y + \frac{1}{2}[X,Y] + \cdots\right)
+	\end{split}\end{equation*}
+	に対応するものだが、写像空間の乗法の定義が異なるために、
+	指数写像も異なる形になっている。
+%s2:値域が複素数の場合}
+
+\subsection{バックアップ}\label{s2:バックアップ} %{
+
+	$V$の基底系を一つ固定して$E$とすると、$E$から生成される文字列の集合を
+	$\Word E$として、$\Tensor V\simeq \fukuso\Word E$という同一視をすると、
+	$\Tensor V$の積$m_\myspace$\eqref{eq:テンソル空間の連結}は文字列の連結
+	と見ることができる。以下では、$\Tensor V$の基底系を文字列$\Word E$で
+	表すことにする。
+
+	テンソル代数の普遍性を示す可換図\eqref{eq:テンソル代数の普遍性}で代数$A$
+	を複素数とすると、次の畳み込みによって余積$\Delta_\myspace$が定義される。
+	\begin{equation}\label{eq:余積の定義}\xymatrix{
+		\Tensor V\otimes \Tensor V \ar[r]^{m_\myspace}
+			\ar@{.>}[d]^{\Delta_\myspace f} & V \ar[d]^{f} \\
+		\fukuso\otimes \fukuso & \fukuso \ar[l]_{\simeq_\fukuso} \\
+	}\end{equation}
+
+	テンソル代数の普遍性の自然同型射を
+	$\kappa_A:\mybf{Vec}(V,A)\simeq\mybf{Alg}(\Tensor, A)$とすると、
+	任意の$f\in\mybf{Vec}(V,A)$に対して、$\kappa_Af\in\mybf{Alg}(\Tensor,A)$
+	は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\kappa_Af = \sum_{w\in\Word E}(\Tensor f)_ww^\dag
+	\end{split}\end{equation*}
+	ここで、$\Tensor f$と$w^\dag$は次のようにおいた。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{array}{rcll}
+		(\Tensor f)_w &:=& (\Tensor f)w &\quad\text{for all }w\in \Word E \\
+		(\Tensor f)1_\Word &=& 1 \\
+		(\Tensor f)[e_1e_2\cdots e_m] &=& (fe_1)(fe_2)\cdots(fe_m)
+			&\quad\text{for all }e_1,e_2,\dots,e_m\in E \\
+		w_1^\dag w_2 &=& \jump{w_1 = w_2}
+			&\quad\text{for all }w_1,w_2\in \Word E \\
+	\end{array}\end{equation*}
+	}
+	この式はKleeneスターの式に他ならない。通常使われるKleeneスターの記号
+	$-^*$を使うと次のように書ける。
+	\begin{equation}\label{eq:Kleeneスターによる代数準同型}\begin{split}
+		\kappa_Af = \left(\sum_{e\in E}(fe)e^\dag\right)^*
+		\quad\text{for all }f\in \mybf{Vec}(V,A)
+	\end{split}\end{equation}
+	そして、代数$A$が複素数の場合、$\mybf{Alg}(\Tensor V,\fukuso)$の元は
+	余積$\Delta_\myspace$に対して群的（ノート\ref{note:群的な元}）になる。
+	\begin{equation*}\begin{split}
+		\Delta_\myspace\kappa f = \kappa f\otimes \kappa f
+		\quad\text{for all }f\in \mybf{Vec}(V,\fukuso)
+	\end{split}\end{equation*}
+	任意の$w\in\Word E$に対してBrzozowski微分$w^\beta:\Tensor V\to \Tensor V$
+	は次のように与えられるから、
+	\begin{equation*}\begin{split}
+		w^\beta f :\simeq_\fukuso (\Delta f)(w\otimes -)
+		\quad\text{for all }f\in\mybf{Vec}(\Tensor V,\fukuso)
+	\end{split}\end{equation*}
+	代数準同型$\kappa f$のBrzozowski微分は次のようになることがわかる。
+	\begin{equation*}\begin{split}
+		w^\beta\kappa f = (\Tensor f)_w\kappa f
+		\quad\text{for all }w\in\Word E,\;f\in\mybf{Vec}(V,\fukuso)
+	\end{split}\end{equation*}
+	状態線図\footnote{
+		通常状態遷移図はブーリアン上の加群に対して描かれる。ここでは、それを
+		拡張して複素数上のベクトル空間に対しても描くことにする。その際、
+		複素数の場合、ブーリアンと異なり、係数の作用を無視することができない
+		ので、係数の作用を辺に描くことする。係数$0$は、遷移がないことを表す。
+	}で書くと次のようになる。
+	\begin{equation*}\xymatrix{
+		\ar[r] &*++[o][F=]{\kappa f} \ar@(rd,ru)_{fe}
+	}
+		\quad\text{for all }e\in E
+	\end{equation*}
+
+	代数準同型をKleeneスターで表した式\eqref{eq:Kleeneスターによる代数準同型}
+	は、$\kappa\in\mybf{Set}(V^\dag,\Tensor V^\dag)$を定義したことになる。
+	これを$\kappa\in\mybf{Set}(\Tensor V^\dag,\Tensor V^\dag)$に拡張すると、
+	Kleeneスターが$\Tensor V^\dag$全域に対して定義できることになる。
+	Kleeneスターを$\Tensor V^\dag$全域で定義する前に、ここで定義した
+	$\kappa\in\mybf{Set}(V^\dag,\Tensor V^\dag)$をもう少し調べることにする。
+
+	$\Tensor_GV^\dag\subseteq \Tensor V^\dag$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\Tensor_GV^\dag = \set{f\in\Tensor V^\dag\bou \Delta f = f\otimes f}
+	\end{split}\end{equation*}
+	$\Tensor_GV^\dag$は$\Tensor V^\dag$の余積$\Delta$について群的な元全体の
+	作る$\Tensor V^\dag$の部分空間である。$\Tensor_GV^\dag$は、積$m$について
+	閉じていないが、余積$\Delta$に圏的に双対な積$m_\shuffle$について
+	閉じている。$m_\shuffle$はシャッフル積である。
+	\begin{equation*}\begin{split}
+		\Delta(f\shuffle g) = (\Delta f)\shuffle(\Delta g)
+		\quad\text{for all }f,g\in \Tensor V^\dag
+	\end{split}\end{equation*}
+	$\Tensor_GV^\dag=\mybf{Alg}(\Tensor V,\fukuso)$で、値域$\fukuso$は可換代数
+	だから、$\Tensor_GV^\dag$がシャッフル積で可換代数になることは理解できる。
+	また、任意の$e_1,e_2\in E$に対して$f_{e_1e_2}:=(fe_1)(fe_2)$とおいて、
+	Kleeneスターによる代数準同型\eqref{eq:Kleeneスターによる代数準同型}
+	を展開すると次のようになるが、
+	\begin{equation*}\begin{split}
+		\kappa f &= \left(\sum_{e\in E}(fe)e^\dag\right)^* \\
+		&= 1_\Word^\dag + \sum_{e\in E}(fe)[e]^\dag
+		+ \sum_{e_1,e_2\in E}f_{e_1e_2}[e_1e_2]^\dag
+		+ \sum_{e_1,e_2,e_3\in E}f_{e_1e_2e_3}[e_1e_2e_3]^\dag
+		+ \cdots \\
+		&\quad\text{for all }f\in V^\dag
+	\end{split}\end{equation*}
+	値域が可換だから$f_{e_1e_2}=f_{e_2e_1}$となり、次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\sum_{e_1,e_2\in E}f_{e_1e_2}[e_1e_2]^\dag
+		&= \frac{1}{2!}\sum_{e_1,e_2\in E}f_{e_1e_2}\bigl([e_1e_2] + [e_2e_1]\bigr)^\dag \\
+		&= \frac{1}{2!}\sum_{e_1,e_2\in E}f_{e_1e_2}\bigl([e_1]\shuffle[e_2]\bigr)^\dag \\
+		&= \frac{1}{2!}f\shuffle f \\
+		%
+		\sum_{e_1,e_2,e_2\in E}f_{e_1e_2e_3}[e_1e_2e_3]^\dag
+		&= \frac{1}{3!}\sum_{e_1,e_2,e_3\in E}f_{e_1e_2e_3}\bigl(\sum_{\sigma\in S_3}[e_{\sigma1}e_{\sigma2}e_{\sigma3}]\bigr)^\dag \\
+		&= \frac{1}{3!}\sum_{e_1,e_2\in E}f_{e_1e_2e_3}\bigl([e_1]\shuffle[e_2]\shuffle[e_3]\bigr)^\dag \\
+		&= \frac{1}{3!}f\shuffle f\shuffle f \\
+		%
+		\vdots
+	\end{split}\end{equation*}
+	Kleeneスターによる代数準同型はシャッフル積を用いて次のように書ける。
+	\begin{equation}\label{eq:指数写像による代数準同型}\begin{split}
+		\kappa f = \exp\left(\sum_{e\in E}(fe)(e\shuffle)^\dag\right)1_\Word^\dag
+		\quad\text{for all }f\in V^\dag
+	\end{split}\end{equation}
+	ここで、任意の$e\in E,\;w\in \Word E$に対して
+	$(e\shuffle)^\dag w^\dag=[e]^\dag\shuffle w^\dag$とおいた。
+	式\eqref{eq:指数写像による代数準同型}はリー代数の指数写像と同じ形を
+	している。Kleeneスター
+	$\kappa:\mybf{Vec}(V,\fukuso)\to\mybf{Alg}(\Tensor V,\fukuso)$は
+	シャッフル積$m_\shuffle$を用いると指数写像の形で表される。
+	したがって、Kleeneスター$\kappa$は$\mybf{Vec}(V,\fukuso)$の加法群
+	から$\Tensor_G V^\dag$のシャッフル積$m_\shuffle$による乗法群への
+	群準同型となっている。$\kappa$が$1:1$になっていることは明らかである。
+	\begin{equation*}\begin{split}
+		\kappa f = \kappa g 
+		&\iff \biggl((\kappa f)v = (\kappa g)v \quad\text{for all }v\in V\biggr) \\
+		&\iff \biggl(fv = gv \quad\text{for all }v\in V\biggr) \\
+		&\iff f = g \quad\text{for all }f,g\in V^\dag
+	\end{split}\end{equation*}
+	$\kappa$が$\onto$になっていることは次の式からわかる。
+	\begin{equation*}\begin{split}
+		\phi = \kappa\left(\sum_{e\in E}(\phi e)e^\dag\right)
+		\quad\text{for all }\phi\in \Tensor_GV^\dag
+	\end{split}\end{equation*}
+	連続群での指数写像の場合は、大域的な可微分同相写像は保証されず、
+	原点近傍での可微分同相写像になることまでしか言えない\footnote{
+		局所的に同型だが大域的には同型でない連続群としては、
+		$\myop{SU}_2$と$\myop{SO}_3$のような例がある。
+	}。Kleeneスターの場合も同様で、$f\in V^\dag$に対して
+	$\kappa f$が収束しなければ、これまでの議論はご破算である。
+	$\kappa f$の値が有限であることは、$\Tensor V$がテンソル積の直和
+	（有限個のテンソル積だけ）であることから保証されている。
+	\begin{equation*}\begin{split}
+		\bigl|(\kappa f)v\bigr| < \infty \quad\text{for all }v\in\Tensor V
+	\end{split}\end{equation*}
+	しかし、$\Tensor V$をテンソル積の直積（無限個のテンソル積を含む）に拡張
+	した場合には、$\kappa f$の収束性を考える必要がある。そして、Kleeneスターを
+	導入するということは、定義域$\Tensor V$をテンソル積の直和から直積に拡張
+	するということに繋がる気がする。したがって、Kleeneスターは原点近傍で
+	可微分同相な可換群同型を与えると思っておく。
+	\begin{equation}\label{Kleeneスターの可微分同相}\begin{split}
+		\kappa:(V^\dag,+,0)\simeq(\Tensor_GV^\dag,m_\shuffle,1_\Word^\dag)
+		\quad\text{locally around }0\in V^\dag
+	\end{split}\end{equation}
+	原点近傍というのは、$|\kappa f|$が収束するほど$|f|$
+	が小さいということである。
+	値域を複素数から任意の可換代数に変えても同じことが成り立つ。
+
+	Kleeneスターの定義域を$\Tensor V^\dag$に拡大することを考える。
+	任意の$v\neq0\in\Tensor V$に対して$v$で張られる$\Tensor V$の
+	一次元部分空間を$(v):=\myop{span}\set{v}\subseteq\Tensor V$とし、
+	任意の線形写像$f:(v)\to\fukuso$に対して、次の図を可換にする代数準同型$f_*$
+	と線形写像$f_{**}$を定めればよいだろう。
+	\begin{equation}\label{eq:Kleeneスターの拡張}\xymatrix{
+		(v) \ar[rd]_{f} \ar[r]^{\subseteq}
+			& \Tensor(v)\ar@{.>}[d]^{f_*} \ar[r]^{\subseteq}
+			& \Tensor V \ar@{.>}[dl]^{f_{**}} \\
+		& \fukuso \\
+	}\end{equation}
+	$f_*$は$f$から唯一に定まる。$f_{**}$は次のように定義するば、上の図が
+	可換になる。
+	\begin{equation*}\begin{split}
+		f_{**}t = \begin{cases}
+			f_*t, &\text{ iff } t\in \Tensor(v) \\
+			0, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}
+	\quad\text{for all }t\in \Tensor V
+	\end{equation*}
+	応用上、$f_{**}$をこのように定義することは都合がよいが、
+	理論の構成上は$f_{**}$をこのように定義する必要性は感じられない。
+	このことは後で考えてみることにする。
+
+	\begin{todo}[このあと]\label{todo:このあと} %{
+		力尽きたので、このあとに考える事柄を列挙しておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Kleeneスターの収束 \\
+			文字列の連結による積で表示した場合と、シャッフル積で表示した場合とで、
+			収束半径が異なる。普通に考えれば、シャッフル積で表示した場合に収束
+			すれば、そのKleeneスターは収束すると判定することになるだろう。
+			考えてみる必要がある。
+			%
+			\item Kleeneスターの構成 \\
+			テンソル空間を単位元で張られる部分空間$\Tensor_0V$とそれ以外の
+			部分空間$\Tensor_+V$に分割して、$\Tensor V=\Tensor_0V + \Tensor_+V$
+			とする。
+			%
+			\item Kleeneスターの構成 - バックアップ \\
+			多分、$v\in\Tensor V$によるテンソル空間$\Tensor(v)$を使う方法は
+			構成上問題がある。例えば、$v=1_\Word$とした場合、$\Tensor V$を
+			どのように解釈したらよいか困ってしまう。次のように修正することを
+			考える。部分モノイド$v^*:=\set{1_\Word,v,v^2,\dots}$で張られる
+			部分空間に対して代数準同型となるようにKleeneスターを定義する。
+			例えば、$v=c1_\Word$とすると、
+			$v^*=\set{1_\Word,c1_\Word,c^21_\Word,\dots}$
+			となり、$(v):=\myop{span}v^*=\set{c1_\Word\bou c\in\fukuso}$と
+			一次元部分空間となり、$(v)$から$\fukuso$への代数準同型は$1_\Word$
+			の写像先によって決まることがわかる。
+			%
+			\item 変数変換 \\
+			Kleeneスターの拡張\eqref{eq:Kleeneスターの拡張}の記号をそのまま
+			用いる。$v\in\Tensor V$は単位元$1_\Word$を含まないとする。
+			$v$に$1_\Word$が含まれる場合は、厄介な場合分けが必要となる、多分。
+			$\Tensor(v)^\dag$で余積$\Delta_v$を次のように定義すると、
+			\begin{equation*}\begin{split}
+				\Delta_v[v^n]^\dag = \sum_{m=0}^n[v^m]^\dag\otimes[v^{n-m}]^\dag
+				\quad\text{for all }n\in\sizen
+			\end{split}\end{equation*}
+			$\Delta_v$に圏的に双対なシャッフル積$\shuffle_v$が次のように
+			定義される。
+			\begin{equation*}\begin{split}
+				[v^m]^\dag\shuffle_v[v^n]^\dag = \binom{m+n}{n}[v^{m+n}]^\dag
+				\quad\text{for all }m,n\in\sizen
+			\end{split}\end{equation*}
+			そして、Kleeneスターが次のように$\Delta_v$に対して群的になることが
+			わかる。
+			\begin{equation}\label{eq:部分空間で群的になるKleeneスター}\begin{split}
+				\Delta_v\kappa(cv^\dag) = \kappa(cv^\dag)\otimes\kappa(cv^\dag)
+				\quad\text{for all }c\in\fukuso
+			\end{split}\end{equation}
+			しかし、$\Tensor V^\dag$での余積$\Delta$に対しては$\kappa(cv^\dag)$
+			は一般的には群的にはならない。例えば、$a,b\in E$、$v=[ab]$とすると、
+			$\Delta v=\Delta_v v+[a]\otimes[b]$となる。シャッフル積で見ると、
+			$v\shuffle v=v\shuffle_vv+4[a^2b^2]$となる。
+			式\eqref{eq:部分空間で群的になるKleeneスター}のように$\Tensor(v)^\dag$
+			で群的になるのは$\shuffle_v$と$\Delta_v$の双対性のおかげである。
+			\begin{equation*}\begin{split}
+				\Delta_v\bigl([v]\shuffle_v\cdots\shuffle_v[v]\bigr)
+				= \bigl(\Delta_v[v]\bigr)\shuffle_v\cdots\shuffle_v\bigl(\Delta_v[v]\bigr)
+			\end{split}\end{equation*}
+			一般には、$\shuffle_v$と$\Delta$は双対的ではないので、
+			$\Delta\kappa(cv^\dag)$は群的にはならない。
+			%
+			\item 単位元を含む部分空間 \\
+			$v\in\Tensor V$が単位元を含む場合の$v$によって張られる一次元空間の
+			テンソル空間を考える。極端な場合で、$v=1_\Word$のときは、
+			$\Tensor(1_\Word)$をどう解釈すべきか悩んでしまう。
+			\item \Midline{Kleeneスターの定義} \\
+			\begin{boxedminipage}{\linewidth} 可換図\eqref{eq:Kleeneスターの拡張} 
+			による定義でよいのではなかろうか。
+			\end{boxedminipage}
+			テンソル代数の普遍性を拡張して、
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 任意のベクトル空間$W$、
+				\item 任意の$1:1$線形写像$i_W:W\to \Tensor V$、
+				\item 任意の代数$A$、
+				\item 任意の線形写像$f:W\to A$
+			\end{itemize} %}
+			に対して次の可換図を考える。
+			\begin{equation}\label{eq:テンソル代数の普遍性の拡張}\xymatrix{
+				W \ar[rd]_{f} \ar[r]^{i_W} & \Tensor V \ar@{.>}[d]^{\kappa_Af} \\
+				& A \\
+			}\end{equation}
+			ここで、$\kappa_Af$は、$W$の基底系を$E_W$として、次のように与えられる
+			ものとする。
+			\begin{equation}\label{eq:代数準同型の拡張}\begin{split}
+				\kappa_Af = \left(\sum_{e\in E_W}(fe)(i_We)^\dag\right)^*
+				\quad\text{for all }f\in \mybf{Vec}(W,A)
+			\end{split}\end{equation}
+			この式の右辺を特徴づける性質を見つけることが課題となる。
+			$\kappa_Af$は、
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item ベクトル空間として$W\simeq V$が成り立ち、
+				\item $\myop{span}i_WE_W=V$となるときに
+			\end{itemize} %}
+			代数準同型となるようにする。代数準同型を拡張することになる。
+			%
+			\item 代数準同型を拡張した式$\kappa_\fukuso f$
+			\eqref{eq:代数準同型の拡張}の余積$\Delta_\myspace$が有限和に
+			なることを証明する。
+			%
+			\item \Midline{シャッフル積} \\
+			\begin{boxedminipage}{\linewidth} シャッフル積によって局所的な
+			群同型が与えられる。式\eqref{Kleeneスターの可微分同相}を見ること。
+			\end{boxedminipage}
+			値域が可換代数$A$の場合、$\mybf{Vec}(\Tensor V,A)$だけを考える
+			とすると、$\mybf{Vec}(\Tensor V,A)$では文字列の連結による積で考えて
+			も、シャッフル積で考えても結果は変わらないのでないだろうか。
+		\end{itemize} %}
+	\end{todo} %todo:このあと}
+
+	\begin{note}[単位元を含むKleeneスター]
+	\label{note:単位元を含むKleeneスター} %{
+		単位元$1_\Word$を含むKleeneスターを計算する。
+		$t\in \Tensor V$とし、$t$を単位元を含む部分と含まない部分に分解する。
+		\begin{equation*}\begin{split}
+			v = v_0 + v_1,\quad v_0 = u\epsilon v
+			,\quad v_1 = (\id - u\epsilon) v
+		\end{split}\end{equation*}
+		すると、次の式から、
+		\begin{equation*}\begin{split}
+			(a + b)^* = 1 + (a + b)(a + b)^* 
+			= \bigl(1 + a(a + b)^*\bigr) + b(a + b)^* \\
+			= b^*\bigl(1 + a(a + b)^*\bigr)
+			= b^* + b^*a(a + b)^*
+			= (b^*a)^*b^*
+		\end{split}\end{equation*}
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			v^* = (v_0^*v_1)^*v_0^* 
+			= \left(\frac{v - u\epsilon v}{1 - \epsilon v}\right)^*
+				\frac{1_\Word}{1 - \epsilon v}
+				\quad\text{ iff } |\epsilon v| < 1
+		\end{split}\end{equation*}
+		連結による積では、$1\le |\epsilon v|$のときは$v^*$は発散するが、
+	\end{note} %note:単位元を含むKleeneスター}
+
+	\begin{note}[余単位射の唯一性]\label{note:余単位射の唯一性} %{
+		$C=(C,\Delta)$を余代数とする。$\epsilon_1,\epsilon_2:C\to\fukuso$
+		を$\Delta$の余単位射とする。すると、次の式が成り立ち、余単位射が
+		存在すれば、一意に定まることが示される。
+		\begin{equation*}\begin{split}
+			\epsilon_1 = \epsilon_1\id
+			\simeq_\fukuso \epsilon_1(\id\otimes \epsilon_2)\Delta
+			= \epsilon_2(\epsilon_1\otimes \id)\Delta
+			\simeq_\fukuso \epsilon_2\id = \epsilon_2
+		\end{split}\end{equation*}
+	\end{note} %note:余単位射の唯一性}
+
+	\begin{note}[群的な元]\label{note:群的な元} %{
+		余代数$C=(C,\Delta,\epsilon)$で、$c\in C$が群的であるとは、
+		$\Delta c = c\otimes c$となることを言う。このような$c\in C$を'群的'と
+		いうのは以下の理由に拠っている。
+
+		$C$がHopf代数であるとする。積を$m$、単位射を$u$、対合射を$S$とする。
+		\begin{equation*}\begin{split}
+			m(S\otimes\id)\Delta = u\epsilon = m(\id\otimes S)\Delta
+		\end{split}\end{equation*}
+		$GC$を$C$の群的な元の作る部分余代数とする。
+		\begin{equation*}\begin{split}
+			GC := \set{c\in C\bou \Delta c = c\otimes c}
+		\end{split}\end{equation*}
+		すると、次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			\epsilon g = 1 \quad\text{for all }g\in GC
+		\end{split}\end{equation*}
+		次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			m(Sg\otimes g) = m(S\otimes\id)\Delta g = u\epsilon g = u1
+			\quad\text{for all }g\in GC
+		\end{split}\end{equation*}
+		対合射$S$が$GC$の元をその逆元に対応させる射になっていることがわかる。
+	\end{note} %note:群的な元}
+
+	\begin{note}[余積と無限]\label{note:余積と無限} %{
+		$(A,m_A),(B,m_B)$を代数、$E$を$A$の基底系とすると、任意の
+		$f,g\in BA^\dag:=\mybf{Vec}(A,B)$に対してその積は次のようになる。
+		\begin{equation*}\begin{split}
+			fg = \sum_{e\in E}h_ee^\dag
+			\text{ where }h_e = \sum_{e_1,e_2\in E}\jump{e=e_1e_2}(fe_1)(ge_2)
+			= m_B(f\otimes g)\Delta_Ae
+		\end{split}\end{equation*}
+		ここで、余積$\Delta_A$は積$m_A$に対して畳み込み\eqref{eq:余積の定義}
+		で定義された余積とする。任意の$e\in E$に対して$\Delta_Ae$が有限和で
+		収まれば問題ないのだが、有限和で収まらない場合は、その収束性を調べる
+		必要がある。
+		
+		基底系$E$が有限長の文字列の集合$\Word S$で与えられる場合は、
+		任意の$w\in\Word S$に対して$\Delta w$は$\zettai{w}+1$の項の和となり、
+		$\Delta w$が有限和に収まる。しかし、Kleene閉包をした場合には、無限長の
+		文字列が$A^\dag$に入ってきて、$A^\dag$の基底系を$\Word S$で覆うことは
+		できなくなる。そこで、$A^\dag$の完備化が必要となる。
+
+		一方、初めから余積が有限和で収まらないこともある。例えば、
+		有理数$\bun$の乗法に対する余積$\Delta$は、任意の$q\in\bun$に対して
+		無数に$q=q_1q_2$となる$q_1,q_2\in\bun$が存在するから、$\Delta q$は
+		無限和になってしまう。このような場合は、$\bun$で積と余積を考えるのでは
+		なく、余積が有限和になる適当な商空間を考えて、そこで積と余積を考える
+		ことになるのだろう。
+
+		いずれにしても、次の手順になると思われる。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item 余積が有限和となる空間を考える。
+			\item その空間を完備化する。
+			\item Kleene閉包または指数写像を定義する。
+		\end{enumerate} %}
+	\end{note} %note:余積と無限}
+%s2:バックアップ}
+%s1:クリーネ閉包}
+\section{順序}\label{s1:順序} %{
+	$A$を有限集合、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\Word A$を$A$から生成された自由モノイド、
+		\item $\Group A$を$A$から生成された自由群
+	\end{itemize} %}
+	とする。$\Word A$に順序$\le$を次のように定義する。
+	\begin{equation*}\begin{split}
+		w_1\le w_2 \iff \exists\; w\in \Word A\bou w_1w = w_2
+		\quad\text{for all }w_1,w_2\in \Word A
+	\end{split}\end{equation*}
+	すると、順序$\le$は左からの積とコンパチになる。
+	\begin{equation*}\begin{split}
+		w_1\le w_2 \iff ww_1\le ww_2 \quad\text{for all }w,w_1,w_2\in \Word A
+	\end{split}\end{equation*}
+	\begin{proof}任意の$w,w_1,w_2\in \Word A$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		w_1\le w_2 &\iff \exists\; x\in \Word A\bou w_1x = w_2
+		\iff \exists\; x\in \Word A\bou ww_1x = ww_2 \\
+		&\iff ww_1\le ww_2
+	\end{split}\end{equation*}
+	\end{proof}
+	一方、右からの積はコンパチとはならない。
+	左から積がコンパチとなるように、$\Group A$に順序を拡張する。
+	\begin{equation*}\begin{split}
+		w_1\le w_2 &\implies w_2^{-1}\le w_1^{-1}
+	\end{split}\end{equation*}
+%s1:順序}
+\section{形式級数}\label{s1:形式級数} %{
+	この節で使う記号を書いておく。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
 		\item[直積と直和]
 		集合$S$による自然数の直積$\prod_S\sizen$と直和$\coprod_S\sizen$を
@@ -65,400 +1958,63 @@
 		同じ記号を用いる。
 	\end{description} %}
 
-\subsection{グロタンディーク群}\label{s2:グロタンディーク群} %{
-	$M=(M,m_\myspace)$を可換半群とする。
-	直積$M\times M$に積$m_\myspace$を次のように定義する。
-	\begin{equation*}\begin{split}
-		(m_1,m_2)(n_1,n_2) = (m_1n_1,m_2n_2)
-		\quad\text{for all }m_1,m_2,n_1,n_2\in M
-	\end{split}\end{equation*}
-	さらに、$M\times M$に同値関係$\sim$を次のように定義する。
-	\begin{equation}\label{eq:グロタンディーク群を導く同値関係}\begin{split}
-		(m_1,n_1) \sim (m_2,n_2)
-		\iff \exists\; g\in M\bou m_1n_2g = m_2n_1g \\
-		\quad\text{for all }m_1,m_2,n_1,n_2\in M
-	\end{split}\end{equation}
-	\begin{proof} $\sim$が同値関係となることを示す。
+	テーマを書いておく。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[反射律] 次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			\bigl(mng=mng \text{ for all }g\in M\bigr)\implies (m,n) \sim (m,n) \\
-			\quad\text{for all }m,n\in M
-		\end{split}\end{equation*}
-		\item[対称律] 次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			(m_1,n_1)\sim(m_2,n_2) \iff (m_2,n_2)\sim(m_1,n_1) \\
-			\quad\text{for all }m_1,m_2,n_1,n_2\in M
-		\end{split}\end{equation*}
-		\item[推移律] 次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			&(m_1,n_1)\sim(m_2,n_2) \text{ and } (m_2,n_2)\sim(m_3,n_3) \\
-			&\implies \exists\;g,h\in M\bou
-				m_1n_2g = m_2n_1g \text{ and } m_2n_3h = m_3n_2h \\
-			&\implies \exists\;g,h\in M\bou
-				m_1n_3(m_2n_2gh) = m_3n_1(m_2n_2gh) \\
-			&\implies (m_1,n_1)\sim(m_3,n_3)
-			\quad\text{for all }m_1,m_2,n_1,n_2\in M
-		\end{split}\end{equation*}
-	\end{description} %}
-	\end{proof}
-	すると、次の式が成り立ち、
-	\begin{equation*}\begin{split}
-		f_1\sim g_1 \text{ and } f_2\sim g_2 \implies f_1f_2\sim g_1g_2
-		\quad\text{for all }f_1,f_2,g_1,g_2\in M\times M
-	\end{split}\end{equation*}
-	$\sim$による商を$\pi:=-/\sim$として、
-	任意の切断$\sigma:\pi(M\times M)\to M\bou \pi\sigma=\id$に対して、
-	次の可換図によって$\pi(M\times M)$に積$m_\myspace$を定義することができる。
-	\begin{equation*}\xymatrix@C=4em{
-		M\times M\times M\times M \ar[r]^{m_\myspace} & M\times M \ar[d]^\pi \\
-		\pi(M\times M)\times \pi(M\times M) \ar@{.>}[r]^{m_\myspace}
-			\ar[u]^{\sigma\times\sigma} & \pi(M\times M) \\
-	}\end{equation*}
-	このようにして作られた可換半群$G=\bigl(\pi(M\times M),m_\myspace\bigr)$は
-	次の性質を満たす。
-	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[単位元] 任意の$m\in M$に対して、$\pi(m,m)$が単位元となる。
-		\item[逆元] 任意の$m,n\in M$に対して、$\pi(m,n)$と$\pi(n,m)$は互いに
-		逆になる。
-	\end{description} %}
-	可換群$G$を$M$のグロタンディーク群という。
-
-	\begin{definition}[グロタンディーク群]\label{def:グロタンディーク群} %{
-		$M=(M,m_\myspace)$を可換半群とする。$M\times M$に積$m_\myspace$を
-		次のように定義し、
-		\begin{equation*}\begin{split}
-			(m_1,n_1)(m_2,n_2) := (m_1m_2,n_1n_2)
-			\quad\text{for all }m_1,m_2,n_1,n_2\in M
-		\end{split}\end{equation*}
-		同値関係$\sim$を次のように定義する。
-		\begin{equation*}\begin{split}
-			(m_1,n_1)\sim(m_2,n_2) \iff m_1n_2=m_2n_1
-			\quad\text{for all }m_1,m_2,n_1,n_2\in M
-		\end{split}\end{equation*}
-		すると、$(M\times M)/\sim$は可換群となる。この可換群を
-		$M$のグロタンディーク群といい、$\Gro M$と書く。
-
-		また、任意の$m,n\in M$に対して$(m,n)$を代表元として持つ$\Gro M$の元を
-		$(m,n)_\Gro$と書くことにする。
-
-		グロタンディーク群を構成する方法の詳細は上記を見ること。
-	\end{definition} %def:グロタンディーク群}
-
-	\begin{note}[グロタンディーク群でのゲージ変換]
-	\label{note:グロタンディーク群でのゲージ変換} %{
-		有理数の割り算で成り立つ関係$m_1/n_1=m_2/n_2\implies m_1n_2=m_2n_1$
-		をモデルとした次の二項関係$R\subset M\times M\times M\times M$は、
-		\begin{equation*}\begin{split}
-			(m_1,n_1,m_2,n_2)\in R \iff m_1n_2 = m_2n_1 \\
-			\quad\text{for all }m_1,m_2,n_1,n_2\in M
-		\end{split}\end{equation*}
-		一般には同値関係とならない。例えば、自然数の乗法$(\sizen,m_\myspace)$
-		を考えると、$\sizen$はゼロ元$0$を含むので、
-		\begin{equation*}\begin{split}
-			(m,n,0,0)\in R \quad\text{for all }m,n\in \sizen
-		\end{split}\end{equation*}
-		となり、任意の$(m,n)\in\sizen^2$は$(0,0)\in\sizen^2$と$R$の関係になる
-		が、$(1,2)\in\sizen^2$と$(2,1)\in\sizen^2$は$R$の関係にはならない。
-
-		グロタンディーク群を定義するための同値関係$\sim$
-		\eqref{eq:グロタンディーク群を導く同値関係}での、
-		\begin{equation*}\begin{split}
-			(m_1,n_1) \sim (m_2,n_2)
-			\iff \exists\; g\in M\bou m_1n_2g = m_2n_1g \\
-			\quad\text{for all }m_1,m_2,n_1,n_2\in M
-		\end{split}\end{equation*}
-		ゲージ変換$g\in M$の不定性は、$\sim$が同値関係となるために必要な
-		ものとなっている。
-	\end{note} %note:グロタンディーク群でのゲージ変換}
-
-	半群$M$とそのグロタンディーク群$\Gro M$との元の対応関係を考える。
-	半群$M$にゼロ元が存在した場合は、$\Gro M$は自明な群となる。
-
-	\begin{proposition}[ゼロ元を持つ半群のグロタンディーク群]
-	\label{prop:ゼロ元を持つ半群のグロタンディーク群} %{
-		半群$M$にゼロ元$0_M$が存在した場合は、$\Gro M=\set{(0_M,0_M)_\Gro}$
-		となる。
-	\end{proposition} %prop:ゼロ元を持つ半群のグロタンディーク群}
-	\begin{proof} 次の式によって、$\Gro M$の任意の元が$(0_M,0_M)_\Gro$に
-	等しくなることがわかる。
-	\begin{equation*}\begin{split}
-		m0_M = 0_M = n0_M \implies (m,n)_\Gro = (0_M, 0_M)_\Gro
-		\quad\text{for all }m,n\in M
-	\end{split}\end{equation*}
-	\end{proof}
-
-	埋め込み$\sizen\subset\sei$や$\sizen\subset\bun$に対応する写像を定義
-	しておく。ただし、半群がキャンセル可能でないと$1:1$となる保証はない。
-
-	\begin{proposition}[グロタンディーク群への埋込み]
-	\label{グロタンディーク群への埋込み} %{
-		$M$を半群とする。任意の$p\in M$に対して写像$i_p,i_p^c:M\to\Gro M$を
-		次のように定義する。
-		\begin{equation*}\begin{split}
-			i_pm := (m,p)_\Gro,\quad i_p^cm := (p,m)_\Gro
-			\quad\text{for all }m\in M
-		\end{split}\end{equation*}
-		$i_p$と$i_p^c$は互いに次の逆元の関係になる。
-		\begin{equation*}\begin{split}
-			(i_pm)(i_p^cm) = (p,p)_\Gro \quad\text{for all }m\in M
-		\end{split}\end{equation*}
-		また、次の性質が成り立つ。
-		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
-			\item $p$が冪等元$p^2=p$とならば、$i_p$と$i_p^c$は半群準同型となる。
-			\item $M$がキャンセル可能ならば、$i_p$と$i_p^c$は$1:1$となる。
-		\end{enumerate} %}
-	\end{proposition} %prop:グロタンディーク群への埋込み}
-	\begin{proof} \quad
-		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
-			\item 任意の$m,n\in M$に対して$(i_pm)(i_pn)=(mn,p^2)=i_{p^2}(mn)$
-			となる。
-			\item $M$がキャンセル可能ならば、任意の$m,n\in M$に対して次の式が
-			成り立つ。
-			{\setlength\arraycolsep{2pt}
-			\begin{equation*}\begin{array}{rcll}
-				i_pm = i_pn &\iff& \exists\; g\in M\bou mpg = npg \\
-				&\implies& mp = np & \text{// $M$ is a cancellative} \\
-				&\implies& m = n & \text{// $M$ is a cancellative} \\
-			\end{array}\end{equation*}
-			}
-		\end{enumerate} %}
-	\end{proof}
-
-	モノイド$M=(M,m_\myspace,u)$では、$i_u:M\to\Gro M$が準同型になる。
-	さらに、$M$がキャンセル可能ならば、$i_u$は$1:1$になり、
-	$i_u$が埋め込み$\sizen\subset\sei$や$\sizen\subset\bun$に相当する。
-	$M$がキャンセル可能でない場合は、命題\ref{グロタンディーク群への埋込み}
-	の写像が$1:1$になる保証はない。例えば、ブーリアンの$\myop{or}$による
-	モノイド$(\set{0,1},\myop{or},0)$はキャンセル可能ではなく、逆元を定義
-	できない。
-
-	\begin{proposition}[グロタンディーク群への標準入射]
-	\label{prop:グロタンディーク群への標準入射} %{
-		$M$をキャンセル可能な可換モノイド、$u$を$M$の単位元とする。
-		写像$i_\Gro,i_\Gro^c:M\to\Gro M$を次のように定義する。
-		\begin{equation*}\begin{split}
-			i_\Gro m := (m,u)_\Gro,\quad i_\Gro^cm := (u,m)_\Gro
-			\quad\text{for all }m\in M
-		\end{split}\end{equation*}
-		すると、$i_\Gro$と$i_\Gro^c$は$1:1$のモノイド準同型となり、
-		次の関係を満たす。
-		\begin{equation*}\begin{split}
-			(i_\Gro m)(i_\Gro^c m) = (u,u)_\Gro \quad\text{for all }m\in M
-		\end{split}\end{equation*}
-		$i_\Gro$のことを分子入射、$i_\Gro^c$のことを分母入射ということにする。
-	\end{proposition} %prop:グロタンディーク群への標準入射}
-	\begin{proof} 命題\ref{グロタンディーク群への埋込み}で
-	$i_\Gro=i_u$かつ$i_\Gro^c=i_u^c$とおいたものになっている。
-	\end{proof}
-
-	\begin{example}[自然数から整数]\label{eg:自然数から整数} %{
-		自然数の加法$\sizen=(\sizen,m_+,0)$のグロタンディーク群の元を
-		引き算の記号を用いて$m-n:=(m,n)_\Gro$と書くと、次のようになり、
-		通常の整数の引き算に一致する。
-		\begin{equation*}\begin{split}
-			m_1-n_1 = m_2-n_2 \iff m_1 + n_2 = m_2 + n_1
-			\quad\text{for all }m_1,m_2,n_1,n_2\in \sizen
-		\end{split}\end{equation*}
-		この場合のゲージ変換は次のようになる。
-		\begin{equation*}\begin{split}
-			m - n = (m + g) - (n + g) \quad\text{for all }m,n,g\in \sizen
-		\end{split}\end{equation*}
-	\end{example} %eg:自然数から整数}
-
-	\begin{example}[自然数から有理数]\label{eg:自然数から有理数} %{
-		自然数の乗法$\sizen_+=(\sizen_+,m_\myspace,1)$のグロタンディーク群の元を
-		割り算の記号を用いて$m/n:=(m,n)_\Gro$と書くと、次のようになり、
-		通常の有理数の割り算に一致する。
-		\begin{equation*}\begin{split}
-			m_1/n_1 = m_2/n_2 \iff m_1n_2 = m_2n_1
-			\quad\text{for all }m_1,m_2,n_1,n_2\in \sizen_+
-		\end{split}\end{equation*}
-		この場合のゲージ変換は次のようになる。
-		\begin{equation*}\begin{split}
-			m / n = (m g) / (n g) \quad\text{for all }m,n,g\in \sizen_+
-		\end{split}\end{equation*}
-		割り算の場合には、引き算の場合（例\ref{eg:自然数から整数}）と異なり、
-		$0$を含めたモノイド$(\sizen,m_\myspace,1)$のグロタンディーク群は自明な
-		群になってしまう（命題\ref{prop:ゼロ元を持つ半群のグロタンディーク群}）。
-		意味のある割り算を導き出すためには、$0$を除いたモノイド
-		$(\sizen_+,m_\myspace,1)$のグロタンディーク群を使う必要がある。
-		直感的には、任意の$m\in\sizen_+$に対して$m/0=\infty$となるから、
-		割り算での$0$割りが禁止されているが、後述のグロタンディーク群の普遍性
-		（命題\ref{prop:グロタンディーク群の普遍性}）から、
-		ゼロ元を含む可換モノイドに意味のある方法で逆元を付加することが
-		できないことがわかる。
-	\end{example} %eg:自然数から有理数}
-
-	\begin{proposition}[グロタンディーク群の普遍性]
-	\label{prop:グロタンディーク群の普遍性} %{
-		キャンセル可能な可換モノイド$M$から可換群$G$へのモノイド準同型$f$
-		に対して次の図を可換にする群準同型$f_*$が唯一つ定まる。
-		また、逆に、任意の群準同型$f_*$に対して次の図を可換にするモノイド準同型
-		$f$が唯一つ定まる。
-		\begin{equation}\label{eq:グロタンディーク群の普遍性}\xymatrix{
-			M \ar[r]^{i_\Gro} \ar[rd]_f & \Gro M \ar@{.>}[d]^{f_*} \\
-			& G
-		}\end{equation}
-	\end{proposition} %prop:グロタンディーク群の普遍性}
-	\begin{proof} モノイド$M=(M,m_\myspace,1_M)$とし、群$G=(G,m_\myspace,1_G)$
-	とする。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item $f_*$が存在することを証明する。
-		$f_*$を次のように定義し、
-		\begin{equation*}\begin{split}
-			f_*(m,1_M)_\Gro := fm,\quad f_*(1_M,m)_\Gro := (fm)^{-1}
-			\quad\text{for all }m\in M
-		\end{split}\end{equation*}
-		$f_*$が群準同型となるように、$\Gro M$全体に次のように拡張する。
-		\begin{equation}\label{eq:グロタンディーク群の普遍性その二}\begin{split}
-			f_*(m,n)_\Gro
-			:= \bigl(f_*(m,1_M)_\Gro\bigr)\bigl(f_*(1_M,n)_\Gro\bigr)
-			= (fm)(fn)^{-1} \\
-			\quad\text{for all }m,n\in M
-		\end{split}\end{equation}
-		すると、$f_*$は群準同型かつ$f_*i_\Gro=f$となる。
-		%
-		\item $f_*$が唯一つ定まることを証明する。
-		$g_*$を群準同型かつ$g_*i_\Gro=f$とする。$g_*$は群準同型だから、
-		任意の$m\in M$に対して次の式が成り立ち、
-		\begin{equation*}\begin{split}
-			1_G = g_*(m,m)_\Gro
-			=\bigl(g_*(m,1_M)_\Gro\bigr)\bigl(g_*(1_M,m)_\Gro\bigr) \\
-			\implies g_*(m,1_M)_\Gro=\bigl(g_*(1_M,m)_\Gro\bigr)^{-1}
-		\end{split}\end{equation*}
-		任意の$m,n\in M$に対して次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			g_*(m,n)_\Gro
-			=\bigl(g_*(m,1_M)_\Gro\bigr)\bigl(g_*(1_M,n)_\Gro\bigr) \\
-			=\bigl(g_*(m,1_M)_\Gro\bigr)\bigl(g_*(n,1_M)_\Gro\bigr)^{-1} \\
-		\end{split}\end{equation*}
-		そして、$g_*i_\Gro=f$より、次の式成り立つことがわかるが、
-		\begin{equation*}\begin{split}
-			g_*(m,n)_\Gro = (fm)(fn)^{-1} \quad\text{for all }m,n\in M
-		\end{split}\end{equation*}
-		この式は$f_*$の定義式\eqref{eq:グロタンディーク群の普遍性その二}である。
-		%
-		\item $f_*$から$f$が唯一つ定まることを証明する。
-		与えられた群準同型$f_*:\Gro M\to G$に対して写像$f:M\to G$を次のように
-		定義すると、
-		\begin{equation*}\begin{split}
-			fm = f_*(m,1_M) \quad\text{for all }m\in M
-		\end{split}\end{equation*}
-		$f$はモノイド準同型となり、$f_*$は式\eqref{eq:グロタンディーク群の普遍性}
-		を満たす。したがって、$f$は唯一つ定まることがわかる。
-	\end{itemize} %}
-	\end{proof}
-
-	この命題を圏の言葉で書くと、群からモノイドへの忘却関手を$\mycal{U}$
-	として、任意の$M\in\mybf{Mon},\;G\in\mybf{Grp}$に対して次の集合同型
-	$\phi:\mybf{Mon}(M, \mycal{U}G)\simeq\mybf{Grp}(\Gro M, G)$が成り立つ
-	\footnote{
-		$\phi$が集合同型となること以外にも、$\phi$が自然変換となっていることも
-		示される。つまり、$(\Gro,\mycal{U},\phi^{-1})$が随伴となる。
-		$\phi$が自然変換となっていることは、分子入射$i_\Gro$が単射であることと、
-		可換図\eqref{eq:グロタンディーク群の普遍性}から示される。
-	}。
-	\begin{equation*}\begin{split}
-		(\phi f)(m,n)_\Gro = (fm)(fn)^{-1} \quad\text{for all }m,n\in M
-	\end{split}\end{equation*}
-%s2:グロタンディーク群}
-\subsection{半群のゼロ元}\label{s2:ゼロ元} %{
-	\begin{definition}[ゼロ元]\label{def:ゼロ元} %{
-		半群$M=(M,m_\myspace)$とする。$M$の元$z$が任意の$m\in M$に対して
+		\item[なんちゃって無限長] $10$進数表示での$1/7=0.(142857)^*$や
+		文字列でのKleeneスター$a(bc)^*d=[ad]+[abcd]+[abcbcd]+\cdots$などの、
+		無限長の文字列であるけれども、無限の部分は有限長の文字列の繰り返し
+		になっているものをなんちゃって無限長ということにする。
+		有理数の場合は、文字$\braket{k}:=\set{0,1,\dots,k-1}$のなんちゃって
+		無限長の文字列は分数として二つの自然数の比として書くことができ、
+		オートマトンの場合は、なんちゃって文字列は有限次元ベクトル空間で
+		状態遷移が表現できる。
+		この辺りを統一的に見ることができないものだろうか？
+		カギとなりそうな道具を並べてみる。
 		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[左ゼロ元] $zm=z$となるとき、$z$を$M$の左ゼロ元、
-			\item[右ゼロ元] $mz=z$となるとき、$z$を$M$の右ゼロ元、
+			\item[モノイド] 何はともあれ代数構造
+			\begin{description}\setlength{\itemsep}{-1mm} %{
+				\item[答え] キャンセル可能なモノイドまたは、ゼロ因子を持たない
+				可換環があれば、そのグロタンディーク群を作ることで逆元を導入
+				することができる。
+			\end{description} %}
+			\item[分数] モノイドに逆元の導入する。その際、分数のゲージ対称性
+			$\frac{a}{b}=\frac{ga}{gb}$が必然なのかたまたまなのかを調べる。
+			\begin{description}\setlength{\itemsep}{-1mm} %{
+				\item[答え] グロタンディーク群の作り方では必然である。
+				ノート\ref{note:グロタンディーク群でのゲージ変換}を見ること。
+			\end{description} %}
+			\item[内積と逆元] 内積と逆元の関係を調べる。
 		\end{description} %}
-		という。右ゼロ元かつ左ゼロ元となる元を両側ゼロ元または単にゼロ元という。
-	\end{definition} %def:ゼロ元}
-
-	ゼロ元も単位元と同じ唯一性を持つ。
-
-	\begin{proposition}[ゼロ元の唯一性]\label{prop:ゼロ元の唯一性} %{
-		半群が左ゼロ元と右ゼロ元をともに持つならば、それは両側ゼロ元に一致する。
-		そして、半群が両側ゼロ元を持つならば、それ以外には左ゼロ元も右ゼロ元も
-		持たない。
-	\end{proposition} %prop:ゼロ元の唯一性}
-	\begin{proof} 半群$M=(M,m_\myspace)$とする。
-	$z_L$を左ゼロ元と$z_R$を右ゼロ元とすると次の式が成り立つ。
-	\begin{equation*}\begin{split}
-		z_L = z_Lz_R = z_R
-	\end{split}\end{equation*}
-	\end{proof}
-
-	半群のゼロ元に関しては次の場合に限られる。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 左ゼロ元を持たないが、複数の右ゼロ元を持つかもしれない。
-		\item 右ゼロ元を持たないが、複数の左ゼロ元を持つかもしれない。
-		\item 両側ゼロ元を唯一つだけ持ち、それ以外には左ゼロ元も右ゼロ元も
-		持たない。
-	\end{itemize} %}
-
-	半群$G$が単位元かつゼロ元となる元$0_G$を持つ場合は、$G$は単位元$0_G$
-	だけからなる自明な群となる。
-	\begin{equation*}\begin{split}
-		g \udset{\text{$0_G$ is a unit}}{}{=} g0_G
-		\udset{\text{$0_G$ is a zero}}{}{=} 0_G
-		\quad\text{for all }g\in G
-	\end{split}\end{equation*}
-
-	環においては、加法の単位元は乗法のゼロ元になる。
-	したがって、環の乗法は必ずゼロ元を持つ。
-
-	\begin{proposition}[環の乗法のゼロ元]\label{prop:環の乗法のゼロ元} %{
-		環の加法の単位元は乗法のゼロ元となる。
-	\end{proposition} %prop:環の乗法のゼロ元}
-	\begin{proof} $R=(R,m_+,0_R,m_\myspace,1_R)$を環とする。
-	次の式が成り立つ。
-	\begin{equation*}\begin{split}
-		\bigl(rs = (r + 0_R)s = rs + 0_Rs \text{ for all }r,s\in R\bigr)
-		\implies (0_Rr = 0 \text{ for all }r\in R)
-	\end{split}\end{equation*}
-	\end{proof}
-%s2:ゼロ元}
-\subsection{キャンセル可能な半群}\label{s2:キャンセル可能な半群} %{
-	\begin{definition}[キャンセル可能な半群]\label{def:キャンセル可能な半群} %{
-		$M=(M,m_\myspace)$を半群とする。
-		次の性質が成り立つとき、$M$を左キャンセル可能といい、
+		%
+		\item[形式級数] 乗法の逆元を導入しただけでは次の式は示すことができないと
+		思う。
 		\begin{equation*}\begin{split}
-			mm_1 = mm_2 \implies m_1 = m_2 \quad\text{for all }m_1,m_2,m\in M
+			\frac{n}{n - 1} = 1 + \frac{1}{n} + \frac{1}{n^2} + \cdots
+			\quad\text{for all }1<n\in\sizen
 		\end{split}\end{equation*}
-		次の性質が成り立つとき、$M$を右キャンセル可能という。
+		右辺が次のようになることは四則演算だけで導くことができるが、
 		\begin{equation*}\begin{split}
-			m_1m = m_2m \implies m_1 = m_2 \quad\text{for all }m_1,m_2,m\in M
+			\text{rhs} 
+			= \frac{n}{n - 1}\left(1 - \lim_{p\to\infty}\frac{1}{n^{p-1}}\right)
 		\end{split}\end{equation*}
-		また、$M$が左キャンセル可能かつ右キャンセル可能なとき、
-		両側キャンセル可能または単にキャンセル可能という。
-	\end{definition} %def:キャンセル可能な半群}
-
-	有限半群$M$がキャンセル可能ならば、$M$は群になってしまう。
-
-	\begin{proposition}[キャンセル可能な有限半群]\label{prop:キャンセル可能な有限半群} %{
-		キャンセル可能な有限半群は群となる。
-	\end{proposition} %prop:キャンセル可能な有限半群}
-	\begin{proof} $M$を有限半群とする。
-	$M$がキャンセル可能ならば、任意の元$g\in M$に対して次の写像$g-:M\to M$
-	\begin{equation*}\begin{split}
-		(g-)h = gh \quad\text{for all }h\in M
-	\end{split}\end{equation*}
-	が$1:1$となる。したがって、$SM$を$M$の置換群とすると、$g-\in SM$となる。
-	写像$\phi:M\to SM$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		\phi g = g-
-	\end{split}\end{equation*}
-	$M$がキャンセル可能だから、$\phi$は$1:1$になる。
-	\begin{equation*}\begin{split}
-		\phi g_1 = \phi g_2
-		\implies (g_1g = g_2g \text{ for all }g\in M)
-		\implies g_1 = g_2 \\
-		\quad\text{for all }g_1,g_2\in M
-	\end{split}\end{equation*}
-	そして、$(g-)^n=\id$となるから、$M$は単位元$\phi^{-1}(g-)^n$を持ち、
-	$\phi^{-1}(g-)^{n-1}$が$g$の逆元となる。
-	任意の$g\in M$に対して同様の議論が成り立ち、$\phi M$が$SM$の部分群となる
-	ことがわかる。$\phi$は$1:1$だから、$M$と$\phi M$を同一視しても構わない。
-	\end{proof}
-%s2:キャンセル可能な半群}
-%s1:分数の構成}
+		$\lim_{p\to\infty}1/n^{p-1}=0$という式は、四則演算だけでは導くことが
+		できないと思う。
+		通常は、負でない有理数$|\bun|$に順序$\le$を加法と乗法で不変となるように
+		定義する。
+		\begin{equation*}\begin{split}
+			q_1\le q_2 \implies q + q_1\le q + q_2 \text{ and } qq_1\le qq_2
+			\quad\text{for all }q,q_1,q_2\in |\bun|
+		\end{split}\end{equation*}
+		この順序は、自然数に対して次のように定義すると、
+		\begin{equation*}\begin{split}
+			0 < 1 < 2 < \cdots
+		\end{split}\end{equation*}
+		次のようにして、$|\bun|$に一意的に拡張される。
+		\begin{equation*}\begin{split}
+			n_1\le n_2 \udset{\text{divides by $n_1n_2$}}{}{\implies}
+			\frac{1}{n_2}\le \frac{1}{n_1}
+			\quad\text{for all }n_1,n_2\in\sizen_+
+		\end{split}\end{equation*}
+	\end{description} %}
+%s1:形式級数}
 \endgroup %}

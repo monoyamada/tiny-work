@@ -101,6 +101,7 @@
 \newtheorem{note}{ノート}[section]
 \newtheorem{example}{例}[section]
 \newtheorem{observation}{観察}[section]
+\newtheorem{problem}{問題}[section]
 %
 \def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
 \def\endproof{{\large$\Box$}\endtrivlist}
@@ -126,8 +127,8 @@
 \newcommand{\myspace}{\text{\textvisiblespace}}
 %\newcommand{\mybinom}[2]{\left[{{#1}\atop{#2}}\right]}
 \newcommand{\mybinom}[2]{\genfrac{[}{]}{0pt}{1}{#1}{#2}}
-\newcommand{\myhere}{\mathchar`-}
-\newcommand{\mybiop}[1]{\mathchar`-{#1}\myhere}
+\newcommand{\myhere}{{\ensuremath{\mathchar`-}}}
+\newcommand{\mybiop}[1]{{\ensuremath{\myhere{#1}\myhere}}}
 %obsolete
 %\newcommand{\mypowop}[1]{\myhere^{#1}}
 \newcommand{\lcomment}[1]{//\;\text{#1}}
@@ -136,7 +137,6 @@
 %
 %\newcommand{\homset}{\ensuremath{\myop{hom}}}
 %\newcommand{\mapset}{\ensuremath{\myop{map}}}
-%\newcommand{\myid}{\ensuremath{\myop{id}}}
 %\newcommand{\mydu}{\ensuremath{\myop{du}}}
 %\newcommand{\dup}{\ensuremath{\myop{du}}}
 %\newcommand{\curry}{\myop{curring}}

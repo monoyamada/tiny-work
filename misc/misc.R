@@ -1,5 +1,20 @@
 source("utils.R");
 
+zero.temp <- function(xs, value=1) {
+	exp(- value / xs) / xs;
+}
+
+test.zero.temp <- function() {
+	dx <- 0.001;
+	xs <- seq(dx, 1, by=dx)
+	plot(xs, zero.temp(xs, 0.1));
+}
+
+if (T) {
+	test.zero.temp();
+	stop("stopped");
+}
+
 bit2integer <- function(xs, zero=0) {
 	for (i in 1:length(xs)) {
 		zero = zero + xs[i] * 2^(i - 1);

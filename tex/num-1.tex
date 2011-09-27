@@ -1,12 +1,7 @@
 \begingroup %{
-	\newcommand{\Hom}{\myop{Hom}}
-	\newcommand{\End}{\myop{End}}
-	\newcommand{\Auto}{\myop{Auto}}
-	\newcommand{\Pow}{\mycal{P}}
 	\newcommand{\Word}{\mycal{W}}
 	\newcommand{\Forget}{\mycal{U}}
 	\newcommand{\id}{\myop{id}}
-	\newcommand{\dup}{\myop{du}}
 	\newcommand{\onto}{\myop{onto}}
 	\newcommand{\im}{\myop{im}}
 	\newcommand{\spanall}{\myop{span}}
@@ -15,8 +10,9 @@
 	\newcommand{\ofm}{only finitely many }
 	\newcommand{\bunsub}[1][0]{{\bun_{#1}^\circ}}
 	\newcommand{\jitusub}[1][0]{{|\jitu|_{#1}}}
-
+	%
 \section{数と文字列}\label{s1:数と文字列} %{
+	この節で使う記号を書いておく。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
 		\item[直積と直和]
 		集合$S$による自然数の直積$\prod_S\sizen$と直和$\coprod_S\sizen$を
@@ -740,11 +736,11 @@
 	{\setlength\arraycolsep{2pt}
 	\begin{equation*}\begin{array}{rcll}
 		n=qm+\pi_mn &\implies& \pi_mn = n-qm\in g\sizen_+ \\
-		&\implies& h = \gcd(\pi_mn,m) \in g\sizen_+ 
-			& \because\; \gcd(g,m)=g=\gcd(g,n) \\
+		&\implies& h\in \gcd(g,m)\sizen_+ = g\sizen_+
+			& \because\; \gcd(g,m) = g \\
 		n=qm+\pi_mn &\implies& n\in h\sizen_+ \\
-		&\implies& g = \gcd(m,n) \in h\sizen_+
-			& \because\; \gcd(h,m)=g=\gcd(h,\pi_mn) \\
+		&\implies& g\in \gcd(h,m)\sizen_+ = h\sizen_+
+			& \because\; \gcd(h,m)=g \\
 	\end{array}\end{equation*}
 	}
 	\end{proof}
@@ -1021,16 +1017,16 @@
 	$\beta$は同型写像となる。したがって、集合同型
 	\eqref{eq:自然数と有理数の集合同型}から、次の集合同型が成り立つことが
 	わかる。
-	\begin{equation*}\xymatrix@C=10em{
+	\begin{equation*}\xymatrix{
 		\sizen \ar[r]^{r_k}_\simeq
 			& \Word\sizen_+ \ar[d]^{\beta}_\simeq \ar[r]^{-\rhd1}_\simeq
 			&  \bunsub[1]\ar[d]^{\alpha}_\simeq \\
 		& \mycal{X}_1\sizen_+ \ar[r]^{-\unrhd0}_\simeq & \bunsub[0] \\
 	}\end{equation*}
 	ここで、$r_k:=(\Word_+\rho_k^{-1})\sigma_{k+1}\rho_{k+1}$とおいた。
-	さらに、カントルのペアリング関数$g\sizen\simeq\sizen\times\sizen$
-	\ref{eg:カントルのペアリング関数}を用いると、次の集合同型が成り立つことが
-	わかる。
+	さらに、カントルのペアリング関数$g:\sizen\simeq\sizen\times\sizen$
+	（例\ref{eg:カントルのペアリング関数}）を用いると、次の集合同型が
+	成り立つことがわかる。
 	\begin{equation*}\begin{split}
 		\sizen \xto[\simeq]{g} \sizen\times\sizen
 		\xto[\simeq]{\id\times r_k} \sizen\times\Word\sizen_+
@@ -1169,9 +1165,7 @@
 	存在しないことがわかる。
 	\end{proof}
 %s2:カントルの対角線論法}
-%s1:数と文字列}
-
-\section{ゲーデル関数}\label{s1:ゲーデル関数} %{
+\subsection{ゲーデル関数}\label{s2:ゲーデル関数} %{
 	\begin{definition}[ゲーデル関数]\label{def:ゲーデル関数} %{
 		同型写像$\sizen^n\to\sizen \quad(2\le n)$を一般にゲーデル関数という
 		\footnote{
@@ -1200,5 +1194,6 @@
 		\end{array}\end{equation*}
 		$g$をカントルのペアリング関数という。
 	\end{example} %eg:カントルのペアリング関数}
-%s1:ゲーデル関数}
+%s2:ゲーデル関数}
+%s1:数と文字列}
 \endgroup %}
