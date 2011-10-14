@@ -9,7 +9,7 @@ fi
 
 out_dir="output"
 if [ ! -d $out_dir ]; then
-	mkdir $out_dir
+	mkdir $out_di#r
 fi
 
 opts_encode="-kanji=utf8"

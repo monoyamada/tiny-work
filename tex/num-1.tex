@@ -10,6 +10,7 @@
 	\newcommand{\ofm}{only finitely many }
 	\newcommand{\bunsub}[1][0]{{\bun_{#1}^\circ}}
 	\newcommand{\jitusub}[1][0]{{|\jitu|_{#1}}}
+	\newcommand{\tran}{\mathbf{t}}
 	%
 \section{数と文字列}\label{s1:数と文字列} %{
 	この節で使う記号を書いておく。
@@ -1196,4 +1197,350 @@
 	\end{example} %eg:カントルのペアリング関数}
 %s2:ゲーデル関数}
 %s1:数と文字列}
+\section{中国の剰余定理}\label{s1:中国の剰余定理} %{
+	ユークリッドの互除法と中国の剰余定理について書く。
+
+\subsubsection{ユークリッドの互除法}\label{s3:ユークリッドの互除法} %{
+	ユークリッドの互除法は次の命題に基づく。
+	\begin{equation}\label{eq:ユークリッドの互除法を支える命題}\begin{split}
+		n_0 = qn_1 + n_2 \implies \gcd(n_0,n_1) = \gcd(n_1,n_2) \\
+		\text{for all } n_0>n_1>n_2\in\sizen,\;q\in\sizen
+	\end{split}\end{equation}
+	この命題より、$n_0>n_1\in \sizen_+$から生成される次の数列
+	$n_0>n_1>\cdots>n_p>0\in\sizen$を計算すると、$n_0$と$n_1$の最大公約数
+	が$n_p=\gcd(n_0,n_1)$と求まる。
+	\begin{equation*}\begin{split}
+		n_0 &= q_1n_1 + n_2 \\
+		n_1 &= q_2n_2 + n_3 \\
+		\vdots \\
+		n_{p-1} &= q_pn_p + 0 \\
+	\end{split}\end{equation*}
+	この数列を次のように書き直す。
+	{\arraycolsep2pt\begin{equation}\label{eq:ユークリッド互除法の変形}
+	\begin{array}{rclcl}
+		n_2 &=& n_0 - q_1n_1 &=& n_0 - q_1n_1 \\
+		n_3 &=& n_1 - q_2n_2 &=& n_1 - q_2(n_0 - q_1n_1) \\
+		n_4 &=& n_2 - q_3n_3 &=& (n_0 - q_1n_1) 
+			- q_3\bigl(n_1 - q_2(n_0 - q_1n_1)\bigr) \\
+		\vdots \\
+		n_p &=& n_{p-2} - q_{p-1}n_{p-1} &=& \cdots \\
+	\end{array}\end{equation}}
+	すると、右辺が$n_0$と$n_1$の線形結合で書かれることがわかる。
+	したがって、$n_p=\gcd(n_0,n_1)$より、任意の$m,n\in\sizen_+$に対して
+	次の式を満たす$x,y\in\sei$が存在する。
+	\begin{equation*}\begin{split}
+		mx + ny = \gcd(m,n)
+	\end{split}\end{equation*}
+	もう少し正確に言うと、任意の$m,n,g\in\sizen_+$に対して、$g$が$\gcd(m,n)$
+	の倍数になるときに限り、次の式は解$x,y\in\sei$を持つ。
+	\begin{equation*}\begin{split}
+		mx + ny = g
+	\end{split}\end{equation*}
+
+	問題を簡単にするために、互いに素な$n_0,n_1\in\sizen_+$
+	（$\gcd(n_0,n_1)=1$）に対して、次の式を満たす$x_0,x_1\in\sei$を
+	求めることを考える。
+	\begin{equation}\label{eq:Bezout方程式}\begin{split}
+		n_0x_0 + n_1x_1 = 1
+	\end{split}\end{equation}
+	互いに素な自然数の組を表す集合$P^2\subset\sizen_+^2$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		P^2 := \set{(n_1,n_2)\in\sizen_+^2
+		\bou \gcd(n_1, n_2) = 1 \text{ and } n_1>n_2}
+	\end{split}\end{equation*}
+	式\eqref{eq:Bezout方程式}は次のように書くことができる。
+	\begin{equation}\label{eq:Bezout方程式その二}\begin{split}
+		N^\tran X = 1 \text{ where } N\in P^2,\; X\in \sei^2
+	\end{split}\end{equation}
+
+	式\eqref{eq:Bezout方程式その二}の解$X\in\sei^2$が存在することは
+	分かったが、解は何個存在するのかを考えてみる。
+	$X,Y\in\sei^2$が共に式\eqref{eq:Bezout方程式その二}の解だとすると、
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		N^\tran X = 1 = N^\tran Y \implies N^\tran(X-Y) = 0
+	\end{split}\end{equation*}
+	したがって、$N$に直交するベクトルの張る１次元部分空間を$(N)_\perp$と
+	書くと、$X-Y\in(A)_\perp$となる。$(A)_\perp$はベクトル$JA$によって
+	張られる。
+	\begin{equation*}\begin{split}
+		J := \begin{pmatrix}
+			0 & 1 \\
+			-1 & 0 \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	平面上の直線で考えると、$(1/n_0,0)$と$(0,1/n_1)$を結ぶ直線と整数を表す
+	格子が交わる点が解となる。式\eqref{eq:Bezout方程式その二}の解空間は次の
+	ように書くことができる。
+	\begin{equation}\label{eq:Bezout方程式の解の不定性}\begin{split}
+		N^\tran X = 1 \implies N^\tran (X + gJN) = 1
+		\quad\text{for all }X\in\sei^2,\; g\in\sei
+	\end{split}\end{equation}
+
+	式\eqref{eq:Bezout方程式}の解$x_0,x_1\in\sei$は次の意味を持つ。
+	\begin{equation}\label{eq:Bezout方程式の解は逆元}\begin{split}
+		n_0x_0 + n_1x_1 = 1 \implies \begin{cases}
+			n_0x_0 \equiv 1 \bmod n_1 \\
+			n_1x_1 \equiv 1 \bmod n_0 \\
+		\end{cases} \iff \begin{cases}
+			x_0 \equiv n_0^{-1} \bmod n_1 \\
+			x_1 \equiv n_1^{-1} \bmod n_0 \\
+		\end{cases}
+	\end{split}\end{equation}
+	この式の意味で、$x_0,x_1$はそれぞれ$n_0,n_1$の乗法での逆元になっている。
+	一般には、この式の逆は成り立たないことに注意する。
+	\begin{equation*}\begin{split}
+		\begin{cases}
+			x_0 \equiv n_0^{-1} \bmod n_1 \\
+			x_1 \equiv n_1^{-1} \bmod n_0 \\
+		\end{cases} \not\implies n_0x_0 + n_1x_1 = 1
+		\quad\text{in general}
+	\end{split}\end{equation*}
+
+	式\eqref{eq:Bezout方程式その二}の解法を考える。
+	式\eqref{eq:ユークリッド互除法の変形}を２次元の記法で書くと次のように
+	なる。
+	{\arraycolsep2pt\begin{equation*}\begin{array}{rclcl}
+		n_0 &=& N^\tran X_0 \\
+		n_1 &=& N^\tran X_1 \\
+		n_2 &=& N^\tran X_2 \\
+		\vdots \\
+		n_p &=& N^\tran X_p &=& 1 \\
+		n_{p+1} &=& N^\tran X_{p+1} &=& 0 \\
+	\end{array}\end{equation*}}
+	$X_p$が式\eqref{eq:Bezout方程式その二}の解となる。
+	ここで、$X_k\in\sei^2,\;k=0,1,\dots,p+1$は$X_0=(1,0)^\tran$と
+	$X_1=(0,1)^\tran$を初期値とする次の漸化式で定められるベクトルである。
+	\begin{equation}\label{eq:ベクトル版ユークリッド互除法}\begin{split}
+		X_{k+2} = X_{k} 
+		- \left[\frac{A^\tran X_{k}}{A^\tran X_{k+1}}\right]X_{k+1}
+	\end{split}\end{equation}
+	$[m/n]$は$m,n\in\sizen_+$に対して$m$を$n$で割った商の自然数部分を
+	表すものとする。自然数列$N^\tran X_0,N^\tran X_1,\dots,N^\tran X_p$は、
+	命題\eqref{eq:ユークリッドの互除法を支える命題}より、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $1$に向かって小さくなり、
+		\item 隣合う数同士は互いに素になる
+	\end{itemize} %}
+	自然数の系列になる。
+	{\setlength\arraycolsep{2pt}
+	\begin{equation*}\begin{split}
+		A^\tran X_1 > A^\tran X_2 > \cdots > A^\tran X_p=1
+			\;\biggl(> A^\tran X_{p+1}=0 \biggr) \\
+		\begin{split}
+			\bcontraction{}{A^\tran X_k}{ > }{A^\tran X_{k+1}}
+			A^\tran X_k > A^\tran X_{k+1} \\
+			\text{coprimes}\qquad
+		\end{split} \quad\text{for all } k=1,2,\dots,p-1
+	\end{split}\end{equation*}}
+	この自然数の系列は、各$k\in0..p$で任意の$g_i\in\sizen$を用いて
+	$X_k\mapsto X_k+g_kJN$と変換しても変わらない。
+
+	\begin{example}[ユークリッド互除法の計算]
+	\label{eg:ユークリッド互除法の計算} %{
+		ユークリッドの互除法の漸化式\eqref{eq:ベクトル版ユークリッド互除法}
+		を解いた結果を、$X^\tran=(x_1,x_2)$、$r=A^\tran X$として書いておく。
+		上の二行の$r$が互いに素な自然数$n_0,n_1$を表す。
+		\begin{equation*}\begin{array}{r|rrr|rrr|rrr}
+			 & r & x_0 & x_1 & r & x_0 & x_1 & r & x_0 & x_1 \\\hline
+			n_0 & 851 & 1 & 0 & 387 & 1 & 0 & 120 & 1 & 0 \\
+			n_1 & 323 & 0 & 1 & 109 & 0 & 1 & 23 & 0 & 1 \\
+			 & 205 & 1 & -2 & 60 & 1 & -3 & 5 & 1 & -5 \\
+			 & 118 & -1 & 3 & 49 & -1 & 4 & 3 & -4 & 21 \\
+			 & 87 & 2 & -5 & 11 & 2 & -7 & 2 & 5 & -26 \\
+			 & 31 & -3 & 8 & 5 & -9 & 32 & 1 & -9 & 47 \\
+			 & 25 & 8 & -21 & 1 & 20 & -71 \\
+			 & 6 & -11 & 29 \\
+			 & 1 & 52 & -137 \\
+		\end{array}\end{equation*}
+		各行毎に解$x_0,x_1$と余り$r$は次の式を満たしている。
+		\begin{equation*}\begin{split}
+			n_0x_0 = r\bmod n_1,\quad
+			n_1x_1 = r\bmod n_0
+		\end{split}\end{equation*}
+		特に最後の行は次の式を満たしている。
+		{\arraycolsep2pt\begin{equation*}\begin{array}{rclrcl}
+			851 \cdot 52 &\equiv& 1 \bmod 323 ,\quad &
+				- 323 \cdot 137 &\equiv& 1 \bmod 851 \\
+			387 \cdot 20 &\equiv& 1 \bmod 109 ,\quad &
+				- 109 \cdot 71 &\equiv& 1 \bmod 387 \\
+			- 120 \cdot 9 &\equiv& 1 \bmod 23 ,\quad &
+				23 \cdot 47 &\equiv& 1 \bmod 120 \\
+		\end{array}\end{equation*}}
+	\end{example} %eg:ユークリッド互除法の計算}
+%s3:ユークリッドの互除法}
+\subsubsection{中国の剰余定理}\label{s3:中国の剰余定理} %{
+	中国の剰余定理は次のような定理である。
+
+	\begin{proposition}[中国の剰余定理]\label{prop:中国の剰余定理} %{
+		次の式が、
+		\begin{equation}\label{eq:孫氏の問題}\begin{split}
+			a_0\bmod n_0 = x = a_1\bmod n_1
+			\quad\text{where}\quad n_0,n_1\in\sizen_+,\; a_0,a_1\in\sizen
+		\end{split}\end{equation}
+		解$x\in\sizen$を持つための必要十分は、$n_0,n_1$が共に$n_0$と$n_1$の
+		最大公約数の倍数になり、
+		\begin{equation*}\begin{split}
+			a_0 \equiv a_1\bmod \gcd(n_0, n_1)
+		\end{split}\end{equation*}
+		解を持つとすると、$n_0$と$n_1$の最小公倍数の倍数を除き一意に定まる。
+		\begin{equation*}\begin{split}
+			\left\{\begin{array}{ccccc}
+				a_0\bmod n_0 &=& x &=& a_1\bmod n_1 \\
+				a_0\bmod n_0 &=& y &=& a_1\bmod n_1
+			\end{array}\right. \implies x \equiv y \bmod \myop{lcm}(n_0,n_1)
+		\end{split}\end{equation*}
+	\end{proposition} %prop:中国の剰余定理}
+	\begin{proof} 
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[必要十分] 式\eqref{eq:孫氏の問題}の解$x$が存在するためには
+		次の式を満たす$x_0,x_1\in\sei$が存在する必要がある。
+		\begin{equation*}\begin{split}
+			a_0 + n_0x_0 = x = a_1 + n_1x_1
+			\implies - n_0x_0 + n_1x_1 = a_0 - a_1
+		\end{split}\end{equation*}
+		ユークリッドの互除法での話により、解$x_0,x_1$が存在するためには、
+		$a_0-a_1$が$\gcd(n_0,n_1)$の倍数になっていることが必要十分条件に
+		なることがわかる。解$x_0,x_1$が存在すれば、$a_0+n_0x_1=a_1+n_1x_1$
+		となるから、$a_0+n_0x_1=x=a_1+n_1x_1$とすると、$x$が
+		式\eqref{eq:孫氏の問題}の解$x$となる。
+		\item[一意性] 次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\begin{cases}
+				a_0 + n_0x_0 = x = a_1 + n_1x_1 \\
+				a_0 + n_0y_1 = y = a_1 + n_1y_1
+			\end{cases} & \implies n_0(x_0 - y_0) = x - y = n_1(x_1 - y_1) \\
+			& \implies x \equiv y \bmod \myop{lcm}(n_0, n_1)
+		\end{split}\end{equation*}
+	\end{description} %}
+	\end{proof}
+
+	以下では、中国の剰余定理を用いて整数の剰余環$\sei_n$の直和分解を
+	考える。記号を見やすくするために、$\braket{n}:=\sei_n:=\sei/n\sei$
+	という記号を使うことにする。
+	
+	式\eqref{eq:孫氏の問題}の両辺を$\gcd(n_0,n_1)$で割ると、
+	$\gcd(n_0,n_1)=1$のときの問題に帰着する。
+	\begin{equation}\label{eq:孫氏の問題その二}\begin{split}
+		a_0 \bmod n_0 \equiv x \equiv a_1 \bmod n_1
+		\quad\text{where}\quad (n_0,n_1)\in P^2,\; a_i\in\braket{n_i}
+	\end{split}\end{equation}
+	中国の剰余定理\ref{prop:中国の剰余定理}から、
+	式\eqref{eq:孫氏の問題その二}の解$x$と係数$a_0,a_1$の関係を
+	与える次の写像$\phi\braket{n_0n_1}\to\braket{n_0}\times\braket{n_1}$は
+	集合同型となることがわかる。
+	\begin{equation*}\begin{split}
+		\phi: \braket{n_0n_1} &\simeq \braket{n_0}\times\braket{n_1} \\
+		x &\mapsto (x\bmod n_0,\; x\bmod n_1)
+	\end{split}\end{equation*}
+	さらに、環同型$\phi\braket{n_0n_1}\to\braket{n_0}\oplus\braket{n_1}$
+	となっていることもわかる
+	\footnote{
+		$\myhere\bmod a:\sei\to\sei_a$は環準同型となる。
+		$\begin{array}{rcll}
+			(q_1a + r_1) + (q_2a + r_2) &\equiv& r_1 + r_2 &\mod a \\
+			(q_1a + r_1)(q_2a + r_2) &\equiv& r_1r_2 &\mod a \\
+		\end{array}$
+	}。
+
+	逆射$\phi^{-1}$をユークリッドの互除法を使って求める。
+	$\phi^{-1}:a_0\oplus a_1\mapsto x$は次の式を満たす
+	$x_0,x_1\in\braket{n_0n_1}$によって与えられる。
+	\begin{equation}\label{eq:孫氏の問題その三}\begin{split}
+		a_0 + n_0x_0 \equiv x \equiv a_1 + n_1x_1 \bmod \braket{n_0n_1} \\
+		\implies - n_0x_0 + n_1x_1 = a_0 - a_1 \bmod \braket{n_0n_1}
+	\end{split}\end{equation}
+	以下、単に$\equiv$と書いた場合は、$\bmod\braket{n_0n_1}$による
+	同値関係とする。
+	$y_0,y_1\in\braket{n_0n_1}$を次の式の解だとすると、
+	\begin{equation}\label{eq:孫氏の問題その四}\begin{split}
+		n_0y_0 + n_1y_1 \equiv 1
+	\end{split}\end{equation}
+	式\eqref{eq:孫氏の問題その三}の解$x_0,x_1$は次のように与えられ、
+	\begin{equation*}\begin{split}
+		x_0 \equiv - (a_0 - a_1)y_0,\quad x_1 \equiv (a_0 - a_1)y_1
+	\end{split}\end{equation*}
+	式\eqref{eq:孫氏の問題その三}の解$x$は次ようになることがわかる。
+	\begin{equation*}\begin{split}
+		a_0 - n_0(a_0 - a_1)y_0 \equiv x \equiv a_1 + n_1(a_0 - a_1)y_1
+	\end{split}\end{equation*}
+	式\eqref{eq:孫氏の問題その四}を使うと次のようにまとめられる。
+	\begin{equation*}\begin{split}
+		x \equiv n_1y_1a_0 + n_0y_0a_1
+	\end{split}\end{equation*}
+	以上より、$\phi^{-1}$は次のように書くことができる。
+	\begin{equation}\label{eq:孫氏の問題その五}\begin{split}
+		\phi^{-1}(a_0\oplus a_1) \equiv n_1x_1a_0 + n_0x_0a_1
+		\quad\text{where}\quad n_0x_0 + n_1x_1 \equiv 1
+	\end{split}\end{equation}
+	この式での$x_0,x_1$はそれぞれ次の意味で$n_0,n_1$の逆元となっている。
+	\begin{equation}\label{eq:孫氏の問題その六}\begin{split}
+		n_0x_0 + n_1x_1 \equiv 1 \implies \begin{cases}
+			x_0n_0 \equiv 1 \bmod n_1 \\
+			x_1n_1 \equiv 1 \bmod n_0 \\
+		\end{cases}
+	\end{split}\end{equation}
+	したがって、ユークリッドの互除法を経ずに、直接$x_0,x_1$を$n_0,n_1$の
+	逆元として求めることも可能である。ユークリッドの互除法は、$n_0,n_1$の
+	逆元となる$x_0,x_1$を$1$から$n_0n_1$に向かって順に探していいく方法
+	としても見ることができる。
+
+	$\braket{n_0n_1}$の直和分解$\phi$を可換図で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\xymatrix@C=3em{
+			& \braket{n_0n_1} \ar@<-1ex>[ld]_{p_0} \ar@<1ex>[rd]^{p_1}
+				\ar[d]^\phi_{\simeq} \\
+			\braket{n_0} \ar@<-1ex>[r]_(0.4){\myhere\oplus0} \ar[ur]_{i_0}
+			& \braket{n_0}\oplus\braket{n_1}
+				\ar[l]_(0.6){\pi_0} \ar[r]^(0.6){\pi_1}
+			& \braket{n_1} \ar@<+1ex>[l]^(0.4){0\oplus\myhere} \ar[ul]^{i_1}
+		} \\
+		\begin{array}{ll}
+			p_0 = \myhere\bmod n_0, & i_0 = n_1x_1\myhere \\
+			p_1 = \myhere\bmod n_1, & i_1 = n_0x_0\myhere \\
+		\end{array}\quad\text{where}\quad n_0x_0 + n_1x_1 = 1
+	\end{split}\end{equation*}
+	射影$p_0,p_1$と切断$i_0,i_1$は双積になる。
+	\begin{equation*}\begin{split}
+		p_0i_0 = \id_{\braket{n_0}},\quad p_1i_1 = \id_{\braket{n_1}}
+		,\quad i_0p_0 + i_1p_1 = \id_{\braket{n_0n_1}}
+	\end{split}\end{equation*}
+	\begin{proof} 次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		p_0i_0 &= (n_1x_1\myhere)\bmod n_0 = \myhere\bmod n_0
+		= \id_{\braket{n_0}} \\
+		p_0i_1 &= (n_0x_0\myhere)\bmod n_0 = 0
+	\end{split}\end{equation*}
+	$p_0i_0=\id_{\braket{n_0}}$を示すのに、$n_0x_1\equiv 1\bmod n_0$
+	となること\eqref{eq:孫氏の問題その六}を使った。
+	\end{proof}
+
+	\begin{example}[中国の直和分解]\label{eg:中国の直和分解} %{
+		$6=3\cdot2$かつ$3$と$2$は互いに素なので、
+		同型射$\phi_6:\sei_6\simeq\sei_3\oplus\sei_2$が成り立つ。
+		また、$3\cdot1-2\cdot1=1$なので、$\phi_6^{-1}$は次のようになる。
+		\begin{equation*}\begin{split}
+			\phi_6^{-1}:\sei_3\oplus \sei_2 &\simeq \sei_6 \\
+			a_0\oplus a_1 &\mapsto - 2\cdot1\cdot a_0 + 3\cdot1\cdot a_1
+			\equiv 4a_0 + 3a_1 \;\bmod 6
+		\end{split}\end{equation*}
+		実際の数値を並べると次のようになる。
+		\begin{equation*}\begin{array}{ccccc}
+			\sei_6 &\to& \sei_3\oplus\sei_2 &\to& \sei_6 \\ \hline
+			0 && 0 \oplus 0 && 0 + 0 \equiv 0 \\
+			1 && 1 \oplus 1 && 4 + 3 \equiv 1 \\
+			2 && 2 \oplus 0 && 8 + 0 \equiv 2 \\
+			3 && 0 \oplus 1 && 0 + 3 \equiv 3 \\
+			4 && 1 \oplus 0 && 4 + 0 \equiv 4 \\
+			5 && 2 \oplus 1 && 8 + 3 \equiv 5 \\
+		\end{array}\end{equation*}
+		表現論の観点から見ると、$\sei_6$の直和分解$\phi_6$は、正則表現
+		$\sei_6$を$\sei_3$と$\sei_2$の二つの既約表現に分解していることになる。
+		\begin{equation*}\begin{split}
+			\phi_6^{-1}(\sei_3\oplus0) = \set{0, 2, 4},\quad
+			\phi_6^{-1}(0\oplus\sei_2) = \set{0, 3}
+		\end{split}\end{equation*}
+	\end{example} %eg:中国の直和分解}
+%s3:中国の剰余定理}
+%s1:中国の剰余定理}
 \endgroup %}

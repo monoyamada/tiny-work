@@ -4,12 +4,14 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import tiny.function.BinaryPredicate;
 import tiny.function.Combinadic;
 import tiny.function.ComparableOrder;
+import tiny.function.Function;
 import tiny.function.LexicographicalOrder;
 import tiny.function.Permutation;
 
@@ -731,5 +733,28 @@ public class ArrayHelper {
 		}
 			break;
 		}
+	}
+
+	public static <S, T> T accumulate(S[] array, Function<S, T> fnc, T value)
+			throws Exception {
+		return accumulate(array, 0, array.length, fnc, value);
+	}
+	public static <S, T> T accumulate(S[] array, int begin, int end,
+			Function<S, T> fnc, T value) throws Exception {
+		for (; begin < end; ++begin) {
+			value = fnc.evaluate(array[begin]);
+		}
+		return value;
+	}
+	public static <S, T> T accumulate(List<S> array, Function<S, T> fnc, T value)
+			throws Exception {
+		return accumulate(array, 0, array.size(), fnc, value);
+	}
+	public static <S, T> T accumulate(List<S> array, int begin, int end,
+			Function<S, T> fnc, T value) throws Exception {
+		for (; begin < end; ++begin) {
+			value = fnc.evaluate(array.get(begin));
+		}
+		return value;
 	}
 }

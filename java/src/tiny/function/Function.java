@@ -2,8 +2,8 @@ package tiny.function;
 
 public interface Function<Source, Target> {
 	public Target evaluate(Source source) throws Exception;
-	public <X> Function<X, ? extends Target> compose(
-			Function<X, ? extends Source> source);
+//	public <X> Function<X, ? extends Target> compose(
+//			Function<X, ? extends Source> source);
 
 	public static class IdentityFunction<Value> extends AbFunction<Value, Value> {
 		@Override
@@ -14,11 +14,11 @@ public interface Function<Source, Target> {
 		public Value getValue(Value key, Value defaultValue) {
 			return key;
 		}
-		@Override
-		public <X> Function<X, ? extends Value> compose(
-				Function<X, ? extends Value> source) {
-			return source;
-		}
+//		@Override
+//		public <X> Function<X, ? extends Value> compose(
+//				Function<X, ? extends Value> source) {
+//			return source;
+//		}
 	}
 
 	public static class CompositeFunction<Source, X, Target> extends
