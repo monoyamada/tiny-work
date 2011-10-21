@@ -3,6 +3,8 @@ package tiny.lang;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import tiny.function.Function;
+
 public class StringHelper {
 	public static final String EMPTY_STRING = "";
 	public static final String DEFAULT_SEPARATOR = ",";
@@ -67,8 +69,12 @@ public class StringHelper {
 	}
 
 	public static String join(Iterable<?> array, String delim) {
+		return join(array, delim, null);
+	}
+	public static<T> String join(Iterable<T> array, String delim,
+			Function<?super T, ?> fnc) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		StringHelper.join(buffer, array, delim, fnc);
 		return buffer.toString();
 	}
 	public static String join(Object[] array, String delim) {
@@ -113,17 +119,29 @@ public class StringHelper {
 	}
 
 	public static void join(StringBuilder buffer, Iterable<?> array, String delim) {
+		join(buffer, array, delim, null);
+	}
+	public static<T> void join(StringBuilder buffer, Iterable<T> array,
+			String delim, Function<?super T, ?> fnc) {
 		Debug.isNotNull(buffer);
 		Debug.isNotNull(array);
 		if (delim == null) {
 			delim = StringHelper.DEFAULT_SEPARATOR;
 		}
-		final Iterator<?> p = array.iterator();
+		final Iterator<T> p = array.iterator();
 		for (int i = 0; p.hasNext(); ++i) {
 			if (i != 0) {
 				buffer.append(delim);
 			}
-			buffer.append(p.next());
+			if (fnc != null) {
+				try {
+					buffer.append(fnc.evaluate(p.next()));
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			} else {
+				buffer.append(p.next());
+			}
 		}
 	}
 	public static void join(StringBuilder buffer, Object[] array, String delim) {

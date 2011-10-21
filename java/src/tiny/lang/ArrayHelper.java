@@ -183,6 +183,18 @@ public class ArrayHelper {
 		System.arraycopy(y, 0, z, x.length, y.length);
 		return z;
 	}
+	public static long[] addAll(long[] x, long[] y) {
+		assert x != null && y != null;
+		if (x.length < 1) {
+			return y;
+		} else if (y.length < 1) {
+			return x;
+		}
+		final long[] z = new long[x.length + y.length];
+		System.arraycopy(x, 0, z, 0, x.length);
+		System.arraycopy(y, 0, z, x.length, y.length);
+		return z;
+	}
 	public static <T> void addAll(Collection<? super T> output, T[] array) {
 		for (int i = 0, n = array == null ? 0 : array.length; i < n; ++i) {
 			output.add(array[i]);

@@ -1,7 +1,16 @@
-\section{下線/上線/打ち消し線}\label{s1:下線/上線/打ち消し線} %{
+\section{\LaTeX\,チップス}\label{s1:LaTexチップス} %{
+\subsection{Wickの記号}\label{s2:Wickの記号} %{
+	$$
+	\contraction{}{A}{B}{C}
+	\contraction[2ex]{A}{B}{C}{D}
+	\bcontraction{}{A}{B}{C}
+	ABCD
+	$$
+%s2:Wickの記号}
+\subsection{下線/上線/打ち消し線}\label{s2:下線/上線/打ち消し線} %{
 	\Underline{下線}と、\Overline{上線}と、\Midline{打ち消し線}
-%s1:下線/上線/打ち消し線}
-\section{ギリシャ文字}\label{s1:ギリシャ文字} %{
+%s2:下線/上線/打ち消し線}
+\subsection{ギリシャ文字}\label{s2:ギリシャ文字} %{
 	アルファベットとギリシャ文字の対応を表にすると次のようになる。
 	\begin{table}[htbp] %{
 		\begin{center}\begin{tabular}{rrrr} \hline
@@ -35,16 +44,16 @@
 		\end{tabular}\end{center}
 		\caption{ギリシャ文字}
 	\end{table} %}
-%s1:ギリシャ文字}
+%s2:ギリシャ文字}
 
-\section{和記号の添え字}\label{s1:和記号の添え字} %{
+\subsection{和記号の添え字}\label{s2:和記号の添え字} %{
 	\begin{equation*}\begin{split} %{
 		\sideset{_{\text{左下}}^{\text{左上}}}{_{\text{右下}}^{\text{右上}}}
 			\sum_{n=0}^\infty
 	\end{split}\end{equation*} %}
-%s1:和記号の添え字}
+%s2:和記号の添え字}
 
-\section{文字の大きさの単位}\label{s1:文字の大きさの単位} %{
+\subsection{文字の大きさの単位}\label{s2:文字の大きさの単位} %{
 	{\TeX}の文字の大きさは表\ref{tab:文字の大きさの単位}のような単位を表す
 	定数が定義されている。その他に縦横の大きさを表す単位として
 	表\ref{tab:縦横の大きさの単位}のものがある。
@@ -76,9 +85,9 @@
 		\caption{縦横の大きさの単位}
 		\label{tab:縦横の大きさの単位}
 	\end{table} %}
-%s1:文字の大きさの単位}
+%s2:文字の大きさの単位}
 
-\section{局所的なマクロ}\label{s1:局所的なマクロ} %{
+\subsection{局所的なマクロ}\label{s2:局所的なマクロ} %{
 	マクロを文書内で局所的に使いたい場合、\\begingroup$\cdots$\\endgroup
 	で範囲を限定してマクロを定義する。
 	\begingroup
@@ -87,9 +96,9 @@
 	\endgroup
 	% コンパイルエラー
 	% '\xxx' form outside
-%s1:局所的なマクロ}
+%s2:局所的なマクロ}
 
-\section{表}
+\subsection{表}
 \begin{table}[htbp]
 	\begin{center}\begin{tabular}{|l|c|r|} \hline
 		あ & い & う \\ \hline
@@ -97,18 +106,18 @@
 	\caption{テスト}
 \end{table}
 
-\section{基準線の上下}
+\subsection{基準線の上下}
 \begin{tabular}{lll} \hline
 a & \Huge A & \raisebox{10pt}[0pt][0pt]{\Huge A} \\ \hline
 \end{tabular}
 
-\section{数式中のハイフン}\label{s1:数式中のハイフン} %{
+\subsection{数式中のハイフン}\label{s2:数式中のハイフン} %{
 	$$
 		\mathcal{L}_{\rm star\mathchar`-free}
 	$$
-%s1:数式中のハイフン}
+%s2:数式中のハイフン}
 
-\section{記号の上下に文字}
+\subsection{記号の上下に文字}
 $$
 	\overset{\mathrm{def}}{=}
 $$
@@ -116,19 +125,19 @@ $$
 	\underset{\mathrm{def}}{=}
 $$
 
-\section{数式の説明}
+\subsection{数式の説明}
 $$
 	e_m^{\otimes n} = \underbrace{e_m\otimes e_m\otimes \cdots\otimes e_m}_{n\text{個}} \\
 $$
 
-\section{Wickの縮約}
+\subsection{Wickの縮約}
 $$
 \contraction{}{A}{B}{C}
 \contraction[2ex]{A}{B}{C}{D}
 ABCD
 $$
 
-\section{矢印を曲げる}
+\subsection{矢印を曲げる}
 $$
 	\xymatrix {
 		\bullet \ar@{-}@(dr, ur) 
@@ -141,14 +150,14 @@ $$
 	}
 $$
 
-\section{矢印をずらす}
+\subsection{矢印をずらす}
 $$
 	\xymatrix {
 		\bullet \ar@<1ex>[r] & \bullet \ar@<1ex>[l]
 	}
 $$
 
-\section{矢印の添え字をずらす}
+\subsection{矢印の添え字をずらす}
 $$
 	\xymatrix {
 		\bullet \ar[r]^(0.2){f} & \bullet \\
@@ -157,10 +166,11 @@ $$
 	}
 $$
 
-\section{矢印の間に矢印を書く}
+\subsection{矢印の間に矢印を書く}
 $$
 	\xymatrix{
 		A \ar[rr]^f &&  B \\
 		& X \ar[ul]^{g}_{}="g" \ar[ur]_{fg}^{}="fg" \ar "g";"fg" ^{1:1}
 	}
 $$
+%s1:LaTexチップス}

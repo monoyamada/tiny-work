@@ -2,12 +2,20 @@
 	\newcommand{\Mod}[1]{{#1}\myhere\mybf{Mod}}
 	\newcommand{\Vect}[1]{\mybf{Vec}_{#1}}
 	\newcommand{\Hom}{\myop{Hom}}
-	\newcommand{\T}{\mycal{T}}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Mat}{\myop{M}}
+	\newcommand{\Map}{\mybf{Set}}
+	\newcommand{\Pow}{\mycal{P}}
+	\newcommand{\Perm}{\mycal{S}}
 	\newcommand{\W}{\mycal{W}}
+	\newcommand{\T}{\mycal{T}}
+	\newcommand{\Wedge}{{\bigwedge}}
+	%
 	\newcommand{\id}{\myop{id}}
 	\newcommand{\dup}{\myop{du}}
 	\newcommand{\onto}{\myop{onto}}
-	\newcommand{\Wedge}{{\bigwedge}}
+	\newcommand{\dfn}{\,\myop{def}\,}
+	\newcommand{\oless}{\olessthan}
 	%
 	\newcommand{\tran}{\mathbf{t}}
 	%
@@ -16,9 +24,893 @@
 	\newcommand{\fromfrom}{\leftleftarrows}
 	\newcommand{\tofrom}{\rightleftarrows}
 	\newcommand{\fromto}{\leftrightarrows}
+	\newcommand{\xIff}[2][]{\xLongleftrightarrow[#1]{#2}}
+	%
+	\newcommand{\bld}[1][e]{{\mathbf{#1}}}
+	\newcommand{\swap}{\leftrightarrow}
+	\newcommand{\range}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
 	%
 	{\setlength\arraycolsep{2pt}
 	%
+\section{シャッフル積}\label{s1:シャッフル積} %{
+	この節を通して次の記号を用いる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		%
+		\item[係数環] $R$を可換環とする。
+		%
+		\item[対称群] $S_n$を$n$次対称群とする。
+		%
+		\item[べき集合] 集合$A$に対して$\Pow_*A$を$A$のべき集合とし、
+		$\Pow_nA\subset\Pow_*A$を$A$の大きさ$n$の部分集合全体のつくる集合、
+		$\Pow_+A\subset\Pow_*A$を$A$の空でない部分集合全体のつくる集合とする。
+		\begin{equation*}\begin{split}
+			\Pow_*A = \sum_{n\in\sizen} \Pow_nA
+			,\quad \Pow_+A = \sum_{n\in\sizen_+} \Pow_nA
+		\end{split}\end{equation*}
+		$A$が空集合の場合は、$\Pow_*A$は空集合だけからなるべき集合となる。
+		%
+		\item[文字列] 集合$A$に対して$\W_*A$を集合$A$から生成される
+		自由モノイドとし、$\W_nA\subset\W_*A$を長さ$n$の文字列全体のつくる
+		集合、$\W_+A\subset\Pow_*A$を空でない文字列全体のつくる集合とする。
+		\begin{equation*}\begin{split}
+			\W_*A = \sum_{n\in\sizen} \W_nA
+			,\quad \W_+A = \sum_{n\in\sizen_+} \W_nA
+		\end{split}\end{equation*}
+		$A$が空集合の場合は、$\W_*A$は空の文字列だけからなる文字列の集合
+		となる。
+		$\W_*A$の文字列の連結による積は、前置記法で$m_\myspace$または$\myspace$
+		と書き、中置記法では記号を省略する。
+		%
+		\item[文字列] $\W_*A$の元をカッコを用いて次のように書く。
+		\begin{equation*}\begin{array}{rll}
+			\text{空文字列}\quad & 1_\W \text{ または } []  \\
+			\text{非空文字列}\quad & [a_1\cdots a_m] 
+			& \quad\text{for all } a_1,\dots,a_m\in A
+		\end{array}\end{equation*}
+		%
+		\item[文字列] 文字の文字列への作用を次のように定義する。
+		\begin{equation*}\begin{split}
+			a[a_1\cdots a_m] = [aa_1\cdots a_m]
+		\end{split}\end{equation*}
+		$a\in A$と$a\in \End(\W_*A)$を同一視して書く。
+		%
+		\item[自由代数] 集合$A$に対して$\W_*A$から生成される自由$R$-代数を
+		$R\W_*A$と書く。$\W_*A$から$R\W_*A$への標準入射をケットを使って
+		$\ket{-}:\W_*A\to R\W_*A$と書く。
+		\begin{equation*}\begin{split}
+				1_\W &\mapsto \ket{1} \\
+				[a_1\cdots a_p] &\mapsto \ket{a_1\cdots a_p}
+				\quad\text{for all } a_1,\dots,a_p\in A
+		\end{split}\end{equation*}
+		また、$R\W_*A$の双対空間を$R\W_*A^\tran:=\Mod{R}(R\W_*A,R)$と書き、
+		$\ket{W_*A}$の双対元をブラを使って表す。
+		\begin{equation*}\begin{split}
+			\braket{w_1|w_2} = \jump{w_1 = w_2}
+			\quad\text{for all } w_1,w_2\in \W_*A
+		\end{split}\end{equation*}
+		%
+		\item[置換群] 空でない集合$A$に対して$A$の置換群を$\Perm A$と書く。
+		$A$が有限集合でない場合は、$\Perm A$は$A$の自己同型写像全体のつくる
+		集合とする。
+		%
+		\item[非交差和] 共通を持たない集合$A,B$に対して非交差和を$A+B$と書く。
+		共通を持もつかもしれない集合$C,D$の和は$C\cup D$と書く。
+	\end{description} %}
+
+\subsection{シャッフル置換}\label{s2:シャッフル置換} %{
+	$I$を全順序$\le$の定義された集合とする。
+
+	\begin{definition}[順序で分離された部分集合]
+	\label{def:順序で分離された部分集合} %{
+		空でない部分集合$I_1,I_2\subseteq I$に対して、
+		$I_1\oless I_2\subseteq I\times I$を次の直積集合とする。
+		\begin{equation*}\begin{split}
+			I_1\oless I_2 \xIff{\dfn} 
+				i_1 < i_2 \quad\text{for all } i_1\in I_1,\; i_2\in I_2
+		\end{split}\end{equation*}
+		$I_1,I_2$を順序で分離された$I$の部分集合といい、$I_1\oless I_2$と書く。
+	\end{definition} %def:順序で分離された部分集合}
+
+	$I_1\oless I_2$ならば$I_1\cap I_2=\emptyset$となることに注意する。
+
+	シャッフル置換と逆シャッフル置換を次のように定義する。
+
+	\begin{definition}[シャッフル置換]\label{def:シャッフル置換} %{
+		$I_1\oless I_2\subseteq I^2$に対して、
+		置換群の部分集合$\Cap(I_1,I_2)\subseteq\Perm(I_1+I_2)$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			\sigma\in \Cap(I_1,I_2) \xIff{\dfn} \left\{\begin{split}{}
+				\sigma i,\;\sigma j \in I_1 \And \sigma i < \sigma j
+					&\implies i < j \\
+				\sigma i,\;\sigma j \in I_2 \And \sigma i < \sigma j
+					&\implies i < j \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+		$\Cap(I_1,I_2)$を$I_1\oless I_2$のシャッフル置換という。
+	\end{definition} %def:シャッフル置換}
+	\begin{definition}[逆シャッフル置換]\label{def:逆シャッフル置換} %{
+		$I_1\oless I_2\subseteq I^2$に対して、
+		$I_1+I_2$の置換群の部分集合
+		$\Cap^\tran(I_1,I_2)\subseteq\Perm(I_1+I_2)$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\sigma\in\Cap^\tran(I_1,I_2) \xIff{\dfn} \left\{\begin{array}{ll}
+				\sigma i < \sigma j
+				& \quad\text{for all } i,\;j \in I_1 \And i < j \\
+				\sigma i < \sigma j
+				& \quad\text{for all } i,\;j \in I_2 \And i < j \\
+			\end{array}\right. \\ %\}
+		\end{split}\end{equation*}
+		$\Cap^\tran(I_1,I_2)$を$I_1\oless I_2$の逆シャッフル置換という。
+	\end{definition} %def:逆シャッフル置換}
+
+	シャッフル置換と逆シャッフル置換は集合同型で互いに逆の関係にある。
+	\begin{equation*}\begin{split}
+		\Cap(I_1,I_2) &\simeq \Cap^\tran(I_1,I_2) \\
+		\sigma &\mapsto \sigma^{-1}
+	\end{split}\end{equation*}
+	したがって、シャッフル置換だけをを定義すればよいが、定義が簡単な
+	逆シャッフル置換が用いられることもあるので、逆シャッフル置換も定義
+	しておいた。
+
+	シャッフル置換は通常の積で群にはならないことに注意する。
+	例えば$I_1,I_2\in\sizen_+$で$I_1=\set{1,2},\;I_2=\set{3}$とすると、
+	$\Cap(I_1,I_2)=\set{1,\sigma_1,\sigma_2}$の群表は次のようになる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{array}{rcl}
+			\sigma_1 &=& \begin{pmatrix}
+				1 & 2 & 3 \\ 1 & 3 & 2
+			\end{pmatrix} \\
+			\sigma_2 &=& \begin{pmatrix}
+				1 & 2 & 3 \\ 3 & 1 & 2
+			\end{pmatrix} \\
+		\end{array}\right. \implies \begin{array}{c|cc}
+			& \sigma_1 & \sigma_2 \\\hline
+			\sigma_1 & 1 & \begin{pmatrix}
+				1 & 2 & 3 \\ 3 & 2 & 1
+			\end{pmatrix} \\
+			\sigma_2 & \begin{pmatrix}
+				1 & 2 & 3 \\ 2 & 1 & 3
+			\end{pmatrix} & \begin{pmatrix}
+				1 & 2 & 3 \\ 2 & 3 & 1
+			\end{pmatrix} \\
+		\end{array}
+	\end{split}\end{equation*}
+	$\sigma_1^2$以外は$\Cap(I_1,I_2)$の元ではない。
+
+	次のように順序を保ったまま文字列の文字を入れ替えていく操作を繰り返すと、
+	シャッフル置換の元が列挙できる。
+	\begin{equation}\label{eq:シャッフル置換の列挙その一}
+	\xymatrix@R=1em@C=1em{
+		[1,2\bou3,4] \ar[r] & [1\bou3,2\bou4] \ar[r] \ar[rd] 
+			& [3,1,2\bou4] \ar[r] & [3,1\bou4,2] \ar[r] & [3,4,1,2] \\
+		& & [1\bou3,4,2] \ar[ru] & \\
+	}\end{equation}
+	この図では次のような規則で文字の並びを入れ替えている。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\set{1,2}$と$\set{3,4}$の位置を一つづつ入れ替える。
+		\item $\set{1,2}$の元は左から右へ、$\set{3,4}$の元は右から左へ
+		移動する。
+	\end{itemize} %}
+	図\eqref{eq:シャッフル置換の列挙その一}では入れ替えを行うことができる
+	位置を縦棒$\bou$で示している。
+
+	図\eqref{eq:シャッフル置換の列挙その一}の列挙を見ると、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 左端の文字は$1$または$3$、
+		\item 右端の文字は$2$または$4$
+	\end{itemize} %}
+	となっていることに気づく。これは偶然ではなく、次の事実に基づく。
+	$I_1\oless I_2\subset I^2$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		i_1<\cdots< i_{p+q} \in I
+		,\quad I_1 = \set{i_1,\dots,i_p}
+		,\quad I_2 = \set{i_{p+1},\dots,i_{p+q}}
+	\end{split}\end{equation*}
+	任意の$\sigma\in\Cap(I_1,I_2)$に対して次の式が成り立つ。
+	\begin{equation*}\begin{array}{rcll}
+		\sigma i_1 \neq i_1 &\implies& \sigma i_1\not\in I_1
+		& \because\; \text{$\Cap(I_1,I_2)$の定義} \\
+		&\iff& \sigma i_1\in I_2 \\
+		&\implies& \sigma i_1 = i_{p+1}
+		& \because\; \text{$\Cap(I_1,I_2)$の定義} \\
+	\end{array}\end{equation*}
+	つまり、$\sigma i_1$は必ず$i_1$または$i_{p+1}$になる。
+	このことを使うと、上記の方法とは別のシャッフル置換の元を列挙する方法
+	が得られる。
+	\begin{equation*}\begin{split}
+		[1,2\bou 3,4] &= [1]\times[2\bou 3,4] + [3]\times[1,2\bou 4] \\
+		&= [1,2]\times[\bou 3,4] + [1,3]\times[2\bou 4] \\
+		&\,+ [3,1]\times[2\bou 4] + [3,4]\times[1,2\bou] \\
+		&= [1,2,3,4] + [1,3,2]\times[\bou 4] + [1,3,4]\times[2\bou] \\
+		&\,+ [3,1,2]\times[\bou 4] + [3,1,4]\times[2\bou] + [3,4,1,2] \\
+		&= [1,2,3,4] + [1,3,2,4] + [1,3,4,2] \\
+		&\,+ [3,1,2,4] + [3,1,4,2] + [3,4,1,2] \\
+	\end{split}\end{equation*}
+	したがって、シャッフル置換を次のように拡張すると、
+	\begin{equation}\label{eq:シャッフル置換の拡張}\begin{split}
+		\Cap(\emptyset,J) = \set{\id_J} = \Cap(J,\emptyset) 
+		\quad\text{for all } J\ne\emptyset\subseteq I
+	\end{split}\end{equation}
+	シャッフル置換の次の分解が得られる。
+	\begin{equation}\label{eq:シャッフル置換の分解}\begin{split}
+		\Cap(I_1,I_2) = \Cap(I_1',I_2) + \Cap(I_1,I_2') \quad\text{where} \\
+		I_1' := I_1 - \set{\min I_1},\quad I_2' := I_2 - \set{\min I_2}
+	\end{split}\end{equation}
+	この分解から、シャッフル置換の大きさ$\Cap_{|I_1|,|I_2|}:=\Cap(I_1,I_2)$
+	についての次の漸化式が得られる。
+	\begin{equation}\label{eq:シャッフル置換の大きさの漸化式}
+	\begin{array}{rcll}
+		\Cap_{m+1,n+1} &=& \Cap_{m,n+1} + \Cap_{m+1,n}
+			& \quad\text{for all } m,n\in\sizen \\
+		\Cap_{m,0} &=& 1 = \Cap_{0,m} & \quad\text{for all } m\in\sizen \\
+	\end{array}\end{equation}
+	この漸化式は次のように考えて解くことができる。
+	$\Cap_{I_1,I_2}$は$|I_1|+|I_2|$個の箱を一直線に並べて、箱の中に$I_1$と
+	$I_2$の元をそれぞれの順序を保ちながら入れていく方法と考えることができる。
+	その時、$|I_1|+|I_2|$個の箱の中から$I_1$個の箱を選び出すと、$I_1$と$I_2$
+	の順序を保つことから、一意に元の分配方法が定まってしまう。したがって、
+	次の式が成り立つことになる。
+	\begin{equation}\label{eq:シャッフル置換の大きさ}\begin{split}
+		\Cap_{m,n} &= \binom{m+n}{n} \quad\text{for all } m,n\in\sizen_+
+	\end{split}\end{equation}
+	実際、二項係数は次の式を満たす。
+	\begin{equation*}\begin{split}
+		\binom{m+n+2}{m+1} = \binom{m+n+1}{m} + \binom{m+n+1}{m+1}
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+%s2:シャッフル置換}
+\subsection{シャッフル積}\label{s2:シャッフル積} %{
+	シャッフル置換を用いてシャッフル積を定義する。
+
+	\begin{definition}[シャッフル積]\label{def:シャッフル積} %{
+		$A$を集合とする。
+		$R$-双線形写像$\shuffle:R\W_*A\otimes R\W_*A\to R\W_*A$
+		を次のように定義する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$w\in \W_*A$に対して
+			\begin{equation*}\begin{split}
+				\ket{w}\shuffle\ket{1} = \ket{w} = \ket{1}\shuffle\ket{w}
+			\end{split}\end{equation*}
+			\item 任意の$a_1,\dots,a_{p+q}\in A$に対して
+			\begin{equation*}\begin{split}
+				\ket{a_1\cdots a_p}\shuffle\ket{a_{p+1}\cdots a_{p+q}}
+				= \sum_{\sigma\in\Cap(I_1,I_2)} 
+				\ket{a_{\sigma1}\cdots a_{\sigma(p+q)}} \text{ where} \\
+				I_1=1..p,\quad I_2=(p+1)..(p+q)
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		$\shuffle$を$R\W_*A$のシャッフル積という。
+	\end{definition} %def:シャッフル積}
+
+	$R\W_+\sizen_+$に対するシャッフル積は次のようになる。
+	\begin{equation*}\begin{split}
+		[1]\shuffle[2] &= [1,2] + [2,1] \\
+		[1,2]\shuffle[3] &= [1,2,3] + [1,3,2] + [3,1,2] \\
+		[1,2]\shuffle[3,4] &= [1,2,3,4] + [1,3,2,4] + [1,3,4,2] \\
+			&\, + [3,1,2,4] + [3,1,4,2] + [3,4,1,2] \\
+	\end{split}\end{equation*}
+
+	シャッフル積は対称な積となるが、それを証明する前に、
+	シャッフル置換の分解\eqref{eq:シャッフル置換の分解}を用いて、
+	シャッフル積を漸化式によって計算する方法を導いておく。
+
+	\begin{proposition}[シャッフル積の摂動]\label{prop:シャッフル積の摂動} %{
+		$A$を集合とする。任意の$v_1,v_2\in RA$と$x_1,x_2\in R\W_*A$に対して
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			(v_1x_1)\shuffle(v_2x_2) = v_1\bigl(x_1\shuffle(v_2x_2)\bigr) 
+				+ v_2\bigl((v_1x_1)\shuffle x_2\bigr)
+		\end{split}\end{equation*}
+	\end{proposition} %prop:シャッフル積の摂動}
+	\begin{proof} $p,q\in\sizen_+$として、
+	シャッフル置換の分解\eqref{eq:シャッフル置換の分解}を
+	シャッフル積に適用すると次のようになる。
+	\begin{equation*}\begin{split}
+		& \ket{a_1\cdots a_p}\shuffle\ket{a_{p+1}\cdots a_{p+q}} \\
+		&= \sum_{\sigma\in\Cap(1..p,(p+1)..(p+q))}
+			\ket{a_{\sigma 1}\cdots a_{\sigma p}
+			a_{\sigma(p+1)}\cdots a_{\sigma(p+q)}} \\
+		&= \sum_{\sigma\in\Cap(2..p,(p+1)..(p+q))}
+			a_1\ket{a_{\sigma }\cdots a_{\sigma p}
+			a_{\sigma(p+1)}\cdots a_{\sigma(p+q)}} \\
+		&\,+ \sum_{\sigma\in\Cap(1..p,(p+2)..(p+q))}
+			a_{p+1}\ket{a_{\sigma }\cdots a_{\sigma p}
+			a_{\sigma(p+2)}\cdots a_{\sigma(p+q)}} \\
+		&= a_{1}\bigl(\ket{a_2\cdots a_p}
+			\shuffle\ket{a_{p+1}\cdots a_{p+q}}\bigr)
+			+ a_{p+1}\bigl(\ket{a_1\cdots a_p}
+			\shuffle\ket{a_{p+2}\cdots a_{p+q}}\bigr)
+	\end{split}\end{equation*}
+	したがって、命題の式が成り立つことがわかる。
+	\end{proof}
+
+	この命題を用いて、シャッフル積が対称な積となることを証明する。
+
+	\begin{proposition}[シャッフル積は対称な積]
+	\label{prop:シャッフル積は対称な積} %{
+		次の命題が成り立つ。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{eum:シャッフル積は対称} シャッフル積は対称である。
+			\item\label{eum:シャッフル積は結合的} シャッフル積は結合的である。
+		\end{enumerate} %}
+	\end{proposition} %prop:シャッフル積は対称な積}
+	\begin{proof} $A$を集合とする。
+	$A$が$\W_*A$の生成元になっていることと、
+	\begin{equation*}\begin{split}
+		v\in\W_{n+1} \implies \exists\; x\in A,\; w\in\W_nA \text{ s.t. }
+		v = xw
+	\end{split}\end{equation*}
+	シャッフル積が文字列の長さを保つこと
+	\begin{equation*}\begin{split}
+		w_1\in \W_mA \And w_2\in \W_nA
+		\implies w_1\shuffle w_2\in R\W_{m+n}A
+	\end{split}\end{equation*}
+	を使って、連結した文字列の長さの帰納法によって証明する。
+	対称性と結合性の証明は同じようにして証明される。
+
+	\ref{eum:シャッフル積は対称}\quad
+	シャッフル積の定義より、任意の$w\in\W_*A$に対して次の式が成り立つ。
+	\begin{equation}\label{eq:単位元とのシャッフル積}\begin{split}
+		w\shuffle1_\W=w=1_\W\shuffle w
+	\end{split}\end{equation}
+	特に、連結した文字列の長さが$1$以下のときに命題が成り立つことがわかる。
+	連結した文字列の長さが$n$以下のときに命題が成り立つと仮定する。
+	\begin{equation*}\begin{split}
+		w_1\shuffle w_2 = w_2\shuffle w_1
+		\quad\text{for all } |w_1| + |w_2| \le n
+	\end{split}\end{equation*}
+
+	$x_1,x_2\in\W_*A$を$|x_1|+|x_2|=n+1$となる文字列とする。
+	$x_1=1_\W$または$x_2=1_\W$のときは、$1_\W$がシャッフル積の単位元
+	だから、$x_1\shuffle x_2=x_2\shuffle x_1$が成り立つ。
+	したがって、$x_1,x_2\in\W_+A$とする。この時、
+	$x_1=a_1w_1$かつ$x_2=a_2w_2$となる$a_1,a_2\in A$と$w_1,w_2\in\W_*A$
+	が存在する。そして、次の式が成り立つ。
+	\begin{equation}\label{eq:非単位同士のシャッフル積}\begin{split}
+		(a_1w_1)\shuffle(a_2w_2) &= a_1\bigl(w_1\shuffle(a_2w_2)\bigr) 
+			+ a_2\bigl((a_1w_1)\shuffle w_2\bigr) \\
+		(a_2w_2)\shuffle(a_1w_1) &= a_2\bigl(w_2\shuffle(a_1w_1)\bigr) 
+			+ a_1\bigl((a_2w_2)\shuffle w_1\bigr) \\
+	\end{split}\end{equation}
+	$|w_1|+|w_2|=n-1$だから、帰納法の仮定より、
+	$w_1\shuffle(a_2w_2)=(a_2w_2)\shuffle w_1$と
+	$(a_1w_1)\shuffle w_2=w_2\shuffle(a_1w_1)$が成り立つから、
+	\begin{equation*}\begin{split}
+		(a_1w_1)\shuffle(a_2w_2) = (a_2w_2)\shuffle(a_1w_1)
+	\end{split}\end{equation*}
+	となることがわかる。よって、任意の$|x_1|+|x_2|=n+1$となる
+	$x_1,x_2\in\W_*A$に対して$x_1\shuffle x_2=x_2\shuffle x_1$となることが
+	わかり、連結した文字列の長さが$n+1$のときも命題が成り立つことがわかる。
+	
+	\ref{eum:シャッフル積は結合的}\quad
+	シャッフル積の定義より、任意の$w_1,w_2\in\W_*A$に対して次の式が成り立つ。
+	\begin{equation}\label{eq:単位元とのシャッフル積その二}\begin{split}
+		(w_1\shuffle1_\W)\shuffle w_2 = w_1\shuffle w_2 
+		= w_1\shuffle (1_\W\shuffle w_2)
+	\end{split}\end{equation}
+	特に、連結した文字列の長さが$2$以下のときに命題が成り立つことがわかる。
+	連結した文字列の長さが$n$以下のときに命題が成り立つと仮定する。
+	\begin{equation*}\begin{split}
+		w_1\shuffle(w_2\shuffle w_3) = (w_1\shuffle w_2)\shuffle w_3
+		\quad\text{for all } |w_1| + |w_2| + |w_3| \le n
+	\end{split}\end{equation*}
+	$x_1,x_2,x_3\in\W_*A$を$|x_1|+|x_2|+|x_3|=n+1$となる文字列とする。
+	$x_1,x_2,x_3$のうちどれかが$1_\W$ときは、
+	式\eqref{eq:単位元とのシャッフル積その二}から、
+	$(x_1\shuffle x_2)\shuffle x_3=x_1\shuffle(x_2\shuffle x_3)$が成り立つ。
+	したがって、$x_1,x_2,x_3\in\W_+A$とする。この時、各$i=1,2,3$に対して、
+	$x_i=a_iw_i$となる$a_i\in A$と$w_i\in\W_*A$が存在する。
+	そして、次の式が成り立つ。
+	\begin{equation}\label{eq:非単位同士のシャッフル積その二}\begin{split}
+		\bigl((a_1w_1)\shuffle(a_2w_2)\bigr)\shuffle(a_3w_3)
+		&= a_1\biggl(\bigl(w_1\shuffle(a_2w_2)\bigr)\shuffle(a_3w_3)\biggr) \\
+		&\,+ a_2\biggl(\bigl((a_1w_1)\shuffle w_2\bigr)\shuffle(a_3w_3)\biggr) \\
+		&\,+ a_3\biggl(\bigl((a_1w_1)\shuffle(a_2w_2)\bigr)\shuffle w_3\biggr) \\
+		(a_1w_1)\shuffle\bigl((a_2w_2)\shuffle(a_3w_3)\bigr)
+		&= a_1\biggl(w_1\shuffle\bigl((a_2w_2)\shuffle(a_3w_3)\bigr)\biggr) \\
+		&\,+ a_2\biggl((a_1w_1)\shuffle\bigl(w_2\shuffle(a_3w_3)\bigr)\biggr) \\
+		&\,+ a_3\biggl((a_1w_1)\shuffle\bigl((a_2w_2)\shuffle w_3\bigr)\biggr) \\
+	\end{split}\end{equation}
+	$|w_1|+|w_2|+|w_3|=n-2$だから、帰納法の仮定より、次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\bigl(w_1\shuffle(a_2w_2)\bigr)\shuffle(a_3w_3)
+		&= w_1\shuffle\bigl((a_2w_2)\shuffle(a_3w_3) \\
+		\bigl((a_1w_1)\shuffle w_2\bigr)\shuffle(a_3w_3)
+		&= (a_1w_1)\shuffle\bigl(w_2\shuffle(a_3w_3) \\
+		\bigl((a_1w_1)\shuffle(a_2w_2)\bigr)\shuffle w_3
+		&= (a_1w_1)\shuffle\bigl((a_2w_2)\shuffle w_3 \\
+	\end{split}\end{equation*}
+	次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\bigl((a_1w_1)\shuffle(a_2w_2)\bigr)\shuffle(a_3w_3)
+		= (a_1w_1)\shuffle\bigl((a_2w_2)\shuffle(a_3w_3)\bigr)
+	\end{split}\end{equation*}
+	よって、任意の$|x_1|+|x_2|+|x_3|=n+1$となる$x_1,x_2,x_3\in\W_*A$に対して
+	$(x_1\shuffle x_2)\shuffle x_3=x_1\shuffle(x_2\shuffle x_3)$となることが
+	わかり、連結した文字列の長さが$n+1$のときも命題が成り立つことがわかる。
+	\end{proof}
+
+	シャッフル積を拡張してq-シャッフル積を定義する\cite{Duchamp1997Non}。
+	q-シャッフル積は文字列の連結と外積代数を含むシャッフル積の
+	拡張になっている。シャッフル積の拡張には擬シャッフル積
+	（quasi-shuffle product）もあるが、ここではそれは扱わない。
+
+	\begin{definition}[q-シャッフル積（q-shuffle product）]
+	\label{def:q-シャッフル積} %{
+		$A$を集合とする。$q\in R$に対して
+		$R$-双線形写像$\shuffle_q:R\W_*A\otimes R\W_*A\to R\W_*A$
+		を次のように再帰的に定義する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$w\in \W_*A$に対して
+			\begin{equation*}\begin{split}
+				w\shuffle_q1_\W = w = 1_\W\shuffle_qw
+			\end{split}\end{equation*}
+			\item 任意の$a_1,a_2\in A$と$w_1,w_2\in\W_*A$に対して
+			\begin{equation*}\begin{split}
+				(a_1w_1)\shuffle (a_2w_2)
+				= a_1\bigl(w_1\shuffle_q(a_2w_2)\bigr)
+				+ q^{|w_1|+1} a_2\bigl((a_1w_1)\shuffle_2w_2\bigr)
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		$\shuffle_q$を$R\W_*A$のq-シャッフル積という。
+	\end{definition} %def:q-シャッフル積}
+
+	q-シャッフル積の$q=0$が文字列の連結、$q=1$がシャッフル積、
+	$q=-1$が外積に対応する。
+
+	\begin{proposition}[q-シャッフル積は積]\label{prop:q-シャッフル積は積} %{
+		q-シャッフル積は結合的である。
+	\end{proposition} %prop:q-シャッフル積は積}
+	\begin{proof} まず、任意の$a_1,a_2,a_3\in A$に対して次の結合性が
+	成り立つ。
+	\begin{equation*}\begin{split}
+		\bigl([a_1]\shuffle_q[a_2]\bigr)\shuffle_q[a_3]
+		= [a_1]\shuffle_q\bigl([a_2]\shuffle_q[a_3]\bigr) \\
+		= [a_1a_2a_3] + q\bigl([a_1a_3a_2] + [a_2a_1a_3]\bigr)
+		+ q^2\bigl([a_3a_1a_2] + [a_2a_3a_1]\bigr) + q^3[a_3a_2a_1]
+	\end{split}\end{equation*}
+	任意の$a_1,a_2,a_3\in A$と$w_1,w_2,w_3\in \W_*A$に対して、
+	次の式が成り立つことを帰納法に帰着させる。
+	\begin{equation}\label{eq:q-シャッフル積の結合性}\begin{split}
+		\bigl(a_1w_1\shuffle_qa_2w_2\bigr)\shuffle_qa_3w_3
+		= a_1w_1\shuffle_q\bigl(a_2w_2\shuffle_qa_3w_3\bigr)
+	\end{split}\end{equation}
+	ここで、カッコを減らすために$aw\shuffle\cdots:=(aw)\shuffle\cdots$という
+	演算の順序で書くことにする。
+	左辺は次のようになり、
+	\begin{equation*}\begin{split}
+		\text{lhs} &= \bigl(a_1(w_1\shuffle_qa_2w_2)
+			+ q^{|w_1|+1}a_2(a_1w_1\shuffle_qw_2)\bigr)\shuffle a_3w_3 \\
+		&= a_1 \bigl((w_1\shuffle_qa_2w_2)\shuffle a_3w_3\bigr)
+			+ q^{|w_1|+|w_2|+2}
+			a_3 \bigl(a_1(w_1\shuffle_qa_2w_2)\shuffle w_3\bigr) \\
+		&\,+ q^{|w_1|+1}a_2\bigl((a_1w_1\shuffle_qw_2)\shuffle a_3w_3\bigr)
+			+ q^{2|w_1|+|w_2|+3}
+			a_3\bigl(a_2(a_1w_1\shuffle_qw_2)\shuffle w_3\bigr) \\
+		&= a_1 \bigl((w_1\shuffle_qa_2w_2)\shuffle a_3w_3\bigr)
+			+ q^{|w_1|+1}a_2\bigl((a_1w_1\shuffle_qw_2)\shuffle a_3w_3\bigr) \\
+		&\,+ q^{|w_1|+|w_2|+2}
+			a_3 \bigl(a_1(w_1\shuffle_qa_2w_2)\shuffle w_3
+			+ q^{|w_1|+1} a_2(a_1w_1\shuffle_qw_2)\shuffle w_3\bigr) \\
+		&= a_1 \bigl((w_1\shuffle_qa_2w_2)\shuffle a_3w_3\bigr)
+			+ q^{|w_1|+1}a_2\bigl((a_1w_1\shuffle_qw_2)\shuffle a_3w_3\bigr) \\
+		&\,+ q^{|w_1|+|w_2|+2}
+			a_3 \bigl((a_1w_1\shuffle_qa_2w_2)\shuffle w_3\bigr) \\
+	\end{split}\end{equation*}
+	右辺は次のようになる。
+	\begin{equation*}\begin{split}
+		\text{rhs} &= a_1w_1\shuffle_q\bigl(a_2(w_2\shuffle_qa_3w_3) 
+			+ q^{|w_2|+1} a_3(a_2w_2\shuffle_qw_3)\bigr) \\
+		&= a_1\bigl(w_1\shuffle_qa_2(w_2\shuffle_qa_3w_3)\bigr)
+			+ q^{|w_1|+1} a_2\bigl(a_1w_1\shuffle_q(w_2\shuffle_qa_3w_3)\bigr) \\
+		&\,+ q^{|w_2|+1}
+			a_1 \bigl(w_1\shuffle_qa_3(a_2w_2\shuffle_qw_3)\bigr)
+			+ q^{|w_1|+|w_2|+2}
+			a_3 \bigl(a_1w_1\shuffle_q(a_2w_2\shuffle_qw_3)\bigr) \\
+		&= a_1\bigl(w_1\shuffle_qa_2(w_2\shuffle_qa_3w_3)
+			+ q^{|w_2|+1} w_1\shuffle_qa_3(a_2w_2\shuffle_qw_3)\bigr) \\
+		&\,+ q^{|w_1|+1} a_2\bigl(a_1w_1\shuffle_q(w_2\shuffle_qa_3w_3)\bigr)
+			+ q^{|w_1|+|w_2|+2}
+			a_3 \bigl(a_1w_1\shuffle_q(a_2w_2\shuffle_qw_3)\bigr) \\
+		&= a_1\bigl(w_1\shuffle_q(a_2w_2\shuffle_qa_3w_3)\bigr)
+			+ q^{|w_1|+1} a_2\bigl(a_1w_1\shuffle_q(w_2\shuffle_qa_3w_3)\bigr) \\
+		&\,+ q^{|w_1|+|w_2|+2}
+			a_3 \bigl(a_1w_1\shuffle_q(a_2w_2\shuffle_qw_3)\bigr) \\
+	\end{split}\end{equation*}
+	したがって、次の式が成り立てば、式\eqref{eq:q-シャッフル積の結合性}が
+	成り立つことになる。
+	\begin{equation*}\begin{split}
+		(w_1\shuffle_qa_2w_2)\shuffle a_3w_3
+			&= w_1\shuffle_q(a_2w_2\shuffle_qa_3w_3) \\
+		(a_1w_1\shuffle_qw_2)\shuffle a_3w_3
+			&= a_1w_1\shuffle_q(w_2\shuffle_qa_3w_3) \\
+		(a_1w_1\shuffle_qa_2w_2)\shuffle w_3
+			&= a_1w_1\shuffle_q(a_2w_2\shuffle_qw_3) \\
+	\end{split}\end{equation*}
+	よって、命題の証明は文字列の長さ$|w_1w_2w_3|$に関する帰納法に帰着する。
+	\end{proof}
+
+	q-シャッフル積をシャッフル置換を用いて表すことを考える。
+	まず、置換に対してその大きさを定義する。
+
+	\begin{definition}[置換の大きさ]\label{def:置換の大きさ} %{
+		$S_n$を$n$次対称群とする。
+		任意の$\sigma\in S_n$に対して、$\sigma$をあみだくじとして書いた時に
+		必要となる\underline{最小の}横線の数を$|\sigma|$と書く。
+	\end{definition} %def:置換の大きさ}
+
+	$3$次対称群の場合、巡回置換を用いるとその大きさは次のようになる。
+	\begin{equation*}\begin{split}
+		|()| = 0,\quad |(1,2)| = |(2,3)| = |(3,1)| = 1
+		,\quad |(1,2,3)| = |(1,3,2)| = 2
+	\end{split}\end{equation*}
+	一般に置換の大きさは次の三角不等式を満たす。
+	\begin{equation*}\begin{split}
+		|\sigma_1\sigma_2|\le |\sigma_1| + |\sigma_2| \\
+		|\sigma_1\sigma_2| = 0 \iff \sigma_1\sigma_2 = \id
+	\end{split}
+		\quad\text{for all } \sigma_1,\sigma_2\in S_n
+	\end{equation*}
+
+	置換の大きさを用いると、q-シャッフル積は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\ket{a_1\cdots a_p}\shuffle_q\ket{a_{p+1}\cdots a_{p+q}}
+		= \sum_{\sigma\in\Cap(I_1,I_2)} q^{|\sigma|}
+		\ket{a_{\sigma 1}\cdots a_{\sigma(p+q)}} \quad\text{where} \\
+		I_1 = 1..p,\; I_2 = (p+1)..(p+q)
+		\quad\text{for all } a_1,\dots,a_{p+q}\in A
+	\end{split}\end{equation*}
+	シャッフル置換の分解\eqref{eq:シャッフル置換の分解}から、
+	このようにq-シャッフル積を定義しても、シャッフル積の定義
+	\ref{def:q-シャッフル積}の漸化式を満たすことがわかる。
+
+	\begin{proposition}[q-シャッフル写像その一]
+	\label{prop:q-シャッフル写像その一} %{
+		$S_n$を$n$次対称群とすると、任意の$a_1,\dots,a_n\in A$に対して
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\ket{a_1}\shuffle_q\cdots\shuffle_q\ket{a_n}
+			= \sum_{\sigma\in S_n} q^{|\sigma|}
+			\ket{a_{\sigma1}\cdots a_{\sigma n}}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:q-シャッフル写像その一}
+	\begin{proof} 文字数$n$に関する帰納法で証明する。まず、$n=2$の時は
+	q-シャッフル積の定義より命題が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\ket{a_1}\shuffle_q\ket{a_2}
+		&= \sum_{\sigma\in S_2} q^{|\sigma|} \ket{a_{\sigma1}a_{\sigma2}}
+		\quad\text{for all } a_1,a_2\in A
+	\end{split}\end{equation*}
+	ある$2\le n\in\sizen$に対して命題が成り立つとすると、
+	任意の$a_1,\dots,a_{n+1}$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\ket{a_1}\shuffle_q\cdots\shuffle_q\ket{a_{n+1}}
+		&= \sum_{\sigma\in S_n} q^{|\sigma|} \ket{a_{\sigma1}\cdots a_{\sigma n}}
+			\shuffle_q\ket{a_{n+1}} \\
+		&= \sum_{\sigma\in S_n} q^{|\sigma|} \left(\begin{array}{rrl}
+			&& \ket{a_{\sigma1}\cdots a_{\sigma n}a_{n+1}} \\
+			+& q & \ket{a_{\sigma1}\cdots a_{\sigma(n-1)}a_{n+1}a_{\sigma n}} \\
+			+& & \cdots \\
+			+& q^n & \ket{a_{n+1}a_{\sigma1}\cdots a_{\sigma n}} \\
+		\end{array}\right) \\
+		&= \sum_{\sigma\in S_{n+1}} q^{|\sigma|} \ket{a_{\sigma1}
+			\cdots a_{\sigma(n+1)}} \\
+	\end{split}\end{equation*}
+	したがって、文字数が$n+1$の時も命題が成り立つことがわかる。
+	\end{proof}
+
+	\begin{definition}[q-シャッフル写像]\label{def:q-シャッフル写像} %{
+		$A$を集合とする。$R$-線形写像$\Cap_q:R\W_*A\to R\W_*A$を次のように
+		定義する。
+		\begin{equation*}\begin{array}{rcll}
+			\Cap_q\ket{1} &:=& \ket{1} \\
+			\Cap_q\ket{a_1\cdots a_m} 
+			&:=& \sum_{\sigma\in S_n} q^{|\sigma|} \ket{a_{\sigma1}\cdots a_{\sigma n}}
+			%&=& \ket{a_1}\shuffle_q\cdots\shuffle_q\ket{a_m}
+			& \quad\text{for all } a_1,\dots,a_m\in A
+		\end{array}\end{equation*}
+		$\Cap_q$をq-シャッフル写像ということにする。
+	\end{definition} %def:q-シャッフル写像}
+
+	\begin{proposition}[q-シャッフル写像その二]
+	\label{prop:q-シャッフル写像その二} %{
+		文字列の連結$\myspace$とq-シャッフル積の間に次の関係が成り立つ。
+		\begin{equation*}\begin{split}
+			(-\shuffle_q-)(\Cap_q\otimes\Cap_q)
+			= \Cap_q(-\myspace-)
+		\end{split}\end{equation*}
+	\end{proposition} %prop:q-シャッフル写像その二}
+	\begin{proof} 一項目の文字数に関する帰納法によって証明する。
+	まず、任意の$w\in\W_*A$に対して次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\bigl(\Cap_q\ket{1}\bigr)\shuffle_q\bigl(\Cap_q\ket{w}\bigr)
+		= \Cap_q\ket{w}
+	\end{split}\end{equation*}
+	任意の$w_1,w_2\in\W_*A$と$a\in A$に対して次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\bigl(\Cap_q\ket{w_1}\bigr)\shuffle_q\bigl(\Cap_q\ket{w_2}\bigr)
+		= \Cap_q\ket{w_1w_2} \\
+		\implies \begin{split}
+			\bigl(\Cap_qa\ket{w_1}\bigr)\shuffle_q\bigl(\Cap_q\ket{w_2}\bigr)
+			& = \ket{a}\shuffle_q\bigl(\Cap_q\ket{w_1}\bigr)
+				\shuffle_q\bigl(\Cap_q\ket{w_2}\bigr) \\
+			& = \ket{a}\shuffle_q\bigl(\Cap_q\ket{w_1w_2}\bigr) \\
+			& = \Cap_qa\ket{w_1w_2}
+		\end{split}
+	\end{split}\end{equation*}
+	$w_1$の長さについて帰納法を使うと命題が証明される。
+	\end{proof}
+
+	この命題より、$\Cap_p$は$R$-代数準同型
+	$\Cap_p:(R\T_*A,-\myspace-)\to(\Cap_pR\T_*A,-\shuffle_q-)$
+	となることがわかる。
+
+	\begin{todo}[余積の性質]\label{todo:余積の性質} %{
+		積の代数的な双対として余積$\Delta_q$を定義すると次のようになる。
+		\begin{equation*}\begin{split}
+			\Delta_q(a\shuffle_qb) = (\Delta_qa)\shuffle(\Delta_qb),\quad
+			\Delta_q(b\shuffle_qa) = (\Delta_qb)\shuffle(\Delta_qa)
+		\end{split}\end{equation*}
+		これを行列で書くと次のようになる。
+		\begin{equation*}\begin{split}
+			\Delta_q \begin{pmatrix}
+				1 & q \\ q & 1
+			\end{pmatrix} \begin{pmatrix}
+				ab \\ ba
+			\end{pmatrix} = \begin{pmatrix}
+				1 & q \\ q & 1
+			\end{pmatrix} \begin{pmatrix}
+				ab\otimes 1 + 1\otimes ab \\ ba\otimes 1 + 1\otimes ba
+			\end{pmatrix} + \begin{pmatrix}
+				1 & 1 \\ 1 & 1
+			\end{pmatrix} \begin{pmatrix}
+				a\otimes b \\ b\otimes a
+			\end{pmatrix} \\
+			\udset{q\neq-1}{}{\implies} \Delta_q \begin{pmatrix}
+				ab \\ ba
+			\end{pmatrix} = \begin{pmatrix}
+				ab\otimes 1 + 1\otimes ab \\ ba\otimes 1 + 1\otimes ba
+			\end{pmatrix} + \frac{1}{1+q}\begin{pmatrix}
+				1 & 1 \\ 1 & 1
+			\end{pmatrix}\begin{pmatrix}
+				a\otimes b \\ b\otimes a
+			\end{pmatrix} + \ker \begin{pmatrix}
+				1 & q \\ q & 1
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		$q=-1$のときは外積代数に対応するが、$\Delta_{-1}$は$R\W_*A$全域で
+		定義することができないことを示している。ただし、$q=-1$の時も、
+		部分代数$\Wedge_*A\subset R\W_*A$には$\Delta_{-1}$は定義できる。
+		$\ker$の部分は不定性を表している。$1-q^2=0$の時のみ$\ker$は存在するが、
+		$q=-1$の時は$1/(1+q)$が定義できなのので、$q=1$の時のみ$\ker$が存在
+		する。したがって、$q$の値に応じて$\Delta_q$は次のようになる。
+		\begin{equation*}\begin{array}{rcrcll}
+			q = 1 &:& \Delta_{1} \begin{pmatrix}
+				ab \\ ba
+			\end{pmatrix} &=& \begin{pmatrix}
+				ab\otimes 1 + 1\otimes ab \\ ba\otimes 1 + 1\otimes ba
+			\end{pmatrix} + \cfrac{1}{2}\begin{pmatrix}
+				1 & 1 \\ 1 & 1
+			\end{pmatrix}\begin{pmatrix}
+				a\otimes b \\ b\otimes a
+			\end{pmatrix} + \ker \begin{pmatrix}
+				1 & 1 \\ 1 & 1
+			\end{pmatrix} \\
+			|q| \neq 1 &:& \Delta_q \begin{pmatrix}
+				ab \\ ba
+			\end{pmatrix} &=& \begin{pmatrix}
+				ab\otimes 1 + 1\otimes ab \\ ba\otimes 1 + 1\otimes ba
+			\end{pmatrix} + \cfrac{1}{1+q}\begin{pmatrix}
+				1 & 1 \\ 1 & 1
+			\end{pmatrix}\begin{pmatrix}
+				a\otimes b \\ b\otimes a
+			\end{pmatrix}
+		\end{array}\end{equation*}
+
+		一方、積の内積的な双対として余積$m_q^\tran$を定義すると次のようになる。
+		\begin{equation*}\begin{split}
+			m_q^\tran\ket{ab}
+			&= \sum_{x,y\in \W_*A}(\ket{x}\otimes\ket{y})(\bra{x}\otimes\bra{y})
+				m_q^\tran\ket{ab} \\
+			&= \sum_{x,y\in \W_*A}(\ket{x}\otimes\ket{y})
+				\bigl(m_q(\ket{x}\otimes\ket{y})\bigr)^\tran\ket{ab} \\
+			&= \ket{ab}\otimes\ket{1} + \ket{a}\otimes\ket{b} 
+				+ \ket{1}\otimes \ket{ab} + q\ket{b}\otimes\ket{a} \\
+		\end{split}\end{equation*}
+		これを行列で書くと次のようになる。
+		\begin{equation*}\begin{split}
+			m_q^\tran\begin{pmatrix}
+				ab \\ ba
+			\end{pmatrix} = \begin{pmatrix}
+				ab\otimes 1 + 1\otimes ab \\
+				ba\otimes 1 + 1\otimes ba \\
+			\end{pmatrix} + \begin{pmatrix}
+				1 & q \\ q & 1
+			\end{pmatrix} \begin{pmatrix}
+				a\otimes b \\ b\otimes a
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		$\Delta_1$の$\ker$の部分を次のようにとると、
+		\begin{equation*}\begin{split}
+			\frac{1}{2} \begin{pmatrix}
+				1 & -1 \\ -1 & 1
+			\end{pmatrix} \begin{pmatrix}
+				a\otimes b \\ b\otimes a
+			\end{pmatrix}\in \ker \begin{pmatrix}
+				1 & 1 \\ 1 & 1
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		$m_0^\tran=\Delta_1$となる。このことは、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 文字列の連結について内積的な余積がシャッフル積の代数的な余積
+			になっている
+		\end{itemize} %}
+		ことは特殊な例であることを示している。
+	\end{todo} %todo:余積の性質}
+
+
+	\begin{todo}[余積の一意性]\label{todo:余積の一意性} %{
+		テンソル代数の普遍性から代数的双対な余積が一意に定まることがわかる。
+		部分$R$-代数$V\subseteq R\W_*A$として次の可換図が成り立つ。
+		\begin{equation*}\begin{array}{rcll}
+			\xymatrix{
+				A \ar[r]^{-\ket{1}} \ar[rd]_{f} & R\W_*A \ar@{.>}[d]^{f_*} \\
+				& V
+			} \quad \xymatrix{
+				A \ar[r]^{-\ket{1}} \ar[rd]_{g} & R\W_*A \ar@{.>}[d]^{g_*} \\
+				& V\otimes V
+			}
+		\end{array}\end{equation*}
+	\end{todo} %todo:余積の一意性}
+%s2:シャッフル積}
+\subsection{ここまで}\label{s2:ここまで} %{
+%s2:ここまで}
+	シャッフル積の代数的双対な余積$\Delta_\shuffle$を求める。
+	$A$を集合とする。$\W_*A$の生成元$A$に対する$\Delta_\shuffle$の作用を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\Delta_\shuffle1_\W &= 1_\W\otimes 1_\W \\
+		\Delta_\shuffle[a] &= [a]\otimes1_\W + 1_\W\otimes[a]
+		\quad\text{for all } a\in A
+	\end{split}\end{equation*}
+	すると、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		&(\Delta_\shuffle[a_1])\shuffle(\Delta_\shuffle[a_2]) \\
+		&= ([a_1]\shuffle[a_2])\otimes1_\W + [a_1]\otimes[a_2] 
+		+ 1_\W\otimes[a_1a_2] + 1_\W\otimes([a_1]\shuffle[a_2]) \\
+		&= [a_1a_2]\otimes1_\W + [a_1]\otimes[a_2] + 1_\W\otimes[a_1a_2]
+		+ (1\swap2) \quad\text{for all } a_1,a_2\in A
+	\end{split}\end{equation*}
+	$\Delta_\shuffle$を$\W_2A$に対して次のように定義すれば、
+	$\Delta_\shuffle$が$\shuffle$の代数的双対になることがわかる（十分条件）。
+	\begin{equation*}\begin{split}
+		& \Delta_\shuffle[a_1a_2]
+		= [a_1a_2]\otimes1_\W + [a_1]\otimes[a_2] + 1_\W\otimes[a_1a_2] \\
+		& \implies \left\{\begin{split}
+			\Delta_\shuffle([a_1a_2]\shuffle 1_\W)
+			&= (\Delta_\shuffle[a_1a_2])\shuffle(\Delta_\shuffle 1_\W) \\
+			\Delta_\shuffle([a_1]\shuffle[a_2])
+			&= (\Delta_\shuffle[a_1])\shuffle(\Delta_\shuffle[a_2]) \\
+		\end{split}\right. \quad\text{for all } a_1,a_2\in A
+	\end{split}\end{equation*}
+	これを一般化して$\Delta_\shuffle$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\Delta_\shuffle1_\W &= 1_\W\otimes 1_\W \\
+		\Delta_\shuffle[a_1\cdots a_p]
+		&= 1_\W\otimes[a_1\cdots a_p] \\
+		&\,+ [a_1]\otimes[a_2\cdots a_p] \\
+		&\,+ [a_1a_2]\otimes[a_3\cdots a_p] \\
+		&\,+ \cdots \\
+		&\,+ [a_1\cdots a_p]\otimes1_\W 
+		\quad\text{for all } a_1,\dots,a_p\in A
+	\end{split}\end{equation*}
+	この式から、$\Delta_\shuffle$が余対称になることはわかる。
+	また、任意の$w\in\W_*A$に対して次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		(\Delta_\shuffle\otimes\id)\Delta_\shuffle1_\W
+		= 1_\W\otimes1_\W\otimes1_\W
+		= (\id\otimes\Delta_\shuffle)\Delta_\shuffle1_\W
+	\end{split}\end{equation*}
+	任意の$a_1,\dots,a_p\in A$に対して次の式が成り立つことから、
+	$\Delta_\shuffle$が余結合的になることがわかる。
+	\begin{equation*}\begin{array}{lcrcrcr}
+		&& (\Delta_\shuffle\otimes\id)\Delta_\shuffle[a_1\cdots a_p] \\
+		&=& 1_\W\otimes1_\W\otimes[a_1\cdots a_p] \\
+		&+& 1_\W\otimes[a_1]\otimes[a_2\cdots a_p]
+		&+& [a_1]\otimes1_\W\otimes[a_2\cdots a_p] \\
+		&+& 1_\W\otimes[a_1a_2]\otimes[a_3\cdots a_p]
+		&+& [a_1]\otimes[a_2]\otimes[a_3\cdots a_p]
+		&+& [a_1a_2]\otimes1_\W\otimes[a_3\cdots a_p] \\
+		&+& \cdots \\
+		&=& 1_\W\otimes(\Delta_\shuffle[a_1\cdots a_p])
+		&+& [a_1]\otimes(\Delta_\shuffle[a_2\cdots a_p])
+		&+& [a_1a_2]\otimes(\Delta_\shuffle[a_3\cdots a_p]) \\
+		&+& \cdots \\
+		&=& (\id\otimes\Delta_\shuffle)\Delta_\shuffle[a_1\cdots a_p]
+	\end{array}\end{equation*}
+
+	シャッフル積に比べて$\Delta_\shuffle$は定義が簡単なので、
+	シャッフル積の場合の命題\ref{prop:シャッフル積の摂動}に相当する式が
+	任意の$\W_*A$の元に対して求まる。
+	\begin{equation*}\begin{split}
+		\Delta_\shuffle(w_1w_2) = (\Delta_\shuffle w_1)(1_\W\otimes w_2)
+		+ (w_1\otimes1_\W)(\Delta_\shuffle w_2) - w_1\otimes w_2 \\
+		\quad\text{for all } w_1,w_2\in \W_*A
+	\end{split}\end{equation*}
+	特に、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\Delta_\shuffle(aw) = 1_\W\otimes(aw) + (a\otimes\id)\Delta_\shuffle w
+		\quad\text{for all } a\in A,\; w\in \W_*A
+	\end{split}\end{equation*}
+
+	次の式が成り立つことが証明されれば、$\Delta_\shuffle$がシャッフル積に
+	代数的双対になることがわかる。
+	\begin{equation*}\begin{split}
+		(\Delta_\shuffle w_1)\shuffle(\Delta_\shuffle w_2)
+		= \Delta_\shuffle(w_1\shuffle w_2)
+		\quad\text{for all } w_1,w_2\in \W_*A
+	\end{split}\end{equation*}
+	この式を帰納法によって証明する。紙面の節約のために、
+	任意の$a\in A,\;t\in \W_2A$に対して$a\rhd t:=(a\otimes\id)t$と書く。
+	\begin{equation*}\begin{split}
+		&\Delta_\shuffle(a_1w_1)\shuffle\Delta_\shuffle(a_2w_2) \\
+		&= \bigl(1_\W\otimes(a_1w_1) + a_1\rhd\Delta_\shuffle w_1\bigr)
+		\shuffle\bigl(1_\W\otimes(a_2w_2) + a_2\rhd\Delta_\shuffle w_2\bigr) \\
+		&= 1_\W\otimes\bigl((a_1w_1)\shuffle(a_2w_2)\bigr)
+		+ \bigl(a_1\rhd\Delta_\shuffle w_1\bigr)
+			\shuffle\bigl(a_2\rhd\Delta_\shuffle w_2\bigr) + r \\
+		%
+		&\Delta_\shuffle\bigl((a_1w_1)\shuffle(a_2w_2)\bigr)
+		= \Delta_\shuffle\biggl(a_1\bigl(w_1\shuffle(a_2w_2)\bigr)
+			+ (1\swap2))\biggr) \\
+		&= 1_\W\otimes\biggl(a_1\bigl(w_1\shuffle(a_2w_2)\bigr)\biggr) 
+		+ a_1\rhd\Delta_\shuffle\bigl(w_1\shuffle(a_2w_2)\bigr) + (1\swap2) \\
+		&= 1_\W\otimes\bigl((a_1w_1)\shuffle(a_2w_2)\bigr) + s \\
+	\end{split}\end{equation*}
+	ここで、$r,s$を次のようにおいた。
+	\begin{equation*}\begin{split}
+		r &:= \bigl(a_1\rhd\Delta_\shuffle w_1\bigr)
+			\shuffle\bigl(1_\W\otimes(a_2w_2)\bigr) + (1\swap2) \\
+		s &:= a_1\rhd\biggl((\Delta_\shuffle w_1)
+			\shuffle\bigl(\Delta_\shuffle(a_2w_2)\bigr)\biggr) + (1\swap2) \\
+	\end{split}\end{equation*}
+	ここで、次の式より、
+	\begin{equation*}\begin{split}
+		s &= a_1\rhd\biggl((\Delta_\shuffle w_1)
+			\shuffle\bigl(\Delta_\shuffle(a_2w_2)\bigr)\biggr) + (1\swap2) \\
+		&= a_1\rhd\biggl((\Delta_\shuffle w_1)
+			\shuffle(a_2\rhd\Delta_\shuffle w_2)\biggr) \\
+		&\,+ a_1\rhd\biggl((\Delta_\shuffle w_1)
+			\shuffle\bigl(1_\W\otimes(a_2w_2)\bigr)\biggr) + (1\swap2) \\
+		&= \bigl(a_1\rhd\Delta_\shuffle w_1\bigr)
+			\shuffle\bigl(a_2\rhd\Delta_\shuffle w_2\bigr) + r
+	\end{split}\end{equation*}
+	次の式が成り立つことがわかり、
+	\begin{equation*}\begin{split}
+		s = \bigl(a_1\rhd\Delta_\shuffle w_1\bigr)
+		\shuffle\bigl(a_2\rhd\Delta_\shuffle w_2\bigr) + r
+	\end{split}\end{equation*}
+	次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\Delta_\shuffle(a_1w_1)\shuffle\Delta_\shuffle(a_2w_2)
+		= \Delta_\shuffle\bigl((a_1w_1)\shuffle(a_2w_2)\bigr)
+	\end{split}\end{equation*}
+
+	\begin{todo}[知りたいこと]\label{todo:知りたいこと} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item シャッフル積の変形
+			\begin{equation*}\begin{split}
+				[a_1\cdots a_p]\shuffle_q[a_{p+1}\cdots a_{p+q}]
+				= q^{\sigma} [a_{\sigma1}\cdots a_{\sigma(p+q)}]
+			\end{split}\end{equation*}
+			$q=1$で通常のシャッフル積、$q=-1$で外積となる。
+			通常のシャッフル積をBosonic統計、外積をFermionic統計と思うと、
+			$q=e^{ih}$はAnyonic統計に対応しそうだ。
+		\end{itemize} %}
+	\end{todo} %todo:知りたいこと}
+%s1:シャッフル積}
+
 \section{可換環}\label{s1:可換環} %{
 	この節を通して、$R=(R,+,0,\myspace,1)$を可換環とする。
 
@@ -701,6 +1593,299 @@
 	\end{split}\end{equation*}
 %s2:加群の外積}
 %s1:加群}
+\section{自由加群の線形代数}\label{s1:自由加群の線形代数} %{
+	この節を通して、$R=(R,+,0,\myspace,1)$を可換環とする。
+	さらに次のような記号を使う。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 自由$R$-加群の間の射の集合を次のように書く。
+		\begin{equation*}\begin{split}
+			\Mat_{m,n}R := \Hom_R(R^m,R^n) ,\quad \Mat_{m}R := \Hom_R(R^m,R^m)
+		\end{split}\end{equation*}
+		%
+		\item $\bld_k$を$k$番目の成分がでそれ以外はすべてのベクトルとする。
+		\begin{equation*}\begin{split}
+			\bld_k^\tran = (0,\dots,0,\underbrace{1}_{\text{$k$-th}},0,\dots)
+		\end{split}\end{equation*}
+		$\bld_k$は入れ物の自由$R$-加群の次元については考えないものとする。
+		例えば、$\bld_2$という記号は$2$次元以上の自由$R$-加群について全て共通に
+		使う。
+		%
+		\item 紙面の省略のために、基底系$\bld_i$のテンソル積をブラケット記法
+		で書くことにする。
+		\begin{equation*}\begin{array}{rcll}
+			\ket{1} &=& 1 \\
+			\ket{i_1\cdots i_p} &=& \bld_{i_1}\otimes\cdots\otimes \bld_{i_p} 
+				& \quad\text{for all } i_1,\dots,i_p\in 1..m \\
+		\end{array}\end{equation*}
+		ケット同士のテンソル積は文字列の連結となる。
+		\begin{equation*}\begin{split}
+			\ket{i_1\cdots i_p}\otimes\ket{j_1\cdots j_q}
+				= \ket{i_1\cdots i_pj_1\cdots j_q} \\
+			\quad\text{for all } i_1,\dots,i_p,j_1,\dots,j_q\in 1..m \\
+		\end{split}\end{equation*}
+	\end{itemize} %}
+\subsection{外積}\label{s2:外積} %{
+	任意の$m\in\sizen$に対して$R$-加群準同型$\alpha:\T_*R^m\to\T_*R^m$
+	を次のように定義する。
+	\begin{equation*}\begin{array}{rcll}
+		\alpha \ket{i_1\cdots i_k}
+			&=& \frac{1}{k!}\sum_{\sigma\in S_k} (-)^\sigma 
+			\ket{i_{\sigma1}\cdots i_{\sigma k}}
+			& \quad\text{for all } i_1,\dots,i_k\in 1..m
+	\end{array}\end{equation*}
+	ここで、$S_k$は$k$次対称群、$(-)^\sigma$は$\sigma\in S_k$が偶置換か奇置換
+	かの符号とする。$A_*R^m:=\alpha\T_*R^m$とおく。
+	$R$-双線形写像$\owedge:A_*R^m\times A_*R^m\to A_*R^m$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		(\alpha t_1)\owedge(\alpha t_2) := \alpha(t_1\otimes t_2)
+		\quad\text{for all } t_1,t_2\in \T_*R^m
+	\end{split}\end{equation*}
+	次の式が成り立てば、$\owedge$は結合的になり、$R$-代数準同型
+	$\alpha:(\T_*R^m,\otimes,1)\to (A_*R^m,\owedge,1)$となる。
+	\begin{equation}\label{eq:交代化が積になるための条件}\begin{split}
+		\alpha\bigl(\alpha(t_1\otimes t_2)\otimes t_3\bigr)
+		= \alpha\bigl(t_3\otimes \alpha(t_2\otimes t_3)\bigr)
+		\quad\text{for all } t_1,t_2,t_3\in\T_*R^m
+	\end{split}\end{equation}
+	$R^m\otimes R^m\otimes T_*R^m$の場合では次のようになる。
+	\begin{equation*}\begin{split}
+		& \alpha\bigl((\alpha\ket{i_1i_2})\otimes\ket{i_3\cdots i_p}\bigr) \\
+		& = \frac{1}{2}\alpha\bigl((\ket{i_1i_2}-\ket{i_2i_1})
+			\otimes\ket{i_3\cdots i_p}\bigr) \\
+		& = \frac{1}{2p!} \sum_{\sigma\in S_p} (-)^\sigma
+			(\ket{i_{\sigma1}i_{\sigma2}} - \ket{i_{\sigma2}i_{\sigma1}})
+			\otimes\ket{i_{\sigma3}\cdots i_{\sigma p}} \\
+		& = \frac{1}{p!} \sum_{\sigma\in S_p} (-)^\sigma
+			\ket{i_{\sigma1}i_{\sigma2}}
+			\otimes\ket{i_{\sigma3}\cdots i_{\sigma p}} \\
+		& = \alpha\ket{i_1i_2i_3\cdots i_p} \\
+	\end{split}\end{equation*}
+	これを一般化すると次のようになる。
+	\begin{equation*}\begin{split}
+		& \ket{i_1\cdots i_p}\times\ket{i_{p+1}\cdots i_{p+q}}
+			\times\ket{i_{p+q+1}\cdots i_{p+q+r}} \\
+		& \xmapsto{\alpha(\myhere\otimes\myhere)\times\id}
+			\frac{1}{(p+q)!}\sum_{\sigma\in S_{p+q}} (-)^\sigma
+			\ket{i_{\sigma1}\cdots i_{\sigma(p+q)}}
+			\times\ket{i_{p+q+1}\cdots i_{p+q+r}} \\
+		& \xmapsto{\alpha(\myhere\otimes\myhere)} \frac{1}{(p+q)!(p+q+r)!}
+			\sum_{\substack{\sigma\in S_{p+q}\\\tau\in S_{p+q+r}}}
+			(-)^{\sigma+\tau} \ket{i_{\tau\sigma1}\cdots i_{\tau\sigma(p+q)}
+			i_{\tau(p+q+1)}\cdots i_{\tau(p+q+r)}} \\
+		& = \frac{1}{(p+q+r)!} \sum_{\tau\in S_{p+q+r}} (-)^{\tau}
+			\ket{i_{\tau1}\cdots i_{\tau(p+q)}
+			i_{\tau(p+q+1)}\cdots i_{\tau(p+q+r)}} \\
+		& = \alpha\ket{i_1\cdots i_{p+q+r}}
+	\end{split}\end{equation*}
+	$\alpha(\myhere\otimes\myhere)(\id\otimes\alpha(\myhere\otimes\myhere))$
+	についても同様に計算すると、$\owedge$が結合的になるための式
+	\eqref{eq:交代化が積になるための条件}が成り立つことがわかる。
+	したがって、$\alpha$が$R$-代数準同型となることもわかる。
+	\begin{equation*}\xymatrix{
+		\T_*R^m\otimes \T_*R^m \ar[r]^{\alpha\otimes\alpha} \ar[d]^{\simeq}
+			& A_*R^m\otimes A_*R^m \ar[d]^{\myhere\owedge\myhere} \\
+		\T_*R^m \ar[r]^{\alpha} & A_*R^m \\
+	}\end{equation*}
+
+	任意の$1\le p\le m$に対して次の集合$E_p^m$は$A_pR^m$の基底系となる。
+	\begin{equation*}\begin{split}
+		E_p^m := \Set{\alpha\ket{i_1\cdots i_p}\bou i_1<\cdots<i_p\in 1..m}
+	\end{split}\end{equation*}
+	$R$-加群準同型$\phi:A_pR^m\to\Wedge_pR^m$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\phi\alpha\ket{1_1\cdots i_p} := \bld_{i_1}\wedge\cdots\wedge \bld_{i_p}
+	\end{split}\end{equation*}
+	$\phi$は$R$-加群同型となる。また、次の式より、$\phi$は$R$-代数同型
+	$\phi:A_*R^m\simeq\Wedge_*R^m$となることもわかる。
+	\begin{equation*}\begin{split}
+		\phi\biggl(\bigl(\alpha\ket{i_1\cdots i_p}\bigr)
+			\owedge\bigl(\alpha\ket{j_1\cdots j_q}\bigr)\biggr)
+		&= \phi\alpha\ket{i_1\cdots i_pj_1\cdots j_q} \\
+		&= \bigl(\phi\alpha\ket{i_1\cdots i_p}\bigr)
+			\wedge\bigl(\phi\alpha\ket{j_1\cdots j_q}\bigr)
+	\end{split}\end{equation*}
+	よって、$(A_*R^m,\owedge,1)$と$(\Wedge_*R^m,\wedge,1)$を同一視しても
+	構わない。以降、$(A_*R^m,\owedge,1)$と$(\Wedge_*R^m,\wedge,1)$を同一視して
+	$R$-代数準同型$\alpha:(T_*R^m,\otimes,1)\to(\Wedge_*R^m,\wedge,1)$
+	として扱い、$\Wedge_*R^m\subseteq \T_*R^m$とする。
+	\begin{equation*}\begin{split}
+		(\alpha t_1)\wedge (\alpha t_2) = \alpha(t_1\otimes t_2)
+		\quad\text{for all } t_1,t_2\in T_*R^m
+	\end{split}\end{equation*}
+
+	$\wedge$を$\Wedge_*R^m$から$\T_*R^m$へ拡張することを考える。次の式から、
+	\begin{equation*}\begin{split}
+		(\alpha t)\wedge(\alpha v) = (\alpha t)\wedge v = \alpha(t\otimes v)
+		\quad\text{for all } t\in T_*R^m,\; v\in R^m
+		\implies \\
+		\sum_{\sigma\in S_p} (-)^{\sigma}
+			\ket{i_{\sigma1}\cdots i_{\sigma p}}\wedge\ket{i_{p+1}}
+		= \frac{1}{p+1}\sum_{\sigma\in S_{p+1}} (-)^{\sigma}
+			\ket{i_{\sigma1}\cdots i_{\sigma p}i_{\sigma(p+1)}} \\
+	\end{split}\end{equation*}
+	$\wedge$を次のように定義すればよいことがわかる（十分条件）。
+	\begin{equation*}\begin{split}
+		(p + 1) \ket{i_1\cdots i_p}\wedge\ket{i_{p+1}}
+		& = \ket{i_1\cdots i_pi_{p+1}} \\
+		& - \ket{i_1\cdots i_{p-1}i_{p+1}i_p} \\
+		& +\cdots \\
+		& + (-)^p \ket{i_{p+1}i_1\cdots i_p} \\
+		& = \ket{i_1}\otimes
+			\bigl(\ket{i_2\cdots i_p}\wedge\ket{i_{p+1}}\bigr)
+			+ (-)^p \ket{i_{p+1}}\otimes\ket{i_1\cdots i_p} \\
+	\end{split}\end{equation*}
+	この式はシャッフル積を交代化したものになっている。
+	$\T_*R^m$の二項演算$\Cap$を次の漸化式で定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 任意の$t\in\T_*R^m$に対して
+		\begin{equation*}\begin{split}
+			t\Cap 1 = t = 1\Cap t
+		\end{split}\end{equation*}
+		\item 任意の$w_1,w_2\in\W_*\sizen_+$と$i_1,i_2\in\sizen_+$に対して
+		\begin{equation*}\begin{split}
+			\ket{i_1w_1}\Cap\ket{i_2w_2} 
+			&= \frac{1}{|w_1| + |w_2| + 2} \bigl(x_1 - (-)^{|w_1|} x_2\bigr) \\
+			x_1 &= \ket{i_1}\otimes\bigl(\ket{w_1}\Cap \ket{i_2w_2}\bigr) \\
+			x_2 &= \ket{i_2}\otimes\bigl(\ket{i_1w_1}\Cap \ket{w_2}\bigr) \\
+		\end{split}\end{equation*}
+	\end{itemize} %}
+
+\subsubsection{シャッフル置換（shuffle permutation）}
+\label{s3:シャッフル置換} %{
+	\begin{todo}[ここまで切り取り]\label{todo:ここまで切り取り} %{
+	\end{todo} %todo:ここまで切り取り}
+	さらに、$S^{p+q}_p(1)$
+
+	したがって、$\shuffle$の可換性はシャッフル置換の可換性に帰着され、
+	\begin{equation*}\begin{split}
+		(\myhere\shuffle\myhere)
+			\biggl([x_1\cdots x_p]\otimes[x_{p+1}\cdots x_{p+q}]\biggr)
+		= \sum_{\sigma^{-1}\in S^{p+q}_p}
+			[x_{\tau\sigma1}\cdots x_{\tau\sigma(p+q)}] \\
+	\end{split}\end{equation*}
+	$\shuffle$の結合性はシャッフル置換の結合性に帰着される。
+	\begin{equation*}\begin{split}
+		(\myhere\shuffle\myhere)(\myhere\shuffle\myhere\otimes\id)
+		\biggl([x_1\cdots x_p]\otimes[x_{p+1}\cdots x_{p+q}]
+			\otimes[x_{p+q+1}\cdots x_{p+q+r}]\biggr) \\
+		= \sum_{\tau^{-1}\in S^{p+q+r}_{p+q},\;\sigma^{-1}\in S^{p+q}_p}
+		[x_{\tau\sigma1}\cdots x_{\tau\sigma(p+q)}
+			x_{\tau(p+q+1)}\cdots x_{\tau(p+q+r)}]
+	\end{split}\end{equation*}
+%s3:シャッフル置換}
+
+	\begin{todo}[確かめること]\label{todo:確かめること} %{
+		交代シャッフル積について確かめることを書いておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 自由Lie代数の双対がShuffle代数となる。
+			\item 集合から生成される自由$R$-代数を定義すること。
+			\begin{equation*}\xymatrix@R=1em{
+				\text{自由モノイド} \W_*X \ar[r] 
+					& \text{$R$-モノイド代数} R\W_*X \ar@{<->}[dd]^{\simeq} \\
+				\text{集合} X \ar[u] \ar[d] \\
+				\text{自由$R$-加群} RX^\tran \ar[r] 
+					& \text{テンソル代数} \T_*X^\tran \\
+			}\end{equation*}
+			\item $\Cap$が結合的になること。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item	シャッフル置換を用いて、交代シャッフル積を定義する。
+				\begin{equation*}\begin{split}
+					\ket{i_1\cdots i_p}\Cap\ket{i_{p+1}\cdots i_n}
+					= \frac{1}{n!}\sum_{\sigma^{-1}\in S_{n:p}} (-)^{\sigma}
+					\ket{i_{\sigma1}\cdots i_{\sigma n}}
+				\end{split}\end{equation*}
+			\end{itemize} %}
+			%
+			\item 交代シャッフル積を用いて外積が定義できること。
+			\begin{equation*}\begin{split}
+				(\alpha\ket{w_1})\Cap(\alpha\ket{w_2}) = \alpha\ket{w_1w_2}
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{todo} %todo:確かめること}
+
+////////////////////
+	\begin{equation*}\begin{split}
+		v_1\owedge v_2 = \alpha(v_1\otimes v_2)
+			\implies v_1\owedge v_2
+			= \frac{1}{2}(v_1\otimes v_2 - v_2\otimes v_1) \\
+		v_1\owedge v_2\owedge v_3 = \alpha(v_1\otimes v_2\otimes v_3) \\
+		\implies \sum_{\sigma\in S_2} (-)^\sigma
+			(v_{\sigma1}\otimes v_{\sigma2})\owedge v_3
+			= \frac{1}{3}\sum_{\sigma\in S_3} (-)^\sigma 
+			v_{\sigma1}\otimes v_{\sigma2}\otimes v_{\sigma3} \\
+	\end{split}\end{equation*}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	$\owedge$は積となり、$\phi$は$R$-代数準同型
+	$\T_*R^m\to A_*R^m$となる。
+
+	$R$-双線形写像$\owedge:\T_*R^m\times \T_*R^m\to \T_*R^m$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		v\owedge w = \phi(v\otimes w) \quad\text{for all } v,w\in \T_*R^m
+	\end{split}\end{equation*}
+	\begin{equation*}\begin{split}
+		\bigl(\phi (v_1\otimes\cdots\otimes v_p)\bigr)
+			\owedge \bigl(\phi (w_1\otimes\cdots\otimes w_q)\bigr) \\
+		= \frac{1}{p!q!} \sum_{\sigma\in S_p,\tau\in S_q} (-)^{\sigma+\tau}
+			(v_{\sigma1}\otimes\cdots\otimes v_{\sigma p})
+			\owedge (w_{\tau1}\otimes\cdots\otimes w_{\tau p}) \\
+		= \frac{1}{p!q!(p+q)!} \sum_{\sigma\in S_p,\tau\in S_q,\mu\in S_{p+q}}
+			(-)^{\sigma+\tau+\mu}
+			v_{\mu\sigma1}\otimes\cdots\otimes v_{\mu\sigma p}\otimes
+			w_{\mu\tau1}\otimes\cdots\otimes w_{\mu\tau p} \\
+	\end{split}\end{equation*}
+\subsubsection{行列式}\label{s3:行列式} %{
+	行列$A\in\Mat_2R$を縦ベクトルで$A=[A_1,A_2]$と表すと、次のように
+	行列式を反対称化したテンソル積によって表すことができる。
+	\begin{equation*}\begin{split}
+		A_1\otimes A_2 - A_2\otimes A_1
+		& = \begin{pmatrix}
+		A_{11} \\ A_{21}
+		\end{pmatrix} \begin{pmatrix}
+		A_{12} & A_{22}
+		\end{pmatrix} - \begin{pmatrix}
+		A_{12} \\ A_{22}
+		\end{pmatrix} \begin{pmatrix}
+		A_{11} & A_{21}
+		\end{pmatrix} \\
+		& = (\det A) (\bld_1\otimes\bld_2 - \bld_2\otimes\bld_1)
+	\end{split}\end{equation*}
+	この式を$2$次元から一般の次元に一般化する。
+	行列$A\in\Mat_nR$を縦ベクトルで$A=[A_1,\dots,A_n]$と表して、
+	反対称化したテンソル積を計算すると次のようになる。
+	\begin{equation}\label{eq:反対称テンソルによる行列式}\begin{split}
+		& \sum_{\sigma\in S_n} (-)^\sigma A_{\sigma1}
+			\otimes\cdots\otimes A_{\sigma n} \\
+		& = \sum_{\sigma\in S_n}\sum_{i_1,\dots,i_n\in1..n} 
+			(-)^\sigma A_{(\sigma1)i_1}\cdots A_{(\sigma n)i_n}
+			(\bld_{i_1}\otimes\cdots\otimes\bld_{i_n}) \\
+		& = \sum_{\sigma,\tau\in S_n}
+			(-)^\sigma A_{(\sigma1)(\tau1)}\cdots A_{(\sigma n)(\tau n)}
+			(\bld_{\tau1}\otimes\cdots\otimes\bld_{\tau n}) \\
+		& = (\det A) \sum_{\tau\in S_n} (-)^\tau
+			(\bld_{\tau1}\otimes\cdots\otimes\bld_{\tau n}) \\
+	\end{split}\end{equation}
+	ここで、テンソル積の中に同じ添字が二つ以上現れると、
+	置換の和をとると、置換の偶奇性よりその項は$0$になることを使った。
+	例えば、
+	$\cdots\otimes\bld_k\otimes\cdots\otimes\bld_k\otimes\cdots$
+	のようなテンソル積を含む項は、次のように置換の和をとると$0$になる。
+	\begin{equation*}\begin{split}
+		A_{1k}A_{2k}(\bld_k\otimes\bld_k) - A_{2k}A_{1k}(\bld_k\otimes\bld_k)
+		= 0
+	\end{split}\end{equation*}
+	外積を使うと、式\eqref{eq:反対称テンソルによる行列式}は、任意の
+	$A=[A_1,\dots,A_n]\in \Mat_nR$に対して次のように簡潔に書くことができる。
+	\begin{equation}\label{eq:外積による行列式}\begin{split}
+		A_1\wedge\cdots\wedge A_n = (\det A)\;\bld_1\wedge\cdots\wedge \bld_n
+	\end{split}\end{equation}
+%s3:行列式}
+%s2:外積}
+%s1:自由加群の線形代数}
 	%
 	} %\setlength\arraycolsep{2pt}
 	%
