@@ -4,7 +4,72 @@
 	\newcommand{\word}[1]{\ensuremath{[{#1}]}}
 	\newcommand{\range}[1]{\ensuremath{({#1})}}
 	%
-\section{区間の演算}\label{s1:区間の演算} %{
+\section{プログラミングチップス}\label{s1:プログラミングチップス} %{
+\subsection{菱形継承の問題}\label{s2:菱形継承の問題} %{
+	次の図のようなクラス継承をした場合、
+	\begin{equation}\label{eq:菱形継承}\xymatrix@R=1ex@C=2ex{
+		& \frac{A}{\begin{array}{l}
+			\text{void a()}
+		\end{array}} \\
+		\frac{B}{\begin{array}{l}
+			\text{override void a()}
+		\end{array}} \ar@{=>}[ur] & & \frac{C}{\begin{array}{l}
+			\text{override void a()}
+		\end{array}} \ar@{=>}[ul] \\
+		& \frac{D}{\begin{array}{l}
+		\end{array}} \ar@{=>}[ul] \ar@{=>}[ur] \\
+	}\end{equation}
+	クラスDのインスタンスでメソッドa()を呼び出した時、次の曖昧さが生じる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item クラスBのメッソドa()が呼び出される。
+		\item クラスCのメッソドa()が呼び出される。
+	\end{itemize} %}
+	多重継承を許すプログラミング言語では、それぞれプログラミング言語固有の
+	曖昧さの解決方法が定義されている。それらの解決方法はWikipediaなどを
+	参照すれば記載されている。ここでは、二つの解決方法を考えてみる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 実質は単一継承 \\
+		多重継承は構文糖衣であって、コンパイラによって多重継承は単一継承に
+		書き換えられる。
+		\begin{equation*}
+			\xymatrix@R=1em@C=1em {
+				& A \\
+				B \ar@{=>}[ur] & & C \ar@{=>}[ul] \\
+				& D \ar@{=>}[ul] \ar@{=>}[ur] \\
+			} \mapsto \xymatrix@R=1em@C=1em {
+				A \\
+				C \ar@{=>}[u] \\
+				B \ar@{=>}[u] \\
+				D \ar@{=>}[u] \\
+			}
+		\end{equation*} 
+		Pythonなどはこのパターンを使っている。コンパイラと実行エンジンの実装
+		が単純になるので、多くのプログラミング言語で使われているパターンと
+		思われる。この場合は、次のような場合に副作用を持つ。
+		\begin{lstlisting}[caption=多重継承の副作用, label=code:多重継承の副作用]
+		class A {
+			void a() {
+				...
+			}
+			void b() {
+				...
+			}
+		}
+		class B inherit A {
+			override void a() {
+				this.b();
+			}
+		}
+		class C inherit A {
+			override void b() {
+				...
+			}
+		}
+		\end{lstlisting}
+		\item 
+	\end{itemize} %}
+%s2:菱形継承の問題}
+\subsection{区間の演算}\label{s2:区間の演算} %{
 	$0$から$n-1$までの自然数の集合を$[n]$、その冪集合を$P[n]$と書く。
 	$[n]$の両側閉区間$\set{m_1\times m_2\in S^2\bou m_1\le m_2}$の和、
 	または空集合$0_P\in P[n]$で表すことを考える。
@@ -136,9 +201,9 @@
 			\end{split}\end{equation*} %}
 		\end{itemize} %}
 	\end{definition} %def:シャッフル積}
-%s1:区間の演算}
+%s2:区間の演算}
 
-\section{文字列の微積分}\label{s1:文字列の微積分} %{
+\subsection{文字列の微積分}\label{s2:文字列の微積分} %{
 	\begin{todo}[余積とライプニッツ則]\label{todo:余積とライプニッツ則} %{
 		半環$R$を係数とする半モジュール$V$において、
 		\begin{itemize}\setlength{\itemsep}{-1mm} %{
@@ -153,9 +218,9 @@
 	の双対空間、$WA^\dag=\set{f\in WA\to R}$を$WA$の双対空間とする。
 
 	文字列の結合を$m_*:RWA\otimes RWA\to RWA$と書く。
-%s1:文字列の微積分}
+%s2:文字列の微積分}
 
-\section{文字集合をビット配列で表す}\label{s1:文字集合をビット配列で表す} %{
+\subsection{文字集合をビット配列で表す}\label{s2:文字集合をビット配列で表す} %{
 	文字の冪集合ををビットの配列で表すことを考える。
 	文字集合が$n$バイト=$8n$ビットで表されるならば、文字集合の大きさは
 	$2^{8n}$となる。
@@ -176,7 +241,7 @@
 	現在のコンピュータの構造を考えると、$2\myop{Byte}$の文字までなら冪集合を
 	64ビット符号無し整数の配列で表すことができるだろう。$3\myop{Byte}$以上の
 	文字に対しては別の方法を考える必要があるだろう。
-%s1:文字集合をビット配列で表す}
+%s2:文字集合をビット配列で表す}
 \endgroup %}
 
 \begingroup %{
@@ -186,9 +251,10 @@
 	\newcommand{\myeven}{\ensuremath{{2\sizen}}}
 	\newcommand{\myodd}{\ensuremath{{2\sizen+1}}}
 	\newcommand{\kazu}[1]{\ensuremath{{\sharp_{\myop{#1}}}}}
+	\newcommand{\id}{\myop{id}}
 	\setlength\arraycolsep{2pt}
 	%
-\section{箱球の列挙}\label{s1:箱球の列挙} %{
+\subsection{箱球の列挙}\label{s2:箱球の列挙} %{
 	%
 	自然数$n$に対して和をとると$n$になる$k$個の自然数の組全体を
 	$\hakodama_k^n$と書く。
@@ -290,11 +356,11 @@
 		+ \cdots
 		+ \ket{n+1}\otimes\sum_{w\in\hakodama_k^0}w \\
 		&= \ket{0}\otimes\sum_{w\in\hakodama_k^{n+1}}w
-		+ (a_+\otimes\myid^k)\biggl(\ket{0}\otimes\sum_{w\in\hakodama_k^n}w
+		+ (a_+\otimes\id^k)\biggl(\ket{0}\otimes\sum_{w\in\hakodama_k^n}w
 		+ \cdots
 		+ \ket{n}\otimes\sum_{w\in\hakodama_k^0}w\biggr) \\
 		&= \ket{0}\otimes\sum_{w\in\hakodama_k^{n+1}}w
-		+ (a_+\otimes\myid^k)\sum_{w\in\hakodama_{k+1}^n}w \\
+		+ (a_+\otimes\id^k)\sum_{w\in\hakodama_{k+1}^n}w \\
 	\end{split}\end{equation*} %}
 	したがって、$D_k^n=\zettai{\hakodama_k^n}$とすると、
 	次の漸化式が導かれる。
@@ -318,7 +384,7 @@
 	$d$を$k-1$個、$r$を$n$個含む文字列は全部で$\binom{n+k-1}{k-1}$個ある。
 	したがって、$D_k^n=\binom{n+k-1}{k-1}$となることがわかる。
 
-\subsection{辞書式順序による列挙}\label{s2:辞書式順序による列挙} %{
+\subsubsection{辞書式順序による列挙}\label{s2:辞書式順序による列挙} %{
 	$\hakodama_k^n$を辞書式順序で並べて列挙することを考える。
 	辞書式順序とは次の順序である。
 
@@ -383,21 +449,21 @@
 		\item 空でない最も左の箱$i$を見つける。
 		\begin{equation*}\begin{split} %{
 			\pi_0\otimes\pi_0\otimes\cdots\otimes\pi_0\otimes
-			\underbrace{\pi_+}_{\text{箱$i$}}\otimes \myid\otimes 
-			\myid\otimes\cdots\otimes \myid
+			\underbrace{\pi_+}_{\text{箱$i$}}\otimes \id\otimes 
+			\id\otimes\cdots\otimes \id
 		\end{split}\end{equation*} %}
 		\item 箱$i$からその右隣の箱に球を一つ移動する。
 		\begin{equation*}\begin{split} %{
-			\myid\otimes\myid\otimes\cdots\otimes\myid\otimes
+			\id\otimes\id\otimes\cdots\otimes\id\otimes
 			\underbrace{a_-}_{\text{箱$i$}}\otimes a_+\otimes 
-			\myid\otimes\cdots\otimes \myid
+			\id\otimes\cdots\otimes \id
 		\end{split}\end{equation*} %}
 		\item 箱$i$の残りの球を全て箱$1$に移動する。
 		\begin{equation*}\begin{split} %{
 			\sum_{p\in\sizen}\;\underbrace{a_+^p}_{\text{箱$1$}}
-			\otimes\myid\otimes\cdots\otimes \myid\otimes
-			\underbrace{\pi_0a_-^p}_{\text{箱$i$}}\otimes \myid\otimes 
-			\myid\otimes\cdots\otimes \myid
+			\otimes\id\otimes\cdots\otimes \id\otimes
+			\underbrace{\pi_0a_-^p}_{\text{箱$i$}}\otimes \id\otimes 
+			\id\otimes\cdots\otimes \id
 		\end{split}\end{equation*} %}
 	\end{itemize} %}
 
@@ -405,12 +471,12 @@
 	$c_{k+2}^{(i)}$とする。
 	\begin{equation*}\begin{split} %{
 		c_{k+2}^{(i)} = \left\{\begin{split}
-			i=0 &\implies a_-\otimes a_+\otimes \myid^{\otimes k} \\
+			i=0 &\implies a_-\otimes a_+\otimes \id^{\otimes k} \\
 			i=1 &\implies \sum_{p\in\sizen}\; a_+^p\pi_0\otimes \pi_0a_-^{p+1}
-				\otimes a_+\otimes \myid^{\otimes(k-i)} \\
+				\otimes a_+\otimes \id^{\otimes(k-i)} \\
 			2\le i< k &\implies \sum_{p\in\sizen}\; a_+^p\pi_0
 				\otimes \pi_0^{\otimes(i-1)}\otimes \pi_0a_-^{p+1}
-				\otimes a_+\otimes \myid^{\otimes(k-i)} \\
+				\otimes a_+\otimes \id^{\otimes(k-i)} \\
 			i=k &\implies \sum_{p\in\sizen}\; a_+^p\pi_0
 				\otimes \pi_0^{\otimes(k-1)}\otimes \pi_0a_-^{p+1}
 				\otimes a_+ \\
@@ -443,12 +509,12 @@
 	次のように書くことができ、
 	\begin{equation*}\begin{split} %{
 		c_{k+2}^{(i)} 
-		= \bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)}
+		= \bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\id^{\otimes(k-i)}
 	\end{split}\end{equation*} %}
 	$c_{k+2}$は次のように書くことができる。
 	\begin{equation*}\begin{split} %{
 		c_{k+2} &= \sum_{i=0}^k
-			\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)}
+			\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\id^{\otimes(k-i)}
 	\end{split}\end{equation*} %}
 	さらに、$\phi$について次の式が成り立つので、
 	\begin{equation}\label{eq:phiのライプニッツ則}\begin{split} %{
@@ -468,22 +534,22 @@
 	\end{proof} %}
 	$c_{k+2}$について次の漸化式が成り立つことがわかる。
 	\begin{equation}\label{eq:cの漸化式}\begin{split} %{
-		c_{k+2} = a_-\otimes a_+\otimes\myid^{\otimes k} + \phi c_{k+1}
+		c_{k+2} = a_-\otimes a_+\otimes\id^{\otimes k} + \phi c_{k+1}
 	\end{split}\end{equation} %}
 	\begin{proof} %{
 		\begin{equation*}\begin{split} %{
 			c_{k+2} &= \sum_{i=0}^k
-				\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)} \\
-			&= a_-\otimes a_+\otimes\myid^{\otimes k}
+				\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\id^{\otimes(k-i)} \\
+			&= a_-\otimes a_+\otimes\id^{\otimes k}
 				+ \sum_{i=1}^k
-				\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\myid^{\otimes(k-i)} \\
-			&= a_-\otimes a_+\otimes\myid^{\otimes k}
+				\bigl(\phi^i(a_-\otimes a_+)\bigr)\otimes\id^{\otimes(k-i)} \\
+			&= a_-\otimes a_+\otimes\id^{\otimes k}
 				+ \sum_{i=0}^{k-1} \bigl(\phi^{i+1}(a_-\otimes a_+)\bigr)
-				\otimes\myid^{\otimes(k-1-i)} \\
-			&= a_-\otimes a_+\otimes\myid^{\otimes k}
+				\otimes\id^{\otimes(k-1-i)} \\
+			&= a_-\otimes a_+\otimes\id^{\otimes k}
 				+ \phi\sum_{i=0}^{k-1} \bigl(\phi^{i}(a_-\otimes a_+)\bigr)
-				\otimes\myid^{\otimes(k-1-i)} \\
-			&= a_-\otimes a_+\otimes\myid^{\otimes k} + \phi c_{k+1} \\
+				\otimes\id^{\otimes(k-1-i)} \\
+			&= a_-\otimes a_+\otimes\id^{\otimes k} + \phi c_{k+1} \\
 		\end{split}\end{equation*} %}
 	\end{proof} %}
 	今の場合、目的の操作$c_{k+2}$がすでに既知の操作$c_{k+2}^{(i)}$の和で
@@ -521,19 +587,19 @@
 	\eqref{eq:cの漸化式}より、
 	\begin{equation*}\begin{split} %{
 		\ker_\perp c_{k+2} 
-		&= \ker_\perp(a_-\otimes a_+\otimes\myid^{\otimes k})
+		&= \ker_\perp(a_-\otimes a_+\otimes\id^{\otimes k})
 			\cup \ker_\perp(\phi c_{k+1}) \\
 	\end{split}\end{equation*} %}
 	となるが、
 	\begin{equation*}\begin{split} %{
-		\ker_\perp(a_-\otimes a_+\otimes\myid^{\otimes k})
+		\ker_\perp(a_-\otimes a_+\otimes\id^{\otimes k})
 		&= \ket{\sizen_+}\otimes\ket{\sizen}^{\otimes(k+1)} \\
 		\ker_\perp(\phi c_{k+1}) &= \ket{0}\otimes (\ker_\perp c_{k+1}) \\
 	\end{split}\end{equation*} %}
 	だから、$\ker_\perp c_{k+2}$は次のように直和分解されることがわかる。
 	\begin{equation*}\begin{split} %{
 		\ker_\perp c_{k+2} 
-		&= \ker_\perp(a_-\otimes a_+\otimes\myid^{\otimes k})
+		&= \ker_\perp(a_-\otimes a_+\otimes\id^{\otimes k})
 			\oplus \ker_\perp(\phi c_{k+1}) \\
 	\end{split}\end{equation*} %}
 	漸化式を使って、順次箱の数を減らしていけば次の核の補空間の系列が得られる。
@@ -564,7 +630,7 @@
 		（式\eqref{eq:cの核の補空間}）。
 	\end{description} %}
 %s2:辞書式順序による列挙}
-\subsection{グレイコードによる列挙}\label{s2:グレイコードによる列挙} %{
+\subsubsection{グレイコードによる列挙}\label{s2:グレイコードによる列挙} %{
 	%
 	$W_k\sizen$にはハミング距離$d$が定義できる。
 	\begin{equation*}\begin{split} %{
@@ -638,9 +704,9 @@
 	\end{split}\end{equation*} %}
 	箱$3$の球数の偶奇によって次のように操作が分かれている。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[箱$3$の球の数が偶数] $a_-\otimes a_+\otimes\myid$と
+		\item[箱$3$の球の数が偶数] $a_-\otimes a_+\otimes\id$と
 		$\pi_0\otimes a_-\otimes a_+$
-		\item[箱$3$の球の数が奇数] $a_+\otimes a_-\otimes\myid$と
+		\item[箱$3$の球の数が奇数] $a_+\otimes a_-\otimes\id$と
 		$a_-\otimes\pi_0\otimes a_+$
 	\end{description} %}
 	これらの操作をまとめた線形写像を$g_3$とする。
@@ -727,7 +793,7 @@
 	\begin{equation*}\begin{array}{lcllcl} %{
 		(\pi_0)_k &=& \pi_0^{\otimes k}, &\quad
 			\ket{0}_k &=& \ket{0}^{\otimes k} \\
-		(\pi_+)_k &=& \myid^{\otimes k} - (\pi_0)_k, &\quad
+		(\pi_+)_k &=& \id^{\otimes k} - (\pi_0)_k, &\quad
 			\ket{+}_k &=& \ket{0}^{\otimes k}\text{に直交する箱球空間} \\
 		(\pi_\myeven)_k &=& \ket{\myeven}\text{への射影}, &\quad
 			\ket{\myeven}_k &=& \text{球の総数が偶数になる箱球空間} \\
@@ -844,19 +910,19 @@
 	$f_1,f_2,\dots,f_n\in M\sizen$に対して次のように定義する。
 	\begin{equation}\label{eq:phiの定義その二}\begin{split} %{
 		&\phi_{i}^{(1)}(f_1\otimes f_2\otimes\cdots\otimes f_n) \\
-		&= (\myid\otimes f_1\otimes f_2\otimes\cdots\otimes f_n)
+		&= (\id\otimes f_1\otimes f_2\otimes\cdots\otimes f_n)
 		\begin{pmatrix}
 			(\pi_0)_{i+1}\otimes\pi_+\otimes\pi_\myeven \\
-			(\pi_0)_{i+1}\otimes\myid\otimes\pi_\myodd \\
+			(\pi_0)_{i+1}\otimes\id\otimes\pi_\myodd \\
 		\end{pmatrix}^t\otimes \begin{pmatrix}
 			(\pi_\myeven)_{n-2-i} \\
 			(\pi_\myodd)_{n-2-i} \\
 		\end{pmatrix} \\
 		&\phi_{i}^{(2)}(f_1\otimes f_2\otimes\cdots\otimes f_n) \\
-		&= (f_1\otimes \myid\otimes f_2\otimes\cdots\otimes f_n)
+		&= (f_1\otimes \id\otimes f_2\otimes\cdots\otimes f_n)
 		\begin{pmatrix}
 			\pi_+\otimes(\pi_0)_{i+1}\otimes\pi_\myodd \\
-			\myid\otimes(\pi_0)_{i+1}\otimes\pi_{\myeven_+} \\
+			\id\otimes(\pi_0)_{i+1}\otimes\pi_{\myeven_+} \\
 		\end{pmatrix}^t\otimes \begin{pmatrix}
 			(\pi_\myeven)_{n-2-i} \\
 			(\pi_\myodd)_{n-2-i} \\
@@ -892,37 +958,37 @@
 	\begin{equation}\label{eq:gの手続き}\begin{split} %{
 		\Gamma_{i+2}^t\otimes P_{k-i} &= \left\{\begin{split}
 			\text{箱$i+2$より右側の球の総数が偶数}
-				&\implies \gamma_{i+2}\otimes(\myid)_{k-i} \\
-			\text{else} &\implies \gamma_{i+2}^\dag\otimes(\myid)_{k-i} \\
+				&\implies \gamma_{i+2}\otimes(\id)_{k-i} \\
+			\text{else} &\implies \gamma_{i+2}^\dag\otimes(\id)_{k-i} \\
 		\end{split}\right. \\ %\}
-		\gamma_{i+2}\otimes(\myid)_{k-i} &= \left\{\begin{split}
+		\gamma_{i+2}\otimes(\id)_{k-i} &= \left\{\begin{split}
 			\text{箱$i+2$の球数が偶数}
-				&\implies (\pi_0)_i\otimes a_-\otimes a_+\otimes (\myid)_{k-i} \\
+				&\implies (\pi_0)_i\otimes a_-\otimes a_+\otimes (\id)_{k-i} \\
 			\text{else}
-				&\implies a_-\otimes (\pi_0)_i\otimes a_+\otimes (\myid)_{k-i} \\
+				&\implies a_-\otimes (\pi_0)_i\otimes a_+\otimes (\id)_{k-i} \\
 		\end{split}\right. \\ %\}
-		\gamma_{i+2}^\dag\otimes(\myid)_{k-i} &= \left\{\begin{split}
+		\gamma_{i+2}^\dag\otimes(\id)_{k-i} &= \left\{\begin{split}
 			\text{箱$i+2$の球数が奇数}
-				&\implies (\pi_0)_i\otimes a_+\otimes a_-\otimes (\myid)_{k-i} \\
+				&\implies (\pi_0)_i\otimes a_+\otimes a_-\otimes (\id)_{k-i} \\
 			\text{else}
-				&\implies a_+\otimes (\pi_0)_i\otimes a_-\otimes (\myid)_{k-i} \\
+				&\implies a_+\otimes (\pi_0)_i\otimes a_-\otimes (\id)_{k-i} \\
 		\end{split}\right. \\ %\}
-		(\pi_0)_i\otimes a_-\otimes a_+\otimes (\myid)_{k-i}
+		(\pi_0)_i\otimes a_-\otimes a_+\otimes (\id)_{k-i}
 		&= \left\{\begin{split}
 			\text{箱$i+1$が空} &\implies \text{箱$i+3$へ移動} \\
 			\text{else} &\implies \text{箱$i+1$から箱$i+2$へ球を一つ移動して終了}
 		\end{split}\right. \\ %\}
-		a_-\otimes (\pi_0)_i\otimes a_+\otimes (\myid)_{k-i}
+		a_-\otimes (\pi_0)_i\otimes a_+\otimes (\id)_{k-i}
 		&= \left\{\begin{split}
 			\text{箱$1$が空} &\implies \text{箱$i+3$へ移動} \\
 			\text{else} &\implies \text{箱$1$から箱$i+2$へ球を一つ移動して終了}
 		\end{split}\right. \\ %\}
-		(\pi_0)_i\otimes a_+\otimes a_-\otimes (\myid)_{k-i}
+		(\pi_0)_i\otimes a_+\otimes a_-\otimes (\id)_{k-i}
 		&= \left\{\begin{split}
 			\text{箱$i+2$が空} &\implies \text{箱$i+3$へ移動} \\
 			\text{else} &\implies \text{箱$i+2$から箱$i+1$へ球を一つ移動して終了}
 		\end{split}\right. \\ %\}
-		a_+\otimes (\pi_0)_i\otimes a_-\otimes (\myid)_{k-i}
+		a_+\otimes (\pi_0)_i\otimes a_-\otimes (\id)_{k-i}
 		&= \left\{\begin{split}
 			\text{箱$i+2$が空} &\implies \text{箱$i+3$へ移動} \\
 			\text{else} &\implies \text{箱$i+2$から箱$1$へ球を一つ移動して終了}
@@ -944,8 +1010,8 @@
 	\begin{equation}\label{eq:gの逆順の手続き}\begin{split} %{
 		\Gamma_{i+2}^t\otimes P_{k-i} &= \left\{\begin{split}
 			\text{箱$i+2$より右側の球の総数が奇数}
-				&\implies \gamma_{i+2}\otimes(\myid)_{k-i} \\
-			\text{else} &\implies \gamma_{i+2}^\dag\otimes(\myid)_{k-i} \\
+				&\implies \gamma_{i+2}\otimes(\id)_{k-i} \\
+			\text{else} &\implies \gamma_{i+2}^\dag\otimes(\id)_{k-i} \\
 		\end{split}\right. \\ %\}
 		&\text{以下同じ$g_{k+2}$と同じ} \\
 	\end{split}\end{equation} %}
@@ -989,7 +1055,7 @@
 	}
 	\end{lstlisting}
 %s2:グレイコードによる列挙}
-\subsection{第二種スターリング数と箱球の列挙}
+\subsubsection{第二種スターリング数と箱球の列挙}
 \label{s2:第二種スターリング数と箱球の列挙} %{
 	箱球の列挙を考えたもともとの動機は第二種スターリング数$S_k^n$
 	について成り立つと思わる次の式を検証するためであった。
@@ -1015,15 +1081,15 @@
 	ここまでの結果は式\eqref{eq:第二種スターリング数と箱球の関係}が正しい
 	ことを支持している。
 %s2:第二種スターリング数と箱球の列挙}
-\subsection{グレイコード順序の数}\label{s2:グレイコード順序の数} %{
+\subsubsection{グレイコード順序の数}\label{s2:グレイコード順序の数} %{
 	$\hakodama_k^n$において、$(n,0,\dots,0)$から始めて$(0,\dots,0,n)$で
 	終わるグレイコードはいくつあるだろうか。
 	節\ref{s2:グレイコードによる列挙}で扱ったグレイコードは数ある
 	グレイコードの一つである。
 %s2:グレイコード順序の数}
-%s1:箱球の列挙}
+%s2:箱球の列挙}
 %
-\section{数の分割の列挙}\label{s1:数の分割の列挙} %{
+\subsection{数の分割の列挙}\label{s2:数の分割の列挙} %{
 	%
 	数の組成と数の分割の定義を与えてから話を進める。
 	\begin{definition}[数の組成と列挙]\label{def:数の組成と列挙} %{
@@ -1095,7 +1161,7 @@
 			&= P_k^{n-k} + P_{k-1}^{n-1}
 	\end{split}\end{equation*} %}
 
-	箱球の列挙\ref{s1:箱球の列挙}にならって数の分割の列挙を考える。
+	箱球の列挙\ref{s2:箱球の列挙}にならって数の分割の列挙を考える。
 	箱球の反転辞書式順序による列挙\ref{s2:辞書式順序による列挙}と同様に
 	すれば、数の分割の反転辞書式順序による列挙が得られるだろう。ただし、
 	箱$j$に球を一つ加えたときに箱$1$から箱$j-1$の初期化の部分が異なる。
@@ -1220,11 +1286,11 @@
 			11111111
 		}
 	\end{split}\end{equation*} %}
-%s1:数の分割の列挙}
+%s2:数の分割の列挙}
 	%
 \endgroup %}
 
-\section{べき乗}\label{s1:自然数のべき乗} %{
+\subsection{べき乗}\label{s2:自然数のべき乗} %{
 	自然数べき乗をする関数$\myop{power}_\sizen:A\times\sizen\to A$を考える。
 	\begin{equation*}\begin{split} %{
 		a\times n \mapsto a^n \\
@@ -1256,4 +1322,5 @@
 	}
 	\end{lstlisting}
 	ここで、関数に単位元unitを要求しているのは$0$乗に対応するためである。
-%s1:べき乗}
+%s2:べき乗}
+%s1:プログラミングチップス}

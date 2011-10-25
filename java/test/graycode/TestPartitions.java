@@ -6,6 +6,11 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 import tiny.lang.ArrayHelper;
 import tiny.lang.Debug;
+import tiny.number.CompositionHelper;
+import tiny.number.NumberComposition;
+import tiny.number.NumberPartition;
+import tiny.number.ReflexDictionaryComposition;
+import tiny.number.ReflexDictionaryPartition;
 
 public class TestPartitions extends TestCase {
 	protected void setUp() throws Exception {

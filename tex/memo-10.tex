@@ -9,6 +9,8 @@
 	\newcommand{\Perm}{\mycal{S}}
 	\newcommand{\W}{\mycal{W}}
 	\newcommand{\T}{\mycal{T}}
+	\newcommand{\N}{\mycal{N}}
+	\newcommand{\D}{\mycal{D}}
 	\newcommand{\Wedge}{{\bigwedge}}
 	%
 	\newcommand{\id}{\myop{id}}
@@ -30,8 +32,131 @@
 	\newcommand{\swap}{\leftrightarrow}
 	\newcommand{\range}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
 	%
+	\newcommand{\mf}[1]{{\mathfrak{#1}}}
+	\newcommand{\sla}[1]{{\not\!{#1}}}
+	%
 	{\setlength\arraycolsep{2pt}
 	%
+\section{メモ}\label{s1:メモ} %{
+	写像$\myop{supp}:\W_*A\to A$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\myop{supp}[a_1\cdots a_m] = \set{a_1,\dots,a_m}
+	\end{split}\end{equation*}
+	$\mf{S}_{n}$を$n$次対称群、$(m,n)$次シャッフル置換を
+	$\mf{S}_{m,n}\subseteq\mf{S}_{m+n}$と書く。
+	$w_1,w_2\in\W_*A$に対して$\mf{sh}(w_1,w_2)\subseteq\W_*A$を
+	$w_1\shuffle w_2$に現れる単語の集合とする。$w_1$と$w_2$に文字の重複が
+	なければ、$|\mf{sh}(w_1,w_2)|=\binom{|w_1w_2|}{|w_2|}$となるが、一般には
+	文字の重複があるので、$|\mf{sh}(w_1,w_2)|\le\binom{|w_1w_2|}{|w_2|}$
+	となる。この記号を使うとシャッフル積は次のように書ける。
+	\begin{equation*}\begin{split}
+		w_1\shuffle w_2 = \sum_{w\in\mf{sh}(w_1,w_2)}\mu_w w
+	\end{split}\end{equation*}
+	ここで、$\mu_w$は次の重複度を表す。
+	\begin{equation*}\begin{split}
+		\mu_w = \sum_{w_1,w_2\in\W_*A}\jump{w=w_1\shuffle w_2}
+	\end{split}\end{equation*}
+
+	単語$w_1$と$w_2$をそれぞれ単語$[1,\dots,m]$と$[1,\dots,n]$の
+	置換で表される場合を考える。
+	\begin{equation*}\begin{array}{rcll}
+		w_1 &=& [\sigma 1,\dots,\sigma m] & \quad\text{where }
+			\sigma\in\mf{S}_m \\
+		w_2 &=& [\sigma 1,\dots,\sigma n] & \quad\text{where }
+			\sigma\in\mf{S}_n \\
+	\end{array}\end{equation*}
+
+	\begin{proposition}[シャッフル積とカタラン数]
+	\label{prop:シャッフル積とカタラン数} %{
+		\begin{equation*}\begin{split}
+			\bigl|\mf{sh}(\id_n,\id_n)\bigr| = \frac{1}{n+1}\binom{2n}{n}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:シャッフル積とカタラン数}
+
+	一般的にはDyck言語は次のように定義される。
+
+	\begin{definition}[Dyck言語]\label{def:Dyck言語} %{
+		集合$H=\set{\eta,\bar{\eta}}$の$2$文字から生成される自由モノイド
+		$\W_*H$の部分集合$\D_*H\subset\W_*H$が次の条件を満たすとき、
+		$\D_*H$をDyck言語という。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $w\in\D_*H$ならば$\sharp_{\bar{\eta}}w=\sharp_{\eta}w$となる。
+			\item $w\in\D_*H,\;w_1,w_2\in\W_*H$かつ$w=w_1w_2$ならば
+			$\sharp_{\bar{\eta}}w_1\ge\sharp_{\eta}w_1$となる。
+		\end{enumerate} %}
+	\end{definition} %def:Dyck言語}
+
+	この定義は、直感的でないが簡潔にDyck言語を定義する。
+	長さ$2,4,6$のDyck言語を文字$\set{0,1}$で書くと次のようになる。
+	\begin{equation*}\begin{array}{rrrrr}
+		01 \\
+		0011 & 0101 \\
+		000111 & 001011 & 001101 & 010011 & 010101 \\
+	\end{array}\end{equation*}
+	これを文字$\set{\langle,\rangle}$で書き直すと形式言語との関係が
+	明確になる。
+	\begin{equation*}\begin{array}{rrrrr}
+		\braket{} \\
+		\langle\braket{}\rangle & \braket{}\braket{} \\
+		\langle\langle\braket{}\rangle\rangle
+		& \langle\braket{}\braket{}\rangle
+		& \langle\braket{}\rangle\braket{}
+		& \braket{}\langle\braket{}\rangle
+		& \braket{}\braket{}\braket{} \\
+	\end{array}\end{equation*}
+
+	$H$を大きさ$2$の集合$H=\set{\eta,\bar{\eta}}$、$\W_*H$を$H$から生成
+	された自由モノイドとする。
+	部分集合$\N_*H\subset\W_*H$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\N_*H := \set{\eta^m\bar{\eta}^n\in\W_*H\bou m,n\in\sizen}
+	\end{split}\end{equation*}
+	$\N_*H$に次のように二項演算$\myspace$を定義すると、$\N_*H$は$1_\W$を
+	単位元とするモノイドとなる。
+	\begin{equation*}\begin{split}
+		(\eta^p\bar{\eta}^q)(\eta^r\bar{\eta}^s) := \eta^p\bar{\eta}^s
+		\quad\text{for all } p,q,r,s\in\sizen
+	\end{split}\end{equation*}
+	したがって、自由モノイドの普遍性から、次の式を満たすモノイド準同型
+	$\phi:\W_*H\to\N_*H$が唯一に定まる。
+	\begin{equation*}\begin{split}
+		\phi\eta = \eta,\quad \phi\bar{\eta} = \bar{\eta}
+	\end{split}\end{equation*}
+	$R\N_*H$は代数$R[\eta]$の自己$R$線形写像全体のつくる集合とみなすことが
+	できる。
+	\begin{equation*}\begin{split}
+		R\N_*H\simeq\Mod{R}(R[\eta],R[\eta])
+	\end{split}\end{equation*}
+	$\ker\phi$は$\bar{\eta}\eta\mapsto1_\W$で縮約して$1_\W$になる単語
+	の集合だから、$\ker\phi$はDyck言語になる。
+
+	Dyck言語は、次のような平面格子上の経路から生成することができる。
+	\begin{equation}\label{eq:Dyck経路}\xymatrix@R=1em@C=1em{
+		& & & (3,3) \\
+		& & (2,2) \ar[r] & (3,2) \ar[u] \\
+		& (1,1) \ar[r] & (2,1) \ar[r] \ar[u] & (3,1) \ar[u] \\
+		(0,0) \ar[r] & (1,0) \ar[r] \ar[u] & (2,0) \ar[r]\ar[u] 
+			& (3,0) \ar[u] \\
+	}\end{equation}
+	経路内を
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 右へ移動した時に$0$、
+		\item 上へ移動した時に$1$
+	\end{itemize} %}
+	を書いていくと、$(0,0)$から$(n,n)$への経路によって、長さ$2n$のDyck言語の
+	単語が生成される。例えば、経路$(0,0)(1,0)(2,0)(2,1)(2,2)(3,2)(3,3)$
+	からは$001101$という単語が生成される。したがって、長さ$2n$のDyck言語は
+	シャッフル積$[0^n]\shuffle[1^n]$に含まれる。
+	経路\eqref{eq:Dyck経路}をDyck経路という。
+
+	\begin{proposition}[Dyck言語の大きさ]\label{prop:Dyck言語の大きさ} %{
+		$\D_*H$を集合$H=\set{\eta,\bar{\eta}}$から生成されるDyck言語とする。
+		任意の$n\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\bigl|\D_{2n}H\bigr| = \frac{1}{n+1}\binom{2n}{n}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Dyck言語の大きさ}
+%s1:メモ}
 \section{シャッフル積}\label{s1:シャッフル積} %{
 	この節を通して次の記号を用いる。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
@@ -532,20 +657,20 @@
 	\end{proof}
 
 	q-シャッフル積をシャッフル置換を用いて表すことを考える。
-	まず、置換に対してその大きさを定義する。
+	まず、置換に対してその重さを定義する。
 
-	\begin{definition}[置換の大きさ]\label{def:置換の大きさ} %{
+	\begin{definition}[置換の重さ]\label{def:置換の重さ} %{
 		$S_n$を$n$次対称群とする。
 		任意の$\sigma\in S_n$に対して、$\sigma$をあみだくじとして書いた時に
 		必要となる\underline{最小の}横線の数を$|\sigma|$と書く。
-	\end{definition} %def:置換の大きさ}
+	\end{definition} %def:置換の重さ}
 
-	$3$次対称群の場合、巡回置換を用いるとその大きさは次のようになる。
+	$3$次対称群の場合、巡回置換を用いるとその重さは次のようになる。
 	\begin{equation*}\begin{split}
 		|()| = 0,\quad |(1,2)| = |(2,3)| = |(3,1)| = 1
 		,\quad |(1,2,3)| = |(1,3,2)| = 2
 	\end{split}\end{equation*}
-	一般に置換の大きさは次の三角不等式を満たす。
+	一般に置換の重さは次の三角不等式を満たす。
 	\begin{equation*}\begin{split}
 		|\sigma_1\sigma_2|\le |\sigma_1| + |\sigma_2| \\
 		|\sigma_1\sigma_2| = 0 \iff \sigma_1\sigma_2 = \id
@@ -553,7 +678,7 @@
 		\quad\text{for all } \sigma_1,\sigma_2\in S_n
 	\end{equation*}
 
-	置換の大きさを用いると、q-シャッフル積は次のように書くことができる。
+	置換の重さを用いると、q-シャッフル積は次のように書くことができる。
 	\begin{equation*}\begin{split}
 		\ket{a_1\cdots a_p}\shuffle_q\ket{a_{p+1}\cdots a_{p+q}}
 		= \sum_{\sigma\in\Cap(I_1,I_2)} q^{|\sigma|}
@@ -749,7 +874,6 @@
 		ことは特殊な例であることを示している。
 	\end{todo} %todo:余積の性質}
 
-
 	\begin{todo}[余積の一意性]\label{todo:余積の一意性} %{
 		テンソル代数の普遍性から代数的双対な余積が一意に定まることがわかる。
 		部分$R$-代数$V\subseteq R\W_*A$として次の可換図が成り立つ。
@@ -764,6 +888,276 @@
 		\end{array}\end{equation*}
 	\end{todo} %todo:余積の一意性}
 %s2:シャッフル積}
+\subsection{シャッフル積の列挙}\label{s2:シャッフル積の列挙} %{
+	q-シャッフル積をプログラムを使って列挙する方法を考える。
+	q-シャッフル積に現れる単語の数は、文字数に対して指数的に増加する。
+	例えば、$16$文字の単語同士のq-シャッフル積に現れる単語の数は、
+	$\binom{16+16}{16}=601080390$（約$6$億）となる。したがって、単語を
+	列挙するにはなるべく効率的に計算する必要がある。
+
+	次の式を例にして説明する。
+	\begin{equation*}\begin{split}
+		\ket{1,2,3}\shuffle_q\ket{4,5}
+	\end{split}\end{equation*}
+	このq-シャッフル積に現れる重み付き単語は次の格子の$(0,0)$から
+	$(3,2)$に至る経路として表すことができる（集合同型）。
+	\begin{equation}\label{eq:3-2の経路}\xymatrix{
+		(0,2) \ar[r]^{(q^0,1)} & (1,2) \ar[r]^{(q^0,2)} 
+			& (2,2) \ar[r]^{(q^0,3)} & (3,2) \\
+		(0,1) \ar[r]^{(q^0,1)} \ar[u]_{(q^3,5)} 
+			& (1,1) \ar[r]^{(q^0,2)} \ar[u]_{(q^2,5)} 
+			& (2,1) \ar[r]^{(q^0,3)} \ar[u]_{(q^1,5)} 
+			& (3,1) \ar[u]_{(q^0,5)} \\
+		(0,0) \ar[r]^{(q^0,1)} \ar[u]_{(q^3,4)} 
+			& (1,0) \ar[r]^{(q^0,2)} \ar[u]_{(q^2,4)} 
+			& (2,0) \ar[r]^{(q^0,3)} \ar[u]_{(q^1,4)} 
+			& (3,0) \ar[u]_{(q^0,4)} \\
+	}\end{equation}
+	例えば、経路$(0,0)(1,0)(1,1)(2,1)(3,1)(3,2)$は
+	$q^{0+2+0+0+0}\ket{1,4,2,3,5}$という重み付きの単語に対応する。
+
+	経路\eqref{eq:3-2の経路}をパラメトライズすることを考える。
+	$\ket{1,2,3}\shuffle_q\ket{4,5}$の中に現れる単語は、
+	文字$\set{1,2,3}$が単語の中の何文字目に現れるかを決めれば一意的に
+	決まる。したがって、図\eqref{eq:3-2の経路}の経路の集合を$I_{3,2}$
+	とすると、$I_{3,2}$は次の単語の集合として表すことができる。
+	\begin{equation*}\begin{split}
+		I_{3,2} := \set{\ket{k_1,k_2,k_3}\bou k_1,k_2,k_3\in 1..5
+			\And k_0< k_1< k_2}
+	\end{split}\end{equation*}
+	$\ket{k_1,k_2,k_3}\in I_{3,2}$は、生成する単語の中に単語$1,2,3$が現れる
+	位置を示している。$k_1$は文字$4$、$k_2$は$5$が現れる位置を示している。
+	$I_{3,2}$からq-シャッフル積に現れる単語は次の写像
+	$\phi:I_{3,2}\to\W_5(1..5)[q]$によって得られる。
+	\begin{equation*}\begin{split}
+		\phi\ket{k_1,k_2,k_3} = q^{(k_1-1)+(k_2-2)+(k_3-3)} \ket{i_1,\dots,i_5}
+		\text{ with} \\
+		i_{k_1} = 1,\; i_{k_2} = 2,\; i_{k_3} = 3
+		\text{ and } (i_p = 4 \And i_q = 5 \implies p < q)
+	\end{split}\end{equation*}
+	$I_{3,2}$の単語の変化に対して$\phi$の像は次のように変化する。
+	\begin{equation*}\begin{split}
+		\phi\ket{k_1\pm1,k_2,k_3}
+			&= q^{\pm1}(k_1,k_1\pm1)\phi\ket{k_1,k_2,k_3} \\
+		\phi\ket{k_1,k_2\pm1,k_3}
+			&= q^{\pm1}(k_2,k_2\pm1)\phi\ket{k_1,k_2,k_3} \\
+		\phi\ket{k_1,k_2,k_3\pm1}
+			&= q^{\pm1}(k_3,k_3\pm1)\phi\ket{k_1,k_2,k_3} \\
+	\end{split}\end{equation*}
+	ここで、$(k,k+1)$を次のような互換の操作とする。
+	\begin{equation*}\begin{array}{rl}
+		(k,k+1) & \ket{\dots, i_k,\quad i_{k+1},\dots} \\
+		=	& \ket{\dots, i_{k+1}, i_k,\quad\dots}
+	\end{array}\end{equation*}
+	計算機で処理する場合、なるべく少ない互換で列挙することが望ましい。
+
+	次の順序で$I_{3,2}$の単語を列挙することを考えてみる。
+	\begin{equation}\label{eq:シャッフル積の往復列挙}\xymatrix@R=1ex@C=2ex{
+		\ket{1,2,3} \ar[r] & \ket{1,2,4} \ar[r] & \ket{1,2,5} \ar[ld] \\
+		\ket{1,3,4} \ar[d] & \ket{1,3,5} \ar[l] \\
+		\ket{1,4,5} \ar[d] \\
+		\ket{2,3,4} \ar[r] & \ket{2,3,5} \ar[ld] \\
+		\ket{2,4,5} \ar[d] \\
+		\ket{3,4,5}
+	}\end{equation}
+
+\begin{todo}[修正その二]\label{todo:修正その二} %{
+\end{todo} %todo:修正その二}
+	$\ket{3,4}\to\ket{2,3}$の遷移以外は$\phi$の像は一つの互換で遷移する。
+	$I_{n_1,2}$の場合はプログラム\ref{code:In2}のようになる。
+
+	\begin{lstlisting}[caption=$I_{n_1,2}$, label=code:In2]
+	 next: (w:word(natural), q:natural, n1:natural) -> (w:word(natural), q:natural) or None = {
+		 ks = w.which (n1 < $1);
+		 if odd (w.length () - ks[2]) {
+			 if ks[1] + 1 < ks[2] {
+				 return (w.swap (ks[1], ks[1] + 1), q - 1);
+			 } else 1 < ks[1] {
+				 return (w.swap(ks[1] - 1, ks[1]).swap (ks[2] - 1, ks[2]), q + 2);
+			 }
+		 } else 1 < ks[1] {
+			 return (w.swap (ks[1] - 1, ks[1]), q + 1);
+		 } else ks[1] + 1 < ks[2] {
+			 return (w.swap (ks[2] - 1, ks[2]), q + 1);
+		 }
+		 return none;
+	 }
+	\end{lstlisting}
+
+	$I_{3,2}$を列挙する順序\eqref{eq:シャッフル積の往復列挙}を一般の
+	$I_{n_1,n_2}$に拡張することを考える。
+	例えば$I_{3,3}$の場合は、文字の偶奇性を次のようにおいて、
+	\begin{equation*}\begin{split}
+		\ket{*,k_2,k_3} \mapsto \ket{(-)^{5-k_2},(-)^{6-k_3}}
+	\end{split}\end{equation*}
+	次のような順序で列挙してみる。
+	\begin{equation*}\xymatrix@R=1em@C=1em{
+		\ket{+,+} & \ket{1,5,6} \ar[d] & \ket{2,5,6} \ar[l]
+			& \ket{3,5,6} \ar[l] & \ket{4,5,6} \ar[l] \\
+		\ket{-,+} & \ket{1,4,6} \ar[r] & \ket{2,4,6} \ar[r]
+			& \ket{3,4,6} \ar[dl] \\
+		\ket{+,+} & \ket{1,3,6} \ar[d] & \ket{2,3,6} \ar[l] \\
+		\ket{-,+} & \ket{1,2,6} \ar[d] \\
+		\ket{-,-} & \ket{1,2,5} \ar[dr] \\
+		%
+		\ket{+,-} & \ket{1,3,5} \ar[d] & \ket{2,3,5} \ar[l] \\
+		\ket{-,-} & \ket{1,4,5} \ar[r] & \ket{2,4,5} \ar[r]
+			& \ket{3,4,5} \ar[dl] \\
+		\ket{+,+} & \ket{1,3,4} \ar[d] & \ket{2,3,4} \ar[l] \\
+		\ket{-,+} & \ket{1,2,4} \ar[d] \\
+		\ket{-,-} & \ket{1,2,3} \\
+	}\end{equation*}
+	$\ket{k_1,k_2,k_3}\in I_{3,3}$での基本的な操作は次のようになる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $k_1$は、$(-)^{5-k_2}$が正なら値を下げて、負なら値を上げる。
+		\item $k_2$は、$(-)^{6-k_3}$が正なら値を下げて、負なら値を上げる。
+		\item $k_3$は、値を下げる。
+	\end{itemize} %}
+	この列挙の順序は次の直和分解に対応する。
+	\begin{equation*}\begin{split}
+		RI_{3,3}
+		\simeq RI_{3,2} \oplus RI_{2,2} \oplus RI_{1,2} \oplus RI_{0,2} \\
+		\begin{split}
+			p_{n,2}: RI_{3,3} &\to RI_{n,2} \\
+			\ket{k_1,k_2,k_3} &\mapsto \jump{k_3=3+n}\ket{k_1,k_2}
+		\end{split}
+		\quad\text{for all } n = 0..3
+	\end{split}\end{equation*}
+	ここで、$I_{0,2}\simeq\set{\ket{1,2}}\simeq\set{\ket{1,2,3}}$とした。
+
+	\begin{lstlisting}[caption=$I_{n_1,n_2}$, label=code:In1n2]
+	 next: (w:word(natural), q:natural, n1:natural) -> (w:word(natural), q:natural) or None = {
+		 ks = w.which (n1 < $1);
+		 ps = sequence (1, ks.length()) - ks;
+		 ps = ps mod 2;
+		 i = 0
+		 while i < ks.length () {
+			 if odd ps[i] {
+				 if ks[i] + 1 < ks[i + 1] {
+					 return (w.swap (ks[i], ks[i] + 1), q - 1);
+				 } else 1 < ks[i] {
+					 return (w.swap(ks[i] - 1, ks[i]).swap (ks[2] - 1, ks[2]), q + 2);
+				 }
+			 }
+			 i += 1;
+		 }
+
+		 if odd (w.length () - ks[2]) {
+			 if ks[1] + 1 < ks[2] {
+				 return (w.swap (ks[1], ks[1] + 1), q - 1);
+			 } else 1 < ks[1] {
+				 return (w.swap(ks[1] - 1, ks[1]).swap (ks[2] - 1, ks[2]), q + 2);
+			 }
+		 } else 1 < ks[1] {
+			 return (w.swap (ks[1] - 1, ks[1]), q + 1);
+		 } else ks[1] + 1 < ks[2] {
+			 return (w.swap (ks[2] - 1, ks[2]), q + 1);
+		 }
+		 return none;
+	 }
+	\end{lstlisting}
+
+
+	\begin{todo}[修正]\label{todo:修正} %{
+	\end{todo} %todo:修正}
+	q-シャッフル積の漸化式
+	\begin{equation}\label{eq:3-2の分解}\begin{split}
+		\ket{1,2,3}\shuffle_q\ket{4,5}
+		= \bigl(\ket{1,2,3}\shuffle_q\ket{4}\bigr)\ket{5}
+		+ q^2 \bigl(\ket{1,2}\shuffle_q\ket{4,5}\bigr)\ket{3}
+	\end{split}\end{equation}
+	は、経路の分解
+	\begin{equation*}\begin{split}
+		& \xymatrix@R=1em@C=1em{
+			(0,2) \ar[r] & (1,2) \ar[r] & (2,2) \ar[r] & (3,2) \\
+			(0,1) \ar[r] \ar[u] & (1,1) \ar[r] \ar[u] 
+				& (2,1) \ar[r] \ar[u] & (3,1) \ar[u] \\
+			(0,0) \ar[r] \ar[u] & (1,0) \ar[r] \ar[u] 
+				& (2,0) \ar[r] \ar[u] & (3,0) \ar[u] \\
+		} \\
+		= & \xymatrix@R=1em@C=1em{
+			& & & (3,2) \\
+			(0,1) \ar[r] & (1,1) \ar[r] & (2,1) \ar[r] & (3,1) \ar[u] \\
+			(0,0) \ar[r] \ar[u] & (1,0) \ar[r] \ar[u] 
+				& (2,0) \ar[r] \ar[u] & (3,0) \ar[u] \\
+		} \;+\; \xymatrix@R=1em@C=1em{
+			(0,2) \ar[r] & (1,2) \ar[r] & (2,2) \ar[r] & (3,2) \\
+			(0,1) \ar[r] \ar[u] & (1,1) \ar[r] \ar[u] & (2,1) \ar[u] \\
+			(0,0) \ar[r] \ar[u] & (1,0) \ar[r] \ar[u] & (2,0) \ar[u] \\
+		} \\
+	\end{split}\end{equation*}
+	に対応する。
+
+	q-シャッフル積の漸化式\eqref{eq:3-2の分解}に対応する$RI_{3,2}$の直和分解
+	は次のようになる。
+	\begin{equation*}\begin{split}
+		& RI_{3,1} \udset{p_1}{i_1}{\fromto} RI_{3,2}
+			\udset{p_2}{i_2}{\tofrom} RI_{2,2} \\
+		& \begin{array}{rclrcl}
+			p_1\ket{k_1,k_2} &=& \jump{k_2=5}\ket{k_1}
+				,\quad & i_1\ket{k} &=& \ket{k,5} \\
+			p_2\ket{k_1,k_2} &=& \jump{k_2\neq5}\ket{k_1,k_2}
+				,\quad & i_2\ket{k_1,k_2} &=& \ket{k_1,k_2} \\
+		\end{array}
+	\end{split}\end{equation*}
+
+	写像$\phi:I_{3,2}\to\W_{3+2}\braket{3+2}[q]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\phi\ket{k_0,k_1} = q^{(3-k_0)+(3-k_1)}
+			\ket{0,\dots,k_0 - 1, 3, k_0,\dots,k_1 - 1, 4, k_1,\dots,3-1}
+	\end{split}\end{equation*}
+	$0$始まりの添字として、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 添字$k_0$の値が$3$、
+		\item 添字$k_1+1$の値が$4$
+	\end{itemize} %}
+	となっている。
+	$\phi$は次の式を満たす。
+	\begin{equation*}\begin{split}
+		\ket{0,1,2}\shuffle_q\ket{3,4} = \sum_{w\in I_{3,2}}\phi\ket{w}
+	\end{split}\end{equation*}
+	$I_{3,2}$を列挙しならがら$\phi$を作用していくと、次のような巡回置換の
+	操作が必要になる。
+	\begin{equation*}\begin{split}
+		\phi\ket{(k_0+d)k_1} &= q^{-d} 
+			(k_0, k_0 + 1, \dots, k_0 + d) \phi\ket{k_0k_1} \\
+		& \quad\text{for all } d\in0..(k_1-k_0) \\
+		\phi\ket{k_0(k_1+d)} &= q^{-d}
+			(k_1 + 1, k_1 + 2, \dots, k_1 + d + 1) \phi\ket{k_0k_1} \\
+		& \quad\text{for all } d\in0..(3-k_1) \\
+	\end{split}\end{equation*}
+
+	桁上げの方法で$I_{3,2}$を列挙すると次のようになる。
+	\begin{equation*}\begin{array}{rcrl}
+		\ket{3,3} &\mapsto& q^0 & \ket{0,1,2,3,4} \\
+		\ket{2,3} &\mapsto& q^1 & \ket{0,1,3,2,4} \\
+		\ket{2,2} &\mapsto& q^2 & \ket{0,1,3,4,2} \\
+		\ket{1,3} &\mapsto& q^2 & \ket{0,3,1,2,4} \\
+		\ket{1,2} &\mapsto& q^3 & \ket{0,3,1,4,2} \\
+		\ket{1,1} &\mapsto& q^4 & \ket{0,3,4,1,2} \\
+		\ket{0,3} &\mapsto& q^3 & \ket{3,0,1,2,4} \\
+		\ket{0,2} &\mapsto& q^4 & \ket{3,0,1,4,2} \\
+		\ket{0,1} &\mapsto& q^5 & \ket{3,0,4,1,2} \\
+		\ket{0,0} &\mapsto& q^6 & \ket{3,4,0,1,2} \\
+	\end{array}\end{equation*}
+	この場合は、次の二つの操作に集約される。
+	\begin{equation*}\begin{array}{rlcl}
+		\phi & \ket{k_0,k_1-1} &=& q(k_1,k_1+1)\phi\ket{k_0,k_1} \\
+		\phi & \ket{k_0-1,3} &=& q^{1-(3-k_0)}(k_0-1,k_0)(k_0+1,\dots,4)
+		\phi\ket{k_0,k_0} \\
+	\end{array}\end{equation*}
+
+
+	したがって、効率的に$I_{3,2}$を列挙する問題に帰着する。
+	\begin{equation*}\begin{array}{rcrl}
+		\ket{3,3} &\mapsto& q^0 & \ket{0,1,2,3,4} \\
+		\to \ket{2,3} \to \ket{2,2} &\mapsto&
+			q^{1+\cdots} & \ket{0,1,3,\dots} \\
+		\to \ket{1,3} \to \ket{1,2} \to \ket{1,1} &\mapsto&
+			q^{2+\cdots} & \ket{0,3,\dots} \\
+		\to \ket{0,3} \to \ket{0,2} \to \ket{0,1} \to \ket{0,0} \\
+	\end{array}\end{equation*}
+%s2:シャッフル積の列挙}
 \subsection{ここまで}\label{s2:ここまで} %{
 %s2:ここまで}
 	シャッフル積の代数的双対な余積$\Delta_\shuffle$を求める。

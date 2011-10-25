@@ -3,6 +3,10 @@ package graycode;
 import java.io.IOException;
 
 import tiny.lang.Debug;
+import tiny.number.CompositionHelper;
+import tiny.number.DictionaryComposition;
+import tiny.number.GrayCodeComposition;
+import tiny.number.ReflexDictionaryComposition;
 import junit.framework.TestCase;
 
 public class TestCompositions extends TestCase {

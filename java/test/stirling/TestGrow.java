@@ -1,6 +1,5 @@
 package stirling;
 
-import graycode.CompositionHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import junit.framework.TestCase;
 import tiny.lang.ArrayHelper;
 import tiny.lang.Debug;
 import tiny.lang.StringHelper;
+import tiny.number.CompositionHelper;
 
 public class TestGrow extends TestCase {
 	protected void setUp() throws Exception {

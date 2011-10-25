@@ -1,12 +1,10 @@
 package tiny.primitive;
 
 public class PrimitiveHelper {
-	public static int[] toIntegerArray(LongList array) {
-		final int n = array.getLength();
-		final int[] newArray = new int[n];
+	public static int[] plus(int[] x0, int i0, int[] x1, int i1, int n, int value) {
 		for (int i = 0; i < n; ++i) {
-			newArray[i] = (int) array.get(i);
+			x0[i0 + i] = x1[i0 + i] + value;
 		}
-		return newArray;
+		return x0;
 	}
 }

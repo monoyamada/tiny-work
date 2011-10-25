@@ -71,15 +71,19 @@ public class StringHelper {
 	public static String join(Iterable<?> array, String delim) {
 		return join(array, delim, null);
 	}
-	public static<T> String join(Iterable<T> array, String delim,
-			Function<?super T, ?> fnc) {
+	public static <T> String join(Iterable<T> array, String delim,
+			Function<? super T, ?> fnc) {
 		StringBuilder buffer = new StringBuilder();
 		StringHelper.join(buffer, array, delim, fnc);
 		return buffer.toString();
 	}
-	public static String join(Object[] array, String delim) {
+	public static <T> String join(T[] array, String delim) {
+		return join(array, delim, null);
+	}
+	public static <T> String join(T[] array, String delim,
+			Function<? super T, ?> fnc) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		StringHelper.join(buffer, array, delim, fnc);
 		return buffer.toString();
 	}
 	public static String join(long[] array, String delim) {
@@ -119,42 +123,64 @@ public class StringHelper {
 	}
 
 	public static void join(StringBuilder buffer, Iterable<?> array, String delim) {
-		join(buffer, array, delim, null);
+		StringHelper.join(buffer, array, delim, null);
 	}
-	public static<T> void join(StringBuilder buffer, Iterable<T> array,
-			String delim, Function<?super T, ?> fnc) {
+	public static <T> void join(StringBuilder buffer, Iterable<T> array,
+			String delim, Function<? super T, ?> fnc) {
 		Debug.isNotNull(buffer);
 		Debug.isNotNull(array);
 		if (delim == null) {
 			delim = StringHelper.DEFAULT_SEPARATOR;
 		}
 		final Iterator<T> p = array.iterator();
-		for (int i = 0; p.hasNext(); ++i) {
-			if (i != 0) {
-				buffer.append(delim);
+		if (fnc == null) {
+			for (int i = 0; p.hasNext(); ++i) {
+				if (i != 0) {
+					buffer.append(delim);
+				}
+				buffer.append(p.next());
 			}
-			if (fnc != null) {
+		} else {
+			for (int i = 0; p.hasNext(); ++i) {
+				if (i != 0) {
+					buffer.append(delim);
+				}
 				try {
 					buffer.append(fnc.evaluate(p.next()));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-			} else {
-				buffer.append(p.next());
 			}
 		}
 	}
 	public static void join(StringBuilder buffer, Object[] array, String delim) {
+		StringHelper.join(buffer, array, delim, null);
+	}
+	public static <T> void join(StringBuilder buffer, T[] array, String delim,
+			Function<? super T, ?> fnc) {
 		Debug.isNotNull(buffer);
 		Debug.isNotNull(array);
 		if (delim == null) {
 			delim = StringHelper.DEFAULT_SEPARATOR;
 		}
-		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
-			if (i != 0) {
-				buffer.append(delim);
+		if (fnc == null) {
+			for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
+				if (i != 0) {
+					buffer.append(delim);
+				}
+				buffer.append(array[i]);
 			}
-			buffer.append(array[i]);
+		} else {
+			for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
+				if (i != 0) {
+					buffer.append(delim);
+				}
+				try {
+					buffer.append(fnc.evaluate(array[i]));
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
 		}
 	}
 	public static void join(StringBuilder buffer, long[] array, String delim) {
