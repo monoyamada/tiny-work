@@ -16,4 +16,3 @@ opts_encode="-kanji=utf8"
 opts="-halt-on-error $opts_encode -output-directory=$out_dir"
 platex $opts $1
 pbibtex $opts_encode $out_dir/$1
-#dvipdfmx -o $out_dir/$1.pdf $out_dir/$1.dvi

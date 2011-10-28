@@ -1,5 +1,6 @@
 \begingroup %{
 	\newcommand{\Mod}[1]{{#1}\myhere\mybf{Mod}}
+	\newcommand{\Alg}{\mybf{Alg}}
 	\newcommand{\Vect}[1]{\mybf{Vec}_{#1}}
 	\newcommand{\Hom}{\myop{Hom}}
 	\newcommand{\End}{\myop{End}}
@@ -33,58 +34,29 @@
 	\newcommand{\range}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
 	%
 	\newcommand{\mf}[1]{{\mathfrak{#1}}}
-	\newcommand{\sla}[1]{{\not\!{#1}}}
+	\newcommand{\Dyck}{{\mathfrak D}}
+	\newcommand{\Cyck}{{\mathfrak C}}
+	\newcommand{\cbinom}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
 	%
 	{\setlength\arraycolsep{2pt}
 	%
-\section{メモ}\label{s1:メモ} %{
-	写像$\myop{supp}:\W_*A\to A$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\myop{supp}[a_1\cdots a_m] = \set{a_1,\dots,a_m}
-	\end{split}\end{equation*}
-	$\mf{S}_{n}$を$n$次対称群、$(m,n)$次シャッフル置換を
-	$\mf{S}_{m,n}\subseteq\mf{S}_{m+n}$と書く。
-	$w_1,w_2\in\W_*A$に対して$\mf{sh}(w_1,w_2)\subseteq\W_*A$を
-	$w_1\shuffle w_2$に現れる単語の集合とする。$w_1$と$w_2$に文字の重複が
-	なければ、$|\mf{sh}(w_1,w_2)|=\binom{|w_1w_2|}{|w_2|}$となるが、一般には
-	文字の重複があるので、$|\mf{sh}(w_1,w_2)|\le\binom{|w_1w_2|}{|w_2|}$
-	となる。この記号を使うとシャッフル積は次のように書ける。
-	\begin{equation*}\begin{split}
-		w_1\shuffle w_2 = \sum_{w\in\mf{sh}(w_1,w_2)}\mu_w w
-	\end{split}\end{equation*}
-	ここで、$\mu_w$は次の重複度を表す。
-	\begin{equation*}\begin{split}
-		\mu_w = \sum_{w_1,w_2\in\W_*A}\jump{w=w_1\shuffle w_2}
-	\end{split}\end{equation*}
-
-	単語$w_1$と$w_2$をそれぞれ単語$[1,\dots,m]$と$[1,\dots,n]$の
-	置換で表される場合を考える。
-	\begin{equation*}\begin{array}{rcll}
-		w_1 &=& [\sigma 1,\dots,\sigma m] & \quad\text{where }
-			\sigma\in\mf{S}_m \\
-		w_2 &=& [\sigma 1,\dots,\sigma n] & \quad\text{where }
-			\sigma\in\mf{S}_n \\
-	\end{array}\end{equation*}
-
-	\begin{proposition}[シャッフル積とカタラン数]
-	\label{prop:シャッフル積とカタラン数} %{
-		\begin{equation*}\begin{split}
-			\bigl|\mf{sh}(\id_n,\id_n)\bigr| = \frac{1}{n+1}\binom{2n}{n}
-		\end{split}\end{equation*}
-	\end{proposition} %prop:シャッフル積とカタラン数}
-
+\section{Dyck言語}\label{s1:Dyck言語} %{
 	一般的にはDyck言語は次のように定義される。
 
 	\begin{definition}[Dyck言語]\label{def:Dyck言語} %{
-		集合$H=\set{\eta,\bar{\eta}}$の$2$文字から生成される自由モノイド
-		$\W_*H$の部分集合$\D_*H\subset\W_*H$が次の条件を満たすとき、
-		$\D_*H$をDyck言語という。
+		大きさ$2$の集合$\mybf{2}=\set{a,b}$から生成される自由モノイドを
+		$\W_*\mybf{2}$とする。任意の$n\in\sizen$に対して、
+		$\W_{2n}\mybf{2}$の部分集合$\Dyck_n$が次の条件を満たすとき、
+		$\Dyck_*:=\sum_{n\in\sizen}\Dyck_n$をDyck言語という。
 		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
-			\item $w\in\D_*H$ならば$\sharp_{\bar{\eta}}w=\sharp_{\eta}w$となる。
-			\item $w\in\D_*H,\;w_1,w_2\in\W_*H$かつ$w=w_1w_2$ならば
-			$\sharp_{\bar{\eta}}w_1\ge\sharp_{\eta}w_1$となる。
+			\item $w\in\Dyck_n$ならば、$\sharp_{a}w=\sharp_{b}w$となる。
+			\item $w\in\Dyck_n,\;w_1,w_2\in\W_*\mybf{2}$かつ$w=w_1w_2$
+			ならば、$\sharp_{a}w_1\ge\sharp_{b}w_1$となる。
 		\end{enumerate} %}
 	\end{definition} %def:Dyck言語}
+
+	Dyck言語の場合、$\Dyck_n$は長さ$2n$の単語の集合としていることに注意する。
+	式で書くと、$\Dyck_n\subset\W_{2n}\mybf{2}$という約束を使う。
 
 	この定義は、直感的でないが簡潔にDyck言語を定義する。
 	長さ$2,4,6$のDyck言語を文字$\set{0,1}$で書くと次のようになる。
@@ -105,38 +77,37 @@
 		& \braket{}\braket{}\braket{} \\
 	\end{array}\end{equation*}
 
-	$H$を大きさ$2$の集合$H=\set{\eta,\bar{\eta}}$、$\W_*H$を$H$から生成
-	された自由モノイドとする。
-	部分集合$\N_*H\subset\W_*H$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\N_*H := \set{\eta^m\bar{\eta}^n\in\W_*H\bou m,n\in\sizen}
-	\end{split}\end{equation*}
-	$\N_*H$に次のように二項演算$\myspace$を定義すると、$\N_*H$は$1_\W$を
-	単位元とするモノイドとなる。
-	\begin{equation*}\begin{split}
-		(\eta^p\bar{\eta}^q)(\eta^r\bar{\eta}^s) := \eta^p\bar{\eta}^s
-		\quad\text{for all } p,q,r,s\in\sizen
-	\end{split}\end{equation*}
-	したがって、自由モノイドの普遍性から、次の式を満たすモノイド準同型
-	$\phi:\W_*H\to\N_*H$が唯一に定まる。
-	\begin{equation*}\begin{split}
-		\phi\eta = \eta,\quad \phi\bar{\eta} = \bar{\eta}
-	\end{split}\end{equation*}
-	$R\N_*H$は代数$R[\eta]$の自己$R$線形写像全体のつくる集合とみなすことが
-	できる。
-	\begin{equation*}\begin{split}
-		R\N_*H\simeq\Mod{R}(R[\eta],R[\eta])
-	\end{split}\end{equation*}
-	$\ker\phi$は$\bar{\eta}\eta\mapsto1_\W$で縮約して$1_\W$になる単語
-	の集合だから、$\ker\phi$はDyck言語になる。
+	\begin{note}[Dyck言語と自己線形写像]\label{note:Dyck言語と自己線形写像} %{
+		多項式$R[x]$を通常の加法と乗法によって$R$-代数とみなす。
+		$R[x]$の自己線形写像全体のつくる集合を$V=\Mod{R}(R[x],R[x])$とする。
+		$V$は畳み込みによる加法と係数の作用によって$R$-加群となり、
+		写像の合成により$R$-代数となる。
+		$x^{n\tran}:=(x^n)^\tran\in\Mod{R}(R[x],R)$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			x^{m\tran}x^n = \jump{m=n}
+		\end{split}\end{equation*}
+		集合$E=\set{x^mx^{n\tran}\in V\bou m,n\in\sizen}$は$V$の基底系となり、
+		次の代数を満たす。
+		\begin{equation*}\begin{split}
+			x^{m_1}x^{n_1\tran}x^{m_2}x^{n_2\tran}
+			= \jump{n_1=m_2}x^{m_1}x^{n_2\tran}
+			\quad\text{for all } m_1,m_2,n_1,n_2\in\sizen
+		\end{split}\end{equation*}
+		集合$X=\set{x,y}$とすると、自由モノイドの普遍性により、
+		次の性質を満たす$f\in\Alg_R(R\W_*X,V)$が一意に定まる。
+		\begin{equation*}\begin{split}
+			fx = x := xx^{0\tran},\quad fy = x^\tran := x^0x^\tran
+		\end{split}\end{equation*}
+		$\ker f$は$X$から生成されるDyck言語となる。
+	\end{note} %note:Dyck言語と自己線形写像}
 
 	Dyck言語は、次のような平面格子上の経路から生成することができる。
 	\begin{equation}\label{eq:Dyck経路}\xymatrix@R=1em@C=1em{
 		& & & (3,3) \\
-		& & (2,2) \ar[r] & (3,2) \ar[u] \\
-		& (1,1) \ar[r] & (2,1) \ar[r] \ar[u] & (3,1) \ar[u] \\
-		(0,0) \ar[r] & (1,0) \ar[r] \ar[u] & (2,0) \ar[r]\ar[u] 
-			& (3,0) \ar[u] \\
+		& & (2,2) \ar[r]^0 & (3,2) \ar[u]_1\\
+		& (1,1) \ar[r]^0 & (2,1) \ar[r] \ar[u]_1& (3,1) \ar[u]_1\\
+		(0,0) \ar[r]^0 & (1,0) \ar[r]^0 \ar[u]_1 & (2,0) \ar[r]^0 \ar[u]_1
+			& (3,0) \ar[u]_1\\
 	}\end{equation}
 	経路内を
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
@@ -145,18 +116,277 @@
 	\end{itemize} %}
 	を書いていくと、$(0,0)$から$(n,n)$への経路によって、長さ$2n$のDyck言語の
 	単語が生成される。例えば、経路$(0,0)(1,0)(2,0)(2,1)(2,2)(3,2)(3,3)$
-	からは$001101$という単語が生成される。したがって、長さ$2n$のDyck言語は
-	シャッフル積$[0^n]\shuffle[1^n]$に含まれる。
-	経路\eqref{eq:Dyck経路}をDyck経路という。
+	からは$001101$という単語が生成される。この図のようにDyck言語を生成する
+	経路をDyck経路という。
+
+	Dyck経路を２次元平面上の経路の特別な場合として定義する。
+
+	\begin{definition}[単調経路（monotonic path）]\label{def:単調経路} %{
+		平面上の自然数を頂点とする格子で、$(0,0)$から$(m,n)$への経路で、
+		水平方向にも垂直方向にもプラス方向にのみ頂点の移動が可能となる経路を
+		$(0,0)$から$(m,n)$への単調経路という。
+	\end{definition} %def:単調経路}
+
+	次の図は$(0,0)$から$(3,2)$への単調経路（の集合）を表している。
+	\begin{equation*}\xymatrix@R=1em@C=1em{
+		& & (2,2) \ar[r] & (3,2) \\
+		& (1,1) \ar[r] & (2,1) \ar[r] \ar[u] & (3,1) \ar[u] \\
+		(0,0) \ar[r] & (1,0) \ar[r] \ar[u] & (2,0) \ar[r] \ar[u]
+			& (3,0) \ar[u] \\
+	}\end{equation*}
+
+	\begin{definition}[Dyck経路]\label{def:Dyck経路} %{
+		$(0,0)$から$(n,n)$への単調経路で、$p\ge q$となる頂点$(p,q)$のみを通過
+		する経路をDyck経路という。
+	\end{definition} %def:Dyck経路}
+
+	Dyck言語もDyck経路も同じものとして、用途に応じて両者を用いる。
+	Dyck言語を次の命題によって再帰的に定義する流儀もある。
+
+	\begin{proposition}[Dyck言語その二]\label{prop:Dyck言語その二} %{
+		$\Dyck_*$を集合$\mybf{2}=\set{a,b}$から生成されたDyck言語とする。
+		任意の$w\in\Dyck_+$に対して次の式を満たす$w_1,w_2\in\Dyck_*$
+		が唯一つ定まる。
+		\begin{equation*}\begin{split}
+			w = (aw_1)(bw_2)
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Dyck言語その二}
+	\begin{proof} Dyck経路を用いて証明する。
+	$n\ge 1$として、$(n,n)$へのDyck経路全体のつくる集合を$\Gamma_n$とする。
+	経路$\gamma\in\Gamma_n$が通る対角線上の頂点の集合を$\myop{diag}\gamma$
+	と書く。$(0,0)$と$(n,n)$は常に$\myop{diag}\gamma$に含まれ、
+	$1\le n$なので、$2\le|\myop{diag}\gamma|$となる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[存在] $\myop{diag}\gamma$の中で、$(0,0)$の次に小さな頂点を
+		$(p,p)$とする。$\gamma$は次のようなDyck経路となる。
+		\begin{equation*}\xymatrix@R=1em@C=1em{
+			 & & & (n,n) \\
+			 & & (p,p) \ar@{>>}[ru]^{\gamma_2} \\
+			 & & (p,p-1) \ar[u] \\
+			(0,0) \ar@{.}[rruu] \ar[r] & (1,0) \ar@{>>}[ru]^{\gamma_1} \\
+		}\end{equation*}
+		$\gamma$を命題の$w\in\Dyck$に対応させると、$\gamma_1$と$\gamma_2$は
+		それぞれ、命題の$w_1$と$w_2$に対応する。
+		%
+		\item[一意性] $\myop{diag}\gamma$の中で、$(p,p)$の次に小さな頂点
+		$(q,q)$が存在したとする。すると、$\gamma$は次のようなDyck経路となる。
+		\begin{equation*}\xymatrix@R=1em@C=1em{
+			 & & & & & (n, n) \\
+			 & & & & (q, q) \ar@{>>}[ru]^{\eta_2} \\
+			 & & & & (q, q - 1) \ar[u] \\
+			 & & (p,p) \ar[r] \ar@{.}[rruu] & (p + 1,p) \ar@{>>}[ru]^{\eta_1} \\
+			 & & (p,p-1) \ar[u] \\
+			(0,0) \ar@{.}[rruu] \ar[r] & (1,0) \ar@{>>}[ru]^{\gamma_1} \\
+		}\end{equation*}
+		この図で、経路$(1,0)(q,q-1)$は始点と終点が対角的な関係になっているが、
+		部分経路$(p,p-1)(p,p)(p+1,p)$で対角線の上にはみ出てしまっているので、
+		$(1,0)(q,q-1)$はDyck経路とはならない。
+	\end{description} %}
+	\end{proof}
+
+	この命題によって、Dyck言語の大きさに関する次の命題が導かれる。
 
 	\begin{proposition}[Dyck言語の大きさ]\label{prop:Dyck言語の大きさ} %{
-		$\D_*H$を集合$H=\set{\eta,\bar{\eta}}$から生成されるDyck言語とする。
-		任意の$n\in\sizen$に対して次の式が成り立つ。
+		$\Dyck_*$をDyck言語とする。任意の$n\in\sizen$に対して次の式が成り立つ。
 		\begin{equation*}\begin{split}
-			\bigl|\D_{2n}H\bigr| = \frac{1}{n+1}\binom{2n}{n}
+			|\Dyck_{n+1}| = \sum_{p\in0..n}|\Dyck_p||\Dyck_{n-p}|
 		\end{split}\end{equation*}
 	\end{proposition} %prop:Dyck言語の大きさ}
-%s1:メモ}
+	\begin{proof} $\mybf{2}=\set{a,b}$として、
+	命題\ref{prop:Dyck言語その二}から、任意の$n\in\sizen$に対して、次の写像
+	$\phi:\sum_{p\in0..n}\Dyck_p\times\Dyck_{n-p}\to\Dyck_{n+1}$が
+	集合同型となる。
+	\begin{equation*}\begin{split}
+		\phi(w_1,w_2) = (aw_1)(bw_2) \quad\text{for all } (w_1,w_2)\in
+		\sum_{p\in0..n}\Dyck_p\times\Dyck_{n-p}
+	\end{split}\end{equation*}
+	\end{proof}
+
+	Dyck経路の数は既知で次のようにCataran数で表される。
+	\begin{equation*}\begin{split}
+		|\Dyck_n| = \frac{1}{n+1}\binom{2n}{n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この式はDyck経路の数についての漸化式\ref{prop:Dyck言語の大きさ}を
+	用いて次のようにして導くことができる。
+
+	変数$z$についての形式級数$d_z$を次のように定義する。
+	\begin{equation*}\begin{split}
+		d_z := \sum_{n\in\sizen}|\Dyck_n|z^n
+	\end{split}\end{equation*}
+	すると、漸化式\ref{prop:Dyck言語の大きさ}より次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		d_z^2 &= \sum_{p,q\in\sizen} |\Dyck_p||\Dyck_q|z^{p+q}
+		= \sum_{n\in\sizen}\sum_{p=0}^n |\Dyck_p||\Dyck_{n-p}|z^n
+		= \sum_{n\in\sizen} |\Dyck_{n+1}|z^n \\
+		&= \frac{d_z - |\Dyck_0|}{z} = \frac{d_z - 1}{z}
+	\end{split}\end{equation*}
+	したがって、変数$z$についての形式級数$D_z$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		D_z := \sum_{n\in\sizen}|\Dyck_n|z^{n+1}
+	\end{split}\end{equation*}
+	$D_z^2 = D_z - z$が成り立ち、この$D_z$に関する二次式を解くと、
+	次の二つの解が得られる。
+	\begin{equation*}\begin{split}
+		D_z = \frac{1\pm\sqrt{1 - 4z}}{2}
+	\end{split}\end{equation*}
+	この解に$D_0=0$という条件を課すと、次の解が得られ、
+	\begin{equation*}\begin{split}
+		D_z = \frac{1-\sqrt{1 - 4z}}{2}
+	\end{split}\end{equation*}
+	Dyck経路の数を次のように解析的に表すことができる。
+	\begin{equation*}\begin{split}
+		|\Dyck_n| = \frac{1}{2\pi i}\oint_{0}\frac{dz}{z^{n+2}} D_z
+	\end{split}\end{equation*}
+	根号$\sqrt{1-4z}$を$z=0$の周りで展開してみる。
+	一般に、任意の$\nu\in\fukuso,\;k\in\sizen$に対して、$\cbinom{\nu}{k}$を
+	次の式で定義すると、
+	\begin{equation*}\begin{split}
+		(1 + x)^\nu = \sum_{k\in\sizen}\cbinom{\nu}{k} x^k
+	\end{split}\end{equation*}
+	$\cbinom{\nu}{k}$は次のようになる。
+	\begin{equation*}\begin{split}
+		\cbinom{\nu}{0} = 1,\quad
+		\cbinom{\nu}{k} = \frac{\nu}{k}\frac{\nu-1}{k-1}
+			\cdots\frac{\nu-(k-1)}{1}
+		= \frac{\Gamma_{\nu+1}}{\Gamma_{k+1}\Gamma_{\nu-k+1}}
+		\quad\text{for all } k\in\sizen_+
+	\end{split}\end{equation*}
+	$\nu\in\sizen$の時$\cbinom{\nu}{k}$は通常の二項係数となる。
+	$\cbinom{\nu}{k}$を使うと、$\sqrt{1-4z}$は次のように書ける。
+	\begin{equation*}\begin{split}
+		\sqrt{1-4z} = \sum_{k\in\sizen} \cbinom{\frac{1}{2}}{k} (-4z)^k
+	\end{split}\end{equation*}
+	ここで、任意の$k\in\sizen_+$に対して次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\cbinom{\frac{1}{2}}{k}
+		&= \frac{\frac{1}{2}}{k}\frac{\frac{1}{2}-1}{k-1}
+			\cdots\frac{\frac{1}{2}-(k-1)}{1}
+		= -\left(-\frac{1}{2}\right)^k\frac{1\cdot3\cdots(2k-3)}{k!} \\
+		&= -2\left(-\frac{1}{4}\right)^k \frac{(2k-2)!}{k!(k-1)!} \\
+		\implies & \sqrt{1-4z} = 1 - 2\sum_{n\in\sizen_+}
+			\frac{(2k-2)!}{k!(k-1)!} z^k \\
+	\end{split}\end{equation*}
+	$D_z$は次のようになることがわかる。
+	\begin{equation*}\begin{split}
+		D_z = \sum_{n\in\sizen_+} \frac{(2k-2)!}{k!(k-1)!} z^k
+		= \sum_{n\in\sizen} \frac{1}{k+1} \binom{2k}{k} z^{k+1}
+	\end{split}\end{equation*}
+	この式より、$D_z=\sum_{k\in\sizen}|\Dyck_k|z^{k+1}$だから、
+	$|\Dyck_k|=\frac{1}{k+1} \binom{2k}{k}$となることがわかる。
+
+	二項係数$\binom{2n}{n}$は$(0,0)$から$(n,n)$への単調経路の数になっている。
+	Dyck経路の数が単調経路の数を$n+1$で割ったものになるということは、
+	単調経路に次の性質が成り立つ同値関係が定義できることを予想させる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item すべての同値類がDyck経路を唯一つ必ず含む。
+		\item すべての同値類の大きさが等しくなる。
+	\end{itemize} %}
+	因子$n+1$は同値類の大きさとなる。
+	ここで、単調経路から生成される単語を定義しておく。
+
+	\begin{definition}[単調な単語]\label{def:単調な単語} %{
+		文字$a$を$m$個、文字$b$を$n$個含む単語を$\set{a,b}$から生成される
+		単調な単語といい、単調な単語全体のつくる集合を$\Cyck_{m,n}$と書く。
+	\end{definition} %def:単調な単語}
+
+	$(0,0)$から$(m,n)$への単調な経路はすべて$m+n$個の辺を持つ。そして、
+	$m+n$個の辺の中から水平な辺を$m$個選ぶと経路が唯一つ定まる。
+	したがって、単調な経路の数は次の式で与えられる。
+	\begin{equation*}\begin{split}
+		|\Cyck_{m,n}| = \binom{m+n}{n} \quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	単調な経路全体の中でDyck経路を特徴付けるパラメータを定義する。
+
+	\begin{definition}[超過数（exceedance）]\label{def:超過数} %{
+		単調な経路$\gamma$で対角線より上にある上向きの辺の数を$\gamma$の
+		超過数という。
+	\end{definition} %def:超過数}
+
+	次の図は、$(0,0)$から$(5,5)$への単調な経路で、超過数に勘定する辺を二重線
+	で示している。
+	\begin{equation}\label{eq:超過数の例}\xymatrix@R=1em@C=1em{
+		& & & & (4,5) \ar[r] & (5,5) \\
+		& & & & (4,4) \ar@{=>}[u] \\
+		& (1,3) \ar[r] & (2,3) \ar[r] & (3,3) \ar[r] & (4,3) \ar[u] \\
+		& (1,2) \ar@{=>}[u] \\
+		& (1,1) \ar@{=>}[u] \\
+		(0,0) \ar[r] \ar@{.}[rrrrruuuuu] & (1,0) \ar[u] \\
+	}\end{equation}
+	Dyck経路の超過数は$0$となる。
+	超過数が$0$に向かって変化するような経路の変形を考える。
+	単調な経路に対して次のような経路の変形をすると、超過数が一つ減る。
+	\begin{equation}\label{eq:Dyck経路への変形}\begin{split}
+		\xymatrix@R=1em@C=1em{
+			& & \ar@{-}[r] & \\
+			\ar@{-}[r] & \ar[r]^\delta & \ar@{-}[r] \ar@{-}[u]_{}^{}="l" 
+				& \ar@{-}[u]_{}^{}="r" \ar@{}"l";"r"|{\gamma_2} \\
+			\\
+			\ar@{-}[r] \ar@{-}[uu]_{}^{}="L" \ar@{.}[rrruuu] 
+				& \ar@{-}[uu]_{}^{}="R" \ar@{}"L";"R"|{\gamma_1} \\
+		} \quad\mapsto\quad \xymatrix@R=1em@C=1em{
+			& & \ar@{-}[r] & \\
+			\\
+			\ar@{-}[r] & \ar[r]^\delta & \ar@{-}[r]\ar@{-}[uu]^{}_{}="L" 
+				& \ar@{-}[uu]^{}_{}="R" \ar@{}"L";"R"|{\gamma_1} \\
+			\ar@{-}[r] \ar@{-}[u]_{}^{}="l" \ar@{.}[rrruuu] 
+				& \ar@{-}[u]_{}^{}="r" \ar@{}"l";"r"|{\gamma_2} \\
+		}
+	\end{split}\end{equation}
+	この変形を繰り返すと、最終的に超過数が$0$になってDyck経路となる。
+	Dyck経路には辺$\delta$が存在しないので、それ以上の変形はできない。
+	ここで、辺$\delta$は最も左にある辺をとることにする。
+	経路\eqref{eq:超過数の例}の場合には、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\gamma_1$は経路$(0,0)\twoheadrightarrow(2,3)$、
+		\item $\gamma_2$は経路$(3,3)\twoheadrightarrow(5,5)$、
+		\item $\delta$は経路$(2,3)\to(3,3)$
+	\end{itemize} %}
+	となっている。経路\eqref{eq:超過数の例}を変形すると次のようになる。
+	\begin{equation*}\begin{split}
+		& \xymatrix@R=1ex@C=1em{
+			& & & & (4,5) \ar[r] & (5,5) \\
+			\\
+			& (1,3) \ar[r] & (2,3) \ar[r] & (3,3) \ar[r] & (4,3) \ar@{>>}[uu] \\
+			\\
+			\\
+			(0,0) \ar[r] \ar@{.}[rrrrruuuuu] & (1,0) \ar@{>>}[uuu] \\
+		} \\
+		\mapsto & \xymatrix@R=1ex@C=1em{
+			& & & & (1,3) \ar[r] \ar[r] & (2,3) \\
+			\\
+			\\
+			& (4,5) \ar[r] & (5,5) \ar[r] & (0,0) \ar[r] & (1,0) \ar@{>>}[uuu] \\
+			\\
+			(3,3) \ar[r] \ar@{.}[rrrrruuuuu] & (4,3) \ar@{>>}[uu] \\
+		} \\
+		\mapsto & \xymatrix@R=1ex@C=1em{
+			& & & & & (4,5) \\
+			\\
+			& & (1,3) \ar[r] & (2,3) \ar[r] & (3,3) \ar[r] & (4,3) \ar@{>>}[uu] \\
+			\\
+			\\
+			(5,5) \ar[r] \ar@{.}[rrrrruuuuu] & (0,0) \ar[r] & (1,0) \ar@{>>}[uuu] \\
+		} \\
+		\mapsto & \xymatrix@R=1ex@C=1em{
+			& & & & & (1,3) \\
+			\\
+			\\
+			& & (4,5) \ar[r] & (5,5) \ar[r] & (0,0) \ar[r] & (1,0) \ar@{>>}[uuu] \\
+			\\
+			(2,3) \ar[r] \ar@{.}[rrrrruuuuu] & (3,3) \ar[r] & (4,3) \ar@{>>}[uu] \\
+		}
+	\end{split}\end{equation*}
+	$\Cyck_{n,n,l}$を超過数$l$の単調な経路全体のつくる集合とすると、
+	$\Cyck_{n,n}$は次のように分類され、
+	\begin{equation*}\begin{split}
+		\Cyck_{n,n} = \sum_{l\in0..n}\Cyck_{n,n,l}
+	\end{split}\end{equation*}
+	変形\eqref{eq:Dyck経路への変形}は、任意の$l=0..(n-1)$に対して、
+	集合同型$\Cyck_{n,n,l+1}\simeq\Cyck_{n,n,l}$を与える。
+	したがって、Dyck経路の数は$|\Dyck_n|=|\Cyck_{n,n}|/(n+1)$となることが
+	わかる。
+%s1:Dyck言語}
 \section{シャッフル積}\label{s1:シャッフル積} %{
 	この節を通して次の記号を用いる。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
