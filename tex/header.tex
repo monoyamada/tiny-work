@@ -183,6 +183,20 @@
 %
 \makeatletter
 %
+\def\eqtofill@{%
+	\arrowfill@\Relbar\Relbar\Rightarrow%
+}
+\newcommand*\eqto[2][]{%
+	\ext@arrow 0395\eqtofill@{#1}{#2}%
+}
+%
+\def\eqfromfill@{%
+	\arrowfill@\Leftarrow\Relbar\Relbar%
+}
+\newcommand*\eqfrom[2][]{%
+	\ext@arrow 0395\eqfromfill@{#1}{#2}%
+}
+%
 \def\xtotofill@{%
 	\arrowfill@\relbar\relbar\twoheadrightarrow%
 }
