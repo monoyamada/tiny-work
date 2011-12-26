@@ -1,5 +1,6 @@
 package tiny.lang;
 
+import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -8,6 +9,30 @@ import tiny.function.Function;
 public class StringHelper {
 	public static final String EMPTY_STRING = "";
 	public static final String DEFAULT_SEPARATOR = ",";
+	public static final Charset CHARSET_UTF_8 = Charset.forName("UTF-8");
+	public static final Charset CHARSET_ASCII = Charset.forName("ASCII");
+
+	static final byte[] HEX_CHAR_TABLE = { (byte) '0', (byte) '1', (byte) '2',
+			(byte) '3', (byte) '4', (byte) '5', (byte) '6', (byte) '7', (byte) '8',
+			(byte) '9', (byte) 'a', (byte) 'b', (byte) 'c', (byte) 'd', (byte) 'e',
+			(byte) 'f' };
+
+	public static String toHexString(byte value) {
+		byte[] hex = new byte[2];
+		hex[0] = HEX_CHAR_TABLE[value >>> 4];
+		hex[1] = HEX_CHAR_TABLE[value & 0xF];
+		return new String(hex, CHARSET_ASCII);
+	}
+	public static String toHexString(byte[] value) {
+		byte[] hex = new byte[2 * value.length];
+		int index = 0;
+		for (byte b : value) {
+			int v = b & 0xFF;
+			hex[index++] = HEX_CHAR_TABLE[v >>> 4];
+			hex[index++] = HEX_CHAR_TABLE[v & 0xF];
+		}
+		return new String(hex, CHARSET_ASCII);
+	}
 
 	public static class LexicographicalOrder implements Comparator<String> {
 		public int compare(String o1, String o2) {
@@ -263,7 +288,7 @@ public class StringHelper {
 		case 2:
 			return text + text;
 		default:
-			break;
+		break;
 		}
 		final StringBuilder buffer = new StringBuilder();
 		while (0 < n--) {

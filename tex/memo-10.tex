@@ -44,6 +44,68 @@
 	%
 	{\setlength\arraycolsep{2pt}
 	%
+\section{パーサーの曖昧さ}\label{s1:パーサーの曖昧さ} %{
+	次のBNFで与えられた文法を考える。
+	\begin{equation*}\begin{split}
+		& E = A_1A_2B + A_2A_1B \\
+		& A_1 = a,\quad A_2 = a^2,\quad B = b,\quad C = c \\
+	\end{split}\end{equation*}
+	大文字のアルファベットを品詞、小文字のアルファベットを入力文字とする。
+	文法$E$に従って入力文字列を品詞分解する操作は次のように書けるだろう。
+	\begin{equation*}\xymatrix{
+		& E \ar[d]^{a}_{\phi(A_1,1,\eta_1^\dag)} \\
+		& A_2B + A_{21}A_1C \ar[d]^{a}_{\phi(A_2,2,\eta_2^\dag)} \\
+		& A_{21}B + A_1C \ar[d]^{a}_{\phi(A_2,2,\eta_1\eta_3^\dag) + \phi(A_1,1,\eta_2\eta_4^\dag)} \\
+		& B + C \ar@(l,u)[dl]_{b}^{\phi(B,1,\eta_3)} \ar@(r,u)[dr]^{c}_{\phi(C,1,\eta_4)} \\
+		\$_B \ar[dr]_{\beta} & & \$_C \ar[dl]^{\beta} \\
+		& \$ \\
+	}\end{equation*}
+	ここで、$\phi$と$\beta$は品詞バッファと入力バッファの操作で次のように
+	定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\phi$は(品詞, 文字数, Leavitt経路代数)の三つ組を品詞バッファ
+		にプッシュする操作を表す。
+		\item $\beta$はバックトレースの操作で、品詞バッファに積まれた三つ組から
+		入力バッファの文字列を品詞分解していく操作を表す。
+	\end{itemize} %}
+	Leavitte代数は$\eta_i^\dag\eta_j=\jump{i=j}$とする。
+	入力文字列が$a^3b$の場合は状態$\$_1$で品詞バッファは次のようになる。
+	\begin{equation*}\begin{split}
+		[a^3b] \mapsto \bigl[(A_1,1,\eta_1^\dag), (A_2,2,\eta_2^\dag)
+		, (A_2,2,\eta_1\eta_3^\dag) + (A_1,1,\eta_2\eta_4^\dag)
+		, (B,1,\eta_3) \bigr]
+	\end{split}\end{equation*}
+	操作$\beta$は品詞バッファの文字列を次のように操作する。
+	\begin{equation*}\begin{split}
+		\text{Leavitt}\quad
+		& [a^3b] \mapsto \bigl[(A_1,1), 0 , (A_2,2) , (B,1) \bigr] \\
+		\text{tokenize}\quad & \tau(A_1,0,1), \tau(A_2,1,3), \tau(B,3,4) \\
+		\text{clear}\quad & \text{clears input and token buffers} \\
+	\end{split}\end{equation*}
+	ここで、$\tau(A,i,j)$は入力バッファの$i$番目から$j-1$番目までの文字列を
+	品詞$A$とする操作である。Leavitt経路代数を挿入する場所は、
+	NFAからDFAを作成する時に決めることができる（多分）。
+
+	品詞分解の曖昧さの観点から、文法は次の二通りに分けられるだろう。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 入力をすべて読み終わっても曖昧さが残る文法 \\
+		例えば、$A_2+A_1^2$という文法では、$a^2$という入力文字列をどのように
+		分解して良いかがわからない。
+		\item 少なくとも入力をすべて読み終われば品詞分解が唯一つ定まる文法 \\
+		例えば、$A_2^*+A_2^*A_1$という文法では、$a^{2n}$なら$A_2$、
+		$a$なら$A_1$、$a^{2n+3}$なら$A_2A_1$というように、入力をすべて
+		読み終われば品詞分解が唯一つ定まる。
+	\end{itemize} %}
+	もちろん、論理和を表す加法$+$を積ではなく、優先順位がついた二項演算と
+	みなせば曖昧さはなくなる。例えば、文法$A_2\lhd A_1^2$を入力文字列$a^2$
+	に対して$A_2$を割り当てる二項演算する。また、確率を用いても曖昧さを
+	解消することができる。例えば、文法$0.3A_2+0.7A_1^2$を、入力文字列$a^2$
+	に対して、$30\%$の確率で$A_2$、$70\%$の確率で$A_2^2$とすることができる。
+	自然言語への応用を考えると、確率的な解釈をするのが良さそうである。
+	確率的な解釈は、文法ミスに対してのコンパイラからのヒントに使うことが
+	できるだろうが、プログラミング言語の文法自体が確率的になっていることは
+	困りものだろう。
+%s1:パーサーの曖昧さ}
 \section{シーケント計算}\label{s1:シーケント計算} %{
 	シーケント計算を論理式を扱うための計算規則として捉えておく。
 
@@ -66,47 +128,73 @@
 		\end{itemize} %}
 	\end{definition} %def:シーケント}
 %s1:シーケント計算}
-\section{Church-Rosserの定理}\label{s1:Church-Rosserの定理} %{
-	教科書\cite{takahashi:keisan}に従って話を進める。
-
+\section{ラムダ式の記法}\label{s1:ラムダ式の記法} %{
 	ラムダ式全体のつくる集合を$\Lambda$と書く。
 	ラムダ式全体は集合ではないかもしれないが、たとえ集合でなくても、
 	集合のように扱うことにする。
 
-	括弧を減らすために、ラムダ式を次の記法で書く。
+\subsubsection{括弧の省略}\label{s3:括弧の省略} %{
+	ラムダ式をパット見て分かるように、束縛変数と自由変数は共に小文字
+	$x,y,\dots$、一般のラムダ式を大文字$A,B,\dots$で書くことにする。
+	また、括弧を減らすために、ラムダ式を次の約束で書くことにする。
 	\begin{equation*}\begin{array}{lrcll}
 		\text{関数適用}\quad 
-			& M_1M_2\cdots M_n &:=& (\cdots(M_1M_2)\cdots)M_n \\
+			& A_1A_2\cdots A_n &:=& (\cdots(A_1A_2)\cdots)A_n \\
 		\text{関数抽象}\quad 
-			& \lambda x_1x_2x_3\cdots x_n.M 
-			&:=& \lambda x_1.(\lambda x_2.\cdots (\lambda x_n.M)\cdots) \\
+			& \lambda x_1x_2x_3\cdots x_n.A 
+			&:=& \lambda x_1.(\lambda x_2.\cdots (\lambda x_n.A)\cdots) \\
 	\end{array}\end{equation*}
-	ここで、$M,M_1,\dots,M_n$はラムダ式、$x_1,\dots,x_n$は文字とする。
-	また、ラムダ式$M$の中の文字$x$をラムダ式$N$で置き換えたものを$M[x:=N]$
-	と書く。関数の適用を$\beta$変換という。
-
-	\begin{definition}[ベータ変換]\label{def:ベータ変換} %{
-		ラムダ式の関係$\Lambda\xto{\beta}\Lambda\subseteq\Lambda\times\Lambda$
-		を、任意の$M_1,M_2,M,N\in\Lambda$に対して次のように定義する。
-		\begin{equation*}\begin{split}
-			M_1\bigl((\lambda x M)N\bigr) &\xto{\beta} M_1(M[x:=N]) \\
-			\bigl((\lambda x M)N\bigr)M_2 &\xto{\beta} (M[x:=N])M_2 \\
-			M_1\bigl((\lambda x M)N\bigr)M_2 &\xto{\beta} M_1(M[x:=N])M_2 \\
-		\end{split}\end{equation*}
-		また、ラムダ式$M$から有限個のベータ変換で$N$に到達できるとき、
-		$M\xtoto{\beta}N$と書く。
-		\begin{equation*}\begin{split}
-			M\xtoto{\beta}N \xiff{\dfn} \exists\; M_1,\dots,M_{n-1}\in\Lambda
-			\text{ s.t. } \\
-			M\xto{\beta}M_1\xto{\beta}\cdots\xto{\beta}M_{n-1}\xto{\beta}N
-		\end{split}\end{equation*}
-		$\beta$変換は$\beta$簡約（$\beta$ reduction）とも言われる。
-	\end{definition} %def:ベータ変換}
+	ここで、$A,A_1,\dots,A_n$はラムダ式、$x_1,\dots,x_n$は束縛変数とした。
+%s3:括弧の省略}
+\subsubsection{変数への代入}\label{s3:変数への代入} %{
+	ラムダ式中の変数へ別のラムダ式を代入することを次のように書く。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item ラムダ式$A$の中の変数$x$にラムダ式$B$を代入したものを$A[x:=B]$
+		と書く。
+		\item ラムダ式$A$の中の変数$x$にラムダ式$B$を代入した後に、
+		$A$の中の変数$y\neq x$にラムダ式$C$を代入したものを$A[x:=B,y:=C]$
+		と書く。
+		\item ラムダ式$A$の中の変数$x$にラムダ式$B$を代入した後に、
+		$A$と$B$の中の変数$y\neq x$を$C$で置き換えたものを$A[x:=B][y:=C]$
+		と書く。
+	\end{itemize} %}
+	$A[x:=B][y:=C]=A\bigl[x:=B[y:=C],y:=C\bigr]$となり、一般には、
+	$A[x:=B,y:=C]\neq A[x:=B][y:=C]$であることに注意する。
+%s3:変数への代入}
+\subsubsection{ベータ変換}\label{s3:ベータ変換} %{
+	ラムダ式の関係$\Lambda\xto{\beta}\Lambda\subseteq\Lambda\times\Lambda$
+	を、次のように再帰によって定義する。
+	\begin{equation*}\begin{split}
+		A,B\in\Lambda &\implies (\lambda x.A)B \xto{\beta} A[x:=B] \\
+		A\xto{\beta}B &\implies \left\{\begin{split}
+			\lambda x.A &\xto{\beta} \lambda x.B \\
+			AC &\xto{\beta} BC  \quad\text{for all } C\in\Lambda \\
+			CA &\xto{\beta} CB  \quad\text{for all } C\in\Lambda \\
+		\end{split}\right. \\
+	\end{split}\end{equation*}
+	そして、$(\lambda x.A)B$という形のラムダ式または部分ラムダ式を$\beta$基
+	（$\beta$ redex）という。
+	また、ラムダ式$A$から有限個の$\beta$変換で$B$に到達できるとき、
+	その$\beta$変換の列を$\beta$変換の鎖という。
+	\begin{equation*}\begin{split}
+		A\xtoto{\beta}B \xiff{\dfn} \left\{\begin{split}
+			& A = B \text{ or} \\
+			& A\xto{\beta}B \text{ or} \\
+			& \exists\; C\in\Lambda \text{ s.t. }
+				A\xto{\beta}C\xtoto{\beta} B \\
+		\end{split}\right. \\
+	\end{split}\end{equation*}
+	ラムダ式$A$から$B$への$\beta$変換の鎖があるとき、$A\xtoto{\beta}B$
+	と書く。
+%s3:ベータ変換}
+%s1:ラムダ式の記法}
+\section{Church-Rosserの定理}\label{s1:Church-Rosserの定理} %{
+	教科書\cite{takahashi:keisan}に従って話を進める。
 
 	任意の$n\in\sizen_+$に対してラムダ式$X_n:=\lambda_xx^n$とする。
-	すると、任意のラムダ式$M$に対して$X_nM=M^n$となる。
-	特に、$X_1$は'恒等写像'となる。$X_n$を使うと発散するラムダ式をつくること
-	ができる。
+	すると、任意のラムダ式$A$に対して$X_nA=A^n$となる。
+	特に、$X_1$は'恒等写像'となる。$X_n$を使うと$\beta$変換で発散する
+	ラムダ式をつくることができる。
 	\begin{equation*}\begin{array}{rcll}
 		X_2^2\xto{\beta}X_2^2\xto{\beta}X_2^2\xto{\beta}\cdots \\
 		X_3^2\xto{\beta}X_3^3\xto{\beta}X_3^4\xto{\beta}\cdots \\
@@ -127,20 +215,20 @@
 	ラムダ式$Y_m(X_3^2)$は$\beta$変換の収束点$X_m$を持つが、そこに至る経路
 	は無数にある。
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item ラムダ式$M$が収束点$N$を持てば、$M$の変換は必ず$N$に収束するで
-		あろうか
+		\item ラムダ式$A$が$\beta$変換の収束点$B$を持てば、$A$を$\beta$変換
+		していけば必ず$B$に収束するであろうか
 	\end{itemize} %}
 	という疑問に答えてくれるのが、Church-Rosserの定理である。
 
 	\begin{proposition}[Church-Rosserの定理]
 	\label{prop:Church-Rosserの定理} %{
-		任意のラムダ式$M,M_1,M_2$に対して次の式が存在する。
+		任意のラムダ式$A,B_1,B_2$に対して次の式が存在する。
 		\begin{equation*}\begin{split}
-			M_1 \xfromfrom{\beta} M \xtoto{\beta} M_2
-			\implies \exists\; N\in\Lambda \text{ s.t. } \xymatrix@R=1em@C=1em{
-				& M \ar@{>>}[dl]_\beta \ar@{>>}[dr]^\beta \\
-				M_1 \ar@{>>}[dr]_\beta & & M_2 \ar@{>>}[dl]^\beta \\
-				& N
+			B_1 \xfromfrom{\beta} A \xtoto{\beta} B_2
+			\implies \exists\; C\in\Lambda \text{ s.t. } \xymatrix@R=1em@C=1em{
+				& A \ar@{>>}[dl]_\beta \ar@{>>}[dr]^\beta \\
+				B_1 \ar@{>>}[dr]_\beta & & B_2 \ar@{>>}[dl]^\beta \\
+				& C
 			}
 		\end{split}\end{equation*}
 	\end{proposition} %prop:Church-Rosserの定理}
@@ -151,27 +239,28 @@
 
 	\begin{proposition}[局所Church-Rosserの定理]
 	\label{prop:局所Church-Rosserの定理} %{
-		任意のラムダ式$M,M_1,M_2$に対して次の式が存在する。
+		任意のラムダ式$A,B_1,B_2$に対して次の式が存在する。
 		\begin{equation*}\begin{split}
-			M_1 \xfrom{\beta} M \xto{\beta} M_2
+			B_1 \xfrom{\beta} A \xto{\beta} B_2
 			\implies \exists\; N\in\Lambda \text{ s.t. } \xymatrix@R=1em@C=1em{
-				& M \ar[dl]_\beta \ar[dr]^\beta \\
-				M_1 \ar@{>>}[dr]_\beta & & M_2 \ar@{>>}[dl]^\beta \\
+				& A \ar[dl]_\beta \ar[dr]^\beta \\
+				B_1 \ar@{>>}[dr]_\beta & & B_2 \ar@{>>}[dl]^\beta \\
 				& N
 			}
 		\end{split}\end{equation*}
 	\end{proposition} %prop:局所Church-Rosserの定理}
 	\begin{proof} %{
-		$\beta$変換の分岐$\xfrom{\beta}M\xto{\beta}$は次の三つのパターン
+		$\beta$変換の分岐$\xfrom{\beta}A\xto{\beta}$は次の三つのパターン
 		に帰着される。
 		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
 			\item\label{item:ラムダ式の分岐パターンその一}
-			$\cdots\bigl((\lambda x.M_1)N_1\bigr)
-				\cdots\bigl((\lambda y.M_2)N_2\bigr)\cdots$
+			$\cdots\bigl((\lambda x.A_1)B_1\bigr)
+				\cdots\bigl((\lambda y.A_2)B_2\bigr)\cdots$
 			\item\label{item:ラムダ式の分岐パターンその二}
-			$\cdots\biggl((\lambda x.M_1)\bigl((\lambda x.M_2)N\bigr)\biggr)\cdots$
+			$\cdots\biggl((\lambda x.A)\bigl((\lambda x.B)C\bigr)\biggr)
+				\cdots$
 			\item\label{item:ラムダ式の分岐パターンその三}
-			$\cdots\biggl(\bigl(\lambda x.(\lambda y.M_1)M_2\bigr)N\biggr)\cdots$
+			$\cdots\biggl(\bigl(\lambda x.(\lambda y.A)B\bigr)C\biggr)\cdots$
 		\end{enumerate} %}
 		これらのパターンを簡略化して、それぞれのパターン毎に合流するラムダ式
 		が存在することを証明する。
@@ -180,22 +269,21 @@
 			二つの$\beta$変換を行う順序に関わらず次の式が成り立つ。
 			\begin{equation}\label{eq:ラムダ式の分岐パターンその一}
 			\xymatrix@R=1em@C=1ex{
-				\bigl(M_1[x:=N_1])\bigl((\lambda y.M_2)N_2\bigr) \ar[rd]^\beta \\
-				\bigl((\lambda x.M_1)N_1\bigr)\bigl((\lambda y.M_2)N_2\bigr)
+				\bigl(A_1[x:=B_1])\bigl((\lambda y.A_2)B_2\bigr) \ar[rd]^\beta \\
+				\bigl((\lambda x.A_1)B_1\bigr)\bigl((\lambda y.A_2)B_2\bigr)
 					\ar[u]^\beta \ar[d]_\beta
-					& \bigl(M_1[x:=N_1]\bigr)\bigl(M_2[y:=N_2]\bigr) \\
-				\bigl((\lambda x.M_1)N_1\bigr)\bigl(M_2[y:=N_2]\bigr) \ar[ru]_\beta
+					& \bigl(A_1[x:=B_1]\bigr)\bigl(A_2[y:=B_2]\bigr) \\
+				\bigl((\lambda x.A_1)B_1\bigr)\bigl(A_2[y:=B_2]\bigr) \ar[ru]_\beta
 			}\end{equation}
 			%
 			\item[\ref{item:ラムダ式の分岐パターンその二}]
 			二つの$\beta$変換を行う順序に関わらず次の式が成り立つ。
 			\begin{equation}\label{eq:ラムダ式の分岐パターンその二}
 			\xymatrix@R=1em@C=1ex{
-				M_1\bigl[x:=\bigl((\lambda y.M_2)N\bigr)\bigr]
-					\ar@{>>}[rd]^\beta \\
-				(\lambda x.M_1)\bigl((\lambda y.M_2)N\bigr) \ar[u]^\beta
-					\ar[d]_\beta & M_1\bigl[x:=M_2[y:=N]\bigr] \\
-				(\lambda x.M_1)\bigl(M_2[y:=N]\bigr) \ar[ru]_\beta
+				A\bigl[x:=\bigl((\lambda y.B)C\bigr)\bigr] \ar@{>>}[rd]^\beta \\
+				(\lambda x.A)\bigl((\lambda y.B)C\bigr) \ar[u]^\beta
+					\ar[d]_\beta & A\bigl[x:=B[y:=C]\bigr] \\
+				(\lambda x.A)\bigl(B[y:=C]\bigr) \ar[ru]_\beta
 			}\end{equation}
 			%
 			\item[\ref{item:ラムダ式の分岐パターンその三}]
@@ -203,18 +291,15 @@
 			自明と思われないが、
 			\begin{equation}\label{eq:ラムダ式の分岐パターンその三}
 			\xymatrix@R=1em@C=1em{
-				\bigl(\lambda x.(M_1[y:=M_2])\bigr)N \ar[r]^\beta
-					& \bigl(M_1[y:=M_2]\bigr)[x:=N] \\
-				\bigl(\lambda x.(\lambda y.M_1)M_2\bigr)N 
-					\ar[u]^\beta \ar[d]_\beta \\
-				\bigl(\lambda y.M_1[x:=N]\bigr)M_2[x:=N] \ar[r]^\beta
-					& \bigl(M_1[x:=N]\bigr)\bigl[y:=M_2[x:=N]\bigr] \\
+				\bigl(\lambda x.(A[y:=B])\bigr)C \ar[r]^\beta & A[y:=B][x:=C] \\
+				\bigl(\lambda x.(\lambda y.A)B\bigr)C \ar[u]^\beta \ar[d]_\beta \\
+				\bigl(\lambda y.A[x:=N]\bigr)B[x:=C] \ar[r]^\beta
+					& A[x:=C]\bigr)\bigl[y:=B[x:=C] \\
 			}\end{equation}
-			$M_1$を変数$x,y$の関数と思って$M_1:=f_1(x,y)$と書き、$M_2$を変数$x$
-			の関数と思って$M_2=f_2x$と書くと、次のように書ける。
+			$A$を変数$x,y$の関数と思って$A=f_A(x,y)$と書き、$B$を変数$x$
+			の関数と思って$B=f_Bx$と書くと、次のように書ける。
 			\begin{equation*}\begin{split}
-				\bigl(M_1[y:=M_2]\bigr)[x:=N] = f_1(N, f_2N)
-				= \bigl(M_1[x:=N]\bigr)\bigl[y:=M_2[x:=N]\bigr]
+				A[y:=B][x:=C] = f_A(C, f_BC) = A[x:=C]\bigl[y:=B[x:=C]\bigr]
 			\end{split}\end{equation*}
 			したがって、このパターンでも合流するラムダ式が存在することがわかる。
 		\end{description} %}
@@ -224,21 +309,21 @@
 	合流することが示されているのは、式\eqref{eq:ラムダ式の分岐パターンその二}
 	の中に現れる次の$\beta$変換の鎖だけである。
 	\begin{equation*}\begin{split}
-		M_1\bigl[x:=\bigl((\lambda y.M_2)N\bigr)\bigr]
-		\xtoto{\beta}M_1\bigl[x:=M_2[y:=N]\bigr]
+		A\bigl[x:=\bigl((\lambda y.B)C\bigr)\bigr]
+		\xtoto{\beta}A\bigl[x:=B[y:=C]\bigr]
 	\end{split}\end{equation*}
 	関数抽象を代入しているところが、$\beta$変換の鎖を要求する。例えば、
-	$\lambda x.M_1$を$\lambda x.z,\;\lambda x.x,\;\lambda x.(x^2)$
+	$\lambda x.A$を$\lambda x.z,\;\lambda x.x,\;\lambda x.(x^2)$
 	としてみると次のようになる。
 	\begin{equation*}\begin{array}{rcrcr}
-		z\bigl[x:=\bigl((\lambda y.M_2)N\bigr)\bigr] &=& z \\
-		x\bigl[x:=\bigl((\lambda y.M_2)N\bigr)\bigr] &=& (\lambda y.M_2)N
-			&\xto{\beta}& M_2[y:=N] \\
-		(x^2)\bigl[x:=\bigl((\lambda y.M_2)N\bigr)\bigr] 
-			&=& \bigl((\lambda y.M_2)N\bigr)^2
-			&\xtoto{\beta}& \bigl(M_2[y:=N]\bigr)^2
+		z\bigl[x:=\bigl((\lambda y.B)C\bigr)\bigr] &=& z \\
+		x\bigl[x:=\bigl((\lambda y.B)C\bigr)\bigr] &=& (\lambda y.B)C
+			&\xto{\beta}& B[y:=C] \\
+		(x^2)\bigl[x:=\bigl((\lambda y.B)C\bigr)\bigr] 
+			&=& \bigl((\lambda y.B)C\bigr)^2
+			&\xtoto{\beta}& \bigl(B[y:=C]\bigr)^2
 	\end{array}\end{equation*}
-	一回の$\beta$変換で合流が示されるは、$M_1$が$x$の一次式で書かれている
+	一回の$\beta$変換だけで合流するのは、$A$が$x$の一次式で書かれている
 	場合のみである。もし、この$\beta$変換の鎖で書かれている部分が一回の
 	$\beta$変換になったとすると、格子状に合流する例\ref{eg:合流性を持つ例}
 	にあるように、（大域）Church-Rosserの定理は自明になる。
@@ -247,22 +332,30 @@
 
 	この命題の証明に現れた次の式において、
 	\begin{equation}\label{eq:Jacobiの恒等式に相当する式}\begin{split}
-		\bigl(M_1[y:=M_2]\bigr)[x:=N] 
-		= \bigl(M_1[x:=N]\bigr)\bigl[y:=M_2[x:=N]\bigr] \\
-		\quad\text{for all } M_1,M_2,N\in \Lambda
+		\bigl(A[y:=B]\bigr)[x:=C] 
+		= \bigl(A[x:=C]\bigr)\bigl[y:=B[x:=C]\bigr] \\
+		\quad\text{for all } A,B,C\in \Lambda
 	\end{split}\end{equation}
 	関数適用を変数をパラメータに持つ二項演算子$\lhd_x$で次のように書くと、
 	\begin{equation*}\begin{split}
-		(\lambda x.M)N \mapsto M\lhd_x N \quad\text{for all } M,N\in\Lambda
+		(\lambda x.A)B \mapsto A\lhd_x B \quad\text{for all } A,B\in\Lambda
 	\end{split}\end{equation*}
 	式\eqref{eq:Jacobiの恒等式に相当する式}は分配則の形にまとまる。
 	\begin{equation}\label{eq:Jacobiの恒等式に相当する式その二}\begin{split}
-		(M_1\lhd_y M_2)\lhd_x M_3 = (M_1\lhd_x N)\lhd_y(M_2\lhd_x N) \\
-		\quad\text{for all } M_1,M_2,M_3\in\Lambda,\;x,y\in X
+		(A\lhd_y B)\lhd_x C = (A\lhd_x C)\lhd_y(B\lhd_x C) \\
+		\quad\text{for all } A,B,C\in\Lambda,\;x,y\in X
 	\end{split}\end{equation}
 	この分配則は二項演算としてはかなり特徴的な式なので、何らかの名前
 	がついていると思われる。何かの拍子で見つかるかもしれないので、
 	覚えておく。
+
+	まとめると、$\beta$変換の局所合流性は、次のような標語でまとめられる
+	だろう。
+	\begin{equation*}\begin{array}{ll}
+		\text{格子状の合流性からのズレ}\quad & A\lhd_x(B\lhd_y C) \\
+		\text{関数適用の分配則}\quad & (A\lhd_xB)\lhd_y C \xtoto{\beta} 
+			(A\lhd_y C)\lhd_x(B\lhd_y C)
+	\end{array}\end{equation*}
 
 \subsection{合流性}\label{s2:合流性} %{
 	ここでは、合流性を向きづけられたグラフの性質として定義する。

@@ -1,4 +1,22 @@
+* lsass.exe
+
+
 \tip {
+	\title {
+		Samba
+	} \body {
+		\list {
+			\item[] {
+				\code {
+					sudo apt-get install samba
+					sudo smbpasswd -a <user-name>
+					New SMB password: <password>
+					Retype new SMB password: <password>
+				}
+			}
+		}
+	}
+} \tip {
 	\title {
 		Brzozowski derivative
 	} \body {
