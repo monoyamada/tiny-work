@@ -1,12 +1,955 @@
 \begingroup %{
+	\newcommand{\W}{\mycal{W}}
+	\newcommand{\T}{\mycal{T}}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Map}{\myop{Map}}
+	\newcommand{\Lin}{\mathcal{L}}
+	\newcommand{\Hol}{\mathcal{H}}
+	%
+	\newcommand{\id}{\myop{id}}
+	\newcommand{\tran}{\mathbf{t}}
+	\newcommand{\dfn}{\,\myop{def}\,}
+	\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+	%
 	{\setlength\arraycolsep{2pt}
+	%
+\section{ノート}\label{s1:ノート} %{
+	2010年に話題になったパーサーに関する論文（Yacc is Dead）の改訂版
+	\cite{might2011derivatives}についてのメモを書いておく。
+	論文\cite{might2011derivatives}は、次の記法をごちゃ混ぜにして書かれて
+	いるが、このノートでは、記法を線形代数一本に絞って書いてみる。
+
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Lisp \\
+		Lispについては知らないが、多分Lispだけではなく、スイッチ文を表すために
+		Haskell的なデータ型に関するパターンマッチを導入していると思われる。
+		matchという関数がそれである。
+		\item ラムダ計算 \\
+		同型射$\Set{A\times B\to C}\simeq\Set{A\to\Set{B\to C}}$を表すために
+		ラムダ記法が用いられている。ソフトウエアの記述によく見られる
+		コンベンションである。
+		\item 通常の数学 \\
+		文字列の集合を半加群で表すのではなく、集合の和と共通を用いて記述されて
+		いるが、主として半加群の線形写像を考えている。
+	\end{itemize} %}
+
+	このノートでは入力文字列を表すために次の記号を使うことにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[係数] $R$を半環とする。
+		\item[入力文字] $\mycal{A}$を有限集合とする。
+		\item[入力文字列] $\W\mycal{A}$を$\mycal{A}$から生成された自由モノイド
+		とする。
+		\item[入力文字列の集合] $V=R\W\mycal{A}$を$\W\mycal{A}$の元を基底に持つ
+		$R$-半加群とする。
+	\end{description} %}
+
+\subsection{Brzozowski微分}\label{s2:Brzozowski微分} %{
+	Brzozowski微分$-^\tran:\mycal{A}\to\Lin_RV$を、
+	単射$u$と余単位射$\epsilon$を組み合わせたnull写像
+	$\pi_0:=u\epsilon\in\Lin_RV$を用いて次のように定義する。
+	\begin{equation*}\begin{array}{rcll}
+		a^\tran(fg) &=& (a^\tran f)g + (\pi_0f)(a^\tran g)
+		& \quad\text{for all }a\in\mycal{A},\;f,g\in V \\
+		a^\tran[b] &=& \jump{a=b} & \quad\text{for all }a,b\in\mycal{A} \\
+	\end{array}\end{equation*}
+
+	BNF記法を写像の言葉で書くことを考える。
+
+	$R$-線形とは限らない$V$の自己写像で原点を固定するもの全体のつくる集合を
+	$\Hol V$とする。
+	\begin{equation*}\begin{split}
+		\Hol V \overset{\dfn}{=} \set{X:V\to V\bou X0 = 0}
+	\end{split}\end{equation*}
+	$\Hol V$に$R$-半加群の構造を次のように定義し、
+	\begin{equation*}\begin{array}{rcll}
+		(X_1 + X_2)f &=& (X_1f) + X_2f) 
+			&\quad\text{for all }X_i\in\Hol V,\; f\in V \\
+		(rX)f &=& r(Xf)
+			&\quad\text{for all }X\in\Hol V,\; r\in R,\; f\in V
+	\end{array}\end{equation*}
+	写像の合成によって乗法を定義すると、$\Hol V$は$R$-半代数として見ることが
+	できる。そして、$\Lin V$は$\Hol V$の部分$R$-代数となる。
+	\begin{equation*}\begin{split}
+		\Lin V\subseteq\Hol V
+	\end{split}\end{equation*}
+
+	$\Hol V$を用いて文法を定義する。例えば、次のように文法を定義する。
+	\begin{equation*}\begin{split}
+		x = f + g_1xg_2xg_3 \xiff{\dfn} \left\{\begin{split}
+			x &= X^*f \quad\text{where } X\in\Hol V \text{ such that} \\
+			Xh &= g_1hg_2hg_3 \quad\text{for all }h\in V \\
+		\end{split}\right.
+	\end{split}\end{equation*}
+	左辺は右辺の簡約記法として考える。
+%s2:Brzozowski微分}
+%s1:ノート}
+\section{BNFの摂動計算}\label{s1:BNFの摂動計算} %{
+	次の文法と次のオートマトンが等しいことを示したい。
+	\begin{equation}\label{eq:BNFの摂動計算その一}\begin{split}
+		x = a + bxcxd,\quad a,b,c,d\in V
+		\xiff{?} \xymatrix {
+			+ \ar@(ul,dl)_{b\eta_{-1}} \ar@/_1ex/[r]_a
+			& - \ar@(dr,ur)_{d\eta_{2}} \ar@/_1ex/[l]_{c\eta_1\eta_{-2}}
+		}
+	\end{split}\end{equation}
+	$\eta_{\pm i}$はBrzozowsiki代数の元で次の式を満たす。
+	\begin{equation*}\begin{split}
+		\eta_{-i}\eta_{j} = \jump{i=j} \quad\text{for all }i,j\in \sizen_+
+	\end{split}\end{equation*}
+	オートマトンをテンソル積$R\W H_2\otimes R^2$の自己$R$-線形写像として
+	表している。ここで、$H_2$は文字集合$H_2:=\set{\eta_1,\eta_2}$とする。
+
+	文法定義$x=a+bxcxd$をオートマトンで表す方法は一意ではなく、
+	\eqref{eq:BNFの摂動計算その一}のオートマトンは単なる一例に過ぎないが、
+	ともかく、\eqref{eq:BNFの摂動計算その一}のオートマトンが文法定義
+	$x=a+bxcxd$に等価であることを証明したい。
+
+	$R^2$の基底をブラケット記法を用いて$\ket{+}$と$\ket{-}$と書き、
+	\begin{equation*}\begin{split}
+		\braket{\pm|\pm} = 1,\quad \braket{\pm|\mp} = 0
+	\end{split}\end{equation*}
+	次のように$\Lin_RR^2$の元を定義する。
+	\begin{equation*}\begin{split}
+		\pi_{\pm} = \ket{\pm}\bra{\pm},\quad \sigma_{\pm} = \ket{\pm}\bra{\mp}
+	\end{split}\end{equation*}
+	また、$R\W H_2$の基底系もブラケット記法を用いて次のように書く。
+	\begin{equation*}\begin{split}
+		\ket{0}: \text{単位射},\quad \bra{0}: \text{余単位射} \\
+		\eta_i\ket{\eta_{J_1}\cdots\eta_{J_n}}
+			= \ket{\eta_i\eta_{J_1}\cdots\eta_{J_n}},\quad
+		\bra{\eta_{J_1}\cdots\eta_{J_n}}\eta_{-i}
+			= \bra{\eta_i\eta_{J_1}\cdots\eta_{J_n}} \\
+		\braket{w_1|w_2} = \jump{w_1 = w_2}
+			\quad\text{for all } w_1,w_2\in\W H_2 \\
+	\end{split}\end{equation*}
+	すると、示したい式は次のようになる。
+	\begin{equation}\label{eq:示したい式}\begin{array}{rcll}
+		\left\{\begin{split}
+			x &= \bra{0}X_{+-}\ket{0} \\
+			X_{+-} &= \bra{+}Y^*\ket{-} \\
+			Y &= a\sigma_+ + b\eta_{-1}\pi_+ + c\eta_{1}\eta_{-2}\sigma_- 
+				+ d\eta_{2}\pi_- \\
+		\end{split}\right. \overset{?}{\implies} x = a + bxcxd 
+	\end{array}\end{equation}
+	$X_{--}=\bra{-}Y^*\ket{-}$とおくと次のようになる。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			X_{+-} \\ X_{--} \\
+		\end{pmatrix} &= \begin{pmatrix}
+			0 \\ 1 \\
+		\end{pmatrix} + \begin{pmatrix}
+			b\eta_{-1} & a \\ c\eta_{1}\eta_{-2} & d\eta_{2} \\
+		\end{pmatrix} \begin{pmatrix}
+			X_{+-} \\ X_{--} \\
+		\end{pmatrix} \\
+		&= \begin{pmatrix}
+			b\eta_{-1} & a \\ c\eta_{1}\eta_{-2} & d\eta_{2} \\
+		\end{pmatrix}^* \begin{pmatrix}
+			0 \\ 1 \\
+		\end{pmatrix} \\
+	\end{split}\end{equation*}
+	対角成分と非対角成分を分離してKleeneスターを計算すると次のようになる。
+	\begin{equation}\label{eq:二次元部分の消去}\begin{split}
+		\begin{pmatrix}
+			X_{+-} \\ X_{--} \\
+		\end{pmatrix}	&= \begin{pmatrix}
+			(b\eta_{-1})^* & 0 \\ 0 & (d\eta_{2})^* \\
+		\end{pmatrix} \begin{pmatrix}
+			0 & a(d\eta_{2})^* \\ c\eta_1\eta_{-2}(b\eta_{-1})^* & 0 \\
+		\end{pmatrix}^* \begin{pmatrix}
+			0 \\ 1 \\
+		\end{pmatrix} \\
+		&= \begin{pmatrix}
+			\beta & 0 \\ 0 & \delta \\
+		\end{pmatrix} \begin{pmatrix}
+			0 & \alpha\delta \\ \gamma\beta & 0 \\
+		\end{pmatrix}^? \begin{pmatrix}
+			\alpha\delta\gamma\beta & 0 \\ 0 & \gamma\beta\alpha\delta \\
+		\end{pmatrix}^* \begin{pmatrix}
+			0 \\ 1 \\
+		\end{pmatrix} \\
+		&= \begin{pmatrix}
+			\beta\alpha\delta \\ \delta \\
+		\end{pmatrix} (\gamma\beta\alpha\delta)^* \\
+		&= \begin{pmatrix}
+			(b\eta_{-1})^*a(d\eta_2)^* \\ (d\eta_2)^* \\
+		\end{pmatrix} \bigl(c\eta_1\eta_{-2}(b\eta_{-1})^*a(d\eta_2)^*\bigr)^* \\
+	\end{split}\end{equation}
+	この式はオートマトン\eqref{eq:BNFの摂動計算その一}から予想される式に
+	なっている。頂点$(b\eta_{-1})^*:+$と$(d\eta_{2})^*:-$を辺$a:+\to-$と
+	$c\eta_{1}\eta_{-2}:-\to+$でつなげて、頂点$+$から$-$への経路を
+	足し上げたものになっている。さらに、$D$と$V$を次のようにおくと
+	$X_{+-}=D(VD)^*$と書ける。
+	\begin{equation*}\begin{split}
+		D &:= (b\eta_{-1})^*a(d\eta_{2})^*
+			= a + (b\eta_{-1})^+a + a(d\eta_{2})^+ \\
+		V &:= c\eta_{1}\eta_{-2} \\
+	\end{split}\end{equation*}
+	$D$と$V$は場の理論と対応がついて、$D$はプロパゲーター、$V$は相互作用に
+	対応する。$X=D(VD)^*$は遷移確率の摂動計算に対応する。また、$D$と$V$の
+	オートマトン\eqref{eq:BNFの摂動計算その一}との対応は次のようになる。
+	\begin{equation*}\begin{split}
+		D: \xymatrix {
+			+ \ar@(ul,dl)_{b\eta_{-1}} \ar[r]^a & - \ar@(dr,ur)_{d\eta_{2}}
+		},\quad V: \xymatrix {
+			+ & - \ar[l]_{c\eta_1\eta_{-2}}
+		} \\
+	\end{split}\end{equation*}
+
+	低次の項について$x=a+bxcxd$が成り立つかどうかを調べる。
+	$\bra{0}D$と$D\ket{0}$がコヒーレント状態になることを使い、
+	\begin{equation*}\begin{split}
+		\bra{0}D = \bra{0}(b\eta_{-1})^*a,\quad D\ket{0} = a(d\eta_2)^*\ket{0}
+	\end{split}\end{equation*}
+	$\bra{b}:=\bra{0}(b\eta_{-1})^*$と$\ket{d}:=(d\eta_{2})^*\ket{0}$とおく。
+	$0$次の項は次のようになる。
+	\begin{equation*}\begin{split}
+		\braket{D} = \bra{b}a\ket{d} = a
+	\end{split}\end{equation*}
+	$1$次の項は次のようになる。
+	\begin{equation*}\begin{split}
+		\braket{DVD} = \bra{b}a\eta_{1}c\eta_{-2}a\ket{d} = b\bra{b}aca\ket{d}d
+		= bacad
+	\end{split}\end{equation*}
+	$2$次と$3$次の項は次のようになる。
+	\begin{equation*}\begin{split}
+		\braket{DVDVD} 
+		&= \bra{b}a\eta_{1}c\eta_{-2}D\eta_{1}c\eta_{-2}a\ket{d} \\
+		&= b\bra{b}ac\eta_{-2}D\eta_{1}ca\ket{d}d \\
+		\braket{DVDVDVD} 
+		&= \bra{b}a\eta_{1}c\eta_{-2}D\eta_{1}c\eta_{-2}D\eta_{1}c\eta_{-2}a\ket{d} \\
+		&= b\bra{b}ac\eta_{-2}D\eta_{1}c\eta_{-2}D\eta_{1}ca\ket{d}d \\
+	\end{split}\end{equation*}
+	まず、$\eta_{-2}D\eta_{1}$を正規積の形に直してみる。
+	\begin{equation*}\begin{split}
+		\eta_{-2}D\eta_{1} 
+		&= \eta_{-2}\bigl(a + (b\eta_{-1})^+a + a(d\eta_{2})^+\bigr)\eta_{1} \\
+		&= \eta_{-2}(b\eta_{-1})^*ba + ad(d\eta_{2})^*\eta_{1} \\
+	\end{split}\end{equation*}
+	すると、$2$次の項が次のように求まる。
+	\begin{equation*}\begin{split}
+		\braket{DVDVD} 
+		&= b\bra{b}acbaca\ket{d}d^2 + b^2\bra{b}acadca\ket{d}d \\
+		&= bac(bacad)d + b(bacad)cad \\
+	\end{split}\end{equation*}
+	次に、$\eta_{-2}D\eta_{1}$の'二乗'の正規積を計算してみる。
+	\begin{equation*}\begin{split}
+		\eta_{-2}D\eta_{1}c\eta_{-2}D\eta_{1} 
+		&= \eta_{-2}(b\eta_{-1})^*ba c \eta_{-2}(b\eta_{-1})^*ba \\
+		&\;+ ad(d\eta_{2})^*\eta_{1} c ad(d\eta_{2})^*\eta_{1} \\
+		&\;+ ad(d\eta_{2})^*\eta_{1} c \eta_{-2}(b\eta_{-1})^*ba \\
+		&\;+ \eta_{-2}(b\eta_{-1})^*ba c ad(d\eta_{2})^*\eta_{1} \\
+	\end{split}\end{equation*}
+	最後の項以外はすでに正規積の形になっている。最後の項を正規積の形に直す。
+	\begin{equation*}\begin{split}
+		\eta_{-2}(b\eta_{-1})^*ba c ad(d\eta_{2})^*\eta_{1}
+		&= \eta_{-2}(b\eta_{-1})^*ba c ad\eta_{1}
+		+ \eta_{-2}(b\eta_{-1})^*ba c ad(d\eta_{2})^+\eta_{1} \\
+		&= \eta_{-2}(b\eta_{-1})^*b^2a c ad + ba c ad^2(d\eta_{2})^*\eta_{1} \\
+	\end{split}\end{equation*}
+	この結果を使って$3$次の項を単項ごとに計算すると次のようになる。
+	\begin{equation*}\begin{split}
+		b\bra{b}ac \eta_{-2}(b\eta_{-1})^*ba c \eta_{-2}(b\eta_{-1})^*ba ca\ket{d}d
+		&= b\bra{b}acbacbaca\ket{d}d^3 \\
+		&= bac(bac(bacad)d)d \\
+		b\bra{b}ac ad(d\eta_{2})^*\eta_{1} c ad(d\eta_{2})^*\eta_{1} ca\ket{d}d
+		&= b^3\bra{b}ac ad c ad ca\ket{d}d \\
+		&= b(b(bacad)cad)cad \\
+		b\bra{b}ac ad(d\eta_{2})^*\eta_{1} c \eta_{-2}(b\eta_{-1})^*ba ca\ket{d}d
+		&= b^2\bra{b}ac ad c ba ca\ket{d}d^2 \\
+		&= b(bacad)c(bacad)d \\
+		b\bra{b}ac \eta_{-2}(b\eta_{-1})^*b^2a c ad ca\ket{d}d
+		&= b\bra{b}ac b^2a c ad ca\ket{d}d^2 \\
+		&= bac(b(bacad)cad)d \\
+		b\bra{b}ac ba c ad^2(d\eta_{2})^*\eta_{1} ca\ket{d}d
+		&= b^2\bra{b}ac ba c ad^2 ca\ket{d}d \\
+		&= b(bac(bacad)d)cad \\
+	\end{split}\end{equation*}
+	3次の項からは5つの異なる単語が現れるはずだから、計算結果は係数まで
+	含めて過不足なく3次の項に現れる単語を列挙していることがわかる。
+
+	$x=a+bxcxd$の摂動計算をConnes-Kreimerの平面木の成長\cite{Connes:1998qv}
+	になぞらえてみる。$1_\T$を空の木、$\circ$を木の頂点とし、
+	二分木を次のように書く事にする。
+	\begin{equation*}\begin{split}
+		\circ[\circ1_\T] := \xymatrix@R=1em@C=1em{
+			& \circ \ar[ld] \\
+			\circ \\
+		},\quad \circ[1_\T\circ] := \xymatrix@R=1em@C=1em{
+			\circ \ar[rd] \\
+			& \circ \\
+		},\quad \circ[\circ\circ] := \xymatrix@R=1em@C=1em{
+			& \circ \ar[ld] \ar[rd] \\
+			\circ & & \circ \\
+		}
+	\end{split}\end{equation*}
+	二分木$R\T$から文字列$R\W\mycal{A}$への$R$-線形写像$\phi$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		\phi1_\T &= a \\
+		\phi\circ &= bacad \\
+		\phi(\circ[t_1t_2]) &= b(\phi t_1)c(\phi t_2)d 
+		\quad\text{for all } t_1,t_2\in \T
+	\end{split}\end{equation*}
+	二分木の自然な成長$\myop{grow}$を次のように定義する。
+	\begin{equation}\label{eq:二分木の自然な成長}\xymatrix@R=1em@C=1em{
+		& & 1_\T \ar[d] \\
+		& & \circ \ar[ld] \ar[rd] \\
+		& \circ[\circ1_\T] \ar[ld] \ar[d] \ar[rd] 
+		& & \circ[1_\T\circ] \ar[ld] \ar[d] \ar[rd] \\
+		\circ[\circ[\circ1_\T]1_\T] & \circ[\circ[1_\T\circ]1_\T] 
+		& \circ[\circ\circ]
+		& \circ[1_\T\circ[\circ1_\T]] & \circ[1_\T\circ[1_\T\circ]] \\ 
+	}\end{equation}
+	式で書くと次のようになる。
+	\begin{equation}\label{eq:二分木の自然な成長その二}\begin{split}
+		\myop{grow}1_\T &= \circ \\
+		\myop{grow}^21_\T &= \circ[\circ1_\T] + \circ[1_\T\circ] \\
+		\myop{grow}^31_\T 
+		&= \circ[\circ[\circ1_\T]1_\T] + \circ[\circ[1_\T\circ]1_\T] \\
+		&\;+ 2\circ[\circ\circ] \\
+		&\;+ \circ[1_\T\circ[\circ1_\T]] + \circ[1_\T\circ[1_\T\circ]] \\
+	\end{split}\end{equation}
+	$\circ[\circ\circ]$の係数$2$は$\circ[\circ\circ]$が$\circ[\circ1_\T]$
+	と$\circ[1_\T\circ]$の両方の自然な成長に含まれるからである。
+	$t\in R$として、再帰方程式$x=a+tbxcxd$と微分方程式
+	$\partial_tx_t=bx_tcx_td,\;x_0=a$の近似解を比べてみよう。
+	微分方程式$\partial_tx_t=vx_t$に対する4次Runge-Kutta近似は
+	次のようになる。
+	\begin{equation*}\begin{split}
+		x_t &= x_0 + \frac{t}{6}(k_1 + 2k_2 + 2K_3 + k_4) \\
+		k_1 &= v(0,x_0) \\
+		k_2 &= v(\frac{t}{2}, x_0 + \frac{t}{2}k_1) \\
+		k_3 &= v(\frac{t}{2}, x_0 + \frac{t}{2}k_2) \\
+		k_4 &= v(t, x_0 + tk_3) \\
+	\end{split}\end{equation*}
+	これを$vx_t=bx_tcx_td$として当てはめて、各$k_i$に対して2次の項までとると
+	次のようになる。
+	\begin{equation*}\begin{split}
+		k_1 &= bacad \\
+		k_2 &= b(a+\frac{t}{2}k_1)c(a+\frac{t}{2}k_1)d \\
+		&= k_1 + \frac{t}{2}\bigl(bk_1cad + back_1d\bigr)
+			+ \frac{t^2}{4}bk_1ck_1d \\
+		k_3 &= b(a+\frac{t}{2}k_2)c(a+\frac{t}{2}k_2)d \\
+		&= k_1 + \frac{t}{2}\bigl(bk_2cad + back_2d\bigr)
+			+ \frac{t^2}{4}bk_2ck_2d \\
+		&= k_1 + \frac{t}{2}\bigl(bk_1cad + back_1d\bigr) \\
+		&\;+ \frac{t^2}{4}\bigl(bbk_1cadcad + bback_1dcad
+			+ bacbk_1cadd + bacback_1dd + bk_1ck_1d\bigr) \\
+		&\;+ Ot^3 \\
+		k_4 &= b(a+tk_3)c(a+tk_3)d \\
+		&= k_1 + t\bigl(bk_3cad + back_3d\bigr) + t^2bk_3ck_3d \\
+		&= k_1 + t\bigl(bk_1cad + back_1d\bigr) \\
+		&\;+ \frac{t^2}{2}\bigl(bbk_1cadcad + bback_1dcad 
+			+ bacbk_1cadd + bacback_1dd + 2bk_1ck_1d\bigr) \\
+		&\;+ Ot^3 \\
+	\end{split}\end{equation*}
+	これらをまとめると次のようになる。
+	\begin{equation*}\begin{split}
+		x_t &= a + t\bar{x}_1 + \frac{t^2}{2!}\bar{x}_2 
+			+ \frac{t^3}{3!}\bar{x}_3 + Ot^4 \\
+		\bar{x}_1 &= bacad \\
+		\bar{x}_2 &= b(bacad)cad + bac(bacad)d \\
+		\bar{x}_3 &= b(b(bacad)cad)cad + b(bac(bacad)d)cad \\
+		&\;+ 2b(bacad)c(bacad)d \\
+		&\;+ bac(b(bacad)cad)d + bac(bac(bacad)d)d  \\
+	\end{split}\end{equation*}
+	微分方程式$\partial_tx_t=bx_tcx_td$と再帰方程式$x=a+bxcxd$の対比を
+	まとめると次のようになる。
+	\begin{equation*}\begin{split}
+		x_t = a + \int_0^tds bx_scx_sd
+		&\implies x_t = \bar{x}_0 + t\bar{x}_1 + \frac{t^2}{2!}\bar{x}_2 
+			+ \frac{t^3}{3!}\bar{x}_3 + Ot^4 \\ 
+		x = a + tbxcxd
+		&\implies x = x_0 + tx_1 + t^2x_2 + t^3x_3 + Ot^4 \\ 
+	\end{split}\end{equation*}
+	それぞれの摂動項は次のようになっている。
+	\begin{equation*}\begin{split}
+		x_0 &= \bar{x}_0 = a \\
+		x_1 &= \bar{x}_1 = bacad \\
+		x_2 &= \bar{x}_2 = b(bacad)cad + bac(bacad)d \\
+		x_3 &= b(b(bacad)cad)cad + b(bc(bacad)d)cad \\
+		&\;+ b(bacad)c(bacad)d \\
+		&\;+ bac(b(bacad)cad)d + bac(bac(bacad)d)d \\
+		\bar{x}_3 &= b(b(bacad)cad)cad + b(bc(bacad)d)cad \\
+		&\;+ 2b(bacad)c(bacad)d \\
+		&\;+ bac(b(bacad)cad)d + bac(bac(bacad)d)d \\
+	\end{split}\end{equation*}
+	$t$の3次摂動で微分方程式と再帰方程式の係数の違いが現れる。
+	この係数の違いは二分木の子供の入れ替えに関する対称性に関係している。
+	二分木の自然な成長\eqref{eq:二分木の自然な成長}
+	\eqref{eq:二分木の自然な成長その二}での二分木$\circ[\circ\circ]$の
+	係数に現れる$2$は、根において左右の子供を入れ替えても二分木が
+	不変であることによる。子供を入れ替える対称性を数える$R$-線形作用素
+	$\sigma:R\T\to\sizen$は次のように定義することができるだろう。
+	\begin{equation*}\begin{split}
+		\sigma1_\T &= 1 \\
+		\sigma(\circ[t_1t_2]) &= \left\{\begin{split}
+			t_1 = t_2 \neq 1_\W & \implies 2(\sigma t_1)(\sigma t_2) \\
+			\text{else} &\implies (\sigma t_1)(\sigma t_2) \\
+		\end{split}\right. \quad\text{for all } t_1,t_2\in\T \\
+	\end{split}\end{equation*}
+	微分方程式と再帰方程式での解の違いを式で表すと次のようになるだろう。
+	\begin{equation*}\begin{array}{rclcrcl}
+		x_t &=& a + \int_0^tdsbx_scx_sd
+			&\implies& x_t &=& \phi\exp(t\myop{grow})1_\T \\
+		x &=& a + tbxcxd
+			&\implies& x &=& \phi(t\sigma^{-1}\myop{grow})^*1_\T \\
+	\end{array}\end{equation*}
+
+	\begin{problem}[微分方程式の解]\label{prob:微分方程式の解} %{
+		次の式は成り立つだろうか？
+		\begin{equation*}\begin{split}
+			x_t = \bra{0}\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}(\exp T)\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}\ket{0} \xiff{?} x_t = a + \int_0^tds\; bx_scx_sd \\
+			T: = \begin{pmatrix}
+				b\eta_{-1} & a \\ t\,c\eta_{1}\eta_{-2} & d\eta_{2} \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		もしこのことが成り立つならば、Riccati方程式に対する広田の双線形化法
+		を通して、状態$\ket{\pm}$に対する理解が得られるかもしれない。
+
+		微分方程式$x_t=a+\int dsbx_scx_sd$と再帰方程式$x=a+t\,bxcxd$の
+		対応関係は時刻$t$の代数の違いにある。
+		微分方程式での時刻は$q=1$のq-シャッフル積、再帰方程式の時刻は$q=0$の
+		$q$-シャッフル積となっている。
+		q-シャッフル積を$\shuffle_q$と書くと、両者は次のように書ける。
+		\begin{equation*}\begin{array}{lrcll}
+			\text{微分方程式}\quad & (t\shuffle_1)^\tran x_t &= bx_tcx_td \\
+			\text{再帰方程式}\quad & (t\shuffle_0)^\tran x_t &= bx_tcx_td \\
+		\end{array}\end{equation*}
+		$(t\shuffle_q)^\tran$は次の代数を満たす。
+		\begin{equation*}\begin{split}
+			(t\shuffle_q)^\tran t^{n+1} = \frac{1-q^{n+1}}{1-q} t^n
+			\quad\text{for all } n\in\sizen_+
+		\end{split}\end{equation*}
+		したがって、積分に対応する$(t\shuffle_q)^\tran$の右逆元$R_{q,t}$を
+		求めると次のようになる。
+		\begin{equation*}\begin{split}
+			R_{q,t}t^n = \frac{1-q}{1-q^{n+1}}t^{n+1}
+		\end{split}\end{equation*}
+		$q$の値の違いがエクスポーネンシャルとKleeneスターの違いに反映される。
+		したがって、次の式が成り立てば上記の疑問は肯定される。
+		\begin{equation*}\begin{split}
+			x = \bra{0}\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}\begin{pmatrix}
+				b\eta_{-1} & a \\ c\eta_{1}\eta_{-2} & d\eta_{2} \\
+			\end{pmatrix}^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}\ket{0} \xiff{?} x = a + bxcxd
+		\end{split}\end{equation*}
+
+		Connes-Kreimerの自然な成長に次のように$q\in R$でパラメトライズすれば、
+		$q=0$でBNFの摂動、$q=1$でCones-Kreimerの自然な成長になる。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=1em@C=1em{
+				\circ
+			} &\xmapsto{\myop{grow}_q} \xymatrix@R=1em@C=1em{
+				& \circ \ar@{-}[dl] \\
+				\circ
+			} + \xymatrix@R=1em@C=1em{
+				\circ \ar@{-}[dr] \\
+				& \circ
+			} \\
+			\xymatrix@R=1em@C=1em{
+				& \circ \ar@{-}[dl] \\
+				\circ
+			} &\xmapsto{\myop{grow}_q} \xymatrix@R=1em@C=1em{
+				& & \circ \ar@{-}[dl] \\
+				& \circ \ar@{-}[dl] \\
+				\circ \\
+			} + \xymatrix@R=1em@C=1em{
+				& \circ \ar@{-}[dl] \\
+				\circ \ar@{-}[dr] \\
+				& \circ \\
+			} + q\xymatrix@R=1em@C=1em{
+				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				\circ & & \circ \\
+			} \\
+			\xymatrix@R=1em@C=1em{
+				\circ \ar@{-}[dr] \\
+				& \circ
+			} &\xmapsto{\myop{grow}_q} \xymatrix@R=1em@C=1em{
+				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				\circ & & \circ
+			} + \xymatrix@R=1em@C=1em{
+				\circ \ar@{-}[dr] \\
+				& \circ \ar@{-}[dl] \\
+				\circ
+			} + \xymatrix@R=1em@C=1em{
+				\circ \ar@{-}[dr] \\
+				& \circ \ar@{-}[dr] \\
+				& & \circ
+			}
+		\end{split}\end{equation*}
+		$\myop{grow}_q$による二分木の列挙は次のようになる。
+		\begin{equation}\label{eq:二分木の自然な成長その三}\xymatrix@R=1em@C=1em{
+			& & 1_\T \ar[d] \\
+			& & \circ \ar[ld] \ar[rd] \\
+			& \circ[\circ1_\T] \ar[ld] \ar[d] \ar[rd]^q 
+			& & \circ[1_\T\circ] \ar[ld] \ar[d] \ar[rd] \\
+			\circ[\circ[\circ1_\T]1_\T] & \circ[\circ[1_\T\circ]1_\T] 
+			& \circ[\circ\circ]
+			& \circ[1_\T\circ[\circ1_\T]] & \circ[1_\T\circ[1_\T\circ]] \\ 
+		}\end{equation}
+	\end{problem} %prob:微分方程式の解}
+
+	再帰方程式に戻る。簡単のために$c=1$とすると、求める再帰方程式は
+	次のようになる。
+	\begin{equation*}\begin{split}
+		S &= \sum_{n\in\sizen} S_n \\
+		S_n &:= \braket{D(VD)^n} \\
+		D &:= (b\eta_{-1})^*a(d\eta_{2})^* \\
+		V &:= \eta_{1}\eta_{-2} \\
+	\end{split}\end{equation*}
+	$S_n$が次の漸化式を満たすことが証明したいことである。
+	\begin{equation}\label{eq:証明したい因子化}\begin{split}
+		S_0 &= a \\
+		S_{n+1} &= \sum_{p=0}^nbS_{n-p}S_pd \quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	式を見やすくするために次のように略記する。
+	\begin{equation*}\begin{array}{rclcrcl}
+		\beta &:=& b\eta_{-1}, && \bra{\beta} &:=& \bra{0}\beta^* \\
+		\delta &:=& \eta_{2}d, && \ket{\delta} &:=& \delta^*\ket{0} \\
+	\end{array}\end{equation*}
+
+\subsubsection{証明の試み}\label{s3:証明の試み} %{
+	ブラとケットを対称に展開すると次のようになる。
+	\begin{equation*}\begin{split}
+		\braket{D(VD)^*} &= \braket{\beta|S_0|\delta}
+		+ \sum_{n\in\sizen}b\bra{\beta}S_0W^nS_0\ket{\delta}d \\
+		&= \braket{\beta|S_0|\delta} + b\bra{\beta}S_0W^*S_0\ket{\delta}d \\
+	\end{split}\end{equation*}
+	ここで、$W$は次のように定義している。
+	\begin{equation*}\begin{split}
+		W = \beta_-bS_0 + S_0d\delta_+,\quad
+		\beta_- = \eta_{-2}\beta^*,\quad
+		\delta_+ = \delta^*\eta_1
+	\end{split}\end{equation*}
+
+	$R_2:V\otimes V\to R\W\mycal{A}$と$R\in\Lin_RV$を次のように定義する。
+	\begin{equation*}\begin{split}
+		R_2(f\ket{0}\otimes g\ket{0}) &= \braket{(Rf)g} \\
+		R(a,b,d,\eta_{\pm1},\eta_{\pm2}) &= (a,d,b,\eta_{\mp2},\eta_{\mp1}) \\
+	\end{split}\end{equation*}
+	$R$は文字の置換を表している。内積をテンソル積を通して考える理由は
+	次のような式変形を考えるためである。
+	\begin{equation*}\begin{split}
+		(\beta_-bS_0)^n \bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr)
+		&\sim \sum_{p=0}^n (\beta_-bS_0)^{n-p}S_0\ket{\delta}
+			\otimes (\beta_-bS_0)^{p}S_0\ket{\delta} \\
+		&\sim \sum_{p=0}^n \bra{\beta}S_0(S_0d\delta_+)^{n-p}
+			(\beta_-bS_0)^{p}S_0\ket{\delta} \\
+		&\sim \bra{\beta}S_0\bigl(S_0d\delta_+ + \beta_-bS_0\bigr)^n
+			S_0\ket{\delta} \\
+	\end{split}\end{equation*}
+	このような式変形が成り立つと、$\ket{\delta}$は$(\beta_-bS_0)$の
+	固有ベクトルとなっていることから、
+	\begin{equation*}\begin{split}
+		(\beta_-bS_0)^nS_0\ket{\delta} &= (bS_0)^nS_0d^n
+	\end{split}\end{equation*}
+	$R_2$を掛けた結果が次のように因子化されることは明らかである。
+	\begin{equation*}\begin{split}
+		R_2\bigl((\beta_-bS_0)^mS_0\ket{\delta}
+			\otimes(\beta_-bS_0)^nS_0\ket{\delta}\bigr) \\
+		= \bra{\delta}S_0\bigl(R(\beta_-bS_0)^m\bigr)\ket{0}
+			\bra{0}\bigl(R(\beta_-bS_0)^n\bigr)S_0\ket{0}
+	\end{split}\end{equation*}
+	$R_2$を使って摂動計算してみよう。摂動の$1$次では次のようになる。
+	\begin{equation*}\begin{split}
+		&\bra{\beta}S_0\bigl(S_0d\delta_+ + \beta_-bS_0\bigr)S_0\ket{\delta} \\
+		&= \bra{\beta}S_0 S_0d\delta_+ S_0\ket{\delta}
+		+ \bra{\beta}S_0 \beta_-bS_0 S_0\ket{\delta} \\
+		&= R_2 \bigl((\beta_-bS_0)\otimes\id + \id\otimes(\beta_-bS_0)\bigr)
+			\bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr) \\
+	\end{split}\end{equation*}
+	摂動の$2$次では次のようになる。
+	\begin{equation*}\begin{split}
+		&\bra{\beta}S_0\bigl(S_0d\delta_+ + \beta_-bS_0\bigr)^2
+			S_0\ket{\delta} \\
+		&= \sum_{p=0}^2\bra{\beta}S_0 (S_0d\delta_+)^{2-p} (\beta_-bS_0)^p
+			S_0\ket{\delta}
+			+ \bra{\beta}S_0 (\beta_-bS_0)(S_0d\delta_+) S_0\ket{\delta} \\
+		&= \sum_{p=0}^2 R_2 
+			\bigl((\beta_-bS_0)^{2-p}\otimes(\beta_-bS_0)^p\bigr)
+			\bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr) \\
+		&\;+ R_2 \bigl((\beta_-bS_1)\otimes\id + \id\otimes(\beta_-bS_1)\bigr)
+			\bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr) \\
+	\end{split}\end{equation*}
+	この式の二項目は次の正規積の計算に拠っている。
+	\begin{equation*}\begin{split}
+		(\beta_-bS_0)(\beta_-bS_0) &= \beta_-bS_1 + S_1d\delta_+
+	\end{split}\end{equation*}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+	次の変換$R\in\Lin_RR\W(\mycal{A}+\mycal{H})$で、作用素$D(VD)^*$は
+	不変になっている。
+	\begin{equation}\label{eq:真空期待値を不変にする文字の置換}\begin{split}
+		R: (a,b,d,\eta_1,\eta_2) \mapsto (a,d,b,\eta_2,\eta_1) \\
+	\end{split}\end{equation}
+	つまり、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		D(VD)^* = R\bigl(D(VD)^*\bigr)
+	\end{split}\end{equation*}
+	$R$を線形写像で表すことを考える。$R$は次のLie微分で記述できるだろう。
+	\begin{equation*}\begin{split}
+	\end{split}\end{equation*}
+
+	この記法を使うと、$\braket{D(VD)^*}$は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\braket{D(VD)^*} &= S_0 + b\bra{\beta}S_0(\beta_-bS_0)^*
+		\bigl((S_0d\delta_+)(\beta_-bS_0)^*\bigr)^*S_0\ket{\delta}d
+	\end{split}\end{equation*}
+	Kleeneスター$\bigl((S_0d\delta_+)(\beta_-bS_0)^*\bigr)^*$の展開を
+	考えてみる。$0$次の項は次のようになる。
+	\begin{equation*}\begin{split}
+		b\bra{\beta}S_0(\beta_-bS_0)^*S_0\ket{\delta}d
+		= \sum_{n\in\sizen}(bS_0)^{n+1}S_0d^{n+1}
+	\end{split}\end{equation*}
+	この式は次の'片側だけの自然な成長'の和を表している。
+	\begin{equation*}\begin{split}
+		bS_0S_0d \mapsto bS_0(bS_0S_0d)d
+		\mapsto bS_0\bigl(bS_0(bS_0S_0d)d\bigr)d
+		\mapsto \cdots
+	\end{split}\end{equation*}
+	次の$R$-線形写像$\phi_R\in\Lin_RR\W\mycal{A}$を使うと、
+	\begin{equation*}\begin{split}
+		\phi_Rw &= bS_0wd \quad\text{for all } w\in \W\mycal{A} \\
+	\end{split}\end{equation*}
+	次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		(\beta_-bS_0)^*S_0\ket{\delta} &= (\phi_R^*S_0)\ket{\delta} \\
+	\end{split}\end{equation*}
+	$0$次の項は次のように書ける。
+	\begin{equation*}\begin{split}
+		b\bra{\beta}S_0(\beta_-bS_0)^*S_0\ket{\delta}d = \phi_R^+S_0
+	\end{split}\end{equation*}
+	また、次の式と
+	\begin{equation*}\begin{split}
+		(\beta_-bS_0)^*S_0d\delta_+
+		= (\phi_R^*S_0)d\delta_+ + (\beta_-bS_0)^*\beta_-b(\phi_R^+S_0)
+	\end{split}\end{equation*}
+	次の式より、
+	\begin{equation*}\begin{split}
+		\bra{\beta}S_0(\phi_R^*S_0)d\delta_+(\phi_R^*S_0)\ket{\delta}
+		&= (\phi_R^+S_0)(\phi_R^*S_0) \\
+		\bra{\beta}S_0(\beta_-bS_0)^*\beta_-b(\phi_R^+S_0)(\phi_R^*S_0)
+			\ket{\delta}
+		&= S_0\biggl(\phi_R^*\bigl(b(\phi_R^+S_0)(\phi_R^*S_0)d\bigr)\biggr) \\
+	\end{split}\end{equation*}
+	$1$次の項は次のように書けることがわかる。
+	\begin{equation*}\begin{split}
+		b\bra{\beta}S_0(\beta_-bS_0)^*S_0d\delta_+(\beta_-bS_0)^*S_0
+			\ket{\delta}d 
+		= \phi_R^*\biggl(b(\phi_R^+S_0)(\phi_R^*S_0)d\biggr)
+	\end{split}\end{equation*}
+	$0$次と$1$次の項を足すと次のようになる。
+	\begin{equation*}\begin{split}
+		& b\bra{\beta}S_0(\beta_-bS_0)^*S_0\ket{\delta}d 
+		+ b\bra{\beta}S_0(\beta_-bS_0)^*S_0d\delta_+(\beta_-bS_0)^*S_0
+			\ket{\delta}d \\
+		&= \phi_R^*\biggl(\phi_RS_0 + b(\phi_R^+S_0)(\phi_R^*S_0)d\biggr)
+	\end{split}\end{equation*}
+	$1$次のケットだけで見ると次のようになる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Solomon's descent algebra
+		\end{itemize} %}
+	\end{todo} %todo:ここまで}
+
+	$1$次の項は次のようになる。
+	\begin{equation*}\begin{split}
+		b\bra{\beta}S_0(\beta_-bS_0)^*(S_0d\delta_+)(\beta_-bS_0)^*S_0
+			\ket{\delta}d
+	\end{split}\end{equation*}
+	$1$次の項は$0$次の項の計算を使う。
+	\begin{equation*}\begin{split}
+		\ket{\beta_0} &:= (\beta_-bS_0)^*S_0\ket{\delta}d \\
+		&= \sum_{n\in\sizen}(bS_0)^nS_0d^{n+1}
+	\end{split}\end{equation*}
+
+	$W^n$を正規積に書き直すところから0-モードが現れる。
+	このとき、$\beta_-$と$\delta_+$の積が基本的な演算構造になる。
+	\begin{equation*}\begin{split}
+		\beta_-w\delta_+ &= \beta_-bw + wd\delta_+
+			\quad\text{for all } w\in\W\mycal{A}
+	\end{split}\end{equation*}
+	この式を使うと次の式が導かれる。
+	\begin{equation*}\begin{split}
+		(\beta_-bS_0)^*S_0d\delta_+
+			= \sum_{n\in\sizen} (bS_0)^nS_0d^{n+1}\delta_+
+			+ \sum_{n\in\sizen} (\beta_-bS_0)^*\beta_-b(bS_0)^{n+1}S_0d^{n+1} \\
+	\end{split}
+	\end{equation*}
+%s3:証明の試み}
+
+\begin{todo}[ここまで]\label{todo:ここまで} %{
+14,742,697
+14,766,507
+14,797,783
+14,817,344
+14,890,134
+14,910,482
+14,931,755
+14,951,676
+\end{todo} %todo:ここまで}
+
+	低次の項を見てみる。次の式を使って、
+	\begin{equation*}\begin{array}{rclcl}
+		D &=& \beta^*a\delta^* &=& a+\beta^+a+a\delta^+ \\
+		VD &=& \eta_1\eta_{-2}\beta^*a\delta^* 
+			&=& \eta_1(\eta_{-2}\beta^*a + ad\delta^*) \\
+		DV &=& \eta_1\eta_{-2}\beta^*a\delta^* 
+			&=& (\beta^*ba + a\delta^*\eta_1)\eta_{-2} \\
+	\end{array}\end{equation*}
+	$\bra{D_n}:=\bra{0}D(VD)^n$とおいて、摂動の$2$次まで計算してみると次の
+	ようになる。
+	\begin{equation*}\begin{split}
+		\ket{D_0} &= a\ket{\delta} \\
+		\ket{D_1} &= ba^2d\ket{\delta} + a\delta^*\eta_1ad\ket{\delta} \\
+		\ket{D_2} &= ba(ba^2d)d\ket{\delta} + b(ba^2d)ad\ket{\delta}
+			+ ba^2d\delta^*\eta_1ad\ket{\delta} \\
+		&\; + a\delta^*\eta_1(ba^2d)d\ket{\delta}
+			+ a(\delta^*\eta_1ad)^2\ket{\delta} \\
+	\end{split}\end{equation*}
+	これを眺めると、次のような操作が見えてくる。
+	\begin{equation*}\begin{array}{lrcll}
+		\text{Lie微分} & a &\mapsto& ba^2d \\
+		\text{Brzozowski微分} & a &\mapsto& \delta^*\eta_1ad \\
+	\end{array}\end{equation*}
+	高次の摂動では単純にこの二つの微分を足し合わせたものにならないことは、
+	摂動の$3$次からの観察\eqref{eq:二分木の自然な成長その三}から予想される。
+	摂動の$3$次を計算してみる。
+	\begin{equation*}\begin{split}
+		\beta^*ba\eta_{-2}\cdot S_2\ket{\delta} &= baS_2d\ket{\delta} \\
+		\beta^*ba\eta_{-2}\cdot ba^2d\delta^*\eta_1ad\ket{\delta} 
+			&= b(ba(ba^2d)d)ad\ket{\delta} 
+			+ ba(ba^2d)d\delta^*\eta_1ad\ket{\delta} \\
+		\beta^*ba\eta_{-2}\cdot a\delta^*\eta_1(ba^2d)d\ket{\delta}
+			&= b(ba^2d)^2d\ket{\delta}
+			+ ba^2d\delta^*\eta_1(ba^2d)d\ket{\delta} \\
+		\beta^*ba\eta_{-2}\cdot a(\delta^*\eta_1ad)^2\ket{\delta}
+			&= b(b(ba^2d)ad)ad\ket{\delta}
+			+ b(ba^2d)ad\delta^*\eta_1ad\ket{\delta}
+			+ ba^2d(\delta^*\eta_1ad)^2\ket{\delta} \\
+		%
+		a\delta^*\eta_1\eta_{-2}\cdot S_2\ket{\delta} 
+			&= a\delta^*\eta_1S_2d\ket{\delta} \\
+		a\delta^*\eta_1\eta_{-2}\cdot ba^2d\delta^*\eta_1ad\ket{\delta} 
+			&= a\delta^*\eta_1(ba^2d)d\delta^*\eta_1ad\ket{\delta} \\
+		a\delta^*\eta_1\eta_{-2}\cdot a\delta^*\eta_1(ba^2d)d\ket{\delta} 
+			&= a\delta^*\eta_1ad\delta^*\eta_1(ba^2d)d\ket{\delta} \\
+		a\delta^*\eta_1\eta_{-2}\cdot (\delta^*\eta_1ad)^2\ket{\delta} 
+			&= a(\delta^*\eta_1ad)^3\ket{\delta} \\
+	\end{split}\end{equation*}
+	$\delta_1:=\delta^*\eta_1$とおいて、まとめると次のようになる。
+	\begin{equation*}\begin{split}
+		\beta^*ba\eta_{-2}\ket{D_2} 
+		&= b(S_0S_2 + S_1S_1 + S_2S_0)d\ket{\delta}
+			+ (S_2\delta_1^*S_0 + S_1\delta_1^*S_1)d\ket{\delta}
+			+ S_1(\delta_1^*S_0d)^2\ket{\delta} \\
+		a\delta_1^*\eta_{-2}\ket{D_2} 
+		&= S_0\delta_1^*S_2d\ket{\delta}
+			+ S_0(\delta_1^*S_1d\delta_1^*S_0d 
+				+ \delta_1^*S_0d\delta_1^*S_1d)\ket{\delta}
+			+ S_0(\delta_1^*S_0d)^3\ket{\delta}
+	\end{split}\end{equation*}
+	この結果から摂動の$3$次は次のようにまとまる。
+	\begin{equation*}\begin{split}
+		\ket{D_3} &= \sum_{p,q\in0..2}\jump{p+q=2} bS_pS_qd\ket{\delta} \\
+		&\;+ \sum_{p,q\in0..2}\jump{p+q=2}
+			S_p(\delta^*\eta_1)S_qd\ket{\delta} \\
+		&\;+ \sum_{p,q,r\in0..1}\jump{p+q+r=1}
+			S_p(\delta^*\eta_1)S_qd(\delta^*\eta_1)S_rd\ket{\delta} \\
+		&\;+ S_0(\delta^*\eta_1S_0d)^3\ket{\delta} \\
+	\end{split}\end{equation*}
+	摂動の$0,1,2$の各次数も同様にまとめると次のようになる。
+	\begin{equation*}\begin{split}
+		\ket{D_0} &= S_0\ket{\delta} \\
+		\ket{D_1} &= bS_0S_0d\ket{\delta} 
+			+ S_0(\delta^*\eta_1)S_0d\ket{\delta} \\
+		\ket{D_2} &= b(S_0S_1 + S_1S_0)d\ket{\delta} 
+			+ (S_1(\delta^*\eta_1)S_0d + S_0(\delta^*\eta_1)S_1d)\ket{\delta} \\
+			&\;+ S_0(\delta^*\eta_1S_0d)^2\ket{\delta} \\
+	\end{split}\end{equation*}
+	これを任意の$n\in\sizen$に一般化すると次のようになるだろう。
+	\begin{equation}\label{eq:漸化式その一}\begin{split}
+		\ket{D_{n+1}} &= S_{n+1}\ket{\delta} 
+			+ \sum_{p=1}^{n+1}D_{(n+1)p}\ket{\delta} \\
+		S_{n+1} &= \sum_{p=0}^n bS_{n-p}S_pd \\
+		D_{(n+1)p} &= \sum_{r_0,r_1,\dots,r_p=0}^{n+1-p}
+			\jump{r_0 + r_1 + \cdots + r_p = n + 1 - p} \\
+			&\quad S_{r_0}(\delta^*\eta_1)S_{r_1}d
+			\cdots(\delta^*\eta_1)S_{r_p}d \quad\text{for all } p\in 1..(n+1) \\
+	\end{split}\end{equation}
+	この式がある$n-1\in\sizen$で式\eqref{eq:漸化式その一}が成り立つとすると、
+	$\ket{D_{n+1}}=DV\ket{D_n}$の$0$-モードの係数は、
+	$\bra{0}\delta^*\eta_1=0$より、$\beta^*bS_0\eta_{-2}$のみから得られる。
+	$\ket{D_{n+1}}$の$0$-モードの係数$S_{n+1}$を計算すると次のようになる。
+	\begin{equation*}\begin{split}
+			S_{n+1} = \bra{0}\beta^*bS_0\eta_{-2}\ket{D_n}
+			= bS_0S_nd 
+			+ \sum_{p=1}^n\bra{\beta}bS_0\eta_{-2}D_{np}\ket{\delta} \\	
+	\end{split}\end{equation*}
+	ここで、次の式を用いると、
+	\begin{equation*}\begin{split}
+		&\bra{\beta}bS_0\eta_{-2}D_{np}\ket{\delta} \\
+		&= \sum_{r_0+\dots+r_p=n-p}
+		\bra{\beta}bS_0S_{r_0}d(\delta^*\eta_1)S_{r_1}d(\delta^*\eta_1)
+			\cdots d(\delta^*\eta_1)S_{r_p}d\ket{\delta} \\
+		&= \sum_{r_0+\dots+r_p=n-p}
+			b^{p+1}S_0S_{r_0}dS_{r_1}d\cdots dS_{r_p}d \\
+	\end{split}\end{equation*}
+	$S_{n+1}$に対する次の式が得られる。
+	\begin{equation*}\begin{split}
+		S_{n+1} &= bS_0S_nd + \sum_{p=1}^n\;\sum_{r_0+\dots+r_p=n-p}
+			b^{p+1}S_0S_{r_0}dS_{r_1}d\cdots dS_{r_p}d \\
+		&= \sum_{p=0}^n\;\sum_{r_0+\dots+r_p=n-p}
+			b^{p+1}S_0S_{r_0}dS_{r_1}d\cdots dS_{r_p}d \\
+	\end{split}\end{equation*}
+	この式は次の摂動展開で理解することができる。
+	\begin{equation}\label{eq:ゼロモードの漸化式}\begin{split}
+		\left\{\begin{split}
+			x_z &= a + zbx_z^2d \\
+			x_z &= \sum_{n\in\sizen}x_nz^n
+		\end{split}\right. 
+		&\iff \begin{split}
+			x_z &= \sum_{n\in\sizen}b^na(zx_zd)^n
+			= \sum_{n\in\sizen}b^na(\sum_{p\in\sizen}x_pz^{p+1}d)^n \\
+			&= \sum_{n\in\sizen}b^na\sum_{p_1,\dots,p_n\in\sizen}
+				z^{p_1+\cdots+p_n+n} x_{p_1}d\cdots x_{p_n}d \\
+			&= a + \sum_{n=1}^\infty z^n\sum_{p=1}^n\sum_{r_1+\cdots+r_p=n-p}
+				b^pax_{r_1}d\cdots x_{r_n}d
+		\end{split} \\
+		&\iff x_{n+1} = \sum_{p=0}^n\sum_{r_0+\cdots+r_p=n-p}
+			b^{p+1}ax_{r_0}dx_{r_1}d\cdots x_{r_p}d \\
+	\end{split}\end{equation}
+	したがって、$\ket{D_{n+1}}$の$0$-モードの係数について式
+	\eqref{eq:漸化式その一}が成り立つことがわかる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		この先が難しい。$0$-モード以外は係数間の関係式が複雑すぎて手に
+		負えない。簡単な部分と思われる$(S_0\delta^*\eta_1)\eta_{-2}$の作用も
+		次の式から、
+		\begin{equation*}\begin{split}
+			(S_0\delta^*\eta_1)\eta_{-2}D_{(n+1)p}\ket{\delta}
+			&= \sum_{r_0+\cdots+r_p=n+1-p}
+				S_0(\delta^*\eta_1)S_{r_0}d(\delta^*\eta_1)
+				\cdots(\delta^*\eta_1)S_{r_p}d\ket{\delta} \\
+			(S_0\delta^*\eta_1)\eta_{-2}S_{n+1}\ket{\delta}
+			&= S_0(\delta^*\eta_1)S_{n+1}d\ket{\delta} \\
+		\end{split}\end{equation*}
+		次の式が得られるが、
+		\begin{equation*}\begin{split}
+			&(S_0\delta^*\eta_1)\eta_{-2}\ket{D_{n+1}} \\
+			&= \sum_{p=0}^{n+1}\sum_{r_0+\cdots+r_p=n+1-p}
+				S_0(\delta^*\eta_1)S_{r_0}d(\delta^*\eta_1)
+				\cdots(\delta^*\eta_1)S_{r_p}d\ket{\delta}
+		\end{split}\end{equation*}
+		この式と$0$-モードの漸化式\eqref{eq:ゼロモードの漸化式}から、
+		次のようになることぐらいしかわからない。
+		\begin{equation*}\begin{split}
+			\bra{\beta}(S_0\delta^*\eta_1)\eta_{-2}\ket{D_{n+1}} &= S_{n+1}
+		\end{split}\end{equation*}
+	\end{todo} %todo:ここまで}
+%s1:BNFの摂動計算}
+\section{Rota-Baxter代数}\label{s1:Rota-Baxter代数} %{
+	積分$P:f_t\mapsto \int_0^tdsf_s$は次の部分積分の式を満たす。
+	\begin{equation*}\begin{split}
+		(Pf)(Pg) = P\partial\bigl((Pf)(Pg)\bigr) = P\bigl(f(Pg) + (Pf)g\bigr)
+		\quad\text{for all }f,g\in \fukuso[[t]]
+	\end{split}\end{equation*}
+	微分作用素と積分作用素をテンソル積の形で書くと次のようにまとまる。
+	\begin{equation*}\begin{split}
+		m(P\otimes P) &= Pm(\id\otimes P + P\otimes \id) \\
+		\partial m &= m(\id\otimes\partial + \partial\otimes \id)
+	\end{split}\end{equation*}
+	Rota-Baxter代数は次のSpitzerの恒等式の中にも現れる。
+	\begin{equation}\label{eq:Spitzerの恒等式}\begin{split}
+		X_t = X_0 + \int_0^tdsM_sX_s \iff X_t = \exp(\int_0^tdsM_s)X_0 \\
+		\quad\text{for all } X_0\in \End_\fukuso\fukuso^n,\; M_t\in\End_\fukuso\fukuso^n[[t]]
+	\end{split}\end{equation}
+	同値関係の両辺とも初期値$X_0$の微分方程式$\partial_tX_t=M_tX_t$を満たす
+	ことから、Spitzerの恒等式が成り立つことがわかる。同値関係の両辺を摂動展開
+	すると次のようになる。
+	\begin{equation*}\begin{split}
+		\sum_{n\in\sizen}\int_0^tds_1M_{s_1}\int_0^{s_1}ds_2M_{s_2}
+			\cdots\int_0^{s_{n-1}}ds_nM_{s_n}X_0 
+		= \sum_{n\in\sizen}\frac{1}{n!}\left(\int_0^tdsM_s\right)^nX_0
+	\end{split}\end{equation*}
+	例えば、二次の展開係数では次のようになっている。
+	\begin{equation*}\begin{split}
+		\int_0^tdsM_s\int_0^sdrM_r = \frac{1}{2!}\left(\int_0^tdsM_s\right)^2
+	\end{split}\end{equation*}
+	この両辺は共に初期値$0$で微分係数$M_t\int_0^tdsM_s$を持つことから、
+	この式が成り立つことがわかる。したがって、可換性
+	$M_s\int_0^sdrM_r=\int_0^sdrM_rM_s$を用いると次の式が導かれる。
+	\begin{equation*}\begin{split}
+		\int_0^tds\left(M_s\int_0^sdrM_r + \int_0^sdrM_rM_s\right) 
+		= \left(\int_0^tdsM_s\right)^2
+	\end{split}\end{equation*}
+	ここで、$PM_t=\int_0^tdsM_s$、$P^2M_t=\int_0^tds\int_0^sdrM_r$とすると、
+	Rota-Baxter代数が導かれる。
+	\begin{equation*}\begin{split}
+		P\bigl(M_t(PM_t) + (PM_t)M_t\bigr) = (PM_t)^2
+	\end{split}\end{equation*}
+	積分作用素以外にもRota-Baxter代数は現れる。教科書\cite{GuoIntro}には
+	Rota-Baxter代数が現れる場面が書かれている。
+	ここで、直接関係すると期待しているAtkinsonの因子化について述べる。
+	Rota-Baxter代数を拡張して次のようにおく。
+	\begin{equation*}\begin{split}
+		m(P\otimes P) + Pm &= Pm(\id\otimes P + P\otimes \id) \\
+	\end{split}\end{equation*}
+	この式はパラメーター$\lambda$を使ってRota-Baxter代数を次のように拡張
+	してから、$P:=P_\lambda/\lambda$と再定義したものになっている。
+	\begin{equation*}\begin{split}
+		m(P_\lambda\otimes P_\lambda) + \lambda P_\lambda m 
+		&= P_\lambda m(\id\otimes P_\lambda + P_\lambda\otimes \id) \\
+	\end{split}\end{equation*}
+	そして、$\bar{P}$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		\bar{P} := \theta - P 
+	\end{split}\end{equation*}
+	$\bar{P}$もRota-Baxter関係を満たす。
+	\begin{equation*}\begin{split}
+		m(\bar{P}\otimes \bar{P}) + \theta\bar{P}m 
+		&= \bar{P}m(\id\otimes \bar{P} + \bar{P}\otimes \id)
+	\end{split}\end{equation*}
+	Atkinsonの因子化は次のものである。$A$を代数としたとき、任意の$a\in A$
+	と$\theta\in\fukuso$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		X = 1 + P(Xa) \And Y = 1 + \bar{P}(aY) \implies X(1 - \theta a)Y = 1
+	\end{split}\end{equation*}
+	この式は次の式が成り立つことを認めてしまうと、
+	\begin{equation*}\begin{split}
+		P\otimes\bar{P} &= Pm(\id\otimes\bar{P}) + \bar{P}m(P\otimes\id) \\
+		\bar{P}\otimes\bar{P} &= \bar{P}m(\id\otimes P) + Pm(\bar{P}\otimes\id) \\
+	\end{split}\end{equation*}
+	次のようにして示すことができる。
+	\begin{equation*}\begin{split}
+		XY &= (1 + P(Xa))(1 + \bar{P}(aY)) \\
+		&= 1 + P(Xa) + \bar{P}(aY) + P(Xa)\bar{P}(aY) \\
+		&= 1 + P(Xa) + \bar{P}(aY) + P\bigl(Xa\bar{P}(aY)\bigr) 
+			+ \bar{P}\bigl(P(Xa)aY\bigr) \\
+		&= 1 + P\bigl(Xa + Xa\bar{P}(aY)\bigr) + \bar{P}\bigl(aY + P(Xa)aY\bigr) \\
+		&= 1 + P(XaY) + \bar{P}(XaY) \\
+		&= 1 + \theta XaY \\
+		&\implies X(1 -\theta a)Y = 1 \\
+	\end{split}\end{equation*}
+%s1:Rota-Baxter代数}
 \section{トークナイザー}\label{s1:トークナイザー} %{
 \subsection{出発点}\label{s2:出発点} %{
 	BNFで与えられた文脈自由文法にしたがってトークン分割するトークナイザーを
 	作ることを考える。BNFは次のように'文'と'単語'と'文字'が明示的に
 	分割されているものとする。
-	\begin{equation*}\begin{split}
-		B &= U (b B)^* \\
+	\begin{equation}\label{eq:文法定義その一}\begin{split}
+		B &= U + UbB \\
 		U &= V + g_1 B g_2 \\
 		V:\omega &= v_1 v_2^* \\
 		v_1:\alpha &= '\text{a}' .. '\text{z}' + '\text{A}' .. '\text{Z}' \\
@@ -14,71 +957,378 @@
 		g_1:\alpha &= '(' \\
 		g_2:\alpha &= ')' \\
 		b:\alpha &= '*' \\
-	\end{split}\end{equation*}
+	\end{split}\end{equation}
 	この例では、単語を表す変数にはサフィックス$\omega$、文字を表す変数には
 	サフィックス$\alpha$を付けて、単語と文字を明示している。そして、
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 文変数は、文変数と単語変数と文字変数の文脈自由表現、
-		\item 単語変数は、単語変数と文字変数の正規表現、
+		\item 文変数は、文変数と単語変数と文字変数の文脈自由文法、
+		\item 単語変数は、単語変数と文字変数の有理文法、
 		\item 文字変数は、文字変数と文字の集合演算
 	\end{itemize} %}
-	で書かれているものとする。\footnote{
-		単語変数は、文字の正規表現で書かれていることになる。したがって、
-		文字変数を考える必要はなく、文変数と単語変数の文脈自由表現で定義された
-		文変数と文字の正規表現で定義された単語変数だけを考えればよい。
-	}
-	また、文変数の定義式の右辺に現れる文変数を$0$とすると、単語変数と文字変数
-	の多項式となるが、その多項式は'0'にならないとする。例えば、次のようになる
-	ことを仮定する。
-	\begin{equation*}\begin{split}
-		B_0 = U_0,\quad U_0 = V \neq 0 \\
-	\end{split}\end{equation*}
-	この条件が満たされていないと、文の定義式の中に有限長の入力文字列とは
-	決してマッチしない無限長の文字列が現れてしまう。例えば、次のように場合で
-	ある。
-	\begin{equation*}\begin{split}
-		X &= bXb = bb\cdots \\
-	\end{split}\end{equation*}
-	頭出しの問題は後で考えることにする。
-	\begin{equation*}\begin{array}{rcll}
-		B &=& U (b B)^* & \quad\text{左頭出し可能} \\
-		&=& U + B b B & \quad\text{左頭出し不可能な項を含む} \\
-	\end{array}\end{equation*}
-	頭出しの問題は原理的な問題ではなく、計算の効率性の問題と思う。
-
-	トークナイザーは
+	で書かれているものとする。
+	
+	単語変数は、文字の有理文法で書かれていることになる。
+	したがって、文字変数を考える必要はなく、
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 文変数に対して、文の始まりと終わりを、
-		\item 単語変数に対して、マッチした単語を
+		\item 文変数と単語変数の文脈自由文法で定義された文変数と、
+		\item 文字の有理文法で定義された単語変数
 	\end{itemize} %}
-	クライアントに知らせるものとする。
+	だけを考えればよい。
 
-	BNFは左結合として解釈することにする。例えば、トークナイザーは
-	$g_1Bg_2$という式を$(g_1B)g_2$と解釈する。また、変数の参照は
-	変数の定義式をまとめてグループ化する。例えば、トークナイザーは
-	$B=U(bB)^*$という式を$B=(U+BbB)(bB)^*$と解釈する。
-	BNF内で用いられている積の記号は、トークナイザーでは自由モノイドの積では
-	なく結合的でない二項演算として解釈される。トークン分割ではなく、
-	単にマッチングするかどうかしか興味がない場合は、BNF内で用いられている積
-	の記号を自由モノイドの積として解釈して問題ないが、トークン分割を目的
-	とする場合は、自由モノイドの積として解釈することはできない。
+	文変数の定義式の右辺に現れる文変数を$0$とすると、単語変数と文字変数
+	の多項式となるが、その多項式は'0'にならないとする。文変数に文字と可換な
+	パラメータ$h$を付け加えて次のように文法を再定義した時、$h\to0$の極限が
+	$0$にならないと仮定する。
+	\begin{equation*}\begin{array}{rclcl}
+		B &:& \left\{\begin{split}
+			B_h &= U_h + hU_hbB_h \\
+			U_h &= V + g_1hB_hg_2 \\
+		\end{split}\right. &\xmapsto{h\to0}& \left\{\begin{split}
+			B_0 &= U_0 \\
+			U_0 &= V \\
+		\end{split}\right. \\
+		U &:& \left\{\begin{split}
+			B_h &= hU_h + hU_hbB_h \\
+			U_h &= V + g_1B_hg_2 \\
+		\end{split}\right. &\xmapsto{h\to0}& \left\{\begin{split}
+			B_0 &= 0 \\
+			U_0 &= V \\
+		\end{split}\right. \\
+	\end{array}\end{equation*}
+	このパラメータ$h$を（ある変数についての）摂動パラメータ、摂動パラメータを
+	$0$にした値を（ある変数についての）摂動定数ということにする。
+	摂動パラメータのとり方は一意ではない。例えば、係数がブーリアンの場合、
+	文法定義\eqref{eq:文法定義その一}に表される言語は次の文法定義による
+	表される言語と同一になる。（係数が自然数の場合、摂動の二次以上で係数が
+	異なってくる。）
+	\begin{equation*}\begin{split}
+		B &= U + BbB \\
+		U &= V + g_1Bg_2 \\
+	\end{split}\end{equation*}
+	この文法定義の摂動定数を求めてみると次のようになる。
+	\begin{equation*}\begin{array}{rclcl}
+		B &:& \left\{\begin{split}
+			B_h &= U_h + B_hbB_h \\
+			U_h &= V + g_1hB_hg_2 \\
+		\end{split}\right. &\xmapsto{h\to0}& \left\{\begin{split}
+			B_0 &= U_0 \\
+			U_0 &= V \\
+		\end{split}\right. \\
+		U &:& \left\{\begin{split}
+			B_h &= hU_h + B_hbB_h \\
+			U_h &= V + g_1B_hg_2 \\
+		\end{split}\right. &\xmapsto{h\to0}& \left\{\begin{split}
+			B_0 &= B_0bB_0 \\
+			U_0 &= V + g_1B_0g_2 \\
+		\end{split}\right. \\
+	\end{array}\end{equation*}
+	この文法定義の$B$の摂動定数は文法定義\eqref{eq:文法定義その一}の
+	摂動定数と一致するが、$U$の摂動定数は一致しない。この文法定義での
+	$U$の摂動定数には無限長の文字列$B_0=B_0bB_0=bb\cdots$が含まれていて、
+	この部分が文法定義\eqref{eq:文法定義その一}での$U$の摂動定数と
+	異なっている。無限長の文字列の部分を$0$としてしまうと、
+	文法定義\eqref{eq:文法定義その一}の摂動定数と一致する。
+	無限長の文字列を$0$としてしまう根拠は、
+	有限長の入力文字列は決して無限長の文字列にマッチしないことに依る。
+	有限長の入力文字列を扱う限り無限長の文字列に対するマッチングは無視できる。
+
+	\begin{todo}[無限長文字列パターンの無視]
+	\label{todo:無限長文字列パターンの無視} %{
+		無限長の文字列$B_0=B_0bB_0=bb\cdots$を$0$とおいてしまうということを
+		式で書くと$\lim_{n\to\infty}b^n=0$となる。これはある種の完備化を行なって
+		いると思われる。$B_0=B_0bB_0=bb\cdots$を取り扱う方法は$B_0=0$とするだけ
+		ではなく、$B_0b=1_\W$としても$bB_0=1_\W$としても構わない。
+		$B_0=0$とするのは、目的に応じて手法を取捨選択した結果だと考えるのが
+		良いだろう。
+	\end{todo} %todo:無限長文字列パターンの無視}
+
+	\begin{todo}[べき等半環の特殊性]\label{todo:べき等半環の特殊性} %{
+		べき等半環を係数とする場合、一見異なる文法定義が同一の言語を表すことが
+		ある。$x$と$y$を不定元とする次の二つの式は同じ文字列$a^*$を与える。
+		\begin{equation*}\begin{split}
+			x = 1_\W + ax,\quad y = 1_\W + yay
+		\end{split}\end{equation*}
+		$x=a^*$になることはすぐわかるが、$y=a^*$になることは次のようにして
+		わかる。
+		\begin{equation*}\begin{split}
+			y &= 1_\W(ay)^* = 1_\W + ay(ay)^* \\
+			&= 1_\W + ay + ay(ay)^*
+		\end{split}\end{equation*}
+		$y=1_\W+ay$から$y=a^*$となり、三項目から生成される多項式も$a$の多項式
+		になるから、三項目から生成される多項式は二項目までから生成される多項式
+		に含まれてしまう。実数上の形式級数で考えると、次のような形で表される
+		すべての級数はべき等半環に持って行くと、$x=1_\W+ax$と表されてしまう。
+		\begin{equation*}\begin{split}
+			x = \sum_{n\in\sizen}e^{-h_n}a^n \quad\text{for all }h_n\in\jitu
+		\end{split}\end{equation*}
+
+		二つのオートマトンが同一のものかどうかを判定するアルゴリズムは
+		向きづけられたグラフの同一性を判定するアルゴリズムに帰着される。
+		そして、向きづけられたグラフの同一性を判定するアルゴリズムは
+		頂点数の多項式に比例した時間では解くことができない。頂点の入れ替えを
+		しながら二つのグラフを比べなければいけないので、頂点の数を$N$とすると、
+		辺の数が最大$N^2$、頂点の入れ替えが最大$N!$になるから、
+		最大$N^{N+2}$の時間を必要とする。
+		したがって、与えられた二つの文法定義の同一性を判定することは難しいが、
+		与えられた一つの文法定義を同一な言語を表す別の文法定義に変形する方法は
+		ないものだろうか？
+	\end{todo} %todo:べき等半環の特殊性}
+
+	トークナイザーの役割は、入力文字列を左から順に読んでいきながら、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 単語にマッチした場合は、マッチした単語の名前と対応する入力文字列、
+		\item 文にマッチした場合は、マッチした文の名前を
+	\end{itemize} %}
+	クライアントに知らせていくとする。トークナイザーの使われ方として
+	入力文字列はファイルで与えられることを想定すると、入力文字列を
+	一旦中間バッファーに貯めこんでいき、文が確定した段階で中間バッファーを
+	クリアするという使い方が考えられる。
+	\begin{equation*}\begin{split}
+		\text{入力文字列}\xto[\text{追加}]{\text{文字列}}\text{中間バッファー}
+		\xto[\text{ポインターの位置}]{\text{文字}}\text{トークナイザー} \\
+	\end{split}\end{equation*}
+	\begin{equation*}\xymatrix{
+		\text{文字の読み込み} \ar[r]^{\text{EOF}} 
+			\ar@/^1ex/[d]^{\text{パターンが確定}}
+			\ar@(ur,ul)_{\text{パターンが未確定}}
+		& \text{終了} \\
+		\text{中間バッファーのクリア} \ar@/^1ex/[u]^{\text{次のパターンの走査}}
+	}\end{equation*}
+	メモリの節約のために中間バッファーの長さをなるべく短くしたい。\footnote{
+		テキストファイルはだいたいキロバイト単位で、
+		最近ではメモリがギガバイト単位が普通になっていることを考えると、
+		ファイルの文字列をすべて読み込んでしまった方が効率が良いかもしれない。
+		そのような場合、伝統的な入力文字列を左から順に読み込んでく方法だけでは
+		なく、ランダムアクセスが可能な場合に効率的に働くアルゴリズムが必要に
+		なるかもしれない。
+	}
+	そのためには、トークン分割の過程で、なるべく早くパターンを確定することが
+	必要になる。
 %s2:出発点}
+\subsection{思考実験}\label{s2:思考実験} %{
+\subsubsection{トークン分割の一意性}\label{s3:トークン分割の一意性} %{
+	次のパターンでは入力文字列$a$がのとき、トークン分割の規則を追加しない
+	限り、トークン分割を一意に定めることができない。
+	\begin{equation}\label{eq:文字数勘定の例その一}\begin{split}
+		A = a^?,\quad B= a^?
+	\end{split}\end{equation}
+	入力文字列$a$がパターン$AB$にマッチするところまでは問題ないが、
+	トークン分割する段階で曖昧さが出てくる。トークン分割が一意かどうかの判定を
+	単語の文字数が一意に勘定できるかどうかに帰着させてみる。
+	\begin{equation*}\begin{split}
+		\text{単語の文字数勘定が一意} \implies \text{トークン分割が一意}
+	\end{split}\end{equation*}
+
+	例\eqref{eq:文字数勘定の例その一}を使って考えてみる。
+	単語$A$を変数$x_m\in\sizen$に割り当てた時のグラフを次のように定義する。
+	\begin{equation*}\begin{split}
+		A^{(m)} = am^+\tau = \xymatrix{
+			\circ \ar[d]^\tau \ar[r]^a & m^+ \ar[ld]^\tau \\
+			\circ
+		}
+	\end{split}\end{equation*}
+	$m^+$は変数$x_m$をインクリメントとする操作とする。$\tau$は終了文字とする。
+	$A^{(m)}$を単語$A$のインスタンスということにする。
+	インスタンスの積を次のように定義する。
+	\begin{equation*}\begin{split}
+		A^{(m)}B^{(n)} &= m\biggl( \xymatrix{
+			\circ \ar[d]^\tau \ar[r]^a & m^+ \ar[ld]^\tau \\
+			\circ
+		}\times \xymatrix{
+			\circ \ar[d]^\tau \ar[r]^a & n^+ \ar[ld]^\tau \\
+			\circ
+		} \biggr) = \xymatrix{
+			\circ \ar[d]^{1_\W} \ar[r]^a & m^+ \ar[ld]^{1_\W} \\
+			\circ \ar[d]^\tau \ar[r]^a & n^+ \ar[ld]^\tau \\
+			\circ
+		} \\
+		&= \xymatrix{
+			\circ \ar[d]^\tau \ar[r]^a \ar[rd]^a & m^+ \ar[rd]^\tau \ar[r]^a & n^+ \ar[d]^\tau \\
+			\circ & n^+ \ar[l]_\tau & \circ \\
+		}
+	\end{split}\end{equation*}
+	そして、$m^-$を変数$x_m$をディクレメントとする操作として、次の分配則が
+	成り立つとする。
+	\begin{equation*}\begin{split}
+		m^+\alpha w_1 + n^+\alpha w_2 = m^+n^+\alpha (n^-w_1 + m^-w_2) \\
+		\quad\text{for all }m,n\in\sizen,\;\alpha\in\mycal{A}_\tau
+			,\;w_1,w_2\in\W_\tau\mycal{A}
+	\end{split}\end{equation*}
+	$m^\pm$が$\mycal{A}_\tau$と可換だとしていることになる。
+	この分配則を使うと次のようになる。
+	\begin{equation*}\begin{split}
+		A^{(m)}B^{(n)} &= \xymatrix{
+			\circ \ar[d]^\tau \ar[r]^a & m^+n^+ \ar[d]^\tau \ar[rd]^\tau \ar[r]^a 
+				& \circ \ar[r]^\tau & \circ \\
+			\circ & m^- & n^- \\
+		} \\
+		&= \xymatrix{
+			\circ \ar@(ur,ul)[rrr]^\tau \ar[r]^a & m^+n^+ \ar[d]^\tau \ar[r]^a 
+				& \circ \ar[r]^\tau & \circ \\
+			& m^- + n^- \\
+		} \\
+	\end{split}\end{equation*}
+	入力文字列が$a$の時には、読み込みが終了した時点で$m^-+n^-$という操作が
+	行われることになるが、操作の加法がトークン分割の曖昧さを表している。
+	操作の加法も係数環$R$の演算に従うものとする。
+	\begin{equation*}\begin{split}
+		rm^{+p} + sn^{+q}
+		= \left\{\begin{split}
+			m=n \text{ and } p=q &\implies (r + s) m^{+p} \\
+			\text{else} &\implies rm^{+p} + sn^{+q} \\
+		\end{split}\right. \\
+	\end{split}\end{equation*}
+
+	単語を連結した時、終了時点の操作がすべて単項になっていなければ、
+	その単語の連結はトークン分割が一意でなくなる。トークン分割が一意
+	でないとういう性質は次のように単語の積で伝播していく。
+	\begin{equation*}\begin{split}
+		f_1f_2\in\text{トークン分割が一意でない}
+		\implies f_1f_2f_3\in\text{トークン分割が一意でない} \\
+		\quad\text{for all }f_1,f_2,f_3\in R\W_\tau\mycal{A}
+	\end{split}\end{equation*}
+	したがって、文法定義において、文の中にトークン分割が一意でない単語の
+	積が現れたら、その文はトークン分割でなくなる。
+	この単語の連結に起因するトークン分割の曖昧さへの対処はパーサーによって
+	異なる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item PEGでは左の単語を優先する。例\eqref{eq:文字数勘定の例その一}
+		の場合では、入力文字列$a\tau$に対しては、
+		$a\tau\mapsto a:A\times 1_\W:B$となる。（多分）
+		\item LALRではどうしているかわからない。LRでは文のお尻からマッチングして
+		いくので、貪欲マッチングをすると、$a\tau\mapsto 1_\W:A\times a:B$と
+		なるが、アルゴリズムの詳細を知らないとどうなるかはわからない。
+	\end{itemize} %}
+	ここでは、トークン分割が一意でない単語の積には対応しないことにする。
+	対応しなくても、トークン分割が一意でない単語の積が存在すれば、
+	それをクライントに報告する必要がある。
+
+	クリーネスターと文字数の勘定の関係を見ておく。
+	次の文法定義に対して、
+	\begin{equation*}\begin{split}
+		A_* = a^*,\quad A_1 = a
+	\end{split}\end{equation*}
+	積$A_*^{(m)}A_1^{(n)}$のグラフは次のようになる。
+	\begin{equation}\label{eq:文字数勘定の例その二}\begin{split}
+		A_*^{(m)}A_1^{(n)} &= \xymatrix{
+			\circ \ar@(dr,dl)[rr]^{1_\W} \ar[r]^a 
+			& m^+ \ar[r]^{1_\W} \ar@(ur,ul)_a
+			& \circ \ar[r]^a & n^+ \ar[r]^\tau & \circ
+		} \\
+		&= \xymatrix@R=1em{
+			\circ \ar[d]^a \ar[r]^a & m^+ \ar[d]^a \ar[r]^a 
+				& m^+ \ar[d]^a \ar[r]^a & m^+ \ar[d]^a \ar@(dr,ur)_a \\
+			n^+ \ar[d]^\tau & n^+ \ar[d]^\tau & n^+ \ar[d]^\tau 
+				& n^+ \ar[d]^\tau \\
+			\circ & \circ & \circ & \circ
+		} \\
+		&= \xymatrix@R=1em{
+			\circ \ar[r]^a & m^+n^+ \ar[d]^a \ar[r]^a \ar[dl]^\tau
+				& m^+n^- \ar[r]^a \ar[d]^a & m^+ \ar[d]^a \ar@(dr,ur)_a \\
+			m^- & \circ \ar[d]^\tau & n^+ \ar[d]^\tau & n^+ \ar[d]^\tau \\
+			& \circ & \circ & \circ
+		} \\
+		&= \xymatrix@R=1em{
+			\circ \ar[r]^a & m^+n^+ \ar[d]^a \ar[r]^a \ar[dl]^\tau
+				& m^+ \ar[r]^a \ar[d]^a & m^+ \ar[d]^a \ar@(dr,ur)_a \\
+			m^- & \circ \ar[d]^\tau & \circ \ar[d]^\tau & \circ \ar[d]^\tau \\
+			& \circ & \circ & \circ
+		} \\
+		&= \xymatrix@R=1em{
+			\circ \ar[r]^a & m^+n^+ \ar[r]^a \ar[dl]^\tau
+				& m^+ \ar[r]^a \ar[d]^a \ar[dl]^\tau 
+				& m^+ \ar[d]^a \ar@(dr,ur)_a \\
+			m^- & m^- & \circ \ar[d]^\tau & \circ \ar[d]^\tau \\
+			& & \circ & \circ
+		} \\
+		&= \xymatrix@R=1em{
+			\circ \ar[r]^a & m^+n^+ \ar[r]^a \ar[d]^\tau 
+			& m^+ \ar@(dr,ur)_a \ar[dl]^\tau \\
+			& m^- \\
+		} \\
+		&= \xymatrix@R=1em{
+			\circ \ar[r]^a & n^+ \ar[r]^a \ar[d]^\tau 
+			& m^+ \ar@(dr,ur)_a \ar[dl]^\tau \\
+			& \circ \\
+		} \\
+	\end{split}\end{equation}
+	式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		a^*\times a &\mapsto (am^+)^*an^+\tau \\
+		&= an^+(am^+)^*\tau \\
+	\end{split}\end{equation*}
+	単語を連結して、一項目の単語の文字数を勘定する操作の右端を見ると、
+	LL(k)のkがわかる。例えば、$A_*=a^*,\;A_1=a$の場合は、
+	図\eqref{eq:文字数勘定の例その二}から、$A_*^{m}A_1^{(n)}$という積を含む
+	文法はLL($2\le k$)となることがわかる。
+
+	\begin{todo}[中間バッファーの早期クリア]
+	\label{todo:中間バッファーの早期クリア} %{
+		入力文字列を貯めこんでおく中間バッファをなるべく早くクリアするためには、
+		文字数を勘定する操作をまるべく左側に寄せておく必要がある。そのためは、
+		文字数を勘定する操作と文字は非可換として、式変形の手順を絞って式変形
+		していくのが良いだろう。文字数を勘定する操作と文字が可換として、後から
+		文字数を勘定する操作の右端を求める方法については検討する。
+
+		$A,B$を単語として、$B$が$A$のデリミネーターになることを
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の単語$C$に対して、
+			\item $ABC$のトークン分割をした時、
+			\item 単語$B$を読み終わった時点で単語$A$が決定される
+		\end{itemize} %}
+		ということにする。次の条件は$B$が$A$のデリミネーターになるための
+		十分条件になる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $AB$のトークン分割が一意にでき、
+			\item $\tau$を出力辺とする頂点（複数）を始点とする部分グラフで
+			$A$の文字数を勘定する操作がない。
+		\end{itemize} %}
+		$\tau$を出力辺とする頂点を始点とする部分グラフは次のようなグラフである。
+		\begin{equation*}\xymatrix{
+			\ar[r] & \ar[rd]^\tau \\
+			&  \ar@(ul,dl)_{\mycal{A}} \ar[r]^\tau & \circ \\
+			\ar[r] & \ar[ru]^\tau & \\
+			\save "1,2"."3,2" *+[F-:<3pt>]\frm{} \restore
+			\save "1,2"."3,3" *++[F]\frm{} \restore
+		}\end{equation*}
+		$A$の右端になる文字の集合を$A_r$、$B$の左端になる文字の集合を$B_l$
+		とすると、$B_l\neq\emptyset$かつ$A_r\cap B_l=\emptyset$となれば、
+		$B$は$A$のデリミネーターとなる（十分条件）。この条件は、英語の書き言葉や
+		既存のプログラミング言語の文法で多用されている。
+	\end{todo} %todo:中間バッファーの早期クリア}
+
+	\begin{todo}[ペアリング]\label{todo:ペアリング} %{
+		数学的には、文字集合$\mycal{A}$と文字数を勘定するWeyl代数
+		$\mycal{H}=\set{\eta^+,\eta^-}$（もしかするとLevitt代数）のペアを基底
+		とするテンソル代数を考えていることになる。
+		\begin{equation*}\begin{split}
+			\text{文字数勘定の挿入}:\W\mycal{A} &\to \W_{\mycal{H}}\mycal{A} \\
+			abc &\mapsto a\eta^+b\eta^+c\eta^+\tau
+		\end{split}\end{equation*}
+	\end{todo} %todo:ペアリング}
+%s3:トークン分割の一意性}
+%s2:思考実験}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
 \subsection{正規表現でのトークン分解}\label{s2:正規表現でのトークン分解} %{
 	次のBNFで与えられた文法にしたがってトークン分割することを考える。
-	\begin{equation*}\begin{split}
+	\begin{equation}\label{eq:正規表現でのトークン分解の例}\begin{split}
 		E &= A_2A_1B + A_1A_2C \\
 		A_1:\omega &= 'a' \\
-		A_2:\omega &= A_1^2 \\
+		A_2:\omega &= 'a'^2 \\
 		B:\omega &= 'b' \\
 		C:\omega &= 'c' \\
-	\end{split}\end{equation*}
+	\end{split}\end{equation}
 	この文法の場合、入力文字列の最後まで読み込まないとトークン分割できない。
 	これはLL(2)文法となる。通常、LLやLR文法は文脈自由言語の部分言語を定義する
 	文法であると説明されているが、トークン分割を目的とする場合は、
 	有理言語に対してもトークンの先読みが必要なる。\footnote{
 		LLやLR文法について説明されるとき、バックトラック云々という言葉が出てくる
 		が、バックトラックとは、読み込んだ入力と進めた状態遷移をあるところまで
-		戻して、入力の読み込みと状態の遷移をやり直すことを言う。例の場合では、
+		戻して、入力の読み込みと状態の遷移をやり直すことを言う。
+		例\eqref{eq:正規表現でのトークン分解の例}の場合では、
 		$'a^3c\tau'$という入力文字列に対して、まず、$A_2A_1B$のパターンを
 		試してみて、文字$'c'$を読み込んだときにマッチしないことがわかったら、
 		初期状態に戻してから$A_1A_2C$のパターンを試すという方法をバックトラック
@@ -93,6 +1343,281 @@
 		写像空間も可換代数になるので、先読みが必要なくなり、非可換代数への
 		写像の場合、写像空間も非可換代数になるので、先読みが必要になる。
 	}
+	トークナイザーの実装を次のような方針で考えてみる。
+	単項式でない式$E=A_2A_1B + A_1A_2C$が与えられた時、次のように各変数に
+	番号を振り、
+	\begin{equation*}\begin{split}
+		E &= A_2^{(1)}A_1^{(2)}B^{(3)} + A_1^{(4)}A_2^{(5)}C^{(6)} \\
+	\end{split}\end{equation*}
+	次のような表を用意する。
+	\begin{equation*}\begin{array}{c|ccc}
+		\text{番号} & \text{シンボル} & \text{入力文字列の開始位置} 
+			& \text{文字数} \\\hline
+		1 & A_2 & \myop{none} & 0 \\
+		\vdots & \vdots & \vdots & \vdots \\
+	\end{array}\end{equation*}
+	そして、トークン分割の実行時に次のように表を使うことを考える。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[開始] $A_2^{(m)}$の文字列を読み込み始める直前に、
+		入力文字列の開始位置を記憶する。
+		\begin{equation*}\begin{split}
+			(m,A_2,p,k) \mapsto \left\{\begin{split}
+				p\in\sizen &\implies (m,A_2,p,k) \quad\text{何もしない} \\
+				\text{else} &\implies (m,A_2,\text{現在の入力文字列の位置},0) \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+		ここで、$p$は自然数または$\myop{none}$、$k$は自然数とする。
+		\item[文字数の勘定]　$A_2^{(m)}$の文字列を読み込んでいる最中に、
+		文字数を勘定する。
+		\begin{equation*}\begin{split}
+			(m,A_2,p,k) \to (m,A_2,p,k+1)
+		\end{split}\end{equation*}
+		\item[終了] $A_2^{(m)}$の文字列を読み込み終わったら、
+		表の$m$行にある情報をクライアントに知らせる。
+		そして、表の$m$行にある情報を初期化する。
+		\begin{equation*}\begin{split}
+			(m,A_2,p,k) \mapsto \left\{\begin{split}
+				p\in\sizen &\implies \text{emits }(A_2,p,k) \text{ and sets }
+					(m,A_2,\myop{none},0) \\
+				\text{else} &\implies (m,A_2,p,k) \quad\text{何もしない} \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+	\end{description} %}
+	LL(0)この方法で大丈夫だと思うが、例\eqref{eq:正規表現でのトークン分解の例}
+	のように、LL(k>0)の場合は、読み込んでいる入力文字列がどの変数に属している
+	のかが、入力文字列を読み進めた後にならないとわからない。
+	ここでは、可能性がある変数の入力文字列の位置と文字数を読み込んでいる最中
+	に表に記憶しておき、パターンが確定した時点で表の情報からクライアントに
+	パターンを知らせる方法をとることにする。
+
+	入力文字列は普通の文字$\mycal{A}$と終端記号$\tau$で次のような形を
+	しているとする。
+	\begin{equation*}\begin{split}
+		a_1a_2\cdots a_m\tau\tau\cdots
+		\quad\text{for all }m\in\sizen,\; a_1,\dots,a_m\in\mycal{A}
+	\end{split}\end{equation*}
+	$\mycal{A}_\tau=\mycal{A}\cup\set{{\tau}}$と書く事にする。
+	そして、$A_2^{(m)}$の状態遷移を次のように書くことにする。
+	\begin{equation*}\begin{split}
+		A_2 = a^2 \implies
+		\begin{split}
+			A_2^{(m)} &= m^s (a m^+)^2 \tau m^e \\
+			&= m^s \xto{a} m^+ \xto{a} m^+ \xto{\tau} m^e
+		\end{split}
+	\end{split}\end{equation*}
+	ここで、$m^?$は操作表の$m$行目に対する次の操作とする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $m^s$は開始の操作
+		\item $m^+$は文字数のインクリメント
+		\item $m^e$は終了の操作
+	\end{itemize} %}
+	入力文字（のマッチング）と操作は次の交換関係に従い、
+	\begin{equation*}\begin{array}{r|rrrrr}
+		& \mycal{A} & \tau & m^s & m^e & m^+ \\\hline
+		\mycal{A} & \text{非可換} & \text{非可換} & \text{非可換} 
+			& \text{可換} & \text{可換} \\
+		\tau & & \text{べき等} & \text{非可換} & \text{非可換} & \text{可換} \\
+		m^s & & & \text{最後優先} & \text{非可換} & \text{非可換} \\
+		m^e & & & & \text{最初優先} & \text{非可換} \\
+		m^+ & & & & & \text{可換} \\
+	\end{array}\end{equation*}
+	次の分配則を満たすものとする。
+	\begin{equation*}\begin{split}
+		wm^?(w_1+w_2) = wm^?w_1 + wm^?w_2
+		\quad\text{for all }
+		m\in\sizen,\; w,w_1,w_2\in\W_*(\mycal{A}_\tau\cup\mycal{E})
+	\end{split}\end{equation*}
+	ここで、$\mycal{E}$を集合$\set{m^s,m^e,m^+\bou m\in\sizen}$とする。
+	文字数のインクリメント$m^+$が文字と可換なのは、開始$m^s$から終了$m^e$まで
+	のどの時点で文字数をインクリメントしても同じことだからで、終了$m^e$が
+	真の文字$\mycal{A}$と可換なのは、単語を連結する際、パターンが確定する
+	まで終了の操作を先延ばしするためである。また、開始の操作$m^s$が最後優先
+	というのは、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 左から右へ$m^s\cdots m^s$操作をしていった場合は、最も右にある$m^s$
+		が有効になり$\overrightarrow{m^s\cdots\underline{m^s}\;}$、
+		\item 右から左へ$m^s\cdots m^s$操作をしていった場合は、最も左にある$m^s$
+		が有効になる$\overleftarrow{\;\underline{m^s}\cdots m^s}$
+	\end{itemize} %}
+	終了の操作$m^s$が最初優先というのは、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 左から右へ$m^e\cdots m^e$操作をしていった場合は、最も左にある$m^e$
+		が有効になり$\overrightarrow{\underline{m^e}\cdots m^e\;}$、
+		\item 右から左へ$m^e\cdots m^e$操作をしていった場合は、最も右にある$m^e$
+		が有効になる$\overleftarrow{\;m^e\cdots\underline{m^e}}$
+	\end{itemize} %}
+	ことを言っている。
+
+	変数$X$と$Y$の連結では$X$のお尻の$\tau$を取り除くのだが、まず、
+	単純に次のようにしてみる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			s_1 \ar@/^1ex/[d]^{a_1} \ar[rd]^\tau \\
+			*+[F-:<3pt>]{X^{(m)}} \ar@/^1ex/[u]^{b_1} \ar@/^1ex/[d]^{b_2} & m^e \\
+			s_2 \ar@/^1ex/[u]^{a_2} \ar[ru]_\tau \\
+		}\times \xymatrix{
+			& t_1 \ar@/^1ex/[d]^{d_1} \\
+			n^s \ar[ru]^{c_1} \ar[rd]_{c_2} & *+[F-:<3pt>]{Y^{(n)}}
+				\ar@/^1ex/[u]^{e_1} \ar@/^1ex/[d]^{e_2} \\
+			& t_2 \ar@/^1ex/[u]^{d_2} \\
+		}\mapsto
+		\xymatrix@C+2em{
+			s_1m^en^s \ar@/^1ex/[d]^{a_1} \ar[r]^{c_1} \ar[rdd]|(0.4){c_2}
+			& t_1 \ar@/^1ex/[d]^{d_1} \\
+			*+[F-:<3pt>]{X^{(m)}} \ar@/^1ex/[u]^{b_1} \ar@/^1ex/[d]^{b_2}
+			& *+[F-:<3pt>]{Y^{(n)}} \ar@/^1ex/[u]^{e_1} \ar@/^1ex/[d]^{e_2} \\
+			s_2m^en^s \ar@/^1ex/[u]^{a_2} \ar[ruu]|(0.4){c_1} \ar[r]^{c_2}
+			& t_2 \ar@/^1ex/[u]^{d_2} \\
+		}
+	\end{split}\end{equation*}
+	この場合、辺$a_1$や$a_2$が存在すると、経路
+	$s_1m^en^s\xto{a_1}\cdots\xto{b_1}s_1m^en^s$や
+	$s_1m^en^s\xto{a_1}\cdots\xto{b_2}s_2m^en^s$が存在して、左から実行すると、
+	右側の終了操作$m^e$が無効になってしまう。実行すべきは最も右側の終了操作
+	なので、困ったことになる。したがって、出力する辺がない場合は、$sm^en^s$
+	という操作で問題ないが、出力する辺がある場合には、終了の操作を先送りする
+	必要がある。例えば、次のようになる。
+	\begin{equation*}\xymatrix@C+2em{
+		s_1\overbrace{m^e}^{\text{Problem}}n^s \ar@/^1ex/[d]^{a_1}
+			\ar[r]^{c_1} \ar[rdd]|(0.4){c_2}
+		& t_1 \ar@/^1ex/[d]^{d_1} \\
+		*+[F-:<3pt>]{X^{(m)}} \ar@/^1ex/[u]^{b_1} \ar@/^1ex/[d]^{b_2}
+		& *+[F-:<3pt>]{Y^{(n)}} \ar@/^1ex/[u]^{e_1} \ar@/^1ex/[d]^{e_2} \\
+		s_2\underbrace{m^e}_{\text{OK}}n^s \ar[ruu]|(0.4){c_1} \ar[r]^{c_2}
+		& t_2 \ar@/^1ex/[u]^{d_2} \\
+	}\end{equation*}
+	終了操作$m^e$を一文字先送りできれば良いのだが、$a_1=c_1$となる場合は、
+	一文字の先送りでは済まなくなり、二文字以上の先送りが必要になる。
+	$a_1=c_1$かつ$a_1\neq c_2$の場合だと次のようになる。
+	\begin{equation*}\xymatrix@C+2em{
+		n^ss_1 \ar@/^1ex/[d]^{\underline{a_1}} \ar[r]^{\underline{a_1}}
+			\ar[rdd]|(0.4){c_2\neq a_1}
+		& \,\overbrace{m^e}^{\text{Problem}}t_1 \ar@/^1ex/[d]^{d_1} \\
+		*+[F-:<3pt>]{X^{(m)}} \ar@/^1ex/[u]^{b_1} \ar[d]^{b_2}
+		& *+[F-:<3pt>]{Y^{(n)}} \ar@/^1ex/[u]^{e_1} \ar@/^1ex/[d]^{e_2} \\
+		s_2\underbrace{m^e}_{\text{OK}}n^s \ar[ruu]|(0.4){a_1} \ar[r]^{c_2}
+		& \,\underbrace{m^e}_{\text{OK}}t_2 \ar@/^1ex/[u]^{d_2} \\
+	}\end{equation*}
+	問題の箇所を二文字先送りするために次のようなDFAを使った変形をする。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			n^ss_1 \ar@/^1ex/[d]^{a_1} \ar[r]^{a_1} & m^et_1 \ar[d] \\
+			s_3 \ar@/^1ex/[u]^{b_1} \ar[d] & t_3 \\
+			s_4 \\
+		} \mapsto \xymatrix{
+			n^ss_1 \ar@/^1ex/[r]^{a_1}
+				& s_3 + m^et_1 \ar@/^1ex/[l]^{b_1} \ar[ld] \ar[d] \\
+			s_4 & t_3 \\
+		} \mapsto \xymatrix{
+			n^ss_1 \ar@/^1ex/[r]^{a_1}
+				& s_3 + t_1 \ar@/^1ex/[l]^{b_1} \ar[ld] \ar[d] \\
+			s_4 & s_3^{-1}m^et_3 \\
+		}
+	\end{split}\end{equation*}
+	ここで、$s_3^{-1}$は操作$s_3$を打ち消す操作である。$s_3$は$m^+$と$m^e$
+	からなる単語だから、$m^+$の操作を打ち消せばよい。$m^+$の操作を打ち消す
+	操作を$m^-$と書く。$m^-$は表の$m$番目の行の文字数をディクレメントする
+	操作である。$\set{m^+,m^-\bou m\in\sizen}$はWeyl代数となる。
+	\begin{equation*}\begin{split}
+		[m^+,n^-] = \jump{m=n} \quad\text{for all }m,n\in\sizen
+	\end{split}\end{equation*}
+	重複する辺が現れる度にDFAを作りながら終了操作$m^e$をどんどん先送りして
+	いくと、部分DFA$s_1\xto{a_1}\cdots$は次のようになる。
+	\begin{equation*}\xymatrix@C+2em{
+		s_1n^s \ar[rd]^{a_1}
+		& & m^{-p}m^eu_1 \ar@/^1ex/[d] \\
+		*+[F-:<3pt>]{X_1^{(m)}} \ar[u]^{b_1} \ar@/^1ex/[r]
+		& *+[F-:<3pt>]{\text{DFA}} \ar[ru] \ar[rd] \ar@/^1ex/[l]
+		& *+[F-:<3pt>]{Y_1^{(n)}} \ar@/^1ex/[u] \ar@/^1ex/[d] \\
+		& & m^{-q}m^eu_2 \ar@/^1ex/[u] \\
+	}\end{equation*}
+	自然数$p,q$はDFAを作るために辺の合併を行った回数である。
+	最悪の場合は、$Y$の終了操作$n^e$が頂点$u_1\in Y$や$u_2\in Y$になる。
+	それでも有限回の操作で必ず$X$の頂点に戻らない$Y$の頂点は見つかる。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+	\begin{equation*}\begin{split}
+		A_2^{(m)}A_1^{(n)} &= m^{+2}n^{+} (m^sa^2\tau m^e)(n^sa\tau n^e) \\
+		&= m^{+2}n^{+} m^sa^2m^en^sa\tau n^e \\
+	\end{split}\end{equation*}
+	一般には次のようにする。
+	\begin{equation*}\begin{split}
+		\xymatrix {
+			S_1 \ar[r]^\tau & m^e \\
+			S_2 \ar[ru]^\tau \\
+		} \xymatrix {
+			n^s \ar[r]^{\alpha_1} \ar[rd]^{\alpha_2} & T_1 \\
+			& T_2 \\
+		} = \xymatrix @C+1em {
+			S_1m^en^s \ar[r]^{\alpha_1} \ar[rd]|(0.3){\alpha_2} & T_1 \\
+			S_2m^en^s \ar[r]_{\alpha_2} \ar[ru]|(0.3){\alpha_1} & T_2 \\
+		}
+	\end{split}\end{equation*}
+	ここで、$\alpha_i\in\mycal{A}_\tau$とする。
+	この方法は$a\in\mycal{A},\;\alpha\in\mycal{A}_\tau$として、
+	次のような状況で破綻する。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+	\begin{equation*}\begin{split}
+		A_2^{(m)}A_1^{(n)} &= m^{+2}n^{+} (m^sa^2\tau m^e)(n^sa\tau n^e) \\
+		&= m^{+2}n^{+} m^sa^2m^en^sa\tau n^e \\
+	\end{split}\end{equation*}
+	一般には次のようにする。
+	\begin{equation*}\begin{split}
+		\xymatrix {
+			S_1 \ar[r]^\tau & m^e \\
+			S_2 \ar[ru]^\tau \\
+		} \xymatrix {
+			n^s \ar[r]^{\alpha_1} \ar[rd]^{\alpha_2} & T_1 \\
+			& T_2 \\
+		} = \xymatrix @C+1em {
+			S_1m^en^s \ar[r]^{\alpha_1} \ar[rd]|(0.3){\alpha_2} & T_1 \\
+			S_2m^en^s \ar[r]_{\alpha_2} \ar[ru]|(0.3){\alpha_1} & T_2 \\
+		}
+	\end{split}\end{equation*}
+	ここで、$\alpha_i\in\mycal{A}_\tau$とする。
+	この方法は$a\in\mycal{A},\;\alpha\in\mycal{A}_\tau$として、
+	次のような状況で破綻する。
+	\begin{equation*}\begin{split}
+		(S_2 \xfrom{a} S_1 \xto{\tau} m^e) (n^s \xto{\alpha} T)
+		= S_2 \xfrom{a} (S_1'=S_2m^en^s) \xto{\alpha} T
+	\end{split}\end{equation*}
+	$S_1\xto{a}S_2$の遷移があるということは、$S_1$に戻ってくるループがある
+	可能性がある。$S_1$に戻ってくるループがないのであれば、問題はない。
+	$S_1$に戻ってくるループがあった場合は、$S_1'$で終了操作$m^e$をしてしまう
+	ことはまずい。そこで、終了操作$m^e$を先送りすることにする。
+	\begin{equation*}\begin{split}
+		(S_2 \xfrom{a} S_1 \xto{\tau} m^e) (n^s \xto{\alpha} T)
+		= S_2 \xfrom{a} (S_1'=S_2n^s) \xto{\alpha} (T'=m^eT)
+	\end{split}\end{equation*}
+	さらに、$\alpha=a$であった場合には、終了操作$m^e$をさらに先送りする必要
+	がある。
+
+	\begin{todo}[先送り戦略]\label{todo:先送り戦略} %{
+		日常生活においても問題の先送りは利点よりも不利点の方が大きくなること
+		が多い。しかし、致し方ないこともある。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 向きづけられたグラフで、ある頂点を起点とするループ
+			があるかどうかの妥当な判定方法があれば、無駄な先送りを避けられる。
+			\item Kleeneスターが単語の最後にきた場合には、必ずループになる。
+			\item NFAからDFAを作成する時に、頂点がループの起点になるかどうかの
+			判定ができるかもしれない。有理言語の場合、ループはKleeneスターに
+			起因するものだけなので、Kleeneスターに繋がる頂点はすべてループの
+			起点になる。
+			\item 先送りやむなしの場合は、一文字単位で先送りするか変数単位で
+			先送りするかの選択がある。変数単位で先送りする方が処理が簡単になる。
+		\end{itemize} %}
+	\end{todo} %todo:先送り戦略}
+
+	この約束で例\eqref{eq:正規表現でのトークン分解の例}を計算してみる。
 %s2:正規表現でのトークン分解}
+\subsection{ノート}\label{s2:ノート} %{
+	Kleeneスターは次の式で特徴づけることもできる。
+	\begin{equation*}\begin{split}
+		(1 - x)(1 + y) = 1 &\implies y = x^+
+	\end{split}\end{equation*}
+%s2:ノート}
 %s1:トークナイザー}
 }\endgroup %}
