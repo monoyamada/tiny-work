@@ -501,363 +501,246 @@
 	再帰方程式に戻る。簡単のために$c=1$とすると、求める再帰方程式は
 	次のようになる。
 	\begin{equation*}\begin{split}
-		S &= \sum_{n\in\sizen} S_n \\
-		S_n &:= \braket{D(VD)^n} \\
+		x &= \sum_{n\in\sizen} x_n \\
+		x_n &:= \braket{D(VD)^n} \\
 		D &:= (b\eta_{-1})^*a(d\eta_{2})^* \\
 		V &:= \eta_{1}\eta_{-2} \\
 	\end{split}\end{equation*}
-	$S_n$が次の漸化式を満たすことが証明したいことである。
+	$x_n$が次の漸化式を満たすことが証明したいことである。
 	\begin{equation}\label{eq:証明したい因子化}\begin{split}
-		S_0 &= a \\
-		S_{n+1} &= \sum_{p=0}^nbS_{n-p}S_pd \quad\text{for all } n\in\sizen
+		x_0 &= a \\
+		x_{n+1} &= \sum_{p=0}^n bx_{n-p}x_pd \quad\text{for all } n\in\sizen
 	\end{split}\end{equation}
-	式を見やすくするために次のように略記する。
-	\begin{equation*}\begin{array}{rclcrcl}
-		\beta &:=& b\eta_{-1}, && \bra{\beta} &:=& \bra{0}\beta^* \\
-		\delta &:=& \eta_{2}d, && \ket{\delta} &:=& \delta^*\ket{0} \\
-	\end{array}\end{equation*}
 
-\subsubsection{証明の試み}\label{s3:証明の試み} %{
 	ブラとケットを対称に展開すると次のようになる。
 	\begin{equation*}\begin{split}
-		\braket{D(VD)^*} &= \braket{\beta|S_0|\delta}
-		+ \sum_{n\in\sizen}b\bra{\beta}S_0W^nS_0\ket{\delta}d \\
-		&= \braket{\beta|S_0|\delta} + b\bra{\beta}S_0W^*S_0\ket{\delta}d \\
+		\braket{D(VD)^*} &= x_0 + b\bra{\beta}x_0W^*x_0\ket{\delta}d \\
+		W &= \eta_{-2}(\eta_{-1}b)^*bx_0 + x_0d(d\eta_2)^*\eta_1 \\
 	\end{split}\end{equation*}
-	ここで、$W$は次のように定義している。
+	$W^n$が満たす漸化式を求める。$\beta$と$\delta$を次のように定義すると、
 	\begin{equation*}\begin{split}
-		W = \beta_-bS_0 + S_0d\delta_+,\quad
-		\beta_- = \eta_{-2}\beta^*,\quad
-		\delta_+ = \delta^*\eta_1
+		\beta = \eta_{-2}(\eta_{-1})^*b,\quad \delta = d(d\eta_2)^*\eta_1
 	\end{split}\end{equation*}
-
-	$R_2:V\otimes V\to R\W\mycal{A}$と$R\in\Lin_RV$を次のように定義する。
+	$W=\beta x_0+x_0\delta$と書かれる。$\beta$が消滅、$\delta$が生成演算子に
+	対応する。そして、交換関係に相当する次の式が任意の$w_1,w_2\in\W A$
+	に対して成り立つ。
 	\begin{equation*}\begin{split}
-		R_2(f\ket{0}\otimes g\ket{0}) &= \braket{(Rf)g} \\
-		R(a,b,d,\eta_{\pm1},\eta_{\pm2}) &= (a,d,b,\eta_{\mp2},\eta_{\mp1}) \\
+		\beta w_1 w_2 \delta 
+		&= \bigl(\eta_{-2} + \eta_{-2}(\eta_{-1}b)^+\bigr) bw_1w_2d
+		\bigl(\eta_{1} + (d\eta_{2})^+\eta_{1}\bigr) \\
+		&= \beta bw_1w_2d + bw_1w_2d \delta \\
 	\end{split}\end{equation*}
-	$R$は文字の置換を表している。内積をテンソル積を通して考える理由は
-	次のような式変形を考えるためである。
+	したがって、線形二項演算$*:R\W A\otimes R\W A\to R\W A$を次のように
+	定義すると、
 	\begin{equation*}\begin{split}
-		(\beta_-bS_0)^n \bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr)
-		&\sim \sum_{p=0}^n (\beta_-bS_0)^{n-p}S_0\ket{\delta}
-			\otimes (\beta_-bS_0)^{p}S_0\ket{\delta} \\
-		&\sim \sum_{p=0}^n \bra{\beta}S_0(S_0d\delta_+)^{n-p}
-			(\beta_-bS_0)^{p}S_0\ket{\delta} \\
-		&\sim \bra{\beta}S_0\bigl(S_0d\delta_+ + \beta_-bS_0\bigr)^n
-			S_0\ket{\delta} \\
+		w_1*w_2 = bw_1w_2d \quad\text{for all } w_1,w_2\in \W A
 	\end{split}\end{equation*}
-	このような式変形が成り立つと、$\ket{\delta}$は$(\beta_-bS_0)$の
-	固有ベクトルとなっていることから、
+	$\beta w_1 w_2\delta=\beta(w_1*w_2)+(w_1*w_2)\delta$となる。
+	ここで、二項演算$*$は結合的でないことに注意する。
 	\begin{equation*}\begin{split}
-		(\beta_-bS_0)^nS_0\ket{\delta} &= (bS_0)^nS_0d^n
+		(w_1*w_2)*w_3 \neq w_1*(w_2*w_3)
+		\quad\text{in general } w_1,w_2,w_3\in \W A
 	\end{split}\end{equation*}
-	$R_2$を掛けた結果が次のように因子化されることは明らかである。
+	$W^2$は正規積の形で次のように書ける。
 	\begin{equation*}\begin{split}
-		R_2\bigl((\beta_-bS_0)^mS_0\ket{\delta}
-			\otimes(\beta_-bS_0)^nS_0\ket{\delta}\bigr) \\
-		= \bra{\delta}S_0\bigl(R(\beta_-bS_0)^m\bigr)\ket{0}
-			\bra{0}\bigl(R(\beta_-bS_0)^n\bigr)S_0\ket{0}
+		W^2 &= (\beta x_0)^2 + (x_0\delta)^2 + (x_0\delta)(\beta x_0)
+			+ \beta (x_0 * x_0) + (x_0 * x_0) \delta \\
+		&= (\beta x_0)^2 + (x_0\delta)^2 + (x_0\delta)(\beta x_0)
+			+ \beta x_1 + x_1 \delta \\
 	\end{split}\end{equation*}
-	$R_2$を使って摂動計算してみよう。摂動の$1$次では次のようになる。
+	ここで、$x_1:=x_0*x_0$とおいた。$W^3$を正規積の形に直すことを考える。
+	$W^2$の中で生成演算子$\delta$を含む項への$\beta$の作用を計算すると
+	次のようになる。
 	\begin{equation*}\begin{split}
-		&\bra{\beta}S_0\bigl(S_0d\delta_+ + \beta_-bS_0\bigr)S_0\ket{\delta} \\
-		&= \bra{\beta}S_0 S_0d\delta_+ S_0\ket{\delta}
-		+ \bra{\beta}S_0 \beta_-bS_0 S_0\ket{\delta} \\
-		&= R_2 \bigl((\beta_-bS_0)\otimes\id + \id\otimes(\beta_-bS_0)\bigr)
-			\bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr) \\
+		(\beta x_0)(x_0 \delta)^2 
+		&= (x_1 \delta)(x_0\delta) + (x_1*x_0)\delta + \beta(x_1*x_0)  \\
+		(\beta x_0)(x_1\delta) &= (x_0*x_1)\delta + \beta(x_0*x_1) \\
+		(\beta x_0)(x_0\delta)(\beta x_0) 
+		&= (\beta x_1)(\beta x_0) + (x_1 \delta)(\beta x_0) \\
 	\end{split}\end{equation*}
-	摂動の$2$次では次のようになる。
+	ここで、$x_2:=x_1*x_0+x_0*x_1$とおくと、$W^3$は次のようになることが
+	わかる。
 	\begin{equation*}\begin{split}
-		&\bra{\beta}S_0\bigl(S_0d\delta_+ + \beta_-bS_0\bigr)^2
-			S_0\ket{\delta} \\
-		&= \sum_{p=0}^2\bra{\beta}S_0 (S_0d\delta_+)^{2-p} (\beta_-bS_0)^p
-			S_0\ket{\delta}
-			+ \bra{\beta}S_0 (\beta_-bS_0)(S_0d\delta_+) S_0\ket{\delta} \\
-		&= \sum_{p=0}^2 R_2 
-			\bigl((\beta_-bS_0)^{2-p}\otimes(\beta_-bS_0)^p\bigr)
-			\bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr) \\
-		&\;+ R_2 \bigl((\beta_-bS_1)\otimes\id + \id\otimes(\beta_-bS_1)\bigr)
-			\bigl(S_0\ket{\delta}\otimes S_0\ket{\delta}\bigr) \\
+		W^3 &= (x_0\delta)^3 + (x_0\delta)(x_1 \delta)
+			+ (x_0\delta)^2(\beta x_0)
+			+ (x_0\delta)\biggl((\beta x_0)^2 + (\beta x_1)\biggr) \\
+		&\, + (x_1 \delta)(x_0\delta) + x_2 \delta + \beta x_2
+			+ (\beta x_1)(\beta x_0) + (x_1 \delta)(\beta x_0) \\
+		&\, + (\beta x_0)^3 + (\beta x_0)(\beta x_1) \\
+		&= \biggl((x_0\delta)^3 + (x_0\delta)(x_1 \delta) 
+			+ (x_1 \delta)(x_0\delta) + (x_2\delta)\biggr) \\
+		&\, + \biggl((x_0\delta)^2 + (x_1\delta)\biggr)(\beta x_0) \\
+		&\, + (x_0\delta)\biggl((\beta x_0)^2 + (\beta x_1)\biggr) \\
+		&\, + \biggl((\beta x_0)^3 + (\beta x_0)(\beta x_1) 
+			+ (\beta x_1)(\beta x_0) + (\beta x_2)\biggr) \\
 	\end{split}\end{equation*}
-	この式の二項目は次の正規積の計算に拠っている。
+	ここで、$W_{\pm n},\;n\in\sizen$を次のように定義する。
 	\begin{equation*}\begin{split}
-		(\beta_-bS_0)(\beta_-bS_0) &= \beta_-bS_1 + S_1d\delta_+
+		W_{\pm n} &= \sum_{c\in C_n} \xi_\pm c \\
 	\end{split}\end{equation*}
-
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-	\end{todo} %todo:ここまで}
-	次の変換$R\in\Lin_RR\W(\mycal{A}+\mycal{H})$で、作用素$D(VD)^*$は
-	不変になっている。
-	\begin{equation}\label{eq:真空期待値を不変にする文字の置換}\begin{split}
-		R: (a,b,d,\eta_1,\eta_2) \mapsto (a,d,b,\eta_2,\eta_1) \\
+	$C_n,\;n\in\sizen$は$n$の合成とする。例えば、次のように定義する。
+	\begin{equation*}\begin{split}
+		C_0 &= \Set{1_\W} \\
+		C_1 &= \Set{[1]} \\
+		C_2 &= \Set{[2],[1,1]} \\
+		C_3 &= \Set{[3],[2,1],[1,2],[1,1,1]} \\
+	\end{split}\end{equation*}
+	そして、$\xi_\pm:R\W\sizen_+\to R\W A\otimes R\W B$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\xi_\pm1_\W &= 1_\W \\
+		\xi_+[n_1,\dots n_p] &= (x_{n_1-1}\delta)\cdots (x_{n_p-1}\delta) \\
+		\xi_-[n_1,\dots n_p] &= (\beta x_{n_1-1})\cdots (\beta x_{n_p-1}) \\
+	\end{split}\end{equation*}
+	ここで、$x_n$は次の漸化式で定義する。
+	\begin{equation*}\begin{split}
+		x_0 &= a \\
+		x_{n+1} &= \sum_{p=0}^n x_{n-p}*x_p
+	\end{split}\end{equation*}
+	すると、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		W^n = \sum_{p=0}^n W_{n-p}W_{-p} \quad\text{for all } n = 0, 1, 2, 3
+	\end{split}\end{equation*}
+	$W^n=\sum_{p=0}^nW_{n-p}W_{-p}$が任意の$n\in\sizen$で成り立つかどうかを
+	調べる。次の式が成り立つことを使い、
+	\begin{equation*}\begin{split}
+		W_{n+1} &= \sum_{p=1}^n(x_{p-1}\delta)W_{n-p}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$\gamma_{pq}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\gamma_{pq} := \beta(x_p*x_q) + (x_p*x_q)\delta
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(\beta x_0)W_n &= \sum_{p=1}^n(\beta x_0)(x_{p-1}\delta)W_{n-p} \\
+		&= \sum_{p=1}^n \gamma_{0(p-1)} W_{n-p} \\
+		&= (x_1\delta)W_{n-1} + (\beta x_1)W_{n-1} 
+			+ \sum_{p=2}^n \gamma_{0(p-1)} W_{n-p} \\
+		&= (x_1\delta)W_{n-1} + \sum_{p=2}^n
+			\bigl(\gamma_{0(p-1)} + \gamma_{1(p-2)}\bigr) W_{n-p} \\
+		&= (x_1\delta)W_{n-1} + (x_2\delta)W_{n-2} + (\beta x_2)W_{n-2} 
+			+ \sum_{p=3}^n \bigl(\gamma_{0(p-1)} + \gamma_{1(p-2)}\bigr)
+			W_{n-p} \\
+		&= (x_1\delta)W_{n-1} + (x_2\delta)W_{n-2} + \sum_{p=3}^n 
+			\bigl(\gamma_{0(p-1)} + \gamma_{1(p-2)} + \gamma_{2(p-3)}\bigr)
+			W_{n-p} \\
+		&= \cdots \\
+		&= (x_1\delta)W_{n-1} +\cdots+ (x_{n-1}\delta)W_{1} + \sum_{q=0}^{n-1}
+			\gamma_{q(n-1-q)} W_{0} \\
+		&= (x_1\delta)W_{n-1} +\cdots+ (x_n\delta)W_{0} + (\beta x_n)W_{0} \\
+	\end{split}\end{equation*}
+	したがって、ある$n\in\sizen_+$で次の式が成り立つとすると、
+	\begin{equation}\label{eq:Wの帰納法}\begin{split}
+		W^n &= \sum_{p=0}^n W_{n-p}W_{-p}
 	\end{split}\end{equation}
-	つまり、次の式が成り立つ。
+	次の式が成り立つから、
 	\begin{equation*}\begin{split}
-		D(VD)^* = R\bigl(D(VD)^*\bigr)
+		W^{n+1} &= \sum_{p=0}^n \biggl((x_0\delta)W_{n-p}
+			+ (\beta x_0)W_{n-p}\biggr)W_{-p} \\
+		&= \sum_{p=0}^n \biggl((x_0\delta)W_{n-p}
+			+ \sum_{q=1}^{n-p} (x_q\delta)W_{n-p-q}
+			+ (\beta x_{n-p})\biggr)W_{-p} \\
+		&= \sum_{p=0}^n \biggl(W_{n+1-p} + (\beta x_{n-p})\biggr)W_{-p} \\
+		&= \sum_{p=0}^n W_{n+1-p}W_{-p} + W_{-(n+1)} \\
+		&= \sum_{p=0}^{n+1} W_{n+1-p}W_{-p} \\
 	\end{split}\end{equation*}
-	$R$を線形写像で表すことを考える。$R$は次のLie微分で記述できるだろう。
-	\begin{equation*}\begin{split}
-	\end{split}\end{equation*}
-
-	この記法を使うと、$\braket{D(VD)^*}$は次のように書くことができる。
-	\begin{equation*}\begin{split}
-		\braket{D(VD)^*} &= S_0 + b\bra{\beta}S_0(\beta_-bS_0)^*
-		\bigl((S_0d\delta_+)(\beta_-bS_0)^*\bigr)^*S_0\ket{\delta}d
-	\end{split}\end{equation*}
-	Kleeneスター$\bigl((S_0d\delta_+)(\beta_-bS_0)^*\bigr)^*$の展開を
-	考えてみる。$0$次の項は次のようになる。
-	\begin{equation*}\begin{split}
-		b\bra{\beta}S_0(\beta_-bS_0)^*S_0\ket{\delta}d
-		= \sum_{n\in\sizen}(bS_0)^{n+1}S_0d^{n+1}
-	\end{split}\end{equation*}
-	この式は次の'片側だけの自然な成長'の和を表している。
-	\begin{equation*}\begin{split}
-		bS_0S_0d \mapsto bS_0(bS_0S_0d)d
-		\mapsto bS_0\bigl(bS_0(bS_0S_0d)d\bigr)d
-		\mapsto \cdots
-	\end{split}\end{equation*}
-	次の$R$-線形写像$\phi_R\in\Lin_RR\W\mycal{A}$を使うと、
-	\begin{equation*}\begin{split}
-		\phi_Rw &= bS_0wd \quad\text{for all } w\in \W\mycal{A} \\
-	\end{split}\end{equation*}
-	次の式が成り立ち、
-	\begin{equation*}\begin{split}
-		(\beta_-bS_0)^*S_0\ket{\delta} &= (\phi_R^*S_0)\ket{\delta} \\
-	\end{split}\end{equation*}
-	$0$次の項は次のように書ける。
-	\begin{equation*}\begin{split}
-		b\bra{\beta}S_0(\beta_-bS_0)^*S_0\ket{\delta}d = \phi_R^+S_0
-	\end{split}\end{equation*}
-	また、次の式と
-	\begin{equation*}\begin{split}
-		(\beta_-bS_0)^*S_0d\delta_+
-		= (\phi_R^*S_0)d\delta_+ + (\beta_-bS_0)^*\beta_-b(\phi_R^+S_0)
-	\end{split}\end{equation*}
-	次の式より、
-	\begin{equation*}\begin{split}
-		\bra{\beta}S_0(\phi_R^*S_0)d\delta_+(\phi_R^*S_0)\ket{\delta}
-		&= (\phi_R^+S_0)(\phi_R^*S_0) \\
-		\bra{\beta}S_0(\beta_-bS_0)^*\beta_-b(\phi_R^+S_0)(\phi_R^*S_0)
-			\ket{\delta}
-		&= S_0\biggl(\phi_R^*\bigl(b(\phi_R^+S_0)(\phi_R^*S_0)d\bigr)\biggr) \\
-	\end{split}\end{equation*}
-	$1$次の項は次のように書けることがわかる。
-	\begin{equation*}\begin{split}
-		b\bra{\beta}S_0(\beta_-bS_0)^*S_0d\delta_+(\beta_-bS_0)^*S_0
-			\ket{\delta}d 
-		= \phi_R^*\biggl(b(\phi_R^+S_0)(\phi_R^*S_0)d\biggr)
-	\end{split}\end{equation*}
-	$0$次と$1$次の項を足すと次のようになる。
-	\begin{equation*}\begin{split}
-		& b\bra{\beta}S_0(\beta_-bS_0)^*S_0\ket{\delta}d 
-		+ b\bra{\beta}S_0(\beta_-bS_0)^*S_0d\delta_+(\beta_-bS_0)^*S_0
-			\ket{\delta}d \\
-		&= \phi_R^*\biggl(\phi_RS_0 + b(\phi_R^+S_0)(\phi_R^*S_0)d\biggr)
-	\end{split}\end{equation*}
-	$1$次のケットだけで見ると次のようになる。
-
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item Solomon's descent algebra
-		\end{itemize} %}
-	\end{todo} %todo:ここまで}
-
-	$1$次の項は次のようになる。
-	\begin{equation*}\begin{split}
-		b\bra{\beta}S_0(\beta_-bS_0)^*(S_0d\delta_+)(\beta_-bS_0)^*S_0
-			\ket{\delta}d
-	\end{split}\end{equation*}
-	$1$次の項は$0$次の項の計算を使う。
-	\begin{equation*}\begin{split}
-		\ket{\beta_0} &:= (\beta_-bS_0)^*S_0\ket{\delta}d \\
-		&= \sum_{n\in\sizen}(bS_0)^nS_0d^{n+1}
-	\end{split}\end{equation*}
-
-	$W^n$を正規積に書き直すところから0-モードが現れる。
-	このとき、$\beta_-$と$\delta_+$の積が基本的な演算構造になる。
-	\begin{equation*}\begin{split}
-		\beta_-w\delta_+ &= \beta_-bw + wd\delta_+
-			\quad\text{for all } w\in\W\mycal{A}
-	\end{split}\end{equation*}
-	この式を使うと次の式が導かれる。
-	\begin{equation*}\begin{split}
-		(\beta_-bS_0)^*S_0d\delta_+
-			= \sum_{n\in\sizen} (bS_0)^nS_0d^{n+1}\delta_+
-			+ \sum_{n\in\sizen} (\beta_-bS_0)^*\beta_-b(bS_0)^{n+1}S_0d^{n+1} \\
-	\end{split}
+	$n+1$でも帰納法の仮定\eqref{eq:Wの帰納法}が成り立つ。
+	そして、任意の$n\in\sizen$に対して$W_n$と$W_{-n}$はそれぞれ$\bra{\beta}$
+	と$\ket{\delta}$の固有値となっているから、
+	\begin{equation*}\begin{array}{rcccl}
+		\bra{\beta}wW_n &=& \sum_{c\in C_n} \bra{\beta}w(\xi_+c)
+			&=& \sum_{c\in C_n} \bra{\beta}b^{|c|}(\bar{\xi}_+c) \\
+		W_{-n}w\ket{\delta} &=& \sum_{c\in C_n} (\xi_-c)w\ket{\delta}
+			&=& \sum_{c\in C_n} (\bar{\xi}_-c)wd^{|c|}\ket{\delta} \\
+	\end{array} \quad\text{for all } w\in \W A
 	\end{equation*}
-%s3:証明の試み}
-
-\begin{todo}[ここまで]\label{todo:ここまで} %{
-14,742,697
-14,766,507
-14,797,783
-14,817,344
-14,890,134
-14,910,482
-14,931,755
-14,951,676
-\end{todo} %todo:ここまで}
-
-	低次の項を見てみる。次の式を使って、
-	\begin{equation*}\begin{array}{rclcl}
-		D &=& \beta^*a\delta^* &=& a+\beta^+a+a\delta^+ \\
-		VD &=& \eta_1\eta_{-2}\beta^*a\delta^* 
-			&=& \eta_1(\eta_{-2}\beta^*a + ad\delta^*) \\
-		DV &=& \eta_1\eta_{-2}\beta^*a\delta^* 
-			&=& (\beta^*ba + a\delta^*\eta_1)\eta_{-2} \\
+	\begin{equation*}\begin{split}
+		\bar{\xi}_\pm 1_\W &= 1_\W \\
+		\bar{\xi}_+[n_1,\dots,n_p] &= x_{n_1-1}d\cdots x_{n_p-1}d \\
+		\bar{\xi}_-[n_1,\dots,n_p] &= bx_{n_1-1}\cdots bx_{n_p-1} \\
+	\end{split}\end{equation*}
+	任意の$n\in\sizen$に対して次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\bra{\beta}bx_0W^nx_0d\ket{\delta}
+		&= \sum_{p=0}^n \bra{\beta}bx_0W_{n-p}W_{-p}x_0d\ket{\delta} \\
+		&= \sum_{p=0}^n \bra{\beta}bx_0W_{n-p}\ket{\delta}
+			\bra{\beta}W_{-p}x_0d\ket{\delta} \\
+	\end{split}\end{equation*}
+	ここで、$y_n,z_n,\;n\in\sizen$を次のように定義し、
+	\begin{equation*}\begin{split}
+		y_n := \bra{\beta}bx_0W^nx_0d\ket{\delta},\quad
+		z_n := \bra{\beta}W_{-n}x_0d\ket{\delta}
+	\end{split}\end{equation*}
+	$R$-線形写像$\rho\in\Lin_RR\W A$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\rho(w_1w_2) &= (\rho w_2)(\rho w_1) \\
+		\rho [x] &= \left\{\begin{split}
+			x = b &\implies [d] \\
+			x = d &\implies [b] \\
+			\text{else} &\implies [x] \\
+		\end{split}\right. \\
+		\rho 1_\W &= 1_\W \\
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		y_n = \sum_{p=0}^n (\rho z_{n-p})z_p \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$\rho$が逆順準同型かつ冪等だから、$y_n$は$\rho$不変になっている。
+	\begin{equation*}\begin{split}
+		\rho y_n = y_n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	任意の$n\in\sizen$で$y_n=x_{n+1}$が成り立つことを証明しよう。
+	$z_n$に対して成り立つ次の漸化式を使うと、
+	\begin{equation*}\begin{split}
+		z_{n+1} = \sum_{p=1}^{n+1} (bx_{p-1})z_{n+1-p}d
+		= \sum_{p=0}^n (bx_p)z_{n-p}d = \sum_{p=0}^n x_p*z_{n-p}
+	\end{split}\end{equation*}
+	次のようになっていることがわかる。
+	\begin{equation*}\begin{array}{rclclcl}
+		z_0 &=& x_0d \\
+		z_1 &=& x_0*z_0 &=& (x_0*x_0)d &=& x_1d \\
+		z_2 &=& x_0*z_1 + x_1*z_0 &=& (x_0*x_1 + x_1*x_0)d &=& x_2d \\
+		z_3 &=& x_0*z_2 + x_1*z_1 + x_2*z_0 &=& (x_0*x_2 + x_1*x_1 + x_2*x_0)d
+			&=& x_3d \\
 	\end{array}\end{equation*}
-	$\bra{D_n}:=\bra{0}D(VD)^n$とおいて、摂動の$2$次まで計算してみると次の
-	ようになる。
-	\begin{equation*}\begin{split}
-		\ket{D_0} &= a\ket{\delta} \\
-		\ket{D_1} &= ba^2d\ket{\delta} + a\delta^*\eta_1ad\ket{\delta} \\
-		\ket{D_2} &= ba(ba^2d)d\ket{\delta} + b(ba^2d)ad\ket{\delta}
-			+ ba^2d\delta^*\eta_1ad\ket{\delta} \\
-		&\; + a\delta^*\eta_1(ba^2d)d\ket{\delta}
-			+ a(\delta^*\eta_1ad)^2\ket{\delta} \\
-	\end{split}\end{equation*}
-	これを眺めると、次のような操作が見えてくる。
-	\begin{equation*}\begin{array}{lrcll}
-		\text{Lie微分} & a &\mapsto& ba^2d \\
-		\text{Brzozowski微分} & a &\mapsto& \delta^*\eta_1ad \\
+	ある$n\in\sizen$で$z_n=x_nd$が成り立つとすると、次の式が成り立ち、
+	$n+1$でも$z_{n+1}=x_{n+1}d$が成り立つことがわかる。
+	\begin{equation*}\begin{array}{rcll}
+		z_{n+1} &=& \sum_{p=0}^n x_p*z_{n-p} & \lcomment{$z_n$の漸化式} \\
+		&=& \sum_{p=0}^n x_p*(x_{n-p}d) & \lcomment{帰納法の仮定} \\
+		&=& \sum_{p=0}^n (x_p*x_{n-p})d & \lcomment{特殊な性質} \\
+		&=& x_{n+1}d & \lcomment{$x_n$の定義} \\
 	\end{array}\end{equation*}
-	高次の摂動では単純にこの二つの微分を足し合わせたものにならないことは、
-	摂動の$3$次からの観察\eqref{eq:二分木の自然な成長その三}から予想される。
-	摂動の$3$次を計算してみる。
-	\begin{equation*}\begin{split}
-		\beta^*ba\eta_{-2}\cdot S_2\ket{\delta} &= baS_2d\ket{\delta} \\
-		\beta^*ba\eta_{-2}\cdot ba^2d\delta^*\eta_1ad\ket{\delta} 
-			&= b(ba(ba^2d)d)ad\ket{\delta} 
-			+ ba(ba^2d)d\delta^*\eta_1ad\ket{\delta} \\
-		\beta^*ba\eta_{-2}\cdot a\delta^*\eta_1(ba^2d)d\ket{\delta}
-			&= b(ba^2d)^2d\ket{\delta}
-			+ ba^2d\delta^*\eta_1(ba^2d)d\ket{\delta} \\
-		\beta^*ba\eta_{-2}\cdot a(\delta^*\eta_1ad)^2\ket{\delta}
-			&= b(b(ba^2d)ad)ad\ket{\delta}
-			+ b(ba^2d)ad\delta^*\eta_1ad\ket{\delta}
-			+ ba^2d(\delta^*\eta_1ad)^2\ket{\delta} \\
-		%
-		a\delta^*\eta_1\eta_{-2}\cdot S_2\ket{\delta} 
-			&= a\delta^*\eta_1S_2d\ket{\delta} \\
-		a\delta^*\eta_1\eta_{-2}\cdot ba^2d\delta^*\eta_1ad\ket{\delta} 
-			&= a\delta^*\eta_1(ba^2d)d\delta^*\eta_1ad\ket{\delta} \\
-		a\delta^*\eta_1\eta_{-2}\cdot a\delta^*\eta_1(ba^2d)d\ket{\delta} 
-			&= a\delta^*\eta_1ad\delta^*\eta_1(ba^2d)d\ket{\delta} \\
-		a\delta^*\eta_1\eta_{-2}\cdot (\delta^*\eta_1ad)^2\ket{\delta} 
-			&= a(\delta^*\eta_1ad)^3\ket{\delta} \\
-	\end{split}\end{equation*}
-	$\delta_1:=\delta^*\eta_1$とおいて、まとめると次のようになる。
-	\begin{equation*}\begin{split}
-		\beta^*ba\eta_{-2}\ket{D_2} 
-		&= b(S_0S_2 + S_1S_1 + S_2S_0)d\ket{\delta}
-			+ (S_2\delta_1^*S_0 + S_1\delta_1^*S_1)d\ket{\delta}
-			+ S_1(\delta_1^*S_0d)^2\ket{\delta} \\
-		a\delta_1^*\eta_{-2}\ket{D_2} 
-		&= S_0\delta_1^*S_2d\ket{\delta}
-			+ S_0(\delta_1^*S_1d\delta_1^*S_0d 
-				+ \delta_1^*S_0d\delta_1^*S_1d)\ket{\delta}
-			+ S_0(\delta_1^*S_0d)^3\ket{\delta}
-	\end{split}\end{equation*}
-	この結果から摂動の$3$次は次のようにまとまる。
-	\begin{equation*}\begin{split}
-		\ket{D_3} &= \sum_{p,q\in0..2}\jump{p+q=2} bS_pS_qd\ket{\delta} \\
-		&\;+ \sum_{p,q\in0..2}\jump{p+q=2}
-			S_p(\delta^*\eta_1)S_qd\ket{\delta} \\
-		&\;+ \sum_{p,q,r\in0..1}\jump{p+q+r=1}
-			S_p(\delta^*\eta_1)S_qd(\delta^*\eta_1)S_rd\ket{\delta} \\
-		&\;+ S_0(\delta^*\eta_1S_0d)^3\ket{\delta} \\
-	\end{split}\end{equation*}
-	摂動の$0,1,2$の各次数も同様にまとめると次のようになる。
-	\begin{equation*}\begin{split}
-		\ket{D_0} &= S_0\ket{\delta} \\
-		\ket{D_1} &= bS_0S_0d\ket{\delta} 
-			+ S_0(\delta^*\eta_1)S_0d\ket{\delta} \\
-		\ket{D_2} &= b(S_0S_1 + S_1S_0)d\ket{\delta} 
-			+ (S_1(\delta^*\eta_1)S_0d + S_0(\delta^*\eta_1)S_1d)\ket{\delta} \\
-			&\;+ S_0(\delta^*\eta_1S_0d)^2\ket{\delta} \\
-	\end{split}\end{equation*}
-	これを任意の$n\in\sizen$に一般化すると次のようになるだろう。
-	\begin{equation}\label{eq:漸化式その一}\begin{split}
-		\ket{D_{n+1}} &= S_{n+1}\ket{\delta} 
-			+ \sum_{p=1}^{n+1}D_{(n+1)p}\ket{\delta} \\
-		S_{n+1} &= \sum_{p=0}^n bS_{n-p}S_pd \\
-		D_{(n+1)p} &= \sum_{r_0,r_1,\dots,r_p=0}^{n+1-p}
-			\jump{r_0 + r_1 + \cdots + r_p = n + 1 - p} \\
-			&\quad S_{r_0}(\delta^*\eta_1)S_{r_1}d
-			\cdots(\delta^*\eta_1)S_{r_p}d \quad\text{for all } p\in 1..(n+1) \\
-	\end{split}\end{equation}
-	この式がある$n-1\in\sizen$で式\eqref{eq:漸化式その一}が成り立つとすると、
-	$\ket{D_{n+1}}=DV\ket{D_n}$の$0$-モードの係数は、
-	$\bra{0}\delta^*\eta_1=0$より、$\beta^*bS_0\eta_{-2}$のみから得られる。
-	$\ket{D_{n+1}}$の$0$-モードの係数$S_{n+1}$を計算すると次のようになる。
-	\begin{equation*}\begin{split}
-			S_{n+1} = \bra{0}\beta^*bS_0\eta_{-2}\ket{D_n}
-			= bS_0S_nd 
-			+ \sum_{p=1}^n\bra{\beta}bS_0\eta_{-2}D_{np}\ket{\delta} \\	
-	\end{split}\end{equation*}
-	ここで、次の式を用いると、
-	\begin{equation*}\begin{split}
-		&\bra{\beta}bS_0\eta_{-2}D_{np}\ket{\delta} \\
-		&= \sum_{r_0+\dots+r_p=n-p}
-		\bra{\beta}bS_0S_{r_0}d(\delta^*\eta_1)S_{r_1}d(\delta^*\eta_1)
-			\cdots d(\delta^*\eta_1)S_{r_p}d\ket{\delta} \\
-		&= \sum_{r_0+\dots+r_p=n-p}
-			b^{p+1}S_0S_{r_0}dS_{r_1}d\cdots dS_{r_p}d \\
-	\end{split}\end{equation*}
-	$S_{n+1}$に対する次の式が得られる。
-	\begin{equation*}\begin{split}
-		S_{n+1} &= bS_0S_nd + \sum_{p=1}^n\;\sum_{r_0+\dots+r_p=n-p}
-			b^{p+1}S_0S_{r_0}dS_{r_1}d\cdots dS_{r_p}d \\
-		&= \sum_{p=0}^n\;\sum_{r_0+\dots+r_p=n-p}
-			b^{p+1}S_0S_{r_0}dS_{r_1}d\cdots dS_{r_p}d \\
-	\end{split}\end{equation*}
-	この式は次の摂動展開で理解することができる。
-	\begin{equation}\label{eq:ゼロモードの漸化式}\begin{split}
-		\left\{\begin{split}
-			x_z &= a + zbx_z^2d \\
-			x_z &= \sum_{n\in\sizen}x_nz^n
-		\end{split}\right. 
-		&\iff \begin{split}
-			x_z &= \sum_{n\in\sizen}b^na(zx_zd)^n
-			= \sum_{n\in\sizen}b^na(\sum_{p\in\sizen}x_pz^{p+1}d)^n \\
-			&= \sum_{n\in\sizen}b^na\sum_{p_1,\dots,p_n\in\sizen}
-				z^{p_1+\cdots+p_n+n} x_{p_1}d\cdots x_{p_n}d \\
-			&= a + \sum_{n=1}^\infty z^n\sum_{p=1}^n\sum_{r_1+\cdots+r_p=n-p}
-				b^pax_{r_1}d\cdots x_{r_n}d
-		\end{split} \\
-		&\iff x_{n+1} = \sum_{p=0}^n\sum_{r_0+\cdots+r_p=n-p}
-			b^{p+1}ax_{r_0}dx_{r_1}d\cdots x_{r_p}d \\
-	\end{split}\end{equation}
-	したがって、$\ket{D_{n+1}}$の$0$-モードの係数について式
-	\eqref{eq:漸化式その一}が成り立つことがわかる。
+	したがって、次の式から$y_n=x_{n+1}$が成り立つことがわかる。
+	\begin{equation*}\begin{array}{rcll}
+		y_n &=& \sum_{p=0}^n (\rho z_{n-p})z_p & \lcomment{$y_n$の定義} \\
+		&=& \sum_{p=0}^n \bigl(\rho(x_{n-p}d)\bigr)x_pd & \lcomment{$z_n$の性質} \\
+		&=& \sum_{p=0}^n x_{n-p}*x_p & \lcomment{$x_n$が$\rho$不変} \\
+		&=& x_{n+1} & \lcomment{$x_n$の定義} \\
+	\end{array}\end{equation*}
 
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-		この先が難しい。$0$-モード以外は係数間の関係式が複雑すぎて手に
-		負えない。簡単な部分と思われる$(S_0\delta^*\eta_1)\eta_{-2}$の作用も
-		次の式から、
+	\begin{note}[文字列操作と線形代数]\label{note:文字列操作と線形代数} %{
+		やっていることは、文字列操作を線形代数の言葉に置き換えている。
+		\begin{equation*}\begin{array}{rr}
+			\text{文字列} & \text{線形代数} \\\hline
+			\text{反転} & \text{転置} \\
+			\text{文字の入れ替え} & \text{線形写像} \\
+		\end{array}\end{equation*}
+		文字の入れ替えはBrzozowski微分の正規積として定義できるので、
+		そのままで線形写像となるが、
 		\begin{equation*}\begin{split}
-			(S_0\delta^*\eta_1)\eta_{-2}D_{(n+1)p}\ket{\delta}
-			&= \sum_{r_0+\cdots+r_p=n+1-p}
-				S_0(\delta^*\eta_1)S_{r_0}d(\delta^*\eta_1)
-				\cdots(\delta^*\eta_1)S_{r_p}d\ket{\delta} \\
-			(S_0\delta^*\eta_1)\eta_{-2}S_{n+1}\ket{\delta}
-			&= S_0(\delta^*\eta_1)S_{n+1}d\ket{\delta} \\
+			(b,d)\mapsto(d,b) \sim :(bd^\tran+db^\tran)^*:
 		\end{split}\end{equation*}
-		次の式が得られるが、
+		文字列の反転は線形写像として表現することは難しいので、双対空間への
+		写像として表現している。キモは$x=a+bx^2d$で定義される線形空間
+		$V\subset R\W A$を摂動展開の次数で直和分解すると、
 		\begin{equation*}\begin{split}
-			&(S_0\delta^*\eta_1)\eta_{-2}\ket{D_{n+1}} \\
-			&= \sum_{p=0}^{n+1}\sum_{r_0+\cdots+r_p=n+1-p}
-				S_0(\delta^*\eta_1)S_{r_0}d(\delta^*\eta_1)
-				\cdots(\delta^*\eta_1)S_{r_p}d\ket{\delta}
+			V &= \oplus_{n\in\sizen}V_n \\
+			V_{n+1} &= \myop{span}_R\set{x_{n-p}*x_p\bou p\in 0..n} \\
 		\end{split}\end{equation*}
-		この式と$0$-モードの漸化式\eqref{eq:ゼロモードの漸化式}から、
-		次のようになることぐらいしかわからない。
-		\begin{equation*}\begin{split}
-			\bra{\beta}(S_0\delta^*\eta_1)\eta_{-2}\ket{D_{n+1}} &= S_{n+1}
-		\end{split}\end{equation*}
-	\end{todo} %todo:ここまで}
+		各$V_n$が反転と文字の入れ替え$(b,d)$の合成$\rho$について不変空間
+		となっていることだろう。
+	\end{note} %note:文字列操作と線形代数}
 %s1:BNFの摂動計算}
 \section{Rota-Baxter代数}\label{s1:Rota-Baxter代数} %{
 	積分$P:f_t\mapsto \int_0^tdsf_s$は次の部分積分の式を満たす。
