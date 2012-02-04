@@ -718,6 +718,195 @@
 		&=& \sum_{p=0}^n x_{n-p}*x_p & \lcomment{$x_n$が$\rho$不変} \\
 		&=& x_{n+1} & \lcomment{$x_n$の定義} \\
 	\end{array}\end{equation*}
+	以上で次の式が成り立つことがわかった。
+	\begin{equation*}\begin{split}
+		x = a + bx^2d  \iff x = a + b\bra{\beta}aW^*a\ket{\delta}d \\
+	\end{split}\end{equation*}
+	この証明に使った事実を並べてみる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 転置 \\
+		$\rho$を次のように定義する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 文字列を反転する。
+			\item 文字$b$と$d$を入れ替える。
+			\item 文字$\eta_{\pm 1}$と$\eta_{\mp 2}$を入れ替える。
+		\end{itemize} %}
+		\item 数の分割 \\
+		$\phi_\pm:\sizen_+\to\Lin_RR(A\otimes H)^*$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\phi_+n &= \rho\phi_-n \\
+			\phi_-n &= \eta_{-2}(\eta_{-1}b)^*bx_{n-1} \\
+		\end{split}\end{equation*}
+		すると、$W=\phi_-1+\phi_+1$と書けて、$W^n$を正規積の形で次のように
+		書くことができる。
+		\begin{equation}\label{eq:最初のラッキー}\begin{split}
+			(\phi_-1 + \phi_+1)^n = \sum_{p=0}^n
+			\sum_{c_+\in C_{n-p}}\sum_{c_-\in C_p}
+			\bigl((\W\phi_+)c_+\bigr)\bigl((\W\phi_-)c_-\bigr)
+		\end{split}\end{equation}
+		これが最初のラッキーになる。このことから、
+		$\cup_{n\in\sizen}C_n=\W\sizen_+$を使うと、次の式が成り立つことが
+		わかる。
+		\begin{equation*}\begin{split}
+			(\phi_-1 + \phi_+1)^* = 
+			\bigl(\sum_{n\in\sizen_+}\phi_+n\bigr)^*
+			\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*
+		\end{split}\end{equation*}
+		次のラッキーは、$\ket{\delta}$が$\phi_-n$の固有ベクトルになっている
+		ことである。
+		\begin{equation*}\begin{split}
+			(\phi_-n)w\ket{\delta} = (\phi_-n)(x_n*w)\ket{\delta}
+		\end{split}\end{equation*}
+		このことから次の式が容易に確かめられる。
+		\begin{equation}\label{eq:ケット側の式}\begin{split}
+			\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*x_0\ket{\delta} 
+			= (\eta_{-2}bx)^*x_0\ket{\delta} = x\ket{\delta}
+		\end{split}\end{equation}
+		この式は次のようにしても導くことができる。
+		\begin{equation*}\begin{split}
+			x = a + bx^2d = \sum_{n\in\sizen}(bx)^nad^n
+			= \bra{0}(\eta_-bx)^*a(d\eta_+)^*\ket{0}
+		\end{split}\end{equation*}
+		このことから、式\eqref{eq:ケット側の式}の意味がわかる。
+		式\eqref{eq:ケット側の式}に摂動係数$t\in R$を入れてみると
+		次のようになる。
+		\begin{equation*}\begin{split}
+			\bigl(\sum_{n\in\sizen_+}t^n\phi_-n\bigr)^*x_0\ket{\delta} 
+			= (t\eta_{-2}bx)^*x_0\ket{\delta} = x_t\ket{\delta}
+		\end{split}\end{equation*}
+		%
+		\item 証明の逆順 \\
+		$x_t=x_0+bx_t^2d$とすると、$x_h=\sum_{n\in\sizen}t^nx_n$は次の式を
+		満たすことが証明できる。
+		\begin{equation}\label{eq:スタートの式}\begin{split}
+			(t\eta_{-2}bx)^*x_0\ket{\delta} = x_t\ket{\delta}
+		\end{split}\end{equation}
+		写像$\xi_-:R\sizen_+\to R\W A\otimes R\W H$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\xi_-n = \eta_{-2}bx_{n-1}
+		\end{split}\end{equation*}
+		Kleeneスターを展開して$t$のべき毎にまとめると次のようになる。
+		\begin{equation*}\begin{split}
+			(t\eta_{-2}bx)^* = (\sum_{n\in\sizen_+}t^n\xi_-n)^*
+			= \sum_{n\in\sizen} t^n \sum_{c\in C_n} (\W\xi_-)c
+		\end{split}\end{equation*}
+		ここで、$C_0:=\set{1_\W}$かつ$\xi_-1_\W=1$とする。
+		この式の'二乗'をとると次のようになる。
+		\begin{equation*}\begin{split}
+			(txd\eta_1)^*(t\eta_{-2}bx)^*
+			= \sum_{n\in\sizen} t^n 
+				\sum_{p=0}^n\sum_{\substack{c_+\in C_{n-p}\\c_-\in C_p}}
+				\bigl((\W\xi_+)c_+\bigr)\bigl((\W\xi_-)c_-\bigr)
+		\end{split}\end{equation*}
+		ここから、式\eqref{eq:最初のラッキー}に相当する式を導き出したいのだが、
+		$\xi_\pm$からは式\eqref{eq:最初のラッキー}に相当する式は導き出せない。
+		式\eqref{eq:最初のラッキー}の$\phi$とここでの$\xi$の違いは次のように
+		なっている。
+		\begin{equation*}\begin{split}
+			\phi_-n = \eta_{-2}(\eta_{-1}b)^*bx_{n-1},\quad
+			\xi_-n = \eta_{-2}bx_{n-1}
+		\end{split}\end{equation*}
+		この違いは次のことに起因している。最初の式\eqref{eq:スタートの式}は
+		次のような不定性がある。
+		\begin{equation*}\begin{split}
+			\biggl(t\bigl(
+			\eta_{-2}bx_t + \sum_{n\in\sizen_+}\eta_{-1}^n f_n
+			\bigr)\biggr)^* x_0\ket{\delta} = x_t\ket{\delta} 
+			\quad\text{where}\quad f_n\in R\W A
+		\end{split}\end{equation*}
+		$\xi_-$に$\eta_{-1}$の多項式を付け加えてもケットに作用した結果は
+		変わらない。この不定性をゲージ対称性ということにする。
+		ゲージ対称性を使って$\xi_-$を都合のよい形$\phi_-$に持っていくことが
+		課題となる。
+	\end{itemize} %}
+
+	\begin{note}[Yang-Baxterとの関連]\label{note:Yang-Baxterとの関連} %{
+		任意の多項式$f,g\in R\W A[x]$に対して次の式を用いて積を定義する。
+		\begin{equation*}\begin{split}
+			x_t = a + t(fx_t)(gx_t)
+		\end{split}\end{equation*}
+		すると、組み合わせ的なYang-Baxter方程式が得られるのではないだろうか？
+		はたまた、任意の$f\in R\W A$に対して$R\W A$積$m_f$を次のように定義
+		すると、
+		\begin{equation*}\begin{split}
+			m_f(w_1\otimes w_2) = w_1fw_2
+		\end{split}\end{equation*}
+		結合則によく似た次の関係が得られる。
+		\begin{equation*}\begin{split}
+			m_f(\id\otimes m_g) = m_g(m_f\otimes\id)
+			\quad\text{for all } f,g\in R\W A
+		\end{split}\end{equation*}
+	\end{note} %note:Yang-Baxterとの関連}
+
+	\begin{note}[構造その二]\label{note:構造その二} %{
+		次の線形微分方程式を考える。
+		\begin{equation*}\begin{split}
+			x_t = a + \int_0^tds bx_sc
+		\end{split}\end{equation*}
+		この式の解は$x_t=\sum_{n\in\sizen}\frac{t^n}{n!}b^nac^n$となるが、
+		次のWeyl代数とFock空間を用いると、
+		\begin{equation*}\begin{split}
+			\eta_-\eta_+ - \eta_+\eta_- = 1,\quad
+			\eta_-\ket{0} = 0 = \bra{0}\eta_+
+		\end{split}\end{equation*}
+		解$x_t$は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			x_t &= \sum_{n\in\sizen}\frac{t^n}{n!}b^nac^n
+			= \sum_{n\in\sizen}
+				\frac{t^n}{(n!)^2}\bra{0}(\eta_-b)^na(c\eta_+)^n\ket{0} \\
+			&= \bra{0}e^{t_-\eta_-b}ae^{c\eta_+t_+}\ket{0} \\
+			t_-t_+ &= t = t_+t_- \\
+		\end{split}\end{equation*}
+		Weyl代数$\eta_\pm$を使って時刻$t$の二乗根をとったような形になっている。
+		次の式を使って、
+		\begin{equation*}\begin{split}
+			e^{tx} = 1 + \sum_{n\in\sizen}\frac{(tx)^{n+1}}{(n+1)!}
+			= 1 + \sum_{n\in\sizen} x^{n+1} \int_0^tds \frac{s^n}{n!}
+			= 1 + x\int_0^t ds e^{sx}
+		\end{split}\end{equation*}
+		$\ket{t:\pm}$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			\ket{t:-} = e^{t\eta_-b}a\ket{1:+},\quad
+			\ket{t:+} = e^{tc\eta_+}\ket{0}
+		\end{split}\end{equation*}
+		次のオートマトンが得られる。
+		\begin{equation*}\begin{split}
+			\ket{t:-} &= \eta_-b\int_0^t ds\ket{s:-} + a\ket{1:+} \\
+			\ket{t:+} &= \ket{0:+} + c\eta_+\int_0^t ds\ket{s:+} \\
+		\end{split}\end{equation*}
+		微分方程式の場合、積分を使ったオートマトンによる表現よりも、それを微分
+		した線形連立微分方程式の方が有用かもしれない。
+		\begin{equation*}\begin{split}
+			\partial_t\ket{t:-} &= \eta_-b\ket{t:-} \\
+			\partial_t\ket{t:+} &= c\eta_+\ket{t:+} \\
+		\end{split}\end{equation*}
+	\end{note} %note:構造その二}
+
+	\begin{note}[構造その一]\label{note:構造その一} %{
+		線形射$x:R\sizen\to R\W A$を次のように定義する。
+		\begin{equation*}\begin{split}
+				x_0 = a,\quad x_{n+1} = \sum_{p=0}^n bx_{n-p}cx_pd \\
+		\end{split}\end{equation*}
+		一般には、$x$は$x_mx_n\neq x_{m+n}$という意味で代数射にならないことに
+		注意する。$R\sizen$の自己線形射$\eta_0,\eta_\pm$を次のように定義し、
+		\begin{equation*}\begin{split}
+			\eta_0 = \ket{0}\bra{0}
+			,\quad \eta_- = \sum_{n\in\sizen}\ket{n}\bra{n+1}
+			,\quad \eta_+ = \sum_{n\in\sizen}\ket{n+1}\bra{n}
+		\end{split}\end{equation*}
+		$R\sizen$の積$m_\sizen$を次のように定義し、
+		\begin{equation*}\begin{split}
+			m_\sizen(\ket{m}\otimes\ket{n}) = \ket{m+n}
+		\end{split}\end{equation*}
+		$R\W A$の二項演算$\gamma$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\gamma (w_1\otimes w_2) = bw_1cw_2d
+		\end{split}\end{equation*}
+		$x$は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			x = a\eta_0 + \gamma(x\otimes x)m_\sizen^\tran\eta_-
+		\end{split}\end{equation*}
+	\end{note} %note:構造その一}
 
 	\begin{note}[文字列操作と線形代数]\label{note:文字列操作と線形代数} %{
 		やっていることは、文字列操作を線形代数の言葉に置き換えている。
