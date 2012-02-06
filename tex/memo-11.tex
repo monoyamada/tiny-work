@@ -748,6 +748,122 @@
 		$\cup_{n\in\sizen}C_n=\W\sizen_+$を使うと、次の式が成り立つことが
 		わかる。
 		\begin{equation*}\begin{split}
+			(\phi_-1 + \phi_+1)^* =
+			\bigl(\sum_{n\in\sizen_+}\phi_+n\bigr)^*
+			\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*
+		\end{split}\end{equation*}
+		%
+		\item 因子化 \\
+		次のラッキーは、$\ket{\delta}$が$\phi_-n$の固有ベクトルになっている
+		ことである。
+		\begin{equation*}\begin{split}
+			(\phi_-n)w\ket{\delta} = (\phi_-n)(x_n*w)\ket{\delta}
+		\end{split}\end{equation*}
+		このことから、次の因子化がなり立つ。
+		\begin{equation}\label{eq:ラッキーな因子化}\begin{split}
+			\bra{\beta}(\phi_-1 + \phi_+1)^*\ket{\delta} 
+			&= \bra{\beta}\bigl(\sum_{n\in\sizen_+}\phi_+n\bigr)^*\ket{\delta}
+			\bra{\beta}\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*\ket{\delta} \\
+			&= \bra{\beta}\bigl(\sum_{n\in\sizen_+}\phi_+n\bigr)^*\ket{0}
+			\bra{0}\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*\ket{\delta} \\
+		\end{split}\end{equation}
+		固有ベクトルが因子化を導くことは、係数が可換の場合で考えるとわかりやすい。
+		線形作用素$A,B$が固有値$a,b$を次のように持つとすると、
+		\begin{equation*}\begin{split}
+			\bra{a}A = a\bra{a},\quad B\ket{b} = \ket{b}b
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\bra{a}AB\ket{b} &= a\braket{a|b}b \\
+			\bra{a}A\ket{b}\bra{a}B\ket{b} 
+			&= a\braket{a|b}\braket{b|a}b \\
+		\end{split}\end{equation*}
+		したがって、次の因子化が成り立つ。
+		\begin{equation*}\begin{split}
+			\bra{a}AB\ket{b} = \bra{a}A\ket{b}\braket{b|a}^{-1}\bra{a}B\ket{b} 
+		\end{split}\end{equation*}
+		因子化\eqref{eq:ラッキーな因子化}の場合は、$\braket{\beta|\delta}=1$と
+		なっている特別な場合である。
+		%
+		\item リダクション \\
+		$\bra{0}\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*x_0\ket{\delta}$は次のように
+		なる。
+		\begin{equation*}\begin{split}
+			\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*x_0\ket{\delta}
+			= \bigl(\eta_{-2}(b\eta_{-1})^*bx\bigr)^*x_0\ket{\delta}
+			= \bigl(\eta_{-2}bx\bigr)^*x_0\ket{\delta}
+		\end{split}\end{equation*}
+		この式は次のようにして導きだされた式に一致する。
+		\begin{equation*}\begin{split}
+			x = x_0 + bx^2d
+			= \sum_{n\in\sizen}(bx)^nx_0d^n
+			= \bra{0}(bx\eta_-)^*x_0(\eta_+d)^*\ket{0}
+		\end{split}\end{equation*}
+		つまり一次式の場合に帰着させることができる。
+	\end{itemize} %}
+
+	証明は式の変形を次の方向で行ったので、
+	\begin{equation*}\begin{split}
+		x = \bra{0}\begin{pmatrix}
+			1 & 0
+		\end{pmatrix}\begin{pmatrix}
+			b\eta_{-1} & a \\
+			\eta_1c\eta_{-2} & \eta_2d \\
+		\end{pmatrix}^*\begin{pmatrix}
+			0 \\ 1
+		\end{pmatrix}\ket{0} \implies x = a + bxcxd
+	\end{split}\end{equation*}
+	今度は逆の方向から考えてみる。$x=a+bxcxd$とすると、次の式が成り立つことは
+	容易に確かめられる。
+	\begin{equation*}\begin{split}
+		x = \bra{0}(bxc\eta_-)^*a(\eta_+d)^*\ket{0}
+		= \bra{0}(b\eta_-)^*a(\eta_+cxd)^*\ket{0}
+	\end{split}\end{equation*}
+	この式を元の式$x=a+bxcxd$に代入すると次のように書ける。
+	\begin{equation*}\begin{split}
+		x = a + b\bra{0}(b\eta_-)^*a(\eta_+cxd)^*\ket{0}c
+			\bra{0}(bxc\eta_-)^*a(\eta_+d)^*\ket{0}d
+	\end{split}\end{equation*}
+	次のようなトリックを使うと、二項目のブラケットの積を単一のブラケットにすること
+	ができる。
+	\begin{equation*}\begin{split}
+		&\bra{0}(b\eta_-)^*a(\eta_+cxd)^*\ket{0}c
+			\bra{0}(bxc\eta_-)^*a(\eta_+d)^*\ket{0} \\
+		=& \bra{0}(b\eta_{-1})^*a(\eta_1cxd)^*\ket{0}c
+			\bra{0}(bxc\eta_{-2})^*a(\eta_2d)^*\ket{0} \\
+		=& \bra{0}(b\eta_{-1})^*a(\eta_1cxd)^*c
+			(bxc\eta_{-2})^*a(\eta_2d)^*\ket{0} \\
+	\end{split}\end{equation*}
+	この式変形は因子化の逆となっている。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 転置 \\
+		$\rho$を次のように定義する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 文字列を反転する。
+			\item 文字$b$と$d$を入れ替える。
+			\item 文字$\eta_{\pm 1}$と$\eta_{\mp 2}$を入れ替える。
+		\end{itemize} %}
+		\item 数の分割 \\
+		$\phi_\pm:\sizen_+\to\Lin_RR(A\otimes H)^*$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\phi_+n &= \rho\phi_-n \\
+			\phi_-n &= \eta_{-2}(\eta_{-1}b)^*bx_{n-1} \\
+		\end{split}\end{equation*}
+		すると、$W=\phi_-1+\phi_+1$と書けて、$W^n$を正規積の形で次のように
+		書くことができる。
+		\begin{equation}\label{eq:最初のラッキー}\begin{split}
+			(\phi_-1 + \phi_+1)^n = \sum_{p=0}^n
+			\sum_{c_+\in C_{n-p}}\sum_{c_-\in C_p}
+			\bigl((\W\phi_+)c_+\bigr)\bigl((\W\phi_-)c_-\bigr)
+		\end{split}\end{equation}
+		これが最初のラッキーになる。このことから、
+		$\cup_{n\in\sizen}C_n=\W\sizen_+$を使うと、次の式が成り立つことが
+		わかる。
+		\begin{equation*}\begin{split}
 			(\phi_-1 + \phi_+1)^* = 
 			\bigl(\sum_{n\in\sizen_+}\phi_+n\bigr)^*
 			\bigl(\sum_{n\in\sizen_+}\phi_-n\bigr)^*
@@ -776,6 +892,24 @@
 		\end{split}\end{equation*}
 		%
 		\item 証明の逆順 \\
+		一般に、任意の多項式$f,g\in R\W A[x]$と文字列$x_0\in R\W A$に対して次の式が
+		成り立つ。
+		\begin{equation*}\begin{split}
+			x_t = x_0 + t(fx_t)x_t(gx_t) 
+			\iff x_tg_+^*\ket{0} = f_-^*x_0g_+^*\ket{0} \quad\text{where} \\
+			f_- = t_-\eta_-(fx_t),\quad g_+ = (gx_t)\eta_+t_+,\quad t_-t_+=t=t_+t_-
+		\end{split}\end{equation*}
+		作用素$f_-^*x_0$の固有値$x_t$に属する固有ベクトルが$g_+^*\ket{0}$
+		になっているとも、$x_tg_+^*\ket{0}$の時間発展を与える作用素が$f_-^*$
+		になっているとも読める。
+		\item 因子化
+		\begin{equation*}\begin{split}
+			\Braket{f_-^*\eta_+x_0\eta_-g_+^*}
+			 = t\bigl(f\Braket{f_-^*x_0g_+^*}\bigr)
+			 \Braket{f_-^*x_0g_+^*} \bigl(g\Braket{f_-^*x_0g_+^*}\bigr)
+		\end{split}\end{equation*}
+		%
+		\item ここまで \\
 		$x_t=x_0+bx_t^2d$とすると、$x_h=\sum_{n\in\sizen}t^nx_n$は次の式を
 		満たすことが証明できる。
 		\begin{equation}\label{eq:スタートの式}\begin{split}
@@ -810,15 +944,41 @@
 		次のような不定性がある。
 		\begin{equation*}\begin{split}
 			\biggl(t\bigl(
-			\eta_{-2}bx_t + \sum_{n\in\sizen_+}\eta_{-1}^n f_n
-			\bigr)\biggr)^* x_0\ket{\delta} = x_t\ket{\delta} 
-			\quad\text{where}\quad f_n\in R\W A
+			\eta_{-2}bx_t + \sum_{m,n\in\sizen}\eta_{-1}^{m+1}\eta_{-2}^n f_{mn}
+			\bigr)\biggr)^* x_0\ket{\delta} = x_t\ket{\delta}
+			\quad\text{where}\quad f_{mn}\in R\W A
 		\end{split}\end{equation*}
 		$\xi_-$に$\eta_{-1}$の多項式を付け加えてもケットに作用した結果は
-		変わらない。この不定性をゲージ対称性ということにする。
+		変わらない。この不定性をゲージ対称性ということにする。\footnote{
+			正確には、ゲージ対称性は$\eta_{-1}^{m+1}\eta_{-2}^n$での
+			$\eta_{-1}$と$\eta_{-2}$の並びは様々なものをとることができる。
+			正確に書くと煩雑になるので省略している。$\eta_{-1}$が$1$個以上ある
+			$\eta_{-1}$と$\eta_{-2}$を文字とする$R\W A$係数の多項式である。
+		}
 		ゲージ対称性を使って$\xi_-$を都合のよい形$\phi_-$に持っていくことが
 		課題となる。
 	\end{itemize} %}
+
+	\begin{note}[Yang-Baxter式の覚え方]\label{note:Yang-Baxter式の覚え方} %{
+		アミダくじで覚えれば良い。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=1ex@C=1ex{
+				1 \ar@{-}[dddd] & 2 \ar@{-}[dddd] & 3 \ar@{-}[dddd] \\
+				\ar@{-}[r] & \\
+				& \ar@{-}[r] & \\
+				\ar@{-}[r] & \\
+				3 & 2 & 1 \\
+			} = \xymatrix@R=1ex@C=1ex{
+				1 \ar@{-}[dddd] & 2 \ar@{-}[dddd] & 3 \ar@{-}[dddd] \\
+				& \ar@{-}[r] & \\
+				\ar@{-}[r] & \\
+				& \ar@{-}[r] & \\
+				3 & 2 & 1 \\
+			}
+		\end{split}\end{equation*}
+		$R_{12}$を$1$と$2$の互換、$R_{23}$を$2$と$3$の互換とすると、
+		$R_{12}R_{23}R_{12}=R_{23}R_{12}R_{23}$が成り立つ。
+	\end{note} %note:Yang-Baxter式の覚え方}
 
 	\begin{note}[Yang-Baxterとの関連]\label{note:Yang-Baxterとの関連} %{
 		任意の多項式$f,g\in R\W A[x]$に対して次の式を用いて積を定義する。

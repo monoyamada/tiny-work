@@ -1,0 +1,313 @@
+\begingroup %{
+	\newcommand{\W}{\mycal{W}}
+	\newcommand{\T}{\mycal{T}}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Map}{\myop{Map}}
+	\newcommand{\Lin}{\mathcal{L}}
+	\newcommand{\Hol}{\mathcal{H}}
+	%
+	\newcommand{\id}{\myop{id}}
+	\newcommand{\tran}{\mathbf{t}}
+	\newcommand{\dfn}{\,\myop{def}\,}
+	\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+	%
+	\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+	%
+	{\setlength\arraycolsep{2pt}
+	%
+\section{二次方程式の摂動}\label{s1:二次方程式の摂動} %{
+	この節では次のような便宜を用いる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[係数]
+		$R=(R,+,0,\myspace,1)$を可換半体とする。ここで、半体とは次の集合とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 分配則を満たす可換な加法$+$と乗法$\myspace$が定義されている。
+			\item 加法と乗法はそれぞれ単位元$0$と$1$を持つ。
+			\item $0$以外の元は乗法の逆元を持つ。
+		\end{itemize} %}
+		加算集合$A$に対して$RA$を自由半ベクトル空間とする。
+		\begin{equation*}\begin{split}
+			RA := \set{f:A\to R\bou fa \neq 0 \quad\text{for only finitely many } a\in A}
+		\end{split}\end{equation*}
+		%
+		\item[フォック空間]
+		$H:=\set{\eta_n\bou n\in\sizen_+}$を可算集合、
+		$H^\tran=\set{\eta_{-n}\bou n\in\sizen_+}$を$RH$の双対空間の基底とする。
+		\begin{equation*}\begin{split}
+			\eta_{-m}\eta_n = \jump{m=n} \quad\text{for all } m,n\in\sizen_+
+		\end{split}\end{equation*}
+		$R\W H$の単位射を$\ket{0}$、余単位射を$\bra{0}$として、$R\W A$をフォック空間
+		で表す。
+		\begin{equation*}\begin{split}
+			\eta_{-n}\ket{0} = 0 = \bra{0}\eta_n \quad\text{for all } n\in\sizen_+
+		\end{split}\end{equation*}
+	\end{description} %}
+
+	早速命題を述べる。
+
+	\begin{proposition}[二次方程式の摂動展開]\label{prop:二次方程式の摂動展開} %{
+		$A$を集合とする。任意の$a,b,c,d\in R\W A$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			x = a + bxcxd \iff x = \bra{0}\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}\begin{pmatrix}
+				b\eta_{-1} & a \\ \eta_{1}c\eta_{-2} & \eta_2d
+			\end{pmatrix}^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}\ket{0}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:二次方程式の摂動展開}
+	\begin{proof} %{
+		$2\times 2$行列$[]$と$\sigma$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\begin{bmatrix}
+				\alpha \\ \beta
+			\end{bmatrix} := \begin{pmatrix}
+				\alpha & 0 \\ 0 & \beta
+			\end{pmatrix},\quad \sigma := \begin{pmatrix}
+				0 & 1 \\ 1 & 0
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		すると、命題の行列$M$は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			M := \begin{pmatrix}
+				b\eta_{-1} & a \\ \eta_{1}c\eta_{-2} & \eta_2d
+			\end{pmatrix} 
+			= \bvec{b\eta_{-1}}{eta_2d} + \bvec{a}{\eta_{1}c\eta_{-2}}\sigma
+		\end{split}\end{equation*}
+		行列を対角成分と非対角成分に分けてKleeneスターを展開すると次のようになる。
+		\begin{equation*}\begin{split}
+			M^* &= \left(
+				\bvec{b\eta_{-1}}{\eta_2d}^*\bvec{a}{\eta_{1}c\eta_{-2}}\sigma
+			\right)^*\bvec{b\eta_{-1}}{\eta_2d}^*
+		\end{split}\end{equation*}
+		この行列を二次元ベクトル$(1\;0)$と$(0\;1)^\tran$で挟み込むと次のようになる。
+		\begin{equation*}\begin{split}
+			\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}M^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix} = (b\eta_{-1})^*a\biggl(
+					(\eta_2d)^*\eta_1c\eta_{-2}(b\eta_{-1})^*a
+				\biggr)^*(\eta_2d)^*
+		\end{split}\end{equation*}
+		さらに、任意の半代数$V$に対して成り立つ次の式を使って、
+		\begin{equation*}\begin{split}
+			(fg)^* = 1 + f(gf)^*g \quad\text{for all } f,g\in V
+		\end{split}\end{equation*}
+		$\beta$と$\delta$を次のようにおいて、
+		\begin{equation*}\begin{split}
+			\beta := \eta_{-2}(b\eta_{-1})^*,\quad \delta := (\eta_2d)^*\eta_1
+		\end{split}\end{equation*}
+		ブラとケットを対称化すると次のようになる。
+		\begin{equation}\label{eq:二次元部分の遷移}\begin{split}
+			\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}M^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix} &= (b\eta_{-1})^*a(\eta_2d)^*
+				+ (b\eta_{-1})^*a\delta c(\beta a\delta c)^* \beta a(\eta_2d)^*
+		\end{split}\end{equation}
+		ブラ$\bra{b:1}$とケット$\ket{d:2}$を次のように定義して、
+		\begin{equation*}\begin{split}
+			\bra{b:1} := \bra{0}(b\eta_{-1})^*,\quad \ket{d:2} := (\eta_2d)^*\ket{0}
+		\end{split}\end{equation*}
+		式\eqref{eq:二次元部分の遷移}の真空期待値をとると次のようになる。
+		\begin{equation}\label{eq:真空期待値その一}\begin{split}
+			\bra{0}\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}M^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}\ket{0} &= a + b\bra{b:1}ac(\beta a\delta c)^*a\ket{d:2}d
+		\end{split}\end{equation}
+		この式の二項目の$\bra{b:1}ac(\beta a\delta c)^*a\ket{d:2}$を因子化することを
+		考える。Kleeneスターの部分を正規積で表すと次のようになる。
+		\begin{equation*}\begin{split}
+			(\beta a\delta c)^1 &= ad\delta c + \beta b)c \\
+			(\beta a\delta c)^2 &= \bigl((ad\delta c)^2 + bacad^2\delta c\bigr)
+			+ (ad\delta c)(\beta bac)
+			+ \bigl((\beta bac)^2 + \beta b^2bacad\bigr)
+		\end{split}\end{equation*}
+		そこで、点列$\set{x_n\in R\W A\bou n\in\sizen}$を次のように、
+		\begin{equation}\label{eq:摂動係数の漸化式}\begin{split}
+			x_0 &= a \\
+			x_{n+1} &= \sum_{p=0}^n bx_{n-p}cx_pd \quad\text{for all } n\in\sizen
+		\end{split}\end{equation}
+		線形写像$\xi_\pm:R\sizen_+\to V$を次のように、
+		\begin{equation*}\begin{split}
+			\xi_{+n} = x_{n-1}d\delta,\quad \xi_{-n} = \beta bx_{n-1}
+			\quad\text{for all } n\in\sizen_+
+		\end{split}\end{equation*}
+		線形写像$\xi_{\pm}^c:R\W\sizen_+\to V$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\xi_\pm^c1_\W &= 1 \\
+			\xi_\pm^c[n_1\cdots n_p] &= (\xi_\pm n_1)c\cdots(\xi_\pm n_p)c
+			\quad\text{for all } n_1,\dots,n_p\in \sizen_+
+		\end{split}\end{equation*}
+		$\beta a\delta=(\xi_++\xi_-)1$と書け次のようになる。
+		\begin{equation*}\begin{split}
+			(\beta a\delta c)^0 &= \bigl(\xi_+^c1_\W\bigr)\bigl((\xi_-^c1_\W\bigr) \\
+			(\beta a\delta c)^1 &= \bigl(\xi_+^c[1]\bigr)\bigl(\xi_-^c1_\W\bigr) 
+				+ \bigl(\xi_+^c1_\W\bigr)\bigl(\xi_-^c[1]\bigr) \\
+			(\beta a\delta c)^2 &= \bigl(\xi_+^c[2] 
+				+ \xi_+^c[11]\bigr)\bigl(\xi_-^c1_\W\bigr) 
+				+ \bigl(\xi_+^c[1]\bigr)\bigl(\xi_-^c[1]\bigr)
+				+ \bigl(\xi_+^c1_\W\bigr)\bigl(\xi_-^c[2] + \xi_-^c[11]\bigr) \\
+		\end{split}\end{equation*}
+		したがって、数の合成$C_n\subset \W\sizen_+$を次のようにおき、
+		\begin{equation*}\begin{split}
+			C_0 &:= \Set{1_\W} \\
+			C_1 &:= \Set{[1]} \\
+			C_2 &:= \Set{[2],[11]} \\
+			C_3 &:= \Set{[3],[21],[12],[111]} \\
+			\cdots
+		\end{split}\end{equation*}
+		ある$n\in\sizen_+$で次の式が成り立つと仮定する。
+		\begin{equation}\label{eq:帰納法の仮定その一}\begin{split}
+			(\beta a\delta c)^n &= \sum_{p=0}^n \sum_{\gamma_+\in C_{n-p}}
+				\sum_{\gamma_-\in C_p} (\xi_+^c\gamma_+)(\xi_-^c\gamma_-)
+		\end{split}\end{equation}
+		すると、任意の$p,q\in\sizen$に対して$x_{pq}$を次のようにおき、
+		\begin{equation*}\begin{split}
+			x_{pq} := bx_pcx_qd
+		\end{split}\end{equation*}
+		任意の$n\in\sizen$に対して$\Gamma_{\pm n}$を次のようにおき、
+		\begin{equation*}\begin{split}
+			\Gamma_{\pm n} := \sum_{\gamma\in C_n}(\xi_\pm^c\gamma)
+		\end{split}\end{equation*}
+		任意の$n\in\sizen_+$に対して成り立つ次の式を使うと、
+		\begin{equation*}\begin{split}
+			\Gamma_n = \sum_{p=1}^n (\xi_+^c[p])\Gamma_{n-p}
+			= \sum_{p=1}^n (\xi_+p)c \Gamma_{n-p}
+		\end{split}\end{equation*}
+		任意の$n\in\sizen_+$に対して次の式が成り立つことがわかり、
+		\begin{equation*}\begin{split}
+			&(\xi_-1)c\Gamma_n \\
+			&= \sum_{p=1}^n \bigl(x_{0(p-1)}d\delta + \beta bx_{0(p-1)}\bigr)c \Gamma_{n-p} \\
+			&= (\xi_+2)c\Gamma_{n-1} + (\xi_-2)c\Gamma_{n-1}
+				+ \sum_{p=2}^n \bigl(x_{0(p-1)}d\delta + \beta bx_{0(p-1)}\bigr)c \Gamma_{n-p} \\
+			&= (\xi_+2)c\Gamma_{n-1}
+				+ \sum_{p=2}^n \bigl(
+					x_{0(p-1)}d\delta + \beta bx_{0(p-1)} + x_{1(p-1)}d\delta + \beta bx_{1(p-1)}
+				\bigr)c \Gamma_{n-p} \\
+			&= (\xi_+2)c\Gamma_{n-1} + (\xi_+3)c\Gamma_{n-2} + (\xi_-3)c\Gamma_{n-2}
+				+ \sum_{p=3}^n \bigl(x_{0(p-1)}d\delta + \beta bx_{0(p-1)}\bigr)c \Gamma_{n-p} \\
+			&= \cdots \\
+			&= (\xi_+2)c\Gamma_{n-1} +\cdots+ (\xi_+n)c\Gamma_1 + \sum_{q=0}^{n-1}
+				\bigl(x_{q(n-1-q)}d\delta + \beta bx_{q(n-1-q)}\bigr)c \Gamma_0 \\
+			&= (\xi_+2)c\Gamma_{n-1} +\cdots+ (\xi_+(n+1))c\Gamma_0 
+				+ (\xi_-(n+1))c\Gamma_0 \\
+		\end{split}\end{equation*}
+		この式を使うと次の式が成り立つことがわかり、
+		\begin{equation*}\begin{split}
+			(\beta a\delta c)^{n+1} 
+			&= (\xi_+1+\xi_-1)c \sum_{p=0}^n \Gamma_{(n-p)}\Gamma_{-p} \\
+			&=  \sum_{p=0}^n \biggl(
+				(\xi_+1)c\Gamma_{(n-p)} + (\xi_-1)c\Gamma_{n-p}\biggr)\Gamma_{-p} \\
+			&=  \sum_{p=0}^n \biggl(
+				\Gamma_{(n-p+1)} + (\xi_-(n-p+1))c\biggr)\Gamma_{-p} \\
+			&= \sum_{p=0}^{n+1} \Gamma_{(n-p)}\Gamma_{-p} \\
+			&= \sum_{p=0}^{n+1} \sum_{\gamma_+\in C_{n-p}}
+				\sum_{\gamma_-\in C_p} (\xi_+^c\gamma_+)(\xi_-^c\gamma_-)
+		\end{split}\end{equation*}
+		帰納法の仮定\eqref{eq:帰納法の仮定その一}が$n+1$でも成り立つことがわかる。
+		したがって、次の式が成り立つが、
+		\begin{equation*}\begin{split}
+			(\beta a\delta c)^* 
+			&= \sum_{n\in\sizen} \sum_{p=0}^n \Gamma_{n-p}\Gamma_{-p}
+			= \left\{\begin{array}{clclclcl}
+				& \Gamma_0\Gamma_0 \\
+				+ & \Gamma_0\Gamma_{-1} &+& \Gamma_1\Gamma_0 \\
+				+ & \Gamma_0\Gamma_{-2} &+& \Gamma_1\Gamma_{-1} &+& \Gamma_2\Gamma_{0} \\
+				+ & \cdots
+			\end{array}\right. \\
+			&= (\sum_{n\in\sizen}\Gamma_n)(\sum_{n\in\sizen}\Gamma_{-n}) \\
+		\end{split}\end{equation*}
+		次の集合同型が成り立つから、
+		\begin{equation*}\begin{split}
+			\cup_{n\in\sizen}C_n \simeq \W\sizen_+ \quad\text{as set}
+		\end{split}\end{equation*}
+		次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\sum_{n\in\sizen}\Gamma_n
+			= \sum_{n\in\sizen}\sum_{\gamma\in C_n} \xi_+^c\gamma
+			= \bigl(\sum_{m\in\sizen_+}(\xi_+m)c\bigr)^*
+			= \bigl(\sum_{n\in\sizen}x_nd\delta c\bigr)^*
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			(\beta a\delta c)^* = \bigl(\sum_{n\in\sizen}x_nd\delta c\bigr)^*
+				\bigl(\sum_{n\in\sizen}\beta bx_nc\bigr)^*
+		\end{split}\end{equation*}
+		したがって、$x_*\in R\W A$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			x_* := \sum_{n\in\sizen} x_n
+		\end{split}\end{equation*}
+		真空期待値\eqref{eq:真空期待値その一}は次のようになる。
+		\begin{equation*}\begin{split}
+			\bra{0}\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}M^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}\ket{0} &= a + b\bra{b:1}ac(\beta a\delta c)^*a\ket{d:2}d \\
+			&= a + b\bra{b:1}a\bigl(cx_*d\delta c\bigr)^*
+				c\bigl(\beta bx_*c\bigr)^*a\ket{d:2}d \\
+			&= a + b\bra{b:1}a\bigl(cx_*d\eta_1 c\bigr)^*
+				c\bigl(\eta_{-2} bx_*c\bigr)^*a\ket{d:2}d \\
+		\end{split}\end{equation*}
+		そして、$\ket{d:2}$は$\eta_{-2} bx_*c$の固有ベクトルとなっていて、
+		\begin{equation*}\begin{split}
+			(\eta_{-2} bx_*c)f\ket{d:2} = bx_*cfd \quad\text{for all } f\in R\W A
+		\end{split}\end{equation*}
+		$\bra{b:1}$と$\ket{d:2}$は次の式を満たすから、
+		\begin{equation*}\begin{split}
+			\bra{b:1}\ket{0} = \bra{b:1}\ket{d:2} = \bra{0}\ket{d:2}
+		\end{split}\end{equation*}
+		次の因子化が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			&\bra{b:1}a\bigl(cx_*d\eta_1 c\bigr)^*
+				c\bigl(\eta_{-2} bx_*c\bigr)^*a\ket{d:2} \\
+			&= \bra{b:1}a\bigl(cx_*d\eta_1 c\bigr)^*\ket{0}
+				c\bra{0}\bigl(\eta_{-2} bx_*c\bigr)^*a\ket{d:2} \\
+			&= \bra{b}a\ket{cx_*d}c\bra{bx_*c}a\ket{d} \\
+		\end{split}\end{equation*}
+		そして、命題の式をパラメーター$t\in R$を用いて拡張した次の式
+		\begin{equation*}\begin{split}
+			y_t = a + tby_tcy_td
+		\end{split}\end{equation*}
+		の正則解$y_t=\sum_{n\in\sizen}t^ny_n$の摂動係数$y_n$が満たす次の漸化式は、
+		\begin{equation*}\begin{split}
+			y_0 &= a \\
+			y_{n+1} &= \sum_{p=0}^n by_{n-p}cy_pd \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		$x_*$を定義する漸化式\eqref{eq:摂動係数の漸化式}に他ならないので、
+		$x_*$は命題の式の解となることがわかる。
+		\begin{equation*}\begin{split}
+			x_* = a + bx_*cx_*d
+		\end{split}\end{equation*}
+		そして、次の式より、
+		\begin{equation*}\begin{split}
+			\bra{b}a\ket{cx_*d} = \sum_{n\in\sizen}b^na(cx_*d)^n 
+			= x_* = \sum_{n\in\sizen}(bx_*c)^nad^n = \bra{bx_*c}a\ket{d}
+		\end{split}\end{equation*}
+		真空期待値\eqref{eq:真空期待値その一}は次のようになり、命題が成り立つこと
+		がわかる。
+		\begin{equation*}\begin{split}
+			\bra{0}\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}M^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}\ket{0} &= a + bx_*ax_*d = x_*
+		\end{split}\end{equation*}
+	\end{proof} %}
+	\begin{todo}[保留]\label{todo:保留} %{
+	任意の$f,g\in R\W A$と$n\in\sizen$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(\beta f)(g\delta)^* &= \beta h_n + h_ngd\delta(g\delta)^*
+			+ \beta b^{n+1}xg^{n+1}(g\delta)^* \\
+		h_n &= \sum_{p=0}^nb^nfg^n \\
+	\end{split}\end{equation*}
+	\end{todo} %todo:保留}
+%s1:二次方程式の摂動}
+	%
+}\endgroup %}
