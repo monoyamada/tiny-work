@@ -10,14 +10,467 @@
 	\newcommand{\tran}{\mathbf{t}}
 	\newcommand{\dfn}{\,\myop{def}\,}
 	\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+	\newcommand{\tr}{\myop{tr}}
 	%
+	\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
 	\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
 	\newcommand{\what}{\widehat}
 	\newcommand{\even}{\myop{even}}
+	\newcommand{\lieso}{\myop{so}}
 	%
 	{\setlength\arraycolsep{2pt}
 	%
-\section{二次方程式の摂動}\label{s1:二次方程式の摂動} %{
+\section{一次元Ising模型}\label{s1:一次元Ising模型} %{
+	次のようなモデルを考えて、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 頂点数が$N$の一定間隔の一次元格子上で考える。
+		\item 格子上にスピン$\pm1$を割り当てる。
+		\item 周期境界条件を課す。
+		\item 格子上のスピンの隣接相互作用$k$を考える。
+		\item 外部磁場$h$を入れる。
+	\end{itemize} %}
+	分配関数$Z(k,h,N)$を次のように定義する。
+	\begin{equation*}\begin{split}
+		Z(k,h,N) &= \sum_{s_0,\dots,s_{N-1}=\pm1} 
+			\exp\left(\sum_{i=0}^{N-1}(ks_is_{i+1}+hs_i)\right) \\
+	\end{split}\end{equation*}
+	ここで、$\exp(ks_is_{i+1}+hs_i)$はBoltzmann重率と呼ばれる量で、
+	格子の頂点一つ辺りのエネルギーを指数の肩に乗せたものになっている。
+	任意の$s,t=\pm1$に対して$V(s,t)$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		V(s,t) := \exp\bigl(kst + h\frac{s+t}{2}\bigr)
+	\end{split}\end{equation*}
+	分配関数は$Z(k,h,N)=\tr V^N$と書くことができる。
+	$V$はBoltzmann重率を外部磁場$h$の項について対称化したものである。
+	$V$は次のような二次元対称行列なので対角化できる。
+	\begin{equation}\label{eq:転送行列その一}\begin{split}
+		V = \begin{pmatrix}
+			V(1,1) & V(1,-1) \\ V(-1,1) & V(-1,-1) \\
+		\end{pmatrix} = \begin{pmatrix}
+			\exp(k+h) & \exp(-k) \\ \exp(-k) & \exp(k-h) \\
+		\end{pmatrix}
+	\end{split}\end{equation}
+	その固有値を$\lambda_\pm$とすると、分配関数は
+	$Z(k,h,N)=\lambda_+^N+\lambda_-^N$となることがわかる。
+	固有値$\lambda_\pm$はパラメーター$k,h$に依存していることに注意する。
+	今の場合、固有値$\lambda_\pm$は二次方程式$\det(\lambda-V)$の解を
+	求めればよい。ここでは、解を具体的に求めることは割愛する。
+
+	ボルツマン重率$V$はは空間$\pm1$に住む粒子が遷移確率$V$に
+	したがって移動していくという描像をとることができる。
+	絵にすると次のようになる。
+	\begin{equation*}\xymatrix@C=6em{
+		s_0 \ar[r]^{V(s_0,s_1)} & s_1 \ar[r]^{V(s_1,s_2)} 
+		& \cdots \ar[r]^{V(s_{N-2},s_{N-1})} 
+		& s_{N-1} \ar@(u,u)[lll]_{V(s_{N-1},s_0)} \\
+	}\end{equation*}
+	この意味でボルツマン重率$V$を転送行列ということもある。
+
+	格子の間隔が一定でなくても同様の議論が成り立ちそうに思うが、
+	そうは問屋が下ろさない。$V$で$k$を明示的に次のように書いて、
+	$V_{k_1}$と$V_{k_2}$のLie括弧を計算すると次のようになり、
+	\begin{equation*}\begin{split}
+		[V_{k_1},V_{k_2}] = (e^{k_1-k_2} - e^{-(k_1-k_2)}) \begin{pmatrix}
+			0 & e^{h} - e^{-h} \\ e^{-h} - e^{h} & 0
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	$k_1=k_2$または$h=0$でない限り、$V_{k_1}$と$V_{k_2}$は同時に対角化する
+	ことができないことがわかる。
+%s1:一次元Ising模型}
+
+\section{三次元回転}\label{s1:三次元回転} %{
+	$\lieso(3)$の既約表現とテンソル積表現の既約分解について書く。
+
+\subsection{既約表現の構成}\label{s2:既約表現の構成} %{
+	$\lieso(3)$の既約表現を列挙することを考える。
+
+	$\lieso(3)$の生成子$\set{M_i\bou i=1,2,3}$を次の交換関係によって
+	定義する。
+	\begin{equation*}\begin{split}
+		[M_i,M_j] = i\sum_{k=1}^3E_{ijk}M_k \quad\text{for all } i,j=1,2,3
+	\end{split}\end{equation*}
+	$M_\pm=M_1\pm iM_2$と定義すると、交換関係は次のように書ける。
+	\begin{equation}\label{eq:交換関係その一}\begin{split}
+		[M_+,M_-] = 2M_3,\quad [M_3,M_\pm] = \pm M_\pm
+	\end{split}\end{equation}
+	全角運動量$M^2$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		M^2 := \sum_{i=1}^3 M_i^2
+	\end{split}\end{equation*}
+	$M^2$と各$M_i$は可換になる。
+	\begin{equation*}\begin{split}
+		[M_i,M^2] &= \sum_{j=1}^3 [M_i,M_j^2]
+		= \sum_{j=1}^3 \bigl(M_j[M_i,M_j] + [M_i,M_j]M_j\bigr) \\
+		& = i\sum_{j,k=1}^3 E_{ijk}\bigl(M_jM_k + M_kM_j\bigr) = 0
+	\end{split}\end{equation*}
+	したがって、$M^2$と$M_3$は同時に対角化可能となる。
+	また、交換関係\eqref{eq:交換関係その一}から、$M_\pm$を$M_3$の固有値に
+	対する昇降演算子としてフォック空間を構成することができる。
+	$M^2$の固有値$l$と$M_3$の固有値$m$に属する固有ベクトルを$\ket{l,m}$と
+	書き、その双対ベクトルを$\bra{l,m}$と書くことにする。
+	\begin{equation*}\begin{split}
+		M^2\ket{l,m} = l\ket{l,m},\quad M_3\ket{l,m} = m\ket{l,m} \\ 
+		\braket{l_1,m_1\bou l_2,m_2} = \jump{l_1=l_2}\jump{m_1=m_2}
+	\end{split}\end{equation*}
+	$M^2$と各$M_i$と可換だから、次のベクトルによって張られるベクトル空間
+	は$\lieso(3)$の作用に対して閉じている。
+	\begin{equation*}\begin{split}
+		\ket{l,m + n}\propto M_+^n\ket{l,m},\quad
+		\ket{l,m - n}\propto M_-^n\ket{l,m} \quad\text{where } n\in\sizen
+	\end{split}\end{equation*}
+
+	$M_3$の固有値の範囲を調べる。次の式により、
+	\begin{equation*}\begin{split}
+		M_1^2 + M_2^2 &= \frac{1}{2}(M_+M_- + M_-M_+) \\
+		M_1^2 - M_2^2 &= \frac{1}{2}(M_+M_+ + M_-M_-) \\
+	\end{split}\end{equation*}
+	$M^2$は次のように書ける。
+	\begin{equation*}\begin{split}
+		M^2 = \frac{1}{2}(M_+M_- + M_-M_+) + M_3^2
+	\end{split}\end{equation*}
+	この式の対角成分をとると、次の不等式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		l = \frac{1}{2}\biggl(
+			\bigl|M_-\ket{l,m}\bigr|^2 + \bigl|M_+\ket{l,m}\bigr|^2\biggr) + m^2
+		&\implies l\ge m^2 \\
+		&\iff -\sqrt{l} \le m \le \sqrt{l} \\
+	\end{split}\end{equation*}
+	$M^2$の固有値$l$を一つ決めて、$m$の上限を$m_l^{\max}$、
+	下限を$m_l^{\min}$とすると、それらの固有ベクトルに対する昇降演算子
+	の作用が次のように定まる。
+	\begin{equation}\label{eq:上限と下限その一}\begin{split}
+		M_+\ket{l,m_l^{\max}} = 0 = M_-\ket{l,m_l^{\min}}
+	\end{split}\end{equation}
+	ここで、次の式を使うと、
+	\begin{equation}\label{昇降演算子のノルムその一}\begin{split}
+		M_-M_+ = M^2 - M_3(M_3 + 1),\quad M_+M_- = M^2 - M_3(M_3 - 1)
+	\end{split}\end{equation}
+	式\eqref{eq:上限と下限その一}から次の式が導かれる。
+	\begin{equation*}\begin{split}
+		& l - m_l^{\max}(m_l^{\max} + 1) = 0 = l - m_l^{\min}(m_l^{\min} - 1) \\
+		& \implies (m_l^{\max})^2 - (m_l^{\min})^2 + m_l^{\max} + m_l^{\min} = 0 \\
+		& \iff  (m_l^{\max} + m_l^{\min})(m_l^{\max} - m_l^{\min} + 1) = 0 \\
+	\end{split}\end{equation*}
+	仮定から$m_l^{\min}\le m_l^{\max}$だから、この式が成り立つのは
+	$m_l^{\max}+m_l^{\min}=0$となるときだけである。そして、
+	$m_l^{\max}-m_l^{\min}\in\sizen$となるから、$M_3$の取りうる固有値は次の
+	ようになる。
+	\begin{equation*}\begin{array}{rrrrrrr}
+		m_l^{\max} - m_l^{\min} & 0 & 1 & 2 & 3 & \cdots \\
+		m_l^{\min} & 0 & -\frac{1}{2} & -1 & -\frac{3}{2} \\
+		m_l^{\max} & 0 & \frac{1}{2} & 1 & \frac{3}{2} \\
+	\end{array}\end{equation*}
+	半自然数$\sizen/2=\set{0,\frac{1}{2},1,\frac{3}{2},\dots}$を
+	用いると次のように書ける。
+	\begin{equation*}\begin{split}
+		m_l^{\min} = -j,\quad m_l^{\max} = j \quad\text{for all } j\in\sizen/2
+	\end{split}\end{equation*}
+	そして、$l$と$j$の関係は次のように求まる。
+	\begin{equation*}\begin{split}
+		l = m_l^{\max}(m_l^{\max} + 1) = j(j+1)
+	\end{split}\end{equation*}
+	以上をまとめると、次のように$M^2$と$M_3$の固有状態が得られた。
+	\begin{equation*}\begin{split}
+		M^2\ket{j,m} = j(j+1)\ket{j,m},\quad M_2\ket{j,m} = m\ket{j,m} \\
+		\text{for all } j\in \sizen/2,\;
+		m\in \set{-j, -j + 1,\dots, j - 1, j}
+	\end{split}\end{equation*}
+	また、式\eqref{昇降演算子のノルムその一}を使うと次のようになるから、
+	\begin{equation*}\begin{split}
+		\bigl|M_+\ket{j,m}\bigr|^2 = j(j+1) - m(m+1)
+		,\quad \bigl|M_-\ket{j,m}\bigr|^2 = j(j+1) - m(m-1)
+	\end{split}\end{equation*}
+	昇降演算子の規格化因子は次のようになることがわかる。
+	\begin{equation*}\begin{array}{rcll}
+		M_+\ket{j,m} &=& \sqrt{j(j+1) - m(m + 1)}\;\ket{j,m+1}
+			&\quad\text{for all } -j\le m< j \\
+		M_-\ket{j,m} &=& \sqrt{j(j+1) - m(m - 1)}\;\ket{j,m-1}
+			&\quad\text{for all } -j< m\le j \\
+	\end{array}\end{equation*}
+%s2:既約表現の構成}
+\subsection{既約表現のテンソル積}\label{s2:既約表現のテンソル積} %{
+	$\lieso(3)$の既約表現のテンソル積を既約表現の直和に分解することを考える。
+
+	$\lieso(3)$に余積$\Delta$を次のように定義する。
+	\begin{equation*}\begin{array}{rcll}
+		\Delta 1 &=& 1\otimes 1 \\
+		\Delta M_i &=& M_i\otimes1 + 1\otimes M_i
+			&\quad\text{for all } i = 1,2,3 \\
+		\Delta(M_{i_1}\cdots M_{i_n}) 
+			&=& (\Delta M_{i_1})\cdots(\Delta M_{i_n})
+			&\quad\text{for all } i_1,\dots,i_n = 1,2,3 \\
+	\end{array}\end{equation*}
+	すると，次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		[\Delta M_i, \Delta M_j] = i\sum_{k=1}^3 E_{ijk}\Delta M_k
+		\quad\text{for all } i,j = 1,2,3
+	\end{split}\end{equation*}
+	余積$\Delta$はLie代数準同型射となる。
+	この余積を用いてテンソル積への表現を定義する。
+	表現$(\rho_1,V_1)$と$(\rho_2,V_2)$のテンソル積への表現
+	$\rho_1*\rho_2:\lieso(3)\to \End_\fukuso(V_1\otimes V_2)$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		(\rho_1*\rho_2)M_i := (\rho_1\otimes\rho_2)\Delta M_i
+	\end{split}\end{equation*}
+	以下の表現の準同型射$\rho$は省略して書く。
+
+	前節の議論から、$\lieso(3)$の既約表現は半自然数を用いてパラメトライズ
+	することができることがわかるので、任意の$j\in\sizen/2$に対して
+	$M^2$の固有値が$j(j+1)$となる既約な表現空間を$V_j$と書くことにする。
+	\begin{equation*}\begin{split}
+		V_j = \myop{span} \set{\ket{j,m}\bou m=-j,-j+1,\dots,j-1,j}
+	\end{split}\end{equation*}
+	一般には、既約な表現空間のテンソル積によって作られる空間$V_j\otimes V_k$
+	は既約ではない。$V_j\otimes V_k$を既約表現の直和に分解することを考える。
+	
+	ここで、テンソル積の記述を簡略化するための記法を定義しておく。
+	$V_j$のベクトルで$M_3$の固有値$m$に属する固有ベクトルを単に$\ket{m}$
+	と書くことにする。
+	\begin{equation*}\begin{split}
+		\ket{m}\in V_j \xiff{\dfn} \ket{j,m}
+	\end{split}\end{equation*}
+	また、この節では次の命題を使う。
+
+	\begin{proposition}[最高ウィエイトによる部分既約表現]
+	\label{prop:最高ウィエイトによる部分既約表現} %{
+		$(\myspace,V)$を$\lieso(3)$のユニタリ表現とする。$u\in V$が
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $u\neq 0$かつ、
+			\item $M_+u=0$かつ、
+			\item ある$m\in\sizen$があって、$M_3u=mu$となる
+		\end{itemize} %}
+		とき、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $u$は$M^2$の固有値$m(m+1)$を持ち、
+			\item $\set{M_-^ku\bou k=0,1,\dots,2m}$で張られるベクトル空間は
+			$M^2$の固有値が$m(m+1)$となる$\lieso(3)$の既約表現$V_m$と
+			線形同型となる。
+			\begin{equation*}\begin{split}
+				V_m\simeq \myop{span}_\fukuso\set{u, M_-u,\dots, M_-^{2m}u}
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{proposition} %prop:最高ウィエイトによる部分既約表現}
+	\begin{proof} %{
+		$u\in V$を命題の条件を満たすベクトルとし、
+		ベクトルの集合$M_-^*u:=\set{M_-^ku\bou k=0,1,\dots,2m}$とする。
+		$M^2$を'正規積'の形あらわした次の式を使うと、
+		\begin{equation}\label{eq:二乗の正規積その一}\begin{split}
+			M^2 = M_3(M_3 + 1) + M_-M_+ \\
+		\end{split}\end{equation}
+		$M^2u=m(m+1)u$となり、$u$が$M^2$の固有値$m(m+1)$を持つことがわかる。
+		さらに、$M_-$と$M^2$は可換だから、$M_-^*u$の元はすべて$M^2$の固有値
+		$m(m+1)$を持つことがわかる。
+		そして、任意の$p\in\sizen$に対して次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			M_-^{p+1}u = 0 \implies M_+M_-^{p+1}u = (2m - p)(p + 1)M_-^pu = 0
+		\end{split}\end{equation*}
+		$M_-^*u$に$0$が含まれないことがわかり、$M_-^pu$は$M_3$の固有値$m-p$
+		を持つから、$M_-^*u$の元は互いに直交する。
+		したがって、$M_-^*u$で張られるベクトル空間$\fukuso M_-^*u$の次元は
+		$2m+1$となり、$V_m$の次元と一致する。そして、$M_-^*u$の定義より、
+		$\fukuso M_-^*u$は$\lieso(3)$の既約表現となっているから、
+		命題が成り立つことがわかる。
+	\end{proof} %}
+
+\subsubsection{(1/2,1/2)の場合}\label{s3:(1/2,1/2)の場合} %{
+	$V_{1/2}\otimes V_{1/2}$の直和分解を考える。
+	$V_{1/2}\otimes V_{1/2}$の標準的な基底系を、
+	$M_3$の固有値だけを書いて
+	$(m,n):=\ket{m}\otimes\ket{n}\in V_{1/2}\otimes V_{1/2}$として、
+	$M_3$の固有値ごとに並べると、次のようになる。
+	\begin{equation*}\begin{array}{rcrr}
+		M_3 &\quad& \text{基底} \\
+		1 &\quad& (\frac{1}{2},\frac{1}{2}) \\
+		0 &\quad& (-\frac{1}{2},\frac{1}{2}) & (\frac{1}{2},-\frac{1}{2}) \\
+		-1 &\quad& (-\frac{1}{2},-\frac{1}{2}) \\
+	\end{array}\end{equation*}
+	$M_3$の固有値が最も大きな基底$(1/2,1/2)$を$u1$と書くと、
+	\begin{equation*}\begin{split}
+		u1 := \ket{\frac{1}{2}}\otimes\ket{\frac{1}{2}}
+	\end{split}\end{equation*}
+	$(\Delta M_+)u1=0$となるから、
+	命題\ref{prop:最高ウィエイトによる部分既約表現}より、
+	ベクトルの集合$\set{u1,M_-u1,M_-^2u1}$は、既約表現$V_1$の基底系を
+	与えることがわかる。また、標準的な基底系の中で残る一つを$u0$とおき、
+	次のように定義すると、
+	\begin{equation*}\begin{split}
+		u0 &:= \ket{-\frac{1}{2}}\otimes\ket{\frac{1}{2}}
+			- \ket{\frac{1}{2}}\otimes\ket{-\frac{1}{2}} \\
+	\end{split}\end{equation*}
+	$\Delta M_\pm u0=0$となるから、やはり
+	命題\ref{prop:最高ウィエイトによる部分既約表現}より、
+	シングルトン$\set{u0}$は既約表現$V_0$の基底系を与えることがわかる。
+	以上より、次の直和分解が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		V_{\frac{1}{2}}\otimes V_{\frac{1}{2}} \simeq V_1\oplus V_0
+	\end{split}\end{equation*}
+%s3:(1/2,1/2)の場合}
+\subsubsection{(1,1/2)の場合}\label{s3:(1,1/2)の場合} %{
+	$V_1\otimes V_{1/2}$の直和分解を考える。
+	$V_1\otimes V_{1/2}$の標準的な基底系を、
+	$M_3$の固有値だけを書いて
+	$(m,n):=\ket{m}\otimes\ket{n}\in V_1\otimes V_{1/2}$として、
+	$M_3$の固有値ごとに並べると、次のようになる。
+	\begin{equation*}\begin{array}{rcrr}
+		M_3 &\quad& \text{基底} \\
+		\frac{3}{2} &\quad& (1,\frac{1}{2}) \\
+		\frac{1}{2} &\quad& (0,\frac{1}{2}) & (1,-\frac{1}{2}) \\
+		- \frac{1}{2} &\quad& (-1,\frac{1}{2}) & (0,-\frac{1}{2}) \\
+		-\frac{3}{2} &\quad& (-1,-\frac{1}{2}) \\
+	\end{array}\end{equation*}
+	$M_3$の固有値が最も大きな基底$(1,1/2)$を$u(3/2)$と書くと、
+	\begin{equation*}\begin{split}
+		u\frac{3}{2} := \ket{1}\otimes\ket{\frac{1}{2}}
+	\end{split}\end{equation*}
+	$(\Delta M_+)u(3/2)=0$となるから、
+	命題\ref{prop:最高ウィエイトによる部分既約表現}より、
+	ベクトルの集合$\set{M_-^pu(3/2)\bou p=0,1,\dots,3}$は、
+	既約表現$V_{3/2}$の基底系を与えることがわかる。
+	また、$M_3=1/2$の標準基底系で残る一つのベクトルを$u(1/2)$とおき、
+	$(\Delta M_-)u(3/2)$と直交するように定義すると、
+	\begin{equation*}\begin{split}
+		u\frac{1}{2} &:= \ket{0}\otimes\ket{\frac{1}{2}}
+			- \sqrt{2}\ket{1}\otimes\ket{-\frac{1}{2}} \\
+	\end{split}\end{equation*}
+	$(\Delta M_+)u(1/2)=0$となるから、やはり
+	命題\ref{prop:最高ウィエイトによる部分既約表現}より、
+	ベクトルの集合$\set{u(1/2),M_-u(1/2)}$は既約表現$V_{1/2}$の
+	基底系を与えることがわかる。
+	以上より、次の直和分解が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		V_1\otimes V_{\frac{1}{2}} \simeq V_{\frac{2}{2}}\oplus V_{\frac{1}{2}}
+	\end{split}\end{equation*}
+%s3:(1,1/2)の場合}
+\subsubsection{(3/2,1/2)の場合}\label{s3:(3/2,1/2)の場合} %{
+	$V_{3/2}\otimes V_{1/2}$の直和分解を考える。
+	$V_{3/2}\otimes V_{1/2}$の標準的な基底系を、
+	$M_3$の固有値だけを書いて
+	$(m,n):=\ket{m}\otimes\ket{n}\in V_{3/2}\otimes V_{1/2}$として、
+	$M_3$の固有値ごとに並べると、次のようになる。
+	\begin{equation*}\begin{array}{rcrr}
+		M_3 &\quad& \text{基底} \\
+		2 &\quad& (\frac{3}{2},\frac{1}{2}) \\
+		1 &\quad& (\frac{1}{2},\frac{1}{2}) & (\frac{3}{2},-\frac{1}{2}) \\
+		0 &\quad& (-\frac{1}{2},\frac{1}{2}) & (\frac{1}{2},-\frac{1}{2}) \\
+		-1 &\quad& (-\frac{3}{2},\frac{1}{2}) & (-\frac{1}{2},-\frac{1}{2}) \\
+		- 2 &\quad& (-\frac{3}{2},-\frac{1}{2}) \\
+	\end{array}\end{equation*}
+	$M_3$の固有値が最も大きな基底$(3/2,1/2)$を$u2$と書くと、
+	\begin{equation*}\begin{split}
+		u2 := \ket{\frac{3}{2}}\otimes\ket{\frac{1}{2}}
+	\end{split}\end{equation*}
+	$(\Delta M_+)u2=0$となるから、
+	命題\ref{prop:最高ウィエイトによる部分既約表現}より、
+	ベクトルの集合$\set{M_-^pu(3/2)\bou p=0,1,\dots,4}$は、
+	既約表現$V_2$の基底系を与えることがわかる。
+	また、$M_3=1/2$の標準基底系で残る一つのベクトルを$u1$とおき、
+	$(\Delta M_-)u2$と直交するように定義すると、
+	\begin{equation*}\begin{split}
+		u1 &:= \ket{\frac{1}{2}}\otimes\ket{\frac{1}{2}}
+			- \sqrt{3}\ket{\frac{3}{2}}\otimes\ket{-\frac{1}{2}} \\
+	\end{split}\end{equation*}
+	$(\Delta M_+)u1=0$となるから、やはり
+	命題\ref{prop:最高ウィエイトによる部分既約表現}より、
+	ベクトルの集合$\set{u1,M_-u1,M_-^2u1}$は既約表現$V_1$の
+	基底系を与えることがわかる。
+	以上より、次の直和分解が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		V_{\frac{3}{2}}\otimes V_{\frac{1}{2}} \simeq V_2\oplus V_1
+	\end{split}\end{equation*}
+%s3:(3/2,1/2)の場合}
+\subsubsection{(j,k)の場合}\label{s3:(j,k)の場合} %{
+	$j,k\in\sizen/2$とする。$\dim(V_j\otimes V_j)=(2j+1)(2k-1)$となるが、
+	$V_j\otimes V_j$の標準基底系を$M_3$の固有値ごとに縦に並べると、
+	次のような台形になる。
+	\begin{equation*}\xymatrix@R=1ex@C=1ex{
+		& & & \circ & \cdots & \circ & & & \\
+		& & & \vdots & \vdots & \vdots & & & \\
+		& \circ & & \circ & \cdots & \circ & & \circ & \\
+		\circ & \circ & & \circ & \cdots & \circ & & \circ & \circ \\
+		j + k & j + k - 1 & \cdots & |j - k| & \cdots 
+			& - |j - k| & \cdots & - (j + k - 1) & - (j + k) \\
+	}\end{equation*}
+	ここで、$|j-k|=\max(j,k)-\min(j,k)$となることに注意すると、
+	図の$|j-k|$の意味がわかる。
+	そして、$M_3=j+k$から順に、$\ker M_+$の元を一つ選び出して、
+	それに$M_-$を掛けていって、次の図のようなベクトルの系列を作る。
+	\begin{equation*}\xymatrix@R=1ex@C=1ex{
+		& & & \circ \ar[r]^{M_-} & \cdots \ar[r]^{M_-} & \circ \\
+		& & & \vdots & \vdots & \vdots & & & \\
+		& \circ \ar[r]^{M_-} & \cdots \ar[r]^{M_-} 
+			& \circ \ar[r]^{M_-} & \cdots \ar[r]^{M_-} & \circ \ar[r]^{M_-} 
+			& \cdots \ar[r]^{M_-} & \circ \\
+		\circ \ar[r]^{M_-} & \circ \ar[r]^{M_-} & \cdots \ar[r]^{M_-} 
+			& \circ \ar[r]^{M_-} & \cdots \ar[r]^{M_-} & \circ \ar[r]^{M_-} 
+			& \cdots \ar[r]^{M_-} & \circ \ar[r]^{M_-} & \circ \\
+		j + k & j + k - 1 & \cdots & |j - k| & \cdots 
+			& - |j - k| & \cdots & - (j + k - 1) & - (j + k) \\
+	}\end{equation*}
+	すると、命題\ref{prop:最高ウィエイトによる部分既約表現}より、
+	次の直和分解が得られる。
+	\begin{equation*}\begin{split}
+		V_j\otimes V_k \simeq V_{j+k}\oplus V_{j+k-1}\oplus\cdots\oplus
+			V_{|j-k|}
+	\end{split}\end{equation*}
+
+	ここで、$M_3$の固有値ごとに$\ker M_+$の元を一つ選び出す方法だが、
+	教科書\cite{bk:jinbo.ryousigun}の方法を書いておく。
+	$p\in\sizen/2$を$1\le p\le (j+k)-|j-k|=2\min(j,k)$となる半自然数とする。
+	$u(j+k-p)\in V_j\otimes V_k$を$M_3$の固有値$j+k-p$を持ち、
+	$(\Delta M_+)u(j+k-p)=0$となるベクトルとする。$u(j+k-p)$は未定係数
+	$c_i\in\fukuso$を用いて次のように書くことができる。
+	\begin{equation*}\begin{split}
+		u(j+k-p) = \sum_{i=0}^p c_i\ket{j-i}\otimes\ket{k-p+i}
+	\end{split}\end{equation*}
+	$(\Delta M_+)u(j+k-p)=0$となるためには次の式を満たす必要がある。
+	\begin{equation*}\begin{split}
+		0 &= (\Delta M_+)u(j+k-p) \\
+		&= \sum_{i=0}^{p-1}\bigl(c_{i+1}d^j_{j-i-1} + c_id^k_{k-p+i}\bigr)
+			\ket{j-i}\otimes\ket{k-p+i+1} \\
+		d^j_m &:= \braket{j,m+1|M_+|j,m} \\
+	\end{split}\end{equation*}
+	この条件は未定係数に対する漸化式になる。
+	\begin{equation*}\begin{array}{rcll}
+		c_{i+1} &=& - \cfrac{\braket{k,k-p+i+1|M_+|k,k-p+i}}
+			{\braket{j,j-i|M_+|j,j-i-1}} c_i \\
+		&=& - \left(\cfrac{(p-i)(2k-p+i+1)}{(i+1)(2j-i)}\right)^{\frac{1}{2}}
+			c_i &\quad\text{for all } i=0,1,\dots,p-1
+	\end{array}\end{equation*}
+	そして、$c_0$と適当に選べば、例えば$c_0=1$、$u(j+k-p)$が一つ定まる。
+
+	ここに書いた方法で最高ウィエイトベクトルを選び出すと次のようになる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $j=1/2,\;k=1/2$の場合
+		\begin{equation*}\begin{split}
+			u1 = \ket{\frac{1}{2}}\otimes\ket{\frac{1}{2}},\quad
+			u0 = \ket{\frac{1}{2}}\otimes\ket{-\frac{1}{2}}
+				- \ket{-\frac{1}{2}}\otimes\ket{\frac{1}{2}}
+		\end{split}\end{equation*}
+		%
+		\item $j=1,\;k=1/2$の場合
+		\begin{equation*}\begin{split}
+			u\frac{3}{2} = \ket{1}\otimes\ket{\frac{1}{2}},\quad
+			u\frac{1}{2} = \ket{1}\otimes\ket{-\frac{1}{2}}
+				- \frac{1}{\sqrt{2}}\ket{0}\otimes\ket{\frac{1}{2}}
+		\end{split}\end{equation*}
+		%
+		\item $j=3/2,\;k=1/2$の場合
+		\begin{equation*}\begin{split}
+			u2 = \ket{\frac{3}{2}}\otimes\ket{\frac{1}{2}},\quad
+			u1 = \ket{\frac{3}{2}}\otimes\ket{-\frac{1}{2}}
+				- \frac{1}{\sqrt{3}}\ket{\frac{1}{2}}\otimes\ket{\frac{1}{2}}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+%s3:(j,k)の場合}
+%s2:既約表現のテンソル積}
+	\begin{note}[似た者同士]\label{note:似た者同士} %{
+		$\lieso(3,\jitu)$と$su(2)$と$sl(2,\fukuso)$は似た者同士である。
+		具体的にLie代数準同型を示すこと。
+	\end{note} %note:似た者同士}
+%s1:三次元回転}
+
+\section{二次方程式の正級数解}\label{s1:二次方程式の正級数解} %{
 	この節では次のような便宜を用いる。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
 		\item[係数] $R=(R,+,0,\myspace,1)$を標数$0$の可換半体とする。
@@ -80,7 +533,7 @@
 
 	代数方程式\eqref{eq:求める二次式}の正級数解$x$をオートマトンを使って
 	解くことを考える。次のセルオートマトンが$x$に対応すると思われる。
-	\begin{equation*}\xymatrix@C=1ex{
+	\begin{equation}\label{eq:二次式のセルオートマトンその一}\xymatrix@C=1ex{
 		& (+,0) & (-,0) & (+,1) & (-,1) & (+,2) & (-,2) & (+,3) & (-,3) \\
 		0 & \circ \ar[r]^a \ar[d]^b & \circ & \circ \ar[r]^a  \ar[drr]^b 
 			& \circ & \circ \ar[r]^a & \circ & \circ \ar[r]^a & \circ  \\
@@ -89,19 +542,19 @@
 			& \circ \ar[r]^a & \circ \ar[r]^c & \circ \ar[r]^a
 			& \circ \ar[ullll]_d \\
 		2 & \circ \ar[r]^a & \circ \ar[r]^c & \circ \ar[r]^a 
-			& \circ \ar[ull]_d 
+			& \circ \ar[ull]_d
 			& \circ \ar[r]^a & \circ \ar[r]^c & \circ \ar[r]^a
 			& \circ \ar[ullll]_d 
-	}\end{equation*}
+	}\end{equation}
 	遷移のパターンを考慮して水平方向の格子を偶奇で直和分解している。
 	$+$が偶数番目、$-$が奇数番目の水平方向の座標を表す。
 	可能な遷移を書くと任意の$m,n\in\sizen$に対して次のようになる。
-	\begin{equation*}\begin{array}{rcrcl}
+	\begin{equation}\label{eq:二次式のセルオートマトンその二}\begin{array}{rcrcl}
 		a &:& (+, m, n) &\mapsto& (-, m, n) \\
 		c &:& (-, 2m, n + 1) &\mapsto& (+, 2m + 1, n + 1) \\
 		b &:& (+, m, n) &\mapsto& (+, 2m, n + 1) \\
 		d &:& (-, 2m + 1, n + 1) &\mapsto& (-, m, n) \\
-	\end{array}\end{equation*}
+	\end{array}\end{equation}
 	$(+,0,0)$を始点、$(-,0,0)$を終点とするすべての経路を足し上げれば正級数解
 	$x$が得られると予想される。二次元格子を次のように表して、
 	\begin{equation*}\begin{split}
@@ -212,11 +665,11 @@
 
 	まとめると、$1:1$の代数射$\phi:\mycal{H}_2\to\mycal{H}\otimes\mycal{H}$が
 	次のように与えられ、
-	\begin{equation*}\begin{split}
+	\begin{equation}\label{eq:一対一の代数射その一}\begin{split}
 		\phi\eta_1 = B_+\otimes\eta_+,\quad
 		\phi\eta_2 = \eta_+B_+\otimes\eta_+,\quad
 		\phi f^\tran = (\phi f)^\tran \quad\text{for all } f\in \mycal{H}_2
-	\end{split}\end{equation*}
+	\end{split}\end{equation}
 	代数方程式\eqref{eq:求める二次式}の正級数解が次のように与えられたこと
 	になる。
 	\begin{equation}\label{eq:二次式の正級数解その一}\begin{split}
@@ -229,10 +682,19 @@
 			0 \\ 1
 		\end{pmatrix}\ket{0} \\
 	\end{split}\end{equation}
-	ここまでの話を命題の形でまとめておく。
+	そして、セルオートマトン\eqref{eq:二次式のセルオートマトンその一}は
+	次のスタックオートマトンと等しいことがわかる。
+	\begin{equation}\label{eq:二次式のスタックオートマトンその一}\xymatrix{
+		*++[o][F-]{+} \ar@(ul,dl)_{b\eta_{-1}} \ar@/_1ex/[r]_a
+		& *++[o][F-]{-} \ar@(dr,ur)_{d\eta_{2}} \ar@/_1ex/[l]_{c\eta_1\eta_{-2}}
+	}\end{equation}
+	真空期待値\eqref{eq:二次式の正級数解その一}
+	またはスタックオートマトン\eqref{eq:二次式のスタックオートマトンその一}
+	が代数方程式\eqref{eq:求める二次式}の正級数解になっていることを代数的に
+	証明しておく。
 
 	\begin{proposition}[二次式の正級数解]\label{prop:二次式の正級数解} %{
-		$\mycal{H}_*$の真空期待値\eqref{eq:二次式の正級数解その一}は
+		$\mycal{H}_2$の真空期待値\eqref{eq:二次式の正級数解その一}は
 		代数方程式\eqref{eq:求める二次式}の正級数解となる。
 		\begin{equation*}\begin{split}
 			x = \bra{0}\begin{pmatrix}
@@ -244,7 +706,6 @@
 				0 \\ 1
 			\end{pmatrix}\ket{0} \implies x = a + bxcxd
 		\end{split}\end{equation*}
-		一般の半体$R$では逆は成り立たないことに注意する。
 	\end{proposition} %prop:二次式の正級数解}
 	\begin{proof} %{
 		命題の左辺が右辺の式を満たすことを示す。まず、二次元行列のKleeneスター
@@ -291,185 +752,77 @@
 		\begin{equation*}\begin{split}
 			T = T_1 + T_{-1},\quad
 			T_1 := a(d\eta_2)^*c\eta_1\eta_{-2},\quad
-			T_{-1} := (b\eta_{-1}^*)bac\eta_{-2}
+			T_{-1} := (b\eta_{-1})^*bac\eta_{-2}
 		\end{split}\end{equation*}
 		$T_{\pm1}$を一般化して線形写像$T_\pm:V\to\mycal{H}_2$を次のように定義
 		すると、
 		\begin{equation*}\begin{split}
 			T_+f := f(d\eta_2)^*c\eta_1\eta_{-2},\quad
-			T_-f := (b\eta_{-1}^*)bfc\eta_{-2}
+			T_-f := (b\eta_{-1})^*bfc\eta_{-2}
 		\end{split}\end{equation*}
-		$T_{-}f$は次の代数を満たす。
+		$T_\pm$は次の代数を満たし、
 		\begin{equation*}\begin{split}
-			(T_-f)(T_+g) &= T_+(bfcgd) + T_-(bfcgd) \\
-			(T_-f)g\ket{d:2} &= bfcgd\ket{d:2} \\
-		\end{split}
+			(T_-f)(T_+g) = T_+(bfcgd) + T_-(bfcgd)
 			\quad\text{for all } f,g\in V
-		\end{equation*}
-		したがって、$T^n$は次のような'正規積'の形に書け、
-		\begin{equation*}\begin{split}
-			T^n \approx \sum (T_+f_1)\cdots(T_+f_p)(T_-g_1)\cdots(T_-g_q)
 		\end{split}\end{equation*}
-		$T^n$の$a\ket{d:2}$への作用は次のようになることがわかる。
+		$T_-$は$\ket{d:2}$を固有状態に持つ。
 		\begin{equation*}\begin{split}
-			T^n a\ket{d:2} \approx \sum (T_+f_1)\cdots(T_+f_p) g\ket{d:2},\quad
-			g = bg_1c\bigl(\cdots(bg_qcad)\cdots\bigr)d
+			(T_-f)g\ket{d:2} = bfcgd\ket{d:2} \quad\text{for all } f,g\in V
 		\end{split}\end{equation*}
-		煩雑さを避けるために、$V$の線形二項演算$*$を次のように定義する。
+		$T_{\pm1}$は$T_\pm a$と書くことができる。
+		$T_\pm$の代数から$V$の二項演算$\odot$を
 		\begin{equation*}\begin{split}
-			f*g := bfcgd \quad\text{for all } f,g\in V
+			f\odot g = bfcgd \quad\text{for all } f,g\in V
 		\end{split}\end{equation*}
-		$*$は結合則を満たさない二項演算であることに注意する。
-		$*$を用いると$T_\pm f$の'交換関係'は次のように書ける。
+		とおき、$x$を代数方程式\eqref{eq:求める二次式}の正級数解とすると、
 		\begin{equation*}\begin{split}
-			(T_-f)(T_-g) = (T_+ + T_-)(f*g) \quad\text{for all } f,g\in V
-		\end{split}\end{equation*}
-
-		$n$が小さなところの$T^n$を計算してみると次のようになる。
-		\begin{equation*}\begin{split}
-			T^1 &= T_1 + T_{-1} \\
-			T^2 &= (T_2 + T_1^2) + T_1T_{-1} + (T_{-1} + T_{-1}^2) \\
-			T^3 &= (T_3 + T_2T_1 + T_1T_2 + T_1^3) + (T_2 + T_1^2)T_{-1} \\
-			&\; + T_1(T_{-1} + T_{-1}^2) 
-				+ (T_{-3} + T_{-2}{-1} + T_{-1}T_{-2} + T_{-1}^3) \\
-		\end{split}\end{equation*}
-		ここで、$T_{\pm(n+1)}$は次のように定義している。
-		\begin{equation*}\begin{split}
-			T_{\pm(n+1)} := T_\pm x_n \quad\text{for all } n\in\sizen
-		\end{split}\end{equation*}
-		$x_n$は漸化式\eqref{eq:求める漸化式}で定義される$V$の元で、
-		次のように定義している。
-		\begin{equation*}\begin{split}
-			x_0 = a,\quad x_{n+1} = \sum_{p=0}^n x_{n-p}*x_p
+			x = \sum_{n\in\sizen} x_n,\quad
+			x_0 = a,\quad x_{n+1} = \sum_{p=0}^n x_p\odot x_{n-p}
 			\quad\text{for all } n\in\sizen
 		\end{split}\end{equation*}
-		$n$が小さなところの$T^n$を計算から、$T_{\pm0}$を次のように定義して、
-		\begin{equation*}\begin{split}
-			T_{\pm0} := 1
-		\end{split}\end{equation*}
-		$T^{n+1}$は任意の$n\in\sizen$に対して次のように書けると予想される。
-		\begin{equation}\label{eq:予想その一}\begin{split}
-			T^{n+1} = \sum_{p=0}^{n+1} \mybf{T}_{p}\mybf{T}_{-(n+1-p)} \\
-			\mybf{T}_{\pm(n+1)} = \sum_{p=0}^n T_{\pm(p+1)}\mybf{T}_{\pm(n-p)}
-			,\quad \mybf{T}_{\pm 0} = 1
-		\end{split}\end{equation}
-		ある$n=N\in\sizen_+$でこの式が成り立つと仮定する。すると、任意の
-		$n\le N\in\sizen$に対して次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			T_{-1}\mybf{T}_{n+1} &= \sum_{p=0}^n T_{-1}T_{p+1}\mybf{T}_{n-p} \\
-			&= (T_2 + T_{-2})\mybf{T}_{n}
-				+ \sum_{p=1}^n T_{-1}T_{p+1}\mybf{T}_{n-p} \\
-			&= T_2\mybf{T}_{n} + \sum_{p=0}^{n-1}
-				(T_{-1}T_{p+2} + T_{-2}T_{p+1})\mybf{T}_{n-1-p} \\
-			&= T_2\mybf{T}_{n} + T_3\mybf{T}_{n-1} + \sum_{p=0}^{n-2}
-				(T_{-1}T_{p+3} + T_{-2}T_{p+2} + T_{-3}T_{p+1}) \mybf{T}_{n-2-p} \\
-			&= \cdots \\
-			&= T_2\mybf{T}_{n} +\cdots+ T_{n+1}\mybf{T}_{1} + \sum_{p=0}^{0}
-				(T_{-1}T_{p+n+1} +\cdots+ T_{-(n+1)}T_{p+1})\mybf{T}_{0-p} \\
-			&= T_2\mybf{T}_{n} +\cdots+ T_{n+2}\mybf{T}_{0} + T_{-(n+2)} \\
-		\end{split}\end{equation*}
-		この式と帰納法の仮定を使うと次の式が得られる。
-		\begin{equation*}\begin{split}
-			T^{N+2} &= (T_1 + T_{-1})T^{N+1} \\
-			&= T_1T^{N+1} 
-				+ T_{-1}\sum_{p=0}^{N+1} \mybf{T}_p\mybf{T}_{-(N+1-p)} \\
-			&= T_1T^{N+1} + T_{-1}\mybf{T}_{-(N+1)}
-				+ T_{-1}\sum_{p=0}^{N} \mybf{T}_{p+1}\mybf{T}_{-(N-p)} \\
-			&= T_1T^{N+1} + T_{-1}\mybf{T}_{-(N+1)}
-				+ \sum_{p=0}^{N}\sum_{q=0}^p T_{q+2}\mybf{T}_{p-q}\mybf{T}_{-(N-p)}
-				+ \sum_{p=0}^{N}T_{-(p+2)}\mybf{T}_{-(N-p)} \\
-			&= \sum_{p=0}^{N+1}\sum_{q=0}^{p} 
-				T_{q+1}\mybf{T}_{p-q}\mybf{T}_{-(N+1-p)}
-				+ \sum_{p=0}^{N+1}T_{-(p+1)}\mybf{T}_{-(N+1-p)} \\
-			&= \sum_{p=0}^{N} \mybf{T}_{p}\mybf{T}_{-(N+1-p)}
-				+ \sum_{p=0}^{N+1} \bigl(T_{-(p+1)}\mybf{T}_{-(N+1-p)} 
-				+ T_{p+1}\mybf{T}_{N+1-p}\bigr) \\
-		\end{split}\end{equation*}
-		ここで、$\mybf{T}_{\pm(N+2)}$を次のようにおくと、
-		\begin{equation*}\begin{split}
-			\mybf{T}_{\pm(N+2)} 
-			= \sum_{p=0}^{N+1} T_{\pm(p+1)}\mybf{T}_{\pm(N+1-p)} 
-		\end{split}\end{equation*}
-		$T^{N+2}$は次のように書ける。
-		\begin{equation*}\begin{split}
-			T^{N+2} &= \sum_{p=0}^{N+2} \mybf{T}_{p}\mybf{T}_{-(N+1-p)}
-		\end{split}\end{equation*}
-		したがって、$N+2$に対しても式\eqref{eq:予想その一}が成り立つことが
+		命題\eqref{prop:ベクトル空間から代数}から、次の式が成り立つことが
 		わかる。
-		\begin{todo}[メモ]\label{todo:メモ} %{
-			直接次の式を証明した方がイメージが掴みやすいかもしれない。
-			\begin{equation*}\begin{split}
-				T^n = \frac{1}{2\pi i}\oint \frac{dz}{z^{n+1}}
-					(\tau_+z)^*(\tau_-z)^*,\quad
-				\tau_\pm z = \sum_{n\in\sizen_+} z^nT_{\pm n}
-			\end{split}\end{equation*}
-			この式から$T^*$は次のようになる。
-			\begin{equation*}\begin{split}
-				T^* = \sum_{n\in\sizen}T^n
-				= \frac{1}{2\pi i}\oint_{1<|z|} \frac{dz}{z-1}
-					(\tau_+z)^*(\tau_-z)^*
-				= (\tau_+1)^*(\tau_-1)^*
-			\end{split}\end{equation*}
-			複素線積分の代用として昇降演算子を用いると次のように書ける。
-			\begin{equation*}\begin{split}
-				T^n = \bra{n:\zeta}(\tau_+\zeta_+)^*(\tau_-\zeta_+)^*\ket{0:\zeta}
-			\end{split}\end{equation*}
-			そして、$\mybf{T}_{\pm n}$を次のようにおけば、
-			\begin{equation*}\begin{split}
-				\mybf{T}_{\pm n} = \bra{n:\zeta}(\tau_\pm\zeta_+)^*\ket{0:\zeta}
-			\end{split}\end{equation*}
-			次の'分配則'を用いて
-			\begin{equation*}\begin{split}
-				\bra{n:\zeta}(\phi\zeta_+)(\psi\zeta_+)\ket{0}
-				= \sum_{p=0}^n \bra{p:\zeta}(\phi\zeta_+)\ket{0:\zeta}
-					\bra{n-p:\zeta}(\psi\zeta_+)\ket{0:\zeta}
-			\end{split}\end{equation*}
-			次の式が再現できる。
-			\begin{equation*}\begin{split}
-				T^n = \sum_{p=0}^n \mybf{T}_{p}\mybf{T}_{-(n-p)},\quad
-				\mybf{T}_{\pm n} = \jump{n=0} 
-					+ \sum_{p=1}^n T_{\pm p}\mybf{T}_{\pm(n-p)}
-			\end{split}\end{equation*}
-			また、次の式から、
-			\begin{equation*}\begin{split}
-				\sum_{n\in\sizen}\bra{n:\zeta}(\phi\zeta_+)\ket{0} = \phi1
-			\end{split}\end{equation*}
-			次の式が再現できる。
-			\begin{equation*}\begin{split}
-				T^* = \sum_{n\in\sizen} T^n = (\tau_+1)^*(\tau_-1)^*
-			\end{split}\end{equation*}
-
-			Hausdorffの公式を使えばよい？
-
-			\begin{equation*}\begin{split}
-				T^{N+1} &= (T_1 + T_{-1})
-					\bra{N}(\tau_+\zeta_+)^*(\tau_-\zeta_+)^*\ket{0} \\
-				&= T_1T^N
-					+ \bra{N}T_{-1}(\tau_+\zeta_+)^*(\tau_-\zeta_+)^* \ket{0} \\
-				&= T_1T^N + T_{-1}\bra{N}(\tau_-\zeta_+)^*\ket{0}
-					+ \bra{N}T_{-1}(\tau_+\zeta_+)^+(\tau_-\zeta_+)^* \ket{0} \\
-			\end{split}\end{equation*}
-		\end{todo} %todo:メモ}
+		\begin{equation*}\begin{split}
+			T^* = (T_+x)^*(T_-x)^*
+		\end{split}\end{equation*}
+		この式から次の式が得られる。
+		\begin{equation*}\begin{split}
+			\braket{0|X} &= \bra{0}(T_-x)^*a\ket{d:2} \\
+			&= \bra{0}(bxc\eta_{-2})^*a(d\eta_2)\ket{0} \\
+		\end{split}\end{equation*}
+		この式は代数方程式$x=a+bxcxd$を次のように等しい。
+		\begin{equation*}\begin{split}
+			x = a+bxcxd = \sum_{n\in\sizen} (bxc)^nad^n
+			= \bra{0}(bxc\eta_-)^*a(d\eta_+)^*\ket{0}
+		\end{split}\end{equation*}
+		したがって、命題が成り立つことが示された。
 	\end{proof} %}
 
-	\begin{proposition}[二項演算]\label{prop:二項演算} %{
-		$A$をベクトル空間、$B$を代数とする。$\odot$を$A$の線形二項演算とし、
-		線形写像$\phi_\pm:A\to B$が次の性質を満たすとする。
+	この命題で、一般の半体$R$では命題の逆$\Leftarrow$は成り立たないことに
+	注意する。例えば、$R$が複素数の場合、$x=1+tx^2$という二次方程式は
+	$x=\frac{1\pm\sqrt{1-4t}}{2t}$と二つの解を持つが、命題が与える解は
+	$x=\frac{1-\sqrt{1-4t}}{2t}$の方だけになっている。
+
+	\begin{proposition}[ベクトル空間から代数]\label{prop:ベクトル空間から代数} %{
+		$A$をベクトル空間、$B$を代数とする。$\odot$を$A$の線形とは限らない
+		二項演算とし、$\phi_\pm:A\to B$を次の性質を満たす線形写像とする。
 		\begin{equation*}\begin{split}
 			(\phi_-x)(\phi_+y) = (\phi_+ + \phi_-)(x\odot y)
 			\quad\text{for all } x,y\in A
 		\end{split}\end{equation*}
-		このとき、$-^{\odot-}:A\times\sizen\to A$を次のように定義し、
+		このとき、$\alpha:A\times\sizen_+\to A$を任意の$x\in A$に対して
+		次のように定義し、
+		\begin{equation*}\begin{array}{rcll}
+			\alpha_1x &=& x \\
+			\alpha_2x &=& x\odot x \\
+			\alpha_3x &=& (x\odot x)\odot x + x\odot(x\odot x) \\
+			\cdots \\
+			\alpha_{n+1}x &=& \sum_{p=1}^n (\alpha_px)\odot(\alpha_{n+1-p}x)
+			& \quad\text{for all } n\in\sizen_+
+		\end{array}\end{equation*}
+		写像$\psi_\pm:A\times\fukuso\to B$を次のように定義すると、
 		\begin{equation*}\begin{split}
-			x^{\odot 0} = 1,\quad x^{\odot 1} = x \\
-			x^{\odot(n+1)} = \sum_{p=0}^n x^{\odot p}\odot x^{\odot(n-p)}
-			\quad\text{for all } n\in\sizen_+ \\
-		\end{split}
-			\quad\text{for all }x\in A
-		\end{equation*}
-		写像$\psi_\pm:A\otimes\fukuso\to B$を次のように定義すると、
-		\begin{equation*}\begin{split}
-			\psi_\pm(x,z) = \sum_{n\in\sizen_+}(\phi_\pm x^{\odot n})z^n
+			\psi_\pm(x,z) = \sum_{n\in\sizen_+}(\phi_\pm\alpha_nx)z^n
 			\quad\text{for all } x\in A,\; z\in\fukuso
 		\end{split}\end{equation*}
 		任意の$n\in\sizen$に対して次の式が成り立つ。
@@ -477,23 +830,22 @@
 			(\phi_+x + \phi_-x)^n &= \frac{1}{2\pi i} \oint \frac{dz}{z^{n+1}} 
 				\bigl(\psi_+(x,z)\bigr)^*\bigl(\psi_-(x,z)\bigr)^* \\
 		\end{split}\end{equation*}
-	\end{proposition} %prop:二項演算}
+	\end{proposition} %prop:ベクトル空間から代数}
 	\begin{proof} %{
-		フォック空間$\mycal{H}_1$を使って証明する。
-		任意の$n\in\sizen$に対して$\bra{n}:=\bra{0}\eta_-^n$と書き、
-		命題の$\psi_\pm$で複素数の代わりに$\eta_+$を代入したものを単に
+		命題の複素積分は$z$の冪を抜き出しているだけだから、
+		フォック空間$\mycal{H}$を使って証明する。$\psi_{\pm}$と$\phi_{\pm n}$
+		を次のように定義し、
 		\begin{equation*}\begin{split}
-			\psi_\pm := \sum_{n\in\sizen_+}(\phi_\pm x^{\odot n})\eta_+^n
+			\psi_\pm := \sum_{n\in\sizen_+}\phi_{\pm n}\eta_+^n
+			,\quad \phi_{\pm n} := \phi_\pm\alpha_nx
+			\quad\text{for all } n\in\sizen_+
 		\end{split}\end{equation*}
-		と書き、任意の$n\in\sizen_+$に対して
-		\begin{equation*}\begin{split}
-			\phi_{\pm n} := \phi x^{\odot n}
-		\end{split}\end{equation*}
-		と書くことにする。任意の$n\in\sizen$に対して次の式が成り立つことを
+		任意の$n\in\sizen$に対して次の式が成り立つことを
 		帰納法を使って証明する。
 		\begin{equation}\label{eq:証明すべき式その一}\begin{split}
 			(\phi_1 + \phi_{-1})^n = \bra{n}\psi_+^*\psi_-^*\ket{0}
 		\end{split}\end{equation}
+		ここで、任意の$n\in\sizen$に対して$\bra{n}:=\bra{0}\eta_-^n$とする。
 		$n=0,1$でこの式が成り立つことは明らかである。
 		ある$N\in\sizen_+$でこの式が成り立つと仮定する。
 		次の式が成り立っていれば、$n=N+1$でも式\eqref{eq:証明すべき式その一}
@@ -502,7 +854,49 @@
 			\bra{N+1}\psi_+^*\psi_-^*\ket{0}
 			= (\phi_1 + \phi_{-1})\bra{N}\psi_+^*\psi_-^*\ket{0}
 		\end{split}\end{equation}
-		$\phi_{-1}\psi_+^*\psi_-^*$を計算すると次のようになる。
+		任意の$n\in\sizen$に対して次の式が成り立つことを使って、
+		\begin{equation}\label{eq:像の漸化式その一}\begin{split}
+			\phi_{n+1} + \phi_{-(n+1)} = \sum_{p=1}^n\phi_{-p}\phi_{n+1-p}
+		\end{split}\end{equation}
+		$\phi_{-1}\psi_+^*\psi_-^*$を$\eta_+^p\cdots$という形になるように
+		$p=N+1$まで計算\ref{eq:計算の途中経過その一}すると次のようになる。
+		\begin{equation*}\begin{split}
+			\phi_{-1}\psi_+^*\psi_-^*
+			&= \biggl(\phi_{-1} + \phi_{-2}\eta_+ +\cdots+ \phi_{-(N+1)}\eta_+^N
+				\biggr)\psi_-^* \\
+			&\; + \biggl(\phi_2\eta_+ + \phi_3\eta_+^2
+				+\cdots+ \phi_{N+1}\eta_+^N\biggr)\psi_+^*\psi_-^*  \\
+			&\; + \phi_{-(N+1)}\eta_+^N\psi_+^+\psi_-^* \\
+			&\; + \sum_{n=1}^\infty \biggl(\phi_{-1}\phi_{n+N} 
+				+ \phi_{-2}\phi_{n+N-1} +\cdots+ \phi_{-N}\phi_{n+1}\biggr)
+				\eta_+^{n+N}\psi_+^*\psi_-^* \\
+		\end{split}\end{equation*}
+		この計算を用いると次の式が得られる。
+		\begin{equation*}\begin{split}
+			(\phi_1 + \phi_{-1})\bra{N}\psi_+^*\psi_-^*\ket{0}
+			&= \bra{N}\biggl(\phi_{-1} + \phi_{-2}\eta_+
+				+\cdots+ \phi_{-(N+1)}\eta_+^N\biggr)\psi_-^*\ket{0} \\
+			&\; + \bra{N}\biggl(\phi_1 + \phi_2\eta_+
+				+\cdots+ \phi_{N+1}\eta_+^N\biggr)\psi_-^*\ket{0} \\
+			&= \bra{N+1}\psi_-^+\ket{0}
+				+ \bra{N+1}\psi_+^+\psi_-^*\ket{0} \\
+		\end{split}\end{equation*}
+		ここで次の式が成り立つことに注意すると、
+		\begin{equation*}\begin{split}
+			\bra{N+1}\psi_+^*\psi_-^*\ket{0} &= \bra{N+1}\psi_-^*\ket{0}
+				+ \bra{N+1}\psi_+^+\psi_-^*\ket{0} \\
+			&= \bra{N+1}\psi_-^+\ket{0} + \bra{N+1}\psi_+^+\psi_-^*\ket{0} \\
+		\end{split}\end{equation*}
+		次の式が成り立つことがわかり、$n=N+1$でも
+		式\eqref{eq:証明すべき式その一}が成り立つことが示される。
+		\begin{equation*}\begin{split}
+			(\phi_1 + \phi_{-1})\bra{N}\psi_+^*\psi_-^*\ket{0}
+			= \bra{N+1}\psi_+^*\psi_-^*\ket{0}
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	\begin{note}[計算の途中経過その一]\label{note:計算の途中経過その一} %{
+	証明中で用いた計算の途中経過を書いておく。
 		\begin{equation*}\begin{split}
 			\phi_{-1}\psi_+^*\psi_-^*
 			&= \phi_{-1}\psi_-^* + \phi_{-1}\psi_+^+\psi_-^* \\
@@ -533,474 +927,326 @@
 				+ \phi_{-2}\phi_{n+N-1} +\cdots+ \phi_{-N}\phi_{n+1}\biggr)
 				\eta_+^{n+N}\psi_+^*\psi_-^* \\
 		\end{split}\end{equation*}
-		この計算を用いると次の結果が得られる。
-		\begin{equation*}\begin{split}
-			(\phi_1 + \phi_{-1})\bra{N}\psi_+^*\psi_-^*\ket{0}
-			&= \bra{N}\biggl(\phi_{-1} + \phi_{-2}\eta_+
-				+\cdots+ \phi_{-(N+1)}\eta_+^N\biggr)\psi_-^*\ket{0} \\
-			&\; + \bra{N}\biggl(\phi_1 + \phi_2\eta_+
-				+\cdots+ \phi_{N+1}\eta_+^N\biggr)\psi_-^*\ket{0} \\
-			&= \bra{N+1}\psi_-^+\ket{0}
-				+ \bra{N+1}\psi_+^+\psi_-^*\ket{0} \\
-		\end{split}\end{equation*}
-		ここで次の式が成り立つことに注意すると、
-		\begin{equation*}\begin{split}
-			\bra{N+1}\psi_+^*\psi_-^*\ket{0} &= \bra{N+1}\psi_-^*\ket{0}
-				+ \bra{N+1}\psi_+^+\psi_-^*\ket{0} \\
-			&= \bra{N+1}\psi_-^+\ket{0} + \bra{N+1}\psi_+^+\psi_-^*\ket{0} \\
-		\end{split}\end{equation*}
-		次の式が成り立つことがわかり、$n=N+1$でも
-		式\eqref{eq:証明すべき式その一}が成り立つことが示される。
-		\begin{equation*}\begin{split}
-			(\phi_1 + \phi_{-1})\bra{N}\psi_+^*\psi_-^*\ket{0}
-			= \bra{N+1}\psi_+^*\psi_-^*\ket{0}
-		\end{split}\end{equation*}
-	\end{proof} %}
+	\end{note} %note:計算の途中経過その一}
 
-	\begin{todo}[メモ]\label{todo:メモ} %{
-	\begin{equation*}\xymatrix{
-		a_0 \ar[r]^{a_+} \ar[d]^{b_+} & \circ \\
-		b_0 \ar[r]^{a_+} \ar@(d,d)[rrr]^{a_0c_+} 
-			& \circ \ar[r]^{c_+} \ar@(rd,ld)[rr]^{c_0a_+} 
-			& \circ \ar[r]^{a_+} & d_0 \ar[ull]_{d_+} \\
-	}\end{equation*}
-	\begin{equation*}\begin{split}
-		x = \bra{0}\begin{pmatrix}
-			(b_0\eta_{-1})^* & 0
-		\end{pmatrix}\begin{pmatrix}
-			b_+\eta_{-1} & a_+ + a_0c_+ \\
-			c_+\eta_1\eta_{-2} & d_+\eta_2
-		\end{pmatrix}^*\begin{pmatrix}
-			a_0 \\ (d_0\eta_2)^*
-		\end{pmatrix}\ket{0}
-	\end{split}\end{equation*}
-	\end{todo} %todo:メモ}
+	この命題の二項演算$\odot$が積の場合、命題の中で定義した$\alpha_n$は
+	べき乗にCatalan数を掛けたものになる。
+	\begin{equation*}\begin{array}{rcll}
+		\alpha_nx &=& C_nx^{n+1} &\quad\text{for all } x\in A,\; n\in\sizen \\
+		C_n &=& \frac{1}{n+1}\binom{2n}{n} &\quad\text{for all } n\in\sizen \\
+	\end{array}\end{equation*}
+	したがって次の命題が成り立つ。
 
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-	\end{todo} %todo:ここまで}
-
-	\begin{note}[証明のカギ]\label{note:証明のカギ} %{
-		証明のカギとなっているであろうことを列挙しておく。
-		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[二項演算] $R$上の半代数$V$で定義された$R$-双線形二項演算$\beta$
-			が与えられた時、$R$-線形写像$\beta_*:\T V\to V$を次のように定義する。
-			\begin{equation*}\begin{array}{rcll}
-				\beta_*1_\T &=& 1 \\
-				\beta_*f &=& f & \quad\text{for all } f\in V \\
-				\beta_*v &=& \beta(\beta_*\otimes\beta_*)m_2^\tran v
-					& \quad\text{for all } v\in \T V \text{ with } 2\le \deg v \\
-			\end{array}\end{equation*}
-			ここで、$m_2^\tran$は$2$次以上のテンソルと$R$-線形写像$\phi,\psi$
-			に対して次のように定義される。
-			\begin{equation*}\begin{split}
-				(\phi\otimes\psi)m_2^\tran(f_1\otimes\cdots\otimes f_n) 
-				&= (\phi f_1)\otimes\bigl(\psi(f_2\otimes\cdots\otimes f_n)\bigr) \\
-				&\; + \bigl(\phi(f_1\otimes f_2)\bigr)
-					\otimes\bigl(\psi(f_3\otimes\cdots\otimes f_n)\bigr) \\
-				&\; +\cdots \\
-				&\; + \bigl(\phi(f_1\otimes\cdots\otimes f_{n-1})\bigr)
-					\otimes(\psi f_n) \\
-				& \quad\text{for all } 2\le n,\; f_1,\dots,f_n\in V
-			\end{split}\end{equation*}
-			$m_2^\tran$は写像ではなく$R$-線形写像のテンソル積を適用する約束を
-			余積的に書いたものである。
-			$\beta_*$はDyck言語$x=1+bx^2d$の摂動展開を一般化したものである。
-			%
-			\item[摂動] Dyck言語$x_t=a+tbx_t^2d$の摂動展開
-			$x_t=\sum_{n\in\sizen}t^nx_n$は$x_{n+1}=\sum_{p=0}^nbx_{n-p}x_pd$
-			という漸化式を満たす。摂動係数$x_n$を自然数から半代数$V$への写像の像
-			と思うと、自然数の余積
-			$m_\sizen^\tran\ket{n}=\sum_{p=0}^n\ket{n-p}\otimes\ket{p}$と
-			インクリメント$\eta_+\ket{n}=\ket{n+1}$を用いて、漸化式は
-			$x\eta_+=\beta(x\otimes x)m_\sizen^\tran$と書くことができる。
-			ここで、$\beta(f\otimes g)=bfgd$とする。可換図で書くと次のように
-			表される。
-			\begin{equation*}\xymatrix@C=6em{
-				\sum_{p=0}^n \ket{n-p}\otimes\ket{p} \ar@{|->}[d]^{x\otimes x}
-					& \ket{n} \ar@{|->}[l]_{m_\sizen^\tran} \ar@{|->}[d]^{x\eta_+} \\
-				\sum_{p=0}^n x_{n-p}\otimes x_{p} \ar@{|->}[r]^\beta & x_{n+1} \\
-			}\end{equation*}
-			%
-			\item[セルオートマトン] Dyck言語$x=a+bx^2d$に対するオートマトンは
-			二次元セルオートマトンとして書くこともできる。
-			\begin{equation*}\xymatrix@C=1ex{
-				& (+,0) & (-,0) & (+,1) & (-,1) & (+,2) & (-,2) & (+,3) & (-,3) \\
-				0 & \circ \ar[r]^a \ar[d]^b & \circ \ar[r]^c 
-					& \circ \ar[r]^a  \ar[drr]^b & \circ & \circ \ar[r]^a
-					& \circ \ar[r]^c & \circ \ar[r]^a & \circ  \\
-				1 & \circ \ar[r]^a \ar[d]^b & \circ \ar[r]^c 
-					& \circ \ar[r]^a \ar[drr]^b & \circ \ar[ull]_d
-					& \circ \ar[r]^a & \circ \ar[r]^c & \circ \ar[r]^a
-					& \circ \ar[ullll]_d \\
-				2 & \circ \ar[r]^a & \circ \ar[r]^c & \circ \ar[r]^a 
-					& \circ \ar[ull]_d 
-					& \circ \ar[r]^a & \circ \ar[r]^c & \circ \ar[r]^a
-					& \circ \ar[ullll]_d 
-			}\end{equation*}
-			可能な遷移を書くと次のようになる。
-			\begin{equation*}\begin{array}{rcrcl}
-				a &:& (+, m, n) &\mapsto& (-, m, n) \\
-				c &:& (-, 2m, n) &\mapsto& (+, 2m + 1, n) \\
-				b &:& (+, m, n) &\mapsto& (+, 2m, n + 1) \\
-				d &:& (-, 2m + 1, n + 1) &\mapsto& (-, m, n) \\
-			\end{array}\end{equation*}
-			始点を$(0,0)$、終点を$(1,0)$に制限したものが命題の式になることが証明
-			できれば、命題が証明される。そして、このセルオートマトンは任意の多項式
-			$f_x$による代数方程式$x=a+f_x$に容易に拡張できる。
-
-			次のようにフォック空間と２次元空間をとると、
-			\begin{equation*}\begin{split}
-				\bra{m}\otimes\bra{n}
-				,\quad \ket{m}\otimes\ket{n}
-				,\quad (+,-)
-			\end{split}\end{equation*}
-			真空期待値$x=a+bxcxd$は次のように書ける。
-			\begin{equation*}\begin{split}
-				x = m_V\bra{0}\otimes\bra{0}\begin{pmatrix}
-					1 & 0
-				\end{pmatrix}\begin{pmatrix}
-					b\beta & a \\
-					c\gamma & d\delta
-				\end{pmatrix}^*\begin{pmatrix}
-					0 \\ 1
-				\end{pmatrix}\ket{0}\otimes\ket{0} \\
-			\end{split}\end{equation*}
-			ここで、$m_V$は$V$の積とする。$\beta,\gamma,\delta$は次のように定義
-			している。
-			\begin{equation*}\begin{array}{rclrcl}
-				\gamma &=& C\eta_-\otimes\id,
-					&\quad C &=& \sum_{m\in\sizen}\ket{2m}\bra{2m} \\
-				\beta &=& B_-\otimes\eta_-,
-					&\quad B_- &=& \sum_{m\in\sizen}\ket{m}\bra{2m} \\
-				\delta &=& \eta_+B_+\otimes\eta_+,
-					&\quad B_+ &=& \sum_{m\in\sizen}\ket{2m}\bra{m} \\
-			\end{array}\end{equation*}
-			$B_\pm,C$は次の代数を満たす。
-			\begin{equation*}\begin{split}
-				B_-B_+ = 1,\quad B_+B_- = C
-			\end{split}\end{equation*}
-			命題の代数と積表を見比べてみると、
-			\begin{equation*}\begin{split}
-				\begin{array}{r|rrr}
-					& \gamma & \beta & \delta \\\hline
-					\gamma & 0 & \beta^\tran\delta^\tran\beta & \beta^\tran \\
-					\beta & \delta^\tran & \beta^2 & 0 \\
-					\delta & \delta\beta^\tran\delta^\tran & \delta\beta & \delta^2 \\
-				\end{array}\qquad \begin{array}{r|rrr}
-					& \eta_1\eta_{-2} & \eta_{-1} & \eta_2 \\\hline
-					\eta_1\eta_{-2} & 0 & \eta_{-1}^\tran\eta_2^\tran\eta_{-1} 
-						& \eta_{-1}^\tran \\
-					\eta_{-1} & \eta_2^\tran & \eta_{-1}^2 & 0 \\
-					\eta_2 & \eta_2\eta_{-1}^\tran\eta_2^\tran & \eta_2\eta_{-1} 
-						& \eta_2^2 \\
-				\end{array}
-			\end{split}\end{equation*}
-			両者の代数がほとんど同じになっていることがわかる。さらに、次の式が
-			成り立つので、
-			\begin{equation*}\begin{array}{rcll}
-				\beta\beta^\tran = \delta^\tran\delta = \id,\quad
-				\beta\delta = \delta^\tran\beta^\tran = 0
-			\end{array}\end{equation*}
-			$(\beta,\delta)\leftrightarrow(\eta_{-1},\eta_2)$という対応関係
-			になっていることがわかる。両者の違いは次の部分だけである。
-			\begin{equation*}\begin{split}
-				\beta^\tran\delta^\tran = \gamma(\id\otimes\eta_+\eta_-)
-			\end{split}\end{equation*}
-			右辺が$\gamma$になっていれば、完全に同一の代数になる。
-			直線$\bra{0}\otimes\bra{n}$上の$c$の遷移は真空期待値に寄与しないので、
-			因子$\id\otimes\eta_+\eta_-$がなくても真空期待値は変わらないと
-			思われる。さらに次の式が成り立つので、
-			\begin{equation*}\begin{array}{rcll}
-				\beta\ket{0}\otimes\ket{0} = \delta^\tran\ket{0}\otimes\ket{0}
-				= 0 = \bra{0}\otimes\bra{0}\beta^\tran
-				= \bra{0}\otimes\bra{0}\delta
-			\end{array}\end{equation*}
-			両者の真空も同じものになると思われる。
-			したがって、両者の真空期待値は等しくなるように思われる。
-			実際に真空期待値を計算してみよう。
-			\begin{equation*}\begin{split}
-				x = m_V\bra{0}\otimes\bra{0}
-					\biggl((b\beta)^*a(d\delta)^*c\gamma\biggr)^*
-					a(d\delta)^*\ket{0}\otimes\ket{0}
-			\end{split}\end{equation*}
-			クリーネスターの中を正規積の形に直すと次のようになり、
-			\begin{equation*}\begin{split}
-				(b\beta)^*a(d\delta)^*c\gamma &= (h_+a) + (h_-a) \\
-				h_+f &= f(d\delta)^*c\gamma \\
-				h_-f &= (b\beta)^*bfc\delta^\tran \\
-			\end{split}\end{equation*}
-			その代数と作用は次のようになる。
-			\begin{equation*}\begin{split}
-				(h_-f)(h_+g) &= h_-(bfcgd) + h_+(bfcgd) \\
-				(h_-f)g(d\delta)^*\ket{0}\otimes\ket{0}
-					&= (bfcgd)(d\delta)^*\ket{0}\otimes\ket{0} \\
-				\bra{0}\otimes\bra{0}(h_+f)(d\delta)\ket{0}\otimes\ket{0} &= 0 \\
-			\end{split}\end{equation*}
-			したがって、真空期待値は命題と等しくなることがわかる。
-		\end{description} %}
-	\end{note} %note:証明のカギ}
-
-	早速命題を述べる。
-
-	\begin{proposition}[二次方程式の摂動展開]\label{prop:二次方程式の摂動展開} %{
-		$A$を集合とする。任意の$a,b,c,d\in R\W A$に対して次の式が成り立つ。
+	\begin{proposition}[代数から代数]\label{prop:代数から代数} %{
+		$A$と$B$を代数とする。$\phi_\pm:A\to B$を次の性質を満たす線形写像
+		とする。
 		\begin{equation*}\begin{split}
-			x = a + bxcxd \iff x = \bra{0}\begin{pmatrix}
-				1 & 0
-			\end{pmatrix}\begin{pmatrix}
-				b\eta_{-1} & a \\ \eta_{1}c\eta_{-2} & \eta_2d
-			\end{pmatrix}^*\begin{pmatrix}
-				0 \\ 1
-			\end{pmatrix}\ket{0}
+			(\phi_-x)(\phi_+y) = (\phi_+ + \phi_-)(xy)
+			\quad\text{for all } x,y\in A
 		\end{split}\end{equation*}
-	\end{proposition} %prop:二次方程式の摂動展開}
-	\begin{proof} %{
-		$2\times 2$行列$[]$と$\sigma$を次のように定義する。
+		このとき、写像$\psi_\pm:A\times\fukuso\to B$を次のように定義すると、
+		\begin{equation*}\begin{array}{rcll}
+			\psi_\pm(x,z) &=& \sum_{n\in\sizen_+} C_n(\phi_\pm x^n)z^n
+			& \quad\text{for all } x\in A,\; z\in\fukuso \\
+			C_n &=& \frac{1}{n+1}\binom{2n}{n} &\quad\text{for all } n\in\sizen \\
+		\end{array}\end{equation*}
+		任意の$n\in\sizen$に対して次の式が成り立つ。
 		\begin{equation*}\begin{split}
-			\begin{bmatrix}
-				\alpha \\ \beta
-			\end{bmatrix} := \begin{pmatrix}
-				\alpha & 0 \\ 0 & \beta
-			\end{pmatrix},\quad \sigma := \begin{pmatrix}
-				0 & 1 \\ 1 & 0
-			\end{pmatrix}
+			(\phi_+x + \phi_-x)^n &= \frac{1}{2\pi i} \oint \frac{dz}{z^{n+1}} 
+				\bigl(\psi_+(x,z)\bigr)^*\bigl(\psi_-(x,z)\bigr)^* \\
 		\end{split}\end{equation*}
-		すると、命題の行列$M$は次のように書くことができる。
-		\begin{equation*}\begin{split}
-			M := \begin{pmatrix}
-				b\eta_{-1} & a \\ \eta_{1}c\eta_{-2} & \eta_2d
-			\end{pmatrix} 
-			= \bvec{b\eta_{-1}}{eta_2d} + \bvec{a}{\eta_{1}c\eta_{-2}}\sigma
-		\end{split}\end{equation*}
-		行列を対角成分と非対角成分に分けてクリーネスターを展開すると
-		次のようになる。
-		\begin{equation*}\begin{split}
-			M^* &= \left(
-				\bvec{b\eta_{-1}}{\eta_2d}^*\bvec{a}{\eta_{1}c\eta_{-2}}\sigma
-			\right)^*\bvec{b\eta_{-1}}{\eta_2d}^*
-		\end{split}\end{equation*}
-		この行列を二次元ベクトル$(1\;0)$と$(0\;1)^\tran$で挟み込むと次のようになる。
-		\begin{equation*}\begin{split}
-			\begin{pmatrix}
-				1 & 0
-			\end{pmatrix}M^*\begin{pmatrix}
-				0 \\ 1
-			\end{pmatrix} = (b\eta_{-1})^*a\biggl(
-					(\eta_2d)^*\eta_1c\eta_{-2}(b\eta_{-1})^*a
-				\biggr)^*(\eta_2d)^*
-		\end{split}\end{equation*}
-		さらに、任意の半代数$V$に対して成り立つ次の式を使って、
-		\begin{equation*}\begin{split}
-			(fg)^* = 1 + f(gf)^*g \quad\text{for all } f,g\in V
-		\end{split}\end{equation*}
-		$\beta$と$\delta$を次のようにおいて、
-		\begin{equation*}\begin{split}
-			\beta := \eta_{-2}(b\eta_{-1})^*,\quad \delta := (\eta_2d)^*\eta_1
-		\end{split}\end{equation*}
-		ブラとケットを対称化すると次のようになる。
-		\begin{equation}\label{eq:二次元部分の遷移}\begin{split}
-			\begin{pmatrix}
-				1 & 0
-			\end{pmatrix}M^*\begin{pmatrix}
-				0 \\ 1
-			\end{pmatrix} &= (b\eta_{-1})^*a(\eta_2d)^*
-				+ (b\eta_{-1})^*a\delta c(\beta a\delta c)^* \beta a(\eta_2d)^*
-		\end{split}\end{equation}
-		ブラ$\bra{b:1}$とケット$\ket{d:2}$を次のように定義して、
-		\begin{equation*}\begin{split}
-			\bra{b:1} := \bra{0}(b\eta_{-1})^*,\quad \ket{d:2} := (\eta_2d)^*\ket{0}
-		\end{split}\end{equation*}
-		式\eqref{eq:二次元部分の遷移}の真空期待値をとると次のようになる。
-		\begin{equation}\label{eq:真空期待値その一}\begin{split}
-			\bra{0}\begin{pmatrix}
-				1 & 0
-			\end{pmatrix}M^*\begin{pmatrix}
-				0 \\ 1
-			\end{pmatrix}\ket{0} &= a + b\bra{b:1}ac(\beta a\delta c)^*a\ket{d:2}d
-		\end{split}\end{equation}
-		この式の二項目の$\bra{b:1}ac(\beta a\delta c)^*a\ket{d:2}$を因子化することを
-		考える。クリーネスターの部分を正規積で表すと次のようになる。
-		\begin{equation*}\begin{split}
-			(\beta a\delta c)^1 &= ad\delta c + \beta b)c \\
-			(\beta a\delta c)^2 &= \bigl((ad\delta c)^2 + bacad^2\delta c\bigr)
-			+ (ad\delta c)(\beta bac)
-			+ \bigl((\beta bac)^2 + \beta b^2bacad\bigr)
-		\end{split}\end{equation*}
-		そこで、点列$\set{x_n\in R\W A\bou n\in\sizen}$を次のように、
-		\begin{equation}\label{eq:摂動係数の漸化式}\begin{split}
-			x_0 &= a \\
-			x_{n+1} &= \sum_{p=0}^n bx_{n-p}cx_pd \quad\text{for all } n\in\sizen
-		\end{split}\end{equation}
-		線形写像$\xi_\pm:R\sizen_+\to V$を次のように、
-		\begin{equation*}\begin{split}
-			\xi_{+n} = x_{n-1}d\delta,\quad \xi_{-n} = \beta bx_{n-1}
-			\quad\text{for all } n\in\sizen_+
-		\end{split}\end{equation*}
-		線形写像$\xi_{\pm}^c:R\W\sizen_+\to V$を次のように定義すると、
-		\begin{equation*}\begin{split}
-			\xi_\pm^c1_\W &= 1 \\
-			\xi_\pm^c[n_1\cdots n_p] &= (\xi_\pm n_1)c\cdots(\xi_\pm n_p)c
-			\quad\text{for all } n_1,\dots,n_p\in \sizen_+
-		\end{split}\end{equation*}
-		$\beta a\delta=(\xi_++\xi_-)1$と書け次のようになる。
-		\begin{equation*}\begin{split}
-			(\beta a\delta c)^0 &= \bigl(\xi_+^c1_\W\bigr)\bigl((\xi_-^c1_\W\bigr) \\
-			(\beta a\delta c)^1 &= \bigl(\xi_+^c[1]\bigr)\bigl(\xi_-^c1_\W\bigr) 
-				+ \bigl(\xi_+^c1_\W\bigr)\bigl(\xi_-^c[1]\bigr) \\
-			(\beta a\delta c)^2 &= \bigl(\xi_+^c[2] 
-				+ \xi_+^c[11]\bigr)\bigl(\xi_-^c1_\W\bigr) 
-				+ \bigl(\xi_+^c[1]\bigr)\bigl(\xi_-^c[1]\bigr)
-				+ \bigl(\xi_+^c1_\W\bigr)\bigl(\xi_-^c[2] + \xi_-^c[11]\bigr) \\
-		\end{split}\end{equation*}
-		したがって、数の合成$C_n\subset \W\sizen_+$を次のようにおき、
-		\begin{equation*}\begin{split}
-			C_0 &:= \Set{1_\W} \\
-			C_1 &:= \Set{[1]} \\
-			C_2 &:= \Set{[2],[11]} \\
-			C_3 &:= \Set{[3],[21],[12],[111]} \\
-			\cdots
-		\end{split}\end{equation*}
-		ある$n\in\sizen_+$で次の式が成り立つと仮定する。
-		\begin{equation}\label{eq:帰納法の仮定その一}\begin{split}
-			(\beta a\delta c)^n &= \sum_{p=0}^n \sum_{\gamma_+\in C_{n-p}}
-				\sum_{\gamma_-\in C_p} (\xi_+^c\gamma_+)(\xi_-^c\gamma_-)
-		\end{split}\end{equation}
-		すると、任意の$p,q\in\sizen$に対して$x_{pq}$を次のようにおき、
-		\begin{equation*}\begin{split}
-			x_{pq} := bx_pcx_qd
-		\end{split}\end{equation*}
-		任意の$n\in\sizen$に対して$\Gamma_{\pm n}$を次のようにおき、
-		\begin{equation*}\begin{split}
-			\Gamma_{\pm n} := \sum_{\gamma\in C_n}(\xi_\pm^c\gamma)
-		\end{split}\end{equation*}
-		任意の$n\in\sizen_+$に対して成り立つ次の式を使うと、
-		\begin{equation*}\begin{split}
-			\Gamma_n = \sum_{p=1}^n (\xi_+^c[p])\Gamma_{n-p}
-			= \sum_{p=1}^n (\xi_+p)c \Gamma_{n-p}
-		\end{split}\end{equation*}
-		任意の$n\in\sizen_+$に対して次の式が成り立つことがわかり、
-		\begin{equation*}\begin{split}
-			&(\xi_-1)c\Gamma_n \\
-			&= \sum_{p=1}^n \bigl(x_{0(p-1)}d\delta + \beta bx_{0(p-1)}\bigr)c \Gamma_{n-p} \\
-			&= (\xi_+2)c\Gamma_{n-1} + (\xi_-2)c\Gamma_{n-1}
-				+ \sum_{p=2}^n \bigl(x_{0(p-1)}d\delta + \beta bx_{0(p-1)}\bigr)c \Gamma_{n-p} \\
-			&= (\xi_+2)c\Gamma_{n-1}
-				+ \sum_{p=2}^n \bigl(
-					x_{0(p-1)}d\delta + \beta bx_{0(p-1)} + x_{1(p-1)}d\delta + \beta bx_{1(p-1)}
-				\bigr)c \Gamma_{n-p} \\
-			&= (\xi_+2)c\Gamma_{n-1} + (\xi_+3)c\Gamma_{n-2} + (\xi_-3)c\Gamma_{n-2}
-				+ \sum_{p=3}^n \bigl(x_{0(p-1)}d\delta + \beta bx_{0(p-1)}\bigr)c \Gamma_{n-p} \\
-			&= \cdots \\
-			&= (\xi_+2)c\Gamma_{n-1} +\cdots+ (\xi_+n)c\Gamma_1 + \sum_{q=0}^{n-1}
-				\bigl(x_{q(n-1-q)}d\delta + \beta bx_{q(n-1-q)}\bigr)c \Gamma_0 \\
-			&= (\xi_+2)c\Gamma_{n-1} +\cdots+ (\xi_+(n+1))c\Gamma_0 
-				+ (\xi_-(n+1))c\Gamma_0 \\
-		\end{split}\end{equation*}
-		この式を使うと次の式が成り立つことがわかり、
-		\begin{equation*}\begin{split}
-			(\beta a\delta c)^{n+1} 
-			&= (\xi_+1+\xi_-1)c \sum_{p=0}^n \Gamma_{(n-p)}\Gamma_{-p} \\
-			&=  \sum_{p=0}^n \biggl(
-				(\xi_+1)c\Gamma_{(n-p)} + (\xi_-1)c\Gamma_{n-p}\biggr)\Gamma_{-p} \\
-			&=  \sum_{p=0}^n \biggl(
-				\Gamma_{(n-p+1)} + (\xi_-(n-p+1))c\biggr)\Gamma_{-p} \\
-			&= \sum_{p=0}^{n+1} \Gamma_{(n-p)}\Gamma_{-p} \\
-			&= \sum_{p=0}^{n+1} \sum_{\gamma_+\in C_{n-p}}
-				\sum_{\gamma_-\in C_p} (\xi_+^c\gamma_+)(\xi_-^c\gamma_-)
-		\end{split}\end{equation*}
-		帰納法の仮定\eqref{eq:帰納法の仮定その一}が$n+1$でも成り立つことがわかる。
-		したがって、次の式が成り立つが、
-		\begin{equation*}\begin{split}
-			(\beta a\delta c)^* 
-			&= \sum_{n\in\sizen} \sum_{p=0}^n \Gamma_{n-p}\Gamma_{-p}
-			= \left\{\begin{array}{clclclcl}
-				& \Gamma_0\Gamma_0 \\
-				+ & \Gamma_0\Gamma_{-1} &+& \Gamma_1\Gamma_0 \\
-				+ & \Gamma_0\Gamma_{-2} &+& \Gamma_1\Gamma_{-1} &+& \Gamma_2\Gamma_{0} \\
-				+ & \cdots
-			\end{array}\right. \\
-			&= (\sum_{n\in\sizen}\Gamma_n)(\sum_{n\in\sizen}\Gamma_{-n}) \\
-		\end{split}\end{equation*}
-		次の集合同型が成り立つから、
-		\begin{equation*}\begin{split}
-			\cup_{n\in\sizen}C_n \simeq \W\sizen_+ \quad\text{as set}
-		\end{split}\end{equation*}
-		次の式が成り立ち、
-		\begin{equation*}\begin{split}
-			\sum_{n\in\sizen}\Gamma_n
-			= \sum_{n\in\sizen}\sum_{\gamma\in C_n} \xi_+^c\gamma
-			= \bigl(\sum_{m\in\sizen_+}(\xi_+m)c\bigr)^*
-			= \bigl(\sum_{n\in\sizen}x_nd\delta c\bigr)^*
-		\end{split}\end{equation*}
-		次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			(\beta a\delta c)^* = \bigl(\sum_{n\in\sizen}x_nd\delta c\bigr)^*
-				\bigl(\sum_{n\in\sizen}\beta bx_nc\bigr)^*
-		\end{split}\end{equation*}
-		したがって、$x_*\in R\W A$を次のようにおくと、
-		\begin{equation*}\begin{split}
-			x_* := \sum_{n\in\sizen} x_n
-		\end{split}\end{equation*}
-		真空期待値\eqref{eq:真空期待値その一}は次のようになる。
-		\begin{equation*}\begin{split}
-			\bra{0}\begin{pmatrix}
-				1 & 0
-			\end{pmatrix}M^*\begin{pmatrix}
-				0 \\ 1
-			\end{pmatrix}\ket{0} &= a + b\bra{b:1}ac(\beta a\delta c)^*a\ket{d:2}d \\
-			&= a + b\bra{b:1}a\bigl(cx_*d\delta c\bigr)^*
-				c\bigl(\beta bx_*c\bigr)^*a\ket{d:2}d \\
-			&= a + b\bra{b:1}a\bigl(cx_*d\eta_1 c\bigr)^*
-				c\bigl(\eta_{-2} bx_*c\bigr)^*a\ket{d:2}d \\
-		\end{split}\end{equation*}
-		そして、$\ket{d:2}$は$\eta_{-2} bx_*c$の固有ベクトルとなっていて、
-		\begin{equation*}\begin{split}
-			(\eta_{-2} bx_*c)f\ket{d:2} = bx_*cfd \quad\text{for all } f\in R\W A
-		\end{split}\end{equation*}
-		$\bra{b:1}$と$\ket{d:2}$は次の式を満たすから、
-		\begin{equation*}\begin{split}
-			\bra{b:1}\ket{0} = \bra{b:1}\ket{d:2} = \bra{0}\ket{d:2}
-		\end{split}\end{equation*}
-		次の因子化が成り立つことがわかる。
-		\begin{equation*}\begin{split}
-			&\bra{b:1}a\bigl(cx_*d\eta_1 c\bigr)^*
-				c\bigl(\eta_{-2} bx_*c\bigr)^*a\ket{d:2} \\
-			&= \bra{b:1}a\bigl(cx_*d\eta_1 c\bigr)^*\ket{0}
-				c\bra{0}\bigl(\eta_{-2} bx_*c\bigr)^*a\ket{d:2} \\
-			&= \bra{b}a\ket{cx_*d}c\bra{bx_*c}a\ket{d} \\
-		\end{split}\end{equation*}
-		そして、命題の式をパラメーター$t\in R$を用いて拡張した次の式
-		\begin{equation*}\begin{split}
-			y_t = a + tby_tcy_td
-		\end{split}\end{equation*}
-		の正則解$y_t=\sum_{n\in\sizen}t^ny_n$の摂動係数$y_n$が満たす次の漸化式は、
-		\begin{equation*}\begin{split}
-			y_0 &= a \\
-			y_{n+1} &= \sum_{p=0}^n by_{n-p}cy_pd \quad\text{for all } n\in\sizen
-		\end{split}\end{equation*}
-		$x_*$を定義する漸化式\eqref{eq:摂動係数の漸化式}に他ならないので、
-		$x_*$は命題の式の解となることがわかる。
-		\begin{equation*}\begin{split}
-			x_* = a + bx_*cx_*d
-		\end{split}\end{equation*}
-		そして、次の式より、
-		\begin{equation*}\begin{split}
-			\bra{b}a\ket{cx_*d} = \sum_{n\in\sizen}b^na(cx_*d)^n 
-			= x_* = \sum_{n\in\sizen}(bx_*c)^nad^n = \bra{bx_*c}a\ket{d}
-		\end{split}\end{equation*}
-		真空期待値\eqref{eq:真空期待値その一}は次のようになり、
-		命題が成り立つことがわかる。
-		\begin{equation*}\begin{split}
-			\bra{0}\begin{pmatrix}
-				1 & 0
-			\end{pmatrix}M^*\begin{pmatrix}
-				0 \\ 1
-			\end{pmatrix}\ket{0} &= a + bx_*ax_*d = x_*
-		\end{split}\end{equation*}
-	\end{proof} %}
+	\end{proposition} %prop:代数から代数}
 
 	幾つか残っている課題を書いておく。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[Yang-Baxter] Yang-Baxter方程式の効用は代数$A$の表現$(\rho_i,V_i)$
+		が与えられた時、$R$-行列$R\in A\otimes A$から次の表現のintertwiner
+		$\phi:V_1\otimes V_2\to V_2\otimes V_1$を作ることができる点にある。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				V_1\otimes V_2 \ar[r]^\phi \ar[d]^{(\rho_1\otimes\rho_2)\Delta a} 
+				& V_2\otimes V_1 \ar[d]^{(\rho_1\otimes\rho_2)\Delta a} \\ 
+				V_1\otimes V_2 \ar[r]^\phi & V_2\otimes V_1 \\ 
+			} \quad\text{for all } a\in A
+		\end{split}\end{equation*}
+		$\phi$は$R$から次のようにして作られ、
+		\begin{equation*}\begin{array}{rcll}
+			\phi &=& \sigma_{12}\bigl((\rho_1\otimes\rho_2)R\bigr) \\
+		\end{array}\end{equation*}
+		$R$は次の性質を満たす$A\otimes A$の可逆な元として定義される。
+		\begin{equation*}\begin{array}{rcll}
+			\sigma_{12}\Delta a &=& R(\Delta a)R^{-1}
+			&\quad\text{for all } a\in A \\
+			(\Delta\otimes\id)R &=& R_{13}R_{23} \\
+			(\id\otimes\Delta)R &=& R_{13}R_{12} \\
+		\end{array}\end{equation*}
+		ここで、$\sigma_{ij}$はテンソル積の$i$番目と$j$番目の成分を交換する
+		作用で、$R_{ij}$は$R=\sum a_i\otimes b_j$とすると次のように定義される。
+		\begin{equation*}\begin{split}
+			R_{12} = \sum a_i\otimes b_i\otimes \id
+			,\quad R_{23} = \sum \id\otimes a_i\otimes b_i
+			,\quad R_{13} = \sum a_i\otimes \id\otimes b_i
+		\end{split}\end{equation*}
+		大事なことは$R$が表現$\rho_i$とは独立に定義されていることである。
+		$A$の代数構造からのみ$R$-行列が定義され、それを用いると任意の表現の
+		間のintertwinerを作ることができる。$R$-行列が求まらなければ絵に描いた餅
+		だが、多くの代数で$R$-行列が求められている。
+		Diffie-Hellmanの鍵交換プロトコルを思い出す。
+		%
+		\item[Lyndon単語] Lie環の量子変形からみでLyndon単語が出てくることがある
+		ので、Lyndon単語とはなんぞやということを書いておく。文字$A$から生成
+		される単語の集合$\W A$で、文字の位置を巡回させた違いを無視したものを
+		Lyndon単語という。式で書くと$\W A$に次の同値関係を定義してその商
+		$\W A/\sim$をとったものをLyndon単語（の集合）という。
+		\begin{equation*}\begin{split}
+			[a_1a_2\cdots a_m] \sim [a_2a_3\cdots a_ma_1]
+		\end{split}\end{equation*}
+		%
+		\item[インデックス言語] 半整数の遷移を使うとインデックス言語を
+		セルオートマトンで表現できるかもしれない。例えば、
+		$x=a+\sum_{n\in\sizen_+}b^nac^nad^n$というインデックス言語は次の
+		ようなセルオートマトンで表すことができる。
+		\begin{equation*}\xymatrix@C=1ex{
+			& (0,0) & (1/2,0) & (1,0) & (0,1) & (1/2,1) & (1,1) \\
+			0 & \circ \ar[rr]^a \ar[d]^b & & \\
+			1 & \circ \ar[r]^a \ar[d]^b & \circ \ar[r]^c & \circ \ar[r]^a 
+			& \circ \ar[ul]_d \\
+			2 & \circ \ar[r]^a \ar[d]^b & \circ \ar[r]^c & \circ \ar[r]^c 
+			& \circ \ar[r]^a & \circ \ar[ul]_d \\
+			3 & & & & & & \ar[ul]_d \\
+		}\end{equation*}
+		形式言語と３次元多様体の基本群との関係を論じている論文
+		\cite{gilman1996}を思い出す。中身はさっぱりわからんが。
+		%
+		\item[セルオートマトン] $a$の遷移に射影
+		$\pi_0:=1-\sum_{n\in\sizen_+}(\eta_n\eta_{-n}$
+		が必要になる気がする。例えば、$x=a+bxxd$という文法の場合、
+		射影$\pi_0$がないと、水平方向の周期を$2$とすることができない。
+		%
+		\item[Yang-Baxter] 命題の証明の中に可積分系での箱玉モデルとよく似た
+		構造が現れている。もともとがセルオートマトンとから出発しているので
+		当然といえば当然かもしれないが、正規積への描き直しがYang盤を使って
+		行うことができるところなどに似た構造があるように思える。現在のところ
+		妄想に過ぎないが考えてみる価値はあると思う。
+		Rota-Baxter代数に関する論文\cite{aguiar2000}にしたがって、Rota-Baxter
+		代数とYang-Baxter方程式との関係を書いておく。
+		$A$を代数とし、線形写像$\phi_{ij}:A^{\otimes2}\to A^{\otimes3}$を
+		次のように定義し、
+		\begin{equation*}\begin{split}
+			\phi_{12}(u\otimes v) &= u\otimes v\otimes \id \\
+			\phi_{13}(u\otimes v) &= u\otimes \id\otimes v \\
+			\phi_{23}(u\otimes v) &= \id\ u\otimes v \\
+		\end{split}
+			\quad\text{for all } u,v\in A
+		\end{equation*}
+		線形写像$\phi_{ij}:A^{\otimes2}\to A^{\otimes3}$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\phi t
+			= (\phi_{13}t)(\phi_{12}t) - (\phi_{12}t)(\phi_{23}t)
+			+ (\phi_{23}t)(\phi_{13}t)
+			\quad\text{for all } t\in A\otimes A
+		\end{split}\end{equation*}
+		$\phi r=0$を結合的Yang-Baxter方程式、$r\in A^{\otimes2}$をその解という。
+		%
+		\item[集合] 命題\ref{prop:ベクトル空間から代数}のベクトル空間$A$を集合に
+		変えても同様の定理が成り立つはずである。ただし、$A$がベクトル空間
+		でないと、$x\in A$に対してべき乗$x^{\otimes n}$が簡潔に表現することが
+		できない。$x^{\otimes n}$の代わりに漸化式\eqref{eq:像の漸化式その一}
+		によって$\phi_{\pm n}$を定義してしまえばよいかも。
+		ただし、漸化式\eqref{eq:像の漸化式その一}から和$\phi_n+\phi_{-n}$を
+		定めることはできるが、個々の$\phi_{\pm n}$を定めることはできない。
+		この点を考えなくてはならない。
+		%
+		\item[命題は間違っている] $V$を複素数としたとき命題は次のように
+		修正する必要がある。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				x_t &= \ket{0}(tT)^*a\ket{d:2} \\
+				T &= (b\eta_{-1}^*)a(d\eta_2)^*c\eta_1\eta_{-2} \\
+			\end{split}\right. \And |t| < \frac{1}{4} \\
+			\implies x_t = a + tbx_tcx_td
+		\end{split}\end{equation*}
+		左辺の真空期待値が無条件に右辺の多項式の正級数解になるわけではない。
+		多分命題は
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $V$を複素数上の代数に限定して、
+			\item $V$の完備化を仮定して、
+		\end{itemize} %}
+		次のように修正されるべきだろう。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				x_t &= \ket{0}(tT)^*a\ket{d:2} \\
+				T &= (b\eta_{-1}^*)a(d\eta_2)^*c\eta_1\eta_{-2} \\
+			\end{split}\right. \implies \exists\; t\in\fukuso \text{ such that }
+			x_t = a + tbx_tcx_td
+		\end{split}\end{equation*}
+		$\implies$ $V$上の形式級数環$V[[t]]$を考えて$V[t]$から$V$への写像を
+		文法によって定義する。例えば、$V[[t]]$から$V$への写像を次のように
+		定義する。
+		\begin{equation*}\begin{split}
+			x_t = a + bx_tcx_td \quad\text{where }a,b,c,d\in 
+		\end{split}\end{equation*}
+		完備化をしないと形式級数環$V[[t]]$は定義できないかもしれないが、
+		級数が収束することを気にすることなく議論を進めることができるのでは
+		ないだろうか。
+		%
+		\item[サブセット構成法] 代数方程式$x=a+bxcxd$を一次近似して
+		$y=a+b(\xi_{-1}a\xi_1)c(\xi_{-2}a\xi_2)d$という代数方程式を考える。
+		ここで、$\xi_{\pm i}$は$V$の元と非可換な文字とする。
+		%
+		\item[変形] 対称的な形にすると次のようになり、
+		\begin{equation*}\begin{split}
+			T_+f = fd(d\eta_2)^*\eta_1,\quad 
+			T_-f = \eta_{-2}(b\eta_{-1})^*bf
+		\end{split}\end{equation*}
+		次の式を満たす。
+		\begin{equation*}\begin{split}
+			(T_-f)c(T_+g) = (T_+ + T_-)(bfcgd)
+		\end{split}\end{equation*}
+		そして、$T_\pm$の中のKleeneスターを$n$で打ち切ったものを$[T_\pm]_n$
+		とすると、
+		\begin{equation*}\begin{split}
+			[T_+]_nf = fd\frac{1 - (d\eta_2)^{n+1}}{1 - d\eta_2}\eta_1,\quad 
+			[T_-]_nf = \eta_{-2}\frac{1 - (b\eta_{-1})^{n+1}}{1 - b\eta_{-1}}bf
+		\end{split}\end{equation*}
+		次の式を満たす。
+		\begin{equation*}\begin{split}
+			([T_-]_{m+1}f)c([T_+]_{n+1}g) &= ([T_-]_m + [T_+]_n)(bfcgd) \\
+			([T_-]_{m+1}f)c([T_+]_0g) &= [T_-]_m(bfcgd) \\
+			([T_-]_0f)c([T_+]_{n+1}g) &= [T_+]_n(bfcgd) \\
+			([T_-]_0f)c([T_+]_0g) &= 0 \\
+		\end{split}\end{equation*}
+		Kleeneスターの打ち切り$n$を変形パラメーターとして$T_\pm$から元の
+		線形な式を得られないものだろうか？
+		%
+		\item[組み合わせの数] 二次式ですべての係数が$1$の場合（$x=1+x^2$）、
+		摂動計算はカタラン数を与えるだけである。カタラン数のような組み合わせの
+		数に興味がない場合は、$x=1+x^2$の効果を抜き出してしまいたい。
+		\begin{equation*}\begin{array}{rcll}
+			x &=& a + bxcxd,&\quad x = \sum_{n\in\sizen} x_n \\
+			k &=& 1 + k^2,&\quad k = \sum_{n\in\sizen} k_n \\
+		\end{array}\end{equation*}
+		とした場合、$\sum_{n\in\sizen}x_n/k_n$はどのような代数方程式を満たす
+		だろうか？
+		%
+		\item[カウンターオートマトン] 二次元セルオートマトン
+		\eqref{eq:二次式のセルオートマトンその一}
+		\eqref{eq:二次式のセルオートマトンその二}
+		\eqref{eq:セルオートマトンでの真空期待値}
+		をプログラムで実装すると、二つのカウンターを持ったカウンターオートマトン
+		として実装することができる（$\mycal{H}\otimes\mycal{H}$）。
+		一方、スタックを用いたオートマトン\eqref{eq:二次式の正級数解その一}
+		をプログラムで実装すると、二つの文字を要素として持つ一つのスタックとして
+		実装することができる（$\mycal{H}_2$）。このことを数学的にみたものが、
+		$1:1$の代数射\eqref{eq:一対一の代数射その一}とその表現空間の$1:1$対応
+		になっている。そこで問題：
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 二次式の場合と同様に、多項式$x=a+bx^nd$$n$に対して、
+			文字のカウンターオートマトンと$n$文字を要素とするスタックオートマトン
+			との対応をつけることは可能か？
+		\end{itemize} %}
+		%
+		\item[空遷移] パーシングの話での空遷移を一般の代数の話に持って行くと
+		代数の中心となるだろう。したがって、係数$a,b,c,d$に代数の中心が含まれて
+		いる場合を考えればよいだろう。$a,b,c$がそれぞれ$1$の場合の
+		二次元セルオートマトンを考えれば次のようになるだろう。
+		\begin{equation*}\begin{array}{ccc}
+			b = 1 & d = 1 & c = 1 \\
+			\xymatrix@R=4ex@C=4ex{
+				\circ \ar[r]^a & \circ \ar[d]^c \\
+				& \circ \ar[r]^a & \circ \ar[d]^c\ar[ul]_d \\
+				& & & \ar[ul]_d \\
+			} & \xymatrix@R=4ex@C=4ex{
+				\circ \ar[d]^b \ar[r]^a & \circ \\
+				\circ \ar[r]^a \ar[d]^b & \circ \ar[ul]_c \\
+				& \ar[ul]_c \\
+			} & \xymatrix@R=4ex@C=4ex{
+				\circ \ar[d]^b \ar[r]^a & \circ \\
+				\circ \ar[r]^a \ar[d]^b & \circ \ar[r]^a \ar[drr]^b 
+					& \circ \ar[ul]_d \\
+				& & \ar[ul]_d & & & \ar[ulll]_d \\
+			}
+		\end{array}\end{equation*}
+		サブセット構成法を用いてこのセルオートマトンもしくはスタックオートマトン
+		を構成できないだろうか？
+		%
+		\item[摂動] Dyck言語$x_t=a+tbx_t^2d$の摂動展開
+		$x_t=\sum_{n\in\sizen}t^nx_n$は$x_{n+1}=\sum_{p=0}^nbx_{n-p}x_pd$
+		という漸化式を満たす。摂動係数$x_n$を自然数から半代数$V$への写像の像
+		と思うと、自然数の余積
+		$m_\sizen^\tran\ket{n}=\sum_{p=0}^n\ket{n-p}\otimes\ket{p}$と
+		インクリメント$\eta_+\ket{n}=\ket{n+1}$を用いて、漸化式は
+		$x\eta_+=\beta(x\otimes x)m_\sizen^\tran$と書くことができる。
+		ここで、$\beta(f\otimes g)=bfgd$とする。可換図で書くと次のように
+		表される。
+		\begin{equation*}\xymatrix@C=6em{
+			\sum_{p=0}^n \ket{n-p}\otimes\ket{p} \ar@{|->}[d]^{x\otimes x}
+				& \ket{n} \ar@{|->}[l]_{m_\sizen^\tran} \ar@{|->}[d]^{x\eta_+} \\
+			\sum_{p=0}^n x_{n-p}\otimes x_{p} \ar@{|->}[r]^\beta & x_{n+1} \\
+		}\end{equation*}
+		%
+		\item[優先順位] 代数方程式$x=a+xcx$の正級数解はカタラン数$C_n$を用いて
+		$x=\sum_{n\in\sizen}C_n(ac)^na$と書ける。カタラン数が出てくる起源は
+		二項演算$f\odot g=fcg$を適用していく方法の和にある。例えば、次のように
+		なっている。
+		\begin{equation*}\begin{split}
+			C_1(ac)a &= a\odot a \\
+			C_2(ac)^2a &= (a\odot a)\odot a + a\odot(a\odot a) \\
+			C_3(ac)^3a &= ((a\odot a)\odot a)\odot a 
+				+ (a\odot(a\odot a))\odot a \\
+			&\; + (a\odot a)\odot(a\odot a) \\
+			&\; + a\odot(a\odot(a\odot a))
+				+ a\odot((a\odot a)\odot a) \\
+		\end{split}\end{equation*}
+		ここで、二項演算$\odot$を$(a\odot a)\odot a=0$と変更すると、
+		次のように変更される。
+		\begin{equation*}\begin{split}
+			(ac)a &= a\odot a \\
+			(ac)^2a &= a\odot(a\odot a) \\
+			(ac)^3a &= a\odot(a\odot(a\odot a)) \\
+		\end{split}\end{equation*}
+		パーシングの場面で考えると、パース結果の木構造が次のように絞られることに
+		対応する。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=2ex@C=2ex{
+				& & \circ \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+				& \circ \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] & c & a \\
+				a & c & a
+			} + \xymatrix@R=2ex@C=2ex{
+				& & \circ \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+				& a & c & \circ \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+				& & a & c & a
+			} \xmapsto{(aca)ca=0} \xymatrix@R=2ex@C=2ex{
+				& & \circ \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+				& a & c & \circ \ar@{-}[dl] \ar@{-}[d] \ar@{-}[dr] \\
+				& & a & c & a
+			}
+		\end{split}\end{equation*}
+		確率$\mu_1+\mu_2=1,\;\nu_1+\cdots+\nu_5=1$を導入して考えると
+		次のようになるだろう。
+		\begin{equation*}\begin{split}
+			(ac)a &= a\odot a \\
+			(ac)^2a &= \mu_1(a\odot a)\odot a + \mu_2a\odot(a\odot a) \\
+			(ac)^3a &= \nu_1((a\odot a)\odot a)\odot a 
+				+ \nu_2(a\odot(a\odot a))\odot a \\
+			&\; + \nu_3(a\odot a)\odot(a\odot a) \\
+			&\; + \nu_4{2}a\odot(a\odot(a\odot a))
+				+ \nu_5a\odot((a\odot a)\odot a) \\
+		\end{split}\end{equation*}
+		確率変数$\mu_i,\nu_i,\dots$を決める都合の良い方法はないだろうか？
+		一つの方法として、$x=a+xcx$をパースした結果を二分木としてみた場合、
+		左の降りていくときは$\mu_1$、右の降りていくときは$\mu_2$とすると、
+		次のようになる。
+		\begin{equation*}\begin{split}
+			(ac)a &= a\odot a \\
+			(ac)^2a &= \mu_1(a\odot a)\odot a + \mu_2a\odot(a\odot a) \\
+			(ac)^3a &= (\mu_1^3)((a\odot a)\odot a)\odot a 
+				+ (\mu_1^2\mu_2)(a\odot(a\odot a))\odot a \\
+			&\; + 2(\mu_1\mu_2)(a\odot a)\odot(a\odot a) \\
+			&\; + (\mu_2^3){2}a\odot(a\odot(a\odot a))
+				+ (\mu_1\mu_2^2)a\odot((a\odot a)\odot a) \\
+		\end{split}\end{equation*}
+		%
 		\item[一般化] 命題を一般化する方法は幾つかあるだろうが、その一つとして、
 		次のように写像$\phi: R\W A[x]\to R\W A$を定義して、
 		\begin{equation*}\begin{split}
@@ -1094,254 +1340,167 @@
 				\quad\text{for all } n\in\sizen
 		\end{split}\end{equation}
 	\end{description} %}
-
-	\begin{todo}[保留]\label{todo:保留} %{
-	任意の$f,g\in R\W A$と$n\in\sizen$に対して次の式が成り立つ。
-	\begin{equation*}\begin{split}
-		(\beta f)(g\delta)^* &= \beta h_n + h_ngd\delta(g\delta)^*
-			+ \beta b^{n+1}xg^{n+1}(g\delta)^* \\
-		h_n &= \sum_{p=0}^nb^nfg^n \\
-	\end{split}\end{equation*}
-	\end{todo} %todo:保留}
-
-\subsection{証明の改良}\label{s2:証明の改良} %{
-	命題の証明をもっと物理描像が描けるような証明方法に改良したい。
-
-	$V:=R\W A$とおき、ケット空間を文字列$\W H$を基底に持つ$V$上の半加群$V\W H$
-	としてみることにする。そして、フォック空間上の作用素全体のつくる
-	$V$-半加群を$\End_VV\W H$と書く。
-
-	$2\times2$行列$M_i$を次のようにおくと、
-	\begin{equation*}\begin{split}
-		M = M_0 + M_1\sigma,\quad M_0 = \bvec{b\eta_{-1}}{\eta_2d}
-		,\quad M_1 = \bvec{a}{\eta_1c\eta_{-2}}
-	\end{split}\end{equation*}
-	代数方程式は次のように書ける。
-	\begin{equation*}\begin{split}
-		\begin{pmatrix}
-			1 & 0
-		\end{pmatrix}M^*\begin{pmatrix}
-			0 \\ 1
-		\end{pmatrix}\ket{0} &= \begin{pmatrix}
-			1 & 0
-		\end{pmatrix}(M_0^*M_1\sigma)^*\begin{pmatrix}
-			0 \\ 1
-		\end{pmatrix}\ket{d:2} \\
-		&= \begin{pmatrix}
-			1 & 0
-		\end{pmatrix}(M_0^*M_1\sigma M_0^*M_1\sigma)^*\begin{pmatrix}
-			a \\ 0
-		\end{pmatrix}\ket{d:2} \\
-		&= \bigl((b\eta_{-1})^*a(\eta_2d)^*\eta_1c\eta_{-2}\bigr)^*
-			a\ket{d:2} \\
-	\end{split}\end{equation*}
-	クリーネスターの部分は平面二分木を作る操作として解釈できるはずである。
-	まず、クリーネスターの中を正規積の形に書き直す。
-	\begin{equation*}\begin{split}
-		(b\eta_{-1})^*a(\eta_2d)^*\eta_1c\eta_{-2}
-		= a(\eta_2d)^*\eta_1c\eta_{-2} + (b\eta_{-1})^*bac\eta_{-2}
-	\end{split}\end{equation*}
-	ケットが$f\ket{d:2}$という形をしていると仮定すると、
-	作用素$(b\eta_{-1})^*bac\eta_{-2}$は次のように木を成長させる操作になる。
-	\begin{equation*}\begin{split}
-		(b\eta_{-1})^*bac\eta_{-2}\cdot f\ket{d:2} = (bacfd)\ket{d:2}
-	\end{split}\end{equation*}
-	更に正規積を計算すると次のようになる。
-	\begin{equation*}\begin{split}
-		(b\eta_{-1})^*bac\eta_{-2} \cdot a(\eta_2d)^*\eta_1c\eta_{-2}
-		&= bacad(\eta_2d)^*\eta_1c\eta_{-2} 
-			+ (b\eta_{-1})^*b(bacad)c\eta_{-2} \\
-	\end{split}\end{equation*}
-	作用素$(b\eta_{-1})^*b(bacad)c\eta_{-2}$は次のように木を成長させる操作
-	になる。
-	\begin{equation*}\begin{split}
-		(b\eta_{-1})^*b(bacad)c\eta_{-2}\cdot f\ket{d:2}
-		= \bigl(b(bacad)cfd\bigr)\ket{d:2}
-	\end{split}\end{equation*}
-	そこで、$R$-線形写像$B,D:V\to \End_VV\W H$を次のように定義し、
-	\begin{equation}\label{eq:BとDの定義}\begin{split}
-		B_f := Bf = (b\eta_{-1})^*bfc\eta_{-2}
-		,\quad D_f := Df = f(\eta_2d)^*\eta_1c\eta_{-2}
+%s1:二次方程式の正級数解}
+\section{N次方程式の正級数解}\label{s1:N次方程式の正級数解} %{
+	前節の二次方程式の正級数解の求め方を拡張して$N$次方程式の正級数解を
+	求めることを考える。次の$N$次方程式を考える。
+	\begin{equation}\label{eq:求めるN次式}\begin{split}
+		x = a + bxc_1x\cdots c_{N-1}xd
+		\quad\text{where } a,b,d,c_1,\dots,c_{N-1}\in V
 	\end{split}\end{equation}
-	$V$の二項演算$*$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		f*g := bfcgd \quad\text{for all } f,g\in V
-	\end{split}\end{equation*}
-	$B_f$の作用は次のようになる。
-	\begin{equation*}\begin{split}
-		B_fg\ket{d:2} = (f*g)\ket{d:2},\quad B_fD_g = B_{f*g} + D_{f*g}
-	\end{split}\end{equation*}
-	二項演算$*$は結合則を満たさないことに注意する。
-	フォック空間の作用素への写像$B$によって$V$の非結合的な二項演算$*$を
-	与えた格好になっている。そして、代数方程式は次のように書くことができる。
-	\begin{equation*}\begin{split}
-		\begin{pmatrix}
+	セルオートマトン\eqref{eq:二次式のセルオートマトンその一}を拡張すること
+	からスタートする。例えば、$N=3$の場合は次のようになる。
+	\begin{equation*}\xymatrix@C=2ex{
+		\sizen & 0 & 0 & 1 & 1 & 2 & 2 & 3 & 3 & 4 & 4 & 5 & 5 \\
+		\sizen_2 & + & - & + & - & + & - & + & - & + & - & + & - \\
+		0 & \circ \ar[r]^a \ar[d]^b & \circ & \circ \ar[r]^a  \ar[drrrr]^b 
+			& \circ & \circ \ar[r]^a & \circ & \circ \ar[r]^a & \circ
+			& \circ \ar[r]^a & \circ & \circ \ar[r]^a & \circ  \\
+		1 & \circ \ar[r]^a \ar[d]^b & \circ \ar[r]^{c_1}
+			& \circ \ar[r]^a \ar[drrrr]^b & \circ \ar[r]^{c_2} 
+			& \circ \ar[r]^a & \circ \ar[ullll]_d 
+			%
+			& \circ \ar[r]^a & \circ \ar[r]^{c_1}
+			& \circ \ar[r]^a & \circ \ar[r]^{c_2} 
+			& \circ \ar[r]^a & \circ \ar[ullllllll]_d \\
+			%
+		2 & \circ \ar[r]^a & \circ \ar[r]^{c_1}
+			& \circ \ar[r]^a & \circ \ar[r]^{c_2} 
+			& \circ \ar[r]^a & \circ \ar[ullll]_d 
+			%
+			& \circ \ar[r]^a & \circ \ar[r]^{c_1}
+			& \circ \ar[r]^a & \circ \ar[r]^{c_2} 
+			& \circ \ar[r]^a & \circ \ar[ullllllll]_d \\
+			%
+	}\end{equation*}
+	$(\sizen_2,\sizen,\sizen)$の最初の二つをセルオートマトンでの水平軸、
+	最後の自然数を垂直軸として書くと、状態遷移は次のようになる。
+	\begin{equation*}\begin{array}{rcrcrl}
+		a &:& (+,m,n) &\mapsto& (-,m,n) \\
+		c_i &:& (-,Nm+i-1,n+1) &\mapsto& (+,Nm+i,n+1)
+			& \quad\text{for all } i=1,\dots,N-1 \\
+		b &:& (+,m,n) &\mapsto& (+,Nm,n+1) \\
+		d &:& (-,Nm + N-1,n+1) &\mapsto& (-,m,n) \\
+	\end{array}\end{equation*}
+	これを行列の形で書くと次のようになる。
+	\begin{equation}\label{eq:N次代数方程式のセルオートマトン}\begin{split}
+		x = m_V\bra{0}\otimes\bra{0}\begin{pmatrix}
 			1 & 0
-		\end{pmatrix}M^*\begin{pmatrix}
-			0 \\ 1
-		\end{pmatrix}\ket{0} &= (B_a + D_a)^*a\ket{d:2}
-	\end{split}\end{equation*}
-	クリーネスターを低次の冪について計算してみると次のようになる。
-	\begin{equation*}\begin{split}
-		(B_a + D_a)^1 &= B_a + D_a \\ 
-		(B_a + D_a)^2 &= (B_{a*a} + B_a^2) + D_aB_a + (D_{a*a} + D_a^2) \\ 
-		(B_a + D_a)^3 
-		&= (B_{(a*a)*a} + B_{a*(a*a)} + B_{a*a}B_a + B_aB_{a*a} + B_a^3) \\
-		&\; + D_a(B_{a*a} + B_a^2) + (D_{a*a} + D_a^2)B_a \\
-		&\; + (D_{(a*a)*a} + D_{a*(a*a)} + D_{a*a}D_a + D_aD_{a*a} + D_a^3) \\
-	\end{split}\end{equation*}
-	この式から任意の$n\in\sizen$で次の式が成り立っていることが予想される。
-	\begin{equation}\label{eq:因子化の予想その一}\begin{split}
-		(B_a + D_a)^n = \sum_{p=0}^n(\mybf{D}_{n-p}a)(\mybf{B}_pa)
+		\end{pmatrix}\begin{pmatrix}
+			b\beta & a \\
+			c_1\gamma_1 +\cdots+ c_{N-1}\gamma_{N-1} & d\delta \\
+		\end{pmatrix}\begin{pmatrix}
+			1 \\ 0
+		\end{pmatrix}\ket{0}\otimes\ket{0}
 	\end{split}\end{equation}
-	ここで、$\mybf{B}_n:V\to\End_VV\W H$は任意の$f\in V$に対して
-	次のように定義される。
+	ここで、$m_V$は$V$の積とし、$\beta,\delta$と$\gamma_i,\;i=1,\dots,N$を
+	次のように定義する。
+	\begin{equation*}\begin{array}{rclrcll}
+		\gamma_i &=& \eta_-^{i-1}C\eta_-^i\otimes\eta_+\eta_-,
+			&\quad C &=& \sum_{m\in\sizen}\ket{Nm}\bra{Nm} \\
+		\beta &=& B_-\otimes\eta_-,
+			&\quad B_- &=& \sum_{m\in\sizen}\ket{m}\bra{Nm} \\
+		\delta &=& \eta_+^{N-1}B_+\otimes\eta_+,
+			&\quad B_+ &=& \sum_{m\in\sizen}\ket{Nm}\bra{m} \\
+	\end{array}\end{equation*}
+	ここで、$\zeta_{\pm i},\;i=1,\dots,N$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\zeta_i := \eta_+^{i-1}\otimes\eta_+,\quad \zeta_{-i} := \zeta_i^\tran
+	\end{split}\end{equation*}
+	$\beta,\delta,\gamma_i$はそれぞれ次のように書ける。
 	\begin{equation*}\begin{array}{rcll}
-		\mybf{B}_0f &=& \id \\
-		\mybf{B}_nf &=& \sum_{\gamma\in C_n} B_*f^{*\gamma}
-			& \quad\text{for all } n\in\sizen_+
+		\beta = \zeta_{-1},\quad \delta = \zeta_N,\quad
+		\gamma_i &= \zeta_i\zeta_{-(i+1)} \quad\text{for all } i = 1,\dots,N-1
 	\end{array}\end{equation*}
-	また、$R$-線形写像$B_*:\T V\to\End_VV\W H$は$R$-線形写像$B$
-	\eqref{eq:BとDの定義}を用いて次のように定義される。
-	\begin{equation*}\begin{split}
-		B_*1_\T &= \id \\
-		B_*(f_1\otimes\cdots\otimes f_p) &= (Bf_1)\cdots(Bf_p)
-			\quad\text{for all } f_1,\dots,f_p\in V
-	\end{split}\end{equation*}
-	$C_n\subset \W\sizen_+$は$n$の合成つくる集合である。例えば、$C_3$は
-	次のようになる。
-	\begin{equation*}\begin{split}
-		C_3 = \Set{[3],[2,1],[1,2],[1,1,1]}
-	\end{split}\end{equation*}
-	そして、$f^{*\gamma}$は次のように定義され、
-	\begin{equation*}\begin{split}
-		f^{*[n_1,\dots,n_p]} = f^{*n_1}\otimes\cdots\otimes f^{*n_p}
-		\quad\text{for all } n_1,\dots,n_p\in\sizen
-	\end{split}\end{equation*}
-	$f^{*n}$は$n$個の$f\in V$に二項演算$*$を適用する順序のすべて
-	の和をとるものとする。例えば、$n\le 4$では次のようになる。
-	\begin{equation*}\begin{split}
-		f^{*0} &= 1 \\
-		f^{*1} &= f \\
-		f^{*2} &= f*f \\
-		f^{*3} &= f^{*2}*f + f*f^{*2} \\
-		f^{*4} &= f^{*3}*f + f^{*2}*f^{*2} + f*f^{*3} \\
-	\end{split}\end{equation*}
-	一般に次の式が成り立つ。
-	\begin{equation}\label{eq:二項演算のカタラン分解}\begin{split}
-		f^{*n} = \sum_{p=1}^{n} f^{*(n-p)}*f^{*p}
-		\quad\text{for all } f\in V,\;2\le n\in\sizen_+
+	そして、前節の議論と同様にして$\set{\zeta_{\pm i}\bou i=1,\dots,N}$から
+	生成される代数と$\mycal{H}_N$が代数同型になることが示され、
+	セルオートマトンによる正級数解\eqref{eq:N次代数方程式のセルオートマトン}
+	は$\mycal{H}_N$による次の式に等しくなることがわかる。
+	\begin{equation}\label{eq:N次式の正級数解その一}\begin{split}
+		x = \bra{0}\begin{pmatrix}
+			1 & 0
+		\end{pmatrix}\begin{pmatrix}
+			b\eta_{-1} & a \\
+			c_1\eta_1\eta_{-2} +\cdots+ c_{N-1}\eta_{N-1}\eta_N & d\eta_{-N} \\
+		\end{pmatrix}\begin{pmatrix}
+			1 \\ 0
+		\end{pmatrix}\ket{0}
 	\end{split}\end{equation}
-	$\mybf{D}_n$についても同様に定義する。
+	この式が代数方程式$x=a+bc_1x\cdots c_{N-1}xd$の正級数解を与えることを
+	代数的に証明しておく。
 
-	予想\eqref{eq:因子化の予想その一}を証明することを考える。
-	まず、次の式を使って$(Ba)(\mybf{D}_na)$の正規積を計算する。
-	\begin{equation*}\begin{split}
-		\mybf{D}_nf &= \sum_{p=1}^n (Df^{*p})(\mybf{D}_{n-p}f)
-		\quad\text{for all } f\in V,\; n\in\sizen_+
-	\end{split}\end{equation*}
-	この分割は、$3$の合成の場合には次のような分割を考えていることになる。
-	\begin{equation*}\begin{split}
-		\Set{[3],[2,1],[1,2],[1,1,1]}
-		\simeq \Set{[3]\times[],[2]\times[1],[1]\times[2],[1]\times[1,1]}
-		\quad\text{as set}
-	\end{split}\end{equation*}
-	\begin{equation*}\begin{split}
-		(Bf)(\mybf{D}_nf) = (Bf^{*(n+1)}) + (\mybf{D}_{n+1}f) - (Df)^{n+1}
-	\end{split}\end{equation*}
+	\begin{proposition}[N次式の正級数解]\label{prop:N次式の正級数解} %{
+		任意の$2$以上の自然数$N$に対して$\mycal{H}_N$の真空期待値
+		\eqref{eq:N次式の正級数解その一}は代数方程式\eqref{eq:求めるN次式}の
+		正級数解となる。
+		\begin{equation*}\begin{split}
+			x = \bra{0}\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}\begin{pmatrix}
+				b\eta_{-1} & a \\
+				c_1\eta_1\eta_{-2} +\cdots+ c_{N-1}\eta_{N-1}\eta_N & d\eta_{-N} \\
+			\end{pmatrix}^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}\ket{0} \\
+			\implies x = a + bxc_1x\cdots c_{N-1}xd
+		\end{split}\end{equation*}
+	\end{proposition} %prop:N次式の正級数解}
+	\begin{proof} %{
+		二次方程式の場合と同様にして証明する。命題の代数方程式の正級数解を
+		$x=\sum_{n\in\sizen}x_n$とすると、各級数は次の漸化式を満たす。
+		\begin{equation*}\begin{split}
+			x_0 = a,\quad 
+			x_{n+1} = \sum_{p_1+\cdots+p_N=n} 
+				bx_{p_1}c_1x_{p_2}\cdots c_{N-1}x_{p_N}d
+				\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		ここで、$\sum_{p_1+\cdots+p_N=n}$は
+		$\sum_{p_1,\dots,p_N\in\sizen}\jump{p_1+\cdots+p_N=n}$を略記したもの
+		とする。
+		二次元行列の対角成分について
+		Kleeneスターを展開すると次の式が得られる。
+		\begin{equation*}\begin{split}
+			x = \braket{0|X},\quad
+			\ket{X} := T^*a\ket{d:2},\quad
+			T := (b\eta_{-1}^*)a(d\eta_N)^*\gamma \\
+			\gamma := c_1\eta_1\eta_{-2} +\cdots+ c_{N-1}\eta_{N-1}\eta_{-N}
+		\end{split}\end{equation*}
 
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-	\end{todo} %todo:ここまで}
-
-	この式から次のような描像が成り立っていることが予想される。
-	$n\in\sizen_+$の合成の集合を$C_n\in\W\sizen_+$とする。例えば、$3$の合成
-	であれば、次のように定義する。
-	\begin{equation*}\begin{split}
-		C_3 = \set{[3],[2,1],[1,2],[1,1,1]}
-	\end{split}\end{equation*}
-	そして、次の$R$-線形写像の合成を考える。
-	\begin{equation*}\begin{array}{rcrcr}
-		R\W\sizen_+ &\to& R\W A &\to& \End_{R\W A}(R\W A)H \\
-		n &\mapsto& \sum_{\gamma\in C_n}
-	\end{array}\end{equation*}
-
-	\begin{todo}[保留]\label{todo:保留} %{
-	二項演算の和$-^{*n}$を平面二分木の集合からの写像として表すことを考える。
-	次のような葉を$\bullet$、葉以外の頂点を$\circ$とする平面二分木の集合を
-	$\T$とする。
-	\begin{equation*}\begin{split}
-		1_\T,\quad \bullet,\quad \xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-			\bullet & & \bullet
-		},\quad \xymatrix@R=4pt@C=4pt{
-			& & \circ \ar@{-}[dl] \ar@{-}[dr] \\
-			& \circ \ar@{-}[dl] \ar@{-}[dr] & & \bullet \\
-			\bullet & & \bullet
-		}
-	\end{split}\end{equation*}
-	$1_\T$は空の平面二分木を表す。$\T$は根だけからなるシングルトンに
-	葉を二つ足していって作られる集合とする。葉が一つしかない平面二分木は
-	$\T$に含めないものとする。したがって、$\T$の空でない平面二分木は
-	頂点数が奇数の平面二分木となる。
-	次のように定義する$R$-線形写像$\tau:V\otimes R\T\to V$によって、
-	二項演算の'冪'$-^{*n}$を平面二分木の集合からの写像として表す。
-	\begin{equation*}\begin{split}
-		\tau_f1_\T &= 1 \\
-		\tau_f\bullet &= f \\
-		\tau_f\xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-			t_1 & & t_2
-		} &= (\tau t_1)*(\tau t_2) \\
-	\end{split}\end{equation*}
-	\end{todo} %todo:保留}
-
-
-\subsubsection{作用を絵で見る}\label{s3:Bの作用を絵で見る} %{
-	作用素$B_f$の作用が平面二分木を成長させていく操作に対応することを絵で
-	見てみる。$R\W A$の単語と頂点$\set{\bullet,\circ}$からなる平面二分木の
-	対応$\tau$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\tau\bullet = a,\quad \tau\circ = bacad
-		,\quad \tau\xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-			t_1 & & t_2
-		} = b(\tau t_1)c(\tau t_2)d \\
-	\end{split}\end{equation*}
-	ここで、平面二分木の書き方で頂点$\bullet$に関して次のような同一視をする。
-	\begin{equation*}\begin{split}
-		\xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-			\bullet & & t
-		} = \xymatrix@R=4pt@C=4pt{
-			\circ \ar@{-}[dr] \\
-			& t
-		},\quad\xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-			t & & \bullet
-		} = \xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \\
-			t
-		} \quad\text{for all } t\in \text{平面二分木} \\
-		\xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-			\bullet & & \bullet
-		} = \circ
-	\end{split}\end{equation*}
-	$B_f$の作用を絵で書いてみると次のようになる。
-	\begin{equation*}\begin{split}
-		B_a(\tau t)\ket{d:2} = (\tau\xymatrix@R=4pt@C=4pt{
-			\circ \ar@{-}[dr] \\ & t
-		})\ket{d:2},\quad B_a^2(\tau t)\ket{d:2} = (\tau\xymatrix@R=4pt@C=4pt{
-			\circ \ar@{-}[dr] \\ & \circ \ar@{-}[dr] \\ & & t
-		})\ket{d:2} \\
-		B_{a*a}(\tau t)\ket{d:2} = (\tau\xymatrix@R=4pt@C=4pt{
-			& \circ \ar@{-}[dl] \ar@{-}[dr] \\ \circ & & t
-		})\ket{d:2}
-	\end{split}\end{equation*}
-	平面木の自然な成長\cite{Connes:1998qv}とは異なり、$B$の作用は平面二分木
-	の非結合的な二項演算を与える。
-%s3:作用を絵で見る}
-%s2:証明の改良}
-%s1:二次方程式の摂動}
+		\begin{todo}[この先]\label{todo:この先} %{
+			生き残るのは$\bra{0}T^{n(N-1)}a\ket{d:2}$という$T^{N-1}$のべき乗の
+			項だけになることを示し、$T^{N-1}$のKleeneスターを正規積の形に
+			書き直す。上手く行けば正規積の形を求めることができる。
+		\end{todo} %todo:この先}
+		$T_+$と$T_{-i},\;i=1,\dots,N-1$を、任意の$f\in V$に対して次のように
+		おくと、
+		\begin{equation*}\begin{array}{rclcl}
+			T_+f &:=& (d\eta_2)^*\gamma &=& f(d\eta_N)^*\gamma \\
+			T_{-i}f &:=& (b\eta_{-1})^*\gamma^i 
+				&=& (b\eta_{-1})^*bfc_1\cdots c_i\eta_{-(i+1)} \\
+		\end{array}\end{equation*}
+		$T=(T_++T_{-1})a$と書くことができる。
+	\end{proof} %}
+	\begin{note}[memo]\label{note:memo} %{
+		lets look at $\gamma$. $\gamma^n$ is the following form:
+		\begin{equation*}\begin{split}
+			\gamma^n = \sum_{i=1}^{N-n} c_i\cdots c_{i+n} \eta_i\eta_{-(i+n)}
+			\quad\text{for all } n=1,\dots,N-1
+		\end{split}\end{equation*}
+		, and $\gamma^N=0$ implies $\gamma^m\gamma^n=\jump{m+n<N}\gamma^{m+n}$.
+		actions of $\gamma$ to $\eta_{\pm m}$ are the followings
+		for all $1\le m,n< N$:
+		\begin{equation*}\begin{split}
+			\eta_{-m}\gamma^n &= \jump{m+n\le N} c_1\cdots c_n\eta_{-(m+n)} \\
+			\gamma^n\eta_m &= \jump{n+1\le m} c_1\cdots c_n\eta_{m-n} \\
+		\end{split}\end{equation*}
+		. these actions are showing the following correspondance:
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\gamma$ is an annihilation operator.
+			\item $\eta_1$ is a vaccume and $\eta_{-1}$ is its dual.
+			\item $\eta_i,\;i=2,\dots,N-1$ are exicted states.
+		\end{itemize} %}
+		.
+	\end{note} %note:memo}
+%s1:N次方程式の摂動}
 	%
 }\endgroup %}
