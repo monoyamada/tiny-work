@@ -17,10 +17,382 @@
 	\newcommand{\what}{\widehat}
 	\newcommand{\even}{\myop{even}}
 	\newcommand{\lieso}{\myop{so}}
+	\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+	\newcommand{\ad}{\myop{ad}}
+	\newcommand{\Ad}{\myop{Ad}}
 	%
 	{\setlength\arraycolsep{2pt}
 	%
-\section{一次元Ising模型}\label{s1:一次元Ising模型} %{
+\section{Lie代数}\label{s1:Lie代数} %{
+	$G$を群とする。任意の$g\in G$に対して写像$g-g^{-1}:G\to G$を$g$による
+	共役という。任意の$G$の元に対する共役が不変になる$G$の部分群を正規部分群
+	という。
+	\begin{equation*}\begin{split}
+		\text{正規部分群}\; H\subseteq G
+		\xiff{\dfn} ghg^{-1}\in H \quad\text{for all } g\in G,\; h\in H
+	\end{split}\end{equation*}
+	単位元だけからなる部分群$\mybf{1}$と$G$自身は常に正規部分群になる。
+	したがって、$\mybf{1}$と$G$自身を$G$の自明な正規部分群という。
+	また、任意の$G$の元と可換になる部分群を中心部分群という。
+	\begin{equation*}\begin{split}
+		\text{中心部分群}\; H\subseteq G
+		\xiff{\dfn} ghg^{-1}=h \quad\text{for all } g\in G,\; h\in H
+	\end{split}\end{equation*}
+	部分群$\mybf{1}$は常に中心部分群になる。したがって、$\mybf{1}$を$G$の
+	自明な中心部分群という。定義から、中心部分群は常に正規部分群となる。
+	\begin{equation*}\begin{split}
+		\text{中心部分群} \implies \text{正規部分群}
+	\end{split}\end{equation*}
+
+	群$G$の正規部分群が自明な正規部分群のみになるとき、$G$を単純群という。
+	\begin{equation*}\begin{split}
+		\text{単純群}\; G
+		\xiff{\dfn} \text{$G$の正規部分群が$\mybf{1}$と$G$だけ}
+	\end{split}\end{equation*}
+	Lie群$G$の場合、$G$の中心部分群が自明な中心部分群のみになるとき、
+	$G$を半単純群ということもある。
+	\begin{equation*}\begin{split}
+		\text{半単純群}\; G
+		\xiff{\dfn} \text{$G$の中心部分群が$\mybf{1}$だけ}
+	\end{split}\end{equation*}
+	この場合、単純群は常に半単純群となる。
+	\begin{equation*}\begin{split}
+		\text{単純群} \implies \text{半単純群}
+	\end{split}\end{equation*}
+
+	Lie群の正規部分群を随伴表現を通してLie代数の言葉に翻訳することを考える。
+	そのためには、Lie群に対応するLie代数を定義する必要があるが、
+	ここでは微分に関する面倒な議論を避けて、Lie群$G$に対応するLie代数
+	$\frk{g}$を指数写像$\exp:\frk{g}\to G$で'定義'しておく。
+	\begin{equation*}\begin{split}
+		\exp X := 1 + X + \frac{1}{2!}X^2 + \cdots
+		\quad\text{for all } X\in\frk{g}
+	\end{split}\end{equation*}
+	そして、群の随伴表現$\Ad:G\to\End\frk{g}$と代数の随伴表現
+	$\ad:\frk{g}\to\End\frk{g}$を次のように定義する。
+	\begin{equation*}\begin{array}{rcll}
+		(\Ad g)Y &:=& gYg^{-1} & \quad\text{for all } g\in G,\; Y\in \frk{g} \\
+		(\ad X)Y &:=& [X,Y] & \quad\text{for all } X,Y\in \frk{g} \\
+	\end{array}\end{equation*}
+	代数の随伴表現は群の随伴表現の一次近似となっている。
+	\begin{equation*}\begin{split}
+		\Ad\exp X = \id + (\ad X) + OX^2 \quad\text{for all } X\in \frk{g}
+	\end{split}\end{equation*}
+	$\frk{h}\subseteq\frk{g}$を随伴表現の不変部分空間とすると、
+	$\frk{h}$は$G$の正規部分群に対応することがわかる。
+	\begin{equation*}\begin{split}
+		(\Ad g)Y\in \frk{h} \implies ge^Yg^{-1} = e^{(\Ad g)Y}\in e^{\frk{h}}
+		\quad\text{for all } g\in G,\; Y\in\frk{h}
+	\end{split}\end{equation*}
+	また、$\frk{h}\subseteq\frk{g}$を随伴表現の核空間とすると、
+	$\frk{h}$は$G$の中心部分群に対応することがわかる。
+	\begin{equation*}\begin{split}
+		(\Ad g)Y = 0 \implies ge^Yg^{-1} = e^{(\Ad g)Y} = 1
+		\quad\text{for all } g\in G,\; Y\in\frk{h}
+	\end{split}\end{equation*}
+	まとめると次のように書ける。
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{ccccl} \hline
+			& Lie群 & Lie代数 & 随伴表現 \\ \hline
+			& 共役作用 & Lie括弧 & 定義 & $(\ad X)Y = [X,Y]$ \\
+			& 正規部分群 & イデアル & 既約でない 
+				& $(\ad\frk{g})\frk{h}\subseteq\frk{h}$ \\
+			& 中心部分群 & 中心イデアル & 忠実でない 
+				& $(\ad\frk{g})\frk{h}=0$ \\
+		\end{tabular}\end{center}
+		\caption{Lie群とLie代数の対応}
+	\end{table} %}
+	ここで、Lie代数$\mathfrak{g}$のイデアル$I$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\text{部分空間$I\subseteq\mathfrak{g}$がイデアル} 
+		\xiff{\dfn} [g,a]\in I \quad\text{for all } g\in\mathfrak{g},\; a\in I
+	\end{split}\end{equation*}
+	ゼロ元だけからなる部分Lie代数$\set{0}$と$\mathfrak{g}$自身は常に
+	イデアルとなるので、自明なイデアルという。また、$\mathfrak{g}$のすべての
+	元と可換となるイデアルを中心という。
+	\begin{equation*}\begin{split}
+		\text{部分空間$I\subseteq\mathfrak{g}$が中心} 
+		\xiff{\dfn} [g,a]=0 \quad\text{for all } g\in\mathfrak{g},\; a\in I
+	\end{split}\end{equation*}
+	$\set{0}$は常に中心となるので、自明な中心という。
+	イデアルと使うとLie代数での単純と半単純を次のように定義することができる。
+
+	\begin{definition}[Lie代数での単純と半単純]\label{def:Lie代数での単純と半単純} %{
+		$\mathcal{g}$をLie代数とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\mathfrak{g}$のイデアルが自明なイデアルに限られるとき、
+			$\mathfrak{g}$を単純Lie代数といい、
+			\item $\mathfrak{g}$の中心イデアルが自明な中心イデアルに限られる
+			とき、$\mathfrak{g}$を半単純Lie代数という。
+		\end{itemize} %}
+	\end{definition} %def:Lie代数での単純と半単純}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		Lie群$G$とその表現$(\rho,V)$が与えられ、表現空間$V$が
+		内積$\beta$を持つ場合、次のようにすると$G$-不変な内積$\beta_G$
+		が得られる。
+		\begin{equation*}\begin{split}
+			\beta_G(v_1, v_2) 
+			:= \frac{1}{|G|}\sum_{g\in G} \beta(\rho_gv_1, \rho_gv_2)
+			\quad\text{for all } v_1,v_2\in V
+		\end{split}\end{equation*}
+		そして、内積$\beta_G$を用いると、表現$\rho$がユニタリ表現となる。
+		\begin{equation*}\begin{split}
+			\beta_G(v_1, \rho_gv_2) = \beta_G(\rho_g^{-1}v_1, v_2)
+			\quad\text{for all } v_1,v_2\in V,\; g\in G
+		\end{split}\end{equation*}
+	\end{todo} %todo:ここまで}
+
+	\begin{note}[随伴表現とJacobiの恒等式]\label{note:随伴表現とJacobiの恒等式} %{
+		Lie代数$\frk{g}$の随伴表現$\ad:\frk{g}\to\End\frk{g}$を次のように
+		定義すると、
+		\begin{equation}\label{eq:随伴表現その一}\begin{split}
+			(\ad X)Y := [X,Y] \quad\text{for all } X,Y\in\frk{g}
+		\end{split}\end{equation}
+		行列の積について次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			(\ad X)(\ad Y)Z = [X,[Y,Z]] \quad\text{for all }X,Y,Z\in\frk{g}
+		\end{split}\end{equation*}
+		Jacobiの恒等式は随伴表現を用いて次のように書ける。
+		\begin{equation*}\begin{array}{ll}
+			[X,[Y,Z]] + [Y,[Z,X]] + [Z,[X,Y]] = 0 
+				& \quad\text{for all } X,Y,Z\in\frak{g} \\
+			\iff (\ad X)(\ad Y)Z - (\ad Y)(\ad Z)Z - (\ad[X,Y])Z = 0
+				& \quad\text{for all } X,Y,Z\in\frak{g} \\
+			\iff [\ad X, \ad Y] = \ad[X, Y]
+				& \quad\text{for all } X,Y\in\frak{g} \\
+		\end{array}\end{equation*}
+		したがって、Jacobiの恒等式は線形写像\eqref{eq:随伴表現その一}が
+		表現になっていることを保証する式と思っても構わない。
+	\end{note} %note:随伴表現とJacobiの恒等式}
+\subsection{線形代数}\label{s2:線形代数} %{
+	対角化可能よりももう少し条件を弱めた三角化可能を定義する。
+	まず、三角行列を定義しておく。
+
+	\begin{definition}[三角行列]\label{def:三角行列} %{
+		次の形の対角成分を除いた左下半分がすべて$0$となっている正方行列を
+		三角行列という。
+		\begin{equation*}\begin{split}
+			\begin{pmatrix}
+				* & * & * \\
+				0 & * & * \\
+				0 & 0 & * \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+	\end{definition} %def:三角行列}
+
+	正方行列の対角化と異なり、正方行列の三角化は常に可能である。
+	三角化は単に三角行列に書き直すだけではなく、対角成分に固有値が並ぶように
+	することができる。
+
+	\begin{proposition}[正方行列の三角化]\label{prop:正方行列の三角化} %{
+		$A$を$n$次正方行列、$\lambda_1,\lambda_2,\dots,\lambda_n$を$A$の
+		固有値とする。このとき、あるユニタリ行列が存在して、次のように三角行列
+		にすることができる。
+		\begin{equation*}\begin{split}
+			U^{-1}AU = 	\begin{pmatrix}
+				\lambda_1 & & & * \\
+				& \lambda_2 \\
+				& & \ddots \\
+				0 & & & \lambda_n \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:正方行列の三角化}
+	\begin{proof} %{
+		正方行列の次数についての帰納法を用いる。次数が$1$のときは、明らかに
+		命題が成り立つ。ある次数$n\in\sizen_+$で命題が成り立つとし、
+		$A$を$n+1$次正方行列とする。$\lambda\in\fukuso$を$A$の固有値とし、
+		$v\in\fukuso^{n+1}$を$\lambda$に属する固有ベクトルとする。
+		そして、$v,u_1,\dots,u_n\in\fukuso^{n+1}$を互いに直交するベクトル
+		とする。すると、$n+1$次正方行列$U=[v,u_1,\dots,u_n]$はユニタリ行列
+		となり、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			U^{-1}AU &= U^{-1}[\lambda v,Au_1,\dots,Au_n] \\
+			&= \left[\lambda\begin{pmatrix}
+				1 \\ 0 \\ \vdots \\ 0
+			\end{pmatrix},U^{-1}Au_1,\dots,U^{-1}Au_n\right] = \begin{pmatrix}
+				\lambda & * & \cdots & * \\
+				0 & * & \cdots & * \\
+				\vdots & & \ddots & \vdots \\
+				0 & \cdots & 0 & * \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		ここで、$n$次正方行列$B$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			U^{-1}AU &= \begin{pmatrix}
+				\lambda & * \\
+				0 & B
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		帰納法の仮定より、$B$の固有値を$\lambda_1,\dots,\lambda_n$とすると、
+		$B$を次のように三角行列にする$n$次ユニタリ行列$V$が存在する。
+		\begin{equation*}\begin{split}
+			V^{-1}BV = \begin{pmatrix}
+				\lambda_1 & & & * \\
+				& \lambda_2 \\
+				& & \ddots \\
+				0 & & & \lambda_n \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		ここで、$n+1$次正方行列$W$を次のように定義すると、$W$はユニタリ行列
+		となる。
+		\begin{equation*}\begin{split}
+			W = U \begin{pmatrix}
+				1 & 0 \\ 0 & V
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		すると、次の式が成り立ち、$n+1$次正方行列に対しても命題が成り立つことが
+		わかる。
+		\begin{equation*}\begin{split}
+			W^{-1}AW = \begin{pmatrix}
+				\lambda & & & * \\
+				& \lambda_1 \\
+				& & \ddots \\
+				0 & & & \lambda_n \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	この命題でユニタリ変換という制限を外すとJordan標準形にまで持っていける
+	ことが示される。例えば、$4$次正方行列$A$の場合、その固有値を
+	$\lambda_i(i=1,2,3,4)$とすると、正則行列$P$によって次のような
+	形の三角行列にすることができる。
+	\begin{equation*}\begin{split}
+		P^{-1}AP = 	\begin{pmatrix}
+			\lambda_1 & \epsilon_1 & 0 & 0 \\
+			0 & \lambda_2 & \epsilon_2 & 0 \\
+			0 & 0 & \lambda_3 & \epsilon_3 \\
+			0 & 0 & 0 & \lambda_n \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	ここで、$\epsilon_i\in\set{0,1}(i=1,2,3)$は固有値の縮退度によって
+	決まる値である。
+
+	\begin{proposition}[同時上半三角化]\label{prop:同時上半三角化} %{
+		$A$と$B$を互いに可換な正方行列とする。このとき、適当な基底の変換に
+		よって、$A$と$B$は同時に上半三角にすることができる。
+	\end{proposition} %prop:同時上半三角化}
+	\begin{proof} %{
+		$A$の固有値を一つ選んで$\lambda$とし、$\lambda$に属する固有空間を
+		$W\neq 0$とする。$A$と$B$が可換だから、$W$は$B$の不変部分空間
+		となっている（$BW\subseteq W$）。したがって、
+	\end{proof} %}
+%s2:線形代数}
+\subsection{群}\label{s2:群} %{
+	$G$を群、$H$を$G$の部分群とする。任意の$g\in G$に対して$G$の部分集合
+	$gH$を次のようにおくことにする。
+	\begin{equation*}\begin{split}
+		gH := \set{gh\bou h\in H} \quad\text{for all } g\in G
+	\end{split}\end{equation*}
+	すると、任意の$g_1,g_2\in G$に対して、部分集合$g_1H$と$g_2H$は等しいか、
+	全く交わらないかのどちらかになる。
+	\begin{equation*}\begin{array}{rcll}
+		g_1H\cap g_2H \neq \emptyset 
+		&\implies& g_1h_1 = g_2h_2 & \quad\text{for some } h_1,h_2\in H \\
+		&\implies& g_1 = g_2h_2h_1^{-1} \\
+		&\implies& g_1h = g_2h_2h_1^{-1}h\in g_2H & \quad\text{for all } h\in H
+	\end{array}\end{equation*}
+	したがって、ある$G$のある部分集合$K$があって、$G$は$G=\cup_{k\in K} kH$
+	という部分集合の直和として書くことができる。$gH$を$H$を法とする剰余類
+	という。
+
+	部分群$H\subseteq G$が正規部分群の場合、次のようにして、
+	剰余類の間に積$m$を定義することができる\footnote{
+		部分群が正規部分群でなくても、このようにして積を定義することはできる
+		が、代表元のとり方に依存してくる。
+	}。
+	\begin{equation*}\begin{split}
+		m(g_1H,g_2H) := (g_1g_2)H
+	\end{split}\end{equation*}
+	$m$の定義は剰余類の代表元のとり方に依らず、
+	\begin{equation*}\begin{split}
+		g_1H = g_2H \implies g_1gH = g_2gH \quad\text{for all } g_1,g_2,g\in G
+	\end{split}\end{equation*}
+	$H$を単位元とする群になる。この群を正規部分群$H$による商群といい、
+	$G/H$と書く。
+
+	\begin{definition}[可解群]\label{def:可解群} %{
+		群$G$が次のような有限な長さの部分群の列を持ち、
+		\begin{equation*}\begin{split}
+			G = G_0 \supset G_1 \supset\cdots\supset G_n = \mybf{1}
+		\end{split}\end{equation*}
+		すべての$i=0,\dots,n-1$で、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $G_{i+1}$が$G_i$の正規部分群となり、
+			\item $G_i/G_{i+1}$がアーベル群となる
+		\end{itemize} %}
+		とき、$G$を可解群という。
+	\end{definition} %def:可解群}
+
+\subsubsection{二次三角行列}\label{s3:二次三角行列} %{
+	$T_2$を可逆な$2$次三角行列全体の作る集合とする。
+	\begin{equation*}\begin{split}
+		T_2 := \Set{\begin{pmatrix}
+			a & c \\ 0 & b
+		\end{pmatrix}\bou a,b\in\fukuso_\times,\; c\in\fukuso}
+	\end{split}\end{equation*}
+	ここで、$\fukuso_\times$を$\fukuso$から$0$を除いた集合とする。
+	$T_2$は通常の行列の積について群となる。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			a_1 & c_1 \\ 0 & b_1
+		\end{pmatrix}\begin{pmatrix}
+			a_2 & c_2 \\ 0 & b_2
+		\end{pmatrix} = \begin{pmatrix}
+			a_1a_2 & a_1c_2+c_1b_2 \\ 0 & b_1b_2
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	逆元は次のように具体的に求まる。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			a & c \\ 0 & b
+		\end{pmatrix}^{-1} = \frac{1}{ab}\begin{pmatrix}
+			b & -c \\ 0 & a
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	これを用いると、$T_2$の共役変換は対角成分を変えないことがわかる。
+	\begin{equation*}\begin{split}
+		g^{-1} \begin{pmatrix}
+			a & * \\ 0 & b
+		\end{pmatrix}g = \begin{pmatrix}
+			a & * \\ 0 & b
+		\end{pmatrix} \quad\text{for all } g\in T_2
+		,\; a,b\in \fukuso_\times
+	\end{split}\end{equation*}
+	したがって、$T_2$の交換子群$DT_2$は対角成分が$1$となる三角行列からなる
+	ことがわかる。
+	\begin{equation*}\begin{split}
+		DT_2 := \Set{\begin{pmatrix}
+			1 & c \\ 0 & 1 \end{pmatrix}\bou c\in\fukuso}
+	\end{split}\end{equation*}
+	さらに、$DT_2$の共役変換は次のようになり、
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			1 & a \\ 0 & 1
+		\end{pmatrix}^{-1}\begin{pmatrix}
+			1 & b \\ 0 & 1
+		\end{pmatrix}\begin{pmatrix}
+			1 & a \\ 0 & 1
+		\end{pmatrix} = \begin{pmatrix}
+			1 & b \\ 0 & 1
+		\end{pmatrix} \quad\text{for all } a,b\in\fukuso
+	\end{split}\end{equation*}
+	$DT_2$の交換子群$D^2T_2$は単位元だけからなる自明な群となる。
+	\begin{equation*}\begin{split}
+		g_1^{-1}g_2^{-1}g_1g_2 = 1 \quad\text{for all } g_1,g_2\in DT_2
+	\end{split}\end{equation*}
+	したがって、次の部分群の列が成り立ち、$T_2$は可解群となることがわかる。
+	\begin{equation*}\begin{split}
+		T_2 = D^0T_2\supset DT_2\supset D^2T_2 = \mybf{1}
+	\end{split}\end{equation*}
+%s3:二次三角行列}
+%s2:群}
+%s1:Lie代数}
+\section{統計モデル}\label{s1:統計モデル} %{
+\subsection{一次元モデル}\label{s2:一次元モデル} %{
+	まず、最も簡単なモデルの一つであるIsingモデルをおさらいしておく。
+
+\subsubsection{Isingモデル}\label{s3:Isingモデル} %{
 	次のようなモデルを考えて、
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
 		\item 頂点数が$N$の一定間隔の一次元格子上で考える。
@@ -36,47 +408,81 @@
 	\end{split}\end{equation*}
 	ここで、$\exp(ks_is_{i+1}+hs_i)$はBoltzmann重率と呼ばれる量で、
 	格子の頂点一つ辺りのエネルギーを指数の肩に乗せたものになっている。
-	任意の$s,t=\pm1$に対して$V(s,t)$を次のように定義すると、
+	スピン-スピン相互作用に相当する$k$の項はマイナスの符号がついた方が
+	物理的に自然だが、記法の便宜上逆符号で書いている。
+	任意の$s,t=\pm1$に対して$W(s,t)$を次のように定義すると、
 	\begin{equation*}\begin{split}
-		V(s,t) := \exp\bigl(kst + h\frac{s+t}{2}\bigr)
+		W(s,t) := \exp\bigl(kst + h\frac{s+t}{2}\bigr)
 	\end{split}\end{equation*}
-	分配関数は$Z(k,h,N)=\tr V^N$と書くことができる。
-	$V$はBoltzmann重率を外部磁場$h$の項について対称化したものである。
-	$V$は次のような二次元対称行列なので対角化できる。
+	分配関数は$Z(k,h,N)=\tr W^N$と書くことができる。
+	$W$はBoltzmann重率を外部磁場$h$の項について対称化したもので、
+	次のようになる。
 	\begin{equation}\label{eq:転送行列その一}\begin{split}
-		V = \begin{pmatrix}
-			V(1,1) & V(1,-1) \\ V(-1,1) & V(-1,-1) \\
+		W = \begin{pmatrix}
+			W(1,1) & W(1,-1) \\ W(-1,1) & W(-1,-1) \\
 		\end{pmatrix} = \begin{pmatrix}
 			\exp(k+h) & \exp(-k) \\ \exp(-k) & \exp(k-h) \\
 		\end{pmatrix}
 	\end{split}\end{equation}
-	その固有値を$\lambda_\pm$とすると、分配関数は
-	$Z(k,h,N)=\lambda_+^N+\lambda_-^N$となることがわかる。
-	固有値$\lambda_\pm$はパラメーター$k,h$に依存していることに注意する。
-	今の場合、固有値$\lambda_\pm$は二次方程式$\det(\lambda-V)$の解を
-	求めればよい。ここでは、解を具体的に求めることは割愛する。
+	$W$は実対称行列なので、その固有値はすべて実数になる。
+	$\lambda_\pm$を$W$の固有値で$\lambda_-\le\lambda_+$とすると、
+	一頂点当たりの自由エネルギーが次のように計算できる。
+	\begin{equation*}\begin{split}
+		F(k,h) &:= -\lim_{N\to\infty}\frac{1}{N}\ln Z(k,h,N) \\
+		&= -\lim_{N\to\infty}\frac{1}{N}\ln\tr W^n
+		= -\lim_{N\to\infty}\frac{1}{N}\ln (\lambda_+^N + \lambda_-^N)
+		= -\ln\lambda_+
+	\end{split}\end{equation*}
+	$W$の固有値$\lambda_\pm$は次のようになる。
+	\begin{equation}\label{eq:転送行列の固有値その一}\begin{split}
+		\lambda_\pm &= \frac{\tr W \pm \sqrt{(\tr W)^2 - 4(\det W)}}{2} \\
+		&= e^k(\cosh e^h) \pm \sqrt{e^{2k}(\sinh e^h)^2 + e^{-2k}} \\
+	\end{split}\end{equation}
 
-	ボルツマン重率$V$はは空間$\pm1$に住む粒子が遷移確率$V$に
+	自由エネルギー$F$を外部磁場$h$で微分したものはスピンの向きの期待値
+	$\braket{s}$となる。
+	\begin{equation*}\begin{split}
+		\braket{s} &= -\frac{\partial F}{\partial h}(k,h)
+		= -\frac{\partial\ln\lambda_+}{\partial h}(k,h) \\
+		&= -\frac{1}{\lambda_+} \left( e^k(\sinh e^h) 
+			+ \frac{e^{2k}(\cosh e^h)(\sinh e^h)}
+			{\sqrt{e^{2k}(\sinh e^h)^2 + e^{-2k}}} \right) \\
+	\end{split}\end{equation*}
+	外部磁場のない状態$h=0$で$\braket{s}\neq0$となれば、それは磁石となる。
+	つまり、自発的対称性の破れが起きることになる。一次元Isingモデルでは
+	$\lim_{h\to0}\braket{s}=0$となり、磁石にはならない。
+
+	ボルツマン重率$W$はは空間$\pm1$に住む粒子が遷移確率$W$に
 	したがって移動していくという描像をとることができる。
 	絵にすると次のようになる。
 	\begin{equation*}\xymatrix@C=6em{
-		s_0 \ar[r]^{V(s_0,s_1)} & s_1 \ar[r]^{V(s_1,s_2)} 
-		& \cdots \ar[r]^{V(s_{N-2},s_{N-1})} 
-		& s_{N-1} \ar@(u,u)[lll]_{V(s_{N-1},s_0)} \\
+		s_0 \ar[r]^{W(s_0,s_1)} & s_1 \ar[r]^{W(s_1,s_2)} 
+		& \cdots \ar[r]^{W(s_{N-2},s_{N-1})}
+		& s_{N-1} \ar@(u,u)[lll]_{W(s_{N-1},s_0)} \\
 	}\end{equation*}
-	この意味でボルツマン重率$V$を転送行列ということもある。
+	この意味でボルツマン重率$W$を転送行列ということもある。
 
 	格子の間隔が一定でなくても同様の議論が成り立ちそうに思うが、
-	そうは問屋が下ろさない。$V$で$k$を明示的に次のように書いて、
-	$V_{k_1}$と$V_{k_2}$のLie括弧を計算すると次のようになり、
+	そうは問屋が下ろさない。$W$で$k$と$h$を明示的に次のように書いて、
 	\begin{equation*}\begin{split}
-		[V_{k_1},V_{k_2}] = (e^{k_1-k_2} - e^{-(k_1-k_2)}) \begin{pmatrix}
-			0 & e^{h} - e^{-h} \\ e^{-h} - e^{h} & 0
+		W(k,h) = e^k\bvec{e^h}{e^{-h}} + e^{-k}\sigma
+		,\quad \bvec{a}{b} := \begin{pmatrix}
+			a & 0 \\ 0 & b
+		\end{pmatrix},\quad \sigma := \begin{pmatrix}
+			0 & 1 \\ 1 & 0
 		\end{pmatrix}
 	\end{split}\end{equation*}
-	$k_1=k_2$または$h=0$でない限り、$V_{k_1}$と$V_{k_2}$は同時に対角化する
+	$W(k_1,h)$と$W(k_2,h)$のLie括弧を計算すると次のようになり、
+	\begin{equation*}\begin{split}
+		\bigl[W(k_1,h),W(k_2,h)\bigr] 
+		&= (e^{k_1-k_2} - e^{k_2-k_1})\left[\bvec{e^h}{e^{-h}},\sigma\right] \\
+		&= (e^{k_1-k_2} - e^{k_2-k_1})(e^h - e^{-h})\bvec{1}{-1}\sigma \\
+	\end{split}\end{equation*}
+	$k_1=k_2$または$h=0$でない限り、$W(k_1,h)$と$W(k_2,h)$は同時に対角化する
 	ことができないことがわかる。
-%s1:一次元Ising模型}
+%s3:Isingモデル}
+%s2:一次元モデル}
+%s1:統計モデル}
 
 \section{三次元回転}\label{s1:三次元回転} %{
 	$\lieso(3)$の既約表現とテンソル積表現の既約分解について書く。
