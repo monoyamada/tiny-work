@@ -5,6 +5,8 @@
 	\newcommand{\Map}{\myop{Map}}
 	\newcommand{\Lin}{\mathcal{L}}
 	\newcommand{\Hol}{\mathcal{H}}
+	\newcommand{\Aut}{\myop{Aut}}
+	\newcommand{\Mat}{\myop{Mat}}
 	%
 	\newcommand{\id}{\myop{id}}
 	\newcommand{\tran}{\mathbf{t}}
@@ -20,13 +22,15 @@
 	\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
 	\newcommand{\ad}{\myop{ad}}
 	\newcommand{\Ad}{\myop{Ad}}
+	\newcommand{\Cn}{\myop{Cn}}
 	%
 	{\setlength\arraycolsep{2pt}
 	%
 \section{Lie代数}\label{s1:Lie代数} %{
+\subsubsection{正規部分群}\label{s3:正規部分群} %{
 	$G$を群とする。任意の$g\in G$に対して写像$g-g^{-1}:G\to G$を$g$による
-	共役という。任意の$G$の元に対する共役が不変になる$G$の部分群を正規部分群
-	という。
+	共役という。
+	任意の$G$の元に対する共役が不変になる$G$の部分群を正規部分群という。
 	\begin{equation*}\begin{split}
 		\text{正規部分群}\; H\subseteq G
 		\xiff{\dfn} ghg^{-1}\in H \quad\text{for all } g\in G,\; h\in H
@@ -44,6 +48,80 @@
 		\text{中心部分群} \implies \text{正規部分群}
 	\end{split}\end{equation*}
 
+	\begin{proposition}[部分群]\label{prop:部分群} %{
+		$G$を群、$H$を空でない$G$の部分集合とする。このとき、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\text{$H$が部分群}
+			\iff ab^{-1}\in H \quad\text{for all } a,b\in H
+		\end{split}\end{equation*}
+	\end{proposition} %prop:部分群}
+	\begin{proof} %{
+		次の式は明らかだから、
+		\begin{equation*}\begin{split}
+			\text{$H$が部分群}
+			\implies ab^{-1}\in H \quad\text{for all } a,b\in H
+		\end{split}\end{equation*}
+		次の式を証明する。
+		\begin{equation*}\begin{split}
+			\text{$H$が部分群}
+			\Leftarrow ab^{-1}\in H \quad\text{for all } a,b\in H
+		\end{split}\end{equation*}
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[単位元] 任意の$a\in H$に対して、命題の仮定より、
+			$1=aa^{-1}\in H$が成り立つから、$1\in H$となることがわかる。
+			\item[逆元] 任意の$a\in H$に対して、$1\in H$だから、
+			命題の仮定より、$a^{-1}=1a^{-1}\in H$が成り立ち、
+			$a^{-1}\in H$となることがわかる。
+			\item[積] 任意の$a,b\in H$に対して、$b^{-1}\in H$だから、
+			命題の仮定より、$ab=a(b^{-1})^{-1}\in H$が成り立ち、
+			$ab\in H$となることがわかる。
+		\end{description} %}
+		したがって、命題が成り立つことがわかる。
+	\end{proof} %}
+
+	\begin{proposition}[部分群の共通集合]\label{prop:部分群の共通集合} %{
+		$G$を群、$H_1$と$H_2$を$G$の部分群とする。
+		共通集合$H_1\cap H_2$もまた部分群となる。
+	\end{proposition} %prop:部分群の共通集合}
+	\begin{proof} %{
+		$H_1\cap H_2$は単位元を含むので空集合ではない。
+		また、$H_1$と$H_2$が部分群だから、任意の$a,b\in H_1\cap H_2$に対して、
+		$ab^{-1}\in H_1$かつ$ab^{-1}\in H_2$となる。
+		したがって、$ab^{-1}\in H_1\cap H_2$となり、命題\ref{prop:部分群}から
+		$H_1\cap H_2$が部分群となることがわかる。
+	\end{proof} %}
+
+	\begin{proposition}[共役は自己同型]\label{prop:共役は自己同型} %{
+		$G$を群とする。任意の$g\in G$に対する共役は$G$の自己同型写像となる。
+		\begin{equation*}\begin{split}
+			gGg^{-1} = G
+		\end{split}\end{equation*}
+	\end{proposition} %prop:共役は自己同型}
+	\begin{proof} %{
+		共役が群準同型であることは明らかである。また、任意の$h_1,h_2\in G$に
+		対して次の式が成り立ち、$1:1$となることもわかる。
+		\begin{equation*}\begin{split}
+			gh_1g^{-1} = gh_2g^{-1}
+			\implies h_1 = h_2
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	\begin{proposition}[共役部分群の共通集合]\label{prop:共役部分群の共通集合} %{
+		$G$を群、$H$を$G$の部分群とする。$H$の共役部分群の共通集合は
+		正規部分群となる。
+		\begin{equation*}\begin{split}
+			\text{部分群 } H \implies \text{ 正規部分群 } \cap_{g\in G} gHg^{-1}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:共役部分群の共通集合}
+	\begin{proof} %{
+		部分集合集合$N:=\cap_{g\in G} gHg^{-1}$とおくと、
+		命題\ref{prop:部分群の共通集合}より、$N$が部分群となることがわかる。
+		任意の$a\in N$に対して、ある$h\in H$と$g\in G$が存在して、$a=ghg^{-1}$
+		と書けるから、任意の$x\in G$に対して、$xax^{-1}=(xg)h(xg)^{-1}\in N$
+		となり、$N$が正規部分群となることがわかる。
+	\end{proof} %}
+%s3:正規部分群}
+\subsubsection{単純群と半単純群}\label{s3:単純群と半単純群} %{
 	群$G$の正規部分群が自明な正規部分群のみになるとき、$G$を単純群という。
 	\begin{equation*}\begin{split}
 		\text{単純群}\; G
@@ -59,25 +137,166 @@
 	\begin{equation*}\begin{split}
 		\text{単純群} \implies \text{半単純群}
 	\end{split}\end{equation*}
-
-	Lie群の正規部分群を随伴表現を通してLie代数の言葉に翻訳することを考える。
-	そのためには、Lie群に対応するLie代数を定義する必要があるが、
-	ここでは微分に関する面倒な議論を避けて、Lie群$G$に対応するLie代数
-	$\frk{g}$を指数写像$\exp:\frk{g}\to G$で'定義'しておく。
+	半単純群という言葉は状況によって定義が異なるようである。
+	Lie群の場合には同値な定義がいくつかあって、そのどれを用いるかという
+	違いしかないが、一般の群に対して定義されている言葉ではないようである。
+%s3:単純群と半単純群}
+\subsubsection{指数写像}\label{s3:指数写像} %{
+	ここでは、線形群$GL_n(\fukuso)$の部分群となるLie群$G$を考える。
+	この場合は、安直に自然対数の底を使って指数写像が定義できる。
 	\begin{equation*}\begin{split}
-		\exp X := 1 + X + \frac{1}{2!}X^2 + \cdots
+		g\approx1\in G\subseteq GL_n(\fukuso) \\
+		\implies \text{ exists matrix } 
+		X\approx0\in gl_n(\fukuso) \text{ such that } g = e^X
+	\end{split}\end{equation*}
+	一般には、群と代数との対応は局所的になっている。通常は、群の原点$1$
+	と代数の原点$0$近傍で対応させる。
+
+	\begin{example}[sl(2)]\label{eg:sl(2)の指数写像} %{
+		$K$を標数$0$の体として、$sl_2$を次のように定義する。
+		\begin{equation*}\begin{split}
+			sl_2 := \set{X\in\Mat_2(K)\bou \tr X = 0}
+		\end{split}\end{equation*}
+		$sl_2$の基底$\set{H,L_\pm}$は次のようにとれ、
+		\begin{equation*}\begin{split}
+			L_+ = \begin{pmatrix}
+				0 & 1 \\ 0 & 0
+			\end{pmatrix},\quad L_- = \begin{pmatrix}
+				0 & 0 \\ 1 & 0
+			\end{pmatrix},\quad H = \begin{pmatrix}
+				1 & 0 \\ 0 & -1
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		次の交換関係を満たす。
+		\begin{equation*}\begin{split}
+			[L_+,L_-] = H,\quad [H,L_\pm] = \pm 2L_\pm
+		\end{split}\end{equation*}
+		この基底系を使うと$sl_2$は次のように書ける。
+		\begin{equation}\label{eq:sl2の座標系}\begin{split}
+			sl_2 = \Set{\begin{pmatrix}
+				w & z_+ \\ z_- & - w
+			\end{pmatrix}\bou z_\pm,w\in\fukuso}
+		\end{split}\end{equation}
+		この座標系を使って指数写像を計算してみると次のようになる。
+		\begin{equation*}\begin{split}
+			& X := W + Z\sigma,\quad W := \bvec{w}{-w},\quad Z := \bvec{z_+}{z_-}
+			,\quad \sigma := \begin{pmatrix}
+				0 & 1 \\ 1 & 0
+			\end{pmatrix} \\
+			&\implies X^2 = W^2 + ZZ^\sigma + (W + W^\sigma)Z\sigma
+				= w^2 + z_+z_- \\
+			&\implies \begin{array}{rcll}
+				e^X &=& \sum_{n\in\sizen}\left(
+					\cfrac{x^n}{(2n)!} + \cfrac{x^n}{(2n+1)!}X\right)
+					& \quad\text{where } x := w^2 + z_+z_- \\
+				&=& (\cosh t) + \cfrac{(\sinh t)}{t}X
+					& \quad\text{where } t := \pm\sqrt{w^2 + z_+z_-}
+			\end{array}
+		\end{split}\end{equation*}
+		$t$は平方根の正をとっても負をとっても右辺は同じ値を与え、
+		$t=0$の極限では右辺は$1+X$となる。
+		\begin{equation}\label{eq:sl2の指数写像}\begin{split}
+			e^X = (\cosh t) + \cfrac{(\sinh t)}{t}X \quad\text{where }
+			X = \begin{pmatrix}
+				w & z_+ \\ z_- & - w
+			\end{pmatrix} \\ t = \sqrt{w^2 + z_+z_-}
+		\end{split}\end{equation}
+	\end{example} %eg:sl(2)の指数写像}
+
+	\begin{example}[su(2)]\label{eg:su(2)の指数写像} %{
+		$su_2$を次のように定義する。
+		\begin{equation*}\begin{split}
+			su_2 := \set{X\in\Mat(2,\fukuso)\bou \tr X = 0 \And X^\dag = - X}
+		\end{split}\end{equation*}
+		$sl_2$の場合と異なり、$su_2$の定義には複素共役が含まれてるので、
+		$su_2$の係数体は複素数に限定される。$su_2$の基底系はPauli行列
+		$\set{\sigma_1,\sigma_2,\sigma_3}$を用いて次のようにとれ、
+		\begin{equation*}\begin{split}
+			\sigma_1 = \begin{pmatrix}
+				0 & 1 \\ 1 & 0
+			\end{pmatrix},\quad \sigma_2 = \begin{pmatrix}
+				0 & -i \\ i & 0
+			\end{pmatrix},\quad \sigma_3 = \begin{pmatrix}
+				1 & 0 \\ 0 & -1
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		次の交換関係を満たす。
+		\begin{equation*}\begin{split}
+			[\sigma_1,\sigma_2] = 2i\sigma_3
+			,\quad [\sigma_2,\sigma_3] = 2i\sigma_1
+			,\quad [\sigma_3,\sigma_1] = 2i\sigma_2
+		\end{split}\end{equation*}
+		この基底系を使うと$su_2$は次のように書ける。
+		\begin{equation}\label{eq:su2の座標系}\begin{split}
+			su_2 = \Set{i\begin{pmatrix}
+				x_3 & x_1 - ix_2 \\ x_1 + ix_2 & - x_3
+			\end{pmatrix}\bou x_i\in\jitu}
+		\end{split}\end{equation}
+		$su_2$は$sl_2$の虚数部をとったような形になっている。
+		この座標系を$sl_2$の指数写像\eqref{eq:sl2の指数写像}に当てはめると、
+		次のようになる。
+		\begin{equation}\label{eq:su2の指数写像}\begin{split}
+			e^X = (\cos r) + \cfrac{(\sin r)}{r}X \quad\text{where }
+			X = \begin{pmatrix}
+				x_3 & x_1 - ix_2 \\ x_1 + ix_2 & - x_3
+			\end{pmatrix} \\ r = \sqrt{x_1^2 + x_2^2 + x_3^2}
+		\end{split}\end{equation}
+	\end{example} %eg:su(2)の指数写像}
+%s3:指数写像}
+\subsubsection{Lie代数と随伴表現}\label{s3:Lie代数と随伴表現} %{
+	パラメーター$t\in\fukuso$を用いて表して、
+	$t$の一次近似したベクトル空間$\frk{g}$に、
+	\begin{equation*}\begin{split}
+		e^{tX} = 1 + X\int_0^tdse^{sX} = 1 + tX + Ot^2
 		\quad\text{for all } X\in\frk{g}
 	\end{split}\end{equation*}
-	そして、群の随伴表現$\Ad:G\to\End\frk{g}$と代数の随伴表現
-	$\ad:\frk{g}\to\End\frk{g}$を次のように定義する。
-	\begin{equation*}\begin{array}{rcll}
-		(\Ad g)Y &:=& gYg^{-1} & \quad\text{for all } g\in G,\; Y\in \frk{g} \\
-		(\ad X)Y &:=& [X,Y] & \quad\text{for all } X,Y\in \frk{g} \\
-	\end{array}\end{equation*}
-	代数の随伴表現は群の随伴表現の一次近似となっている。
+	Lie括弧を定義したものを$G$のLie代数ということにする。
+
+	Lie群$G$の随伴表現$\Ad:G\to\End\frk{g}$を共役によって定義する。
 	\begin{equation*}\begin{split}
-		\Ad\exp X = \id + (\ad X) + OX^2 \quad\text{for all } X\in \frk{g}
+		e^{(\Ad g)X} := ge^Xg^{-1} \quad\text{for all } g\in G,\; X\in\frk{g}
 	\end{split}\end{equation*}
+	また、Lie代数の随伴表現$\ad:\frk{g}\to\End\frk{g}$を$\Ad$の微分に
+	よって定義する。
+	\begin{equation*}\begin{split}
+		(\ad X)Y := \lim_{t\to0}\frac{d}{dt}(\Ad e^{tX})Y
+		\quad\text{for all } X,Y\in\frk{g}
+	\end{split}\end{equation*}
+	$\ad$はLie括弧を用いて次のように書ける。
+	\begin{equation*}\begin{split}
+		(\ad X)Y = [X, Y] \quad\text{for all } X,Y\in\frk{g}
+	\end{split}\end{equation*}
+
+	$BCH$の公式を用いると、任意の$g\in G,\; Y,Z\in\frk{g}$と十分小さな
+	$t\in\fukuso$に対して、次の二つの式が導かれる。
+	\begin{equation*}\begin{split}
+		\ln\left(ge^{tY}e^{tZ}g^{-1}\right)
+		&= \ln\left(e^{t(\Ad g)Y}e^{t(\Ad g)Z}\right) \\
+		&= t(\Ad g)(Y + Z) + \frac{t^2}{2}[(\Ad g)Y, (\Ad g)Z] + Ot^3 \\
+		\ln\left(ge^{tY}e^{tZ}g^{-1}\right)
+		&= \ln\left(ge^{t(Y+Z) + \frac{t}{2}[Y,Z] + Ot^3}g^{-1}\right) \\
+		&= t(\Ad g)(Y + Z) + \frac{t^2}{2}(\Ad g)[Y, Z] + Ot^3 \\
+	\end{split}\end{equation*}
+	$t$の二次の項を比べると次の式が導かれる。
+	\begin{equation*}\begin{split}
+		(\Ad g)[Y,Z] = [(\Ad g)Y, (\Ad g)Z]
+		\quad\text{for all } g\in G,\; Y,Z\in\frk{g}
+	\end{split}\end{equation*}
+	この式は共役が群の自己同型写像になることの反映である。
+	この式で$g=e^{tX}$とおき、$t$の一次の項を取り出すと、
+	Jacobiの恒等式が得られる。
+	\begin{equation*}\begin{split}
+		[X,[Y,Z]] = [[X,Y],Z] + [Y,[X,Z]] \quad\text{for all } X,Y,Z\in\frk{g}
+	\end{split}\end{equation*}
+	代数の随伴表現$\ad$を用いると、これらの式は次のように書くことができる。
+	\begin{equation}\label{eq:随伴表現その一}\begin{array}{rcll}
+		\ad\bigl((\Ad g)Y\bigr) &=& (\Ad g)(\ad Y)(\Ad g^{-1})
+		& \quad\text{for all } g\in G,\; Y\in\frk{g} \\
+		\ad[X,Y] &=& [\ad X,\ad Y] & \quad\text{for all } X,Y\in\frk{g}
+	\end{array}\end{equation}
+	二つ目の式は$\ad$がLie代数の表現になっていることを示している。
+
+	Lie群の正規部分群を随伴表現を通してLie代数の言葉に翻訳することを考える。
 	$\frk{h}\subseteq\frk{g}$を随伴表現の不変部分空間とすると、
 	$\frk{h}$は$G$の正規部分群に対応することがわかる。
 	\begin{equation*}\begin{split}
@@ -90,47 +309,139 @@
 		(\Ad g)Y = 0 \implies ge^Yg^{-1} = e^{(\Ad g)Y} = 1
 		\quad\text{for all } g\in G,\; Y\in\frk{h}
 	\end{split}\end{equation*}
-	まとめると次のように書ける。
-	\begin{table}[htbp] %{
-		\begin{center}\begin{tabular}{ccccl} \hline
-			& Lie群 & Lie代数 & 随伴表現 \\ \hline
-			& 共役作用 & Lie括弧 & 定義 & $(\ad X)Y = [X,Y]$ \\
-			& 正規部分群 & イデアル & 既約でない 
-				& $(\ad\frk{g})\frk{h}\subseteq\frk{h}$ \\
-			& 中心部分群 & 中心イデアル & 忠実でない 
-				& $(\ad\frk{g})\frk{h}=0$ \\
-		\end{tabular}\end{center}
-		\caption{Lie群とLie代数の対応}
-	\end{table} %}
-	ここで、Lie代数$\mathfrak{g}$のイデアル$I$を次のように定義する。
+
+	ここで、Lie代数について、随伴表現に依らない言葉を定義しておく。
+	Lie代数$\frak{g}$のイデアル$I$を次のように定義する。
 	\begin{equation*}\begin{split}
-		\text{部分空間$I\subseteq\mathfrak{g}$がイデアル} 
-		\xiff{\dfn} [g,a]\in I \quad\text{for all } g\in\mathfrak{g},\; a\in I
+		\text{部分空間$I\subseteq\frak{g}$がイデアル} 
+		\xiff{\dfn} [g,a]\in I \quad\text{for all } g\in\frak{g},\; a\in I
 	\end{split}\end{equation*}
-	ゼロ元だけからなる部分Lie代数$\set{0}$と$\mathfrak{g}$自身は常に
-	イデアルとなるので、自明なイデアルという。また、$\mathfrak{g}$のすべての
+	ゼロ元だけからなる部分Lie代数$\set{0}$と$\frak{g}$自身は常に
+	イデアルとなるので、自明なイデアルという。また、$\frak{g}$のすべての
 	元と可換となるイデアルを中心という。
 	\begin{equation*}\begin{split}
-		\text{部分空間$I\subseteq\mathfrak{g}$が中心} 
-		\xiff{\dfn} [g,a]=0 \quad\text{for all } g\in\mathfrak{g},\; a\in I
+		\text{部分空間$I\subseteq\frak{g}$が中心} 
+		\xiff{\dfn} [g,a]=0 \quad\text{for all } g\in\frak{g},\; a\in I
 	\end{split}\end{equation*}
 	$\set{0}$は常に中心となるので、自明な中心という。
-	イデアルと使うとLie代数での単純と半単純を次のように定義することができる。
+	イデアルを使うとLie代数での単純と半単純を次のように定義することができる。
 
-	\begin{definition}[Lie代数での単純と半単純]\label{def:Lie代数での単純と半単純} %{
-		$\mathcal{g}$をLie代数とする。
+	\begin{definition}[Lie代数での単純と半単純]
+	\label{def:Lie代数での単純と半単純} %{
+		$\frak{g}$をLie代数とする。
 		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item $\mathfrak{g}$のイデアルが自明なイデアルに限られるとき、
-			$\mathfrak{g}$を単純Lie代数といい、
-			\item $\mathfrak{g}$の中心イデアルが自明な中心イデアルに限られる
-			とき、$\mathfrak{g}$を半単純Lie代数という。
+			\item $\frak{g}$のイデアルが自明なイデアルに限られるとき、
+			$\frak{g}$を単純Lie代数といい、
+			\item $\frak{g}$の中心イデアルが自明な中心イデアルに限られる
+			とき、$\frak{g}$を半単純Lie代数という。
 		\end{itemize} %}
 	\end{definition} %def:Lie代数での単純と半単純}
 
+	以上をまとめると、群とLie代数との対応は次のようになり、
+	\begin{equation*}\begin{array}{cc}
+		\text{群} & \text{Lie代数} \\ \hline
+		\text{共役} & \text{Lie括弧} \\
+		\text{正規部分群} & \text{イデアル} \\
+		\text{中心部分群} & \text{中心イデアル} \\
+	\end{array}\end{equation*}
+	単純と半単純についての群とLie代数との対応は次のようになる。
+	\begin{equation*}\begin{array}{c|ccc}
+		& \text{群} & \text{Lie代数} & \text{随伴表現} \\ \hline
+		\text{単純} & \text{自明な正規部分群なし} 
+			& \text{自明なイデアルなし} & \text{不変部分空間なし} \\
+		\text{半単純} & \text{自明な中心部分群なし} 
+			& \text{自明な中心イデアルなし} & \text{核部分空間なし} \\
+	\end{array}\end{equation*}
+%s3:Lie代数と随伴表現}
+\subsubsection{Killing形式}\label{s3:Killing形式} %{
+	次の線形写像$\kappa:\frk{g}\otimes\frk{g}\to\fukuso$をKilling形式という。
+	\begin{equation*}\begin{split}
+		\kappa(X\otimes Y) := \tr\bigl((\ad X)(\ad Y)\bigr)
+	\end{split}\end{equation*}
+	トレースの性質$\tr(AB)=\tr(BA)$から$\kappa$は対称になることがわかる。
+	また、随伴表現の性質\eqref{eq:随伴表現その一}から、
+	$\Ad$を省略して$gX:=(\Ad g)X$と書くと、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\kappa\bigl(gX\otimes Y\bigr)
+		&= \tr\biggl((\ad gX)(\ad Y)\biggr)
+		= \tr\biggl(g(\ad X)g^{-1}(\ad Y)\biggr) \\
+		&= \tr\biggl((\ad X)g^{-1}(\ad Y)g\biggr)
+		= \tr\biggl((\ad X)(\ad g^{-1}Y)\biggr) \\
+		&= \kappa\bigl(X\otimes g^{-1}Y\bigr)
+			\quad\text{for all } g\in G,\; X,Y\in\frk{g} \\
+	\end{split}\end{equation*}
+	$\kappa$が$\Ad$不変になることがわかる。
+	\begin{equation*}\begin{split}
+		\kappa\bigl((\Ad g)\otimes\id\bigr)
+		= \kappa\bigl(\id\otimes(\Ad g^{-1})\bigr)
+		\quad\text{for all } g\in G
+	\end{split}\end{equation*}
+	この式を微分すると$\ad$に関する次の式が得られる。
+	\begin{equation*}\begin{split}
+		\kappa\bigl((\ad X)\otimes\id\bigr)
+		+ \kappa\bigl(\id\otimes(\ad X)\bigr) = 0
+		\quad\text{for all } X\in \frk{g}
+	\end{split}\end{equation*}
+
+	Cartanの判定法とは、Killing形式を用いて有限次元Lie環$\frk{g}$の種類を
+	判定する方法で、次の二つのバージョンがある。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[可解性] $\frk{g}$が可解かどうかの判定
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes Y) = 0 
+			\quad\text{for all }X\in\frk{g},\; Y\in[\frk{g},\frk{g}]
+			\iff \text{$\frk{g}$が可解}
+		\end{split}\end{equation*}
+		\item[半単純性] $\frk{g}$が半単純かどうかの判定
+		\begin{equation*}\begin{split}
+			\det\kappa \neq 0 \iff \text{$\frk{g}$が半単純}
+		\end{split}\end{equation*}
+	\end{description} %}
+	どちらの場合も有限次元Lie環に制限されているので、無限次元Lie環の場合は
+	別途判定方法を考える必要があるようである。ここで、Killing形式を定義する
+	目的はCartanの判定法にある。
+
+	随伴表現とKilling形式を簡単なLie代数について調べてみる。
+
+	\begin{example}[sl(2)]\label{eg:sl(2)の随伴表現} %{
+		座標系\eqref{eq:sl2の座標系}を使い、$(L_+,H,L_-)$の順に基底を並べると、
+		随伴表現とKilling形式は次のようになる。
+		\begin{equation*}\begin{split}
+			\ad L_+ = \begin{pmatrix}
+				0 & -2 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0
+			\end{pmatrix},\; \ad L_- = \begin{pmatrix}
+				0 & 0 & 0 \\ -1 & 0 & 0 \\ 0 & 2 & 0
+			\end{pmatrix},\; \ad H = \begin{pmatrix}
+				2 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & -2
+			\end{pmatrix},\; \kappa = \begin{pmatrix}
+				0 & 0 & 4 \\ 0 & 8 & 0 \\ 4 & 0 & 0
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		Killing形式の固有方程式は次のようになり、
+		\begin{equation*}\begin{split}
+			\det(\lambda - \kappa) = (\lambda - 8)(\lambda^2 - 4^2)
+		\end{split}\end{equation*}
+		Killing形式は非退化だが、正定値または負定値でないことがわかる。
+		座標系\eqref{eq:sl2の座標系}を使うと次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes X) = 8(z_+z_-+w^2) \quad\text{for all } X\in sl_2
+		\end{split}\end{equation*}
+	\end{example} %eg:sl(2)の随伴表現}
+
+	\begin{example}[su(2)]\label{eg:su(2)の随伴表現} %{
+		随伴表現とKilling形式は$sl_2$の場合\ref{eg:sl(2)の随伴表現}と同じ
+		になり、座標系\eqref{eq:su2の座標系}を使うと次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes X) = -8\left(x_1^2+x_2^2+x_3^2\right)
+			\quad\text{for all } X\in su_2
+		\end{split}\end{equation*}
+		したがって、$su_2$の場合は、$sl_2$の場合と異なり、Killing形式を用いて
+		ノルムを定義することができる。
+	\end{example} %eg:su(2)の随伴表現}
+
 	\begin{todo}[ここまで]\label{todo:ここまで} %{
-		Lie群$G$とその表現$(\rho,V)$が与えられ、表現空間$V$が
-		内積$\beta$を持つ場合、次のようにすると$G$-不変な内積$\beta_G$
-		が得られる。
+		有限群$G$とその表現$(\rho,V)$が与えられ、表現空間$V$が内積$\beta$を
+		持つ場合、次のようにすると$G$-不変な内積$\beta_G$が得られる。
 		\begin{equation*}\begin{split}
 			\beta_G(v_1, v_2) 
 			:= \frac{1}{|G|}\sum_{g\in G} \beta(\rho_gv_1, \rho_gv_2)
@@ -142,29 +453,7 @@
 			\quad\text{for all } v_1,v_2\in V,\; g\in G
 		\end{split}\end{equation*}
 	\end{todo} %todo:ここまで}
-
-	\begin{note}[随伴表現とJacobiの恒等式]\label{note:随伴表現とJacobiの恒等式} %{
-		Lie代数$\frk{g}$の随伴表現$\ad:\frk{g}\to\End\frk{g}$を次のように
-		定義すると、
-		\begin{equation}\label{eq:随伴表現その一}\begin{split}
-			(\ad X)Y := [X,Y] \quad\text{for all } X,Y\in\frk{g}
-		\end{split}\end{equation}
-		行列の積について次の式が成り立ち、
-		\begin{equation*}\begin{split}
-			(\ad X)(\ad Y)Z = [X,[Y,Z]] \quad\text{for all }X,Y,Z\in\frk{g}
-		\end{split}\end{equation*}
-		Jacobiの恒等式は随伴表現を用いて次のように書ける。
-		\begin{equation*}\begin{array}{ll}
-			[X,[Y,Z]] + [Y,[Z,X]] + [Z,[X,Y]] = 0 
-				& \quad\text{for all } X,Y,Z\in\frak{g} \\
-			\iff (\ad X)(\ad Y)Z - (\ad Y)(\ad Z)Z - (\ad[X,Y])Z = 0
-				& \quad\text{for all } X,Y,Z\in\frak{g} \\
-			\iff [\ad X, \ad Y] = \ad[X, Y]
-				& \quad\text{for all } X,Y\in\frak{g} \\
-		\end{array}\end{equation*}
-		したがって、Jacobiの恒等式は線形写像\eqref{eq:随伴表現その一}が
-		表現になっていることを保証する式と思っても構わない。
-	\end{note} %note:随伴表現とJacobiの恒等式}
+%s3:Killing形式}
 \subsection{線形代数}\label{s2:線形代数} %{
 	対角化可能よりももう少し条件を弱めた三角化可能を定義する。
 	まず、三角行列を定義しておく。
