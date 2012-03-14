@@ -23,30 +23,1157 @@
 	\newcommand{\ad}{\myop{ad}}
 	\newcommand{\Ad}{\myop{Ad}}
 	\newcommand{\Cn}{\myop{Cn}}
+	\newcommand{\lhdeq}{\trianglelefteq}
+	\newcommand{\rhdeq}{\trianglerighteq}
+	%
+	\newcommand{\xytree}{\xymatrix@R=4pt@C=1pt}
+	\newcommand{\sen}{\ar@{-}}
 	%
 	{\setlength\arraycolsep{2pt}
 	%
+\section{メモ}\label{s1:メモ} %{
+	簡単なモデルを使って、Brzozowski微分による微分方程式の摂動計算を、
+	通常の微分による微分方程式と対比させながら調べてみる。
+
+	$\fukuso[t]$を多項式環とし、$\partial$を$t$についての微分、
+	$\delta$を$t$についてのBrzozowski微分とする。
+	$\delta$を$t$と$\partial$を使って書けば、次のように書ける。
+	\begin{equation}\label{eq:Brzozowski微分の表示その一}\begin{split}
+		\delta = \frac{1}{1 + t\partial}\partial
+	\end{split}\end{equation}
+	そして、次の二つの微分方程式を考える。
+	\begin{equation*}\begin{split}
+		\partial x_t = x_t^2,\quad \delta y_t = y_t^2 \\
+	\end{split}\end{equation*}
+	この二つの微分方程式の解は簡単に求まり次のようになる\footnote{
+		この解の形から初期値$x_0$と$y_0$を$1$に正規化してしまった方が
+		よいかもしれない。少なくとも数値計算の場合は、このように正規化
+		した方が単純になる。問題は、オートマトンを作成する場合にこのような
+		正規化が役に立つかどうかである。多項式環の係数が一般の代数の場合、
+		初期値に中心が含まれる場合は、そのままオートマトンを作成すると
+		空遷移が含まれてしまう。現状、作成してしまったオートマトンから
+		空遷移を取り除く簡便な処方箋がないために、オートマトンを作成する段階
+		で空遷移を取り除かなくてはならない。初期値を正規化してしまうと、
+		その部分の処理を忘れた理論をつくることになる。
+	}。
+	\begin{equation*}\begin{split}
+		x_t = \frac{x_0}{1 - x_0t},\quad 
+		y_t = \begin{cases}
+			0, &\text{ iff } y_0 = 0 \\
+			\cfrac{1 - \sqrt{1 - 4ty_0}}{2t}, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation*}
+	$x_0,y_0\in\fukuso$はそれぞれ$t=0$の初期値である。
+	Brzozowski微分の方は、初期値の値よって解が異なってくる。
+	$y_0\neq0$の場合はCatalan数$C_n$の生成関数になる。
+	\begin{equation*}\begin{split}
+		\frac{y_t}{y_0} = \sum_{n\in\sizen} C_n(ty_0)^n
+		,\quad C_n := \frac{1}{n+1}\binom{2n}{n}
+	\end{split}\end{equation*}
+	$y_0=0$の場合は$y_t$は$0$にとどまり続ける\footnote{
+		任意の$n\in\sizen$に対して$\delta y_t=y_t^{n+1}$の解は、
+		$\lim_{t\to0}y_t=y_0^{n+1}$だから、初期値$y_0$が$0$ならば$y_t=0$となる
+		ことがわかる。また、微分方程式の解が一意に定まることから、代数方程式
+		$y_t=1+ty_t^{n+1}$の$n+1$個ある解で、$t=0$で正則な解は唯一つ定まるの
+		ではないかと予想される。
+	}。したがって、以下では$y_0\neq0$と仮定する\footnote{
+		BNFによる文法定義において、$X=aX=aaa\cdots$のような有限長の文字列に
+		決してマッチしない文法を、微分方程式の初期値が$0$でないという条件で
+		排除することができる。微分方程式の初期値が$0$の場合は、意味のある解
+		が得られない。このことは、モノイドから群を分数によって構成する方法を
+		思い起こさせる（Grothendieckの構成方法）。
+		分数によって群を構成する場合、$x/0$という分数は定義できるが、その場合、
+		出来上がった群は自明な群になってしまう。一方、なんとなく分数を定義して
+		おいて、後から大小関係に照らし合わせると、$x/0$は無限大になっている
+		ことがわかる。
+	}。
+
+	それぞれの解$x_t,y_t$を次の形に級数展開すると、
+	\begin{equation*}\begin{split}
+		x_t = \sum_{n\in\sizen} \frac{t^n}{n!}x_n,\quad 
+		y_t = \sum_{n\in\sizen} t^ny_n
+	\end{split}\end{equation*}
+	その係数は次の漸化式を満たす。
+	\begin{equation}\label{eq:係数の漸化式その一}\begin{split}
+		x_{m+1} = \sum_{r=0}^m \binom{m}{r}x_rx_{m-r}
+		,\quad y_{m+1} = \sum_{r=0}^m y_ry_{m-r}
+	\end{split}\end{equation}
+	$\gamma_\partial:x_n\mapsto x_{n+1}$、
+	$\gamma_\delta:y_n\mapsto y_{n+1}$という係数を一つ移動する写像とすると、
+	$m$を$\fukuso$の通常の積、$\myop{du}:c\mapsto c\otimes c$をコピーとして、
+	任意の初期値に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\gamma_\partial^{m+1}
+		= m(\gamma_\partial\otimes\id + \id\otimes\gamma_\partial)^m\myop{du}
+		,\quad\gamma_\delta^{m+1}
+		= \sum_{r=0}^m m(\gamma_\delta^r\otimes\gamma_\delta^{m-r})\myop{du}
+	\end{split}\end{equation*}
+	$\Delta\gamma_\partial$を次のように定義すると、
+	\begin{equation}\label{eq:微分の場合その一}\begin{split}
+		\Delta\gamma_\partial := 
+		= \gamma_\partial\otimes\id + \id\otimes\gamma_\partial
+		\implies \gamma_\partial^{m+1} &= m(\Delta\gamma_\partial)^m\myop{du}
+	\end{split}\end{equation}
+	次のような手順で解の係数$x_n$が順次求まる。
+	\begin{equation*}\xymatrix{
+		x_0 \ar@{|->}[dr]_{\myop{du}} \ar@{|->}[r]^{\gamma_\partial}
+		& x_1 \ar@{|->}[r]^{\gamma_\partial} 
+		& x_2 \ar@{|->}[r]^{\gamma_\partial} 
+		& x_3 \ar@{|->}[r]^{\gamma_\partial} 
+		& \cdots \\
+		& \myop{du}x_0 \ar@{|->}[u]_m \ar@{|->}[r]^{\Delta\gamma_\partial}
+		& (\Delta\gamma_\partial)\myop{du}x_0 \ar@{|->}[u]_m
+			\ar@{|->}[r]^{\Delta\gamma_\partial}
+		& (\Delta\gamma_\partial)^2\myop{du}x_0 \ar@{|->}[u]_m
+			\ar@{|->}[r]^{\Delta\gamma_\partial}
+		& \cdots \\
+	}\end{equation*}
+	これはEular法による微分方程式の解の求め方の一例である。
+	一方、$\delta$の方は一見$\partial$のようにうまくいかないように
+	思えるが、Brzozowski微分の積との交換関係を思い出すと、
+	\begin{equation*}\begin{split}
+		\delta m = m(\delta\otimes\id + \pi_0\otimes\delta)
+		\quad\text{where}\quad \pi_0t^m := \jump{m=0}t^m
+	\end{split}\end{equation*}
+	次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		(\delta\otimes\id + \pi_0\otimes\delta)^m = \delta^m\otimes\id 
+		+ \sum_{r=0}^{m-1} (\pi_0\delta^r)\otimes\delta^{m-r}
+	\end{split}\end{equation*}
+	$\pi_0$の双対に相当する作用素$p_0:x_m\mapsto\jump{m=0}x_m$を用いて、
+	$\Delta\gamma_\delta$を次のように定義すれば、
+	\begin{equation*}\begin{split}
+		\Delta\gamma_\delta := \gamma_\delta\otimes\id
+			+ p_0\otimes\gamma_\delta
+	\end{split}\end{equation*}
+	次の式から、
+	\begin{equation}\label{eq:Brzozowskiの解析性その一}\begin{split}
+		(\Delta\gamma_\delta)^m = \gamma_\delta\otimes\id 
+		+ \sum_{r=0}^{m-1} \gamma_\delta^rp_0\otimes\gamma_\delta^{m-r} \\
+	\end{split}\end{equation}
+	次の式が成り立ち、
+	\begin{equation}\label{eq:Brzozowskiの解析性その二}\begin{split}
+		(\Delta\gamma_\delta)^m(y_0\otimes-)
+		= \sum_{r=0}^m(\gamma_\delta^r\otimes\gamma_\delta^{m-r})(y_0\otimes-)
+	\end{split}\end{equation}
+	$\partial$と同じ手順で解の係数を順次求めることができることがわかる。
+	\begin{equation*}\begin{split}
+		\Delta\gamma_\delta
+		:= \gamma_\delta\otimes\id + p_0\otimes\gamma_\delta
+		\implies \gamma_\delta^{m+1}y_0 
+		&= m(\Delta\gamma_\delta)^m\myop{du}y_0
+	\end{split}\end{equation*}
+	ここで、この式は$\partial$の場合\eqref{eq:微分の場合その一}と異なり、
+	$y_0$に作用する時のみ成り立つことに注意する。
+	式\eqref{eq:Brzozowskiの解析性その一}から
+	式\eqref{eq:Brzozowskiの解析性その二}を導き出すところである。
+	Brzozowski微分の表示\eqref{eq:Brzozowski微分の表示その一}から、
+	$\delta$は時刻$t$の並進に対して不変でない。
+	\begin{equation*}\begin{split}
+		\frac{1}{1 + t\partial}\partial \xmapsto{t\mapsto t + c}
+		\frac{1}{1 + (t+c)\partial}\partial
+		\quad\text{where } c\in\jitu
+	\end{split}\end{equation*}
+	ある特定の時刻でのみ対称性\eqref{eq:Brzozowskiの解析性その二}が
+	現れることは、$\delta$は時刻$t$の並進に対して不変でないことに
+	起因していると思われる。
+
+	Eular法を微分で書いてみる。$\myop{du}$を次のように再定義すると、
+	\begin{equation*}\begin{split}
+		\myop{du}f = f\otimes f \quad\text{for all } f\in\fukuso[t]
+	\end{split}\end{equation*}
+	$\partial x_t=x_t^2$に対するEular法は次の式にまとめることができる。
+	\begin{equation*}\begin{split}
+		x_t\in\ker(\partial - m\myop{du})
+		&\implies x_t\in\ker\bigl(
+			\partial^{m+1} - m(\Delta\partial)^m\myop{du}\bigr) \\
+		&\implies \lim_{t=0}\partial^{m+1}x_t 
+			= \lim_{t=0}m(\Delta\partial)^m\myop{du}x_t \\
+	\end{split}\end{equation*}
+	この式の最後の式が解の係数の漸化式に対応する。
+	Brzozowski微分も同じである。
+
+	積分を使って微分方程式の解を形式的に表してみる。
+	$\partial^{-1}$と$\delta^{-1}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\partial^{-1}t^m = (m+1)^{-1}t^{m+1},\quad \delta^{-1}t^m = t^{m+1}
+	\end{split}\end{equation*}
+	すると、$\pi_+:t^m\mapsto\jump{1\le m}t^m$として、次の式が成り立ち、
+	\begin{alignat*}{2}
+		\partial\partial^{-1} &= 1, &\quad \partial^{-1}\partial &= \pi_+ \\
+		\delta\delta^{-1} &= 1, &\quad \delta^{-1}\delta &= \pi_+
+	\end{alignat*}
+	微分方程式の形式解を次のように書くことができる。
+	\begin{equation*}\begin{split}
+		x_t = x_0 + \partial^{-1} m(x_t\otimes x_t),\quad
+		y_t = y_0 + \delta^{-1} m(y_t\otimes y_t)
+	\end{split}\end{equation*}
+	$\partial^{-1}$と$\delta^{-1}$の部分積分を計算すると次のようになる。
+	\begin{equation*}\begin{array}{rclcl}
+		\pi_+m(\partial^{-1}\otimes\partial^{-1})
+		&=& \partial^{-1}\partial m(\partial^{-1}\otimes\partial^{-1})
+		&=& \partial^{-1}m(\partial^{-1}\otimes\id + \id\otimes\partial^{-1}) \\
+		\pi_+m(\delta\otimes\delta^{-1})
+		&=& \delta^{-1}\delta m(\delta^{-1}\otimes\delta^{-1})
+		&=& \delta^{-1}m(\id\otimes\delta^{-1}) \\
+	\end{array}\end{equation*}
+	$\pi_+m(\partial\otimes\partial)=m(\partial\otimes\partial)$に
+	注意すると、$\partial^{-1}$は重み$0$のRota-Baxter作用素になるのに
+	対して、$\delta^{-1}$はRota-Baxter作用素にはならないように思われる。
+	しかし、$\delta^{-1}m=m(\id\otimes\delta^{-1})$が成り立つから、
+	$\delta^{-1}$は重み$-1$のRota-Baxter作用素になることがわかる。
+	\begin{equation*}\begin{array}{rcll}
+		m(\partial^{-1}\otimes\partial^{-1})
+		&= \partial^{-1}m(\partial^{-1}\otimes\id + \id\otimes\partial^{-1}) \\
+		m(\delta^{-1}\otimes\delta^{-1}) + \delta^{-1}m
+		&= \delta^{-1}m(\delta^{-1}\otimes\id + \id\otimes\delta^{-1})
+	\end{array}\end{equation*}
+	一般に、重み$\lambda$のRota-Baxter作用素$P$は、
+	積の記号$m$を省略して書くと、次の性質（Spitzerの恒等式）を満たす
+	\cite{GuoIntro}。
+	\begin{equation}\label{eq:Spitzerの恒等式その一}\begin{split}
+		b = 1 + P(ba) \implies 
+		\left\{\begin{split}
+			b &= \exp\bigl(P\frac{1}{\lambda}\ln(1 + \lambda a)\bigr) \\
+			\exp\bigl(P\frac{1}{\lambda}\ln(1 + \lambda a)\bigr)
+			&= \sum_{n\in\sizen} \underbrace{P(P(\cdots(Pa)\cdots)a)a}_{n}
+		\end{split}\right.
+	\end{split}\end{equation}
+	ここで、重みが$0$と$-1$の場合は次のようになっている。
+	\begin{equation*}\begin{split}
+		\frac{1}{1 - Pa} = (Pa)^* \xfrom{\lambda=-1}
+		\exp\bigl(P\frac{1}{\lambda}\ln(1 + \lambda a)\bigr)
+		\xto{\lambda=0} \exp(Pa)
+	\end{split}\end{equation*}
+	今考えている微分方程式の解にSpitzerの恒等式を適用すると、
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		x_t = \exp(\partial^{-1}x_t)x_0,\quad y_t = (\delta^{-1}y_t)^*y_0
+	\end{split}\end{equation*}
+	この式は解の対称性を表している。明示的に書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\frac{x_0}{1-x_0t} = \exp\left(\int_0^tds\frac{x_0}{1-x_0s}\right)x_0
+		,\quad \frac{1 - \sqrt{1 - 4ty_0}}{2t} 
+		= \frac{y_0}{1 - t\cfrac{1 - \sqrt{1 - 4ty_0}}{2t}}
+	\end{split}\end{equation*}
+	Spitzerの恒等式\eqref{eq:Spitzerの恒等式その一}は$a$と$b$が非可換でも
+	成り立ち、形式言語理論における左再帰の消去と全く同じ形をしている。
+	両者は同じものだろう。
+%s1:メモ}
+\section{一変数シャッフル積}\label{s1:一変数シャッフル積} %{
+	一変数だけの場合のq-シャッフル積を調べる。一変数だけの場合は、積や余積
+	の係数だけが問題になる。
+
+\subsection{積と余積}\label{s2:積と余積} %{
+	多項式環$\fukuso[t]$上のq-シャッフル積$m_q:=\mybiop{\shuffle_q}$を
+	次のように定義する。
+	\begin{align*}
+		t^{m+1}\shuffle_qt^{n+1}
+		&:= t(t^m\shuffle_qt^{n+1} + q^{m+1}t^{m+1}\shuffle_qt^n)
+		& \text{for all }m,n\in\sizen \\
+		t^{m}\shuffle_q1 &:= t^m = 1\shuffle_qt^{m}
+		& \text{for all } m\in\sizen
+	\end{align*}
+	そして、q-自然数$(n)_q$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(n)_q := \frac{1-q^n}{1-q} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	このq-自然数の定義はLie環の量子変形で使われるq-自然数と異なる定義になって
+	いるが、ほぼ同じ\footnote{
+		Lie群の量子変形の場合、次のように定義されたものをq-整数という。
+		\begin{equation*}\begin{split}
+			[n]_q := \frac{q^n-q^{-n}}{q-q^{-1}} \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		この定義では、$[-n]_q=-[n]_q$となり、$[n]_1=n$となり、$[n]_0$は
+		$n=0$以外は$\pm\infty$の入り混じった不定値となる。
+	}性質を満たす。
+	\begin{equation*}\begin{split}
+		(m + n)_q &= (m)_q + q^m(n)_q \\
+		(mn)_q &= (m)_q(n)_{q^m} 
+	\end{split}
+		 \quad\text{for all } m,n\in\sizen
+	\end{equation*}
+	q-階乗とq-二項係数を次のように定義する。
+	\begin{align*}
+		(0)_q^! &:= 1 \\
+		(n)_q^! &:= (n)_q(n-1)_q\cdots(0)_q 
+			& \text{for all } n\in\sizen \\
+		\binom{m+n}{m}_q &:= \frac{(m+n)_q^!}{(m)_q^!(n)_q^!} 
+			& \text{for all } m,n\in\sizen
+	\end{align*}
+	すると、次の式が成り立つ。
+	\begin{equation}\label{eq:シャッフル積その一}\begin{split}
+		t^m\shuffle_q t^n = \binom{m+n}{m}_qt^{m+n}
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation}
+	\begin{proof} %{
+		シャッフル積の定義から、$c_{mn}$を$t$を含まない$q$の多項式として、
+		$t^m\shuffle_qt^n=c_{mn}t^{m+n}$と書けることがわかる。定義から直接
+		計算することで$m+n\le1$の場合に命題が成り立つことがわかる。
+		\begin{align*}
+			t^0\shuffle_qt^0 = \frac{(0)_q^!}{(0)_q^!(0)_q^!} 
+			= \binom{0}{0}_q,\quad
+			t^1\shuffle_qt^0 = t^0\shuffle_qt^1
+			= \frac{(1)_q^!}{(0)_q^!(1)_q^!} = \binom{1}{0}_q
+		\end{align*}
+		$1\le N\in\sizen$として、すべての$m+n\le N$で命題が成り立つ仮定する。
+		すると、$m,n\in\sizen$を$m+n+1=N$として、q-シャッフル積の定義と
+		帰納法の仮定から、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			t^{m+1}\shuffle_qt^{n+1} 
+			&= t(t^m\shuffle_qt^{n+1} + q^{m+1}t^{m+1}\shuffle_qt^n) \\
+			&= t\left(\binom{m+n+1}{m}_q + q^{m+1}\binom{m+n+1}{m+1}_q\right) \\
+		\end{split}\end{equation*}
+		ここで、q-二項係数について次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			\binom{m+n+1}{m}_q + q^{m+1}\binom{m+n+1}{m+1}_q
+			&= \binom{m+n+1}{m}_q
+				\left(1 + q^{m+1}\frac{(n+1)_q}{(m+1)_q}\right) \\
+			&= \binom{m+n+1}{m}_q\frac{(m+n+2)_q}{(m+1)_q} \\
+			&= \binom{m+n+2}{m+1}_q \\
+		\end{split}\end{equation*}
+		次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			t^{m+1}\shuffle_qt^{n+1} = \binom{m+n+2}{m+1}_q \\
+		\end{split}\end{equation*}
+		したがって、帰納法の仮定が$N+1$の時も成り立つことがわかる。
+	\end{proof} %}
+	この命題から、一変数q-シャッフル積は可換になることがわかる（当然？）。
+	\begin{equation*}\begin{split}
+		t^m\shuffle_qt^n = t^n\shuffle_qt^m \quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+
+	q-シャッフル積と代数的に双対な余積$\Delta_q$を次の式によって定義する。
+	\begin{equation*}\begin{split}
+		\Delta_qt = t\otimes1 + 1\otimes t
+	\end{split}\end{equation*}
+	すると、式\eqref{eq:シャッフル積その一}を使うと、$\Delta_q$は次のように
+	なることがわかる。
+	\begin{equation}\label{eq:シャッフル積その二}\begin{split}
+		\Delta_qt^m = \sum_{i=0}^m \binom{m}{i}\binom{m}{i}_q^{-1} 
+		t^i\otimes t^{m-i}
+		\quad\text{for all } m\in\sizen
+	\end{split}\end{equation}
+	通常の二項係数を分子、q-二項係数を分母とする分数が係数となっている。
+	二項係数及びq-二項係数の対称性から、$\Delta_q$は余可換になることが
+	わかる。
+
+	今の場合、$m_q$は可換、$\Delta_q$は余可換になるが、それは変数が一つしか
+	ないからであり、非可換な変数が二つ以上ある場合は、$m_q$は非可換、
+	$\Delta_q$は非余可換になる。
+
+	合成$m_q\Delta_q$は次のような簡単な形で書けるのに対して、
+	\begin{equation}\label{eq:mDeltaその一}\begin{split}
+		m_q\Delta_qt^m = (2t)^m \quad\text{for all } m\in\sizen
+	\end{split}\end{equation}
+	合成$\Delta_qm_q$は次のように簡単な形に落ちない。
+	\begin{equation*}\begin{split}
+		\Delta_qm_q(t^m\otimes t^n) = \binom{m+n}{m}_q\sum_{i=0}^{m+n} 
+		\binom{m+n}{i}\binom{m+n}{i}_q^{-1} t^i\otimes t^{m+n-i} \\
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	Fock空間での$\Delta_qm_q$の行列要素の計算は後述\eqref{eq:Deltamその一}
+	する。
+%s2:積と余積}
+\subsection{作用素}\label{s2:作用素} %{
+	微分と積分を定義しよう。
+	ここでは、内積を用いて微分と積分を定義するので、自由ボゾン
+	$\eta,\eta^\dag$を用いてそれらを定義することにする。
+	自由ボゾンは次の交換関係と真空で定義される。
+	\begin{equation*}\begin{split}
+		\eta^\dag\eta = 1,\quad \bra{0}\eta = 0 = \eta^\dag\ket{0}
+	\end{split}\end{equation*}
+	特に断らない限り$\ket{m}$や$\bra{m}$は粒子数状態
+	\begin{equation*}\begin{split}
+		\ket{m} := \eta^m\ket{0},\quad \bra{m} := \bra{0}(\eta^\dag)^m
+		\quad\text{for all } m\in\sizen
+	\end{split}\end{equation*}
+	を表すことにする。集合$\set{\ket{m}\bou m\in\sizen}$で張られるベクトルを
+	$V$、その双対空間を$V^\dag$と書く。線形写像$-^\dag:V\to V^\dag$を
+	$-^\dag:\eta\mapsto\eta^\dag$と定義すると、$-^\dag$は代数反準同型
+	となり、任意の$n\in\sizen$に対して$(\eta^n)^\dag=(\eta^\dag)^n$となる。
+
+	Fock空間$V$から多項式環$\fukuso[t]$へはコヒーレント状態を用いて変換する
+	ことができる。
+	\begin{equation*}\begin{split}
+		\braket{0|(t\eta^\dag)^*|m} = t^m 
+		\quad\text{for all } n\in\sizen,\; t\in\fukuso
+	\end{split}\end{equation*}
+	コヒーレント状態を次のように書く事にする。
+	\begin{equation*}\begin{split}
+		\ket{t}_0 := (t\eta)^*\ket{0},\quad \bra{t}_0 := \bra{0}(t\eta^\dag)^*
+		\quad\text{for all } t\in\fukuso
+	\end{split}\end{equation*}
+	コヒーレント状態が準同型になるように、$V$に積$m_q$と余積$\Delta_q$を
+	定義しよう。
+	\begin{equation*}\xymatrix{
+		V\otimes V \ar[d]^{\bra{t}_0\otimes\bra{t}_0} \ar[r]^{m_q} 
+			& V \ar[d]^{\bra{t}_0} \\
+		\fukuso[t]\otimes \fukuso[t] \ar[r]^{m_q} & \fukuso[t]
+	},\quad\xymatrix{
+		V\otimes V \ar[d]^{\bra{t}_0\otimes\bra{t}_0} 
+			& V \ar[d]^{\bra{t}_0} \ar[l]_{\Delta_q} \\
+		\fukuso[t]\otimes \fukuso[t] & \fukuso[t] \ar[l]^{\Delta_q}
+	}\end{equation*}
+	多項式のq-シャッフル積\eqref{eq:シャッフル積その一}とその双対余積
+	\eqref{eq:シャッフル積その二}から、$V$の$m_q$と$\Delta_q$は次のように
+	定義すればよいことがわかる。
+	\begin{alignat}{2}\label{eq:シャッフル積その三}
+		m_q\ket{m}\otimes\ket{n} &= \binom{m+n}{m}_q\ket{m+n}
+		& \quad\text{for all } m,n\in\sizen \\
+		\Delta_q\ket{m} &= \sum_{r=0}^m \binom{m}{r}\binom{m}{r}_q^{-1} 
+			\ket{r}\otimes\ket{m-r}
+		& \quad\text{for all } m\in\sizen
+	\end{alignat}
+	双対空間$V^\dag$への作用を計算すると次のようになる。
+	\begin{alignat}{2}\label{eq:シャッフル積その四}
+		\bra{m}m_q &= \sum_{r=0}^m \binom{m}{r}_q \bra{r}\otimes\bra{m-r}
+		& \quad\text{for all } m\in\sizen \\
+		\bra{m}\otimes\bra{n}\Delta_q &= \binom{m+n}{m}\binom{m+n}{m}_q^{-1} 
+			\bra{m+n} & \quad\text{for all } m\in\sizen
+	\end{alignat}
+	ここでは、写像$V\to\fukuso[t]$を固定して$V$にq-シャッフル積を導入したが、
+	他にもある導入する方法はある。例えば、$V$の余積を固定して、畳み込みに
+	よって$V^\dag$に積を導入してもよい。
+
+	$\eta_q,\eta_q^\Delta\in\End V$を次のように定義する。
+	\begin{equation}\begin{split}\label{eq:生成元の定義}
+		\eta_qf &:= m_q\ket{1}\otimes f \\
+		\bra{1}\otimes f^\dag\Delta_q &:= f^\dag\eta_q^\Delta
+	\end{split}
+		\quad\text{for all } f\in V
+	\end{equation}
+	成分で書くと、任意の$n\in\sizen$に対して次のようになり、
+	\begin{alignat}{2}\label{eq:生成元の作用その一}
+		\eta_q\ket{n} &= (n+1)_q\ket{n+1}
+		,&\quad \bra{n}\eta_q &= \jump{1\le n} (n)_q\bra{n-1} \\
+		\bra{n}\eta_q^\Delta &= \frac{n+1}{(n+1)_q}\bra{n+1}
+		,&\quad \eta_q^\Delta\ket{n} &= \jump{1\le n} \frac{n}{(n)_q}\ket{n-1}
+	\end{alignat}
+	任意の$m,n\in\sizen$に対して次のようになる。
+	\begin{equation}\label{eq:生成元の作用その二}\begin{split}
+		\eta_q^m\ket{n} &= \binom{m+n}{n}_q\ket{m+n} \\
+		\bra{n}(\eta_q^\Delta)^m &= \binom{m+n}{n}\binom{m+n}{n}_q^{-1}
+			\bra{m+n} \\
+		\bra{n}\eta_q^m &= \jump{m\le n} \binom{n}{m}_q\bra{n-m} \\
+		(\eta_q^\Delta)^m\ket{n} &= \jump{m\le n} 
+			\binom{n}{m}\binom{n}{m}_q^{-1}\ket{n-m}
+	\end{split}\end{equation}
+	したがって、積と余積を粒子数状態で表すことができる。
+	\begin{equation}\label{eq:作用素で表した積と余積その一}\begin{split}
+		m_q &= \sum_{m,n\in\sizen} \eta_q^m\ket{n}\bra{m}\otimes\bra{n} \\
+		\Delta_q &= \sum_{m,n\in\sizen} 
+			\ket{m}\otimes\ket{n}\bra{n}(\eta_q^\Delta)^m \\
+	\end{split}\end{equation}
+	また、$\eta_q$と$\eta_q^\Delta$の定義から、次の正準交換関係が得られ、
+	\begin{equation}\label{eq:正準交換関係その一}\begin{split}
+		\eta_q^\Delta\eta_q = \eta_q\eta_q^\Delta + \id
+	\end{split}\end{equation}
+	正準交換関係と式\eqref{eq:作用素で表した積と余積その一}から、
+	次のLeibnitz則に似た次の式が得られる。
+	\begin{equation}\label{eq:ライプニッツ則その一}\begin{split}
+		\eta_q^\Delta m_q
+		& = m_q(\eta_0^\Delta\otimes\id + \id\otimes\eta_q^\Delta) \\
+		\Delta_q\eta_q
+		& = (\eta_q\otimes\id + \id\otimes\eta_1)\Delta_q \\
+	\end{split}\end{equation}
+	$\eta_q^\Delta m_q$の交換関係には$\eta_0^\Delta$、
+	$\Delta_q\eta_q$の交換関係には$\eta_1$が入ってくることに注意する。
+
+	ここで、$m_q\Delta_q$と$\Delta_qm_q$を計算しておく。まず、$m_q\Delta_q$
+	から計算する。式\eqref{eq:生成元の作用その二}から、次の計算が得られて、
+	\begin{equation*}\begin{split}
+		\eta_q^m(\eta_q^\Delta)^m\ket{n} = \jump{m\le n}\binom{n}{m}\ket{n}
+		\quad\text{for all }m,n\in\sizen
+	\end{split}\end{equation*}
+	$m_q\Delta_q$が次のように求まる。
+	\begin{equation}\label{eq:mDeltaその二}\begin{split}
+		m_q\Delta_q = \sum_{m\in\sizen} \eta_q^m(\eta_q^\Delta)^m = 2^N
+	\end{split}\end{equation}
+	ここで、$N$は粒子数を勘定する作用素で次のように定義される。
+	\begin{equation}\label{eq:粒子数演算子その一}\begin{split}
+		N := \sum_{n\in\sizen} n\ket{n}\bra{n} = \eta_q\eta_q^\Delta
+	\end{split}\end{equation}
+	この$N$のことを粒子数演算子ということにする。粒子数演算子を用いると、
+	$\eta_q$と$\eta_q^\Delta$の交換関係\eqref{eq:正準交換関係その一}は
+	次のように書ける。
+	\begin{equation}\label{eq:正準交換関係その二}\begin{split}
+		\eta_q^\Delta\eta_q = N + 1
+	\end{split}\end{equation}
+	$N$を$\eta_q$と$\eta_q^\Delta$で表した場合でも$q$には依存しない。
+	ここで求めた結果は多項式に対して求めた結果\eqref{eq:mDeltaその一}
+	に一致する。次に、$\Delta_qm_q$を計算する。粒子数状態での行列要素は
+	次のように書ける。
+	\begin{equation*}\begin{split}
+		\Delta_qm_q &= \sum_{m,n,r,s\in\sizen}
+			\ket{m}\otimes\ket{n}C_{mn}^{rs}\bra{r}\otimes\bra{s} \\
+		C_{mn}^{rs} &:= \bra{n}(\eta_q^\Delta)^m\eta_q^r\ket{s} \\
+	\end{split}\end{equation*}
+	正準交換関係\eqref{eq:正準交換関係その二}から、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(\eta_q^\Delta)^m\eta_q^m &= \binom{N+m}{N} \\
+		\binom{N+m}{N} &:= (N+m)(N+m-1)\cdots(N+1) \\
+	\end{split}
+		\quad\text{for all } m\in\sizen
+	\end{equation*}
+	この式を使って場合分けによって行列要素$C_{mn}^{rs}$を求める。
+	\begin{equation*}\begin{split}
+		C_{mn}^{rs} = \begin{cases}
+			\jump{m+n=r+s}\binom{n+r}{n}\binom{s}{m-r}\binom{s}{m-r}_q^{-1}
+				, &\text{ iff } m\ge r \\
+			\jump{m+n=r+s}\binom{n+m}{n}\binom{s}{r-m}\binom{s}{r-m}_q^{-1}
+				, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation*}
+	場合分けをまとめると次のように書ける。
+	\begin{equation}\label{eq:Deltamその一}\begin{split}
+		\Delta_qm_q &= \sum_{m,n,r,s\in\sizen}
+			\ket{m}\otimes\ket{n}C_{mn}^{rs}\bra{r}\otimes\bra{s} \\
+		C_{mn}^{rs} &:= \bra{n}(\eta_q^\Delta)^m\eta_q^r\ket{s} 
+			= \jump{m+n=r+s}D_{mn}^{rs} \\
+		D_{mn}^{rs} &:= \binom{n+\max(m,r)}{n}
+			\binom{s}{|m-r|}\binom{s}{|m-r|}_q^{-1}
+	\end{split}\end{equation}
+	この式には、リー環$sl_2$のテンソル積表現を既約分解するときに現れる係数、
+	最大値$max(*,*)$と差$|*-*|$、が現れるている。どこにでも現れそうな関数
+	なので、表現の既約分解と関係するかどうかわからないが、もしかすると、
+	q-Weyl代数のテンソル積表現を既約分解に関わっているのかもしれない。
+	既にq-Weyl代数の既約表現は分類されていて、
+	論文\cite{2012arXiv1203.1959H}から辿ることができる。
+
+	$I_q$と$I_q^\Delta$を次のように定義すると、$\eta_q=\eta I_q$と
+	$\eta_q^\Delta=I_q^\Delta\eta^\dag$と書くことができる。
+	\begin{alignat}{2}\label{eq:Iの定義その一}
+		I_q &:= \sum_{n\in\sizen} (n+1)_q\ket{n}\bra{n} &&= (N+1)_q \\
+		I_q^\Delta &:= \sum_{n\in\sizen} \frac{n+1}{(n+1)_q}\ket{n}\bra{n}
+		&&= \frac{N+1}{(N+1)_q}
+	\end{alignat}
+	$I_q$と$I_q^\Delta$は共に正則なエルミート作用素である。
+	$q=0$でも$I_q\neq I_q^\Delta$となることに注意する。
+	$I_q$と$I_q^\Delta$は次のように異なる$q$でそれぞれ可換になる。
+	\begin{equation*}\begin{split}
+		I_pI_q = I_qI_p,\quad I_p^\Delta I_q^\Delta = I_q^\Delta I_p^\Delta
+		,\quad I_pI_q^\Delta = I_q^\Delta I_p
+	\end{split}\end{equation*}
+	$I_q$は$\eta$と$\eta^\dag$で書き直すことができる。
+	\begin{equation}\label{eq:Iqその一}\begin{split}
+		I_q &= \left\{\begin{matrix}
+			& ( & 1 & & & & & ) & \ket{0}\bra{0} \\
+			+ & ( & 1 & + & q & & & ) & \ket{1}\bra{1} \\
+			+ & ( & 1 & + & q & + & q^2 & ) & \ket{2}\bra{2} \\
+			+ & \cdots \\
+		\end{matrix}\right. \\
+		&= \sum_{n\in\sizen} \biggl(\ket{n}\bra{n} + q\ket{n+1}\bra{n+1} 
+			+ q^2\ket{n+2}\bra{n+2} + \cdots\biggr) \\
+		&= \sum_{n\in\sizen} q^n\eta^n(\eta^\dag)^n \\
+	\end{split}\end{equation}
+	ここで、最後にまとめ上げるところで次の式を使った。
+	\begin{equation*}\begin{split}
+		\eta^n(\eta^\dag)^n = \sum_{m\in\sizen}\ket{m+n}\bra{m+n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	式\eqref{eq:Iqその一}を使うと、$I_q$に対してKleeneスターに似た
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		I_q = \id + q\eta I_q\eta^\dag
+	\end{split}\end{equation*}
+	$I_q$と$I_q^\Delta$の定義\eqref{eq:Iの定義その一}より、
+	次の交換関係が得られる。
+	\begin{equation*}\begin{split}
+		I_q^\Delta I_q = N + 1 = I_q^\Delta I_q
+	\end{split}\end{equation*}
+	$N+1$は正則なエルミート作用素で$I_q$及び$I_q^\Delta$と可換だから、
+	$I_q$と$I_q^\Delta$は次のように互いに逆になっていることがわかる。
+	\begin{equation*}\begin{split}
+		I_q^{-1} = (N+1)^{-1}I_q^\Delta,\quad (I_q^\Delta)^{-1} = (N+1)^{-1}I_q
+	\end{split}\end{equation*}
+	特に、$\eta_q$の左逆元と$\eta_q^\Delta$の右逆元が次のように与えられる。
+	\begin{equation*}\begin{array}{rcl}
+		\eta_q &\text{の左逆元}\quad& (N+1)^{-1}\eta_q^\Delta \\
+		\eta_q^\Delta &\text{の右逆元}\quad& \eta_q(N+1)^{-1} \\
+	\end{array}\end{equation*}
+
+	\begin{todo}[指数写像]\label{todo:指数写像} %{
+		対応$\ket{n}\to t^n$を定義しないと、多項式との対応は意味ないかも
+		しれない。
+	\end{todo} %todo:指数写像}
+	$q=0$とすると、次のように通常の多項式の演算と対応がつく。
+	\begin{equation*}\begin{array}{rclcrcrcrcl}
+		&\quad&  &&\text{多項式} &\quad& \text{作用素} &\quad& 
+			&& \text{Fock空間} \\
+		\text{掛け算} && f_t &\mapsto& tf_t && \eta_0 && \ket{m} 
+			&\mapsto& \ket{m+1} \\
+		\text{割り算} && f_t &\mapsto& \frac{1}{t}\int_0^tds\partial_sf_s 
+			&& (N+1)^{-1}\eta_0^\Delta
+			&& \ket{m} &\mapsto& \jump{1\le m}\ket{m-1} \\
+		\text{微分} && f_t &\mapsto& \partial_tf && \eta_0^\Delta 
+			&& \ket{m} &\mapsto& \jump{1\le m}m\ket{m-1} \\
+		\text{積分} && f_t &\mapsto& \int_0^tdsf_s && \eta_0(N+1)^{-1} 
+			&& \ket{m} &\mapsto& (m+1)^{-1}\ket{m+1} \\
+	\end{array}\end{equation*}
+	ここで、掛け算、割り算と書いているところは、正確には多項式の係数を
+	シフトする操作である。表が横長になってしまうので、掛け算、割り算と
+	書いている。この表の割り算のところは、多項式に定数が含まれていると、
+	単純に変数$t$で割ってしまうと多項式からはみ出て有理多項式になってしまう。
+	それを防ぐために$\int_0^tds\partial_s$で定数項を除去している。
+
+\subsubsection{Rota-Baxter作用素}\label{s3:Rota-Baxter作用素} %{
+	Rota-Baxter作用素は部分積分を代数化したものとして見ることができる。
+	次の積分について成り立つ式から、
+	\begin{equation*}\begin{split}
+		\int_0^tds\partial_sm\left(\int_0^sdr\otimes\int_0^sds\right)
+		= \int_0^tdsm\left(\id\otimes\int_0^sdr+\int_0^sdr\otimes\id\right)
+	\end{split}\end{equation*}
+	左辺の被積分関数が$s=0$で$0$になることに注意すると次の式が得られる。
+	\begin{equation*}\begin{split}
+		m\left(\int_0^tdt\otimes\int_0^tdt\right)
+		= \int_0^tdsm\left(\id\otimes\int_0^sdr+\int_0^sdr\otimes\id\right)
+	\end{split}\end{equation*}
+	ここで、線形写像$P\in\End\fukuso[t]$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		P: f_t\mapsto \int_0^tds f_s
+	\end{split}\end{equation*}
+	$P$に関する次の式が得られる。
+	\begin{equation*}\begin{split}
+		m(P\otimes P) = Pm(\id\otimes P + P\otimes\id)
+	\end{split}\end{equation*}
+	この式は積分作用素$P$が重み$0$のRota-Baxter作用素になっていることを
+	示している\cite{GuoIntro}。
+%s3:Rota-Baxter作用素}
+%s2:作用素}
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	まず、$\fukuso[t]$の作用素$[t]_q\in\End\fukuso[t]$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		[t]_qf = t\shuffle_qf \quad\text{for all } f\in\fukuso[t]
+	\end{split}\end{equation*}
+	q-シャッフル積を省略して書いただけである。
+	次に、$\fukuso[t]$の双対空間$\fukuso[t^\tran]$を次の式で定義する。
+	\begin{equation*}\begin{split}
+		(t^\tran)^mt^n := \jump{m = n} \quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	同じ記号を使って、線形写像$-^\tran:\fukuso[t]\to\fukuso[t^\tran]$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		(t^m)^\tran := (t^\tran)^m \quad\text{for all } m\in\sizen
+	\end{split}\end{equation*}
+	微分作用素$[t]_q^\tran\in\End\fukuso[t]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		([t]_qf)^\tran g = f^\tran [t]_q^\tran g
+		\quad\text{for all } f,g\in\fukuso[t]
+	\end{split}\end{equation*}
+	$[t]_q^\tran$を恒等写像$\id=\sum_{n\in\sizen}t^n(t^\tran)^n$を使って
+	計算すると次のようになる。
+	\begin{equation*}\begin{split}
+		[t]_q^\tran t^n = \jump{1\le n} (n)_qt^{n-1}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	したがって、との交換関係は次のようになる。
+	\begin{equation*}\begin{split}
+		[t]_q^\tran[t]_q = 
+	\end{split}\end{equation*}
+
+	テンソル積の同型$V\otimes\fukuso\simeq V\simeq \fukuso\otimes V$
+	を$\simeq_\fukuso$と書くことにして、$m_q:=-\shuffle_q-$と$\Delta_q$の
+	転置をそれぞれ次のように定義する。
+	\begin{equation*}\begin{split}
+		\bigl(f\otimes g\bigr)^\tran m_q^\tran h
+		&\simeq_\fukuso \bigl(m_q(f\otimes g)\bigr)^\tran h \\
+		\bigl(f\bigr)^\tran \Delta_q^\tran(g\otimes h)
+		&\simeq_\fukuso \bigl(\Delta_qf\bigr)^\tran (g\otimes h) \\
+	\end{split}
+	\quad\text{for all } f,g,h\in\fukuso[t]
+	\end{equation*}
+%s1:一変数シャッフル積}
+
+\section{保留}\label{s1:保留} %{
+	次の微分方程式を考えてみる。
+	\begin{equation*}\begin{split}
+		x_t = x_0 + \int_0^t dsv(x_s) 
+		= \lim_{x=x_0}\bigl(\exp(tv_x\partial_x)\bigl)x
+	\end{split}\end{equation*}
+	$\exp$の部分はLie群となる。$v$が多項式の場合は、$\exp$の肩の部分は
+	Virasoro代数で書ける。特に、$v$が二次式の場合、$\exp$の肩の部分は
+	$sl_2(\jitu)$となる。微分方程式で成り立つ次のような図式をパーサー
+	に持って行くことを考えたい。
+	\begin{equation*}\begin{split}
+		\text{微分方程式} \to \text{Lie代数}
+	\end{split}\end{equation*}
+	微分方程式でこの図式が成り立つカギは微分のチェイン則にある。
+	\begin{equation*}\begin{split}
+		\frac{\partial}{\partial t}
+		= \frac{\partial x_t}{\partial t}\frac{\partial}{\partial x_t}
+		= v(x_t)\frac{\partial}{\partial x_t}
+	\end{split}\end{equation*}
+	微分作用素と積分作用素をq-シャッフル積を用いて代数方程式に翻訳してみる。
+
+	$\jitu[t]$を実数上の多項式環とする。不定元$t$を基底として考えているのか、
+	作用素として考えているのかをはっきりさせるため、$\jitu[t]$をFock空間
+	$(V,V^\dag)$で表すことにする。
+	\begin{equation*}\begin{split}
+		\ket{m} := \eta^m\ket{0},\quad
+		\bra{m} := \bra{0}(\eta^\dag)^m \quad\text{for all } m\in\sizen \\
+		\eta^\dag\eta = 1
+		\implies \braket{m|n} = \jump{m = n} \quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	元の$\jitu[t]$は次のようにして得られる。
+	\begin{equation*}\begin{split}
+		f_t = \bra{0}(t\eta^\dag)^*f_\eta\ket{0}
+		\quad\text{for all } f_t\in\jitu[t]
+	\end{split}\end{equation*}
+
+	$q\in\jitu$として、q-シャッフル積の作用素版$[\eta]_q\in\End V$を
+	次のように定義する。
+	\begin{equation}\label{q-シャッフル積の定義}\begin{split}
+		[\eta]_q\eta\ket{m} = (m+1)_q\ket{m+1} \quad\text{for all } m\in\sizen
+	\end{split}\end{equation}
+	ここで、$(m)_q$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(m)_q := \frac{1 - q^m}{1 - q} \quad\text{for all } m\in\sizen
+	\end{split}\end{equation*}
+	$(m)_q$は$q\to0,1$の極限で次のようになり、
+	\begin{equation*}\begin{split}
+		(m)_0 = 1,\quad (m)_1 = m \quad\text{for all } m\in\sizen
+	\end{split}\end{equation*}
+	$(-)_q:\sizen\to\sizen$は次のように半環準同型に似たものとなっている。
+	\begin{equation}\label{eq:q-自然数}\begin{array}{rcll}
+		(m + n)_q &=& (m)_q + q^m(n)_q & \quad\text{for all } m,n\in\sizen \\
+		(mn)_q &=& (m)_q(n)_{q^m} & \quad\text{for all } m,n\in\sizen \\
+	\end{array}\end{equation}
+
+	作用素$I_q$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		I_q := \sum_{n\in\sizen} (n+1)_q\ket{n}\bra{n}
+	\end{split}\end{equation*}
+	$\eta I_q$は$[\eta]_q$の定義式\eqref{q-シャッフル積の定義}を満たす。
+	次の式を使うと、
+	\begin{equation*}\begin{split}
+		\eta^n(\eta^\dag)^n = \sum_{m\in\sizen}\ket{m+n}\bra{m+n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$I_q$を次のように展開して$\eta$と$\eta^\dag$で書き直すことができる。
+	\begin{equation*}\begin{split}
+		I_q &= \left\{\begin{matrix}
+			& ( & 1 & & & & & ) & \ket{0}\bra{0} \\
+			+ & ( & 1 & + & q & & & ) & \ket{1}\bra{1} \\
+			+ & ( & 1 & + & q & + & q^2 & ) & \ket{2}\bra{2} \\
+			+ & \cdots \\
+		\end{matrix}\right. \\
+		&= \sum_{n\in\sizen} \biggl(\ket{n}\bra{n} + q\ket{n+1}\bra{n+1} 
+			+ q^2\ket{n+2}\bra{n+2} + \cdots\biggr) \\
+		&= \sum_{n\in\sizen} q^n\eta^n(\eta^\dag)^n \\
+	\end{split}\end{equation*}
+	まとめると$I_q$は次のようになる。
+	\begin{equation}\label{eq:Iの定義}\begin{split}
+		I_q := \sum_{n\in\sizen} q^n\eta^n(\eta^\dag)^n
+		= \sum_{n\in\sizen} (n+1)_q\ket{n}\bra{n}
+	\end{split}\end{equation}
+	$I_q$はKleeneスターに似た次の式を満たす。
+	\begin{equation}\label{eq:Kleeneスターに似た式}\begin{split}
+		I_q = 1 + q\eta I_q\eta^\dag
+	\end{split}\end{equation}
+	$I_p$と$I_q$は可換だから、次の交換関係が得られる。
+	\begin{equation*}\begin{split}
+		(I_p\eta^\dag)(\eta I_q) = I_pI_q = I_qI_p = (I_q\eta^\dag)(I_p\eta)
+		\quad\text{for all } p,q\in\jitu
+	\end{split}\end{equation*}
+	さらに、式\eqref{eq:Kleeneスターに似た式}を使うと、次の式が得られ、
+	\begin{equation*}\begin{split}
+		I_pI_q = 1 + \eta\bigl(pI_p + qI_q + pqI_pI_q\bigr)\eta^\dag
+		\quad\text{for all } p,q\in\jitu
+	\end{split}\end{equation*}
+	次の交換関係が得られる。
+	\begin{equation*}\begin{split}
+		(I_p\eta^\dag)(\eta I_q) = 1 + \eta\bigl(pI_p+qI_q\bigr)\eta^\dag
+			+ pq(\eta I_q)(I_p\eta^\dag) \quad\text{for all } p,q\in\jitu
+	\end{split}\end{equation*}
+	次のように$(p,q)$が$(1,0)$または$(0,1)$の時のみLeibnitz則が現れる。
+	\begin{equation*}\begin{array}{lcrcl}
+		(0,0) &\quad& \eta^\dag\eta &=& 1 \\
+		(1,1) &\quad& (I_1\eta^\dag)(\eta I_1) &=& 1 + 2\eta I_1\eta^\dag 
+			+ (\eta I_1)(I_1\eta^\dag) \\
+		(0,1) &\quad& \eta^\dag(\eta I_1) &=& 1 + (\eta I_1)\eta^\dag \\
+		(1,0) &\quad& (I_1\eta^\dag)\eta &=& 1 + \eta(I_1\eta^\dag) \\
+	\end{array}\end{equation*}
+
+	以降、誤解の恐れがない場合は、$\eta_q:=\eta I_q$、
+	$\eta_q^\dag:=I_q\eta^\dag$と略記する。
+	今興味があるのは次の交換関係である。
+	\begin{equation*}\begin{split}
+		\eta_q^\dag\eta = 1 + q\eta\eta_q^\dag
+	\end{split}\end{equation*}
+	この交換関係を$\eta$の任意のべき乗に一般化すると次のようになる。
+	\begin{equation*}\begin{split}
+		\eta_q^\dag\eta^n = \jump{1\le n}(n)_q\eta^{n-1} + q^n\eta^n\eta_q^\dag
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$S_q\in\End V$を次のように定義し、
+	\begin{equation*}\begin{split}
+		S_q\ket{n} := q^n\ket{n} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$V$の積$m$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		m\ket{n_1}\otimes\ket{n_2} = \ket{n_1+n_2}
+		\quad\text{for all } n_1,n_2\in\sizen
+	\end{split}\end{equation*}
+	$\eta_q^\dag$は次の式を満たす。
+	\begin{equation}\label{eq:擬似ライプニッツ則}\begin{split}
+		\eta_q^\dag m = m(\eta_q^\dag\otimes\id + S_q\otimes\eta_q^\dag)
+	\end{split}\end{equation}
+	$S_q$は$\eta$の定数倍に相当する。
+	$q=0,1$とき、式\eqref{eq:擬似ライプニッツ則}は馴染みの深いものになって
+	いる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $q=0$のときは、$\eta_q^\dag$はBrzozowski微分になる。
+		$S_0$は定数項（$\eta^0$の係数）を取り出す操作になる。
+		\item $q=1$のときは、$\eta_q^\dag$は通常の微分になり、
+		式\eqref{eq:擬似ライプニッツ則}は通常のライプニッツ則となる。
+		$S_1$は恒等写像となる。
+	\end{itemize} %}
+
+	多項式の合成を定義しよう。任意の$f,g\in\fukuso[t]$に対して、
+	$\set{f_n,g_n\in\fukuso\bou n\in\sizen}$を次のようにおいて、
+	\begin{equation*}\begin{split}
+		ft := \sum_{n\in\sizen} f_nt^n,\quad gt := \sum_{n\in\sizen} g_nt^n
+	\end{split}\end{equation*}
+	$\ket{f\circ g}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\ket{f\circ g} := \sum_{n\in\sizen} f_n(g\eta)^n\ket{0}
+	\end{split}\end{equation*}
+	$\ket{f\circ g}$は通常の多項式の合成となっている。
+	$v\in\fukuso[t]$を$v0=0$となる定数項がない多項式として、
+	次の微分方程式を考える。
+	\begin{equation*}\begin{split}
+		\eta_q^\dag\ket{x} = \ket{v\circ x},\quad \ket{0}\ket{x} = x_0
+	\end{split}\end{equation*}
+	この微分方程式の形式解$\ket{x}$は、$I_q$の逆元$I_q^{-1}$を用いて、
+	\begin{equation*}\begin{split}
+		I_q^{-1} = \sum_{n\in\sizen} (n+1)_q^{-1}\ket{n}\bra{n}
+	\end{split}\end{equation*}
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\ket{x} = x_0\ket{0} + (\eta I_q^{-1})\ket{v\circ x}
+	\end{split}\end{equation*}
+
+	\begin{note}[テイラー展開]\label{note:テイラー展開} %{
+		次の微分方程式を考える。
+		\begin{equation*}\begin{split}
+			x_t = a + \int_0^tds bx_scx_sd
+		\end{split}\end{equation*}
+		$a,b,c,d$は互いに非可換とする。この微分方程式の解$x_t$を次のように
+		級数展開して、
+		\begin{equation*}\begin{split}
+			x_t = \sum_{n\in\sizen} \frac{t^n}{n!} x_n
+		\end{split}\end{equation*}
+		元の微分方程式に代入して各$t^n$の係数が等しいとすると、
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			x_{n+1} = \sum_{p=0}^n \binom{n}{p} bx_pcx_{n-p}d
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		$x_n$を三次までは次のようになる。
+		\begin{equation*}\begin{split}
+			x_1 &= bx_0cx_0d \\
+			x_2 &= bx_1cx_0d + bx_0cx_1d \\
+			x_3 &= bx_2cx_0d + 2bx_1cx_1d + bx_0cx_2d \\
+		\end{split}\end{equation*}
+		$A:=\set{a,b,c,d}$、$V:=\fukuso\W A$とし、$x$を不定元として、
+		線形写像$\gamma_x:V[x]\to V[x]$を$x_n=\lim_{x=x_0}\gamma_x^nx$
+		となるように定義すると、次のようになる。
+		\begin{equation*}\begin{array}{rcll}
+			\gamma_x(w_1w_2) &=& (\gamma_xw_1)w_2 + w_1(\gamma_xw_2)
+				& \quad\text{for all } w_1,w_2\in\W(A\cup\set{x}) \\
+			\gamma_xz &=& \jump{z = x} bxcxd
+				& \quad\text{for all } z\in(A\cup\set{x}) \\
+		\end{array}\end{equation*}
+		文字列$x$から始めて、文字列の中の$x$を１つずつ$bxcxd$に置き換えて
+		いって、$x=x_0$とおけば、微分方程式の形式解の係数$x_n$が求まる。
+		$\gamma_x^nx$を三次まで見ると次のようになる。
+		\begin{equation*}\begin{split}
+			\gamma_xx &= bxcxd \\
+			\gamma_x^2x &= b(\gamma_xx)cxd + bxc(\gamma_xx)d \\
+			\gamma_x^3x &= b(\gamma^2 x)cxd + 2b(\gamma_xx)c(\gamma_xx)d 
+				+ bxc(\gamma_x^2x)d \\
+		\end{split}\end{equation*}
+		したがって、$\exp$について成り立つ次の式を用いると、
+		\begin{equation*}\begin{split}
+			e^{tz} = 1 + z\int_0^tds e^{sz}
+		\end{split}\end{equation*}
+		微分方程式の形式解$x_t$は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			x_t = \sum_{n\in\sizen} \frac{t^n\gamma_x^n}{n!}x
+			= \exp(t\gamma_x)x \implies x_t = x + \int_0^tds \gamma_xx_s
+		\end{split}\end{equation*}
+
+		一方、次の代数方程式を考える。
+		\begin{equation*}\begin{split}
+			y_t = a + tby_tcy_td
+		\end{split}\end{equation*}
+		この代数方程式の解$y_t$を次のように級数展開して、
+		\begin{equation*}\begin{split}
+			y_t = \sum_{n\in\sizen} y_n
+		\end{split}\end{equation*}
+		元の代数方程式に代入して各$t^n$の係数が等しいとすると、
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			y_{n+1} = \sum_{p=0}^n by_pcy_{n-p}d \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		$y_n$を三次までは次のようになる。
+		\begin{equation*}\begin{split}
+			y_1 &= by_0cy_0d \\
+			y_2 &= by_1cy_0d + by_0cy_1d \\
+			y_3 &= by_2cy_0d + by_1cy_1d + by_0cy_2d \\
+		\end{split}\end{equation*}
+
+		Lie微分が得られるか否かは微分演算子と右辺の時間の積に拠っているように
+		思える。時刻$t$についてシャッフル積$\shuffle$を次にように定義し、
+		\begin{equation*}\begin{split}
+			t^m\shuffle t^n = \binom{m+n}{n}t^{m+n}
+			\quad\text{for all } m,n\in\sizen
+		\end{split}\end{equation*}
+		次のように下線で時刻$t$に関するシャッフル積を表して、
+		\begin{equation*}\begin{split}
+			\underbrace{t^mw_1t^n}_\shuffle := (t^m\shuffle t^n)w_1
+		\end{split}\end{equation*}
+		微分方程式と代数方程式を次のように定義すると、
+		\begin{equation*}\begin{split}
+			x_t = a + \int_0^tds \underbrace{bx_scx_sd}_\shuffle,\quad
+			y_t = a + \underbrace{tby_tcy_td}_\shuffle
+		\end{split}\end{equation*}
+		今度は、微分方程式と代数方程式の立場が逆転して、
+		形式解を表すLie微分が、微分方程式については得られず、
+		代数方程式について得られる。形式解を表すLie微分を導く過程で、
+		時刻に関する微分作用素とベクトル場の中での時刻の積の代数的な双対関係を
+		使っているものと思われる。
+
+		until
+
+		各係数$y_n$に因子$n$が掛かるところを除いて、微分方程式の場合と全く同じ
+		形になる。$y:=y_0$とおいて、$\gamma$を使って書き直すと次のようになる。
+		\begin{equation*}\begin{split}
+			y_1 &= \gamma_yy \\
+			\frac{1}{2}y_2 &= \gamma_y^2y \\
+			\frac{1}{3!}y_3 &= b(\gamma^2y)cyd + b(\gamma y)c(\gamma y)d 
+				+ byc(\gamma^2y)d \\
+		\end{split}\end{equation*}
+		$(1/3!)y_3$は$\gamma_y^3y$ではない。
+		\begin{equation*}\begin{split}
+			\gamma_y^3 
+			&= b(\gamma^2y)cyd + 2b(\gamma y)c(\gamma y)d + byc(\gamma^2y)d \\
+			&\neq b(\gamma^2y)cyd + b(\gamma y)c(\gamma y)d + byc(\gamma^2y)d \\
+		\end{split}\end{equation*}
+		微分方程式と代数方程式を同じように扱う方法の一つとして、余積を用いる
+		方法があるだろう。集合$A=\set{b,c,d}$、代数$V=\fukuso\W A$として、
+		多項式$V[x]$上に二項演算$\beta$を次のように定義して、
+		\begin{equation*}\begin{split}
+			\beta(w_1\otimes w_2) = bw_1cw_2d
+			\quad\text{for all }w_1,w_2\in\W(A\cup\set{x})
+		\end{split}\end{equation*}
+		$\gamma$で生成される$\End V[x]$の部分空間に余積$\Delta_0$と$\Delta_1$を
+		次のように定義すると、
+		\begin{equation*}\begin{split}
+			\Delta_0\gamma_x^n = \sum_{p=0}^n \gamma_x^p\otimes\gamma_x^{n-p}
+			,\quad \Delta_1\gamma_x^n = \sum_{p=0}^n 
+				\binom{n}{p}\gamma_x^p\otimes\gamma_x^{n-p}
+		\end{split}\end{equation*}
+		微分方程式の形式解$x_n$と代数方程式の形式解$y_n$はそれぞれ次のように
+		書くことができる。
+		\begin{equation*}\begin{split}
+			x_{n+1} = \beta(\Delta_1\gamma_x^n)(x\otimes x),\quad 
+			\frac{1}{(n+1)!}y_{n+1} = \beta(\Delta_0\gamma_y^n)(y\otimes y)
+		\end{split}\end{equation*}
+		この式を用いると、次の式を使って、
+		\begin{equation*}\begin{split}
+			\Delta_0z^* = z^*\otimes z^*,\quad \Delta_1e^z = e^z\otimes e^z
+		\end{split}\end{equation*}
+		それぞれの形式解は次のようになる。
+		\begin{equation*}\begin{split}
+			x_t &= x + \beta(e^{t\gamma_x}\otimes e^{t\gamma_x})(x\otimes x) \\
+			y_t &= y + \beta\bigl((t\gamma_y)^*\otimes(t\gamma_y)^*\bigr)(x\otimes x) \\
+		\end{split}\end{equation*}
+
+		$\delta_x$を次のようにおくと、$\gamma_x=\beta\delta_x$と書ける。
+		\begin{equation*}\begin{array}{rcll}
+			\delta_x(w_1w_2) &=& (\delta w_1)w_2 + w_1(\delta w_2)
+				& \quad\text{for all } w_1,w_2\in\W(A\cup\set{x}) \\
+			\delta_xz &=& \jump{z = x} z\otimes z
+				& \quad\text{for all } z\in(A\cup\set{x}) \\
+		\end{array}\end{equation*}
+
+		kokomade
+
+		したがって、微分方程式と代数方程式の形式解を$\gamma$を使って
+		書くと次のようになる。
+		\begin{equation*}\begin{array}{rclclcl}
+			x_t &=& \sum_{n\in\sizen}\cfrac{(t\gamma_x)^n}{n!}x
+			&=& e^{t\gamma_x}x &\implies& x_t = x + \int_0^tds bx_scx_sd \\
+			y_t &=& \sum_{n\in\sizen}(t\gamma_y)^ny
+			&=& (t\gamma_y)^*y &\implies& y_t = y + tby_tcy_td \\
+		\end{array}\end{equation*}
+	\end{note} %note:テイラー展開}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	$q=1$のとき、式\eqref{eq:擬似ライプニッツ則}は微分のチェイン則を
+	導き出す。非線形写像$\gamma:V\to V\times V$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\gamma\ket{f} := \ket{f}\times\ket{f} \quad\text{for all }\ket{f}\in V
+	\end{split}\end{equation*}
+	$\tau$を直積からテンソル積への標準的な写像とすると、
+	次のようにしてチェイン則が得られる。
+	\begin{equation*}\begin{array}{rcll}
+		\eta_1^\dag\ket{f^2} &=& \eta_1^\dag m\tau\gamma\ket{f} \\
+		 &=& m(\eta_1^\dag\otimes\id + \id\otimes\eta_1^\dag)\tau\gamma\ket{f} 
+		 	& \lcomment{using Leibnitz rule} \\
+		 &=& 2m(\eta_1^\dag\otimes\id)\tau\gamma\ket{f} 
+		 	& \lcomment{symmetrized by $\gamma$} \\
+	\end{array}\end{equation*}
+	このチェイン則の導出を一般の$q$に対して適用すると次のようになる。
+	\begin{equation*}\begin{array}{rcll}
+		\eta_q^\dag\ket{f^2} &=& \eta_q^\dag m\tau\gamma\ket{f} \\
+		 &=& m(\eta_q^\dag\otimes\id + S_q\otimes\eta_q^\dag)\tau\gamma\ket{f} 
+		 	& \lcomment{using Leibnitz rule} \\
+		 &=& m\bigl(\eta_q^\dag\otimes(\id + S_q)\bigr)\tau\gamma\ket{f} 
+		 	& \lcomment{symmetrized by $\gamma$} \\
+	\end{array}\end{equation*}
+	さらに、$3$乗に対して適用すると次のようになる。
+	\begin{equation*}\begin{array}{rcll}
+		\eta_q^\dag\ket{f^3} 
+		&=& \eta_q^\dag m(m\otimes\id)\tau(\gamma\times\id)\gamma\ket{f} \\
+		&=& m(m\otimes\id)(\eta_q^\dag\otimes S_q^{(2)})
+			\tau(\gamma\times\id)\gamma\ket{f}  \\
+	\end{array}\end{equation*}
+	ここで、$S_q^{(2)}$は次のように定義した。
+	\begin{equation*}\begin{split}
+		S_q^{(2)} = \id\otimes\id + S_q\otimes\id + S_q\otimes S_q
+	\end{split}\end{equation*}
+	$S_q^{(2)}$を一般化すると次のようになるだろう。
+	\begin{equation*}\begin{split}
+		S_q^{(n+1)} = S_q^{(n)}\otimes\id + S_q^{\otimes(n+1)}
+	\end{split}\end{equation*}
+	このチェイン則を単項式に適用してみると次のようになる。
+	\begin{equation*}\begin{split}
+		\eta_q^\dag\ket{mn} = \jump{1\le mn}(n)_q(m)_{q^n}\ket{mn-1}
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	一方、$\eta_q^\dag\ket{(m+1)n}$をそのまま計算すると次のようになる。
+	\begin{equation*}\begin{split}
+		\eta_q^\dag\ket{mn} = \jump{1\le mn}(mn)_q\ket{mn-1}
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	両者の計算結果が等しいことは$(n)_q$について成り立つ式\eqref{eq:q-自然数}
+	からわかる。
+
+	面倒なことをしなくても、多項式の合成を計算して次の式（合ってる？）を
+	導きだせばよい。
+	\begin{equation*}\begin{split}
+		fx = \sum_{n\in\sizen} f_nx^n,\quad gx = \sum_{n\in\sizen} g_nx^n
+		,\quad \ket{f} := (f\eta)\ket{0}
+		,\quad \ket{f\circ g} := (fg\eta)\ket{0} \\
+		\implies \eta_q^\dag\ket{f\circ g}
+		= g_q\ket{f},\quad g_q := \sum_{n\in\sizen_+} 
+		(n)_qg_{n}\eta^{n-1}\eta_{q^n}^\dag
+	\end{split}\end{equation*}
+	$g_q$がベクトル場となる。
+
+	\begin{note}[微分方程式]\label{note:微分方程式} %{
+		任意の$q\in\jitu$と$n\in\sizen$に対して$0<(n + 1)_q$だから、
+		$I_q$の逆元$I_q^{-1}$が定義できて次のようになる。
+		\begin{equation*}\begin{split}
+			I_q^{-1} = \sum_{n\in\sizen} (n + 1)_q^{-1}\ket{n}\bra{n}
+		\end{split}\end{equation*}
+		$I_q\eta^\dag$を微分作用素だと思うと、積分作用素は$\eta I_q^{-1}$
+		で与えられる。
+		\begin{equation*}\begin{split}
+			(I_q\eta^\dag)(\eta I_q^{-1}) = 1
+		\end{split}\end{equation*}
+		積分作用素を用いると、微分方程式の形式解が次のように得られる。
+		\begin{equation*}\begin{split}
+			(I_q\eta^\dag)\ket{x} = v\ket{x}
+			\implies \ket{x} = c\ket{0} + (\eta I_q^{-1})v\ket{x}
+		\end{split}\end{equation*}
+		多項式環$\jitu[t]$上のq-微分$(\partial_t)_q$とq-積分$(dt)_q$を
+		次のように定義すると、
+		\begin{equation*}\begin{split}
+			(\partial_t)_qt^n = \jump{1\le n}(n)_pt^{n-1},\quad
+			(dt)_qt^n = (n+1)_p^{-1}t^{n+1} \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		コヒーレント状態を用いて、フォック空間上の微分と積分は多項式環上の
+		微分と積分にそのまま翻訳される。
+		$\bra{t}$をコヒーレント状態$\bra{t}:=\bra{0}(t\eta^\dag)^*$とすると、
+		次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\bra{t}I_q\eta^\dag\ket{n} = (\partial_t)_q t^n,\quad
+			\bra{t}\eta I_q\ket{n} = (dt)_q t^n
+			\quad\text{for all } t\in\jitu,\; n\in\sizen
+		\end{split}\end{equation*}
+		フォック空間上の微分方程式の形式解は次のように多項式環上の微分方程式の
+		形式解に翻訳される。
+		\begin{equation*}\begin{split}
+			(\partial_t)_q\braket{t|x} = \bra{t}v\ket{x}
+			\implies \braket{t|x} = c + (dt)_q\bra{t}v\ket{x}
+		\end{split}\end{equation*}
+	\end{note} %note:微分方程式}
+	\begin{note}[q-シャッフル積と$I_q$の関係]
+	\label{note:q-シャッフル積と$I_q$の関係} %{
+		文字集合をシングルトンから有限集合に一般化した場合に、$I_q$に相当する
+		作用素が得られるだろうか？
+		$A$を有限集合して、線形写像$S:\fukuso A\times\fukuso\to\End\fukuso\W A$
+		を次のように定義する。
+		\begin{equation*}\begin{split}
+			S_qa = \sum_{w\in \W A}q^{|w|}waw^\dag
+			\quad\text{for all } a\in A,\; q\in\fukuso
+		\end{split}\end{equation*}
+		すると、$\ket{w}:=w\ket{0}$として、q-シャッフル積が得られる。
+		\begin{equation*}\begin{split}
+			S_q(a)\ket{w} = \ket{a\shuffle_qw}
+			\quad\text{for all } a\in A,\; w\in \W A,\; q\in\fukuso
+		\end{split}\end{equation*}
+		$S_q$もKleeneスターに似た次の式を満たす。
+		\begin{equation*}\begin{split}
+			S_qa = a + q\sum_{b\in A}b(S_qa)b^\dag \quad\text{for all } a\in A
+		\end{split}\end{equation*}
+		この式はq-シャッフル積を定義する漸化式の特別な場合となっている。
+		\begin{equation*}\begin{split}
+			(S_qa)\ket{bw} = a\ket{bw} + qb(S_qa)\ket{w}
+			\quad\text{for all } a,b\in A,\; w\in\W A \\
+			\sim \ket{(aw)\shuffle_q(bx)}
+			= a\ket{w\shuffle_q(bx)} + b\ket{(aw)\shuffle_qx}
+			\quad\text{for all } a,b\in A,\; w,x\in\W A \\
+		\end{split}\end{equation*}
+		$S_q$は文字列の連結$m$を使って次のようにも書くことができる。
+		\begin{equation*}\begin{split}
+			S_qa &= m(J_q\otimes a)m^\dag \quad\text{for all } a\in A
+			\quad\text{where } J_q := \sum_{w\in\W A} q^{|w|}\ket{w}\bra{w}
+		\end{split}\end{equation*}
+	\end{note} %note:q-シャッフル積と$I_q$の関係}
+\subsection{sl2}\label{s2:sl2} %{
+	$L_n\;(n=0,1,2)$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		L_n = z^n\partial_z \quad\text{for all } n=0,1,2
+	\end{split}\end{equation*}
+	次の交換関係が得られて、$V=\set{L_n\bou n=0,1,2}$が代数となるこがわかる。
+	\begin{equation*}\begin{split}
+		[L_0,L_1] = L_0,\quad [L_1,L_2] = L_2,\quad [L_0,L_2] = 2L_1
+	\end{split}\end{equation*}
+	$L_\pm,H$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		L_+ := iL_2,\quad L_- := iL_0,\quad H := 2L_1 
+	\end{split}\end{equation*}
+	交換関係が次のようになって、$V$は$sl_2$と同じLie代数の構造を持つこと
+	がわかる。
+	\begin{equation*}\begin{split}
+		[H,L_\pm] = \pm2L_\pm,\quad [L_+,L_-] = H
+	\end{split}\end{equation*}
+%s2:sl2}
+%s1:保留}
 \section{Lie代数}\label{s1:Lie代数} %{
-\subsubsection{正規部分群}\label{s3:正規部分群} %{
-	$G$を群とする。任意の$g\in G$に対して写像$g-g^{-1}:G\to G$を$g$による
-	共役という。
-	任意の$G$の元に対する共役が不変になる$G$の部分群を正規部分群という。
-	\begin{equation*}\begin{split}
-		\text{正規部分群}\; H\subseteq G
-		\xiff{\dfn} ghg^{-1}\in H \quad\text{for all } g\in G,\; h\in H
-	\end{split}\end{equation*}
-	単位元だけからなる部分群$\mybf{1}$と$G$自身は常に正規部分群になる。
-	したがって、$\mybf{1}$と$G$自身を$G$の自明な正規部分群という。
-	また、任意の$G$の元と可換になる部分群を中心部分群という。
-	\begin{equation*}\begin{split}
-		\text{中心部分群}\; H\subseteq G
-		\xiff{\dfn} ghg^{-1}=h \quad\text{for all } g\in G,\; h\in H
-	\end{split}\end{equation*}
-	部分群$\mybf{1}$は常に中心部分群になる。したがって、$\mybf{1}$を$G$の
-	自明な中心部分群という。定義から、中心部分群は常に正規部分群となる。
-	\begin{equation*}\begin{split}
-		\text{中心部分群} \implies \text{正規部分群}
-	\end{split}\end{equation*}
+\subsection{群}\label{s2:群} %{
+\subsubsection{部分群}\label{s3:部分群} %{
+	群の部分集合が部分群になっているかどうかを判定する道具を書いておく。
 
 	\begin{proposition}[部分群]\label{prop:部分群} %{
 		$G$を群、$H$を空でない$G$の部分集合とする。このとき、次の式が成り立つ。
@@ -90,38 +1217,29 @@
 		したがって、$ab^{-1}\in H_1\cap H_2$となり、命題\ref{prop:部分群}から
 		$H_1\cap H_2$が部分群となることがわかる。
 	\end{proof} %}
+%s3:部分群}
+\subsubsection{正規部分群}\label{s3:正規部分群} %{
+	$G$を群とする。任意の$g\in G$に対して写像$g-g^{-1}:G\to G$を$g$による
+	共役という。
+	任意の$G$の元に対する共役が不変になる$G$の部分群を正規部分群という。
+	\begin{equation*}\begin{split}
+		\text{正規部分群}\; H\subseteq G
+		\xiff{\dfn} ghg^{-1}\in H \quad\text{for all } g\in G,\; h\in H
+	\end{split}\end{equation*}
+	単位元だけからなる部分群$\mybf{1}$と$G$自身は常に正規部分群になる。
+	したがって、$\mybf{1}$と$G$自身を$G$の自明な正規部分群という。
+	$H\neq G$が$G$の正規部分群となることを$H\lhd G$と書くこともある。
+	また、任意の$G$の元と可換になる部分群を中心部分群という。
+	\begin{equation*}\begin{split}
+		\text{中心部分群}\; H\subseteq G
+		\xiff{\dfn} ghg^{-1}=h \quad\text{for all } g\in G,\; h\in H
+	\end{split}\end{equation*}
+	部分群$\mybf{1}$は常に中心部分群になる。したがって、$\mybf{1}$を$G$の
+	自明な中心部分群という。定義から、中心部分群は常に正規部分群となる。
+	\begin{equation*}\begin{split}
+		\text{中心部分群} \implies \text{正規部分群}
+	\end{split}\end{equation*}
 
-	\begin{proposition}[共役は自己同型]\label{prop:共役は自己同型} %{
-		$G$を群とする。任意の$g\in G$に対する共役は$G$の自己同型写像となる。
-		\begin{equation*}\begin{split}
-			gGg^{-1} = G
-		\end{split}\end{equation*}
-	\end{proposition} %prop:共役は自己同型}
-	\begin{proof} %{
-		共役が群準同型であることは明らかである。また、任意の$h_1,h_2\in G$に
-		対して次の式が成り立ち、$1:1$となることもわかる。
-		\begin{equation*}\begin{split}
-			gh_1g^{-1} = gh_2g^{-1}
-			\implies h_1 = h_2
-		\end{split}\end{equation*}
-	\end{proof} %}
-
-	\begin{proposition}[共役部分群の共通集合]\label{prop:共役部分群の共通集合} %{
-		$G$を群、$H$を$G$の部分群とする。$H$の共役部分群の共通集合は
-		正規部分群となる。
-		\begin{equation*}\begin{split}
-			\text{部分群 } H \implies \text{ 正規部分群 } \cap_{g\in G} gHg^{-1}
-		\end{split}\end{equation*}
-	\end{proposition} %prop:共役部分群の共通集合}
-	\begin{proof} %{
-		部分集合集合$N:=\cap_{g\in G} gHg^{-1}$とおくと、
-		命題\ref{prop:部分群の共通集合}より、$N$が部分群となることがわかる。
-		任意の$a\in N$に対して、ある$h\in H$と$g\in G$が存在して、$a=ghg^{-1}$
-		と書けるから、任意の$x\in G$に対して、$xax^{-1}=(xg)h(xg)^{-1}\in N$
-		となり、$N$が正規部分群となることがわかる。
-	\end{proof} %}
-%s3:正規部分群}
-\subsubsection{単純群と半単純群}\label{s3:単純群と半単純群} %{
 	群$G$の正規部分群が自明な正規部分群のみになるとき、$G$を単純群という。
 	\begin{equation*}\begin{split}
 		\text{単純群}\; G
@@ -140,7 +1258,88 @@
 	半単純群という言葉は状況によって定義が異なるようである。
 	Lie群の場合には同値な定義がいくつかあって、そのどれを用いるかという
 	違いしかないが、一般の群に対して定義されている言葉ではないようである。
-%s3:単純群と半単純群}
+
+	群$G$の部分群$H$が一つ与えられると、$G$を$H$で割った剰余類が定義できる。
+	このことを同値関係を使って見てみる。$G$の二項関係$R_H$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		R_H(g_1,g_2) \xiff{\dfn} g_1^{-1}g_2\in H
+		\quad\text{for all } g_1,g_2\in G
+	\end{split}\end{equation*}
+	$H$が部分群であることから、$R_H$は同値関係になる。
+	\begin{equation*}\begin{array}{ll}
+		\text{反射律 } & g^{-1}g=1\in H \quad\text{for all } g\in G \\
+		\text{対称律 } & g_1^{-1}g_2\in H \xiff{\exists\;h\in H}
+			g_2 = g_1h \iff g_2^{-1}g_1 = h^{-1} \in H \\
+		\text{推移律 } & g_1^{-1}g_2\in H \And g_2^{-1}g_3\in H 
+			\implies g_1^{-1}g_3\in H \\
+	\end{array}\end{equation*}
+	商集合$G/R_H$を$H$による左剰余類という。この意味は次の式に依る。
+	\begin{equation*}\begin{split}
+		R_H(g_1,g_2) \iff g_1H\cap g_2H\neq \emptyset \iff g_1H = g_2H
+		\quad\text{for all } g_1,g_2\in G \\
+	\end{split}\end{equation*}
+	部分群$H$が正規部分群の場合、左剰余類と右剰余類が一致し、
+	\begin{equation*}\begin{split}
+		g_1^{-1}g_2\in H \xiff{\exists\;h\in H} g_2=g_1h
+		\xiff{\exists\; h'\in H} g_2=h'g_1 \iff g_2g_1^{-1}\in H \\
+		\quad\text{for all } g_1,g_2\in G \\
+	\end{split}\end{equation*}
+	同値関係と群の積がコンパチブルになる。
+	\begin{equation*}\begin{split}
+		g_1^{-1}g_2,\;g_3^{-1}g_4\in H
+		&\xiff{\exists\;h_1h_3\in H} g_2g_4=g_1h_1g_3h_3 \\
+		&\xiff{\exists\;h_1'\in H} g_2g_4=g_1g_3h_1'h_3 \\
+		&\iff (g_1g_3)^{-1}(g_2g_4)\in H
+		\quad\text{for all } g_1,g_2,g_3,g_4\in G \\
+	\end{split}\end{equation*}
+	したがって、部分群$H$が正規部分群のとき、群$G$の積をそのまま用いて、
+	商集合$G/R_H$に積が定義できる。この$G/R_H$の積は、$1H$を単位元とし、
+	任意の$g\in G$に対して$gH$の逆元が$g^{-1}H$となるから、群となる。
+	この群を正規部分群$H$による商群といい$G/H$と書く。
+	直積集合$(G/H)\times H$に積$m$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		m: (g_1\times h_1)\times(g_2\times h_2) 
+		\mapsto (g_1g_2)\times(g_2^{-1}h_1g_2h_2)
+		\quad\text{for all }h_i\in H,\; g_i\in G/H
+	\end{split}\end{equation*}
+	この積は$1\times1$を単位元とする群となる。
+	そして、写像$\phi:(G/H)\times H\to G$を$\phi(g\times h)=gh$と定義すると、
+	$\phi$は群同型となる。
+	\begin{equation*}\begin{split}
+		\phi: G\simeq (G/H)\times H \quad\text{with } m
+	\end{split}\end{equation*}
+
+	\begin{proposition}[共役は自己同型]\label{prop:共役は自己同型} %{
+		$G$を群とする。任意の$g\in G$に対する共役は$G$の自己同型写像となる。
+		\begin{equation*}\begin{split}
+			gGg^{-1} = G
+		\end{split}\end{equation*}
+	\end{proposition} %prop:共役は自己同型}
+	\begin{proof} %{
+		共役が群準同型であることは明らかである。また、任意の$g_1,g_2\in G$に
+		対して次の式が成り立ち、$1:1$となることもわかる。
+		\begin{equation*}\begin{split}
+			gg_1g^{-1} = gg_2g^{-1} \implies g_1 = g_2
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	\begin{proposition}[共役部分群の共通集合]\label{prop:共役部分群の共通集合} %{
+		$G$を群、$H$を$G$の部分群とする。$H$の共役部分群の共通集合は
+		正規部分群となる。
+		\begin{equation*}\begin{split}
+			\text{部分群 } H \implies \text{ 正規部分群 } \cap_{g\in G} gHg^{-1}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:共役部分群の共通集合}
+	\begin{proof} %{
+		部分集合集合$N:=\cap_{g\in G} gHg^{-1}$とおくと、
+		命題\ref{prop:部分群の共通集合}より、$N$が部分群となることがわかる。
+		任意の$a\in N$に対して、ある$h\in H$と$g\in G$が存在して、$a=ghg^{-1}$
+		と書けるから、任意の$x\in G$に対して、$xax^{-1}=(xg)h(xg)^{-1}\in N$
+		となり、$N$が正規部分群となることがわかる。
+	\end{proof} %}
+%s3:正規部分群}
+%s2:群}
 \subsubsection{指数写像}\label{s3:指数写像} %{
 	ここでは、線形群$GL_n(\fukuso)$の部分群となるLie群$G$を考える。
 	この場合は、安直に自然対数の底を使って指数写像が定義できる。
@@ -157,26 +1356,27 @@
 		\begin{equation*}\begin{split}
 			sl_2 := \set{X\in\Mat_2(K)\bou \tr X = 0}
 		\end{split}\end{equation*}
-		$sl_2$の基底$\set{H,L_\pm}$は次のようにとれ、
-		\begin{equation*}\begin{split}
-			L_+ = \begin{pmatrix}
-				0 & 1 \\ 0 & 0
-			\end{pmatrix},\quad L_- = \begin{pmatrix}
-				0 & 0 \\ 1 & 0
-			\end{pmatrix},\quad H = \begin{pmatrix}
-				1 & 0 \\ 0 & -1
-			\end{pmatrix}
+		$sl_2$の基底$\set{H,L_\pm}$を次のようにとると、
+		\begin{equation*}\label{eq:sl2の基底系}\begin{split}
+			\begin{bmatrix}
+				H & L_+ \\ L_- & -H
+			\end{bmatrix}_K \xiff{\dfn} \left\{\begin{split}
+				L_+ := \begin{pmatrix}
+					0 & 1 \\ 0 & 0
+				\end{pmatrix},\quad L_- := \begin{pmatrix}
+					0 & 0 \\ 1 & 0
+				\end{pmatrix},\quad H := \begin{pmatrix}
+					1 & 0 \\ 0 & -1
+				\end{pmatrix} \\
+				sl_2(K) = \Set{\begin{bmatrix}
+					w & z_+ \\ z_- & -w
+				\end{bmatrix}\bou z_+,z_-,w\in K}
+			\end{split}\right.
 		\end{split}\end{equation*}
 		次の交換関係を満たす。
 		\begin{equation*}\begin{split}
 			[L_+,L_-] = H,\quad [H,L_\pm] = \pm 2L_\pm
 		\end{split}\end{equation*}
-		この基底系を使うと$sl_2$は次のように書ける。
-		\begin{equation}\label{eq:sl2の座標系}\begin{split}
-			sl_2 = \Set{\begin{pmatrix}
-				w & z_+ \\ z_- & - w
-			\end{pmatrix}\bou z_\pm,w\in\fukuso}
-		\end{split}\end{equation}
 		この座標系を使って指数写像を計算してみると次のようになる。
 		\begin{equation*}\begin{split}
 			& X := W + Z\sigma,\quad W := \bvec{w}{-w},\quad Z := \bvec{z_+}{z_-}
@@ -194,12 +1394,10 @@
 			\end{array}
 		\end{split}\end{equation*}
 		$t$は平方根の正をとっても負をとっても右辺は同じ値を与え、
-		$t=0$の極限では右辺は$1+X$となる。
+		$t=0$の極限では右辺は$1+X$となる。まとめると次のようになる。
 		\begin{equation}\label{eq:sl2の指数写像}\begin{split}
 			e^X = (\cosh t) + \cfrac{(\sinh t)}{t}X \quad\text{where }
-			X = \begin{pmatrix}
-				w & z_+ \\ z_- & - w
-			\end{pmatrix} \\ t = \sqrt{w^2 + z_+z_-}
+			t = \sqrt{\frac{\tr X^2}{2}} \quad\text{for all } X\in sl_2
 		\end{split}\end{equation}
 	\end{example} %eg:sl(2)の指数写像}
 
@@ -209,16 +1407,12 @@
 			su_2 := \set{X\in\Mat(2,\fukuso)\bou \tr X = 0 \And X^\dag = - X}
 		\end{split}\end{equation*}
 		$sl_2$の場合と異なり、$su_2$の定義には複素共役が含まれてるので、
-		$su_2$の係数体は複素数に限定される。$su_2$の基底系はPauli行列
-		$\set{\sigma_1,\sigma_2,\sigma_3}$を用いて次のようにとれ、
-		\begin{equation*}\begin{split}
-			\sigma_1 = \begin{pmatrix}
-				0 & 1 \\ 1 & 0
-			\end{pmatrix},\quad \sigma_2 = \begin{pmatrix}
-				0 & -i \\ i & 0
-			\end{pmatrix},\quad \sigma_3 = \begin{pmatrix}
-				1 & 0 \\ 0 & -1
-			\end{pmatrix}
+		$su_2$の係数体は複素数に限定される。$su_2$の基底系をPauli行列
+		$\set{\sigma_1,\sigma_2,\sigma_3}$を用いて次のようにとると、
+		\begin{equation*}\label{eq:su2の基底系}\begin{split}
+			i\begin{bmatrix}
+				\sigma_3 & \sigma_1-i\sigma_2 \\ \sigma_1+i\sigma_2 & - \sigma_3
+			\end{bmatrix}_\jitu
 		\end{split}\end{equation*}
 		次の交換関係を満たす。
 		\begin{equation*}\begin{split}
@@ -226,20 +1420,12 @@
 			,\quad [\sigma_2,\sigma_3] = 2i\sigma_1
 			,\quad [\sigma_3,\sigma_1] = 2i\sigma_2
 		\end{split}\end{equation*}
-		この基底系を使うと$su_2$は次のように書ける。
-		\begin{equation}\label{eq:su2の座標系}\begin{split}
-			su_2 = \Set{i\begin{pmatrix}
-				x_3 & x_1 - ix_2 \\ x_1 + ix_2 & - x_3
-			\end{pmatrix}\bou x_i\in\jitu}
-		\end{split}\end{equation}
 		$su_2$は$sl_2$の虚数部をとったような形になっている。
 		この座標系を$sl_2$の指数写像\eqref{eq:sl2の指数写像}に当てはめると、
 		次のようになる。
 		\begin{equation}\label{eq:su2の指数写像}\begin{split}
 			e^X = (\cos r) + \cfrac{(\sin r)}{r}X \quad\text{where }
-			X = \begin{pmatrix}
-				x_3 & x_1 - ix_2 \\ x_1 + ix_2 & - x_3
-			\end{pmatrix} \\ r = \sqrt{x_1^2 + x_2^2 + x_3^2}
+			r = \sqrt{\frac{\tr(X^\dag X)}{2}} \quad\text{for all } X\in su_2
 		\end{split}\end{equation}
 	\end{example} %eg:su(2)の指数写像}
 %s3:指数写像}
@@ -404,7 +1590,7 @@
 	随伴表現とKilling形式を簡単なLie代数について調べてみる。
 
 	\begin{example}[sl(2)]\label{eg:sl(2)の随伴表現} %{
-		座標系\eqref{eq:sl2の座標系}を使い、$(L_+,H,L_-)$の順に基底を並べると、
+		基底系\eqref{eq:sl2の基底系}を使い、$(L_+,H,L_-)$の順に基底を並べると、
 		随伴表現とKilling形式は次のようになる。
 		\begin{equation*}\begin{split}
 			\ad L_+ = \begin{pmatrix}
@@ -422,21 +1608,20 @@
 			\det(\lambda - \kappa) = (\lambda - 8)(\lambda^2 - 4^2)
 		\end{split}\end{equation*}
 		Killing形式は非退化だが、正定値または負定値でないことがわかる。
-		座標系\eqref{eq:sl2の座標系}を使うと次の式が成り立つ。
+		基底系\eqref{eq:sl2の基底系}を使うと次の式が成り立つ。
 		\begin{equation*}\begin{split}
-			\kappa(X\otimes X) = 8(z_+z_-+w^2) \quad\text{for all } X\in sl_2
+			\kappa(X\otimes X) = 4\tr X^2 \quad\text{for all } X\in sl_2
 		\end{split}\end{equation*}
 	\end{example} %eg:sl(2)の随伴表現}
 
 	\begin{example}[su(2)]\label{eg:su(2)の随伴表現} %{
 		随伴表現とKilling形式は$sl_2$の場合\ref{eg:sl(2)の随伴表現}と同じ
-		になり、座標系\eqref{eq:su2の座標系}を使うと次の式が成り立つ。
+		になり、基底系\eqref{eq:su2の基底系}を使うと次の式が成り立つ。
 		\begin{equation*}\begin{split}
-			\kappa(X\otimes X) = -8\left(x_1^2+x_2^2+x_3^2\right)
-			\quad\text{for all } X\in su_2
+			\kappa(X\otimes X) = - 4\tr(X^\dag X) \quad\text{for all } X\in su_2
 		\end{split}\end{equation*}
-		したがって、$su_2$の場合は、$sl_2$の場合と異なり、Killing形式を用いて
-		ノルムを定義することができる。
+		したがって、$su_2$の場合は、$sl_2$の場合と異なり、Killing形式が負定値
+		となり、Killing形式を用いてノルムを定義することができる。
 	\end{example} %eg:su(2)の随伴表現}
 
 	\begin{todo}[ここまで]\label{todo:ここまで} %{
@@ -460,7 +1645,7 @@
 
 	\begin{definition}[三角行列]\label{def:三角行列} %{
 		次の形の対角成分を除いた左下半分がすべて$0$となっている正方行列を
-		三角行列という。
+		上三角行列という。
 		\begin{equation*}\begin{split}
 			\begin{pmatrix}
 				* & * & * \\
@@ -468,16 +1653,18 @@
 				0 & 0 & * \\
 			\end{pmatrix}
 		\end{split}\end{equation*}
+		同様に、対角成分を除いた右上半分がすべて$0$となっている正方行列を
+		下三角行列という。また、与えられた正方行列$A$を正則な線形変換$P$を
+		用いて上または下三角行列$PAP^{-1}$にすることを$A$の三角化という。
 	\end{definition} %def:三角行列}
 
-	正方行列の対角化と異なり、正方行列の三角化は常に可能である。
-	三角化は単に三角行列に書き直すだけではなく、対角成分に固有値が並ぶように
-	することができる。
+	対角化と異なり三角化は常に可能である。三角化は単に三角行列に
+	書き直すだけではなく、対角成分に固有値が並ぶようにすることができる。
 
 	\begin{proposition}[正方行列の三角化]\label{prop:正方行列の三角化} %{
 		$A$を$n$次正方行列、$\lambda_1,\lambda_2,\dots,\lambda_n$を$A$の
-		固有値とする。このとき、あるユニタリ行列が存在して、次のように三角行列
-		にすることができる。
+		固有値とする。このとき、あるユニタリ行列が存在して、次のように
+		上三角行列にすることができる。
 		\begin{equation*}\begin{split}
 			U^{-1}AU = 	\begin{pmatrix}
 				\lambda_1 & & & * \\
@@ -514,7 +1701,7 @@
 			\end{pmatrix}
 		\end{split}\end{equation*}
 		帰納法の仮定より、$B$の固有値を$\lambda_1,\dots,\lambda_n$とすると、
-		$B$を次のように三角行列にする$n$次ユニタリ行列$V$が存在する。
+		$B$を次のように上三角行列にする$n$次ユニタリ行列$V$が存在する。
 		\begin{equation*}\begin{split}
 			V^{-1}BV = \begin{pmatrix}
 				\lambda_1 & & & * \\
@@ -545,7 +1732,7 @@
 	この命題でユニタリ変換という制限を外すとJordan標準形にまで持っていける
 	ことが示される。例えば、$4$次正方行列$A$の場合、その固有値を
 	$\lambda_i(i=1,2,3,4)$とすると、正則行列$P$によって次のような
-	形の三角行列にすることができる。
+	形の上三角行列にすることができる。
 	\begin{equation*}\begin{split}
 		P^{-1}AP = 	\begin{pmatrix}
 			\lambda_1 & \epsilon_1 & 0 & 0 \\
@@ -556,16 +1743,6 @@
 	\end{split}\end{equation*}
 	ここで、$\epsilon_i\in\set{0,1}(i=1,2,3)$は固有値の縮退度によって
 	決まる値である。
-
-	\begin{proposition}[同時上半三角化]\label{prop:同時上半三角化} %{
-		$A$と$B$を互いに可換な正方行列とする。このとき、適当な基底の変換に
-		よって、$A$と$B$は同時に上半三角にすることができる。
-	\end{proposition} %prop:同時上半三角化}
-	\begin{proof} %{
-		$A$の固有値を一つ選んで$\lambda$とし、$\lambda$に属する固有空間を
-		$W\neq 0$とする。$A$と$B$が可換だから、$W$は$B$の不変部分空間
-		となっている（$BW\subseteq W$）。したがって、
-	\end{proof} %}
 %s2:線形代数}
 \subsection{群}\label{s2:群} %{
 	$G$を群、$H$を$G$の部分群とする。任意の$g\in G$に対して$G$の部分集合
