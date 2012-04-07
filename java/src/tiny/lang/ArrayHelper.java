@@ -208,6 +208,17 @@ public class ArrayHelper {
 		}
 	}
 
+	public static long[] sub(long[] array, int begin, int end) {
+		final int n = end - begin;
+		if (n < 1) {
+			return ArrayHelper.EMPTY_LONG_ARRAY;
+		} else if (n == array.length) {
+			return array.clone();
+		}
+		final long[] newArray = new long[n];
+		System.arraycopy(array, begin, newArray, 0, n);
+		return newArray;
+	}
 	public static int[] sub(int[] array, int begin, int end) {
 		final int n = end - begin;
 		if (n < 1) {

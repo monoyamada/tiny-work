@@ -15,6 +15,7 @@
 	\newcommand{\tr}{\myop{tr}}
 	%
 	\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+	\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
 	\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
 	\newcommand{\what}{\widehat}
 	\newcommand{\even}{\myop{even}}
@@ -25,21 +26,1565 @@
 	\newcommand{\Cn}{\myop{Cn}}
 	\newcommand{\lhdeq}{\trianglelefteq}
 	\newcommand{\rhdeq}{\trianglerighteq}
+	\newcommand{\dup}{\ensuremath{\myop{dup}\,}}
+	\newcommand{\syou}[2]{\ensuremath{\left[\frac{#1}{#2}\right]}}
 	%
 	\newcommand{\xytree}{\xymatrix@R=4pt@C=1pt}
 	\newcommand{\sen}{\ar@{-}}
 	%
 	{\setlength\arraycolsep{2pt}
 	%
-\section{メモ}\label{s1:メモ} %{
+\section{スタックマシン}\label{s1:スタックマシン} %{
+\begingroup %{
+	\newcommand{\Drop}{\myop{Drop}}
+	\newcommand{\Copy}{\myop{Copy}}
+	\newcommand{\Rot}{\myop{Rot}}
+	\newcommand{\Prot}{\myop{pRot}}
+	\newcommand{\Tuck}{\myop{Tuck}}
+
+\subsection{Shannonの修論}\label{s2:Shannonの修論} %{
+	\cite{shannon2006}のノート。
+
+	スタックマシンは遅いと言われている。von Neumannアーキテクチャに比べて、
+	スタックマシンはプロセッサとメモリの間で大量のデータを転送することに
+	起因するらしい\footnote{
+		von Neumannアーキテクチャとは？
+	}。スタックマシンで大量のデータ転送が発生するのは、コンパイラが賢くない
+	せいで、コンパイラが十分賢ければ、スタックマシンでも大量のデータ転送が
+	必要ならないということを\cite{shannon2006}は主張している。
+
+	\cite{shannon2006}では、スタックマシンでの基本的なスタック操作を次の
+	ようにまとめている。
+	\begin{equation*}\begin{array}{rclcl}
+		\Drop_{-3} &:& \young(\cdots abcd) &\mapsto& \young(\cdots acd) \\
+		\Copy_{-3} &:& \young(\cdots abcd) &\mapsto& \young(\cdots abcdb) \\
+		\Rot_{-3} &:& \young(\cdots abcd) &\mapsto& \young(\cdots acdb) \\
+		\Prot_{-3} &:& \young(\cdots abcd) &\mapsto& \young(\cdots adbc) \\
+		\Tuck_{-3} &:& \young(\cdots abcd) &\mapsto& \young(\cdots adbcd) \\
+	\end{array}\end{equation*}
+	実行速度を無視すれば、サイズ$n$のスタックの要素の置換の集合は対称群$S_n$
+	となり、循環置換$\Rot_1$と互換$\Rot_{-2}$から生成される。また、スタック
+	の伸長は$\Copy_{-1}$、収縮は$\Drop_{-1}$で表される。したがって、上記に挙
+	げたすべてのスタック操作は$\Rot_1,\;\Rot_{-2},\;\Copy_{-1},\;\Drop_{-1}$
+	の四つの操作から生成される。
+
+	スタックマシンは、'深さ'と'マニピュレータ数'という言葉で分類することが
+	できるそうだ。表\ref{tbl:スタックマシンの分類}は、代表的なスタックマシン
+	の'深さ'と'マニピュレータ数'を書いている。この表中のB5000とは、最初の
+	スタックマシンの一つで'Burrough B5000'という商品名らしい。UFOとは、
+	\cite{shannon2006}で目的とするスタックマシンである。
+	'深さ'と'マニピュレータ数'とは何かは、おいおいわかると信じて先に進む。
+
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{rcc} \hline
+			マシン & 深さ & マニピュレータ数 \\ \hline
+			B5000 & 3 & 4 \\
+			Forth VM & 3 & 9 \\
+			Java VM & 4 & 9 \\
+			UFO & 4 & 16 \\
+		\end{tabular}\end{center}
+		\caption{スタックマシンの分類}\label{tbl:スタックマシンの分類}
+	\end{table} %}
+
+	\cite{shannon2006}ではスタックを次の５つの領域に分類している。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[e-stack] 式評価領域
+		\item[p-stack] パラメーター領域
+		\item[l-stack] 局所領域
+		\item[x-stack] 転送領域
+		\item[その他]
+	\end{description} %}
+	単一のスタックを５つの領域に分類するなどケチケチせずに、５つのスタックを
+	用意すればよいと思うが、スタックマシンを直にハードウェアで実装する際の
+	コストに関係するのだろう。式評価領域
+	\begin{equation*}\begin{array}{rr||r|r|}
+		\myop{get-local} & a & a \\
+		\myop{get-local} & b & a & b \\
+		\myop{multiplies} & & a * b \\
+		\myop{integer} & 4 & a * b & 4 \\
+		\myop{plus} & & a * b + 4 \\
+		\myop{set-local} & y \\
+	\end{array}\end{equation*}
+%s2:Shannonの修論}
+\subsection{Lua-5}\label{s2:Lua-5} %{
+	Lua-5では、スタック内でのcopy/rotateによる無駄なコピーを排除するために、
+	スタックをランダムアクセスできるようにしている。そして、ランダムアクセス
+	できるスタックをレジスターと言っている。
+%s2:Lua-5}
+\endgroup %}
+%s1:スタックマシン}
+\section{Diffie-Hellmannのカギ共有}\label{s1:Diffie-Hellmannのカギ共有} %{
+	Diffie-Hellmannのカギ共有は、可換半群$A=(A,*,1)$の元$a,b,c$を用いて、
+	次の図で表すことができる。
+	\begin{equation*}\xymatrix{
+		\text{person }\alpha & \text{common} & \text{person }\beta \\
+		a\in A \ar[d] & c\in A \ar[ld] \ar[rd] & b\in A \ar[d] \\
+		\ar[d] \ar[rrd]^(0.2){a*c} & & \ar[d] \ar[lld]_(0.2){b*c} \\
+		a*(b*c) & & b*(a*c) \\
+	}\end{equation*}
+	この図にある要素には次のような名称が与えられている。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[公開アルゴリズム] 可換半群$A$
+		\item[公開カギ] $c\in A$
+		\item[秘密カギ] $a,b\in A$
+		\item[共有カギ] $a*b*c\in A$ \\
+		$A$が可換半群だから、$a*(b*c)=b*(a*c)$となり、$\alpha$と$\beta$で
+		カギ$a*b*c$を共有できる。
+		\item[交換カギ] $c*a,c*b\in A$ \\
+		交換カギ$a*c$と$b*c$の両方が盗まれた場合でも、共有カギ$a*b*c$を
+		計算することが困難であれば、共有カギを秘密にすることができる。
+	\end{description} %}
+	$A$が群であった場合は、公開カギ$c$の逆元$c^{-1}$が予め計算されてしまう
+	ので、共有鍵を秘密にすることができなくなる。
+	\begin{equation*}\begin{split}
+		a = c^{-1}*a*c \quad\text{for all }a,c\in A
+	\end{split}\end{equation*}
+	幸か不幸か、計算しやすいものは群になることが多い。
+	そこで、$A$の作用域を持ち込んで交換カギから秘密カギの逆元を計算できなく
+	する。集合$C$を可換半群$A$の作用域として、$A$の$C$への作用$\rhd$で書く。
+	\begin{equation*}\begin{split}
+		a\rhd b\rhd c = (a*b)\rhd c \quad\text{for all } a,b\in A,\; c\in C
+	\end{split}\end{equation*}
+	カギ交換のプロトコルは次のような図で表される。
+	\begin{equation*}\xymatrix{
+		\text{person }\alpha & \text{common} & \text{person }\beta \\
+		a\in A \ar[d] & c\in C \ar[ld] \ar[rd] & b\in A \ar[d] \\
+		\ar[d] \ar[rrd]^(0.2){a\rhd c} & & \ar[d] \ar[lld]_(0.2){b\rhd c} \\
+		a\rhd b\rhd c & & b\rhd a\rhd c \\
+	}\end{equation*}
+	この場合、交換カギから秘密カギを求めるアルゴリズムは次のように定式化する
+	ことができる。
+	\begin{equation*}\begin{split}
+		\text{for given } c,d\in C 
+		\text{ find } a\in A \text{ such that } d = a\rhd c
+	\end{split}\end{equation*}
+	この処理が困難なことが保証されていれば、$A$として簡単な半群を使うことが
+	できる。
+	$C$を$\sei/p\sei$、$A$を$\sizen$として、$\rhd$を$k\rhd n=n^k\mod p$
+	としたものが、Diffie-Hellmannのオリジナルらしい。この場合でも、
+	公開カギ$c$の逆数$c^{-1}$を用いると、$c^{-a}c^a=1\mod p$となり、
+	交換カギ$c^a$に対して$c^{-1}$を$a$回掛けると秘密カギ$a$がわかってしまう。
+	秘密カギが$\sei_p$上に一様分布しているとすると、秘密カギを見つける手数
+	は$p$程度になる。
+	\begin{equation}\label{eq:離散対数問題}\begin{split}
+		\text{for given } c,d\in\sei/p\sei 
+		\text{ find } a\in\sizen \text{ such that } d = c^a\mod p
+	\end{split}\end{equation}
+	この問題を効率良く解く方法を見つけることを離散対数問題というらしい。
+
+	Wikipediaによると、RSAとは離散対数問題の困難さを利用した暗号化の方法で
+	ある。Diffie-HellmannのオリジナルとRSAの両者共に離散対数問題の困難さを
+	利用しているために、両者は混同されがちだが、その目的は異なる。
+	$n\in N$をパラメーター、$A_n$を$N$でパラメトライズされたカギとなる群、
+	$M$を平文とし、暗号化を作用$\rhd_n:A_n\times M\to M$で定義する。
+	そして、次のようなプロトコルによって、暗号化を定義したものがRSAである。
+	\begin{equation*}\xymatrix{
+		\text{person }\alpha & \text{person }\beta \\
+		a,a_n^{-1}\in A_n \ar[d] & m\in M \ar[dd] \\
+		\ar[dd] \ar[rd]^{a,n} & & \\
+		& \ar[ld]_{a\rhd_n m} \\
+		a_n^{-1}\rhd_n a\rhd_n m & \\
+	}\end{equation*}
+	暗号化のカギ$a$から復号化のカギ$a_n^{-1}$がバレなければ、$\beta$から
+	$\alpha$へ送信される平文の秘匿性が保たれる。この場合は、暗号化の頑強性を
+	群の逆元を求める難しさに帰着させている。
+	\begin{equation*}\begin{split}
+		p,q\text{が素数} \implies (m^a\bmod n)^b\bmod n = m \quad\text{where }
+		n := pq \\
+		\quad\text{for all } m<pq,\quad ab=1\mod (p-1)(q-1)
+	\end{split}\end{equation*}
+%s1:Diffie-Hellmannのカギ共有}
+\section{Galois理論}\label{s1:Galois理論} %{
+	教科書\cite{artin1959}のノートを書く。
+\subsection{体論}\label{s2:体論} %{
+	体について成り立つ基本的な事柄を述べる。
+	この節では、体という場合は自明な体は除外するものとする。自明な体とは
+	$0$だけからなる体のことである。
+\subsubsection{拡大体}\label{s3:拡大体} %{
+	\begin{minipage}{0.9\hsize}{\small
+		部分体$K\subset E$が与えられたとき、$K$に元$\alpha\in E$を追加して
+		体$K(\alpha)$をつくる。$K(\alpha)$を$K$上のベクトル空間として見て、
+		線形代数を体$K(\alpha)$を調べる道具として利用できるようにする。
+	}\end{minipage}\medskip
+
+	拡大体という言葉は部分体の逆として定義される。
+	$K\subseteq E$を部分体とすると、$E$は$K$の拡大体となる。
+	体$E$とその部分体$K\subseteq E$に対して、$K$と$\alpha\in E$
+	によって生成される体を$K(\alpha)$と書く。
+	\begin{equation*}\begin{split}
+		K(\alpha) := \text{field of generated by }K\cup\set{\alpha}
+		\quad\text{for all } \alpha\in E
+	\end{split}\end{equation*}
+	$K\subseteq K(\alpha)\subseteq E$という包含関係が成り立つ。
+	定義から、$K(\alpha)$は$K$と$\alpha\in E$を含む最小の体となる。
+	また、$K(\alpha)$は、乗法を忘れることで、$K$上のベクトル空間として
+	見ることもできる。このとき、$K(\alpha)$の$K$上のベクトル空間としての
+	次元を$|K(\alpha)/K|$と書く。
+
+	有理数体$\bun$を複素数体$\fukuso$の元で拡大する例を見てみる。
+
+	\begin{example}[拡大体その一]\label{eg:拡大体その一} %{
+		$\bun(\sqrt{2})$を考える。ベクトル空間$V$を次のように定義する。
+		\begin{equation*}\begin{split}
+			V := \set{a + b\sqrt{2}\bou a,b\in\bun}
+		\end{split}\end{equation*}
+		$V$に乗法を$\fukuso$の乗法で定義する。すると、次の式から$V$は乗法で
+		閉じているから$V$は代数となる。
+		\begin{equation*}\begin{split}
+			(a + b\sqrt{2})(c + d\sqrt{2}) = (ac + 2bd) + (ad + bc)\sqrt{2}
+			\quad\text{for all } a,b,c,d\in\bun
+		\end{split}\end{equation*}
+		さらに、次の式から、任意の$\theta\neq0\in\bun(\sqrt{2})$に対して
+		乗法の逆元$\theta^{-1}\in\bun(\sqrt{2})$が唯一つ定まるから、
+		$V$は体となることがわかる。
+		\begin{equation*}\begin{array}{rcll}
+			(a + b\sqrt{2})(c + d\sqrt{2}) = 1
+			&\implies& \begin{pmatrix}
+				b & a \\ a & 2b
+			\end{pmatrix}\begin{pmatrix}
+				c \\ d
+			\end{pmatrix} = \begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix} \\
+			&\implies& \begin{pmatrix}
+				c \\ d
+			\end{pmatrix} = \cfrac{1}{a^2 - 2b^2}\begin{pmatrix}
+				a \\ -b
+			\end{pmatrix} & \lcomment{$a,b\in\bun\implies a^2\neq 2b^2$} \\
+			&\implies& (a + b\sqrt{2})^{-1} = \cfrac{a - b\sqrt{2}}{a^2 - 2b^2}
+			& \quad\text{for all } a,b\in\bun
+		\end{array}\end{equation*}
+		したがって、$\fukuso$の乗法によってベクトル空間$V$に乗法を定義した
+		ものが、体$\bun(\sqrt{2})$になることがわかる。
+	\end{example} %eg:拡大体その一}
+
+	\begin{example}[拡大体その二]\label{eg:拡大体その二} %{
+		$\bun(\sqrt{2},\sqrt{3})$を考える。ベクトル空間$V$を次のように定義
+		すると、$\bun(\sqrt{2})$と同様にして、$\fukuso$の乗法によって$V$に乗法
+		を定義したものが$\bun(\sqrt{2})(\sqrt{3})$になることがわかる。
+		\begin{equation*}\begin{split}
+			V := \set{a + b\sqrt{3}\bou a,b\in\bun(\sqrt{2})}
+		\end{split}\end{equation*}
+		また、ベクトル空間$W$を次のように定義しても同様である。
+		\begin{equation*}\begin{split}
+			W := \set{a + b\sqrt{2}\bou a,b\in\bun(\sqrt{3})}
+		\end{split}\end{equation*}
+		つまり、$\bun$に元を追加する順番に依らず、同一の体
+		$\bun(\sqrt{2})(\sqrt{3})=\bun(\sqrt{3})(\sqrt{2})$が得られる。
+		この体を$\bun(\sqrt{2},\sqrt{3})$と書く。
+		体$\bun(\sqrt{2},\sqrt{3})$を
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\bun$上のベクトル空間として見ると、基底系は
+			$\set{1,\sqrt{2},\sqrt{3},\sqrt{6}}$で与えられ、
+			\item $\bun(\sqrt{2})$上のベクトル空間として見ると、基底系は
+			$\set{1,\sqrt{3}}$で与えられるから、
+		\end{itemize} %}
+		拡大体の次元について次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\left|\frac{\bun(\sqrt{2},\sqrt{3})}{\bun}\right|
+			= \left|\frac{\bun(\sqrt{2},\sqrt{3})}{\bun(\sqrt{3})}\right|
+			\left|\frac{\bun(\sqrt{3})}{\bun}\right|
+			= \left|\frac{\bun(\sqrt{2},\sqrt{3})}{\bun(\sqrt{2})}\right|
+			\left|\frac{\bun(\sqrt{2})}{\bun}\right|
+		\end{split}\end{equation*}
+	\end{example} %eg:拡大体その二}
+
+	\begin{example}[拡大体その三]\label{eg:拡大体その三} %{
+		$\omega$を$1$の三乗根とする。
+		\begin{equation*}\begin{split}
+			\omega := \exp{\frac{2\pi i}{3}} = \frac{-1 + \sqrt{3}i}{2}
+		\end{split}\end{equation*}
+		$\bun(\omega)$は$\omega$を含む$\bun$の最小拡大体で、
+		$\omega\in\bun(\sqrt{3}i)$となるから、
+		$\bun(\omega)\subseteq\bun(\sqrt{3}i)$が成り立つ。一方、
+		$\omega\in\bun(\sqrt{3}i)$は$\sqrt{3}i$を含む$\bun$の最小拡大体で、
+		$\sqrt{3}i=2+2\omega\in\bun(\omega)$となるから、
+		$\bun(\sqrt{3}i)\subseteq\bun(\omega)$が成り立つ。したがって、
+		$\bun(\omega)=\bun(\sqrt{3}i)$となることがわかる。
+		同様にして、$\bun(\omega^2)=\bun(\sqrt{3}i)$となることがわかる。
+		つまり、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\bun(\omega) = \bun(\sqrt{3}i) = \bun(\omega^2)
+		\end{split}\end{equation*}
+		これは、多項式$(x-\omega)(x-\omega^2)=x^2+x+1\in\bun[x]$と
+		その根による拡大体$\bun(\omega)$とが関係していることを示している。
+	\end{example} %eg:拡大体その三}
+
+	\begin{example}[拡大体その四]\label{eg:拡大体その四} %{
+		$n$を$3$以上の自然数として$n$乗根$\omega=\exp(2\pi i/n)$による
+		整数の拡大体$\sei(\omega)$を考える。$\omega$は次の式を満たす。
+		\begin{equation*}\begin{split}
+			\omega^n &= 1 \\
+			(x - \omega)(x - \omega^2)\cdots(x - \omega^{n-1}) 
+			&= x^0 + x^1 +\cdots+ x^{n-1} \\
+		\end{split}\end{equation*}
+		一つ目の式から$\sei(\omega)$は集合$\set{\omega^i\bou i=0..(n-1)}$に
+		よって張られることがわかり、$|\sei(\omega)|\le n$となることがわかる。
+		また、二つ目の式から$\omega+\omega^2+\cdots+\omega^{n-1}=1$となり、
+		$|\sei(\omega)|\le n-1$となることがわかる。
+		また、$n$が素数でなければ、$2$以上の自然数$p$と$q$で$n=pq$と書くことが
+		できる。このとき、$x^n-1=(x^p)^q-1=(x^p-1)(1+x^p+\cdots+x^{p(q-1)})$
+		と書けて、$|\sei(\omega)|\le p-1$となることがわかる。
+		したがって、$\omega$による拡大体の次元の上限が次のように得られる。
+		\begin{equation*}\begin{split}
+			|\sei(\omega)| \le (\text{$n$を割り切る$2$以上の最小の素数}) - 1
+		\end{split}\end{equation*}
+	\end{example} %eg:拡大体その四}
+
+	\begin{proposition}[次元のチェイン則]\label{prop:次元のチェイン則} %{
+		任意の拡大体$A\subseteq B\subseteq C$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			A\subseteq B\subseteq C \implies \left|\frac{C}{A}\right|
+			= \left|\frac{C}{B}\right|\left|\frac{B}{A}\right|
+		\end{split}\end{equation*}
+	\end{proposition} %prop:次元のチェイン則}
+	\begin{proof} %{
+		$B$と$C$をそれぞれ$A$と$B$上のベクトル空間として次のように表した時、
+		\begin{alignat*}{2}
+			B &= A(\beta_1,\beta_2,\dots),&\quad \beta_1,\beta_2,\dots\in B \\
+			C &= B(\gamma_1,\gamma_2,\dots),&\quad \gamma_1,\gamma_2,\dots\in C
+		\end{alignat*}
+		集合$\set{\beta_i\gamma_j\in C}$が$A$上のベクトル空間$C$の基底系
+		となることが言えればよい。次の式から$\set{\beta_i\gamma_j\in C}$が
+		$A$上で線形独立となることがわかる。
+		\begin{alignat*}{3}
+			\sum_{ij}a_{ij}\beta_i\gamma_j = 0
+			&\implies \sum_{i}a_{ij}\beta_i = 0 &\;\text{for all } j
+			&\quad \because \set{\gamma_j}\text{は$B$上で線形独立} \\
+			&\implies a_{ij} &\;\text{for all } i,j
+			&\quad \because \set{\beta_i}\text{は$A$上で線形独立}
+		\end{alignat*}
+		したがって、$|C/A|\ge|C/B||B/A|$となることがわかる。この式の右辺の
+		うち一つでも無限大になっていれば、命題が成り立つことがわかる。
+		$|C/B|$と$|B/A|$が共に有限の場合を考える。
+		
+		任意の$c\in C$はある$b_j\in B$があって$c=\sum_jb_j\gamma_j$と書くこと
+		ができる。また、任意の$j$に対してある$a_{ij}\in A$があって
+		$b_j=\sum_ib_i\beta_i$と書くことができる。したがって、
+		$c=\sum_{ij}a_{ij}\beta_i\gamma_j$となり、任意の$C$の元は
+		$\set{\beta_i\gamma_j\in C}$の$A$上の線型結合で書くことができることが
+		わかる。したがって、$|C/A|\le|C/B||B/A|$となることがわかる。
+
+		以上より$|C/A|=|C/B||B/A|$となり命題が証明された。
+	\end{proof} %}
+%s3:拡大体}
+\subsubsection{多項式}\label{s3:多項式} %{
+	\begin{minipage}{0.9\hsize}{\small
+	既約な多項式を定義する。既約な多項式は素数に対応するものである。
+	係数体が複素数以外では、与えられた多項式が規約かどうかを判定することは
+	難しい。整数上の多項式に対して、既約かどうかを判定するための道具にも
+	触れる。
+	}\end{minipage}\medskip
+
+	$K$を体とし、$K$上の多項式全体のつくる集合を$K[x]$と書く。
+	$K$の加法と乗法によって$K[x]$を$K$上のベクトル空間としてみる。
+	さらに、$K[x]$に乗法を次のように定義すると$K[x]$は代数となる。
+	\begin{equation*}\begin{split}
+		x^mx^n := x^{m+n} \quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	このようにして定義された代数$K[x]$を上の多項式環という。
+	多項式$f\in K[x]$の冪の最高の値を$f$の次数といい、$\deg f$と書く。
+	\begin{equation*}\begin{split}
+		f = a_0 + a_1x + \cdots + a_nx^n \implies \deg f = n
+	\end{split}\end{equation*}
+
+	\begin{proposition}[多項式の剰余]\label{prop:多項式の剰余} %{
+		$K$を体、$K[x]$を上の多項式環とする。任意の$f\in K[x]$と
+		$g\neq0\in K[x]$に対して、次の式を満たす$q,r\in K[x]$が唯一つ定まる。
+		\begin{equation*}\begin{split}
+			f = qg + r \And \deg r < \deg g
+		\end{split}\end{equation*}
+	\end{proposition} %prop:多項式の剰余}
+	\begin{proof} %{
+		命題の$q,r\in K[x]$が存在することと、それが一意であることの二つに分けて
+		証明する。
+
+		まず、命題の$q,r\in K[x]$が存在することを証明する。
+		$\deg f < \deg g$のときは、$q=0,\; r=f$とすれば、$f=qg+r$となる。
+		したがって、$\deg f\le \deg g$となる場合を考える。
+		多項式の最高次数の単項式を取り出す操作を$\mu:K[x]\to K[x]$とする。
+		\begin{equation*}\begin{split}
+			a_n\neq 0\in K[x] \implies \mu(a_0+a_1x +\cdots+ a_nx^n) = a_nx^n
+		\end{split}\end{equation*}
+		次のような多項式$F_0,F_1,\dots$を用いて$f$の次数を下げていくと、
+		\begin{alignat*}{2}
+			F_0 &= f \\
+			F_1 &= F_0 - \frac{\mu F_0}{\mu g} g, &\quad &\deg h_1< (\deg F_0) \\
+			F_2 &= F_1 - \frac{\mu F_1}{\mu g} g, &\quad &\deg h_2< (\deg F_1) \\
+			\cdots
+		\end{alignat*}
+		ある$0\le k\le (\deg f)-(\deg g)$があって次のようになる。
+		\begin{equation*}\begin{split}
+			\deg F_{k+1}< \deg g\le \deg F_k\le \deg f
+		\end{split}\end{equation*}
+		したがって、$f$は次のように書けて、
+		\begin{equation*}\begin{split}
+			f = Qg + F_{k+1},\quad
+			Q = \frac{\mu F_0}{\mu g} + \frac{\mu F_1}{\mu g}
+				+\cdots+ \frac{\mu F_k}{\mu g}
+		\end{split}\end{equation*}
+		$Q,F_{k+1}$が命題の$q,r$となることがわかる。
+
+		次に命題の条件を満たす$q,r\in K[x]$が一意であることを証明する。
+		\begin{alignat*}{2}
+			f &= qg + r, &\quad \deg r\le \deg g \\
+			f &= Qg + R, &\quad \deg R\le \deg g
+		\end{alignat*}
+		とすると、$(Q-q)g=R-r$となるが、$Q\neq q$ならば、
+		左辺の次数は$\deg g$以上で、右辺の次数は$\deg g$より小さくなる。
+		これは矛盾である。したがって、$Q=q$となる必要があるが、
+		そのときは$R=r$となる。したがって、命題の条件を満たす$q,r\in K[x]$が
+		一意であることがわかる。
+	\end{proof} %}
+
+	この命題の$q$を$g$を$f$で割った商、$r$を$g$を$f$で割った余りという。
+	また、二つの多項式$f,g\in K[x]$の関係を次のように定義する。
+	\begin{equation*}\begin{split}
+		\text{$f$は$g$を割り切る} &\xiff{\dfn} \exists\; q\in K[x] 
+			\text{ such that } g = qf \\
+		\text{$f$は$g$は互いに素} &\xiff{\dfn} 
+		\text{$f$と$g$を共に割り切る多項式は定数のみ}
+	\end{split}\end{equation*}
+	自然数の場合と同様に最大公約多項式を定義できるが、
+	多項式の場合、$f$が$g$を割り切れば、任意の$a\neq0\in K[x]$を掛けた
+	$af$も$g$を割り切るから、最大公約多項式$\gcd:K[x]\times K[x]\to K[x]$を
+	最高次の係数が$1$になる多項式に固定する。
+	\begin{equation*}\begin{split}
+		\gcd(f,g) = a_0 + a_1 +\cdots+ a_{m-1}x^{m-1} + x^m
+	\end{split}\end{equation*}
+
+	Bezoutの恒等式\ref{prop:Bezoutの恒等式}を多項式の場合に持ってくる。
+	命題\ref{prop:Bezoutの恒等式}の絶対値$|-|:\sei\to\sizen$のところを
+	$\deg:K[x]\to\sizen$に変えれば、多項式に対して同様に証明できる。
+
+	\begin{proposition}[Bezoutの恒等式（多項式）]\label{prop:Bezoutの恒等式（多項式）} %{
+		$0$でない$f,g\in K[x]$を互いに素とすると、$fF+gG=1$となる$F,G\in K[x]$
+		が、$(F,G)\mapsto(F-g,G+f)$の不定性を除いて唯一つ定まる。
+	\end{proposition} %prop:Bezoutの恒等式（多項式）}
+	\begin{proof} %{
+		部分空間$V\subseteq K[x]$を次のように定義し、
+		\begin{equation*}\begin{split}
+			V := \set{fa + gb\in K[x]\bou a,b\in K[x]}
+		\end{split}\end{equation*}
+		$n$を$V$の$0$でない多項式の最小の次数とする。
+		$V$の定義より、$n\le\min(\deg f,\deg g)$となることがわかる。
+
+		$h=F_0f+G_0g\in V$を$\deg h=n$となる多項式とする。
+		$f$を$h$で割ると、$f=Fh+r$となる$F\in K[x]$と$\deg r<n$となる
+		$r\in K[x]$が唯一つ定まるが、$r=f(1-FF_0)-gG_0\in V$となり、
+		$r=0$となるとき以外は$h$の定義と矛盾する。したがって、$r=0$となり、
+		$f=Fh$と書かれることになる。同様に$g$を$h$で割ると、
+		$g=Gh$となる$G\in K[x]$が唯一つ定まることがわかる。
+		\begin{equation*}\begin{split}
+			\exists\; F,G\in K[x] \text{ such that } f = Fh,\; g = Gh
+		\end{split}\end{equation*}
+		$h$が定数でない場合は、$f$と$g$が互いに素であることに矛盾するから、
+		$h$は定数でなければならないことがわかる。$h$の定義より、$h$は$0$で
+		ないから、$h$は$0$でない定数となる。したがって、$h^{-1}(F_0f+G_0g)=1$
+		となり、$F_0/h,G_0/h$が命題の$F,G$となる。
+
+		$F_i,G_i\in K[x]\;(i=1,2)$が共に$fF_i+gG_i=1$を満たせば、
+		$f(F_1-F_2)+g(G_1-G_2)=0$となり、命題の不定性が成り立つことがわかる。
+	\end{proof} %}
+
+	多項式の可約と既約を次のように定義する。
+	\begin{equation*}\begin{split}
+		f\in K[x]\text{が可約}
+		& \xiff{\dfn} \exists\; g_1,g_2\in K[x] \text{ such that } f = g_1g_2 
+			\text{ with } 0 < \deg g_i \\
+		f\in K[x]\text{が既約}
+		& \xiff{\dfn} 0 < \deg f \text{かつ可約でない} \\
+	\end{split}\end{equation*}
+	多項式の可約や既約という言葉は、次数$2$以上の多項式に対してのみ実質的な
+	意味を持つ。次数が$1$の多項式はすべて既約である。
+	
+	多項式の既約性は多項式の根と関係している。次の式から、任意の体$K$で次数
+	が$1$の多項式は必ず$K$に根を持つことがわかる。
+	\begin{equation*}\begin{split}
+		a + bx = 0,\quad b\neq 0 \implies \begin{cases}
+			x = 0, &\text{ iff } a = 0 \\
+			x = - \cfrac{a}{b}, &\text{ otherwise } \\
+		\end{cases} \quad\text{for all } a,b\in K
+	\end{split}\end{equation*}
+	また、$f\in K[x]$は$a\in K$を根に持つとする。$f=q(x-a)+b$となる
+	$q\in K[x]$と$b\in K$が唯一つ定まるが（命題\ref{prop:多項式の剰余}）、
+	$0=fa=b$だから、$f=q(x-a)$となる。したがって、次数が$2$以上の既約多項式
+	は$K$に根を持たないことがわかる。
+
+	次の命題は整数上の多項式が既約かどうかを判定するのに役に立つ。
+
+	\begin{proposition}[Gaussの補題]\label{prop:Gaussの補題} %{
+		$f\in\sei[x]$がある$g,h\in\bun[x]$で$f=gh$と書けるならば、
+		ある$G,H\in\sei[x]$で$f=GH$と書くことができる。
+	\end{proposition} %prop:Gaussの補題}
+	\begin{proof} %{
+		$g,h\in\bun[x]$で$f=gh$と書けたとする。$g$と$h$それぞれに対して、
+		まず係数の分母の最小公倍数を括りだしてすべての係数を整数にして、
+		次に係数の最大公約数を括りだして次のようにする。
+		\begin{equation*}\begin{split}
+			g = \frac{a}{b} G,\quad h = \frac{c}{d} H
+			\quad\text{where } a,b,c,d\in\sei,\; G,H\in\sei[x]
+		\end{split}\end{equation*}
+		$G$と$H$はそれぞれ係数の最大公約数は$1$になる。
+		仮定から$bdf=acGH$と書けるが、$GH$の係数の最大公約数は$1$だから、
+		$ac$は$hd$の倍数となる。したがって、$e\in\sei$を$ac=bde$とすると、
+		$f=eGH$となり、命題が成り立つことがわかる。
+	\end{proof} %}
+
+	この命題の証明から、整数上の多項式で互いに素になる
+	（係数の最大公約数が$1$になる）もの全体は乗法に関して閉じていることが
+	わかる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			\text{$f$の係数は互いに素} \\
+			\text{$g$の係数は互いに素} \\
+		\end{split}\right. \implies \text{$fg$の係数は互いに素}
+		\quad\text{for all } f,g\in\sei[x]
+	\end{split}\end{equation*}
+	$0$でない整数上の多項式で係数が互いに素になるものを原始多項式という。
+	原始多項式同士の乗法は原始多項式になる。
+
+	さらに、整数上の多項式では次の命題が成り立つ。
+
+	\begin{proposition}[係数の約数]\label{prop:係数の約数} %{
+		$g,h\in\sei[x]$として、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $gh$のすべての係数が素数$p$で割り切れ、
+			\item $gh$の定数項が$p^2$で割り切れないならば、
+		\end{itemize} %}
+		$g$または$h$のすべての係数は$p$で割り切れる。
+	\end{proposition} %prop:係数の約数}
+	\begin{proof} %{
+		$g,h$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			g = g_0 + g_1x + \cdots + g_mx^m,\quad
+			h = h_0 + h_1x + \cdots + h_nx^n
+		\end{split}\end{equation*}
+		$gh$の各係数$f_i$は次のようになる。
+		\begin{equation*}\begin{split}
+			f_0 &= g_0h_0 \\ 
+			f_1 &= g_0h_1 + g_1h_0 \\ 
+			\cdots \\
+			f_{m+n} &= g_mh_n \\ 
+		\end{split}\end{equation*}
+		$f_0$が$p$で割り切れ、$p^2$で割り切れないためには、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $g_0$が$p$で割り切れ、$h_0$が$p$で割り切れないか、
+			\item $g_0$が$p$で割り切れず、$h_0$が$p$で割り切れる
+		\end{itemize} %}
+		かのどちらかになる。ここでは、$g_0$が$p$で割り切れて$h_0$が$p$で
+		割り切れないとする。すると、$f_1$が$p$で割り切れるためには、
+		$g_1$が$p$で割り切れなければならない。
+		さらに、$f_2$が$p$で割り切れるためには、$g_2$が$p$で割り切れなければ
+		ならない。このようにして$f^m$まで続けていくと、$g$のすべての係数が
+		$p$で割り切れなければならないことが示される。
+	\end{proof} %}
+
+	次の命題は上記の命題とほぼ同じ内容だが、最高次の係数が$1$となっている
+	多項式に対して、その多項式が既約かどうかを判定するのに有効である。
+
+	\begin{proposition}[Eisensteinの判定法]\label{prop:Eisensteinの判定法} %{
+		次数が$2$以上の整数上の多項式$f$を次のようにおく。
+		\begin{equation*}\begin{split}
+			f = f_0 + f_1x + \cdots + f_nx^n
+		\end{split}\end{equation*}
+		ある素数$p$が存在して、係数$f_i$が次の条件を満たす時、
+		$f$は整数上で既約になる。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $a_n$が$p$で割り切れない。
+			\item $a_0,a_1,\dots,a_{n-1}$が$p$で割り切れる。
+			\item $a_0$が$p^2$で割り切れない。
+		\end{enumerate} %}
+	\end{proposition} %prop:Eisensteinの判定法}
+	\begin{proof} %{
+		命題の$f$が可約だとすると、ある次数の$1$が以上の整数上の多項式$g,h$で
+		$f=gh$と書ける。すると、命題\ref{prop:係数の約数}の証明と同じように
+		して、$g$または$h$の係数がすべて$p$で割り切れることが示される。
+		ここで、$m:=\max(\deg g, \deg h)$とすると、$m<n$となり、
+		命題\ref{prop:係数の約数}の証明では、係数$f_m$までのチェックで$g$
+		または$f$の係数が$p$で割り切れることが示されることに注意する。
+		したがって、$f$の係数すべてが$p$で割り切れることになり、命題の仮定に
+		矛盾する。
+	\end{proof} %}
+
+	\begin{example}[多項式の根その一]\label{eg:多項式の根その一} %{
+		剰余体$\sei_7:=\sei/7\sei$上の多項式の根を考える。
+		$\sei_7$の積表は次のようになる。
+		\begin{equation*}\begin{array}{r|rrrrrr}
+			& 2 & 3 & 4 & 5 & 6 \\\hline
+			2 & 4 & 6 & 1 & 3 & 5 \\
+			3 & & 2 & 5 & 1 & 4 \\
+			4 & & & 2 & 6 & 3 \\
+			5 & & & & 4 & 2 \\
+			6 & & & & & 1 \\
+		\end{array}\end{equation*}
+		積表を用いると次のように多項式の根が求まる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $3x-4$ \\
+			根は$x=3^{-1}\cdot4=5\cdot4=6$となる。
+			\item $x^2+x+1$ \\
+			$x^2+x+1=(x^3-1)/(x-1)$だから、$x^3=1$となる$1$以外の
+			数が根となる。積表から$2$と$4$が根となることがわかる。
+			\item $x^2-3$ \\
+			積表から$\sei_7$に根はないことがわかる。
+		\end{itemize} %}
+	\end{example} %eg:多項式の根その一}
+
+	\begin{example}[既約な多項式その二]\label{eg:既約な多項式その二} %{
+		有理数体上の多項式の既約性を考える。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $x^3-3$ \\
+			Eisensteinの判定法で割る素数を$3$とすれば、この多項式が既約である
+			ことがわかる。
+			\item $x^4-8x^2+2$ \\
+			Eisensteinの判定法で割る素数を$2$とすれば、この多項式が既約である
+			ことがわかる。
+			\item $x^4+x^3+x^2+x+1$ \\
+			$fx=x^4+x^3+x^2+x+1$とすると、$fx=(x^5-1)/(x-1)$となるが、
+			$x=y+1$とすると、$fx=y^4+5y^3+10y^2+10y+5$となる。
+			$Fy=y^4+5y^3+10y^2+10y+5$として、Eisensteinの判定法で割る素数を
+			$5$とすれば、$F$が既約であることがわかる。ここで、$f$が既約でない
+			とすると、$f=gh$となる次数が$1$以上の整数上の多項式$g,h$が存在
+			するが、そのとき、$f(y+1)=(g(y+1))(h(y+1))=Fy$となり、
+			$Fy$が$g(y+1)$と$h(y+1)$の二つの次数が$1$以上の整数上の多項式の
+			乗法で書かれることになる。これは、$F$が既約であることに矛盾する。
+			したがって、$f$は既約になることがわかる。
+		\end{itemize} %}
+	\end{example} %eg:既約な多項式その二}
+
+	この最後の例\ref{eg:既約な多項式その二}では、$K[x]$の自己代数同型射で、
+	既約な多項式は既約な多項式へ写像されることを使っている。
+	\begin{proof} %{
+		$f\in K[x]$を既約、$\phi\in\Aut K[x]$とする。$\phi f=GH$と次数が
+		$1$以上の$G,H\in K[x]$で書かれたとすると、$f=(\phi^{-1}G)(\phi^{-1}H)$
+		となり、$f$が既約であることに矛盾する。
+		したがって、$\phi f$も既約である。
+	\end{proof} %}
+%s3:多項式}
+\subsubsection{代数的要素}\label{s3:代数的要素} %{
+	\begin{minipage}{0.9\hsize}{\small
+		部分体$K\subset E$に$\alpha\in E$を追加した拡大体$K(\alpha)$に対して、
+		$K[x]$から$K(\alpha)$への代数射を構成する。このとき、$\alpha$を根に
+		もつ$K$上の既約多項式が重要な役割を果たす。
+	}\end{minipage}\medskip
+
+	$K\subset E$を体、$K[x]$を$K$上の多項式環とする。$\alpha\in E$に対して
+	$f\alpha=0$となる$f\in K[x]$が存在するとき、$\alpha$を$K$上で代数的
+	という。
+
+	$\alpha$が$K$上で代数的とする。このとき、$f\alpha$となる$f\in K[x]$で
+	最低の次数を持つものを選び出して、その最高次数の係数が$1$になるように
+	$f$に$K$の元を掛ける。
+	\begin{equation*}\begin{split}
+		f\alpha = 0,\quad f = f_0 + f_1x +\cdots+ f_{n-1}x^{n-1} + x^n
+	\end{split}\end{equation*}
+	すると次の性質が成り立つ。
+	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+		\item\label{enum:乗法の因子その一} $g\alpha=0$となる$g\in K[x]$は
+		$f$を乗法の因子に持つ。
+		\item\label{enum:既約その一} $f$は既約になる。
+		\item\label{enum:一意その一} $f$は一意に定まる。
+	\end{enumerate} %}
+	\begin{proof} %{
+		$g\in K[x]$を$g\alpha=0$とすると、$g=qf+r$かつ$\deg r<\deg f$となる
+		$q,r\in K[x]$が一意に定まる。$0=g\alpha=r\alpha$より、$r\neq 0$
+		とすると、$r$が$f$よりも次数の小さい$r\alpha=0$となる多項式となり、
+		$f$の定義に矛盾する。したがって、$r=0$となり、$g=qf$となる。
+		したがって、性質\ref{enum:乗法の因子その一}と\ref{enum:一意その一}
+		が成り立つことが示される。
+		また、$f=gh$となる次数が$1$以上の$g,h\in K[x]$が存在すれば、$g\alpha=0$
+		または$h\alpha=0$となるから、$f$の定義に矛盾する。したがって、$f$が
+		既約であることがわかり、性質\ref{enum:既約その一}が成り立つことが
+		示される。
+	\end{proof} %}
+	このような$f$を$\alpha$の最小多項式という。
+
+	$\alpha\in E$が$K$上で代数的、$f$を$\alpha$の最小多項式として、
+	部分集合$K_\alpha\subseteq E$を次のように定義する。
+	\begin{equation*}\begin{split}
+		K_\alpha := \set{g\alpha\in E\bou g\in K[x] \text{ and } \deg g<\deg f}
+	\end{split}\end{equation*}
+	$K_\alpha$の元は$\alpha^0,\dots,\alpha^{\deg f-1}$の$K$-線型結合で
+	書くことができるから、$K$は拡大体$K(\alpha)$の部分集合となっている。
+	$K_\alpha$は$E$の加法で閉じていて、$K$の乗法がスカラー積となるから、
+	ベクトル空間となる。また、$g\alpha,h\alpha\in K_\alpha$とすると、
+	$K[x]$で$gh=qf+r$かつ$\deg r<\deg f$となる$q,r\in K[x]$が唯一つ定まり、
+	$(g\alpha)(h\alpha)=r\alpha\in K_\alpha$となる。
+	したがって、$K_\alpha$は$E$の乗法で閉じているから、代数となることが
+	わかる。以下で、$K_\alpha$が体になることを証明する。
+	$K_\alpha$が体になることが示されれば、定義より$K(\alpha)$は$K$と
+	$\alpha$を含む最小の体だから$K_\alpha=K(\alpha)$となることがわかる。
+
+	$K_\alpha$を$K[x]$に持ってくることを考える。
+	多項式に$\alpha$を代入する操作を$\pi_\alpha$と書き、$m$を$K[x]$と$E$の
+	通常の乗法とすると、次の可換図が成り立つことがわかる。
+	\begin{equation*}\xymatrix{
+		K[x]\otimes K[x] \ar[r]^m \ar[d]^{\pi_\alpha\otimes\pi_\alpha} 
+			& K[x] \ar[d]^{\pi_\alpha} \\
+		K_\alpha\otimes K_\alpha \ar[r]^m & K_\alpha \\
+	}\end{equation*}
+	$f$の性質\ref{enum:乗法の因子その一}から、$f$で生成される次の部分代数
+	$(f)\subseteq K[x]$が、$(f)=\ker\pi_\alpha$となることがわかる。
+	\begin{equation*}\begin{split}
+		(f) := \set{qf\in K[x]\bou q\in K[x]}
+	\end{split}\end{equation*}
+	したがって、$K$-代数同型$K[x]/(f)\simeq K_\alpha$が成り立つ。
+	$K[x]/(f)$が体になることを証明できれば、代数同型により$K_\alpha$が
+	体になることが証明される。
+
+	$K$-代数射$\pi_f:K[x]\to K[x]/(f)$を$K$-代数同型
+	$\pi_fK[x]\simeq K_\alpha$が成り立つように定義する。
+	$\pi_f$は$f$で割った余りをとる操作である。
+	$\pi_f$の作用を$K[x]$の基底系$x^m$に対して書くと次のようになる。
+	\begin{alignat*}{2}
+		\pi_f x^m &:= x^m &\quad& \text{iff } m < n \\
+		\pi_f x^{n+p} :&= \pi\bigl(\overbrace{x^p\underbrace{
+				(x^n - fx)}_{(n-1)\text{次以下}}}^{(n+p-1)\text{次以下}}\bigr)
+		&\quad& \text{for all } p\in\sizen
+	\end{alignat*}
+
+	$g\in K[x]$が$\pi g\neq 0$となるならば、$f$と$g$は互いに素になる。
+	したがって、命題\ref{prop:互いに素な多項式}より、
+	$fF+gG=1$となる$F,G\in K[x]$が存在する。
+	この式に対して$f$ので割った余りをとると、$(\pi g)(\pi G)=1$となり、
+	$\pi g$の逆元が$\pi G$となることがわかる。
+	よって、$K[x]/(f)$が体になることがわかる。式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		K(\alpha)=K_\alpha\simeq K[x]/(f)
+	\end{split}\end{equation*}
+
+	$K[x]/(f)$が体になることは、教科書\cite{artin1959}にあるように、
+	線形代数を使っても証明することができる。ここで、$f\in K[x]$は次数$n$の
+	既約多項式とする。$V$を次数が$n-1$以下の$K[x]$の部分空間とする。
+	$\pi_f:V\to K[x]/(f)$はベクトル空間として同型射となるから、
+	任意の$g\neq0\in V$と$h\in V$に対して、$\pi_f(gG)=\pi_fh$となる$G\in V$
+	が存在することが言えれば、$K[x]/(f)$が体になることが言える。
+	$G$と$h$を次のようにおく。
+	\begin{equation*}\begin{split}
+		G = G_0 + G_1x +\cdots+ G_{n-1}x^{n-1},\quad
+		h = h_0 + h_1x +\cdots+ h_{n-1}x^{n-1}
+	\end{split}\end{equation*}
+	すると、式$\pi_f(gG)=\pi_fh=h$は次のような行列で書くことができる。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			g_{00} & g_{10} &\cdots& g_{(n-1)0} \\
+			g_{01} & g_{11} &\cdots& g_{(n-1)1} \\
+			\vdots & \vdots &\cdots& \vdots \\
+			g_{0(n-1)} & g_{1(n-1)} &\cdots& g_{(n-1)(n-1)} \\
+		\end{pmatrix}\begin{pmatrix}
+			G_0 \\ G_1 \\ \vdots \\ G_{n-1}
+		\end{pmatrix} = \begin{pmatrix}
+			h_0 \\ h_1 \\ \vdots \\ h_{n-1}
+		\end{pmatrix} \quad\text{where} \\
+		\pi_f(x^ig) = g_{i0} + g_{i1}x +\cdots+ g_{i(n-1)}x^{n-1}
+		\quad\text{for all } i=0,\dots,n-1
+	\end{split}\end{equation*}
+	この式の左辺の行列を$\what{g}$と書くと、$\what{g}$が正則となることが
+	証明できればよい。$\what{g}\what{\xi}=0$となる$\what{\xi}\in K^{n-1}$が
+	$0$だけとなることが言えれば、$\what{g}$が正則となることが言える。
+	$\what{\xi}\in K^{n-1}$に対して、$\xi\in V$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		\xi := \begin{pmatrix}
+			1 & x &\dots& x^{n-1}
+		\end{pmatrix}\what{\xi} 
+		= \what{\xi}_0 + \what{\xi}_1x +\cdots+ \what{\xi}_{n-1}x^{n-1}
+	\end{split}\end{equation*}
+	次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\what{g}\what{\xi} = 0 \implies \pi_f(g\xi) = 0
+		\implies g\xi\in \ker\pi_f
+	\end{split}\end{equation*}
+	$g$と$\xi$は次数が$n-1$以下の多項式なので、その積$g\xi$が$f$で割り切れる
+	ことはない。したがって、$\what{g}\what{\xi}$ならば$\what{\xi}=0$
+	となることがわかる。よって、任意の$g\neq0\in V$に対して行列
+	$\what{g}$が正則になることがわかり、$K[x]/(f)$が体になることがわかる。
+
+	次の命題によって、$K$上の既約多項式$f$が与えられれば、
+	$f$の根よる体の拡大は根の選び方に依らないことがわかる。
+
+	\begin{proposition}[根の選び方]\label{prop:根の選び方} %{
+		部分体$K\subseteq E$とし、$\alpha\in E$を$K$上で代数的とする。
+		$f$を$\alpha$の最小多項式とすると、$|K(\alpha)/K|=\deg f$となり、
+		任意の$f$の根$\beta$に対して、代数同型$K(\alpha)\simeq K(\beta)$が
+		成り立つ。
+	\end{proposition} %prop:根の選び方}
+	\begin{proof} %{
+		上記の議論より、$|K(\alpha)/K|=|K[x]/(f)|=\deg f$となることがわかる。
+		また、任意の$f$の根$\beta$に対して、$f$は$\beta$の最小多項式になる。
+		そうでなければ、$f$が既約であることに矛盾する。したがって、
+		代数同型$K(\alpha)\simeq K[x]/(f)\simeq K(\beta)$が成り立つ。
+	\end{proof} %}
+
+	次の命題は代数学の基本定理に相当するものである。
+
+	\begin{proposition}[Kroneckerの定理]\label{prop:Kroneckerの定理} %{
+		$K$を体、$g\in K[x]$を定数でない多項式とすると、拡大体$E\supseteq K$
+		で$g$が$E$に根を持つものが存在する。
+	\end{proposition} %prop:Kroneckerの定理}
+	\begin{proof} %{
+		$g$の既約因子$h$をとって、$K[x]/(h)$を作ればよい。
+	\end{proof} %}
+
+	本題とは外れるが、教科書\cite{artin1959}の演習問題を命題の形で書いて
+	おく。
+
+	\begin{proposition}[有理数の自己同型射]\label{prop:有理数の自己同型射} %{
+		有理数体の自己代数同型射は恒等射だけである。
+	\end{proposition} %prop:有理数の自己同型射}
+	\begin{proof} %{
+		まず、$\sigma$を有理数体の自己代数射として、次の式を証明する。
+		\begin{equation}\label{eq:分数の自己同型その一}\begin{split}
+			\sigma q = q(\sigma 1) \quad\text{for all } q\in\bun
+		\end{split}\end{equation}
+
+		自然数に対して次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\sigma n = \underbrace{(\sigma1) +\cdots+ (\sigma1)}_{\text{$n$}個} 
+			= n(\sigma1)\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		次の式から、
+		\begin{equation*}\begin{split}
+			n(\sigma\frac{m}{n}) = \underbrace{
+				(\sigma\frac{m}{n}) +\cdots+ (\sigma\frac{m}{n})}_{\text{$n$}個}
+				= \sigma m \quad\text{for all } m\in\sizen,\; n\in\sizen_+
+		\end{split}\end{equation*}
+		自然数について成り立つ結果を使うと、次の式が導かれる。
+		\begin{equation*}\begin{split}
+			\sigma\frac{m}{n} = \frac{m}{n}(\sigma1)
+			\quad\text{for all } m\in\sizen,\; n\in\sizen_+
+		\end{split}\end{equation*}
+		したがって、$\sigma0=2(\sigma0)$より、$\sigma0=0$となるから、
+		任意の$q\in\bun$に対して$\sigma(-q)=-\sigma q=-q(\sigma1)$が
+		成り立ち、式\ref{eq:分数の自己同型その一}が成り立つことがわかる。
+
+		ここで、$\sigma$を自己同型射とすると、
+		$\sigma1=(\sigma1)^2$より、$\sigma1=0$または$\sigma1=1$となるが、
+		$\sigma1=0$ならば、$\sigma$は自己同型でなくなるから、$\sigma1=1$
+		となることがわかる。したがって、命題が成り立つことがわかる。
+	\end{proof} %}
+
+	\begin{proposition}[実数の自己同型]\label{prop:実数の自己同型} %{
+		実数体の自己代数同型射は恒等射だけである。
+	\end{proposition} %prop:実数の自己同型}
+	\begin{proof} %{
+		$\sigma$を実数体の$1:1$の自己代数射とする\footnote{
+			$K$上の代数$A,B$の代数射$\sigma:A\to B$が次の性質を満たせば、
+			\begin{equation*}\begin{split}
+				\sigma a = 0\implies a = 0 \quad\text{for all } a\in A
+			\end{split}\end{equation*}
+			$\sigma$は$1:1$になる。なぜなら、$\sigma a_1=\sigma a_2$ならば、
+			$\sigma(a_1-a_2)=0$となり、$a_1=a_2$となる。
+			また、$A$が体の場合は、$a\neq0$で$\sigma a=0$となる$a\in A$が存在
+			すれば、$\sigma b=\sigma(aa^{-1}b)=0(\sigma(a^{-1}b))=0$となり、
+			$\sigma A=0$となってしまう。
+		}。すると、任意の$0<a\in\jitu$に対して$\sigma a=(\sigma\sqrt{a})^2>0$
+		となる。したがって、任意の$a<b\in\jitu$に対して
+		$\sigma b-\sigma a=(\sigma\sqrt{b-a})^2>0$となり、
+		次の式が成り立つことがわかる。
+		\begin{equation}\label{eq:実数の自己同型その一}\begin{split}
+			a<b \implies \sigma a< \sigma b \quad\text{for all } a,b\in\jitu
+		\end{split}\end{equation}
+
+		ここで、$\sigma$を自己同型射として、背理法を使って命題を証明する。
+		$a<\sigma a$となる$a\in\jitu$があったとする。すると、$a<q<\sigma a$
+		となる有理数$q$が存在する（実数の定義）。$a<q$に対して
+		式\ref{eq:実数の自己同型その一}を使うと、$\sigma a<\sigma q$となるが、
+		有理数は$\sigma$で不変だから（命題\label{prop:有理数の自己同型射}）、
+		$\sigma a<q$となり、$q$の定義とと照らし合わせると、
+		$\sigma a<q<\sigma a$となって、$q$の定義と矛盾する。
+		$\sigma a<a$となる$a\in\jitu$があった場合も同様である。
+		したがって、$\sigma$は恒等射となる。
+	\end{proof} %}
+%s3:代数的要素}
+\subsubsection{分解体}\label{s3:分解体} %{
+	\begin{minipage}{0.9\hsize}{\small
+		$x^2+1\in\bun[x]$は次の二つの方法で既約因子に分解される。
+		一つ目の方法は、抽象的に$\alpha^2+1=0$となる元を考えて、拡大体
+		$\bun(\alpha)$で$x^2+1=(x-\alpha)(x+\alpha)$と既約因子に分解する。
+		二つ目の方法は、$\beta:=(\exp i\pi/2)\in\fukuso$として、$\fukuso$で
+		$x^2+1=(x-\beta)(x+\beta)$と既約因子に分解する。
+		この二つの拡大体$\bun(\alpha)$と$\bun(\beta)$が代数同型となることを
+		示す。
+	}\end{minipage}\medskip
+
+	部分体$K\subseteq E$とし、$p\in K[x]$を既約とは限らない多項式とする。
+	$p$のすべての根$\alpha_1,\dots,\alpha_r$が$E$に含まれれば、$K$の拡大体
+	$K(\alpha_1,\dots,\alpha_r)$を$K$上の$p$の分解体、または単に、
+	$p$の分解体という。
+	
+	部分体$K\subset E$かつ$K\subset E'$とし、$p\in K[x]$のすべての根
+	$\alpha_1,\dots,\alpha_r$が$E$にも$E'$にも含まれるとする。
+	この時、$E$内での$p$の分解体$B$と、$E'$内での$p$の分解体$B'$は
+	同じものになるだろうか？教科書\cite{artin1959}ではこの問に対して、
+	体の同型射$\phi:K\simeq K'$が与えられたとき、それを多項式環の同型射
+	$\phi:K[x]\simeq K'[x]$に持って行き、既約な$f\in K[x]$に対して
+	同型射$\phi_*:K[x]/(f)\simeq K'[x]/(\phi f)$が存在することを導き出して、
+	分解体が代数同型を除いて一意に定まると答えている。
+	可換図で書くと次のようになることを示している。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			K \ar[d]_{\phi}^{\simeq} \\
+			K' \\
+		}\quad\xymatrix@C+4ex{
+			K[x] \ar[d]_{\phi}^{\simeq} \ar[r]^{-/(f)} 
+				& K[x]/(f) \ar@{.>}[d]_{\phi_*}^{\simeq} \\
+			K'[x] \ar[r]^{-/(\phi f)} & K'[x]/(\phi f) \\
+		}
+	\end{split}\end{equation*}
+
+	教科書\cite{artin1959}では、分解体が（同型を除いて）一意であることに
+	ついて面白い見方をしている。代数学の基本定理を用いると、定数でない任意の
+	複素数上の多項式は一次の多項式に分解することが保証されるので、
+	複素数内で分解体を構成することができる。ここで行ったような既約多項式を
+	使って構成した分解体と、代数学の基本定理により構成した分解体が代数同型
+	になることを保証するのが、分解体の一意性になっている。
+
+	分解体の次元を考えてみる。$n$次多項式$f\in K[x]$を$K$上で既約とする。
+	拡大体$E\supset K$で$f=(x-\alpha_1)\cdots(x-\alpha_n)$と
+	分解できたとすると、$f$が$n$次多項式だから、$|K(\alpha_1)/K|=n$となる。
+	残りの$g:=f/(x-\alpha_1)=(x-\alpha_2)\cdots(x-\alpha_n)$が$K(\alpha_1)$上
+	で既約であれば、$g$が$n-1$次多項式だから、
+	$|K(\alpha_1,\alpha_2)/K(\alpha_1)|=n-1$となる。このようにしていくと、
+	$f$の分解体$B$の次元は$|B/K|\le n!$となることがわかる。
+	式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		p\in K[x] \implies |B/K| \le (\deg p)! 
+		\quad\text{where $B$ is a splitting field of $p$}
+	\end{split}\end{equation*}
+
+	部分体$K\subseteq E$、$f\in K[x]$で次数が$n$とする。
+	$f$の根はすべて$E$内にあり、$fx=(x-\alpha_1)\cdots(x-\alpha_n)$
+	と$E$上で分解されるとする。$D:=\prod_{i<j}(\alpha_i-\alpha_j)^2\in E$
+	を$f$の判別式という。判別式が$0$ならば$f$が重根をもつことがわかるが、
+	判別式はそれ以外の情報も与えてくれる。
+
+	二次式$f=x^2+bx+c$の場合は、$f$の判別式を$D$とすると、$f=(x+b/2)^2-D$
+	となり、$x^2-D$が既約なら$f$が既約となることがわかる。
+
+	三次式$f=x^3+bx^2+cx+d$の場合は、$x^3+bx^2=(x+b/3)^3-(b^2/3)x-(b^3/9)$
+	より、二次の項を消去した$f=x^3+px+q$という形に変形できる。
+	$f$の根を$\alpha,\beta,\gamma$とすると、根と係数の関係は次のようになる。
+	\begin{equation*}\begin{split}
+		\alpha + \beta + \gamma = 0,\quad
+		\alpha\beta + \beta\gamma + \gamma\alpha = p,\quad
+		\alpha\beta\gamma = -q
+	\end{split}\end{equation*}
+	また、$f$の判別式を$D$とすると次のようになるが、
+	\begin{equation*}\begin{split}
+		fx &= (x-\alpha)(gx) \\
+		gx &= (x-\beta)(x-\gamma) 
+			= \left(x - \frac{\beta + \gamma}{2}\right)^2 
+				- \left(\frac{\beta - \gamma}{2}\right)^2 \\
+			&= \left(x - \frac{\beta + \gamma}{2}\right)^2
+				+ \frac{D}{4(\alpha-\beta)^2(\alpha-\gamma)^2}
+	\end{split}\end{equation*}
+	根と係数の関係を使うと次の式が得られて、
+	\begin{alignat*}{2}
+		(\alpha-\beta)(\alpha-\gamma)
+		&= \alpha^2 - (\beta + \gamma)\alpha + \beta\gamma \\
+		&= \alpha^2 - 2(\beta + \gamma)\alpha + p 
+		&\quad&\because\; \alpha\beta + \beta\gamma + \gamma\alpha = p \\
+		&= 3\alpha^2 + p
+		&\quad&\because\; \alpha + \beta + \gamma = 0
+	\end{alignat*}
+	次のように、$f$を$\alpha$と$D$だけで書くことができる。
+	\begin{equation*}\begin{split}
+		fx = (x - \alpha)(gx),\quad
+		gx = \left(x + \frac{\alpha}{2}\right)^2 
+			+ \frac{D}{4(3\alpha^2 + p)^2}
+	\end{split}\end{equation*}
+	したがって、$f$を体$K$上の既約多項式だとすると、$\alpha\not\in K$となり、
+	$2(3\alpha^2 + p)\in K(\alpha)$に注意すると、$f$の分解体$B$は、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\sqrt{D}\in K(\alpha)$の場合は、$B=K(\alpha)$となり、
+		$|B/K|=3$となり、
+		\item $\sqrt{D}\not\in K(\alpha)$の場合は、$K(\alpha,\sqrt{D})$となり、
+		$|B/K|=|K(\alpha,\sqrt{D})/K(\alpha)||K(\alpha)/K|=6$となる
+	\end{itemize} %}
+	ことがわかる。最後に判別式を係数$p$と$q$で表しておく。
+	根と係数の関係から$D$は次のようになるが、
+	\begin{alignat*}{2}
+		D &= (\alpha-\beta)^2(\beta-\gamma)^2(\gamma - \alpha)^2 \\
+		&= - (\alpha-\beta)(\alpha-\gamma)(\beta-\beta)(\beta-\alpha)
+			(\gamma-\beta)(\gamma-\alpha) \\
+		&= -(3\alpha^2 + p)(3\beta^2 + p)(3\gamma^2 + p) \\
+		&= - p^3 - 3(\alpha^2 + \beta^2 + \gamma^2)p^2
+		- 9(\alpha^2\beta^2 + \beta^2\gamma^2 + \gamma^2\alpha^2)p
+		- 27\alpha^2\beta^2\gamma^2
+	\end{alignat*}
+	次の式を使うと、
+	\begin{equation*}\begin{array}{rclcl}
+		\alpha^2 + \beta^2 + \gamma^2 &=& (\alpha + \beta + \gamma)^2
+			- 2(\alpha\beta + \beta\gamma + \gamma\alpha) &=& -2p \\
+		\alpha^2\beta^2 + \beta^2\gamma^2 + \gamma^2\alpha^2 
+		&=& (\alpha\beta + \beta\gamma + \gamma\alpha)^2
+			- 2\alpha\beta\gamma(\alpha + \beta + \gamma) &=& p^2
+	\end{array}\end{equation*}
+	$D=-4p^3-27q^2$となることがわかる。
+
+	\begin{example}[分解体その一]\label{eg:分解体その一} %{
+		有理数上の既約多項式$f:=x^3-2$を考える。
+		$\omega=\exp(2\pi i/3)$とすると、複素数上で$f=(x-2^{\frac{1}{3}})
+		(x-2^{\frac{1}{3}}\omega)(x-2^{\frac{1}{3}\omega^2})$と分解できる。
+		$f$は$3$次の$\bun$上の既約多項式だから、
+		$|\bun(2^{\frac{1}{2}})/\bun|=3$となる。
+		$f$の残りの因子$g:=(x-2^{\frac{1}{3}}\omega)(x-2^{\frac{1}{3}\omega^2})
+		=x^2-2^{\frac{1}{3}}+2^{\frac{2}{3}}$は$\bun(2^{\frac{1}{2}})$上の
+		既約多項式となり、$\bun(2^{\frac{1}{2}},\omega)$で$g$は可約となる。
+		$g$は$2$次の$\bun(2^{\frac{1}{2}})$上の既約多項式だから、
+		$|\bun(2^{\frac{1}{2}},\omega)/\bun(2^{\frac{1}{2}}|=2$となる。
+		したがって、$f$の分解体は$B:=\bun(2^{\frac{1}{2}},\omega)$となり、
+		その次元は$|B/\bun|=|\bun(2^{\frac{1}{2}})/\bun|
+		|\bun(2^{\frac{1}{2}},\omega)/\bun(2^{\frac{1}{2}}|=6$となる。
+	\end{example} %eg:分解体その一}
+%s3:分解体}
+\subsubsection{群指標}\label{s3:群指標} %{
+	\begin{minipage}{0.9\hsize}{\small
+	体$E$の自己同型射の組$\sigma_1,\dots,\sigma_n\in\Aut E$が群$G$をつくる
+	場合、$G$の作用で不変になる$E$の元全体の集合は部分体$K$となる。
+	$K$を$G$の不変体という。$|G|\le|E/K|$となることが命題
+	\ref{prop:Artinの工夫}により導かれる。
+	}\end{minipage}\medskip
+
+	$K$を体、$G$を群とする。写像$\sigma:G\to K$が
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $K$の乗法について準同型となり、
+		\item 任意の$x\in G$に対して$\sigma x\neq0$となるとき、
+	\end{itemize} %}
+	$\sigma$を$K$における$G$の指標という。
+
+	指標の定義での二つ目の条件$\sigma x\neq0,\;\forall\; x\in G$は、
+	ある$x\in G$で$\sigma x=0$となると、任意の$y\in G$で
+	$\sigma y=(\sigma x)(\sigma(x^{-1}y))=0$となってしまうからである。
+
+	\begin{proposition}[指標の独立性]\label{prop:指標の独立性} %{
+		$K$を体、$G$を群とする。相異なる指標$G\to K$は線形独立となる。
+		つまり、$\sigma_1,\dots,\sigma_n:G\to N$を相異なる指標とすると、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			a_1\sigma_1 +\cdots+ a_n\sigma_n = 0 \iff a_1 =\cdots= a_n = 0
+		\end{split}\end{equation*}
+	\end{proposition} %prop:指標の独立性}
+	\begin{proof} %{
+		指標の数についての帰納法で示す。指標の定義より$a\sigma=0\iff a=0$
+		となることがわかる。ある$n\in\sizen_+$で命題が成り立つとする。
+		ある$a_i\in K$で$a_1\sigma_1+\cdots+a_{n+1}\sigma_{n+1}=0$となる
+		とすると、任意の$x,y\in G$で次の二つの式が成り立つ。
+		\begin{equation*}\begin{split}
+			a_1(\sigma_1x)(\sigma_1y)+a_2(\sigma_2x)(\sigma_2y)
+				+\cdots+a_{n+1}(\sigma_{n+1}x)(\sigma_{n+1}y) &= 0 \\
+			a_1(\sigma_{n+1}x)(\sigma_1y)+a_2(\sigma_{n+1}x)(\sigma_2y)
+				+\cdots+a_{n+1}(\sigma_{n+1}x)(\sigma_{n+1}y) &= 0 \\
+		\end{split}\end{equation*}
+		一つ目の式は積$xy\in G$に$a_1\sigma_1+\cdots+a_{n+1}\sigma_{n+1}$を
+		作用させたもの、二つ目の式は$y$に
+		$a_1\sigma_1+\cdots+a_{n+1}\sigma_{n+1}$を作用させた後に$\sigma_{n+1}x$
+		を掛けたものである。二つの式の差をとると次のようになるが、
+		\begin{equation*}\begin{split}
+			a_1b_1\sigma_1 + a_2b_2\sigma_2 +\cdots+ + a_nb_n\sigma_n = 0
+			\quad\text{where } b_i := (\sigma_ix) - (\sigma_{n+1}x)
+		\end{split}\end{equation*}
+		帰納法の仮定より、$a_1b_1=\cdots=a_nb_n=0$となる。一方、
+		$\sigma_1\neq\sigma_{n+1}$だから、ある$x\in G$で
+		$\sigma_1x\neq\sigma_{n+1}x$となるから$a_1=0$となる。
+		したがって、$a_2\sigma_2+\cdots+a_{n+1}\sigma_{n+1}=0$となるが、
+		帰納法の仮定より、$a_2=\cdots=a_{n+1}=0$となり、
+		命題が$n+1$でも成り立つことがわかる。
+	\end{proof} %}
+
+	この命題の証明には体の逆元の存在を使っていないので、体を代数に変えても
+	そのまま成り立つ。この命題から次の命題が導かれる。
+
+	\begin{proposition}[同型射の独立性]\label{prop:同型射の独立性} %{
+		体$E$から体$E'$への相異なる同型射は線形独立である。
+	\end{proposition} %prop:同型射の独立性}
+	\begin{proof} %{
+		$E,E'$が自明でない体なので、$E$から$E'$への同型射を$E$の乗法群
+		$E_\times:=E-\set{0}$に制限したものは指標となる。
+		相異なる同型射$\sigma_1,\dots,\sigma_n:E\to E$が
+		$E_\times$で互いに線形独立ならば、$E$でも互いに線形独立となる。
+	\end{proof} %}
+
+	体の同型射$\sigma_1,\dots,\sigma_n:E\to E'$に対して、
+	$\sigma_1\alpha=\cdots=\sigma_n\alpha$となる$\alpha\in E$を
+	$\sigma_1,\dots,\sigma_n$の不変元という。不変元の集合は部分体となる。
+
+	\begin{proposition}[不変体]\label{prop:不変体} %{
+		体の同型射$\sigma_1,\dots,\sigma_n:E\to E'$の不変元の集合は$E$の
+		部分体となる。この部分体を$\sigma_1,\dots,\sigma_n$の不変体という。
+	\end{proposition} %prop:不変体}
+	\begin{proof} %{
+		任意の$\alpha,\beta\in E$と$i,j=1,\dots,n$に対して次の式が
+		成り立つから、
+		\begin{equation*}\begin{array}{rclclcl}
+			\sigma_i(\alpha + \beta) &=& \sigma_i\alpha + \sigma_i\beta
+			&=& \sigma_j\alpha + \sigma_j\beta &=& \sigma_j(\alpha + \beta) \\
+			\sigma_i(\alpha\beta) &=& (\sigma_i\alpha)(\sigma_i\beta)
+			&=& (\sigma_j\alpha)(\sigma_j\beta) &=& \sigma_j(\alpha\beta) \\
+		\end{array}\end{equation*}
+		$\sigma_1,\dots,\sigma_n$の不変元の集合は$E$の部分体となる。
+	\end{proof} %}
+
+	\begin{proposition}[Artinの工夫]\label{prop:Artinの工夫} %{
+		$E,\;E'$を体とする。相異なる同型射$\sigma_1,\dots,\sigma_n$の不変体を
+		$K$とすると、$n\le|E/K|$となる。
+	\end{proposition} %prop:Artinの工夫}
+	\begin{proof} %{
+		$r<n$、$\omega_1,\dots,\omega_r$をベクトル空間$E/K$の基底系とする。
+		\begin{equation*}\begin{split}
+			\begin{pmatrix}
+				\sigma_1\omega_1 & \sigma_1\omega_1 &\cdots& \sigma_n\omega_1 \\
+				\sigma_1\omega_2 & \sigma_1\omega_2 &\cdots& \sigma_n\omega_2 \\
+				\vdots & \vdots &\cdots& \vdots \\
+				\sigma_1\omega_r & \sigma_1\omega_r &\cdots& \sigma_n\omega_r \\
+			\end{pmatrix}\begin{pmatrix}
+				x_1 \\ x_2 \\ \vdots \\ x_n
+			\end{pmatrix} = 0
+		\end{split}\end{equation*}
+		$r<n$より、この式は自明でない解$x_1,\dots,x_n$を持つ。
+		$\alpha\in E$と$a_1,\dots,a_r\in K$が
+		$\alpha=a_1\omega_1+\cdots+a_r\omega_r$となるとする。すると、
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			\begin{pmatrix}
+				\sigma_1(a_1\omega_1) & \sigma_1(a_1\omega_1) 
+					&\cdots& \sigma_n(a_1\omega_1) \\
+				\sigma_1(a_2\omega_2) & \sigma_1(a_2\omega_2) 
+					&\cdots& \sigma_n(a_2\omega_2) \\
+				\vdots & \vdots &\cdots& \vdots \\
+				\sigma_1(a_r\omega_r) & \sigma_1(a_r\omega_r) 
+					&\cdots& \sigma_n(a_r\omega_r) \\
+			\end{pmatrix}\begin{pmatrix}
+				x_1 \\ x_2 \\ \vdots \\ x_n
+			\end{pmatrix} = 0
+		\end{split}\end{equation*}
+		この式の和をとると次のようになる。
+		\begin{equation*}\begin{split}
+			(\sigma_1\alpha)x_1 + (\sigma_2\alpha)x_2
+			+\cdots+ (\sigma_n\alpha)x_n = 0
+		\end{split}\end{equation*}
+		$x_1,\dots,x_n$は自明でないから、$\sigma_1,\dots,\sigma_n$が線形独立
+		であることに矛盾する。
+	\end{proof} %}
+
+	\begin{example}[拡大体の次元その一]\label{eg:拡大体の次元その一} %{
+		$1$の$3$乗根を$\omega:=\exp(2\pi i/3)$とする。
+		複素単位の反転$\sigma:i\mapsto -i$は
+		体$\bun(\omega)$の自己同型射になるが、$|\bun(\omega)/\bun|=2$
+		となることに注意すると、命題\ref{prop:Artinの工夫}から$\bun(\omega)$
+		の自己同型射は$\sigma$と恒等射だけになることがわかる。
+	\end{example} %eg:拡大体の次元その一}
+
+	\begin{example}[不変体その一]\label{eg:不変体その一} %{
+		$k$を標数$0$の体、$k(x)$を$k$上の有理関数体とする。
+		次の自己代数射$\sigma\in\End_kk(x)$は、
+		\begin{equation*}\begin{split}
+			\sigma x = \frac{1}{1-x}
+		\end{split}\end{equation*}
+		$2$次の巡回群の生成元となる。
+		\begin{equation*}\begin{split}
+			\sigma x = \frac{1}{1-x}
+			,\quad \sigma \frac{1}{1-x} = \frac{x-1}{x}
+			,\quad \sigma \frac{x-1}{x} = x
+		\end{split}\end{equation*}
+		したがって、$\sigma$は$k(x)$の自己同型射となることがわかる。
+		$\braket{\sigma}:=\set{\id,\sigma,\sigma^2}$を$\sigma$から生成される
+		自己同型射のつくる群、$k\braket{\sigma}$を$\braket{\sigma}$の群環と
+		する。$\id+\sigma+\sigma^2\in k\braket{\sigma}$を定数でない多項式に
+		作用させると、$\braket{\sigma}$の不変元が得られる。
+		例えば次のようになる。
+		\begin{equation*}\begin{split}
+			I_\sigma := (\id+\sigma+\sigma^2)x = \frac{x^3-3x+1}{x(x-1)}
+		\end{split}\end{equation*}
+		命題\ref{prop:Artinの工夫}から$3\le|k(x)/k(I_\sigma)|$となることが
+		わかる。
+		一方、$I_\sigma$の定義より、$x^3-3x+1=I_\sigma x(x-1)$が成り立つから、
+		任意の$k$を係数にもつの多項式は、$k(I_\sigma)$を係数に持つ$2$次の
+		多項式に書き直すことができる。したがって、$|k(x)/k(I_\sigma)|\le 3$
+		となる。以上より、次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			|k(x)/k(I_\sigma)| = 3
+		\end{split}\end{equation*}
+	\end{example} %eg:不変体その一}
+
+	\begin{example}[不変体その二]\label{eg:不変体その二} %{
+		$k$を標数$0$の体、$k(x)$を$k$上の有理関数体とする。
+		$\tau\in\End_kk(x)$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\tau x = \frac{1}{x}
+		\end{split}\end{equation*}
+		すると、$\tau^2=\id$となり、$\tau$は互換$\braket{\tau}:=\set{\id,\tau}$
+		の生成元となる。直前の例\ref{eg:不変体その一}と同様にして、
+		$\braket{\tau}$の不変元$I_\tau\in k(x)$が次のように求まる。
+		\begin{equation*}\begin{split}
+			I_\tau := (\id+\tau)x = \frac{x+1}{x}
+		\end{split}\end{equation*}
+		また、$x+1=I_\tau x$から$2\le|k(x)/k(I_\tau)|\le2$となり、
+		次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			|k(x)/k(I_\tau)|=2
+		\end{split}\end{equation*}
+
+		直前の例\ref{eg:不変体その一}と合わせると、$\sigma$と$\tau$で生成される
+		群$\braket{\sigma,\tau}$は$3$次対称群と同型になる。
+		\begin{equation*}\begin{split}
+			\begin{array}{rcccl}
+				\tau\sigma x &=& \cfrac{x}{x-1} &=& \sigma^2\tau x \\
+				\sigma\tau x &=& 1-x &=& \tau\sigma^2 x \\
+			\end{array}
+			\implies \tau\sigma\tau = \sigma^2
+		\end{split}\end{equation*}
+		したがって、$\braket{\sigma,\tau}$の不変体を$K$とすると、$|k(x)/K|=6$
+		となることがわかる。今まで方法で$K/k$の基底系を求めようとすると、
+		$(\id+\tau)(\id+\sigma+\sigma^2)x=3\in k$となってしまう。
+		\begin{equation*}\begin{array}{ccccccc}
+			&& \braket{\sigma,\tau} &\supset& \braket{\sigma} &\supset& \mybf{1} \\
+			k &\subset& k(?) &\subset& k(I_\sigma) &\subset& k(x)
+		\end{array}\end{equation*}
+		一つの答えは\cite{artin1959}p.41にあるが、その答えを導き出す方法を
+		見つけることは宿題としておく。
+	\end{example} %eg:不変体その二}
+%s3:群指標}
+\subsubsection{対称式}\label{s3:対称式} %{
+	\begin{minipage}{0.9\hsize}{\small
+	前節の命題\ref{prop:Artinの工夫}を有理多項式体$E:=k(x_1,\dots,x_n)$に
+	適用する。$E$への$n$次対称群$S_n$の作用を不定元$x_1,\dots,x_n$の置換で
+	定義すると、$S_n$の不変体$K$が、$E$の基本対称式$a_1,\dots,a_n\in E$:
+	\begin{equation*}\begin{split}
+		(t-x_1)\cdots(t-x_n) = a_n + a_{n-1}t +\cdots+ a_1t^{n-1} + t^n
+	\end{split}\end{equation*}
+	を用いて、$K=k(a_1,\dots,a_n)$と与えられることを導く。
+	}\end{minipage}\medskip
+
+	\begin{proposition}[対称式]\label{prop:対称式} %{
+		$k$を体、$E:=k(x_1,\dots,x_n)$を$x_1,\dots,x_n$を不定元とする$k$上の
+		有理多項式体とする。$a_1,\dots,a_n\in E$を次の多項式$f\in E[t]$で
+		定義し、
+		\begin{equation*}\begin{split}
+			ft &:= (t - x_1)\cdots(t - x_n) \\
+				&= a_n +\cdots+ a_1t^{n-1} + t^n \\
+		\end{split}\end{equation*}
+		部分体$S\subseteq E$を$S:=k(a_1,\dots,a_n)$と定義する。
+		このとき、$|E/S|=n!$となる。
+	\end{proposition} %prop:対称式}
+	\begin{proof} %{
+		$n$次対称群$S_n$から$\End_kE$への写像$\what{-}:S_n\to\End_kE$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			\what{\sigma}x_i := x_{\sigma i} \quad\text{for all } i=1,\dots,n
+			,\; \sigma\in S_n
+		\end{split}\end{equation*}
+		$\what{S_n}$は不定元$x_1,\dots,x_n$の入れ替えだから、$\what{-}$は$1:1$
+		になる。したがって、$\what{S_n}$の不変体を$K$とすると、
+		命題\ref{prop:Artinの工夫}から、$n!\le|E/K|$となる。
+		また、命題の$a_1,\dots,a_n$はそれぞれ$\what{S_n}$の作用で不変となる。
+		\begin{equation*}\begin{split}
+			\what{\sigma}a_i = a_i \quad\text{for all } i=1,\dots,n
+			,\; \sigma\in S_n
+		\end{split}\end{equation*}
+		したがって、$S\subseteq K$となる。次の式から、
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				S\subseteq K\subseteq E \\
+				n!\le|E/K|
+			\end{split}\right. \implies n!\le|E/K|\le|E/S|
+		\end{split}\end{equation*}
+		$|E/S|\le n!$が成り立つことが示されれば、命題が成り立つことが示される。
+		以下で、$|E/S|\le n!$が成り立つことを示す。
+
+		次のように、$S$に不定元を付け足していって、
+		\begin{equation*}\begin{split}
+			S_n:=S,\quad S_{n-1}:=S_n(x_n),\dots,\quad S_0:=S_1(x_1)
+		\end{split}\end{equation*}
+		次の部分体の系列をつくる。
+		\begin{equation*}\begin{split}
+			S=S_n\subseteq S_{n-1}\subseteq\cdots\subseteq S_0=E
+		\end{split}\end{equation*}
+		この系列の各$i=1,\dots,n$で$|S_{i-1}/S_i|\le i$が成り立つことが
+		示されれば、次の式から$|E/S|\le n!$となることがわかる。
+		\begin{equation*}\begin{split}
+			|S_{i-1}/S_i|\le i \quad\text{for all } i=1,\dots,n \\
+			\implies |E/S|=|S_0/S_1|\cdots|S_{n-1}/S_n|\le n!
+		\end{split}\end{equation*}
+		まず、$(t-x_1)\cdots(t-x_n)$は$S_n$上の$n$次多項式で、
+		根$x_n\in S_n$を持つ。したがって、$|S_{n-1}/S_n|\le n$となる。
+		次に、$(t-x_1)\cdots(t-x_{n-1})$は$S_{n-1}$上の$n-1$次多項式で、
+		根$x_{n-1}\in S_{n-2}$を持つ。したがって、$|S_{n-2}/S_{n-1}|\le n-1$
+		となる。このようして続けていくと次のようになる。
+		\begin{alignat*}{3}
+			F_nt &:= (t-x_1)\cdots(t-x_n) &\;\in\;& S_n[t] 
+				&\quad& \text{根$x_n\in S_{n-1}$を持つ} \\
+			F_{n-1}t &:= (t-x_1)\cdots(t-x_{n-1}) &\;\in\;& S_{n-1}[t]
+				&\quad& \text{根$x_{n-1}\in S_{n-2}$を持つ} \\
+			\vdots \\
+			F_2t &:= (t-x_1)(t-x_2) &\;\in\;& S_2[t]
+				&\quad& \text{根$x_2\in S_1$を持つ} \\
+			F_1t &:= (t-x_1) &\;\in\;& S_1[t]
+		\end{alignat*}
+		各$i=1,\dots,n$で$F_it\in S_i[t]$は$i$次多項式で、根$x_i\in S_{i+1}$
+		を持つから、$Fx_i=0$となり、$x_i^i$が$i-1$次多項式で書くことができる。
+		したがって、$|S_{i+1}/S_i|\le i$となる。
+	\end{proof} %}
+
+	この命題の、有理多項式体$E:=k(x_1,\dots,x_n)$上の次の多項式$f\in E[t]$
+	の係数$a_1,\dots,a_n\in E$を$E$の基本対称式という。
+	\begin{equation*}\begin{split}
+		(t-x_1)\cdots(t-x_n) = a_n + a_{n-1}t +\cdots+ a_1t^{n-1} + t^n
+	\end{split}\end{equation*}
+	$k$に基本対称式を追加して作った$k$の拡大体$K:=k(a_1,\dots,a_n)$は、
+	不定元$x_1,\dots,x_n$の置換について$E$の不変体となる。そして、
+	ベクトル空間$E/K$は、次の形の単項式を基底系として持つ$n!$次元ベクトル空間
+	となる。
+	\begin{equation*}\begin{split}
+		x_1^{p_1}x_2^{p_2}\cdots x_n^{p_n}
+		\quad\text{where } 0\le p_i\le i-1
+	\end{split}\end{equation*}
+%s3:対称式}
+%s2:体論}
+\subsection{自然数と整数}\label{s2:自然数と整数} %{
+	\begin{proposition}[Euclidの互除法]\label{prop:Euclidの互除法} %{
+		$n>m>0$となる任意の自然数$m,n$に対して、次の式を満たす$q,r\in\sizen$が
+		唯一つ定まり、
+		\begin{equation*}\begin{split}
+			n = qm + r,\quad r < m
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\gcd(n,m) = \begin{cases}
+				m, &\text{ iff } r = 0 \\
+				\gcd(m,r), &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Euclidの互除法}
+	\begin{proof} %{
+		$r\neq0$のとき、$\gcd(n,m)=\gcd(m,r)$となることを証明する。
+		$n=qm+r$の両辺を$\gcd(m,r)$で剰余をとると、$n$が$\gcd(m,r)$で割り切れる
+		ことがわかる。また、$m$も$\gcd(m,r)$で割り切れるから次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			n,m\in \gcd(m,r)\sizen \implies \gcd(n,m)\in \gcd(m,r)\sizen
+		\end{split}\end{equation*}
+		$n=qm+r$の両辺を$\gcd(n,m)$で剰余をとると、$r$が$\gcd(n,m)$で
+		割り切れることがわかる。また、$m$も$\gcd(n,m)$で割り切れるから
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			m,r\in \gcd(n,m)\sizen \implies \gcd(m,r)\in \gcd(n,m)\sizen
+		\end{split}\end{equation*}
+		以上より、
+		$\gcd(n,m)\sizen\subseteq\gcd(m,r)\sizen\subseteq\gcd(n,m)\sizen$
+		となり、命題が成り立つことがわかる。
+	\end{proof} %}
+
+	この命題から、$n>m>0$となる自然数$m,n$の最大公約数は次のような
+	自然数の減少列から求めることができる。
+	\begin{equation}\label{eq:Euclidの互除法その一}\begin{split}
+		n_0=n > n_1=m > n_2 > \cdots > n_N=\gcd(n,m) > n_{N+1}=0 \\
+		n_{i+2} = n_i \bmod n_{i+1} \quad\text{for all } i=0,\dots,N-1
+	\end{split}\end{equation}
+	この手続きを商$q_i$も含めて書くと次のようになる。
+	\begin{equation}\label{eq:Euclidの互除法その二}\left\{\begin{split}
+		n_0 &= q_1n_1 + n_2 \\
+		n_1 &= q_2n_2 + n_3 \\
+		\cdots \\
+		n_{N-2} &= q_{N-1}n_{N-1} + n_N \\
+		n_{N-1} &= q_Nn_N + 0 \\
+	\end{split}\right.\iff\left\{\begin{split}
+		n_2 &= n_0 - q_1n_1 \\
+		n_3 &= n_2 - q_2n_2 \\
+		\cdots \\
+		n_N &= n_{N-2} - q_{N-1}n_{N-1} \\
+		0 &= n_{N-1} - q_Nn_N \\
+	\end{split}\right.\end{equation}
+	右側の式の右辺は$q_i$を係数とする$m$と$n$の線型結合で書かれること
+	がわかる。したがって、$n_N=\gcd(n,m)$となるから、次の式を満たす
+	$x,y\in\sei$が存在することがわかる。
+	\begin{equation*}\begin{split}
+		mx + ny = \gcd(n,m)
+	\end{split}\end{equation*}
+	このような$x,y\in\sei$は唯一には定まらない。
+	$X,Y\in\sei$を$mX+nY=\gcd(n,m)$とすると次の式が成り立つ。
+	\begin{equation}\label{eq:Euclidの互除法その三}\begin{split}
+		mx + ny = mX + nY &\implies m(x-X) + n(y-Y) = 0 \\
+		&\implies \pvec{X}{Y} = \pvec{x}{y} + z\pvec{-n}{m}
+		\quad\text{for all } z\in\sei
+	\end{split}\end{equation}
+	したがって、$(x,y)\mapsto(x-nz,y+mz)$の不定性を除いて$mx+ny=\gcd(x,y)$
+	となる$x,y\in\sei$は一意に定まることがわかる。
+	$m$と$n$が互いに素になる場合を命題の形で書いておく。
+
+	\begin{proposition}[Bezoutの恒等式]\label{prop:Bezoutの恒等式} %{
+		$a,b\in\sizen_+$を互いに素とすると、$ax+by=1$となる$x,y\in\sei$
+		が次の不定性を除いて唯一つ定まる。
+		\begin{equation*}\begin{split}
+			(x,y)\mapsto(x-bz,x+az) \quad\text{for all } z\in\sei
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Bezoutの恒等式}
+	\begin{proof} %{
+		$x,y$が存在することの証明をWikipediaから借用する。
+		$X,Y$を次の式を満たす整数とする。
+		\begin{equation*}\begin{split}
+			aX+bY := \min_{x,y\in\sei_\times} |ax+by|
+			,\quad \sei_\times := \sei - \set{0}
+		\end{split}\end{equation*}
+		$c=aX+bY$とおくと$c\in\sizen$となる。$a$を$c$で割ると、
+		$a=Ac+r$となる$A\in\sizen$と、$r<c$となる$r\in\sizen$が唯一つ定まるが、
+		$r=a(1-AX)-bAY<c\in\sizen$となり、$c$の定義より$r=0$となる。
+		したがって、$a=Ac$と書かれることになる。同様に$b$を$c$で割ると、
+		$b=Bc$となる$B\in\sizen$が唯一つ定まる。
+		\begin{equation*}\begin{split}
+			\exists\; A,B\in\sizen \text{ such that } a = Ac,\; b = Bc
+		\end{split}\end{equation*}
+		$c$が$1$でない場合は、$a$と$b$が互いに素であることに矛盾するから、
+		$c=1$でなければならない。したがって、$aX+bY=1$となり、$X,Y$が命題の
+		$x,y$となる。
+
+		$x,y$が命題の不定性を除いて一意に定まることは
+		式\eqref{eq:Euclidの互除法その三}からわかる。
+	\end{proof} %}
+
+	この命題は素数$p$が与えられたとき、体$\sei_p:=\sei/p\sei$で逆数を
+	求めるときなどに役に立つ。
+	\begin{alignat*}{2}
+		m\in\sei_p &\implies mx + py = 1 &\quad& \text{(in $\sei$)} \\
+		&\implies m(x\bmod p) = 1 &\quad& \text{(in $\sei_p$)}
+	\end{alignat*}
+
+	$a,b\in\sizen_+$に対して次の式を満たす$x,y\in\sei$を求める手続きを
+	考える。
+	\begin{equation*}\begin{split}
+		ax + by = \gcd(a,b)
+	\end{split}\end{equation*}
+	二次元ベクトル$N=\in\sizen^2$と$X_0,X_1\in\sei^2$を次のように定義し、
+	\begin{equation*}\begin{split}
+		N := (a,b)^\tran,\quad \left\{\begin{split}
+			a \ge b &\implies X_0 := (1,0)^\tran,\quad X_1 := (0,1)^\tran \\
+			\text{else} &\implies X_0 := (0,1)^\tran,\quad X_1 := (1,0)^\tran \\
+		\end{split}\right. \\
+	\end{split}\end{equation*}
+	漸化式\eqref{eq:Euclidの互除法その一}を次のように書き直す。
+	\begin{alignat*}{2}
+		n_i &= N^\tran X_i &\quad &\text{for all } i=0,\dots,N+1 \\
+		X_{i+2} &= X_i - \syou{n_i}{n_{i+1}} X_{i+1}
+		&\quad &\text{for all } i = 0,\dots,N-1
+	\end{alignat*}
+	ここで、$X_2,\dots,X_{N+1}\in\sei^2$は上記の式で定まる二次元ベクトルで、
+	整数の割り算$p/q$の整数部分を$[p/q]$と書いている。
+	$n_N=\gcd(n,m)$となり、$X_N$が求める$x,y$となる。
+	また、$n_{N+1}=0$となり、$N^\tran X_{N+1}=0$という手続きの終了条件を
+	与える。内積$N^\tran X_i\in\sizen$の
+	減少列\eqref{eq:Euclidの互除法その一}によって、
+	この手続きが有限回で終了する保証が与えられる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			a = b &\implies n_0 = n_1 > n_2=0 \\
+			\text{else} &\implies n_0 > n_1 > n_2 > \cdots > n_N > n_{N+1}=0 \\
+		\end{split}\right. \\
+		n_0 = \max(a, b),\quad n_1 = \min(a,b),\quad n_N = \gcd(a,b) \\
+		n_{i+2} = n_i \bmod n_{i+1} \quad\text{for all } i=0,\dots,N-1
+	\end{split}\end{equation*}
+	この手続きをプログラミングしやすい形にまとめると次のようになる。
+
+	\begin{procedure}[Euclidの互除法]\label{proc:Euclidの互除法} %{
+		与えられた$a,b\in\sizen_+$となる自然数に対して、$ax+by=\gcd(a,b)$となる
+		$x,y\in\sei$を返す。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{item:Euclidの互除法の初期化}
+			$N:= (a,b)^\tran\in\sizen^2$と定義し、$X_0,X_1\in\sei^2$を
+			次のように定義する。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $a\ge b$なら、$X_0 := (1,0)^\tran,\quad X_1 := (0,1)^\tran$
+				\item それ以外なら、$X_0 := (0,1)^\tran,\quad X_1 := (1,0)^\tran$
+			\end{itemize} %}
+			\item\label{item:Euclidの互除法の繰り返し} 
+			$R\in\sei^2$を次のように定義する。
+			\begin{equation*}\begin{split}
+				R := X_0 - \syou{N^\tran X_0}{N^\tran X_1} X_1
+			\end{split}\end{equation*}
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $N^\tran R=0$なら、$X_1$を返す。
+				\item それ以外なら、$X_0=X_1,\;X_1=R$と再定義して
+				\ref{item:Euclidの互除法の繰り返し}に行く。
+			\end{itemize} %}
+		\end{enumerate} %}
+	\end{procedure} %proc:Euclidの互除法}
+
+	Bezoutの恒等式\ref{prop:Bezoutの恒等式}は三つ以上の自然数の最大公約数
+	を求める手続きに容易に拡張できる。
+
+	\begin{proposition}[Bezoutの恒等式その二]\label{prop:Bezoutの恒等式その二} %{
+		$n$を$2$以上の自然数とし、$a_1,\dots,a_n\in\sizen_+$を互いに素とする。
+		このとき、ベクトル$a:=(a_1,\dots,a_n)\in\sizen_+^n$とおくと、
+		$a^\tran x=1$となるベクトル$x\in\sei^n$が$x\mapsto x+\ker a^\tran$
+		の不定性を除き唯一つ定まる。
+	\end{proposition} %prop:Bezoutの恒等式その二}
+	\begin{proof} %{
+		$X_1,\dots,X_n$を次の式を満たす整数とする。
+		\begin{equation*}\begin{split}
+			a_1X_1 +\cdots+ a_nX_n := \min_{x_1,\dots,x_n\in\sei_\times} 
+			|a_1x_1+\cdots+a_nx_n|,\quad \sei_\times := \sei - \set{0}
+		\end{split}\end{equation*}
+		$c=a_1X_1+\cdots+a_nX_n$とおくと$c\in\sizen$となる。
+		$a_1$を$c$で割ると、$a_1=A_1c+r$となる$A\in\sizen$と、
+		$r<c$となる$r\in\sizen$が唯一つ定まるが、
+		$r=a_1(1-A_1X_1)-a_2A_1X_2-\cdots-a_nA_1X_n<c\in\sizen$となり、
+		$c$の定義より$r=0$となる。
+		したがって、$a_1=A_1c$と書かれることになる。同様に$a_i,\; i=2,\dots,n$
+		を$c$で割ると、$a_i=A_ic$となる$A_i\in\sizen$が唯一つ定まる。
+		\begin{equation*}\begin{split}
+			\exists\; A_1,\dots,A_n\in\sizen \text{ such that } a_i = A_ic
+		\end{split}\end{equation*}
+		$c$が$1$でない場合は、$a_1,\dots,a_n$が互いに素であることに矛盾する
+		から、$c=1$でなければならない。したがって、$a_1X_1+\cdots+a_nX_n=1$
+		となり、$X_1,\dots,X_n$が命題の$x_1,\dots,x_n$となる。
+
+		$a$を命題のベクトルとし、$x\in\sei^n$と$X\in\sei^n$が共に、
+		$a^\tran x=1=a^\tran X$を満たすとすると、$a^\tran(x-X)=0$となり、
+		$x-X\in\ker a^\tran$となるから、命題の$x\in\sei^n$の不定性があること
+		がわかる。
+	\end{proof} %}
+
+	この命題から、$2\le n\in\sizen$として、$a\in\sizen_+^n$に対して、
+	$a^\tran x=\gcd a$となる$x\in\sei^n$は$\ker a^\tran$の不定性を除いて
+	唯一つ定まる。ここで、$\gcd:\sizen_+^n\to\sizen_+$はベクトルの$n$個の
+	成分の最大公約数とする。
+	
+	$a^\tran x=\gcd a$となる$x\in\sei^n$を求める手続きを$n=3$の場合に
+	スケッチしてみる。最大公約数は次の式を満たす\footnote{
+		$\gcd:\sizen_+\times\sizen_+\to\sizen_+$は
+		可換かつべき等な積となり、$1\in\sizen_+$をゼロ元として持つ。
+		\begin{alignat*}{3}
+				\text{結合的} &\quad& \gcd(\gcd\times\id) &= \gcd(\id\times\gcd) \\
+				\text{べき等} &\quad& \gcd(a,a) &= a &\quad &\text{for all }a\in\sizen_+ \\
+				\text{ゼロ元} &\quad& \gcd(1,a) &= 1 &\quad &\text{for all }a\in\sizen_+
+		\end{alignat*}
+	}。
+	\begin{equation*}\begin{split}
+		\gcd(\gcd\times\id)(a_1,a_2,a_3) = \gcd(a_1,a_2,a_3) = 
+		\gcd(\id\times\gcd)(a_1,a_2,a_3) \\
+		\quad\text{for all } a_1,a_2,a_3\in\sizen_+
+	\end{split}\end{equation*}
+	この性質を使って、$a_1,a_2,a_3\in\sizen_+$に対して、一組ずつ最大公約数
+	を求めていくと次のようになる。
+	\begin{equation*}\begin{split}
+		\myop{euclid}(a_1,a_2) &= (x_1,x_2) \\
+		\myop{euclid}(a_1x_1+a_2x_2,a_3) &= (y_1,y_2) \\
+		\myop{merge}(x_1,x_2,y_1,y_2) &= (x_1y_1,x_2y_1,y_2) \\
+	\end{split}\end{equation*}
+	$\myop{euclid}:(a,b)\mapsto(x,y)$が$ax+by=\gcd(a,b)$となる$x,y\in\sei$
+	を求める操作で、最後の\myop{merge}した結果が求める整数の組になる。
+%s2:自然数と整数}
+%s1:Galois理論}
+
+\section{Eular法}\label{s1:Eular法} %{
+\subsection{微分方程式の例}\label{s2:微分方程式の例} %{
 	簡単なモデルを使って、Brzozowski微分による微分方程式の摂動計算を、
 	通常の微分による微分方程式と対比させながら調べてみる。
 
-	$\fukuso[t]$を多項式環とし、$\partial$を$t$についての微分、
+\subsubsection{お題}\label{s3:お題} %{
+	$\fukuso[t]$を多項式環とし、$\partial$を$t$についての通常の微分、
 	$\delta$を$t$についてのBrzozowski微分とする。
-	$\delta$を$t$と$\partial$を使って書けば、次のように書ける。
-	\begin{equation}\label{eq:Brzozowski微分の表示その一}\begin{split}
-		\delta = \frac{1}{1 + t\partial}\partial
+	\begin{equation}\label{eq:Brzozowski微分の定義その一}\begin{split}
+		\partial t^m := \jump{1\le m} mt^{m-1},\quad
+		\delta t^m := \jump{1\le m} t^{m-1}
 	\end{split}\end{equation}
 	そして、次の二つの微分方程式を考える。
 	\begin{equation*}\begin{split}
@@ -87,112 +1632,118 @@
 		おいて、後から大小関係に照らし合わせると、$x/0$は無限大になっている
 		ことがわかる。
 	}。
-
-	それぞれの解$x_t,y_t$を次の形に級数展開すると、
+%s3:お題}
+\subsubsection{Eular法}\label{s3:Eular法} %{
+	微分方程式の解$x_t,y_t$を次の形に級数展開して、
 	\begin{equation*}\begin{split}
 		x_t = \sum_{n\in\sizen} \frac{t^n}{n!}x_n,\quad 
 		y_t = \sum_{n\in\sizen} t^ny_n
 	\end{split}\end{equation*}
-	その係数は次の漸化式を満たす。
+	元の微分方程式に代入すると、次の漸化式を得る。
 	\begin{equation}\label{eq:係数の漸化式その一}\begin{split}
 		x_{m+1} = \sum_{r=0}^m \binom{m}{r}x_rx_{m-r}
 		,\quad y_{m+1} = \sum_{r=0}^m y_ry_{m-r}
 	\end{split}\end{equation}
-	$\gamma_\partial:x_n\mapsto x_{n+1}$、
-	$\gamma_\delta:y_n\mapsto y_{n+1}$という係数を一つ移動する写像とすると、
-	$m$を$\fukuso$の通常の積、$\myop{du}:c\mapsto c\otimes c$をコピーとして、
+	$m$を$\fukuso$の通常の積、$\dup$を次のように定義された重複化の操作とし、
+	\begin{equation*}\begin{split}
+		\dup f:=f\otimes f \quad\text{for all } f\in\fukuso[t]
+		\quad\text{線形写像ではない}
+	\end{split}\end{equation*}
+	$\gamma_\partial$と$\gamma_\delta$を次のように係数の添字を一つ移動する
+	写像とし、
+	\begin{equation*}\begin{split}
+		\gamma_\partial x_m := x_{m+1},\quad \gamma_\delta y_m := y_{m+1}
+	\end{split}\end{equation*}
 	任意の初期値に対して次の式が成り立つ。
 	\begin{equation*}\begin{split}
 		\gamma_\partial^{m+1}
-		= m(\gamma_\partial\otimes\id + \id\otimes\gamma_\partial)^m\myop{du}
+		= m(\gamma_\partial\otimes\id + \id\otimes\gamma_\partial)^m\dup
 		,\quad\gamma_\delta^{m+1}
-		= \sum_{r=0}^m m(\gamma_\delta^r\otimes\gamma_\delta^{m-r})\myop{du}
+		= \sum_{r=0}^m m(\gamma_\delta^r\otimes\gamma_\delta^{m-r})\dup
 	\end{split}\end{equation*}
-	$\Delta\gamma_\partial$を次のように定義すると、
+
+	通常の微分については、$\Delta\gamma_\partial$を次のように定義すると、
 	\begin{equation}\label{eq:微分の場合その一}\begin{split}
 		\Delta\gamma_\partial := 
 		= \gamma_\partial\otimes\id + \id\otimes\gamma_\partial
-		\implies \gamma_\partial^{m+1} &= m(\Delta\gamma_\partial)^m\myop{du}
+		\implies \gamma_\partial^{m+1} &= m(\Delta\gamma_\partial)^m\dup
 	\end{split}\end{equation}
-	次のような手順で解の係数$x_n$が順次求まる。
+	次のような手順で、$x_0$から順に解の係数$x_n$が求まる。
 	\begin{equation*}\xymatrix{
-		x_0 \ar@{|->}[dr]_{\myop{du}} \ar@{|->}[r]^{\gamma_\partial}
+		x_0 \ar@{|->}[dr]_\dup \ar@{|->}[r]^{\gamma_\partial}
 		& x_1 \ar@{|->}[r]^{\gamma_\partial} 
 		& x_2 \ar@{|->}[r]^{\gamma_\partial} 
 		& x_3 \ar@{|->}[r]^{\gamma_\partial} 
 		& \cdots \\
-		& \myop{du}x_0 \ar@{|->}[u]_m \ar@{|->}[r]^{\Delta\gamma_\partial}
-		& (\Delta\gamma_\partial)\myop{du}x_0 \ar@{|->}[u]_m
+		& \dup x_0 \ar@{|->}[u]_m \ar@{|->}[r]^{\Delta\gamma_\partial}
+		& (\Delta\gamma_\partial)\dup x_0 \ar@{|->}[u]_m
 			\ar@{|->}[r]^{\Delta\gamma_\partial}
-		& (\Delta\gamma_\partial)^2\myop{du}x_0 \ar@{|->}[u]_m
+		& (\Delta\gamma_\partial)^2\dup x_0 \ar@{|->}[u]_m
 			\ar@{|->}[r]^{\Delta\gamma_\partial}
 		& \cdots \\
 	}\end{equation*}
 	これはEular法による微分方程式の解の求め方の一例である。
-	一方、$\delta$の方は一見$\partial$のようにうまくいかないように
-	思えるが、Brzozowski微分の積との交換関係を思い出すと、
+
+	一方、Brzozowski微分の方は、一見、$
+		\gamma_\delta^{m+1} = m(\Delta\gamma_\delta)^m\dup
+	$となる$\Delta\gamma_\delta$がなさそうに見える。
+	このような$\Delta\gamma_\delta$がないと、$
+		m^{-1}x_m\mapsto m^{-1}x_{m+1}
+	$の操作で次数$m$に依存した操作を強いられる。
+	しかし、Brzozowski微分の場合も、$p_0$を$p_0:y_m\mapsto\jump{m=0}y_m$
+	と定義し、$\Delta\gamma_\delta$を次のように定義すると、
 	\begin{equation*}\begin{split}
-		\delta m = m(\delta\otimes\id + \pi_0\otimes\delta)
-		\quad\text{where}\quad \pi_0t^m := \jump{m=0}t^m
+		\Delta\gamma_\delta = \gamma_\delta\otimes\id 
+		+ p_0\otimes\gamma_\delta
 	\end{split}\end{equation*}
 	次の式が成り立つから、
 	\begin{equation*}\begin{split}
-		(\delta\otimes\id + \pi_0\otimes\delta)^m = \delta^m\otimes\id 
-		+ \sum_{r=0}^{m-1} (\pi_0\delta^r)\otimes\delta^{m-r}
+		(\Delta\gamma_\delta)^m = \gamma_\delta^m\otimes\id 
+		+ \sum_{r=0}^{m-1}\gamma_\delta^r p_0\otimes\gamma_\delta^{m-r}
 	\end{split}\end{equation*}
-	$\pi_0$の双対に相当する作用素$p_0:x_m\mapsto\jump{m=0}x_m$を用いて、
-	$\Delta\gamma_\delta$を次のように定義すれば、
+	やはり、通常の微分の場合と同じ形をした次の式が得られる。
 	\begin{equation*}\begin{split}
-		\Delta\gamma_\delta := \gamma_\delta\otimes\id
-			+ p_0\otimes\gamma_\delta
+		\gamma_\delta^{m+1} &= m(\Delta\gamma_\delta)^m\dup
 	\end{split}\end{equation*}
-	次の式から、
-	\begin{equation}\label{eq:Brzozowskiの解析性その一}\begin{split}
-		(\Delta\gamma_\delta)^m = \gamma_\delta\otimes\id 
-		+ \sum_{r=0}^{m-1} \gamma_\delta^rp_0\otimes\gamma_\delta^{m-r} \\
-	\end{split}\end{equation}
-	次の式が成り立ち、
-	\begin{equation}\label{eq:Brzozowskiの解析性その二}\begin{split}
-		(\Delta\gamma_\delta)^m(y_0\otimes-)
-		= \sum_{r=0}^m(\gamma_\delta^r\otimes\gamma_\delta^{m-r})(y_0\otimes-)
-	\end{split}\end{equation}
-	$\partial$と同じ手順で解の係数を順次求めることができることがわかる。
-	\begin{equation*}\begin{split}
-		\Delta\gamma_\delta
-		:= \gamma_\delta\otimes\id + p_0\otimes\gamma_\delta
-		\implies \gamma_\delta^{m+1}y_0 
-		&= m(\Delta\gamma_\delta)^m\myop{du}y_0
-	\end{split}\end{equation*}
-	ここで、この式は$\partial$の場合\eqref{eq:微分の場合その一}と異なり、
-	$y_0$に作用する時のみ成り立つことに注意する。
-	式\eqref{eq:Brzozowskiの解析性その一}から
-	式\eqref{eq:Brzozowskiの解析性その二}を導き出すところである。
-	Brzozowski微分の表示\eqref{eq:Brzozowski微分の表示その一}から、
-	$\delta$は時刻$t$の並進に対して不変でない。
-	\begin{equation*}\begin{split}
-		\frac{1}{1 + t\partial}\partial \xmapsto{t\mapsto t + c}
-		\frac{1}{1 + (t+c)\partial}\partial
-		\quad\text{where } c\in\jitu
-	\end{split}\end{equation*}
-	ある特定の時刻でのみ対称性\eqref{eq:Brzozowskiの解析性その二}が
-	現れることは、$\delta$は時刻$t$の並進に対して不変でないことに
-	起因していると思われる。
+	したがって、Brzozoswki微分の場合も通常の微分と同じ手順で解の係数
+	を順次求めることができることがわかる。
 
-	Eular法を微分で書いてみる。$\myop{du}$を次のように再定義すると、
+	Brzozowski微分の場合は、通常の微分に比べて複雑になっている理由は、
+	Brzozowski微分が時間の並進に対して不変になっていないことに起因する。
+	定数$c\in\fukuso$として、時間の並進$t\mapsto(t+c)$に対して、二つの微分は
+	それぞれ次のように振る舞う。
 	\begin{equation*}\begin{split}
-		\myop{du}f = f\otimes f \quad\text{for all } f\in\fukuso[t]
+		\partial(t+c)^m = \jump{1\le m} m(t+c)^{m-1}
+		,\quad \delta(t+c)^m = \sum_{r=0}^{m-1} \binom{m}{r+1}c^{m-r-1}t^r
 	\end{split}\end{equation*}
-	$\partial x_t=x_t^2$に対するEular法は次の式にまとめることができる。
+	Brzozowski微分と通常の微分の振る舞いの違いは、
+	Brzozowski微分が時間と通常の微分を使って次のように書けることからも
+	理解できる。
 	\begin{equation*}\begin{split}
-		x_t\in\ker(\partial - m\myop{du})
+		\delta = \frac{1}{1 + t\partial}\partial
+		\implies \frac{1}{1 + (t-c)\partial}\partial
+		= \sum_{r\in\sizen}\frac{c^r}{1 + t\partial}\partial^{r+1}
+	\end{split}\end{equation*}
+
+	係数のシフト$\Delta\gamma_\partial$と$\Delta\gamma_\delta$は、微分と
+	積との交換関係によって定まっている。
+	\begin{equation*}\begin{split}
+		\partial m = m(\partial\otimes\id + \id\otimes\partial),\quad
+		\delta m = m(\delta\otimes\id + \pi_0\otimes\delta)
+	\end{split}\end{equation*}
+	ここで、$\pi_0:t^m\mapsto\jump{m=0}t^m$と定義している。そして、
+	$\lim_{t=0}m=m(\lim_{t=0}\otimes\lim_{t=0})$に注意すると、
+	Eular法は次のように書けることがわかる。
+	\begin{equation}\label{eq:Eular法その一}\begin{split}
+		x_t\in\ker(\partial - m\dup)
 		&\implies x_t\in\ker\bigl(
-			\partial^{m+1} - m(\Delta\partial)^m\myop{du}\bigr) \\
+			\partial^{m+1} - m(\Delta\partial)^m\dup\bigr) \\
 		&\implies \lim_{t=0}\partial^{m+1}x_t 
-			= \lim_{t=0}m(\Delta\partial)^m\myop{du}x_t \\
-	\end{split}\end{equation*}
-	この式の最後の式が解の係数の漸化式に対応する。
-	Brzozowski微分も同じである。
-
+			= \lim_{t=0}m(\Delta\partial)^m\dup x_t \\
+	\end{split}\end{equation}
+	最後の式が解の係数の漸化式に対応する。Brzozowski微分の場合も同じである。
+%s3:Eular法}
+\subsubsection{解の積分表示}\label{s3:解の積分表示} %{
 	積分を使って微分方程式の解を形式的に表してみる。
 	$\partial^{-1}$と$\delta^{-1}$を次のように定義する。
 	\begin{equation*}\begin{split}
@@ -203,23 +1754,27 @@
 		\partial\partial^{-1} &= 1, &\quad \partial^{-1}\partial &= \pi_+ \\
 		\delta\delta^{-1} &= 1, &\quad \delta^{-1}\delta &= \pi_+
 	\end{alignat*}
-	微分方程式の形式解を次のように書くことができる。
+	微分方程式の解を次のように書くことができる。
 	\begin{equation*}\begin{split}
 		x_t = x_0 + \partial^{-1} m(x_t\otimes x_t),\quad
 		y_t = y_0 + \delta^{-1} m(y_t\otimes y_t)
 	\end{split}\end{equation*}
-	$\partial^{-1}$と$\delta^{-1}$の部分積分を計算すると次のようになる。
+
+	ここで、$\partial^{-1}$および$\delta^{-1}$とRota-Baxter作用素との関連を
+	調べてみる。$\partial^{-1}$と$\delta^{-1}$の部分積分を計算すると
+	次のようになる。
 	\begin{equation*}\begin{array}{rclcl}
 		\pi_+m(\partial^{-1}\otimes\partial^{-1})
 		&=& \partial^{-1}\partial m(\partial^{-1}\otimes\partial^{-1})
 		&=& \partial^{-1}m(\partial^{-1}\otimes\id + \id\otimes\partial^{-1}) \\
-		\pi_+m(\delta\otimes\delta^{-1})
+		\pi_+m(\delta^{-1}\otimes\delta^{-1})
 		&=& \delta^{-1}\delta m(\delta^{-1}\otimes\delta^{-1})
 		&=& \delta^{-1}m(\id\otimes\delta^{-1}) \\
 	\end{array}\end{equation*}
-	$\pi_+m(\partial\otimes\partial)=m(\partial\otimes\partial)$に
-	注意すると、$\partial^{-1}$は重み$0$のRota-Baxter作用素になるのに
-	対して、$\delta^{-1}$はRota-Baxter作用素にはならないように思われる。
+	$\pi_+m(\partial^{-1}\otimes\partial^{-1})
+	= m(\partial^{-1}\otimes\partial^{-1})$に注意すると、
+	$\partial^{-1}$は重み$0$のRota-Baxter作用素になるのに対して、
+	$\delta^{-1}$はRota-Baxter作用素にはならないように思われる。
 	しかし、$\delta^{-1}m=m(\id\otimes\delta^{-1})$が成り立つから、
 	$\delta^{-1}$は重み$-1$のRota-Baxter作用素になることがわかる。
 	\begin{equation*}\begin{array}{rcll}
@@ -245,6 +1800,9 @@
 		\exp\bigl(P\frac{1}{\lambda}\ln(1 + \lambda a)\bigr)
 		\xto{\lambda=0} \exp(Pa)
 	\end{split}\end{equation*}
+	この結果は、$\partial^{-1}$または$\delta^{-1}$の一階微分方程式であれば、
+	微分方程式の右辺に依らずに成り立つ結果である。
+
 	今考えている微分方程式の解にSpitzerの恒等式を適用すると、
 	次の式が得られる。
 	\begin{equation*}\begin{split}
@@ -259,7 +1817,18 @@
 	Spitzerの恒等式\eqref{eq:Spitzerの恒等式その一}は$a$と$b$が非可換でも
 	成り立ち、形式言語理論における左再帰の消去と全く同じ形をしている。
 	両者は同じものだろう。
-%s1:メモ}
+%s3:解の積分表示}
+%s2:微分方程式の例}
+\subsection{Fock空間}\label{s2:Fock空間} %{
+	Eular法での係数比較を微分を用いて書くと式\eqref{eq:Eular法その一}のように
+	なる。同じことをFock空間を用いて書くと次のように書ける。
+	\begin{equation*}\begin{split}
+		\bra{t}\eta^\dag\ket{x} = \braket{t|x}\braket{t|x}
+		\implies \bra{0}(\eta^\dag)^{m+1}\ket{x} = \sum_{r=0}^m
+			\bra{0}(\eta^\dag)^r\ket{x}\bra{0}(\eta^\dag)^{m-r}\ket{x}
+	\end{split}\end{equation*}
+%s2:Fock空間}
+%s1:Eular法}
 \section{一変数シャッフル積}\label{s1:一変数シャッフル積} %{
 	一変数だけの場合のq-シャッフル積を調べる。一変数だけの場合は、積や余積
 	の係数だけが問題になる。
@@ -1172,595 +2741,6 @@
 %s1:保留}
 \section{Lie代数}\label{s1:Lie代数} %{
 \subsection{群}\label{s2:群} %{
-\subsubsection{部分群}\label{s3:部分群} %{
-	群の部分集合が部分群になっているかどうかを判定する道具を書いておく。
-
-	\begin{proposition}[部分群]\label{prop:部分群} %{
-		$G$を群、$H$を空でない$G$の部分集合とする。このとき、次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			\text{$H$が部分群}
-			\iff ab^{-1}\in H \quad\text{for all } a,b\in H
-		\end{split}\end{equation*}
-	\end{proposition} %prop:部分群}
-	\begin{proof} %{
-		次の式は明らかだから、
-		\begin{equation*}\begin{split}
-			\text{$H$が部分群}
-			\implies ab^{-1}\in H \quad\text{for all } a,b\in H
-		\end{split}\end{equation*}
-		次の式を証明する。
-		\begin{equation*}\begin{split}
-			\text{$H$が部分群}
-			\Leftarrow ab^{-1}\in H \quad\text{for all } a,b\in H
-		\end{split}\end{equation*}
-		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[単位元] 任意の$a\in H$に対して、命題の仮定より、
-			$1=aa^{-1}\in H$が成り立つから、$1\in H$となることがわかる。
-			\item[逆元] 任意の$a\in H$に対して、$1\in H$だから、
-			命題の仮定より、$a^{-1}=1a^{-1}\in H$が成り立ち、
-			$a^{-1}\in H$となることがわかる。
-			\item[積] 任意の$a,b\in H$に対して、$b^{-1}\in H$だから、
-			命題の仮定より、$ab=a(b^{-1})^{-1}\in H$が成り立ち、
-			$ab\in H$となることがわかる。
-		\end{description} %}
-		したがって、命題が成り立つことがわかる。
-	\end{proof} %}
-
-	\begin{proposition}[部分群の共通集合]\label{prop:部分群の共通集合} %{
-		$G$を群、$H_1$と$H_2$を$G$の部分群とする。
-		共通集合$H_1\cap H_2$もまた部分群となる。
-	\end{proposition} %prop:部分群の共通集合}
-	\begin{proof} %{
-		$H_1\cap H_2$は単位元を含むので空集合ではない。
-		また、$H_1$と$H_2$が部分群だから、任意の$a,b\in H_1\cap H_2$に対して、
-		$ab^{-1}\in H_1$かつ$ab^{-1}\in H_2$となる。
-		したがって、$ab^{-1}\in H_1\cap H_2$となり、命題\ref{prop:部分群}から
-		$H_1\cap H_2$が部分群となることがわかる。
-	\end{proof} %}
-%s3:部分群}
-\subsubsection{正規部分群}\label{s3:正規部分群} %{
-	$G$を群とする。任意の$g\in G$に対して写像$g-g^{-1}:G\to G$を$g$による
-	共役という。
-	任意の$G$の元に対する共役が不変になる$G$の部分群を正規部分群という。
-	\begin{equation*}\begin{split}
-		\text{正規部分群}\; H\subseteq G
-		\xiff{\dfn} ghg^{-1}\in H \quad\text{for all } g\in G,\; h\in H
-	\end{split}\end{equation*}
-	単位元だけからなる部分群$\mybf{1}$と$G$自身は常に正規部分群になる。
-	したがって、$\mybf{1}$と$G$自身を$G$の自明な正規部分群という。
-	$H\neq G$が$G$の正規部分群となることを$H\lhd G$と書くこともある。
-	また、任意の$G$の元と可換になる部分群を中心部分群という。
-	\begin{equation*}\begin{split}
-		\text{中心部分群}\; H\subseteq G
-		\xiff{\dfn} ghg^{-1}=h \quad\text{for all } g\in G,\; h\in H
-	\end{split}\end{equation*}
-	部分群$\mybf{1}$は常に中心部分群になる。したがって、$\mybf{1}$を$G$の
-	自明な中心部分群という。定義から、中心部分群は常に正規部分群となる。
-	\begin{equation*}\begin{split}
-		\text{中心部分群} \implies \text{正規部分群}
-	\end{split}\end{equation*}
-
-	群$G$の正規部分群が自明な正規部分群のみになるとき、$G$を単純群という。
-	\begin{equation*}\begin{split}
-		\text{単純群}\; G
-		\xiff{\dfn} \text{$G$の正規部分群が$\mybf{1}$と$G$だけ}
-	\end{split}\end{equation*}
-	Lie群$G$の場合、$G$の中心部分群が自明な中心部分群のみになるとき、
-	$G$を半単純群ということもある。
-	\begin{equation*}\begin{split}
-		\text{半単純群}\; G
-		\xiff{\dfn} \text{$G$の中心部分群が$\mybf{1}$だけ}
-	\end{split}\end{equation*}
-	この場合、単純群は常に半単純群となる。
-	\begin{equation*}\begin{split}
-		\text{単純群} \implies \text{半単純群}
-	\end{split}\end{equation*}
-	半単純群という言葉は状況によって定義が異なるようである。
-	Lie群の場合には同値な定義がいくつかあって、そのどれを用いるかという
-	違いしかないが、一般の群に対して定義されている言葉ではないようである。
-
-	群$G$の部分群$H$が一つ与えられると、$G$を$H$で割った剰余類が定義できる。
-	このことを同値関係を使って見てみる。$G$の二項関係$R_H$を次のように
-	定義すると、
-	\begin{equation*}\begin{split}
-		R_H(g_1,g_2) \xiff{\dfn} g_1^{-1}g_2\in H
-		\quad\text{for all } g_1,g_2\in G
-	\end{split}\end{equation*}
-	$H$が部分群であることから、$R_H$は同値関係になる。
-	\begin{equation*}\begin{array}{ll}
-		\text{反射律 } & g^{-1}g=1\in H \quad\text{for all } g\in G \\
-		\text{対称律 } & g_1^{-1}g_2\in H \xiff{\exists\;h\in H}
-			g_2 = g_1h \iff g_2^{-1}g_1 = h^{-1} \in H \\
-		\text{推移律 } & g_1^{-1}g_2\in H \And g_2^{-1}g_3\in H 
-			\implies g_1^{-1}g_3\in H \\
-	\end{array}\end{equation*}
-	商集合$G/R_H$を$H$による左剰余類という。この意味は次の式に依る。
-	\begin{equation*}\begin{split}
-		R_H(g_1,g_2) \iff g_1H\cap g_2H\neq \emptyset \iff g_1H = g_2H
-		\quad\text{for all } g_1,g_2\in G \\
-	\end{split}\end{equation*}
-	部分群$H$が正規部分群の場合、左剰余類と右剰余類が一致し、
-	\begin{equation*}\begin{split}
-		g_1^{-1}g_2\in H \xiff{\exists\;h\in H} g_2=g_1h
-		\xiff{\exists\; h'\in H} g_2=h'g_1 \iff g_2g_1^{-1}\in H \\
-		\quad\text{for all } g_1,g_2\in G \\
-	\end{split}\end{equation*}
-	同値関係と群の積がコンパチブルになる。
-	\begin{equation*}\begin{split}
-		g_1^{-1}g_2,\;g_3^{-1}g_4\in H
-		&\xiff{\exists\;h_1h_3\in H} g_2g_4=g_1h_1g_3h_3 \\
-		&\xiff{\exists\;h_1'\in H} g_2g_4=g_1g_3h_1'h_3 \\
-		&\iff (g_1g_3)^{-1}(g_2g_4)\in H
-		\quad\text{for all } g_1,g_2,g_3,g_4\in G \\
-	\end{split}\end{equation*}
-	したがって、部分群$H$が正規部分群のとき、群$G$の積をそのまま用いて、
-	商集合$G/R_H$に積が定義できる。この$G/R_H$の積は、$1H$を単位元とし、
-	任意の$g\in G$に対して$gH$の逆元が$g^{-1}H$となるから、群となる。
-	この群を正規部分群$H$による商群といい$G/H$と書く。
-	直積集合$(G/H)\times H$に積$m$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		m: (g_1\times h_1)\times(g_2\times h_2) 
-		\mapsto (g_1g_2)\times(g_2^{-1}h_1g_2h_2)
-		\quad\text{for all }h_i\in H,\; g_i\in G/H
-	\end{split}\end{equation*}
-	この積は$1\times1$を単位元とする群となる。
-	そして、写像$\phi:(G/H)\times H\to G$を$\phi(g\times h)=gh$と定義すると、
-	$\phi$は群同型となる。
-	\begin{equation*}\begin{split}
-		\phi: G\simeq (G/H)\times H \quad\text{with } m
-	\end{split}\end{equation*}
-
-	\begin{proposition}[共役は自己同型]\label{prop:共役は自己同型} %{
-		$G$を群とする。任意の$g\in G$に対する共役は$G$の自己同型写像となる。
-		\begin{equation*}\begin{split}
-			gGg^{-1} = G
-		\end{split}\end{equation*}
-	\end{proposition} %prop:共役は自己同型}
-	\begin{proof} %{
-		共役が群準同型であることは明らかである。また、任意の$g_1,g_2\in G$に
-		対して次の式が成り立ち、$1:1$となることもわかる。
-		\begin{equation*}\begin{split}
-			gg_1g^{-1} = gg_2g^{-1} \implies g_1 = g_2
-		\end{split}\end{equation*}
-	\end{proof} %}
-
-	\begin{proposition}[共役部分群の共通集合]\label{prop:共役部分群の共通集合} %{
-		$G$を群、$H$を$G$の部分群とする。$H$の共役部分群の共通集合は
-		正規部分群となる。
-		\begin{equation*}\begin{split}
-			\text{部分群 } H \implies \text{ 正規部分群 } \cap_{g\in G} gHg^{-1}
-		\end{split}\end{equation*}
-	\end{proposition} %prop:共役部分群の共通集合}
-	\begin{proof} %{
-		部分集合集合$N:=\cap_{g\in G} gHg^{-1}$とおくと、
-		命題\ref{prop:部分群の共通集合}より、$N$が部分群となることがわかる。
-		任意の$a\in N$に対して、ある$h\in H$と$g\in G$が存在して、$a=ghg^{-1}$
-		と書けるから、任意の$x\in G$に対して、$xax^{-1}=(xg)h(xg)^{-1}\in N$
-		となり、$N$が正規部分群となることがわかる。
-	\end{proof} %}
-%s3:正規部分群}
-%s2:群}
-\subsubsection{指数写像}\label{s3:指数写像} %{
-	ここでは、線形群$GL_n(\fukuso)$の部分群となるLie群$G$を考える。
-	この場合は、安直に自然対数の底を使って指数写像が定義できる。
-	\begin{equation*}\begin{split}
-		g\approx1\in G\subseteq GL_n(\fukuso) \\
-		\implies \text{ exists matrix } 
-		X\approx0\in gl_n(\fukuso) \text{ such that } g = e^X
-	\end{split}\end{equation*}
-	一般には、群と代数との対応は局所的になっている。通常は、群の原点$1$
-	と代数の原点$0$近傍で対応させる。
-
-	\begin{example}[sl(2)]\label{eg:sl(2)の指数写像} %{
-		$K$を標数$0$の体として、$sl_2$を次のように定義する。
-		\begin{equation*}\begin{split}
-			sl_2 := \set{X\in\Mat_2(K)\bou \tr X = 0}
-		\end{split}\end{equation*}
-		$sl_2$の基底$\set{H,L_\pm}$を次のようにとると、
-		\begin{equation*}\label{eq:sl2の基底系}\begin{split}
-			\begin{bmatrix}
-				H & L_+ \\ L_- & -H
-			\end{bmatrix}_K \xiff{\dfn} \left\{\begin{split}
-				L_+ := \begin{pmatrix}
-					0 & 1 \\ 0 & 0
-				\end{pmatrix},\quad L_- := \begin{pmatrix}
-					0 & 0 \\ 1 & 0
-				\end{pmatrix},\quad H := \begin{pmatrix}
-					1 & 0 \\ 0 & -1
-				\end{pmatrix} \\
-				sl_2(K) = \Set{\begin{bmatrix}
-					w & z_+ \\ z_- & -w
-				\end{bmatrix}\bou z_+,z_-,w\in K}
-			\end{split}\right.
-		\end{split}\end{equation*}
-		次の交換関係を満たす。
-		\begin{equation*}\begin{split}
-			[L_+,L_-] = H,\quad [H,L_\pm] = \pm 2L_\pm
-		\end{split}\end{equation*}
-		この座標系を使って指数写像を計算してみると次のようになる。
-		\begin{equation*}\begin{split}
-			& X := W + Z\sigma,\quad W := \bvec{w}{-w},\quad Z := \bvec{z_+}{z_-}
-			,\quad \sigma := \begin{pmatrix}
-				0 & 1 \\ 1 & 0
-			\end{pmatrix} \\
-			&\implies X^2 = W^2 + ZZ^\sigma + (W + W^\sigma)Z\sigma
-				= w^2 + z_+z_- \\
-			&\implies \begin{array}{rcll}
-				e^X &=& \sum_{n\in\sizen}\left(
-					\cfrac{x^n}{(2n)!} + \cfrac{x^n}{(2n+1)!}X\right)
-					& \quad\text{where } x := w^2 + z_+z_- \\
-				&=& (\cosh t) + \cfrac{(\sinh t)}{t}X
-					& \quad\text{where } t := \pm\sqrt{w^2 + z_+z_-}
-			\end{array}
-		\end{split}\end{equation*}
-		$t$は平方根の正をとっても負をとっても右辺は同じ値を与え、
-		$t=0$の極限では右辺は$1+X$となる。まとめると次のようになる。
-		\begin{equation}\label{eq:sl2の指数写像}\begin{split}
-			e^X = (\cosh t) + \cfrac{(\sinh t)}{t}X \quad\text{where }
-			t = \sqrt{\frac{\tr X^2}{2}} \quad\text{for all } X\in sl_2
-		\end{split}\end{equation}
-	\end{example} %eg:sl(2)の指数写像}
-
-	\begin{example}[su(2)]\label{eg:su(2)の指数写像} %{
-		$su_2$を次のように定義する。
-		\begin{equation*}\begin{split}
-			su_2 := \set{X\in\Mat(2,\fukuso)\bou \tr X = 0 \And X^\dag = - X}
-		\end{split}\end{equation*}
-		$sl_2$の場合と異なり、$su_2$の定義には複素共役が含まれてるので、
-		$su_2$の係数体は複素数に限定される。$su_2$の基底系をPauli行列
-		$\set{\sigma_1,\sigma_2,\sigma_3}$を用いて次のようにとると、
-		\begin{equation*}\label{eq:su2の基底系}\begin{split}
-			i\begin{bmatrix}
-				\sigma_3 & \sigma_1-i\sigma_2 \\ \sigma_1+i\sigma_2 & - \sigma_3
-			\end{bmatrix}_\jitu
-		\end{split}\end{equation*}
-		次の交換関係を満たす。
-		\begin{equation*}\begin{split}
-			[\sigma_1,\sigma_2] = 2i\sigma_3
-			,\quad [\sigma_2,\sigma_3] = 2i\sigma_1
-			,\quad [\sigma_3,\sigma_1] = 2i\sigma_2
-		\end{split}\end{equation*}
-		$su_2$は$sl_2$の虚数部をとったような形になっている。
-		この座標系を$sl_2$の指数写像\eqref{eq:sl2の指数写像}に当てはめると、
-		次のようになる。
-		\begin{equation}\label{eq:su2の指数写像}\begin{split}
-			e^X = (\cos r) + \cfrac{(\sin r)}{r}X \quad\text{where }
-			r = \sqrt{\frac{\tr(X^\dag X)}{2}} \quad\text{for all } X\in su_2
-		\end{split}\end{equation}
-	\end{example} %eg:su(2)の指数写像}
-%s3:指数写像}
-\subsubsection{Lie代数と随伴表現}\label{s3:Lie代数と随伴表現} %{
-	パラメーター$t\in\fukuso$を用いて表して、
-	$t$の一次近似したベクトル空間$\frk{g}$に、
-	\begin{equation*}\begin{split}
-		e^{tX} = 1 + X\int_0^tdse^{sX} = 1 + tX + Ot^2
-		\quad\text{for all } X\in\frk{g}
-	\end{split}\end{equation*}
-	Lie括弧を定義したものを$G$のLie代数ということにする。
-
-	Lie群$G$の随伴表現$\Ad:G\to\End\frk{g}$を共役によって定義する。
-	\begin{equation*}\begin{split}
-		e^{(\Ad g)X} := ge^Xg^{-1} \quad\text{for all } g\in G,\; X\in\frk{g}
-	\end{split}\end{equation*}
-	また、Lie代数の随伴表現$\ad:\frk{g}\to\End\frk{g}$を$\Ad$の微分に
-	よって定義する。
-	\begin{equation*}\begin{split}
-		(\ad X)Y := \lim_{t\to0}\frac{d}{dt}(\Ad e^{tX})Y
-		\quad\text{for all } X,Y\in\frk{g}
-	\end{split}\end{equation*}
-	$\ad$はLie括弧を用いて次のように書ける。
-	\begin{equation*}\begin{split}
-		(\ad X)Y = [X, Y] \quad\text{for all } X,Y\in\frk{g}
-	\end{split}\end{equation*}
-
-	$BCH$の公式を用いると、任意の$g\in G,\; Y,Z\in\frk{g}$と十分小さな
-	$t\in\fukuso$に対して、次の二つの式が導かれる。
-	\begin{equation*}\begin{split}
-		\ln\left(ge^{tY}e^{tZ}g^{-1}\right)
-		&= \ln\left(e^{t(\Ad g)Y}e^{t(\Ad g)Z}\right) \\
-		&= t(\Ad g)(Y + Z) + \frac{t^2}{2}[(\Ad g)Y, (\Ad g)Z] + Ot^3 \\
-		\ln\left(ge^{tY}e^{tZ}g^{-1}\right)
-		&= \ln\left(ge^{t(Y+Z) + \frac{t}{2}[Y,Z] + Ot^3}g^{-1}\right) \\
-		&= t(\Ad g)(Y + Z) + \frac{t^2}{2}(\Ad g)[Y, Z] + Ot^3 \\
-	\end{split}\end{equation*}
-	$t$の二次の項を比べると次の式が導かれる。
-	\begin{equation*}\begin{split}
-		(\Ad g)[Y,Z] = [(\Ad g)Y, (\Ad g)Z]
-		\quad\text{for all } g\in G,\; Y,Z\in\frk{g}
-	\end{split}\end{equation*}
-	この式は共役が群の自己同型写像になることの反映である。
-	この式で$g=e^{tX}$とおき、$t$の一次の項を取り出すと、
-	Jacobiの恒等式が得られる。
-	\begin{equation*}\begin{split}
-		[X,[Y,Z]] = [[X,Y],Z] + [Y,[X,Z]] \quad\text{for all } X,Y,Z\in\frk{g}
-	\end{split}\end{equation*}
-	代数の随伴表現$\ad$を用いると、これらの式は次のように書くことができる。
-	\begin{equation}\label{eq:随伴表現その一}\begin{array}{rcll}
-		\ad\bigl((\Ad g)Y\bigr) &=& (\Ad g)(\ad Y)(\Ad g^{-1})
-		& \quad\text{for all } g\in G,\; Y\in\frk{g} \\
-		\ad[X,Y] &=& [\ad X,\ad Y] & \quad\text{for all } X,Y\in\frk{g}
-	\end{array}\end{equation}
-	二つ目の式は$\ad$がLie代数の表現になっていることを示している。
-
-	Lie群の正規部分群を随伴表現を通してLie代数の言葉に翻訳することを考える。
-	$\frk{h}\subseteq\frk{g}$を随伴表現の不変部分空間とすると、
-	$\frk{h}$は$G$の正規部分群に対応することがわかる。
-	\begin{equation*}\begin{split}
-		(\Ad g)Y\in \frk{h} \implies ge^Yg^{-1} = e^{(\Ad g)Y}\in e^{\frk{h}}
-		\quad\text{for all } g\in G,\; Y\in\frk{h}
-	\end{split}\end{equation*}
-	また、$\frk{h}\subseteq\frk{g}$を随伴表現の核空間とすると、
-	$\frk{h}$は$G$の中心部分群に対応することがわかる。
-	\begin{equation*}\begin{split}
-		(\Ad g)Y = 0 \implies ge^Yg^{-1} = e^{(\Ad g)Y} = 1
-		\quad\text{for all } g\in G,\; Y\in\frk{h}
-	\end{split}\end{equation*}
-
-	ここで、Lie代数について、随伴表現に依らない言葉を定義しておく。
-	Lie代数$\frak{g}$のイデアル$I$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\text{部分空間$I\subseteq\frak{g}$がイデアル} 
-		\xiff{\dfn} [g,a]\in I \quad\text{for all } g\in\frak{g},\; a\in I
-	\end{split}\end{equation*}
-	ゼロ元だけからなる部分Lie代数$\set{0}$と$\frak{g}$自身は常に
-	イデアルとなるので、自明なイデアルという。また、$\frak{g}$のすべての
-	元と可換となるイデアルを中心という。
-	\begin{equation*}\begin{split}
-		\text{部分空間$I\subseteq\frak{g}$が中心} 
-		\xiff{\dfn} [g,a]=0 \quad\text{for all } g\in\frak{g},\; a\in I
-	\end{split}\end{equation*}
-	$\set{0}$は常に中心となるので、自明な中心という。
-	イデアルを使うとLie代数での単純と半単純を次のように定義することができる。
-
-	\begin{definition}[Lie代数での単純と半単純]
-	\label{def:Lie代数での単純と半単純} %{
-		$\frak{g}$をLie代数とする。
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item $\frak{g}$のイデアルが自明なイデアルに限られるとき、
-			$\frak{g}$を単純Lie代数といい、
-			\item $\frak{g}$の中心イデアルが自明な中心イデアルに限られる
-			とき、$\frak{g}$を半単純Lie代数という。
-		\end{itemize} %}
-	\end{definition} %def:Lie代数での単純と半単純}
-
-	以上をまとめると、群とLie代数との対応は次のようになり、
-	\begin{equation*}\begin{array}{cc}
-		\text{群} & \text{Lie代数} \\ \hline
-		\text{共役} & \text{Lie括弧} \\
-		\text{正規部分群} & \text{イデアル} \\
-		\text{中心部分群} & \text{中心イデアル} \\
-	\end{array}\end{equation*}
-	単純と半単純についての群とLie代数との対応は次のようになる。
-	\begin{equation*}\begin{array}{c|ccc}
-		& \text{群} & \text{Lie代数} & \text{随伴表現} \\ \hline
-		\text{単純} & \text{自明な正規部分群なし} 
-			& \text{自明なイデアルなし} & \text{不変部分空間なし} \\
-		\text{半単純} & \text{自明な中心部分群なし} 
-			& \text{自明な中心イデアルなし} & \text{核部分空間なし} \\
-	\end{array}\end{equation*}
-%s3:Lie代数と随伴表現}
-\subsubsection{Killing形式}\label{s3:Killing形式} %{
-	次の線形写像$\kappa:\frk{g}\otimes\frk{g}\to\fukuso$をKilling形式という。
-	\begin{equation*}\begin{split}
-		\kappa(X\otimes Y) := \tr\bigl((\ad X)(\ad Y)\bigr)
-	\end{split}\end{equation*}
-	トレースの性質$\tr(AB)=\tr(BA)$から$\kappa$は対称になることがわかる。
-	また、随伴表現の性質\eqref{eq:随伴表現その一}から、
-	$\Ad$を省略して$gX:=(\Ad g)X$と書くと、次の式が成り立ち、
-	\begin{equation*}\begin{split}
-		\kappa\bigl(gX\otimes Y\bigr)
-		&= \tr\biggl((\ad gX)(\ad Y)\biggr)
-		= \tr\biggl(g(\ad X)g^{-1}(\ad Y)\biggr) \\
-		&= \tr\biggl((\ad X)g^{-1}(\ad Y)g\biggr)
-		= \tr\biggl((\ad X)(\ad g^{-1}Y)\biggr) \\
-		&= \kappa\bigl(X\otimes g^{-1}Y\bigr)
-			\quad\text{for all } g\in G,\; X,Y\in\frk{g} \\
-	\end{split}\end{equation*}
-	$\kappa$が$\Ad$不変になることがわかる。
-	\begin{equation*}\begin{split}
-		\kappa\bigl((\Ad g)\otimes\id\bigr)
-		= \kappa\bigl(\id\otimes(\Ad g^{-1})\bigr)
-		\quad\text{for all } g\in G
-	\end{split}\end{equation*}
-	この式を微分すると$\ad$に関する次の式が得られる。
-	\begin{equation*}\begin{split}
-		\kappa\bigl((\ad X)\otimes\id\bigr)
-		+ \kappa\bigl(\id\otimes(\ad X)\bigr) = 0
-		\quad\text{for all } X\in \frk{g}
-	\end{split}\end{equation*}
-
-	Cartanの判定法とは、Killing形式を用いて有限次元Lie環$\frk{g}$の種類を
-	判定する方法で、次の二つのバージョンがある。
-	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[可解性] $\frk{g}$が可解かどうかの判定
-		\begin{equation*}\begin{split}
-			\kappa(X\otimes Y) = 0 
-			\quad\text{for all }X\in\frk{g},\; Y\in[\frk{g},\frk{g}]
-			\iff \text{$\frk{g}$が可解}
-		\end{split}\end{equation*}
-		\item[半単純性] $\frk{g}$が半単純かどうかの判定
-		\begin{equation*}\begin{split}
-			\det\kappa \neq 0 \iff \text{$\frk{g}$が半単純}
-		\end{split}\end{equation*}
-	\end{description} %}
-	どちらの場合も有限次元Lie環に制限されているので、無限次元Lie環の場合は
-	別途判定方法を考える必要があるようである。ここで、Killing形式を定義する
-	目的はCartanの判定法にある。
-
-	随伴表現とKilling形式を簡単なLie代数について調べてみる。
-
-	\begin{example}[sl(2)]\label{eg:sl(2)の随伴表現} %{
-		基底系\eqref{eq:sl2の基底系}を使い、$(L_+,H,L_-)$の順に基底を並べると、
-		随伴表現とKilling形式は次のようになる。
-		\begin{equation*}\begin{split}
-			\ad L_+ = \begin{pmatrix}
-				0 & -2 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0
-			\end{pmatrix},\; \ad L_- = \begin{pmatrix}
-				0 & 0 & 0 \\ -1 & 0 & 0 \\ 0 & 2 & 0
-			\end{pmatrix},\; \ad H = \begin{pmatrix}
-				2 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & -2
-			\end{pmatrix},\; \kappa = \begin{pmatrix}
-				0 & 0 & 4 \\ 0 & 8 & 0 \\ 4 & 0 & 0
-			\end{pmatrix}
-		\end{split}\end{equation*}
-		Killing形式の固有方程式は次のようになり、
-		\begin{equation*}\begin{split}
-			\det(\lambda - \kappa) = (\lambda - 8)(\lambda^2 - 4^2)
-		\end{split}\end{equation*}
-		Killing形式は非退化だが、正定値または負定値でないことがわかる。
-		基底系\eqref{eq:sl2の基底系}を使うと次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			\kappa(X\otimes X) = 4\tr X^2 \quad\text{for all } X\in sl_2
-		\end{split}\end{equation*}
-	\end{example} %eg:sl(2)の随伴表現}
-
-	\begin{example}[su(2)]\label{eg:su(2)の随伴表現} %{
-		随伴表現とKilling形式は$sl_2$の場合\ref{eg:sl(2)の随伴表現}と同じ
-		になり、基底系\eqref{eq:su2の基底系}を使うと次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			\kappa(X\otimes X) = - 4\tr(X^\dag X) \quad\text{for all } X\in su_2
-		\end{split}\end{equation*}
-		したがって、$su_2$の場合は、$sl_2$の場合と異なり、Killing形式が負定値
-		となり、Killing形式を用いてノルムを定義することができる。
-	\end{example} %eg:su(2)の随伴表現}
-
-	\begin{todo}[ここまで]\label{todo:ここまで} %{
-		有限群$G$とその表現$(\rho,V)$が与えられ、表現空間$V$が内積$\beta$を
-		持つ場合、次のようにすると$G$-不変な内積$\beta_G$が得られる。
-		\begin{equation*}\begin{split}
-			\beta_G(v_1, v_2) 
-			:= \frac{1}{|G|}\sum_{g\in G} \beta(\rho_gv_1, \rho_gv_2)
-			\quad\text{for all } v_1,v_2\in V
-		\end{split}\end{equation*}
-		そして、内積$\beta_G$を用いると、表現$\rho$がユニタリ表現となる。
-		\begin{equation*}\begin{split}
-			\beta_G(v_1, \rho_gv_2) = \beta_G(\rho_g^{-1}v_1, v_2)
-			\quad\text{for all } v_1,v_2\in V,\; g\in G
-		\end{split}\end{equation*}
-	\end{todo} %todo:ここまで}
-%s3:Killing形式}
-\subsection{線形代数}\label{s2:線形代数} %{
-	対角化可能よりももう少し条件を弱めた三角化可能を定義する。
-	まず、三角行列を定義しておく。
-
-	\begin{definition}[三角行列]\label{def:三角行列} %{
-		次の形の対角成分を除いた左下半分がすべて$0$となっている正方行列を
-		上三角行列という。
-		\begin{equation*}\begin{split}
-			\begin{pmatrix}
-				* & * & * \\
-				0 & * & * \\
-				0 & 0 & * \\
-			\end{pmatrix}
-		\end{split}\end{equation*}
-		同様に、対角成分を除いた右上半分がすべて$0$となっている正方行列を
-		下三角行列という。また、与えられた正方行列$A$を正則な線形変換$P$を
-		用いて上または下三角行列$PAP^{-1}$にすることを$A$の三角化という。
-	\end{definition} %def:三角行列}
-
-	対角化と異なり三角化は常に可能である。三角化は単に三角行列に
-	書き直すだけではなく、対角成分に固有値が並ぶようにすることができる。
-
-	\begin{proposition}[正方行列の三角化]\label{prop:正方行列の三角化} %{
-		$A$を$n$次正方行列、$\lambda_1,\lambda_2,\dots,\lambda_n$を$A$の
-		固有値とする。このとき、あるユニタリ行列が存在して、次のように
-		上三角行列にすることができる。
-		\begin{equation*}\begin{split}
-			U^{-1}AU = 	\begin{pmatrix}
-				\lambda_1 & & & * \\
-				& \lambda_2 \\
-				& & \ddots \\
-				0 & & & \lambda_n \\
-			\end{pmatrix}
-		\end{split}\end{equation*}
-	\end{proposition} %prop:正方行列の三角化}
-	\begin{proof} %{
-		正方行列の次数についての帰納法を用いる。次数が$1$のときは、明らかに
-		命題が成り立つ。ある次数$n\in\sizen_+$で命題が成り立つとし、
-		$A$を$n+1$次正方行列とする。$\lambda\in\fukuso$を$A$の固有値とし、
-		$v\in\fukuso^{n+1}$を$\lambda$に属する固有ベクトルとする。
-		そして、$v,u_1,\dots,u_n\in\fukuso^{n+1}$を互いに直交するベクトル
-		とする。すると、$n+1$次正方行列$U=[v,u_1,\dots,u_n]$はユニタリ行列
-		となり、次の式が成り立つ。
-		\begin{equation*}\begin{split}
-			U^{-1}AU &= U^{-1}[\lambda v,Au_1,\dots,Au_n] \\
-			&= \left[\lambda\begin{pmatrix}
-				1 \\ 0 \\ \vdots \\ 0
-			\end{pmatrix},U^{-1}Au_1,\dots,U^{-1}Au_n\right] = \begin{pmatrix}
-				\lambda & * & \cdots & * \\
-				0 & * & \cdots & * \\
-				\vdots & & \ddots & \vdots \\
-				0 & \cdots & 0 & * \\
-			\end{pmatrix}
-		\end{split}\end{equation*}
-		ここで、$n$次正方行列$B$を次のようにおくと、
-		\begin{equation*}\begin{split}
-			U^{-1}AU &= \begin{pmatrix}
-				\lambda & * \\
-				0 & B
-			\end{pmatrix}
-		\end{split}\end{equation*}
-		帰納法の仮定より、$B$の固有値を$\lambda_1,\dots,\lambda_n$とすると、
-		$B$を次のように上三角行列にする$n$次ユニタリ行列$V$が存在する。
-		\begin{equation*}\begin{split}
-			V^{-1}BV = \begin{pmatrix}
-				\lambda_1 & & & * \\
-				& \lambda_2 \\
-				& & \ddots \\
-				0 & & & \lambda_n \\
-			\end{pmatrix}
-		\end{split}\end{equation*}
-		ここで、$n+1$次正方行列$W$を次のように定義すると、$W$はユニタリ行列
-		となる。
-		\begin{equation*}\begin{split}
-			W = U \begin{pmatrix}
-				1 & 0 \\ 0 & V
-			\end{pmatrix}
-		\end{split}\end{equation*}
-		すると、次の式が成り立ち、$n+1$次正方行列に対しても命題が成り立つことが
-		わかる。
-		\begin{equation*}\begin{split}
-			W^{-1}AW = \begin{pmatrix}
-				\lambda & & & * \\
-				& \lambda_1 \\
-				& & \ddots \\
-				0 & & & \lambda_n \\
-			\end{pmatrix}
-		\end{split}\end{equation*}
-	\end{proof} %}
-
-	この命題でユニタリ変換という制限を外すとJordan標準形にまで持っていける
-	ことが示される。例えば、$4$次正方行列$A$の場合、その固有値を
-	$\lambda_i(i=1,2,3,4)$とすると、正則行列$P$によって次のような
-	形の上三角行列にすることができる。
-	\begin{equation*}\begin{split}
-		P^{-1}AP = 	\begin{pmatrix}
-			\lambda_1 & \epsilon_1 & 0 & 0 \\
-			0 & \lambda_2 & \epsilon_2 & 0 \\
-			0 & 0 & \lambda_3 & \epsilon_3 \\
-			0 & 0 & 0 & \lambda_n \\
-		\end{pmatrix}
-	\end{split}\end{equation*}
-	ここで、$\epsilon_i\in\set{0,1}(i=1,2,3)$は固有値の縮退度によって
-	決まる値である。
-%s2:線形代数}
-\subsection{群}\label{s2:群} %{
-	$G$を群、$H$を$G$の部分群とする。任意の$g\in G$に対して$G$の部分集合
-	$gH$を次のようにおくことにする。
-	\begin{equation*}\begin{split}
-		gH := \set{gh\bou h\in H} \quad\text{for all } g\in G
-	\end{split}\end{equation*}
-	すると、任意の$g_1,g_2\in G$に対して、部分集合$g_1H$と$g_2H$は等しいか、
-	全く交わらないかのどちらかになる。
-	\begin{equation*}\begin{array}{rcll}
-		g_1H\cap g_2H \neq \emptyset 
-		&\implies& g_1h_1 = g_2h_2 & \quad\text{for some } h_1,h_2\in H \\
-		&\implies& g_1 = g_2h_2h_1^{-1} \\
-		&\implies& g_1h = g_2h_2h_1^{-1}h\in g_2H & \quad\text{for all } h\in H
-	\end{array}\end{equation*}
-	したがって、ある$G$のある部分集合$K$があって、$G$は$G=\cup_{k\in K} kH$
-	という部分集合の直和として書くことができる。$gH$を$H$を法とする剰余類
-	という。
 
 	部分群$H\subseteq G$が正規部分群の場合、次のようにして、
 	剰余類の間に積$m$を定義することができる\footnote{
@@ -2731,7 +3711,7 @@
 			\phi_{n+1} + \phi_{-(n+1)} = \sum_{p=1}^n\phi_{-p}\phi_{n+1-p}
 		\end{split}\end{equation}
 		$\phi_{-1}\psi_+^*\psi_-^*$を$\eta_+^p\cdots$という形になるように
-		$p=N+1$まで計算\ref{eq:計算の途中経過その一}すると次のようになる。
+		$p=N+1$まで計算\ref{note:計算の途中経過その一}すると次のようになる。
 		\begin{equation*}\begin{split}
 			\phi_{-1}\psi_+^*\psi_-^*
 			&= \biggl(\phi_{-1} + \phi_{-2}\eta_+ +\cdots+ \phi_{-(N+1)}\eta_+^N
@@ -2992,7 +3972,7 @@
 		線形な式を得られないものだろうか？
 		%
 		\item[組み合わせの数] 二次式ですべての係数が$1$の場合（$x=1+x^2$）、
-		摂動計算はカタラン数を与えるだけである。カタラン数のような組み合わせの
+		摂動計算はCatalan数を与えるだけである。Catalan数のような組み合わせの
 		数に興味がない場合は、$x=1+x^2$の効果を抜き出してしまいたい。
 		\begin{equation*}\begin{array}{rcll}
 			x &=& a + bxcxd,&\quad x = \sum_{n\in\sizen} x_n \\
@@ -3057,8 +4037,8 @@
 			\sum_{p=0}^n x_{n-p}\otimes x_{p} \ar@{|->}[r]^\beta & x_{n+1} \\
 		}\end{equation*}
 		%
-		\item[優先順位] 代数方程式$x=a+xcx$の正級数解はカタラン数$C_n$を用いて
-		$x=\sum_{n\in\sizen}C_n(ac)^na$と書ける。カタラン数が出てくる起源は
+		\item[優先順位] 代数方程式$x=a+xcx$の正級数解はCatalan数$C_n$を用いて
+		$x=\sum_{n\in\sizen}C_n(ac)^na$と書ける。Catalan数が出てくる起源は
 		二項演算$f\odot g=fcg$を適用していく方法の和にある。例えば、次のように
 		なっている。
 		\begin{equation*}\begin{split}
@@ -3150,7 +4130,7 @@
 		\begin{equation*}\begin{split}
 			x &= (ac)^*a
 		\end{split}\end{equation*}
-		$R$が一般の半体の場合にはカタラン数$C_n$を与えるために真空期待値
+		$R$が一般の半体の場合にはCatalan数$C_n$を与えるために真空期待値
 		\begin{equation*}\begin{split}
 			C_{n+1} = \Braket{\eta_{-1}^*\biggl(ac\bigl(
 				\eta_2^*\eta_1+\eta_{-2}\eta_{-1}^*\bigr)\biggr)^n\eta_2^*}
@@ -3188,7 +4168,7 @@
 			&\quad\because\quad (1 - 4t)^{\frac{1}{2}} 
 			= 1 - 2t\sum_{n\in\sizen} \frac{t^n}{n+1}\binom{2n}{n} \\
 		\end{split}\end{equation*}
-		$\set{C_n\in\sizen\bou n\in\sizen}$はカタラン数と呼ばれる数列である。
+		$\set{C_n\in\sizen\bou n\in\sizen}$はCatalan数と呼ばれる数列である。
 		代数方程式を真空期待値で表すと次のようになるから、
 		\begin{equation*}\begin{split}
 			x &= \Braket{\bigl(ac\eta_{-1}^*\eta_2^*\eta_1\eta_{-2}
@@ -3196,17 +4176,17 @@
 			&= a + ac\Braket{\eta_{-1}^*\biggl(ac\bigl(
 				\eta_2^*\eta_1+\eta_{-2}\eta_{-1}^*\bigr)\biggr)^*\eta_2^*}a \\
 		\end{split}\end{equation*}
-		カタラン数は次のように書けることがわかる。\footnote{
-			カタラン経路の足し上げをフォック空間で表すと、カタラン数は一組の
+		Catalan数は次のように書けることがわかる。\footnote{
+			Catalan経路の足し上げをフォック空間で表すと、Catalan数は一組の
 			生成消滅演算子だけで次のように書くこともできる。
 			\begin{equation*}\begin{split}
 				C_{n+1} = \Braket{\bigl(\eta_+ + \eta_-\bigr)^{2n}}
 				\quad\text{for all } n\in\sizen
 			\end{split}\end{equation*}
-			したがって、式\eqref{eq:カタラン数の二組表示}はある変換でこの式に
+			したがって、式\eqref{eq:Catalan数の二組表示}はある変換でこの式に
 			なることが予想される。
 		}
-		\begin{equation}\label{eq:カタラン数の二組表示}\begin{split}
+		\begin{equation}\label{eq:Catalan数の二組表示}\begin{split}
 			C_{n+1} = \Braket{\eta_{-1}^*\bigl(
 				\eta_2^*\eta_1 + \eta_{-2}\eta_{-1}^*\bigr)^n\eta_2^*}
 				\quad\text{for all } n\in\sizen

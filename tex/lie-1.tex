@@ -1,0 +1,694 @@
+\begingroup %{
+	\newcommand{\W}{\mycal{W}}
+	\newcommand{\T}{\mycal{T}}
+	\newcommand{\End}{\myop{End}}
+	\newcommand{\Map}{\myop{Map}}
+	\newcommand{\Lin}{\mathcal{L}}
+	\newcommand{\Hol}{\mathcal{H}}
+	\newcommand{\Aut}{\myop{Aut}}
+	\newcommand{\Mat}{\myop{Mat}}
+	%
+	\newcommand{\id}{\myop{id}}
+	\newcommand{\tran}{\mathbf{t}}
+	\newcommand{\dfn}{\,\myop{def}\,}
+	\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+	\newcommand{\tr}{\myop{tr}}
+	%
+	\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+	\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+	\newcommand{\what}{\widehat}
+	\newcommand{\even}{\myop{even}}
+	\newcommand{\lieso}{\myop{so}}
+	\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+	\newcommand{\ad}{\myop{ad}}
+	\newcommand{\Ad}{\myop{Ad}}
+	\newcommand{\Cn}{\myop{Cn}}
+	\newcommand{\lhdeq}{\trianglelefteq}
+	\newcommand{\rhdeq}{\trianglerighteq}
+	\newcommand{\dup}{\ensuremath{\myop{dup}\,}}
+	%
+	\newcommand{\xytree}{\xymatrix@R=4pt@C=1pt}
+	\newcommand{\sen}{\ar@{-}}
+	%
+	{\setlength\arraycolsep{2pt}
+	%
+\section{Lie代数の表現}\label{s1:Lie代数の表現} %{
+\subsection{群}\label{s2:群} %{
+\subsubsection{部分群}\label{s3:部分群} %{
+	群の部分集合が部分群になっているかどうかを判定する道具を書いておく。
+
+	\begin{proposition}[部分群]\label{prop:部分群} %{
+		$G$を群、$H$を空でない$G$の部分集合とする。このとき、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\text{$H$が部分群}
+			\iff ab^{-1}\in H \quad\text{for all } a,b\in H
+		\end{split}\end{equation*}
+	\end{proposition} %prop:部分群}
+	\begin{proof} %{
+		次の式は明らかだから、
+		\begin{equation*}\begin{split}
+			\text{$H$が部分群}
+			\implies ab^{-1}\in H \quad\text{for all } a,b\in H
+		\end{split}\end{equation*}
+		次の式を証明する。
+		\begin{equation*}\begin{split}
+			\text{$H$が部分群}
+			\Leftarrow ab^{-1}\in H \quad\text{for all } a,b\in H
+		\end{split}\end{equation*}
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[単位元] 任意の$a\in H$に対して、命題の仮定より、
+			$1=aa^{-1}\in H$が成り立つから、$1\in H$となることがわかる。
+			\item[逆元] 任意の$a\in H$に対して、$1\in H$だから、
+			命題の仮定より、$a^{-1}=1a^{-1}\in H$が成り立ち、
+			$a^{-1}\in H$となることがわかる。
+			\item[積] 任意の$a,b\in H$に対して、$b^{-1}\in H$だから、
+			命題の仮定より、$ab=a(b^{-1})^{-1}\in H$が成り立ち、
+			$ab\in H$となることがわかる。
+		\end{description} %}
+		したがって、命題が成り立つことがわかる。
+	\end{proof} %}
+
+	\begin{proposition}[部分群の共通集合]\label{prop:部分群の共通集合} %{
+		$G$を群、$H_1$と$H_2$を$G$の部分群とする。
+		共通集合$H_1\cap H_2$もまた部分群となる。
+	\end{proposition} %prop:部分群の共通集合}
+	\begin{proof} %{
+		$H_1\cap H_2$は単位元を含むので空集合ではない。
+		また、$H_1$と$H_2$が部分群だから、任意の$a,b\in H_1\cap H_2$に対して、
+		$ab^{-1}\in H_1$かつ$ab^{-1}\in H_2$となる。
+		したがって、$ab^{-1}\in H_1\cap H_2$となり、命題\ref{prop:部分群}から
+		$H_1\cap H_2$が部分群となることがわかる。
+	\end{proof} %}
+%s3:部分群}
+\subsubsection{正規部分群}\label{s3:正規部分群} %{
+	$G$を群とする。任意の$g\in G$に対して写像$g-g^{-1}:G\to G$を$g$による
+	共役という。ある元$g\in G$による共役は$G$の自己同型写像となる。
+
+	\begin{proposition}[共役は自己同型]\label{prop:共役は自己同型} %{
+		$G$を群とする。任意の$g\in G$に対する共役は$G$の自己同型写像となる。
+		\begin{equation*}\begin{split}
+			gGg^{-1} = G
+		\end{split}\end{equation*}
+	\end{proposition} %prop:共役は自己同型}
+	\begin{proof} %{
+		共役が群準同型であることは明らかである。また、任意の$g_1,g_2\in G$に
+		対して次の式が成り立ち、$1:1$となることもわかる。
+		\begin{equation*}\begin{split}
+			gg_1g^{-1} = gg_2g^{-1} \implies g_1 = g_2
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	任意の共役に対する不変部分群を正規部分群という。
+
+	\begin{definition}[正規部分群]\label{def:正規部分群} %{
+		$G$を群とする。任意の$G$の元に対する共役が不変になる$G$の部分群を
+		正規部分群といい、$H\lhd G$と書くこともある。
+		\begin{equation*}\begin{split}
+			\text{正規部分群}\; H\subseteq G
+			\xiff{\dfn} ghg^{-1}\in H \quad\text{for all } g\in G,\; h\in H
+		\end{split}\end{equation*}
+		単位元だけからなる部分群$\mybf{1}$と$G$自身は常に正規部分群になる。
+		$\mybf{1}$と$G$自身を$G$の自明な正規部分群という。
+	\end{definition} %def:正規部分群}
+
+	\begin{definition}[中心部分群]\label{def:中心部分群} %{
+		$G$を群とする。任意の$G$の元と可換になる部分群を中心部分群という。
+		\begin{equation*}\begin{split}
+			\text{中心部分群}\; H\subseteq G
+			\xiff{\dfn} ghg^{-1}=h \quad\text{for all } g\in G,\; h\in H
+		\end{split}\end{equation*}
+		部分群$\mybf{1}$は常に中心部分群になる。$\mybf{1}$を$G$の自明な
+		中心部分群という。
+	\end{definition} %def:中心部分群}
+
+	正規部分群と中心部分群の定義から、中心部分群は常に正規部分群となる。
+	\begin{equation*}\begin{split}
+		\text{中心部分群} \implies \text{正規部分群}
+	\end{split}\end{equation*}
+
+	\begin{definition}[単純群]\label{def:単純群} %{
+		正規部分群が自明な正規部分群のみになる群を単純群という。
+		\begin{equation*}\begin{split}
+			\text{$G$が単純群}
+			\xiff{\dfn} \text{$G$の正規部分群が$\mybf{1}$と$G$だけ}
+		\end{split}\end{equation*}
+	\end{definition} %def:単純群}
+
+	Lie群$G$の場合、$G$の中心部分群が自明な中心部分群のみになるとき、
+	$G$を半単純群ということもある。
+	\begin{equation*}\begin{split}
+		\text{半単純群}\; G
+		\xiff{\dfn} \text{$G$の中心部分群が$\mybf{1}$だけ}
+	\end{split}\end{equation*}
+	この場合、単純群は常に半単純群となる。
+	\begin{equation*}\begin{split}
+		\text{単純群} \implies \text{半単純群}
+	\end{split}\end{equation*}
+	半単純群という言葉は状況によって定義が異なるようである。
+	Lie群の場合には同値な定義がいくつかあって、そのどれを用いるかという
+	違いしかないが、一般の群に対して定義されている言葉ではないようである。
+
+	群$G$の部分群$H$が一つ与えられると、$G$を$H$で割った剰余類が定義できる。
+	このことを同値関係を使って見てみる。$G$の二項関係$R_H$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		R_H(g_1,g_2) \xiff{\dfn} g_1^{-1}g_2\in H
+		\quad\text{for all } g_1,g_2\in G
+	\end{split}\end{equation*}
+	$H$が部分群であることから、$R_H$は同値関係になる。
+	\begin{equation*}\begin{array}{ll}
+		\text{反射律 } & g^{-1}g=1\in H \quad\text{for all } g\in G \\
+		\text{対称律 } & g_1^{-1}g_2\in H \xiff{\exists\;h\in H}
+			g_2 = g_1h \iff g_2^{-1}g_1 = h^{-1} \in H \\
+		\text{推移律 } & g_1^{-1}g_2\in H \And g_2^{-1}g_3\in H 
+			\implies g_1^{-1}g_3\in H \\
+	\end{array}\end{equation*}
+	商集合$G/R_H$を$H$による左剰余類という。この意味は次の式に依る。
+	\begin{equation*}\begin{split}
+		R_H(g_1,g_2) \iff g_1H\cap g_2H\neq \emptyset \iff g_1H = g_2H
+		\quad\text{for all } g_1,g_2\in G \\
+	\end{split}\end{equation*}
+	部分群$H$が正規部分群の場合、左剰余類と右剰余類が一致し、
+	\begin{equation*}\begin{split}
+		g_1^{-1}g_2\in H \xiff{\exists\;h\in H} g_2=g_1h
+		\xiff{\exists\; h'\in H} g_2=h'g_1 \iff g_2g_1^{-1}\in H \\
+		\quad\text{for all } g_1,g_2\in G \\
+	\end{split}\end{equation*}
+	同値関係と群の積がコンパチブルになる。
+	\begin{equation*}\begin{split}
+		g_1^{-1}g_2,\;g_3^{-1}g_4\in H
+		&\xiff{\exists\;h_1h_3\in H} g_2g_4=g_1h_1g_3h_3 \\
+		&\xiff{\exists\;h_1'\in H} g_2g_4=g_1g_3h_1'h_3 \\
+		&\iff (g_1g_3)^{-1}(g_2g_4)\in H
+		\quad\text{for all } g_1,g_2,g_3,g_4\in G \\
+	\end{split}\end{equation*}
+	したがって、部分群$H$が正規部分群のとき、群$G$の積をそのまま用いて、
+	商集合$G/R_H$に積が定義できる。この$G/R_H$の積は、$1H$を単位元とし、
+	任意の$g\in G$に対して$gH$の逆元が$g^{-1}H$となるから、群となる。
+	この群を正規部分群$H$による商群といい$G/H$と書く。
+	直積集合$(G/H)\times H$に積$m$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		m: (g_1\times h_1)\times(g_2\times h_2) 
+		\mapsto (g_1g_2)\times(g_2^{-1}h_1g_2h_2)
+		\quad\text{for all }h_i\in H,\; g_i\in G/H
+	\end{split}\end{equation*}
+	この積は$1\times1$を単位元とする群となる。
+	そして、写像$\phi:(G/H)\times H\to G$を$\phi(g\times h)=gh$と定義すると、
+	$\phi$は群同型となる。
+	\begin{equation*}\begin{split}
+		\phi: G\simeq (G/H)\times H \quad\text{with } m
+	\end{split}\end{equation*}
+
+
+	\begin{proposition}[共役部分群の共通集合]\label{prop:共役部分群の共通集合} %{
+		$G$を群、$H$を$G$の部分群とする。$H$の共役部分群の共通集合は
+		正規部分群となる。
+		\begin{equation*}\begin{split}
+			\text{$H$が部分群} \implies \cap_{g\in G} gHg^{-1}\text{が正規部分群} 
+		\end{split}\end{equation*}
+	\end{proposition} %prop:共役部分群の共通集合}
+	\begin{proof} %{
+		部分集合集合$N:=\cap_{g\in G} gHg^{-1}$とおくと、
+		命題\ref{prop:部分群の共通集合}より、$N$が部分群となることがわかる。
+		任意の$a\in N$に対して、ある$h\in H$と$g\in G$が存在して、$a=ghg^{-1}$
+		と書けるから、任意の$x\in G$に対して、$xax^{-1}=(xg)h(xg)^{-1}\in N$
+		となり、$N$が正規部分群となることがわかる。
+	\end{proof} %}
+%s3:正規部分群}
+\subsubsection{交換子群}\label{s3:交換子群} %{
+	まず、群の交換子と交換子群を定義しておく。
+
+	\begin{definition}[交換子群]\label{def:交換子群} %{
+		$G$を有限群とする。次の写像$[-,-]:G\times G\to G$を群の交換子という。
+		\begin{equation*}\begin{split}
+			[g_1,g_2] = (g_1g_2)(g_2g_1)^{-1} \quad\text{for all } g_1,g_2\in G
+		\end{split}\end{equation*}
+		$H\subseteq G$を次の部分集合とし、
+		\begin{equation*}\begin{split}
+			H := \set{[g_1,g_2]\in G\bou g_1,g_2\in G}
+		\end{split}\end{equation*}
+		$H$から生成された部分群$[G,G]$を$G$の交換子群（commutant）または
+		導来群（derived group）という。
+		\begin{equation*}\begin{split}
+			[G,G] := \cup_{n\in\sizen}H_n,\quad 
+			H_n:=\set{h_1\cdots h_n\bou h_i\in H}
+		\end{split}\end{equation*}
+	\end{definition} %def:交換子群}
+
+	\begin{proposition}[交換子群]\label{prop:交換子群} %{
+		$G$を有限群とする。交換子群$[G,G]$は$G$の正規部分群となる。
+	\end{proposition} %prop:交換子群}
+	\begin{proof} %{
+		交換子による$G$の部分集合を$H$とする。
+		\begin{equation*}\begin{split}
+			H := \set{[g_1,g_2]\in G\bou g_1,g_2\in G}
+		\end{split}\end{equation*}
+		すると、$H$は共役で閉じている。
+		\begin{equation*}\begin{split}
+			gHg^{-1}\subseteq H \quad\text{for all } g\in G \\
+			\because\quad g[g_1,g_2]g^{-1} = [gg_1g^{-1},gg_2g^{-1}]
+			\quad\text{for all } g_1,g_2,g\in G
+		\end{split}\end{equation*}
+		したがって、$H$から生成された$G$の交換子群$[G,G]$は$G$の正規部分群
+		となる。
+	\end{proof} %}
+
+	群が可換群であれば、その交換子群は単位元だけからなる自明な群になって
+	しまう。交換子群の意味は次の命題にある。
+
+	\begin{proposition}[交換子群による商群]\label{prop:交換子群による商群} %{
+		を群、をの交換子群とする。このとき、剰余類
+	\end{proposition} %prop:交換子群による商群}
+%s3:交換子群}
+%s2:群}
+\subsection{指数写像}\label{s2:指数写像} %{
+	ここでは、線形群$GL_n(\fukuso)$の部分群となるLie群$G$を考える。
+	この場合は、安直に自然対数の底を使って指数写像が定義できる。
+	\begin{equation*}\begin{split}
+		g\approx1\in G\subseteq GL_n(\fukuso) \\
+		\implies \text{ exists matrix } 
+		X\approx0\in gl_n(\fukuso) \text{ such that } g = e^X
+	\end{split}\end{equation*}
+	一般には、群と代数との対応は局所的になっている。通常は、群の原点$1$
+	と代数の原点$0$近傍で対応させる。
+
+	\begin{example}[sl(2)]\label{eg:sl(2)の指数写像} %{
+		$K$を標数$0$の体として、$sl_2$を次のように定義する。
+		\begin{equation*}\begin{split}
+			sl_2 := \set{X\in\Mat_2(K)\bou \tr X = 0}
+		\end{split}\end{equation*}
+		$sl_2$の基底$\set{H,L_\pm}$を次のようにとると、
+		\begin{equation*}\label{eq:sl2の基底系}\begin{split}
+			\begin{bmatrix}
+				H & L_+ \\ L_- & -H
+			\end{bmatrix}_K \xiff{\dfn} \left\{\begin{split}
+				L_+ := \begin{pmatrix}
+					0 & 1 \\ 0 & 0
+				\end{pmatrix},\quad L_- := \begin{pmatrix}
+					0 & 0 \\ 1 & 0
+				\end{pmatrix},\quad H := \begin{pmatrix}
+					1 & 0 \\ 0 & -1
+				\end{pmatrix} \\
+				sl_2(K) = \Set{\begin{bmatrix}
+					w & z_+ \\ z_- & -w
+				\end{bmatrix}\bou z_+,z_-,w\in K}
+			\end{split}\right.
+		\end{split}\end{equation*}
+		次の交換関係を満たす。
+		\begin{equation*}\begin{split}
+			[L_+,L_-] = H,\quad [H,L_\pm] = \pm 2L_\pm
+		\end{split}\end{equation*}
+		この座標系を使って指数写像を計算してみると次のようになる。
+		\begin{equation*}\begin{split}
+			& X := W + Z\sigma,\quad W := \bvec{w}{-w},\quad Z := \bvec{z_+}{z_-}
+			,\quad \sigma := \begin{pmatrix}
+				0 & 1 \\ 1 & 0
+			\end{pmatrix} \\
+			&\implies X^2 = W^2 + ZZ^\sigma + (W + W^\sigma)Z\sigma
+				= w^2 + z_+z_- \\
+			&\implies \begin{array}{rcll}
+				e^X &=& \sum_{n\in\sizen}\left(
+					\cfrac{x^n}{(2n)!} + \cfrac{x^n}{(2n+1)!}X\right)
+					& \quad\text{where } x := w^2 + z_+z_- \\
+				&=& (\cosh t) + \cfrac{(\sinh t)}{t}X
+					& \quad\text{where } t := \pm\sqrt{w^2 + z_+z_-}
+			\end{array}
+		\end{split}\end{equation*}
+		$t$は平方根の正をとっても負をとっても右辺は同じ値を与え、
+		$t=0$の極限では右辺は$1+X$となる。まとめると次のようになる。
+		\begin{equation}\label{eq:sl2の指数写像}\begin{split}
+			e^X = (\cosh t) + \cfrac{(\sinh t)}{t}X \quad\text{where }
+			t = \sqrt{\frac{\tr X^2}{2}} \quad\text{for all } X\in sl_2
+		\end{split}\end{equation}
+	\end{example} %eg:sl(2)の指数写像}
+
+	\begin{example}[su(2)]\label{eg:su(2)の指数写像} %{
+		$su_2$を次のように定義する。
+		\begin{equation*}\begin{split}
+			su_2 := \set{X\in\Mat(2,\fukuso)\bou \tr X = 0 \And X^\dag = - X}
+		\end{split}\end{equation*}
+		$sl_2$の場合と異なり、$su_2$の定義には複素共役が含まれてるので、
+		$su_2$の係数体は複素数に限定される。$su_2$の基底系をPauli行列
+		$\set{\sigma_1,\sigma_2,\sigma_3}$を用いて次のようにとると、
+		\begin{equation*}\label{eq:su2の基底系}\begin{split}
+			i\begin{bmatrix}
+				\sigma_3 & \sigma_1-i\sigma_2 \\ \sigma_1+i\sigma_2 & - \sigma_3
+			\end{bmatrix}_\jitu
+		\end{split}\end{equation*}
+		次の交換関係を満たす。
+		\begin{equation*}\begin{split}
+			[\sigma_1,\sigma_2] = 2i\sigma_3
+			,\quad [\sigma_2,\sigma_3] = 2i\sigma_1
+			,\quad [\sigma_3,\sigma_1] = 2i\sigma_2
+		\end{split}\end{equation*}
+		$su_2$は$sl_2$の虚数部をとったような形になっている。
+		この座標系を$sl_2$の指数写像\eqref{eq:sl2の指数写像}に当てはめると、
+		次のようになる。
+		\begin{equation}\label{eq:su2の指数写像}\begin{split}
+			e^X = (\cos r) + \cfrac{(\sin r)}{r}X \quad\text{where }
+			r = \sqrt{\frac{\tr(X^\dag X)}{2}} \quad\text{for all } X\in su_2
+		\end{split}\end{equation}
+	\end{example} %eg:su(2)の指数写像}
+%s2:指数写像}
+\subsection{随伴表現}\label{s2:随伴表現} %{
+	Lie群$G$の随伴表現$\Ad:G\to\End\frk{g}$を共役によって定義する。
+	\begin{equation*}\begin{split}
+		(\Ad g)X := gXg^{-1} \quad\text{for all } g\in G,\; X\in\frk{g}
+	\end{split}\end{equation*}
+	群の随伴表現のココロは群の共役$ge^Xg^{-1}=e^{(\Ad g)X}$にある。
+	また、Lie代数の随伴表現$\ad:\frk{g}\to\End\frk{g}$を$\Ad$の微分に
+	よって定義する。
+	\begin{equation*}\begin{split}
+		(\ad X)Y := \lim_{t\to0}\frac{d}{dt}(\Ad e^{tX})Y
+		\quad\text{for all } X,Y\in\frk{g}
+	\end{split}\end{equation*}
+	$\ad$はLie括弧を用いて次のように書ける。
+	\begin{equation*}\begin{split}
+		(\ad X)Y = [X, Y] \quad\text{for all } X,Y\in\frk{g}
+	\end{split}\end{equation*}
+	共役の合成$(g_1g_2)g_3(g_1g_2)^{-1}=g_1(g_2g_3g_2^{-1})g_1^{-1}$
+	を随伴表現で書くと次のようになる。
+	\begin{equation}\label{eq:随伴表現その一}\begin{split}
+		\left\{\begin{split}
+			ge^YZe^{-Y}g^{-1} &= (\Ad g)(\Ad e^Y)Z \\
+			ge^YZe^{-Y}g^{-1} &= (\Ad e^{(\Ad g)Y})(\Ad g)Z \\
+		\end{split}\right. \\
+		\implies (\Ad g)[Y,Z] = [(\Ad g)Y, (\Ad g)Z]
+		\quad\text{for all } g\in G,\; X,Y\in\frk{g}
+	\end{split}\end{equation}
+	この式で$g=e^X$とおき、$X$の一次の項を取り出すと、
+	Jacobiの恒等式が得られる。
+	\begin{equation*}\begin{split}
+		[X,[Y,Z]] = [[X,Y],Z] + [Y,[X,Z]] \quad\text{for all } X,Y,Z\in\frk{g}
+	\end{split}\end{equation*}
+
+	Lie群の正規部分群を随伴表現を通してLie代数の言葉に翻訳することを考える。
+	$\frk{h}\subseteq\frk{g}$を随伴表現の不変部分空間とすると、
+	$\frk{h}$は$G$の正規部分群に対応することがわかる。
+	\begin{equation*}\begin{split}
+		(\Ad g)Y\in \frk{h} \implies ge^Yg^{-1} = e^{(\Ad g)Y}\in e^{\frk{h}}
+		\quad\text{for all } g\in G,\; Y\in\frk{h}
+	\end{split}\end{equation*}
+	また、$\frk{h}\subseteq\frk{g}$を随伴表現の核空間とすると、
+	$\frk{h}$は$G$の中心部分群に対応することがわかる。
+	\begin{equation*}\begin{split}
+		(\Ad g)Y = 0 \implies ge^Yg^{-1} = e^{(\Ad g)Y} = 1
+		\quad\text{for all } g\in G,\; Y\in\frk{h}
+	\end{split}\end{equation*}
+
+	ここで、Lie代数について、随伴表現に依らない言葉を定義しておく。
+	Lie代数$\frak{g}$のイデアル$I$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\text{部分空間$I\subseteq\frak{g}$がイデアル} 
+		\xiff{\dfn} [g,a]\in I \quad\text{for all } g\in\frak{g},\; a\in I
+	\end{split}\end{equation*}
+	ゼロ元だけからなる部分Lie代数$\set{0}$と$\frak{g}$自身は常に
+	イデアルとなるので、自明なイデアルという。また、$\frak{g}$のすべての
+	元と可換となるイデアルを中心という。
+	\begin{equation*}\begin{split}
+		\text{部分空間$I\subseteq\frak{g}$が中心} 
+		\xiff{\dfn} [g,a]=0 \quad\text{for all } g\in\frak{g},\; a\in I
+	\end{split}\end{equation*}
+	$\set{0}$は常に中心となるので、自明な中心という。
+	イデアルを使うとLie代数での単純と半単純を次のように定義することができる。
+
+	\begin{definition}[Lie代数での単純と半単純]
+	\label{def:Lie代数での単純と半単純} %{
+		$\frak{g}$をLie代数とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\frak{g}$のイデアルが自明なイデアルに限られるとき、
+			$\frak{g}$を単純Lie代数といい、
+			\item $\frak{g}$の中心イデアルが自明な中心イデアルに限られる
+			とき、$\frak{g}$を半単純Lie代数という。
+		\end{itemize} %}
+	\end{definition} %def:Lie代数での単純と半単純}
+
+	以上をまとめると、群とLie代数との対応は次のようになり、
+	\begin{equation*}\begin{array}{cc}
+		\text{群} & \text{Lie代数} \\ \hline
+		\text{共役} & \text{Lie括弧} \\
+		\text{正規部分群} & \text{イデアル} \\
+		\text{中心部分群} & \text{中心イデアル} \\
+	\end{array}\end{equation*}
+	単純と半単純についての群とLie代数との対応は次のようになる。
+	\begin{equation*}\begin{array}{c|ccc}
+		& \text{群} & \text{Lie代数} & \text{随伴表現} \\ \hline
+		\text{単純} & \text{自明な正規部分群なし} 
+			& \text{自明なイデアルなし} & \text{不変部分空間なし} \\
+		\text{半単純} & \text{自明な中心部分群なし} 
+			& \text{自明な中心イデアルなし} & \text{核部分空間なし} \\
+	\end{array}\end{equation*}
+%s2:随伴表現}
+\subsection{Killing形式}\label{s2:Killing形式} %{
+	次の線形写像$\kappa:\frk{g}\otimes\frk{g}\to\fukuso$をKilling形式という。
+	\begin{equation*}\begin{split}
+		\kappa(X\otimes Y) := \tr\bigl((\ad X)(\ad Y)\bigr)
+	\end{split}\end{equation*}
+	トレースの性質$\tr(AB)=\tr(BA)$から$\kappa$は対称になることがわかる。
+	また、随伴表現の性質\eqref{eq:随伴表現その一}から次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\ad(\Ad g)X = (\Ad g)(\ad X)(\Ad g)^{-1}
+		\quad\text{for all } g\in G,\; X\in\frk{g}
+	\end{split}\end{equation*}
+	次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\kappa\bigl((\Ad g)X\otimes Y\bigr)
+		&= \tr\biggl((\Ad g)(\ad X)(\Ad g)^{-1}(\ad X)\biggr) \\
+		&= \tr\biggl((\ad X)(\Ad g)^{-1}(\ad X)(\Ad g)\biggr) \\
+		&= \kappa\bigl(X\otimes (\Ad g)^{-1}Y\bigr)
+			\quad\text{for all } g\in G,\; X,Y\in\frk{g} \\
+	\end{split}\end{equation*}
+	$\kappa$が$\Ad$不変になることがわかる。
+	\begin{equation*}\begin{split}
+		\kappa\bigl((\Ad g)\otimes\id\bigr)
+		= \kappa\bigl(\id\otimes(\Ad g^{-1})\bigr)
+		\quad\text{for all } g\in G
+	\end{split}\end{equation*}
+	この式を微分すると$\ad$に関する次の式が得られる。
+	\begin{equation*}\begin{split}
+		\kappa\bigl((\ad X)\otimes\id\bigr)
+		+ \kappa\bigl(\id\otimes(\ad X)\bigr) = 0
+		\quad\text{for all } X\in \frk{g}
+	\end{split}\end{equation*}
+
+	Cartanの判定法とは、Killing形式を用いて有限次元Lie環$\frk{g}$の種類を
+	判定する方法で、次の二つのバージョンがある。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[可解性] $\frk{g}$が可解かどうかの判定
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes Y) = 0 
+			\quad\text{for all }X\in\frk{g},\; Y\in[\frk{g},\frk{g}]
+			\iff \text{$\frk{g}$が可解}
+		\end{split}\end{equation*}
+		\item[半単純性] $\frk{g}$が半単純かどうかの判定
+		\begin{equation*}\begin{split}
+			\det\kappa \neq 0 \iff \text{$\frk{g}$が半単純}
+		\end{split}\end{equation*}
+	\end{description} %}
+	どちらの場合も有限次元Lie環に制限されているので、無限次元Lie環の場合は
+	別途判定方法を考える必要があるようである。ここで、Killing形式を定義する
+	目的はCartanの判定法にある。
+
+	さらに、Killing形式はLie群のコンパクト性とも関係している
+	\cite{kirillov2008}。$G$をコンパクト実Lie群、$\frk{g}$をそのLie代数
+	とすると、次の事が成り立つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\frk{g}$上のKilling形式$\kappa$は半負定値となる。
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes X)\le 0 \quad\text{for all } X\in\frk{g}
+		\end{split}\end{equation*}
+		\item $\ker\kappa=\frk{z}\frk{g}=\myop{rad}\frk{g}$となる。
+		\item 商代数$\frk{g}/\frk{z}\frk{g}$上のKilling形式は負定値となる。
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes X) = 0 \implies X = 0 \quad\text{for all } X\in\frk{g}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+	ここで、$\frk{z}\frk{g}$を$\frk{g}$の中心イデアル、$\myop{rad}\frk{g}$
+	を$\frk{g}$のラディカルとする。Lie代数$\frk{g}$のラディカルとは、
+	\frk{g}のすべての可解イデアルを含む可解イデアルのことである。
+	\begin{equation*}\begin{split}
+		\frk{h}\subseteq\frk{g}\text{が可解イデアル}
+		\implies \frk{h}\subseteq\myop{rad}\frk{g}
+	\end{split}\end{equation*}
+	つまり、最大の可解イデアルのことである。可解Lie代数$\frk{g}$は誘導系列
+	を用いて定義される。Lie代数$\frk{g}$の誘導系列とは、
+	次のように定義されたLie代数の系列$\set{D^n\frk{g}\bou n\in\sizen}$である。
+	\begin{equation*}\begin{split}
+		D^{n+1}\frk{g} := [D^n\frk{g},D^n\frk{g}]
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	Lie代数の定義から、誘導系列では次の包含関係が成り立つが、
+	\begin{equation*}\begin{split}
+		\frk{g} = D^0\frk{g}\supseteq D\frk{g}\supseteq D^2\frk{g}\supseteq
+		\cdots
+	\end{split}\end{equation*}
+	ある有限の$N\in\sizen$があって、$D^N\frk{g}=\set{0}0$となるLie代数を
+	可解Lie代数という。
+
+	商代数$\frk{g}/\frk{z}\frk{g}$は、半単純Lie代数の定義より、半単純Lie代数
+	となる。半単純実Lie代数$\frk{g}$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\frk{g}\text{上のKilling形式が負定値} 
+		\implies \frk{g}\text{のLie群がコンパクト実Lie群}
+	\end{split}\end{equation*}
+
+	随伴表現とKilling形式を簡単なLie代数について調べてみる。
+
+	\begin{example}[sl(2)]\label{eg:sl(2)の随伴表現} %{
+		基底系\eqref{eq:sl2の基底系}を使い、$(L_+,H,L_-)$の順に基底を並べると、
+		随伴表現とKilling形式は次のようになる。
+		\begin{equation*}\begin{split}
+			\ad L_+ = \begin{pmatrix}
+				0 & -2 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0
+			\end{pmatrix},\; \ad L_- = \begin{pmatrix}
+				0 & 0 & 0 \\ -1 & 0 & 0 \\ 0 & 2 & 0
+			\end{pmatrix},\; \ad H = \begin{pmatrix}
+				2 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & -2
+			\end{pmatrix},\; \kappa = \begin{pmatrix}
+				0 & 0 & 4 \\ 0 & 8 & 0 \\ 4 & 0 & 0
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		Killing形式の固有方程式は次のようになり、
+		\begin{equation*}\begin{split}
+			\det(\lambda - \kappa) = (\lambda - 8)(\lambda^2 - 4^2)
+		\end{split}\end{equation*}
+		Killing形式は非退化だが、正定値または負定値でないことがわかる。
+		基底系\eqref{eq:sl2の基底系}を使うと次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes X) = 4\tr X^2 \quad\text{for all } X\in sl_2
+		\end{split}\end{equation*}
+	\end{example} %eg:sl(2)の随伴表現}
+
+	\begin{example}[su(2)]\label{eg:su(2)の随伴表現} %{
+		随伴表現とKilling形式は$sl_2$の場合\ref{eg:sl(2)の随伴表現}と同じ
+		になり、基底系\eqref{eq:su2の基底系}を使うと次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\kappa(X\otimes X) = - 4\tr(X^\dag X) \quad\text{for all } X\in su_2
+		\end{split}\end{equation*}
+		したがって、$su_2$の場合は、$sl_2$の場合と異なり、Killing形式が負定値
+		となり、Killing形式を用いてノルムを定義することができる。
+	\end{example} %eg:su(2)の随伴表現}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		有限群$G$とその表現$(\rho,V)$が与えられ、表現空間$V$が内積$\beta$を
+		持つ場合、次のようにすると$G$-不変な内積$\beta_G$が得られる。
+		\begin{equation*}\begin{split}
+			\beta_G(v_1, v_2) 
+			:= \frac{1}{|G|}\sum_{g\in G} \beta(\rho_gv_1, \rho_gv_2)
+			\quad\text{for all } v_1,v_2\in V
+		\end{split}\end{equation*}
+		そして、内積$\beta_G$を用いると、表現$\rho$がユニタリ表現となる。
+		\begin{equation*}\begin{split}
+			\beta_G(v_1, \rho_gv_2) = \beta_G(\rho_g^{-1}v_1, v_2)
+			\quad\text{for all } v_1,v_2\in V,\; g\in G
+		\end{split}\end{equation*}
+	\end{todo} %todo:ここまで}
+%s2:Killing形式}
+\subsection{線形代数}\label{s2:線形代数} %{
+	対角化可能よりももう少し条件を弱めた三角化可能を定義する。
+	まず、三角行列を定義しておく。
+
+	\begin{definition}[三角行列]\label{def:三角行列} %{
+		次の形の対角成分を除いた左下半分がすべて$0$となっている正方行列を
+		上三角行列という。
+		\begin{equation*}\begin{split}
+			\begin{pmatrix}
+				* & * & * \\
+				0 & * & * \\
+				0 & 0 & * \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		同様に、対角成分を除いた右上半分がすべて$0$となっている正方行列を
+		下三角行列という。また、与えられた正方行列$A$を正則な線形変換$P$を
+		用いて上または下三角行列$PAP^{-1}$にすることを$A$の三角化という。
+	\end{definition} %def:三角行列}
+
+	対角化と異なり三角化は常に可能である。三角化は単に三角行列に
+	書き直すだけではなく、対角成分に固有値が並ぶようにすることができる。
+
+	\begin{proposition}[正方行列の三角化]\label{prop:正方行列の三角化} %{
+		$A$を$n$次正方行列、$\lambda_1,\lambda_2,\dots,\lambda_n$を$A$の
+		固有値とする。このとき、あるユニタリ行列が存在して、次のように
+		上三角行列にすることができる。
+		\begin{equation*}\begin{split}
+			U^{-1}AU = 	\begin{pmatrix}
+				\lambda_1 & & & * \\
+				& \lambda_2 \\
+				& & \ddots \\
+				0 & & & \lambda_n \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:正方行列の三角化}
+	\begin{proof} %{
+		正方行列の次数についての帰納法を用いる。次数が$1$のときは、明らかに
+		命題が成り立つ。ある次数$n\in\sizen_+$で命題が成り立つとし、
+		$A$を$n+1$次正方行列とする。$\lambda\in\fukuso$を$A$の固有値とし、
+		$v\in\fukuso^{n+1}$を$\lambda$に属する固有ベクトルとする。
+		そして、$v,u_1,\dots,u_n\in\fukuso^{n+1}$を互いに直交するベクトル
+		とする。すると、$n+1$次正方行列$U=[v,u_1,\dots,u_n]$はユニタリ行列
+		となり、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			U^{-1}AU &= U^{-1}[\lambda v,Au_1,\dots,Au_n] \\
+			&= \left[\lambda\begin{pmatrix}
+				1 \\ 0 \\ \vdots \\ 0
+			\end{pmatrix},U^{-1}Au_1,\dots,U^{-1}Au_n\right] = \begin{pmatrix}
+				\lambda & * & \cdots & * \\
+				0 & * & \cdots & * \\
+				\vdots & & \ddots & \vdots \\
+				0 & \cdots & 0 & * \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		ここで、$n$次正方行列$B$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			U^{-1}AU &= \begin{pmatrix}
+				\lambda & * \\
+				0 & B
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		帰納法の仮定より、$B$の固有値を$\lambda_1,\dots,\lambda_n$とすると、
+		$B$を次のように上三角行列にする$n$次ユニタリ行列$V$が存在する。
+		\begin{equation*}\begin{split}
+			V^{-1}BV = \begin{pmatrix}
+				\lambda_1 & & & * \\
+				& \lambda_2 \\
+				& & \ddots \\
+				0 & & & \lambda_n \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		ここで、$n+1$次正方行列$W$を次のように定義すると、$W$はユニタリ行列
+		となる。
+		\begin{equation*}\begin{split}
+			W = U \begin{pmatrix}
+				1 & 0 \\ 0 & V
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		すると、次の式が成り立ち、$n+1$次正方行列に対しても命題が成り立つことが
+		わかる。
+		\begin{equation*}\begin{split}
+			W^{-1}AW = \begin{pmatrix}
+				\lambda & & & * \\
+				& \lambda_1 \\
+				& & \ddots \\
+				0 & & & \lambda_n \\
+			\end{pmatrix}
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	この命題でユニタリ変換という制限を外すとJordan標準形にまで持っていける
+	ことが示される。例えば、$4$次正方行列$A$の場合、その固有値を
+	$\lambda_i(i=1,2,3,4)$とすると、正則行列$P$によって次のような
+	形の上三角行列にすることができる。
+	\begin{equation*}\begin{split}
+		P^{-1}AP = 	\begin{pmatrix}
+			\lambda_1 & \epsilon_1 & 0 & 0 \\
+			0 & \lambda_2 & \epsilon_2 & 0 \\
+			0 & 0 & \lambda_3 & \epsilon_3 \\
+			0 & 0 & 0 & \lambda_n \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	ここで、$\epsilon_i\in\set{0,1}(i=1,2,3)$は固有値の縮退度によって
+	決まる値である。
+%s2:線形代数}
+%s1:Lie代数}
+	%
+}\endgroup %}

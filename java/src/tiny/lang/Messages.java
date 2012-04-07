@@ -14,8 +14,12 @@ public class Messages {
 		return open + StringHelper.join(x) + close;
 	}
 	public static String getIndexOutOfRange(int begin, int index, int end) {
-		return "index out of range "
-				+ Messages.getTuple("[", ")", begin, index, end);
+		return getIndexOutOfRange("index", begin, index, end);
+	}
+	public static String getIndexOutOfRange(String what, int begin, int index, int end) {
+		what = what == null ? "index" : what;
+		return "out of range " + what
+				+ Messages.getTuple(" [", ")", begin, index, end);
 	}
 	public static String getUnexpectedValue(String what, Object expected,
 			Object actual) {
@@ -46,5 +50,10 @@ public class Messages {
 	}
 	public static String getOperating(String what) {
 		return what + " ...";
+	}
+	public static String getNotEnoughSize(String what, int expected, int actual) {
+		what = what == null ? "buffer" : what;
+		return "not enough size of " + what + " , expected=" + expected
+		+ " but actual=" + actual;
 	}
 }

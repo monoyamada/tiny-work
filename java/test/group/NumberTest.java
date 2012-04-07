@@ -9,6 +9,9 @@ import junit.framework.TestCase;
 import tiny.lang.Debug;
 import tiny.lang.Messages;
 import tiny.lang.NumberHelper;
+import tiny.lang.StringHelper;
+import tiny.number.LongArrayAdapter;
+import tiny.primitive.Euclid;
 import tiny.primitive.LongArrayList;
 import tiny.primitive.LongList;
 import tiny.primitive.LongPushable;
@@ -194,5 +197,63 @@ public class NumberTest extends TestCase {
 			}
 			System.out.println(" \\\\");
 		}
+	}
+	public void testGcd() {
+		Debug.log().debug(Euclid.gcd(10, -15));
+		Debug.log().debug(Euclid.gcd(-15, 10));
+		Debug.log().debug(Euclid.gcd(851, 437));
+		Debug.log().debug(Euclid.gcd(-851, 437));
+		Debug.log().debug(Euclid.gcd(851, -437));
+		Debug.log().debug(Euclid.gcd(-851, -437));
+
+		long[] xs = new long[2];
+		long g = 0;
+		long a = 120;
+		long b = 23;
+		g = Euclid.gcd(xs, a, b);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+		g = Euclid.gcd(xs, -a, b);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+		g = Euclid.gcd(xs, a, -b);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+		g = Euclid.gcd(xs, -a, -b);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+		g = Euclid.gcd(xs, b, a);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+		g = Euclid.gcd(xs, -b, a);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+		g = Euclid.gcd(xs, b, -a);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+		g = Euclid.gcd(xs, -b, -a);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+
+		g = Euclid.gcd(xs, 6, 9);
+		Debug.log().debug(g + ", " + xs[0] + ", " + xs[1]);
+	}
+	public void testEuclid_1() {
+		long[] base = { 15, 10 };
+		long[] x0 = { 1, 0 };
+		long[] x1 = { 0, 1 };
+		long n0 = base[0];
+		long n1 = base[1];
+		LongArrayAdapter y = new LongArrayAdapter(x1);
+		y.multiplies(n0 / n1);
+		y.plus(x0);
+		long m = y.inner(base);
+		while (0 < m) {
+			Debug.log().debug(
+					m + ", " + StringHelper.join(x0) + ", " + StringHelper.join(x1));
+			n0 = n1;
+			n1 = m;
+			x0 = x1;
+			x1 = y.get();
+			y.set(x1);
+			y.multiplies(n0 / n1);
+			y.minus();
+			y.plus(x0);
+			m = y.inner(base);
+		}
+		Debug.log().debug(
+				m + ", " + StringHelper.join(x0) + ", " + StringHelper.join(x1));
 	}
 }
