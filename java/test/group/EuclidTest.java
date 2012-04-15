@@ -306,6 +306,9 @@ public class EuclidTest extends TestCase {
 		} catch (Exception ex) {
 			Debug.log().debug(ex);
 		}
+		Debug.log().debug(this.getClass().getCanonicalName());
+		Debug.log().debug(this.getClass().getClass().getCanonicalName());
+		Debug.log().debug(this.getClass().getClass().getClass().getCanonicalName());
 	}
 	private static long[] one(long[] xs) {
 		long[] ys = new long[xs.length];

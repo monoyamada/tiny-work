@@ -7,6 +7,7 @@
 	\newcommand{\Hol}{\mathcal{H}}
 	\newcommand{\Aut}{\myop{Aut}}
 	\newcommand{\Mat}{\myop{Mat}}
+	\newcommand{\Hom}{\myop{Hom}}
 	%
 	\newcommand{\id}{\myop{id}}
 	\newcommand{\tran}{\mathbf{t}}
@@ -32,8 +33,656 @@
 	\newcommand{\xytree}{\xymatrix@R=4pt@C=1pt}
 	\newcommand{\sen}{\ar@{-}}
 	%
+	\newcommand{\catSet}{\mybf{Set}}
+	\newcommand{\catMon}{\mybf{Mon}}
+	%
+	\newcommand{\lmd}[1]{\lambda{#1}.}
+	\newcommand{\mlin}{\,\myop{in}\,}
+	\newcommand{\mlLet}{\myop{let}\,}
+	\newcommand{\mlLetrec}{\myop{letrec}\,}
+	\newcommand{\qTrue}{\myop{true}}
+	\newcommand{\qFalse}{\myop{false}}
+	\newcommand{\qAnd}{\myop{and}}
+	\newcommand{\qOr}{\myop{or}}
+	\newcommand{\qNot}{\myop{not}}
+	\newcommand{\qIf}{\myop{if}\,}
+	\newcommand{\qThen}{\myop{then}\,}
+	\newcommand{\qElse}{\myop{else}\,}
+	%
 	{\setlength\arraycolsep{2pt}
 	%
+\section{CoC}\label{s1:CoC} %{
+	設定によってサブシステム間の結合の自由度の高めることよりも、
+	規約によってサブシステム間の結合の仕方を決め打ちしてしまった方が
+	開発効率が高まることが往々にしてある。
+	例えば、次のような自由度は高いが冗長な関数は、
+	\begin{lstlisting}[caption=冗長な例, label=code:冗長な例]
+	sum: (begin: P, end: P
+		, eq: (P, P) -> boolean, inc: P -> P, val: P -> T
+		, plus: (T, T) -> T, zero: T) -> T = {
+		for (; eq(p, end); p = inc(p)) {
+			zero = plus (zero, val p);
+		}
+		return zero;
+	}
+	\end{lstlisting}
+	イテレータ型を取り入れることでもう少し単純な次のような関数をつくることが
+	できる。
+	\begin{lstlisting}[caption=単純化した例, label=code:単純化した例]
+	sum: (begin: (iterator T), end: (iterator T)
+		, plus: (T, T) -> T, zero: T) -> T = {
+		return sum (begin, end, (iterator T).equals (iterator T).increment
+		, (iteartor T).get, plus, zero);
+	}
+	\end{lstlisting}
+	この場合は、イテレータ型というのが規約になる。
+	\begin{lstlisting}[caption=イテレータ型, label=code:イテレータ型]
+	iterator (T): type = {
+		equals: ((iterator T) x) -> boolean;
+		increment: () -> self;
+		get: () -> T;
+	}
+	\end{lstlisting}
+%s1:CoC}
+\section{ラムダ計算周辺}\label{s1:ラムダ計算周辺} %{
+\subsection{ラムダ式の記述}\label{s2:ラムダ式の記述} %{
+	ラムダ式を言語としてみた場合、ラムダ式ではベータ変換の順序を指定する
+	括弧が必須となるから、ラムダ式はDyck言語の仲間と見ることができるだろう。
+%s2:ラムダ式の記述}
+\subsection{ラムダ式と文字列}\label{s2:ラムダ式と文字列} %{
+	ラムダ計算を文字列の計算に帰着させられるかを考えてみる。
+
+	$A$を可算集合、$\W A$を$A$から生成される自由モノイドとする。
+	$A$でパラメトライズされた$\W A$の二項演算$\lhd$を、任意の$w_1,w_2\in\W X$
+	に対して次のように定義する。
+	\begin{equation*}\begin{split}
+		w_1\lhd_aw_2 
+		:= \text{単語$w_1$の中にある文字$a$を単語$w_2$で置き換える}
+	\end{split}\end{equation*}
+	$\lhd$は次の意味で結合的になり、
+	\begin{equation*}\begin{split}
+		(w_1\lhd_aw_2)\lhd_aw_3 = w_1\lhd_a(w_2\lhd_aw_3)
+		\quad\text{for all } w_1,w_2,w_3\in\W A,\; a\in A
+	\end{split}\end{equation*}
+	文字列の連結と分配則を満たす。
+	\begin{equation*}\begin{split}
+		(w_1w_2)\lhd_aw_3 = (w_1\lhd_aw_3)(w_2\lhd_aw_3)
+		\quad\text{for all } w_1,w_2,w_3\in\W A,\; a\in A
+	\end{split}\end{equation*}
+	したがって、$A$がシングルトンと場合には$\W A$は自然数と半代数同型となる。
+	\begin{equation*}\begin{split}
+		(\W\set{a},\myspace,1_\W,\lhd_a,[a])
+		\simeq (\sizen,+,0,\myspace,1)
+	\end{split}\end{equation*}
+	一般には、$\lhd$は次の意味で結合的ではない。
+	\begin{equation*}\begin{split}
+		(w_1\lhd_aw_2)\lhd_bw_3 \neq w_1\lhd_a(w_2\lhd_bw_3)
+		\quad\text{in general}
+	\end{split}\end{equation*}
+	例えば、互い異なる$a,b,c\in A$に対して次のようになる。
+	\begin{equation*}\begin{split}
+		([ab]\lhd_a[b])\lhd_b[c] = [cc] \neq [cb] = [ab]\lhd_a([b]\lhd_b[c]) 
+	\end{split}\end{equation*}
+%s2:ラムダ式と文字列}
+\subsection{SKI式}\label{s2:SKI式} %{
+	最小限のTuring完全な計算機の一つはSKI計算だろう。文字SKIはそれぞれ
+	次のラムダ式を表す。
+	\begin{alignat*}{2}
+		I &:= \lambda x. x &\quad&\lcomment{identity} \\
+		K &:= \lambda x.\lambda y. x &\quad&\lcomment{konstant} \\
+		S &:= \lambda x.\lambda y.\lambda z. xz(yz) 
+		&\quad&\lcomment{substitute}
+	\end{alignat*}
+	SKIの$\beta$-変換は次のようになる。
+	\begin{alignat*}{2}
+		IA &= A &\quad&\text{for all } A\in\Lambda \\
+		KAB &= A &\quad&\text{for all } A,B\in\Lambda \\
+		SABC &= AC(BC) &\quad&\text{for all } A,B,C\in\Lambda
+	\end{alignat*}
+	$I$は$S$と$K$で表すことができて$I=SKK=(SK)K$と書けるが、伝統的にSKIの組
+	で考えることが多いようだ。
+	\begin{equation*}\begin{split}
+		SK &= \lambda y.\lambda z. Kz(yz)
+		= \lambda y.\lambda z. z = \lambda y.I \implies SKK = I
+	\end{split}\end{equation*}
+
+	ラムダ式$\lmd{x}M$の$\lmd{x}$を$S,K,I$で置き換える写像$\phi$を
+	任意のラムダ式$M$に対して次のように定義する。
+	\begin{equation*}\begin{split}
+		\phi M &= \begin{cases}
+			x, &\text{ if } M = x \\
+			(\phi P)(\phi Q),
+				&\text{ if } M = PQ \text{ with some } P,Q\in\Lambda[X] \\
+			[x]N, &\text{ otherwise } M = \lmd{x}N \\
+		\end{cases}
+	\end{split}\end{equation*}
+	ここで、$[x]M$は次のように定義される。
+	\begin{equation}\label{eq:ブラケット抽象}\begin{split}
+		[x]M &= \begin{cases}
+			I, &\text{ if } M = x \\
+			Ky, &\text{ if } M = y\in X \\
+			S\bigl([x]P\bigr)\bigl([x]Q\bigr), 
+			&\text{ if } M = PQ \text{ with some } P,Q\in\Lambda[X] \\
+			[x]\bigl([y]N\bigr), &\text{ otherewise } M = \lmd{y}N \\
+		\end{cases}
+	\end{split}\end{equation}
+	$\lmd{x}M$をラムダ抽象というのに対応して、$[x]M$をブラケット抽象という。
+	ブラケット抽象の最後の二つが再帰になっているが、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $[x](PQ)=\bigl([x]P\bigr)\bigl([x]Q\bigr)$はラムダ適用の数を
+		一つ減らし、
+		\item $[x]\lmd{y}N=[x]\bigl([y]N\bigr)$はラムダ抽象の数を一つ減らす
+	\end{itemize} %}
+	から、ラムダ適用の数とラムダ抽象の数が共に$0$になるところで再帰は終了
+	する。ブラケット抽象の定義式\eqref{eq:ブラケット抽象}の最初の二つの式で
+	ブラケット抽象は変換前後が$\beta$同値になることがわかる。
+	\begin{equation*}\begin{array}{rr}
+		\xymatrix{
+			\lmd{x}x\times A \ar@{|->>}[r]^\beta \ar@{|->}[d]^{\phi\times\phi} 
+			& A \ar@{|->}[d]^{\phi} \\
+			I(\phi A) \ar@{|->>}[r]^\beta & \phi A \\
+		},&\quad\xymatrix{
+			\lmd{x}y\times A \ar@{|->>}[r]^\beta \ar@{|->}[d]^{\phi\times\phi} 
+			& y \ar@{|->}[d]^{\phi} \\
+			Ky(\phi A) \ar@{|->>}[r]^\beta & y \\
+		} \\
+		\text{for all } A\in\Lambda[X],\; x\in X,
+			&\quad\text{for all } A\in\Lambda[X],\; x,y\in X
+	\end{array}\end{equation*}
+	ラムダ適用の数とラムダ抽象の数について帰納法を使って、ブラケット抽象に
+	よる変換前後が$\beta$同値になることが証明できると信じて先に進む。
+%s2:SKI式}
+\subsection{イオタ式}\label{s2:イオタ式} %{
+	ラムダ閉式$U$をSKIを用いて次のように定義すると、
+	\begin{equation*}\begin{split}
+		U = \lmd{f}(fSK)
+	\end{split}\end{equation*}
+	次の式が成り立つ\footnote{
+		\url{http://en.wikipedia.org/wiki/Iota_and_Jot}
+	}。
+	\begin{equation*}\begin{split}
+		I = UU,\quad K = U(UI),\quad S = UK
+	\end{split}\end{equation*}
+	$U$と自由変数と括弧だけで書かれたDyck言語をイオタ式という。
+%s2:iイオタ式}
+\subsection{引数の遅延評価}\label{s2:引数の遅延評価} %{
+	関数に渡す引数に式が含まれている場合、引数を遅延評価して欲しいと思う場面
+	は多々ある。個人的にはデバッグ用のプリント関数で引数を遅延評価して欲しい
+	と思う。引数を遅延評価する方法をcall-by-nameといい、関数呼び出しの前に
+	引数をすべて評価してしまう方法をcall-by-valueという。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[call-by-name] $(f\circ g)x$で引数$g$の評価は呼び出された関数
+		$f$の中で行う。
+		\item[call-by-value] $(f\circ g)x$で引数$g$の評価は関数$f$を呼び出す
+		前に行ってしまう。
+	\end{description} %}
+%s2:引数の遅延評価}
+\subsection{SECDマシン}\label{s2:SECDマシン} %{
+	SECDマシンはインタープリターとしても素晴らしいが、コンパイラーとしても
+	素晴らしい。通常、SECDマシンは、ラムダ式をプログラムとして読み込み、
+	それを評価して$\beta$-正規形のラムダ式を出力する。評価の過程で、
+	入力のラムダ式は順次より簡単な命令に分解されていく。より簡単な命令とは
+	通常のスタックマシンでの命令に相当する。
+	通常のスタックマシンでは評価の過程で命令列は不変なのに対して、
+	SECDマシンでは評価の過程で命令列が変化する。
+	\begin{equation*}\begin{split}
+		\begin{bmatrix}
+			S \\ C
+		\end{bmatrix} \xto{\text{評価}} \begin{bmatrix}
+			S' \\ C
+		\end{bmatrix} \quad\text{通常のスタックマシン},\quad \begin{bmatrix}
+			S \\ C
+		\end{bmatrix} \xto{\text{評価}} \begin{bmatrix}
+			S' \\ C'
+		\end{bmatrix} \quad\text{SECDマシン} \\
+	\end{split}\end{equation*}
+	SECDマシンのラムダ式を簡単な命令に分解していく作業だけを取り出せば、
+	ラムダ式からスタックマシン命令へのコンパイラーになる。
+
+	\cite{lawrence2000}にしたがって、SECDマシンの動きを見てみる。
+
+\subsubsection{ISWIM}\label{s3:ISWIM} %{
+	ISWIM（If you See What I Mean）はPeter Landinが作ったプログラミング言語
+	で、ラムダ式に事前定義した定数や関数を追加したような言語である。
+	例えば、毎度Church数を使って算術を行うのはマゾヒスティックなので、
+	$0,1,2,\dots,$や$\pm$などは事前定義してしまった方がアタマに優しい。
+
+	ISWIMのスタート地点はラムダ式である。
+	\begin{equation*}\begin{split}
+		X + (\lmd{x}M) + (MN)
+	\end{split}\end{equation*}
+	\cite{lawrence2000}では、ラムダ式を表すのにML方言も用いている。
+	\begin{equation*}\begin{array}{rclcl}
+		\mlLet x &=& M \mlin N &\xiff{\dfn}& (\lmd{x}N)M \\
+		\mlLet f x_1 \cdots x_m &=& M \mlin N 
+			&\xiff{\dfn}& (\lmd{f}N)(\lmd{x_1}\cdots\lmd{x_m}M) \\
+		\mlLetrec f x_1 \cdots x_m &=& M \mlin N 
+			&\xiff{\dfn}& (\lmd{f}N)\bigl(Y(\lmd{x_1}\cdots\lmd{x_m}M)\bigr) \\
+	\end{array}\end{equation*}
+	そして、次のような変数を事前定義してしまう。
+	\begin{equation*}\begin{array}{rl}
+		0,\pm1,\pm2,\dots & \quad\text{integers} \\
+		\pm,*,/ & \quad\text{operation of integers} \\
+		=,\neq,<,> & \quad\text{operation of integers} \\
+		\qTrue,\qFalse & \quad\text{booleans} \\
+		\qAnd,\qOr,\qNot & \quad\text{operation of booleans} \\
+		\qIf E\; \qThen M\; \qElse N & \quad\text{conditional} \\
+	\end{array}\end{equation*}
+	これらの変数はラムダ式に戻すことなく、ホスト言語の機能を使って評価して
+	しまうことを考える。
+	
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 大域代入と遅延評価 \\
+		$\qIf$をラムダ式で書くと次のようになるが、
+		\begin{equation*}\begin{split}
+			\qIf E\; \qThen M\; \qElse N 
+			\udset{\beta}{}{\simeq} (\lmd{x}\lmd{y}\lmd{z} xyz) EMN \\
+			\qTrue \udset{\beta}{}{\simeq} \lmd{x}\lmd{y}x,\quad
+			\qFalse \udset{\beta}{}{\simeq} \lmd{x}\lmd{y}y
+		\end{split}\end{equation*}
+		遅延評価をしない場合は、$\qIf E;\qThen M\;\qElse N$という式は、
+		$E$の評価に関わらずに$M$と$N$は共に評価されることになる。
+		すると、言語が大域変数への代入機能を持つ場合は、使い勝手が悪くなる。
+		例えば、
+		\begin{equation*}\begin{array}{l}
+			x := 0; \\
+			\qIf E\;\qThen x:=1\;\qElse x:=2;
+		\end{array}\end{equation*}
+		という式で、遅延評価をしない場合は、$E$の評価に依らずに$x$の値は常に
+		$2$、マシンの実装によっては$1$、となってしまう。
+		大域変数への代入を許さないという選択肢もあるが、
+		\begin{equation*}\begin{array}{l}
+			x := 0; \\
+			x := \qIf E\;\qThen 1\;\qElse 2;
+		\end{array}\end{equation*}
+		ISWIMでは、$\qIf$については遅延評価するという特例を設ける。
+	\end{itemize} %}
+%s3:ISWIM}
+%s2:SECDマシン}
+%s1:ラムダ計算周辺}
+\section{多重継承}\label{s1:多重継承} %{
+	次のような多重継承では菱形継承の問題は起きない。
+	\begin{equation*}\xymatrix{
+		A & A' \ar[l]_{\myop{parant}} \\
+		B \ar[u]_{\myop{super}} 
+		& B' \ar@{.>}[l]_{\myop{parant}} \ar@{.>}[u]_{\myop{super}} \\
+	}\end{equation*}
+	プログラマが$A$から$A'$を$\myop{parent}$という関係で継承すると、
+	$B$を$\myop{parent}$という関係で継承した$B'$が自動的に作られるように
+	する。SFチックに言えばパラレルワールドをつくるような感じだ。
+	cvsやgitにおけるブランチのような機能と思っても良い。
+	開発リポジトリにおけるブランチの機能は必須である。
+	プログラミングでもこのような機能が欲しいと思う場面は多々ある。
+	以前のPrototype.jsが大元のobjectを書き換えて混乱を引き起こしたのも
+	javascriptにこうした機能が欠けているためである。
+	このような機能を実現するための障害は次のようなものだろう。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item コンパイラの負荷
+		\item コードの可読性の低下
+		\item 実行時性能の低下 - 実行スピードとメモリ使用量
+	\end{itemize} %}
+	開発リポジトリにおけるブランチの機能も使いこなすのは難しく、マージ時に
+	トラブルはつきものである。しかし、継続的な開発においては欠かせない機能
+	である。多重継承も使いこなすのは難しいが、適度な使用は開発を効率的に
+	するものだろうと思う。最近のプログラミング言語で使われるtraitという言葉
+	はC++でのprivate inheritanceという言葉を言い換えたものである。ディスコを
+	クラブというようなものだ。多重継承の問題点として菱形継承が挙げられること
+	が多いが、菱形継承は規約を設けることでコンパイルの問題は回避できる。
+
+	この機能を実現する枠組みとしては関手がいいのかなと思う。
+
+\subsection{Haskellでの関手}\label{s2:Haskellでの関手} %{
+	まず、随伴関手を復習して、随伴関手からモナドを導く。
+	この節では、圏に関して次のような記号を使うことする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[集合の圏] 小さい集合の圏を$\catSet$と書く。
+		\item[モノイドの圏] 小さいモノイドの圏を$\catMon$と書く。
+		\item[$\Hom$集合] 小さい圏$\mycal{C}$の対象から$A$へ$B$の射全体の
+		つくる集合を$\mycal{C}(A,B)$と書く。
+		\item[恒等射] 圏$\mycal{C}$の対象$A$から$A$への恒等射を$1_A$と書く。
+		また、圏$\mycal{C}$の恒等射全体を$1_{\mycal{C}}$または単に$1$と書く。
+	\end{description} %}
+
+\subsubsection{自由モノイド}\label{s3:自由モノイド} %{
+	随伴関手の例題として、自由モノイドを考える。$A$を集合、$WA$を$A$から生成
+	される自由モノイドとする。$WA$の元を$(a,b,\cdots)$というように
+	$a,b,\dots\in A$というように書くことにする。
+	$W$を$\catSet$から$\catMon$への関手、
+	$U$を$\catMon$から$\catSet$への忘却関手、
+	$A\xto{i_A}UWA\in\catSet$を標準入射とする。
+	\begin{equation*}\begin{split}
+		\catSet\udset{W}{U}{\rightleftarrows}\catMon,\quad
+		i_Aa=(a)\in UWA \quad\text{for all }a\in A
+	\end{split}\end{equation*}
+
+	\begin{proposition}[自由モノイドの普遍性]\label{prop:自由モノイドの普遍性} %{
+		任意の$A\xto{f}UG\in\catSet$に対して次の図を可換にする
+		$WA\xto{f_*}G\in\catMon$が唯一つ定まる。
+		\begin{equation}\label{eq:標準入射が単位射}\xymatrix{
+			A \ar[r]^{i_A} \ar[rd]_{f} & UWA \ar@{.>}[d]^{Uf_*} \\
+			& UG
+		}\end{equation}
+	\end{proposition} %prop:自由モノイドの普遍性}
+	\begin{proof} %{
+		$f_*$を次のように定義すると、$f_*$はモノイド同型射$WA\to G$になり、
+		$(Uf_*)i_A=f$を満たす。
+		\begin{alignat*}{2}
+			(Uf_*)(a) &= fa &\quad& \text{for all } a\in A \\
+			(Uf_*)(a,b) &= (fa)(fb) &\quad& \text{for all } a,b\in A \\
+			(Uf_*)(a,b,c) &= (fa)(fb)(fc) &\quad& \text{for all } a,b,c\in A \\
+			\cdots
+		\end{alignat*}
+		したがって、図\eqref{eq:標準入射が単位射}を可換にする$f_*$は
+		存在する。また、$WA\xto{g}G\in\catMon$が$(Ug)i_A=f$を満たすならば、
+		次の式が成り立たなければならないので、$f_*=g$となることがわかる。
+		\begin{alignat*}{3}
+			(Uf_*)(a) &=& fa &= (Ug)(a) &\quad& \text{for all } a\in A \\
+			(Uf_*)(a,b) &=& (fa)(fb) &= (Ug)(a,b)
+				&\quad& \text{for all } a,b\in A \\
+			(Uf_*)(a,b,c) &=& (fa)(fb)(fc) &= (Ug)(a,b,c) 
+				&\quad& \text{for all } a,b,c\in A \\
+			\cdots
+		\end{alignat*}
+	\end{proof} %}
+
+	命題\ref{prop:自由モノイドの普遍性}の逆で、任意の$WA\xto{f_*}G\in\catMon$
+	に対して、命題の図を可換にする$A\xto{f}UG\in\catSet$は、任意の$a\in A$に
+	対して$fa=f_*(a)$となることから、唯一つ定まる。したがって、
+	同型射$\phi_A^G:\catMon(WA,G)\simeq\catSet(A,UG)$が成り立つ。
+	\begin{equation}\label{eq:標準入射その一}\begin{split}
+		\xymatrix{
+			A \ar[r]^{i_A} \ar[rd]_{\phi_A^Gf_*} & UWA \ar[d]^{Uf_*} \\
+			& UG
+		}\quad\text{for all } WA\xto{f_*}G\in\catMon
+	\end{split}\end{equation}
+	この式で、$WA\xto{f_*}G$を$WA\xto{1_{WA}}WA$とすると、$U1_{WA}=1_{UWA}$
+	から、次の式が得られる。
+	\begin{equation}\label{eq:標準入射その二}\begin{split}
+		\phi_A^{WA}1_{WA} = i_A \quad\text{for all } A\in \catSet
+	\end{split}\end{equation}
+	式\eqref{eq:標準入射その一}に$G\xto{g_*}H\in\catMon$を付け足すと、
+	次の式が得られる。
+	\begin{equation}\label{eq:標準入射その三}\begin{split}
+		\xymatrix{
+			A \ar[d]_{i_A} \ar[dr]|{\phi_A^Gf_*} 
+				\ar[drr]^{\phi_A^H(g_*\circ f_*)} \\
+			UWA \ar[r]_{Uf_*} & UG \ar[r]_{Ug_*} & UH \\
+		}\quad\text{for all } WA\xto{f_*}G\xto{g_*}H\in\catMon
+	\end{split}\end{equation}
+	この式をばらして書くと次のようになり、
+	\begin{equation*}\begin{split}
+		(Ug_*)\circ(Uf_*)\circ i_A = \phi_A^H(g_*\circ f_*) 
+		= (Ug)\circ(\phi_A^Gf_*)
+	\end{split}\end{equation*}
+	この二つ目の式を可換図で書くと次のようになり、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\phi_A^Gf_* \ar@{|->}[d]^{(Ug_*)\circ-} 
+			& f_* \ar@{|->}[d]^{g_*\circ-} \ar@{|->}[l]_{\phi_A^G} \\
+			\phi_A^H(g_*\circ f_*) & g_*\circ f_* \ar@{|->}[l]_{\phi_A^H} \\
+		}\quad\text{for all } WA\xto{f_*}G\xto{g_*}H\in\catMon
+	\end{split}\end{equation*}
+	次の可換図が成り立つことがわかる。
+	\begin{equation}\label{eq:標準入射その四}\begin{split}
+		\xymatrix{
+			\catSet(A,UG) \ar[d]^{(Ug_*)\circ-} 
+			& \catMon(WA,G) \ar[d]^{g_*\circ-} \ar[l]_{\phi_A^G} \\
+			\catSet(A,UH) & \catMon(WA,H) \ar[l]_{\phi_A^H} \\
+		}\quad\text{for all } G\xto{g_*}H\in\catMon
+	\end{split}\end{equation}
+
+	$\phi^{-1}$について同様に議論する。
+	射$WUG\xto{m_G}G\in\catMon$を次のように定義すると、
+	\begin{equation}\label{eq:平坦化そのゼロ}\begin{split}
+		m_G(g_1,\dots,g_n) = g_1\cdots g_n
+		\quad\text{for all } g_1,\dots,g_n\in G
+	\end{split}\end{equation}
+	式\eqref{eq:標準入射その一}に双対な次の式が成り立つ。
+	\begin{equation}\label{eq:平坦化その一}\begin{split}
+		\xymatrix{
+			WA \ar[r]^{Wf} \ar[rd]_{(\phi_A^G)^{-1}f} & WUG \ar[d]^{m_G} \\
+			& G
+		}\quad\text{for all } A\xto{f}UG\in\catSet
+	\end{split}\end{equation}
+	この式で、$A\xto{f}UG$を$UG\xto{1_{UG}}UG$とすると、$W1_{UG}=1_{WUG}$
+	から、次の式が得られる。
+	\begin{equation}\label{eq:平坦化その二}\begin{split}
+		(\phi_A^G)^{-1}1_{UG} = m_G \quad\text{for all } G\in \catMon
+	\end{split}\end{equation}
+	式\eqref{eq:平坦化その一}に$B\xto{g}A\in\catSet$を付け足すと、
+	次の式が得られる。
+	\begin{equation}\label{eq:平坦化その三}\begin{split}
+		\xymatrix{
+			WB \ar[r]^{Wg} \ar[drr]_{(\phi_B^G)^{-1}(f\circ g)} 
+			& WA \ar[r]^{Wf} \ar[dr]|{(\phi_A^G)^{-1}f} & WUG \ar[d]^{m_G} \\
+			&& G
+		}\quad\text{for all } B\xto{g}A\xto{f}UG\in\catSet
+	\end{split}\end{equation}
+	この式をばらして書くと次のようになり、
+	\begin{equation*}\begin{split}
+		m_G\circ(Wf)\circ(Wg) = (\phi_B^G)^{-1}(f\circ g) 
+		= \bigl((\phi_A^G)^{-1}f\bigr)\circ(Wg)
+	\end{split}\end{equation*}
+	この二つ目の式を可換図で書くと次のようになり、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			f \ar@{|->}[d]^{-\circ g} \ar@{|->}[r]^{(\phi_A^G)^{-1}}
+			& (\phi_A^G)^{-1}f \ar@{|->}[d]^{-\circ(Wg)} \\
+			f\circ g \ar@{|->}[r]^{(\phi_B^G)^{-1}} 
+			& (\phi_B^G)^{-1}(f\circ g) \\
+		}\quad\text{for all } B\xto{g}A\xto{f}UG\in\catSet
+	\end{split}\end{equation*}
+	$\phi$が同型射であることを使うと、次の可換図が成り立つことがわかる。
+	\begin{equation}\label{eq:平坦化その四}\begin{split}
+		\xymatrix{
+			\catSet(A,UG) \ar[d]^{-\circ g} 
+			& \catMon(WA,G) \ar[d]^{-\circ(Wg)} \ar[l]_{\phi_A^G} \\
+			\catSet(B,UG) & \catMon(WB,G) \ar[l]_{\phi_B^G} \\
+		}\quad\text{for all } B\xto{g}A\in\catSet
+	\end{split}\end{equation}
+
+	式\eqref{eq:標準入射その四}と\eqref{eq:平坦化その四}を連結すると、
+	次の可換図が得られる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\catSet(A,UWA) \ar[d]^{(UWf)\circ-} 
+			& \catMon(WA,WA) \ar[l]_{\phi_A^{WA}} \ar[d]^{(Wf)\circ-} \\
+			\catSet(A,UWB) & \catMon(WA,WB) \ar[l]_{\phi_A^{WB}} \\
+			\catSet(B,UWB) \ar[u]_{-\circ g} 
+			& \catMon(WB,WB) \ar[l]_{\phi_B^{WB}} \ar[u]_{-\circ(Wg)} \\
+		} \quad\text{for all } A\udset{f}{g}{\rightrightarrows}B\in\catSet
+	\end{split}\end{equation*}
+	この可換図から次の式が得られ、
+	\begin{equation*}\begin{split}
+		\xymatrix@C=6em{
+			i_A \ar@{|->}[d]^{(UWf)\circ-} 
+			& 1_{WA} \ar@{|->}[l]_{\phi_A^{WA}} \ar@{|->}[d]^{(Wf)\circ-} \\
+			(UWf)\circ i_A = i_B\circ f & Wf \ar@{|->}[l]_{\phi_A^{WB}} \\
+			i_B \ar@{|->}[u]_{-\circ f} 
+			& 1_{WB} \ar@{|->}[l]_{\phi_B^{WB}} \ar@{|->}[u]_{-\circ(Wf)} \\
+		} \quad\text{for all } A\xto{f}B\in\catSet
+	\end{split}\end{equation*}
+	次の自然変換$i:1_\catSet\xto{\bullet}UW$が成り立つことがわかる。
+	\begin{equation}\label{eq:標準入射その五}\begin{split}
+		\xymatrix{
+			A \ar[r]^{i_A} \ar[d]^f & UWA \ar[d]^{UWf} \\
+			B \ar[r]^{i_B} & UWB \\
+		} \quad\text{for all } A\xto{f}B\in\catSet
+	\end{split}\end{equation}
+	同様にすると、次の可換図が得られる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\catSet(UG,UG) \ar[d]^{(Uf_*)\circ-} \ar[r]^{(\phi_{UG}^G)^{-1}}
+			& \catMon(WUG,G) \ar[d]^{f_*\circ-} \\
+			\catSet(UG,UH) \ar[r]^{(\phi_{UG}^H)^{-1}} & \catMon(WUG,H) \\
+			\catSet(UH,UH) \ar[u]_{-\circ(Ug_*)} \ar[r]^{(\phi_{UH}^H)^{-1}}
+			& \catMon(WUH,H) \ar[u]_{-\circ(WUg_*)} \\
+		} \quad\text{for all } G\udset{f_*}{g_*}{\rightrightarrows}H\in\catMon
+	\end{split}\end{equation*}
+	この可換図から次の式が得られ、
+	\begin{equation*}\begin{split}
+		\xymatrix@C=6em{
+			1_{UG} \ar[d]^{(Uf_*)\circ-} \ar[r]^{(\phi_{UG}^G)^{-1}}
+			& m_G \ar[d]^{f_*\circ-} \\
+			Uf_* \ar[r]^{(\phi_{UG}^H)^{-1}} & m_H(WUf_*) = f_*m_G \\
+			1_{UH} \ar[u]_{-\circ(Ug_*)} \ar[r]^{(\phi_{UH}^H)^{-1}}
+			& m_H \ar[u]_{-\circ(WUg_*)} \\
+		} \quad\text{for all } G\xto{f_*}H\in\catMon
+	\end{split}\end{equation*}
+	次の自然変換$m:WU\xto{\bullet}1_\catMon$が成り立つことがわかる。
+	\begin{equation}\label{eq:平坦化その五}\begin{split}
+		\xymatrix{
+			G \ar[d]^{f_*} & WUG \ar[d]^{WUf_*} \ar[l]_{m_G} \\
+			H & WUH \ar[l]_{m_H} \\
+		} \quad\text{for all } G\xto{f_*}H\in\catMon
+	\end{split}\end{equation}
+	また、式\eqref{eq:標準入射その一}と\eqref{eq:平坦化その一}から、
+	次の式が得られ、
+	\begin{equation*}\begin{split}
+		\begin{split}
+			\phi_A^Gf_* &= Uf_*\circ i_A \\
+			(\phi_A^G)^{-1}f &= m_G\circ Wf \\
+		\end{split}\implies \begin{split}
+			f &= Um_G(Wf)\circ i_A \\
+			f_* &= m_G\circ W\bigl((Uf_*)i_A\bigr) \\
+		\end{split} \quad\text{for all } \begin{split}
+			WA\xto{f_*}G\in\catMon \\
+			A\xto{f}UG\in\catSet \\
+		\end{split}
+	\end{split}\end{equation*}
+	次の式が成り立つことがわかる。
+	\begin{equation*}\begin{array}{rcll}
+		1_{UG} &= Um_G\circ i_{UG} &\quad\text{for all } G\in\catMon \\
+		1_{WA} &= m_{WA}\circ Wi_A &\quad\text{for all } A\in\catSet
+	\end{array}\end{equation*}
+	この式を可換図で表すと次のようになり、
+	\begin{equation*}\begin{array}{rr}
+		\xymatrix{
+			& UWUG \ar[dr]^{Um_G} \\
+			UG \ar[ur]^{i_{UG}} \ar@{=}[rr] & & UG
+		},&\quad\xymatrix{
+			& WUWA \ar[dr]^{m_{WA}} \\
+			WA \ar[ur]^{Wi_A} \ar@{=}[rr] & & WA
+		} \\
+		\text{for all } G\in\catMon, &\text{for all } A\in\catSet
+	\end{array}\end{equation*}
+	自然変換で表すと次の恒等射となる。
+	\begin{equation*}\begin{split}
+		U\xto{i}UWU\xto{Um}U,\quad W\xto{Wi}WUW\xto{m}W
+	\end{split}\end{equation*}
+	この意味で$i$と$m$は双対の関係にある。
+
+	式\eqref{eq:標準入射その四}と\eqref{eq:平坦化その四}を満たす同型射
+	$\phi$として随伴関手が定義することができる（\cite{maclane.work}p.78）。
+
+	\begin{definition}[随伴関手]\label{def:随伴関手} %{
+		関手$\mycal{X}\udset{F}{G}{\rightleftarrows}\mycal{A}$が与えられた時、
+		任意の$X\in\mycal{X},\;A\in\mycal{A}$に対して次の図を可換にする同型射
+		$\phi_X^A:\mycal{A}(FX,A)\simeq\mycal{X}(X,GA)$存在するとき、
+		\begin{equation*}\begin{array}{rr}
+			\xymatrix{
+				\mycal{X}(X,GA) \ar[d]^{(Uf_*)\circ-}
+				& \mycal{A}(FX,A) \ar[l]_{\phi_X^A} \ar[d]^{f_*\circ-} \\
+				\mycal{X}(X,GB) & \mycal{A}(FX,B) \ar[l]_{\phi_X^B} \\
+			},&\quad \xymatrix{
+				\mycal{X}(X,GA) \ar[d]^{-\circ f} 
+				& \mycal{A}(FX,A) \ar[l]_{\phi_X^A} \ar[d]^{-\circ(Ff)} \\
+				\mycal{X}(Y,GA) & \mycal{A}(FY,A) \ar[l]_{\phi_Y^A} \\
+			} \\
+			\text{for all } A\xto{f_*}B\in\mycal{A}
+			& \quad\text{for all } Y\xto{f}X\in\mycal{A} \\
+		\end{array}\end{equation*}
+		組$(F,G,\phi)$を随伴関手といい、$(F,G,\phi):\mycal{X}\to\mycal{A}$
+		と書く。
+	\end{definition} %def:随伴関手}
+
+	\begin{proposition}[随伴関手の単位射と余単位射]
+	\label{prop:随伴関手の単位射と余単位射} %{
+		$(F,G,\phi):\mycal{X}\to\mycal{A}$を随伴関手とすると、次の性質を持つ
+		自然変換が一意に定まる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 自然変換$\eta:1_{\mycal{X}}\xto{\bullet}GF$で次の式を満たす。
+			\begin{equation*}\begin{split}
+				\phi_X^Af_* = (Gf_*)\circ\eta_X
+				\quad\text{for all } FX\xto{f_*}A\in\mycal{A}
+			\end{split}\end{equation*}
+			\item 自然変換$\epsilon:FG\xto{\bullet}1_{\mycal{A}}$で次の式を満たす。
+			\begin{equation*}\begin{split}
+				(\phi_X^A)^{-1}f = \epsilon_A\circ(Ff)
+				\quad\text{for all } X\xto{f}GA\in\mycal{X}
+			\end{split}\end{equation*}
+			\item 次の自然変換の合成が恒等射となる。
+			\begin{equation*}\begin{split}
+				G\xto{\eta}GFG\xto{G\epsilon}G,\quad F\xto{F\eta}FGF\xto{\epsilon}F
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{proposition} %prop:随伴関手の単位射と余単位射}
+%s3:自由モノイド}
+
+\begin{todo}[ここまで]\label{todo:ここまで} %{
+\end{todo} %todo:ここまで}
+
+	Wikibooks\cite{haskellmonad}の例を書いておく。
+	集合の圏での冪集合への関手$P:\mybf{Set}\to\mybf{Set}$をを考える。
+	$P$は任意の$A\xto{f}B\in\mybf{Set}$に対して次のように定義される。
+	\begin{equation*}\begin{split}
+		Pf: PA\to PB \text{ such that } (Pf)U = \set{fa\in B\bou a\in U}
+		\quad\text{for all } U\in PA
+	\end{split}\end{equation*}
+	シングルトンへの写像$\eta_A:A\to PA$と合併$\mu_A:P^2A\to PA$を次のように
+	定義すると、
+	\begin{alignat*}{2}
+		\eta_Aa &= \set{a} &\quad&\text{for all } a\in A \\
+		\mu_A\alpha &= \cup_{U\in\alpha}U &\quad&\text{for all } \alpha\in P^2A
+	\end{alignat*}
+	$\eta_A$は$\mybf{Set}$の恒等関手$\id_{\mybf{Set}}$から$P$への自然変換、
+	$\mu_A$は$P^2$から$P$の自然変換とみることができる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			A \ar[r]^{f} \ar[d]^{\eta_A} & B \ar[d]^{\eta_B} \\
+			PA \ar[r]^{Pf} & PB \\
+		},\quad \xymatrix{
+			P^2A \ar[r]^{P^2f} \ar[d]^{\mu_A} & P^2B \ar[d]^{\mu_B} \\
+			PA \ar[r]^{Pf} & PB \\
+		}
+	\end{split}\end{equation*}
+	したがって、$\eta_A$と$\mu_A$はモナドを構成する。
+
+	モナドは抽象的過ぎて実感が掴めないので、随伴関手を構成してみる。
+	冪集合はブール代数になるから、部分集合の和によって積を定義することで、
+	$P$を集合の圏から冪等モノイドへの関手としてみる。
+	\begin{equation*}\begin{split}
+		U,V\in PA\implies UV := U\cup V\in PA
+	\end{split}\end{equation*}
+	すると、$U$を忘却関手として、任意の冪等モノイド$G$と写像
+	$A\xto{f}UG\in\mybf{Set}$に対して次の図を可換にする冪等モノイドの射
+	$PA\xto{f_*}G$が唯一つ定まる。
+	\begin{equation*}\xymatrix{
+		A \ar[r]^{\eta_A} \ar[rd]^{f} & UPA \ar@{.>}[d]^{Uf_*} \\
+		& UG
+	}\end{equation*}
+	逆に、$PA$から$G$への冪等モノイドの射に対して$A$から$UG$への写像が
+	唯一つ定まるから、自然同型$\Hom(A, UG)\simeq\Hom(PA, G)$が成り立つ。
+	$\id_\mybf{Set}\overset{\eta}{\rightsquigarrow}P$が単位射、
+	$P\overset{\mu}{\rightsquigarrow}\id_{\mybf{Set}}$が余単位射となる。
+	このことは、自由モノイドの普遍性から導き出すこともできる。
+	冪等モノイドの圏はモノイドの圏の部分圏となっている。
+
+	さて、Haskellに戻る。
+	Haskellではモナドとは次のように定義されているそうだ。
+	\begin{lstlisting}[caption=Monad in Haskell, label=code:Monad in Haskell]
+	class Functor => Monad m where
+		return :: a -> m a
+		(>>=)  :: m a -> (a -> m b) -> m b
+	\end{lstlisting}
+	\begin{lstlisting}[caption=Monad in Java, label=code:Monad in Java]
+	interface Monad<M, A> extends Functor {
+		M unit(A a
+	}
+	\end{lstlisting}
+	うーん何だかわからん。
+%s2:Haskellでの関手}
+%s1:多重継承}
 \section{スタックマシン}\label{s1:スタックマシン} %{
 \begingroup %{
 	\newcommand{\Drop}{\myop{Drop}}
@@ -42,6 +691,48 @@
 	\newcommand{\Prot}{\myop{pRot}}
 	\newcommand{\Tuck}{\myop{Tuck}}
 
+\subsection{スタックマシンの基本構造}\label{s2:スタックマシンの基本構造} %{
+	可算集合$A$から生成される自由モノイドを$\W A$と書く。
+
+	スタックマシンとは、データ列とデータ列を編集するための命令列の二つの
+	文字列を言うようである。データの集合を$D$、データ列を編集するための命令の
+	集合を$C$とする。ここでは、次の組をスタックマシンということにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[データ列] 可変長の文字列$\W D$
+		\item[命令列] 固定の文字列$\W C$
+		\item[命令位置] 次に実行する命令の$\W C$の中でのインデックス
+	\end{description} %}
+	文字の種類に依らない文字列$\W A$に対する基本的な操作は次のようになる
+	だろう。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 固定長スタックの操作
+		\begin{equation*}\begin{split}
+			\myop{rotate}: [a]w\mapsto w[a],\quad \myop{swap}: w[ab]\mapsto w[ba]
+		\end{split}\end{equation*}
+		スタックの長さが$n$であれば、スタックの要素の置換群$S_n$はこの二つの
+		操作から生成される。
+		\item スタックの伸長
+		\begin{equation*}\begin{split}
+			\myop{push}: w\times a\mapsto w[a],\quad \myop{pop}: w[a]\mapsto w
+		\end{split}\end{equation*}
+		\item 要素の検査
+		\begin{equation*}\begin{split}
+			\myop{test}: w\times a\mapsto \begin{cases}
+				1, &\text{ iff } \exists\; w_1\in\W A\text{ such that } 
+					w = w_1[a] \\
+				0, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+		次のように$\myop{push}_a$と$\myop{pop}_a$を定義すると、Brzozowski代数
+		になる。
+		\begin{equation*}\begin{split}
+			\myop{push}_aw := \myop{push}(w,a),\quad
+			\myop{pop}_a := \myop{pop}\circ\myop{test}_a,\quad
+			\myop{test}_aw := \myop{test}(w,a) \\
+			\implies \myop{pop}_a\myop{push}_b =  \jump{a=b} 
+		\end{split}\end{equation*}
+	\end{itemize} %}
+%s2:スタックマシンの基本構造}
 \subsection{Shannonの修論}\label{s2:Shannonの修論} %{
 	\cite{shannon2006}のノート。
 
