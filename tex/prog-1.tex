@@ -4,8 +4,7 @@
 	\newcommand{\word}[1]{\ensuremath{[{#1}]}}
 	\newcommand{\range}[1]{\ensuremath{({#1})}}
 	%
-\section{プログラミングチップス}\label{s1:プログラミングチップス} %{
-\subsection{菱形継承の問題}\label{s2:菱形継承の問題} %{
+\section{菱形継承の問題}\label{s1:菱形継承の問題} %{
 	次の図のようなクラス継承をした場合、
 	\begin{equation}\label{eq:菱形継承}\xymatrix@R=1ex@C=2ex{
 		& \frac{A}{\begin{array}{l}
@@ -68,8 +67,8 @@
 		\end{lstlisting}
 		\item 
 	\end{itemize} %}
-%s2:菱形継承の問題}
-\subsection{区間の演算}\label{s2:区間の演算} %{
+%s1:菱形継承の問題}
+\section{区間の演算}\label{s1:区間の演算} %{
 	$0$から$n-1$までの自然数の集合を$[n]$、その冪集合を$P[n]$と書く。
 	$[n]$の両側閉区間$\set{m_1\times m_2\in S^2\bou m_1\le m_2}$の和、
 	または空集合$0_P\in P[n]$で表すことを考える。
@@ -201,26 +200,8 @@
 			\end{split}\end{equation*} %}
 		\end{itemize} %}
 	\end{definition} %def:シャッフル積}
-%s2:区間の演算}
-
-\subsection{文字列の微積分}\label{s2:文字列の微積分} %{
-	\begin{todo}[余積とライプニッツ則]\label{todo:余積とライプニッツ則} %{
-		半環$R$を係数とする半モジュール$V$において、
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item 互いに準同型となる積$m$と余積$\Delta$と、
-			\item 双対空間$V^\dag=\set{f\in V\to R}$
-		\end{itemize} %}
-		が与えられたとき、微分を導くことができるか？
-	\end{todo} %todo:余積とライプニッツ則}
-	$R=(R,+,0_R,m_\myspace,1_R)$を半環とし、集合$X$を基底とする
-	$R$係数自由半モジュールを$RX$と書く。
-	$A$を集合、$WA$を$A$を文字とする単語の集合、$A^\dag=\set{f\in A\to R}$を
-	の双対空間、$WA^\dag=\set{f\in WA\to R}$を$WA$の双対空間とする。
-
-	文字列の結合を$m_*:RWA\otimes RWA\to RWA$と書く。
-%s2:文字列の微積分}
-
-\subsection{文字集合をビット配列で表す}\label{s2:文字集合をビット配列で表す} %{
+%s1:区間の演算}
+\section{文字集合をビット配列で表す}\label{s1:文字集合をビット配列で表す} %{
 	文字の冪集合ををビットの配列で表すことを考える。
 	文字集合が$n$バイト=$8n$ビットで表されるならば、文字集合の大きさは
 	$2^{8n}$となる。
@@ -241,7 +222,7 @@
 	現在のコンピュータの構造を考えると、$2\myop{Byte}$の文字までなら冪集合を
 	64ビット符号無し整数の配列で表すことができるだろう。$3\myop{Byte}$以上の
 	文字に対しては別の方法を考える必要があるだろう。
-%s2:文字集合をビット配列で表す}
+%s1:文字集合をビット配列で表す}
 \endgroup %}
 
 \begingroup %{

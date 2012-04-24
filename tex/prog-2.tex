@@ -1,0 +1,251 @@
+\begingroup %{
+	\newcommand{\Pow}{\mycal{P}}
+	{\setlength\arraycolsep{2pt}
+\section{文字列の検索}\label{s1:文字列の検索} %{
+\subsection{Boyer-Mooreの方法}\label{s2:Boyer-Mooreの方法} %{
+	Boyer-Mooreの方法は文字列を検索するとき、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 如何にして無駄な文字のマッチングを避けるか
+	\end{itemize} %}
+	という問題に対して基本的な考え方を与えてくれる。
+
+	文章を先頭から一文字づつずらしながら単語を照合していく方法では、
+	文章が$AACAAB$だった場合、単語$AAB$が出現する位置を見つけ出すまで$9$回
+	の文字の照合を行うことになる。
+	\begin{equation*}\begin{array}{rcrcrcrcr}
+		3 &+& 2 &+& 1 &+& 3 &=& 9 \\
+		\young(AACAAB,AAB) &\to& \young(AACAAB,:AA) &\to&
+		\young(AACAAB,::A) &\to& \young(AACAAB,:::AAB)
+	\end{array}\end{equation*}
+	文字集合を$\Sigma$として、単語$\Sigma^*AAB$の状態遷移図を書くと
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			x_0 \ar@(lu,ld)_{\neg a} \ar[r]^A
+			& x_1 \ar[r]^A \ar@(ul,ur)[l]_{A^\neg} 
+			& x_2 \ar[r]^B \ar@(ul,ur)[l]_A \ar@(dl,dr)[ll]^{(A+B)^\neg} & 1
+		} \quad \begin{split}
+			x_0 &= \Sigma^*AAB \\
+			x_1 &= AB + x_0 \\
+			x_2 &= B + x_1 \\
+		\end{split}
+	\end{split}\end{equation*}
+	したがって、状態遷移図を用いると$7$回の文字の照合で済む。
+	\begin{equation*}\begin{array}{rcrcrcrcr}
+		3 &+& 1 &+& 3 &=& 7 \\
+		\young(AACAAB,AAB) &\to& C\neq A &\to& \young(AACAAB,:::AAB)
+	\end{array}\end{equation*}
+	さらに、単語の右から左へと文字の照合をおこなっていくと、$5$回の文字の
+	照合で済む。
+	\begin{equation*}\begin{array}{rcrcrcrcr}
+		1 &+& 1 &+& 3 &=& 5 \\
+		\young(AACAAB,AAB) &\to& C\neq A &\to& \young(AACAAB,:::AAB)
+	\end{array}\end{equation*}
+	この例からわかるように、文章の中から単語$w$が出現する位置を見つけ出す
+	には、文章中のカーソル上の文字に対して、$w$の文字を右から左への照合
+	していけば効率がよい。
+
+	Boyer-Mooreの方法を解説\cite{lecroq}にしたがって書いておく。
+	Boyer-Mooreの方法は、単語の右から左へと文字の照合を行なっていき、文字の
+	ミスマッチが起こったところで、予め計算しておいた次の二つの関数を利用して
+	次にとるべき動作を決める。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[good suffix shift] 既にマッチした部分が残る場合 \\
+		文章中の文字$b$と単語中の文字$a$がミスマッチしたとする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item パターンその一
+			\begin{equation*}\begin{array}{rcrcrcrcrcrcrcrcrcr}
+			\text{text} &\quad& &\cdots& && \cdots && \cdots &|& B &|& \text{matched} &|& \cdots \\
+			\text{word} &\quad& && &|& \cdots && \cdots &|& A &|& \text{matched} &|& \\
+			\text{word} &\quad& && && \xto{\text{shift}} &|& \cdots &|& C &|& \text{matched} &|& \cdots &|& \\
+			\end{array}\end{equation*}
+			\item パターンその二
+			\begin{equation*}\begin{array}{rcrcrcrcrcrcrcrcr}
+			\text{text} &\quad& && \cdots && \cdots &|& B &|& \text{matched-1} &|& \text{matched-2} &|& \cdots \\
+			\text{word} &\quad& && &|& \cdots &|& A &|& \text{matched-1} &|& \text{matched-2} &|& \\
+			\text{word} &\quad& && && && && \xto{\text{shift}} &|& \text{matched-2}  &|& \cdots &|& \\
+			\end{array}\end{equation*}
+		\end{itemize} %}
+		\item[bad character shift] 既にマッチした部分が残らない場合 \\
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item パターンその一
+			\begin{equation*}\begin{array}{rcrcrcrcrcrcrcrcrcr}
+			\text{text} &\quad& &\cdots& && \cdots && \cdots &|& B &|& \text{matched} &|& \cdots \\
+			\text{word} &\quad& && &|& \cdots && \cdots &|& A &|& \text{matched} &|& \\
+			\text{word} &\quad& && && \xto{\text{shift}} &|& \cdots &|& B &|& \text{no $b$s} &|& \text{no $b$s} &|& \\
+			\end{array}\end{equation*}
+			\item パターンその二
+			\begin{equation*}\begin{array}{rcrcrcrcrcrcrcrcrcr}
+			\text{text} &\quad& &\cdots& && \cdots && \cdots &|& B &|& \text{matched} &|& \cdots \\
+			\text{word} &\quad& && &|& \cdots && \cdots &|& A &|& \text{matched} &|& \\
+			\text{word} &\quad& && && && && \xto{\text{shift}} &|& \text{no $B$s} &|& \text{no $B$s} &|& \\
+			\end{array}\end{equation*}
+		\end{itemize} %}
+	\end{description} %}
+	\cite{lecroq}の例を用いてgood-suffixとbad-characterの表を作ってみる。
+	使っている{\TeX}のライブラリの都合上、$a:=A..Z-\set{A}$のように、
+	大文字の補集合として小文字を用いる。単語$GCAGAGAG$のgood-suffixの表
+	$\myop{bmG}$は次のようにして作る。
+	\begin{equation*}\begin{array}{rcl}
+		\text{シフトの計算} && \myop{bmG} \\
+		\young(GCAGAGAG,::::::g) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} &   &   &   &   &   &   &   & 1 \\
+		\end{array} \\
+		\young(:GCAGAGAG,aG) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} &   &   &   &   &   &   & 7 & 1 \\
+		\end{array} \\
+		\young(GCAGAGAG,:gAG) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} &   &   &   &   &   & 4 & 7 & 1 \\
+		\end{array} \\
+		\young(:::GCAGAGAG,aGAG) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} &   &   &   &   & 7 & 4 & 7 & 1 \\
+		\end{array} \\
+		\young(GCAGAGAG,:gAGAG) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} &   &   &   & 2 & 7 & 4 & 7 & 1 \\
+		\end{array} \\
+		\young(:::::GCAGAGAG,aGAGAG) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} &   &   & 7 & 2 & 7 & 4 & 7 & 1 \\
+		\end{array} \\
+		\young(::::::GCAGAGAG,cAGAGAG) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} &   & 7 & 7 & 2 & 7 & 4 & 7 & 1 \\
+		\end{array} \\
+		\young(:::::::GCAGAGAG,gCAGAGAG) &\implies& \begin{array}{r|rrrrrrrr}
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} & 7 & 7 & 7 & 2 & 7 & 4 & 7 & 1 \\
+		\end{array} \\
+	\end{array}\end{equation*}
+	単語$w$のgood-suffixの値は$1$以上$|w|$以下の自然数となる。
+	単語$GCAGAGAG$の場合は、単語の長さは$8$だが、左端と右端の文字が等しい
+	から、$1$以上$7$以下の自然数のみが現れていることに注意する。このように
+	して作られた$\myop{bmG}$は次のようになる。
+	\begin{equation*}\begin{split}
+		\myop{bmG} := \begin{array}{r|rrrrrrrr}
+			\text{alph.} & G & C & A & G & A & G & A & G \\
+			\text{index} & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\\hline
+			\text{shift} & 7 & 7 & 7 & 2 & 7 & 4 & 7 & 1 \\
+		\end{array}
+	\end{split}\end{equation*}
+	bad-characterの表$\myop{bmB}$は単語に現れる文字の右端の位置になる。
+	\begin{equation*}\begin{split}
+		\myop{bmB} := \begin{array}{r|rrrr}
+			\text{alph.} & G & A & C & \text{その他} \\
+			\text{index} & 7 & 6 & 1 & 8 \\
+		\end{array}
+	\end{split}\end{equation*}
+	$\myop{bmG}$と$\myop{bmB}$は次のように組み合わせて使う。
+	\begin{equation*}\begin{array}{l}
+		\young(AAAAAAGCAGAGAG,GCAGAGAG,:::::::\uparrow) \\
+		\downarrow \max(\myop{bmG}_7,7-\myop{bmB}_C) = \max(1,7-1) = 6 \\
+		\young(AAAAAAGCAGAGAG,::::::GCAGAGAG) \\
+	\end{array}\end{equation*}
+	\cite{lecroq}にある少し長い例を挙げておく。
+	\begin{equation*}\begin{array}{ll}
+		\young(GCATCGCAGAGAGTATACAGTACG,GCAGAGAG,:::::::\uparrow) \\
+		\downarrow \myop{bmG}_7 = 1,\quad 7 - \myop{bmB}_A = 1 \\
+		\young(GCATCGCAGAGAGTATACAGTACG,:GCAGAGAG,::::::\uparrow) \\
+		\downarrow \myop{bmG}_5 = 4,\quad 5 - \myop{bmB}_C = 4 \\
+		\young(GCATCGCAGAGAGTATACAGTACG,:::::GCAGAGAG),\quad\text{found} \\
+		\downarrow \myop{bmG}_0 = 7 \\
+		\young(GCATCGCAGAGAGTATACAGTACG,::::::::::::GCAGAGAG,:::::::::::::::::\uparrow) \\
+		\downarrow \myop{bmG}_5 = 4,\quad 5 - \myop{bmB}_C = 4 \\
+		\young(GCATCGCAGAGAGTATACAGTACG,::::::::::::::::GCAGAGAG,::::::::::::::::::::::\uparrow) \\
+		\downarrow \myop{bmG}_6 = 7,\quad 6 - \myop{bmB}_C = 5 \\
+	\end{array}\end{equation*}
+	この例では、単語$GCAGAGAG$の位置が一つ見つかった後もその次の位置を探して
+	いるが、その際に、bad-characterがないので$\myop{bmB}$を参照をしていない
+	ことに注意する。
+
+	\begin{note}[文字列検索での言葉]\label{note:文字列検索での言葉} %{
+		文字列検索では次のような言葉が用いられるようだ。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[needle] パターン
+			\item[haystack] パターンを含むかもしれない文章
+		\end{description} %}
+	\end{note} %note:文字列検索での言葉}
+	\begin{todo}[やりたいこと]\label{todo:やりたいこと} %{
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[Sundayの方法] 実用的な検索方法。通常のコンピュータでは 
+			一文字同士の比較とmemcmpのスピードがあまり変わらないことを利用
+			する。good-suffixを使わない単純だが効率的な検索方法のようだ。
+			\item[DFA] DFAを用いた場合にスキップをどうやって取り入れるかを
+			考える。
+		\end{description} %}
+	\end{todo} %todo:やりたいこと}
+%s2:Boyer-Mooreの方法}
+\subsection{Sundayの方法}\label{s2:Sundayの方法} %{
+	Sundayの方法はBoyer-Mooreの方法で使ったbad-characterの表だけを使って
+	次のようにシフトしていく。
+	\begin{equation*}\begin{array}{l}
+		\young(CATCGCAGAGTAGATACAGTACG,GCAGAGAG,:::::\uparrow) \\
+		\downarrow \quad\text{shift} \\
+		\young(CATCGCAGAGTAGATACAGTACG,::GCAGAGAG,::::::::\uparrow) \\
+		\downarrow \\
+		\young(CATCGCAGAGTAGATACAGTACG,::GCAGAGAG,:::::\uparrow) \\
+		\downarrow \quad\text{shift} \\
+		\young(CATCGCAGAGTAGATACAGTACG,:::::::::::GCAGAGAG,::::::::::\uparrow) \\
+	\end{array}\end{equation*}
+%s2:Sundayの方法}
+%s1:文字列の検索}
+\section{バイト集合}\label{s1:バイト集合} %{
+	$1$バイト（$8$ビット）で表される集合$\myop{uint8\_t}$の演算考える。
+	$|\myop{uint8\_t}|=2^8=256$だから、冪集合$\Pow\myop{uint8\_t}$を
+	\myop{uint64\_t}の配列で表すと、
+	$|\myop{uint8\_t}|/64=4$だから、長さ$4$の配列が必要になる。
+
+	ASCIIは$7$ビットで表される集合の部分集合である。
+	wikipediaによると、$7$ビットを次のような領域に分割している。
+	\begin{equation*}\begin{split}
+		\left.\begin{split}
+			000\;0000 \\
+			001\;1111
+		\end{split}\;\right\} & \quad\text{制御コード} \\
+		\left.\begin{split}
+			010\;0000 \\
+			111\;1110
+		\end{split}\;\right\} & \quad\text{印字可能な文字} \\
+		\left.\begin{split}
+			111\;1112
+		\end{split}\;\right\} & \quad\text{制御コード} \\
+	\end{split}\end{equation*}
+%s1:バイト集合}
+\section{CoC}\label{s1:CoC} %{
+	設定によってサブシステム間の結合の自由度の高めることよりも、
+	規約によってサブシステム間の結合の仕方を決め打ちしてしまった方が
+	開発効率が高まることが往々にしてある。
+	例えば、次のような自由度は高いが冗長な関数は、
+	\begin{lstlisting}[caption=冗長な例, label=code:冗長な例]
+	sum: (begin: P, end: P
+		, eq: (P, P) -> boolean, inc: P -> P, val: P -> T
+		, plus: (T, T) -> T, zero: T) -> T = {
+		for (; eq(p, end); p = inc(p)) {
+			zero = plus (zero, val p);
+		}
+		return zero;
+	}
+	\end{lstlisting}
+	イテレータ型を取り入れることでもう少し単純な次のような関数をつくることが
+	できる。
+	\begin{lstlisting}[caption=単純化した例, label=code:単純化した例]
+	sum: (begin: (iterator T), end: (iterator T)
+		, plus: (T, T) -> T, zero: T) -> T = {
+		return sum (begin, end, (iterator T).equals (iterator T).increment
+		, (iteartor T).get, plus, zero);
+	}
+	\end{lstlisting}
+	この場合は、イテレータ型というのが規約になる。
+	\begin{lstlisting}[caption=イテレータ型, label=code:イテレータ型]
+	iterator (T): type = {
+		equals: ((iterator T) x) -> boolean;
+		increment: () -> self;
+		get: () -> T;
+	}
+	\end{lstlisting}
+%s1:CoC}
+}\endgroup %}

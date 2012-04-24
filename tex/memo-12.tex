@@ -1,6 +1,7 @@
 \begingroup %{
 	\newcommand{\W}{\mycal{W}}
 	\newcommand{\T}{\mycal{T}}
+	\newcommand{\Pow}{\mycal{P}}
 	\newcommand{\End}{\myop{End}}
 	\newcommand{\Map}{\myop{Map}}
 	\newcommand{\Lin}{\mathcal{L}}
@@ -51,39 +52,6 @@
 	%
 	{\setlength\arraycolsep{2pt}
 	%
-\section{CoC}\label{s1:CoC} %{
-	設定によってサブシステム間の結合の自由度の高めることよりも、
-	規約によってサブシステム間の結合の仕方を決め打ちしてしまった方が
-	開発効率が高まることが往々にしてある。
-	例えば、次のような自由度は高いが冗長な関数は、
-	\begin{lstlisting}[caption=冗長な例, label=code:冗長な例]
-	sum: (begin: P, end: P
-		, eq: (P, P) -> boolean, inc: P -> P, val: P -> T
-		, plus: (T, T) -> T, zero: T) -> T = {
-		for (; eq(p, end); p = inc(p)) {
-			zero = plus (zero, val p);
-		}
-		return zero;
-	}
-	\end{lstlisting}
-	イテレータ型を取り入れることでもう少し単純な次のような関数をつくることが
-	できる。
-	\begin{lstlisting}[caption=単純化した例, label=code:単純化した例]
-	sum: (begin: (iterator T), end: (iterator T)
-		, plus: (T, T) -> T, zero: T) -> T = {
-		return sum (begin, end, (iterator T).equals (iterator T).increment
-		, (iteartor T).get, plus, zero);
-	}
-	\end{lstlisting}
-	この場合は、イテレータ型というのが規約になる。
-	\begin{lstlisting}[caption=イテレータ型, label=code:イテレータ型]
-	iterator (T): type = {
-		equals: ((iterator T) x) -> boolean;
-		increment: () -> self;
-		get: () -> T;
-	}
-	\end{lstlisting}
-%s1:CoC}
 \section{ラムダ計算周辺}\label{s1:ラムダ計算周辺} %{
 \subsection{ラムダ式の記述}\label{s2:ラムダ式の記述} %{
 	ラムダ式を言語としてみた場合、ラムダ式ではベータ変換の順序を指定する
