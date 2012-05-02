@@ -16,8 +16,8 @@ CFLAGS += ${ADD_CFLAGS} $(PKG_CFLAGS)
 CPPFLAGS += -std=c++0x ${ADD_CFLAGS} $(PKG_CFLAGS)
 LDLIBS += $(PKG_LDLIBS)
 
-LIB_INCS = debug.h utf8_helper.h fatvm.h
-LIB_SRCS = debug.cpp utf8_helper.cpp fatvm.cpp
+LIB_INCS = debug.h utf8_helper.h fatvm.h common.h containers.h
+LIB_SRCS = debug.cpp utf8_helper.cpp fatvm.cpp common.cpp
 LIB_FILES = $(LIB_INCS) $(LIB_SRCS)
 
 APP_INCS = 

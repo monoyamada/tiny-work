@@ -1,35 +1,9 @@
 #include "fatvm.h"
 #include "debug.h"
-#include <iostream>
 #include <sstream>
 #include <algorithm>
 
 using namespace fatvm;
-
-std::ostream& header_msg (std::ostream& out, const char* file, int line) {
-	if (file == 0) {
-		return out << "[] ";
-	}
-	return out << "[" << file << ":" << line << "] ";
-}
-
-std::ostream& out_of_range_msg (std::ostream& out
-	, int64_t begin, int64_t end, int64_t index 
-	, const char* what, const char* file, int line) {
-	if (what == 0) {
-		what = "";
-	}
-	return header_msg (out, file, line) << what << " " << index 
-		<< " not in [" << begin << ", " << end << ")";
-}
-
-std::ostream& no_such_msg (std::ostream& out
-	, const char* what, const char* file, int line) {
-	if (what == 0) {
-		what = "object";
-	}
-	return header_msg (out, file, line) << "no such " << what << " exists";
-}
 
 const char* stack_element_type_name (uint8_t type) {
 	switch (type) {
@@ -99,18 +73,31 @@ std::ostream& stack_element::write (std::ostream& out) const {
 	}
 }
 
-std::ostream& operator << (std::ostream& out, const stack_element& x) {
-	return x.write (out);
-}
-
 stack_frame::stack_frame () : stack_index (0) {
 }
 
-machine_error::machine_error (const std::string& what)
-	: std::runtime_error (what) {
+machine_config::machine_config ()
+	: max_data_array_size (1024)
+	, min_data_array_size (128)
+	, max_frame_array_size (256)
+	, min_frame_array_size (4) {
 }
 
-machine_base::machine_base () {
+const bool _fatvm_direct_edit = true;
+const bool _fatvm_set_anyway = true;
+
+const machine_config default_config;
+
+machine_base::machine_base () 
+	: _data_array (default_config.max_data_array_size, default_config.min_data_array_size)
+	, _frame_array (default_config.max_frame_array_size, default_config.min_frame_array_size) {
+	this->_current_frame = &(this->_root_frame);
+	this->_msg_buffer.reserve (256);
+}
+
+machine_base::machine_base (const machine_config& config) 
+	: _data_array (config.max_data_array_size, config.min_data_array_size)
+	, _frame_array (config.max_frame_array_size, config.min_frame_array_size) {
 	this->_current_frame = &(this->_root_frame);
 	this->_msg_buffer.reserve (256);
 }
@@ -139,55 +126,6 @@ const stack_frame& machine_base::get_current_frame () const {
 	return *(this->_current_frame);
 }
 
-size_t machine_base::frame_size () const {
-	return this->get_frame_array().size ();
-}
-
-size_t machine_base::size () const {
-	return this->global_size () - this->get_current_frame ().stack_index;
-}
-
-size_t machine_base::global_size () const {
-	return this->get_data_array ().size ();
-}
-
-machine_base& machine_base::push (const stack_element& value)
-	throw (machine_error) {
-	data_array_type& array = this->data_array ();
-	array.push_back (value);
-	return *this;
-}
-
-machine_base& machine_base::push (const stack_element& value, size_t n)
-	throw (machine_error) {
-	data_array_type& array = this->data_array ();
-	array.insert (array.end(), n, value);
-	return *this;
-}
-
-machine_base& machine_base::pop () throw (machine_error) {
-	if (this->size () < 1) {
-		std::stringstream buffer (this->_msg_buffer);
-		no_such_msg (buffer, "stack element", __FILE__, __LINE__);
-		throw machine_error (buffer.str ());
-	}
-	data_array_type& array = this->data_array ();
-	array.pop_back ();
-	return *this;
-}
-
-machine_base& machine_base::pop (size_t n) throw (machine_error) {
-	data_array_type& array = this->data_array ();
-	if (this->size () < n) {
-		std::stringstream buffer (this->_msg_buffer);
-		out_of_range_msg (buffer, 0, this->size (), n
-			, "pop number", __FILE__, __LINE__);
-		throw machine_error (buffer.str ());
-	}
-	array.erase (array.end () - n, array.end ());
-	return *this;
-}
-
 size_t machine_base::to_global_index (size_t index) const {
 	return this->get_current_frame ().stack_index + index;
 }
@@ -196,100 +134,208 @@ size_t machine_base::to_local_index (size_t index) const {
 	return index - this->get_current_frame ().stack_index;
 }
 
-const stack_element& machine_base::get (size_t index) const throw (machine_error) {
-	if (this->size () <= index) {
+size_t machine_base::frame_size () const {
+	return this->get_frame_array().size ();
+}
+
+size_t machine_base::data_size () const {
+	return this->global_data_size () - this->get_current_frame ().stack_index;
+}
+
+size_t machine_base::global_data_size () const {
+	return this->get_data_array ().size ();
+}
+
+stack_element& machine_base::local_data (size_t index)
+	throw (fatvm_error) {
+	if (this->data_size () <= index) {
 		std::stringstream buffer (this->_msg_buffer);
-		out_of_range_msg (buffer, 0, this->size (), index
+		out_of_range_msg (buffer, 0, this->data_size (), index
 			, "stack element", __FILE__, __LINE__);
-		throw machine_error (buffer.str ());
+		throw fatvm_error (buffer.str ());
+	}
+	return this->data_array ()[this->to_global_index (index)];
+}
+
+const stack_element& machine_base::get_local_data (size_t index) const 
+	throw (fatvm_error) {
+	if (this->data_size () <= index) {
+		std::stringstream buffer (this->_msg_buffer);
+		out_of_range_msg (buffer, 0, this->data_size (), index
+			, "stack element", __FILE__, __LINE__);
+		throw fatvm_error (buffer.str ());
 	}
 	return this->get_data_array ()[this->to_global_index (index)];
 }
 
-machine_base& machine_base::set (size_t index, const stack_element& value) throw (machine_error) {
-	return this->set_global (this->to_global_index (index), value);
+stack_element& machine_base::global_data (size_t index) throw (fatvm_error) {
+	if (this->global_data_size () <= index) {
+		std::stringstream buffer (this->_msg_buffer);
+		out_of_range_msg (buffer, 0, this->global_data_size (), index
+			, "stack element", __FILE__, __LINE__);
+		throw fatvm_error (buffer.str ());
+	}
+	return this->data_array ()[index];
 }
 
-const stack_element& machine_base::get_global (size_t index) const throw (machine_error) {
-	if (this->global_size () <= index) {
+const stack_element& machine_base::get_global_data (size_t index) const 
+	throw (fatvm_error) {
+	if (this->global_data_size () <= index) {
 		std::stringstream buffer (this->_msg_buffer);
-		out_of_range_msg (buffer, 0, this->global_size (), index
+		out_of_range_msg (buffer, 0, this->global_data_size (), index
 			, "stack element", __FILE__, __LINE__);
-		throw machine_error (buffer.str ());
+		throw fatvm_error (buffer.str ());
 	}
 	return this->get_data_array ()[index];
 }
 
-machine_base& machine_base::set_global (size_t index, const stack_element& value) throw (machine_error) {
-	if (this->global_size () <= index) {
-		this->push (stack_element (), index - this->global_size () + 1);
+machine_base& machine_base::push_data ()
+	throw (fatvm_error) {
+	return this->push_data (stack_element ());
+}
+
+machine_base& machine_base::push_data (size_t n)
+	throw (fatvm_error) {
+	return this->push_data (stack_element (), n);
+}
+
+
+machine_base& machine_base::push_data (const stack_element& value)
+	throw (fatvm_error) {
+	data_array_type& array = this->data_array ();
+	array.push_back (value);
+	return *this;
+}
+
+machine_base& machine_base::push_data (const stack_element& value, size_t n)
+	throw (fatvm_error) {
+	data_array_type& array = this->data_array ();
+	//array.insert (array.end(), n, value);
+	array.push_back (value, n);
+	return *this;
+}
+
+machine_base& machine_base::pop_data () throw (fatvm_error) {
+	if (this->data_size () < 1) {
+		std::stringstream buffer (this->_msg_buffer);
+		no_such_msg (buffer, "stack element", __FILE__, __LINE__);
+		throw fatvm_error (buffer.str ());
 	}
-	this->data_array ()[index] = value;
+	data_array_type& array = this->data_array ();
+	array.pop_back ();
+	return *this;
+}
+
+machine_base& machine_base::pop_data (size_t n) throw (fatvm_error) {
+	data_array_type& array = this->data_array ();
+	if (this->data_size () < n) {
+		std::stringstream buffer (this->_msg_buffer);
+		out_of_range_msg (buffer, 0, this->data_size (), n
+			, "pop number", __FILE__, __LINE__);
+		throw fatvm_error (buffer.str ());
+	}
+	//array.erase (array.end () - n, array.end ());
+	array.pop_back (n);
+	return *this;
+}
+
+const stack_element& machine_base::get_data (size_t index) const 
+	throw (fatvm_error) {
+	return this->get_local_data (index);
+}
+
+machine_base& machine_base::set_data (size_t index, const stack_element& value) 
+	throw (fatvm_error) {
+	this->local_data (index) = value;
 	return *this;
 }
 
 machine_base& machine_base::apply_operator_type_1_0 (
-	operator_type_1_0 fnc, size_t dst) throw (machine_error) {
-	if (this->size () <= dst) {
-		this->push (stack_element (), dst - this->size () + 1);
+	operator_type_1_0 fnc, size_t dst) throw (fatvm_error) {
+	if (_fatvm_set_anyway && this->data_size () <= dst) {
+		this->push_data (dst - this->data_size () + 1);
 	}
-	stack_element x_dst = this->get (dst);
-	fnc (x_dst);
-	return this->set (dst, x_dst);
+	if (_fatvm_direct_edit) {
+		fnc (this->local_data (dst));
+	} else {
+		stack_element x_dst = this->get_data (dst);
+		fnc (x_dst);
+		this->set_data (dst, x_dst);
+	}
+	return *this;
 }
 
 machine_base& machine_base::apply_operator_type_1_1 (
-	operator_type_1_1 fnc, size_t dst, size_t src) throw (machine_error) {
-	if (this->size () <= dst) {
-		this->push (stack_element (), dst - this->size () + 1);
+	operator_type_1_1 fnc, size_t dst, size_t src) throw (fatvm_error) {
+	if (_fatvm_set_anyway && this->data_size () <= dst) {
+		this->push_data (dst - this->data_size () + 1);
 	}
-	const stack_element& x_src = this->get (src);
-	stack_element x_dst = this->get (dst);
-	fnc (x_dst, x_src);
-	return this->set (dst, x_dst);
+	const stack_element& x_src = this->get_data (src);
+	if (_fatvm_direct_edit) {
+		fnc (this->local_data (dst), x_src);
+	} else {
+		stack_element x_dst = this->get_data (dst);
+		fnc (x_dst, x_src);
+		this->set_data (dst, x_dst);
+	}
+	return *this;
 }
 
 machine_base& machine_base::apply_operator_type_1_2 (
 	operator_type_1_2 fnc, size_t dst, size_t src_0, size_t src_1)
-	throw (machine_error) {
-	if (this->size () <= dst) {
-		this->push (stack_element (), dst - this->size () + 1);
+	throw (fatvm_error) {
+	if (_fatvm_set_anyway && this->data_size () <= dst) {
+		this->push_data (dst - this->data_size () + 1);
 	}
-	const stack_element& x_src_0 = this->get (src_0);
-	const stack_element& x_src_1 = this->get (src_1);
-	stack_element x_dst = this->get (dst);
-	fnc (x_dst, x_src_0, x_src_1);
-	return this->set (dst, x_dst);
+	const stack_element& x_src_0 = this->get_data (src_0);
+	const stack_element& x_src_1 = this->get_data (src_1);
+	if (_fatvm_direct_edit) {
+		fnc (this->local_data (dst), x_src_0, x_src_1);
+	} else {
+		stack_element x_dst = this->get_data (dst);
+		fnc (x_dst, x_src_0, x_src_1);
+		this->set_data (dst, x_dst);
+	}
+	return *this;
 }
 
 machine_base& machine_base::apply_operator_type_2_1 (
 	operator_type_2_1 fnc, size_t dst_0, size_t dst_1, size_t src)
-	throw (machine_error) {
-	if (this->size () <= dst_0 || this->size () <= dst_1) {
-		this->push (stack_element ()
-			, std::max (dst_0, dst_1) - this->size () + 1);
+	throw (fatvm_error) {
+	if (_fatvm_set_anyway 
+		&& (this->data_size () <= dst_0 || this->data_size () <= dst_1)) {
+		this->push_data (std::max (dst_0, dst_1) - this->data_size () + 1);
 	}
-	const stack_element& x_src = this->get (src);
-	stack_element x_dst_0 = this->get (dst_0);
-	stack_element x_dst_1 = this->get (dst_1);
-	fnc (x_dst_0, x_dst_1, x_src);
-	this->set (dst_0, x_dst_0);
-	return this->set (dst_1, x_dst_1);
+	const stack_element& x_src = this->get_data (src);
+	if (_fatvm_direct_edit) {
+		fnc (this->local_data (dst_0), this->local_data (dst_1), x_src);
+	} else {
+		stack_element x_dst_0 = this->get_data (dst_0);
+		stack_element x_dst_1 = this->get_data (dst_1);
+		fnc (x_dst_0, x_dst_1, x_src);
+		this->set_data (dst_0, x_dst_0);
+		this->set_data (dst_1, x_dst_1);
+	}
+	return *this;
 }
 
 machine_base& machine_base::apply_operator_type_2_2 (
 	operator_type_2_2 fnc, size_t dst_0, size_t dst_1
-	, size_t src_0, size_t src_1) throw (machine_error) {
-	if (this->size () <= dst_0 || this->size () <= dst_1) {
-		this->push (stack_element ()
-			, std::max (dst_0, dst_1) - this->size () + 1);
+	, size_t src_0, size_t src_1) throw (fatvm_error) {
+	if (_fatvm_set_anyway 
+		&& (this->data_size () <= dst_0 || this->data_size () <= dst_1)) {
+		this->push_data (std::max (dst_0, dst_1) - this->data_size () + 1);
 	}
-	const stack_element& x_src_0 = this->get (src_0);
-	const stack_element& x_src_1 = this->get (src_1);
-	stack_element x_dst_0 = this->get (dst_0);
-	stack_element x_dst_1 = this->get (dst_1);
-	fnc (x_dst_0, x_dst_1, x_src_0, x_src_1);
-	this->set (dst_0, x_dst_0);
-	return this->set (dst_1, x_dst_1);
-
+	const stack_element& x_src_0 = this->get_data (src_0);
+	const stack_element& x_src_1 = this->get_data (src_1);
+	if (_fatvm_direct_edit) {
+		fnc (this->local_data (dst_0), this->local_data (dst_1), x_src_0, x_src_1);
+	} else {
+		stack_element x_dst_0 = this->get_data (dst_0);
+		stack_element x_dst_1 = this->get_data (dst_1);
+		fnc (x_dst_0, x_dst_1, x_src_0, x_src_1);
+		this->set_data (dst_0, x_dst_0);
+		this->set_data (dst_1, x_dst_1);
+	}
+	return *this;
 }

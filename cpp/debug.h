@@ -2,6 +2,7 @@
 #define DEBUG_J0HH2B6P
 
 #include <string>
+#include <iostream>
 
 #ifndef STD_DEBUG
 #define STD_DEBUG std::cout << "[debug " << __FILE__ << ":" << __LINE__ << "] "
