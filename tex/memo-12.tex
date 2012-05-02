@@ -658,6 +658,9 @@
 	\newcommand{\Rot}{\myop{Rot}}
 	\newcommand{\Prot}{\myop{pRot}}
 	\newcommand{\Tuck}{\myop{Tuck}}
+	\newcommand{\Plus}{\myop{plus}}
+	\newcommand{\Less}{\myop{less}}
+	\newcommand{\Apply}{\myop{apply}}
 
 \subsection{スタックマシンの基本構造}\label{s2:スタックマシンの基本構造} %{
 	可算集合$A$から生成される自由モノイドを$\W A$と書く。
@@ -770,89 +773,105 @@
 	スタックをランダムアクセスできるようにしている。そして、ランダムアクセス
 	できるスタックをレジスターと言っている。
 %s2:Lua-5}
+\subsection{思考実験}\label{s2:思考実験} %{
+	次の関数定義をコンパイルすることを考える。
+	\begin{lstlisting}[caption=関数定義その一, label=code:関数定義その一]
+	f: x:any -> any = {
+		y = x + 1;
+		if 0 < y {
+			y = 0;
+		}
+		return y;
+	}
+	\end{lstlisting}
+	ここで、見やすいように二項演算子$+$と$<$を用いたが、それらはそれぞれ
+	変数$\Plus$と$\Less$がコンパイラーフロントエンドで置き換えられたものと
+	する。この式リストで使われている変数を次のように特徴づける。
+	\begin{equation}\label{eq:変数の表その一}\begin{array}{rrr}
+		\text{変数名} & \text{変数の定義} & \text{変数の種類} \\\hline
+		1 & \text{組み込み} & \text{定数} \\
+		0 & \text{組み込み} & \text{定数} \\
+		\Plus & \text{文脈} & \text{関数} \\
+		\Less & \text{文脈} & \text{関数} \\
+		x & \text{引数} & \text{変数} \\
+		y & \text{局所} & \text{変数} \\
+	\end{array}\end{equation}
+	表の中で、変数の定義と書いた欄は、その変数がどこで定義されているかを
+	示す。変数の種類の欄は、$\Apply$を適用できる変数を関数ということに
+	している。また、代入できない変数を定数ということにする。
+	したがって、ここでの定数はCやC++のconstではなく、Javaのfinalに相当する
+	ものである。
+
+	Luaに習って関数のデータ構造を次のようにしてみる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[変数の表] 表\ref{eq:変数の表その一}のような、関数で使われている
+		変数の性質をまとめた表を持っておく。プログラムの実行のためには必要ない
+		が、コンパイルする時とデバッグする時に必要になる。
+		\item[組み込み定数の配列] 組み込みの定数はプログラムの文脈に依らない。
+		組み込み定数はopcodeに埋め込んでも構わないが、Luaの場合、$4$バイト
+		固定長のopcodeなので、その中に$32$ビット長のデータを埋め込むことが
+		できない。そのための策として、関数を表すレコードに組み込み定数を
+		保持しておく特別な配列を用意している。
+		\item[関数の配列] この関数から呼び出される関数を配列として持っておく。
+		\item[opcodeの配列] Luaでは$4$バイト固定長のopcodeを用いている。
+		$4$バイトを次のように$3$通りの方法で区切って使う。
+		\begin{equation*}\begin{array}{lrrrrr}\hline
+			|& \myop{code} &| \quad &| \quad &| \quad &| \\\hline
+			|& \myop{code} &| \quad &| \quad & \quad &| \\\hline
+			|& \myop{code} &| \quad & \quad & \quad &| \\\hline
+		\end{array}\end{equation*}
+		正確には$\myop{code}$の部分は$6$ビットだが、ほぼ$1$バイトと思って、
+		一つのコマが$1$バイトを表すと思っていよい。例えば、$\Apply,i,n,j$
+		というopcodeだと、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $i$番目の関数に、
+			\item スタックのトップから$n$個の変数を引数として適用して、
+			\item 出力をスタックの$j$番目に書き出す
+		\end{itemize} %}
+		という命令になる。したがって、各種配列へのランダムアクセスは$1$バイトで
+		表される範囲に限定される。
+	\end{description} %}
+
+	自由変数は関数の引数として束縛されるか、式が定義された環境の中から
+	見つけ出さなくてはいけない。自由変数が束縛されない場合は、実行不可能
+	な関数になる。定数変数はコンパイラーフロントエンドが見つけてくれるもの
+	とする。局所変数はデバッグ用となる。関数定義を次のように静的単一代入な
+	中間言語に翻訳してみる。
+	\begin{lstlisting}[caption=中間言語その一, label=code:中間言語その一]
+	@0 {
+		bind-local x $0
+		load-const C_1 $1
+		apply plus 2 $2
+		bind-local y $2
+		load-const C_0 $3
+		apply less $4
+		if-else $4 @1 @2
+	}
+	@1 {
+		load-const C_0 $5
+		rebind-local y $5
+		goto @2
+	}
+	@2 {
+		copy $2 $6
+		return 1
+	}
+	\end{lstlisting}
+
+	\begin{todo}[関数とは]\label{todo:関数とは} %{
+		関数とは次のメソッドを持ったオブジェクトとしてもいいのでは？
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[入出力] 入力変数と出力変数それぞれの数と型
+			\item[apply] $\beta$変換
+			\item[currying] シンタックスシュガーとしていいし、ビルトイン関数
+			としてもいい。
+			\item[composite] シンタックスシュガーとしていいし、ビルトイン関数
+			としてもいい。
+		\end{description} %}
+	\end{todo} %todo:関数とは}
+%s2:思考実験}
 \endgroup %}
 %s1:スタックマシン}
-\section{Diffie-Hellmannのカギ共有}\label{s1:Diffie-Hellmannのカギ共有} %{
-	Diffie-Hellmannのカギ共有は、可換半群$A=(A,*,1)$の元$a,b,c$を用いて、
-	次の図で表すことができる。
-	\begin{equation*}\xymatrix{
-		\text{person }\alpha & \text{common} & \text{person }\beta \\
-		a\in A \ar[d] & c\in A \ar[ld] \ar[rd] & b\in A \ar[d] \\
-		\ar[d] \ar[rrd]^(0.2){a*c} & & \ar[d] \ar[lld]_(0.2){b*c} \\
-		a*(b*c) & & b*(a*c) \\
-	}\end{equation*}
-	この図にある要素には次のような名称が与えられている。
-	\begin{description}\setlength{\itemsep}{-1mm} %{
-		\item[公開アルゴリズム] 可換半群$A$
-		\item[公開カギ] $c\in A$
-		\item[秘密カギ] $a,b\in A$
-		\item[共有カギ] $a*b*c\in A$ \\
-		$A$が可換半群だから、$a*(b*c)=b*(a*c)$となり、$\alpha$と$\beta$で
-		カギ$a*b*c$を共有できる。
-		\item[交換カギ] $c*a,c*b\in A$ \\
-		交換カギ$a*c$と$b*c$の両方が盗まれた場合でも、共有カギ$a*b*c$を
-		計算することが困難であれば、共有カギを秘密にすることができる。
-	\end{description} %}
-	$A$が群であった場合は、公開カギ$c$の逆元$c^{-1}$が予め計算されてしまう
-	ので、共有鍵を秘密にすることができなくなる。
-	\begin{equation*}\begin{split}
-		a = c^{-1}*a*c \quad\text{for all }a,c\in A
-	\end{split}\end{equation*}
-	幸か不幸か、計算しやすいものは群になることが多い。
-	そこで、$A$の作用域を持ち込んで交換カギから秘密カギの逆元を計算できなく
-	する。集合$C$を可換半群$A$の作用域として、$A$の$C$への作用$\rhd$で書く。
-	\begin{equation*}\begin{split}
-		a\rhd b\rhd c = (a*b)\rhd c \quad\text{for all } a,b\in A,\; c\in C
-	\end{split}\end{equation*}
-	カギ交換のプロトコルは次のような図で表される。
-	\begin{equation*}\xymatrix{
-		\text{person }\alpha & \text{common} & \text{person }\beta \\
-		a\in A \ar[d] & c\in C \ar[ld] \ar[rd] & b\in A \ar[d] \\
-		\ar[d] \ar[rrd]^(0.2){a\rhd c} & & \ar[d] \ar[lld]_(0.2){b\rhd c} \\
-		a\rhd b\rhd c & & b\rhd a\rhd c \\
-	}\end{equation*}
-	この場合、交換カギから秘密カギを求めるアルゴリズムは次のように定式化する
-	ことができる。
-	\begin{equation*}\begin{split}
-		\text{for given } c,d\in C 
-		\text{ find } a\in A \text{ such that } d = a\rhd c
-	\end{split}\end{equation*}
-	この処理が困難なことが保証されていれば、$A$として簡単な半群を使うことが
-	できる。
-	$C$を$\sei/p\sei$、$A$を$\sizen$として、$\rhd$を$k\rhd n=n^k\mod p$
-	としたものが、Diffie-Hellmannのオリジナルらしい。この場合でも、
-	公開カギ$c$の逆数$c^{-1}$を用いると、$c^{-a}c^a=1\mod p$となり、
-	交換カギ$c^a$に対して$c^{-1}$を$a$回掛けると秘密カギ$a$がわかってしまう。
-	秘密カギが$\sei_p$上に一様分布しているとすると、秘密カギを見つける手数
-	は$p$程度になる。
-	\begin{equation}\label{eq:離散対数問題}\begin{split}
-		\text{for given } c,d\in\sei/p\sei 
-		\text{ find } a\in\sizen \text{ such that } d = c^a\mod p
-	\end{split}\end{equation}
-	この問題を効率良く解く方法を見つけることを離散対数問題というらしい。
-
-	Wikipediaによると、RSAとは離散対数問題の困難さを利用した暗号化の方法で
-	ある。Diffie-HellmannのオリジナルとRSAの両者共に離散対数問題の困難さを
-	利用しているために、両者は混同されがちだが、その目的は異なる。
-	$n\in N$をパラメーター、$A_n$を$N$でパラメトライズされたカギとなる群、
-	$M$を平文とし、暗号化を作用$\rhd_n:A_n\times M\to M$で定義する。
-	そして、次のようなプロトコルによって、暗号化を定義したものがRSAである。
-	\begin{equation*}\xymatrix{
-		\text{person }\alpha & \text{person }\beta \\
-		a,a_n^{-1}\in A_n \ar[d] & m\in M \ar[dd] \\
-		\ar[dd] \ar[rd]^{a,n} & & \\
-		& \ar[ld]_{a\rhd_n m} \\
-		a_n^{-1}\rhd_n a\rhd_n m & \\
-	}\end{equation*}
-	暗号化のカギ$a$から復号化のカギ$a_n^{-1}$がバレなければ、$\beta$から
-	$\alpha$へ送信される平文の秘匿性が保たれる。この場合は、暗号化の頑強性を
-	群の逆元を求める難しさに帰着させている。
-	\begin{equation*}\begin{split}
-		p,q\text{が素数} \implies (m^a\bmod n)^b\bmod n = m \quad\text{where }
-		n := pq \\
-		\quad\text{for all } m<pq,\quad ab=1\mod (p-1)(q-1)
-	\end{split}\end{equation*}
-%s1:Diffie-Hellmannのカギ共有}
 \section{Galois理論}\label{s1:Galois理論} %{
 	教科書\cite{artin1959}のノートを書く。
 \subsection{体論}\label{s2:体論} %{
