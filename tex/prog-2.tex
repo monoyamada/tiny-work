@@ -171,9 +171,6 @@
 	\end{note} %note:文字列検索での言葉}
 	\begin{todo}[やりたいこと]\label{todo:やりたいこと} %{
 		\begin{description}\setlength{\itemsep}{-1mm} %{
-			\item[Sundayの方法] 実用的な検索方法。通常のコンピュータでは 
-			一文字同士の比較とmemcmpのスピードがあまり変わらないことを利用
-			する。good-suffixを使わない単純だが効率的な検索方法のようだ。
 			\item[DFA] DFAを用いた場合にスキップをどうやって取り入れるかを
 			考える。
 		\end{description} %}
@@ -191,6 +188,9 @@
 		\downarrow \quad\text{shift} \\
 		\young(CATCGCAGAGTAGATACAGTACG,:::::::::::GCAGAGAG,::::::::::\uparrow) \\
 	\end{array}\end{equation*}
+	文字列が配列で与えられて文字列の比較にmemcmpなどの高速な関数が使える場合、
+	Sundayの方法は有効である。Boyer-Mooreの方法でgood-suffixの表を辿る時間で、
+	数回の文字列比較ができてしまうからである。
 %s2:Sundayの方法}
 %s1:文字列の検索}
 \section{バイト集合}\label{s1:バイト集合} %{

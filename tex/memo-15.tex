@@ -1,0 +1,246 @@
+\begingroup %{
+\newcommand{\W}{\mycal{W}}
+\newcommand{\T}{\mycal{T}}
+\newcommand{\B}{\mycal{B}}
+\newcommand{\D}{\mycal{D}}
+\newcommand{\Pow}{\mycal{P}}
+\newcommand{\End}{\myop{End}}
+\newcommand{\Map}{\myop{Map}}
+\newcommand{\Lin}{\myop{Lin}}
+\newcommand{\Aut}{\myop{Aut}}
+\newcommand{\Mat}{\myop{Mat}}
+\newcommand{\Hom}{\myop{Hom}}
+%
+\newcommand{\id}{\myop{id}}
+\newcommand{\tran}{\mathbf{t}}
+\newcommand{\dfn}{\,\myop{def}\,}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\tr}{\myop{tr}}
+%
+\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
+\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+\newcommand{\rvec}[1]{\overrightarrow{#1}}
+\newcommand{\lvec}[1]{\overleftarrow{#1}}
+\newcommand{\what}{\widehat}
+\newcommand{\wbar}{\widebar}
+\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\ad}{\myop{ad}}
+\newcommand{\Ad}{\myop{Ad}}
+%
+\newcommand{\Alp}[1]{\ensuremath{\,'{#1}'\,}}
+\newcommand{\eos}{\ensuremath{\$}}
+%
+\newcommand{\tofrom}[2]{\underset{#2}{\overset{#1}{\rightleftarrows}}}
+\newcommand{\fromto}{\leftrightarrows}
+%
+\newcommand{\lr}[1]{\left({#1}\right)}
+\newcommand{\glr}[1]{\bigl({#1}\bigr)}
+\newcommand{\gglr}[1]{\Bigl({#1}\Bigr)}
+\newcommand{\ggglr}[1]{\biggl({#1}\biggr)}
+\newcommand{\gggglr}[1]{\Biggl({#1}\Biggr)}
+%
+\newcommand{\glrb}[1]{\bigl[{#1}\bigr]}
+\newcommand{\gglrb}[1]{\Bigl[{#1}\Bigr]}
+\newcommand{\ggglrb}[1]{\biggl[{#1}\biggr]}
+\newcommand{\gggglrb}[1]{\Biggl[{#1}\Biggr]}
+%
+%\newcommand{\ldyck}{\lceil}
+%\newcommand{\rdyck}{\rceil}
+\newcommand{\ldyck}{[}
+\newcommand{\rdyck}{]}
+\newcommand{\dyck}[1][]{\ldyck{#1}\rdyck}
+\newcommand{\gdyck}[1]{\bigl\ldyck{#1}\bigr\rdyck}
+\newcommand{\ggdyck}[1]{\Bigl\ldyck{#1}\Bigr\rdyck}
+\newcommand{\gggdyck}[1]{\biggl\ldyck{#1}\biggr\rdyck}
+\newcommand{\ggggdyck}[1]{\Biggl\ldyck{#1}\Biggr\rdyck}
+
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
+
+\newcommand{\Brz}{\mycal{B}}
+\newcommand{\cat}[1]{\mybf{{#1}}}
+%
+{\setlength\arraycolsep{2pt}
+\section{Dyck言語}\label{s1:Dyck言語} %{
+	通常の定義とは異なるが、ここで扱いやすい形でDyck言語を定義しておく。
+
+	\begin{definition}[Dyck言語]\label{def:Dyck言語} %{
+		文字$\ldyck$と$\rdyck$から生成される自由モノイドを
+		$G=(G,\myspace,1_\W)$とする。任意の$n\in\sizen$に対して部分集合
+		$\D_n\subset G$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\D_0 &:= \set{1_\W} \\
+			\D_{n+1} &:= \cup_{r=0}^n\Set{\dyck{w_1}w_2\in G
+				\bou w_1\in\D_r,\;w_2\in\D_{n-r}} \\
+		\end{split}\end{equation*}
+		$\D_n$を文字$\ldyck$と$\rdyck$から生成された長さ$2n$のDyck言語といい、
+		その合併$\D_*:=\cup_{n\in\sizen}\D_n$を単に
+		文字$\ldyck$と$\rdyck$から生成されたDyck言語という。
+	\end{definition} %def:Dyck言語}
+
+	Dyck言語は以下のような文字列の集合である。
+	\begin{equation*}\begin{split}
+		\D_0 &= \Set{1_\W} \\
+		\D_1 &= \Set{\dyck} \\
+		\D_2 &= \Set{\gdyck{\dyck},\; \dyck\dyck} \\
+		\D_3 &= \Set{\ggdyck{\gdyck{\dyck}},\; \gdyck{\dyck\dyck}
+			,\; \gdyck{\dyck}\dyck\;, \dyck\gdyck{\dyck},\; \dyck\dyck\dyck} \\
+	\end{split}\end{equation*}
+	Dyck言語は自由モノイドの部分モノイドとなっている。
+	定義\label{def:Dyck言語}の記号を使うと、部分モノイド$\D_*\subseteq G$
+	となっている。ただし、文字列の連結による積では$\D_1$が$\D_*$の生成系には
+	なっていない。Dyck言語の場合、文字列の長さではなくその半分を次数として
+	勘定した方が都合がよいので、写像$||_\D:\D_*\to\sizen$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		|w|_\D = n \xiff{\dfn} w\in \D_n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	一般に有限集合$X$に対して$\lambda X\in \sizen X$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\lambda X := \sum_{x\in X} x
+	\end{split}\end{equation*}
+	また、$\sizen X$に二項関係$\preceq$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		f\preceq g \xiff{\dfn} \text{there exists } h\in\sizen X
+		\text{ such that } g = f + h
+	\end{split}\end{equation*}
+	$\preceq$は半順序となる。任意の部分集合$Y\subseteq X$に対して
+	$\lambda Y\preceq\lambda X$が成り立つ。
+	$\lambda$を用いると、集合の元を列挙する操作を線形代数を使って表すことが
+	できる。Dyck言語の列挙は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\lambda\D_0 &= 1_\W \\ 
+		\lambda\D_{n+1} &= \sum_{r=0}^n \gdyck{(\lambda\D_r)}(\lambda\D_{n-r})
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	また、線形射$\rho^t_q:\sizen\D_*\to\fukuso[t,q]$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\rho^t_q 1_\W &= 1 \\
+		\rho^t_q \gdyck{w_1}w_2 &= \int_0^t (\rho^s_q w_1)(\rho^s_q w_2) d_qs
+		\quad\text{for all } w_1,w_2\in\D_*
+	\end{split}\end{equation*}
+	次のq-微分方程式が得られる。
+	\begin{equation*}\begin{split}
+		\rho^t_q \lambda\D_{n+1} = \sum_{r=0}^n \int_0^t 
+		(\rho^t_q\lambda\D_r)(\rho^t_q\lambda\D_{n-r}) d_qs
+	\end{split}\end{equation*}
+	そして、$\rho^t_q\lambda\D_*:=\sum_{n\in\sizen} \rho^t_q\lambda\D_n$
+	が収束するならば、次のq-微分方程式が得られる。
+	\begin{equation*}\begin{split}
+		\rho^t_q\lambda\D_* = 1 + \int_0^t 
+		(\rho^t_q\lambda\D_*)(\rho^t_q\lambda\D_*) d_qs
+	\end{split}\end{equation*}
+	$q=0,1$の場合にはこの式は簡単に解けて次のようになる。
+	\begin{equation*}\begin{split}
+		\rho^t_0\lambda\D_* = \frac{\sqrt{1-4t}}{2t} 
+			= \sum_{n\in\sizen} \frac{(2n)!}{(n+1)!n!}t^n,\quad
+		\rho^t_1\lambda\D_* = \frac{1}{1-t}
+	\end{split}\end{equation*}
+	特に、$q=0$の場合から長さ$2n$のDyck言語の大きさがわかる。
+	\begin{equation*}\begin{split}
+		|\D_n| = \frac{(2n)!}{(n+1)!n!}
+	\end{split}\end{equation*}
+	$\rho^t_q\lambda\D_*$を次のように級数展開すると、
+	\begin{equation*}\begin{split}
+		\rho^t_q\lambda\D_* := x_t = x_0 + x_1 + x_2t^2 + \cdots
+	\end{split}\end{equation*}
+	次の漸化式が得られる。
+	\begin{equation*}\begin{split}
+		x_{n+1} = \frac{1}{[n+1]_q^!}\sum_{r=0}^n x_rx_{n-r}
+	\end{split}\end{equation*}
+	$5$次まで計算してみると次のようになる。
+	\begin{equation*}\begin{split}
+		[0]_q^!\, x_0 &= 1 \\
+		[1]_q^!\, x_1 &= 1 \\
+		[2]_q^!\, x_2 &= 2 \\
+		[3]_q^!\, x_3 &= 2^2 + [2]_q \\
+		[4]_q^!\, x_4 &= 2^3 + 2^2[3]_q + 2[2]_q \\
+		[5]_q^!\, x_5 &= 2^4 + 2^3[4]_q + 2^3[3]_q + 2^2[2]_q 
+			+ 2^2\frac{[4]_q[3]_q}{[2]_q} + 2[4]_q[2]_q \\
+	\end{split}\end{equation*}
+
+	Dyck言語はいろいろな幾何学的な描像を持つ。
+	ここでは、Dyck経路と平面二分木との関係を書いておく。
+
+	Dyck経路とは二次元格子を右上または右下に動きながら$(0,0)$から$(2n,0)$
+	へ到達する経路のことである。例えば次のようになる。
+	\begin{equation*}\begin{split}
+		\gdyck{\dyck}\dyck \sim &\vcenter{\xymatrix@R=2ex@C=2ex{
+			(0,2) & & \ar[rd] \\
+			(0,1) & \ar[ru] & & \ar[rd] & & \ar[rd] \\
+			(0,0) \ar[ru] & (1,0) & (2,0) & (3,0) & (4,0) \ar[ru] & (5,0) 
+			& (6,0) \\
+		}} \\
+		\dyck\dyck\dyck \sim &\vcenter{\xymatrix@R=2ex@C=2ex{
+			(0,1) & \ar[rd] & & \ar[rd] & & \ar[rd] \\
+			(0,0) \ar[ru] & (1,0) & (2,0) \ar[ru] & (3,0) & (4,0) \ar[ru] & (5,0) 
+			& (6,0) \\
+		}} \\
+	\end{split}\end{equation*}
+	この描像からDyck言語の列挙をBrzozowski代数を用いて書くことができる。
+	文字$\ldyck$と$\rdyck$は数式の中で書くと紛らわしいので、$b$と$c$で
+	置き換えて書く。$\eta$と$\eta^\flat$に次の交換関係を定義すると、
+	\begin{equation*}\begin{split}
+		\eta\eta^\flat = 1
+	\end{split}\end{equation*}
+	次の因子化が成り立つことから、
+	\begin{equation*}\begin{split}
+		\Braket{\glr{b\eta + \eta^\flat c}^{2(n+1)}} = \sum_{r=0}^n
+			b\Braket{\glr{b\eta + \eta^\flat c}^{2r}}c
+			\Braket{\glr{b\eta + \eta^\flat c}^{2(n-r)}}
+	\end{split}\end{equation*}
+	$\braket{}=1$より、Dyck言語の列挙が次のように得られる。
+	\begin{equation*}\begin{split}
+		\lambda\D_n = \Braket{\glr{b\eta + \eta^\flat c}^{2n}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	\begin{todo}[残りの話題]\label{todo:残りの話題} %{
+		課題を書いておく。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[Dyck言語の積] Dyck言語は文字列の連結による積$m_0$で閉じている
+		が、$m_0$では$\D_1$から$\D_*$を生成することができない。
+		$\D_1$から$\D_*$を生成されるような積を定義したい。
+		\item[反転に関する対称性] $R:\D_*\to\sizen$を次のように定義する。
+		\begin{equation*}\begin{split}
+			R 1_\W &= 0 \\
+			R \gdyck{w_1}w_2 &= \jump{w_1=w_2} + (Rw_1) + (Rw_2) \\
+		\end{split}\end{equation*}
+		$\D_n$を二分木で書いて、深さが最大になる単語が$\D_n$の中で$R$が
+		最小になり、深さが最小になる単語が$\D_n$の中で$R$が最大になる。
+		%
+		\item[平面上の二分木]
+		頂点数$2n+1$の平面上の二分木のつくる集合を$\T_n$、
+		$\T_*:=\cup_{n\in\sizen}\T_n$とする。
+		写像$(\T\D^{-1}):\D_*\to\T_*$を次のように定義する。
+		\begin{equation*}\begin{split}
+			(\T\D^{-1}) 1_\W &= \circ \\
+			(\T\D^{-1}) \gdyck{w_1}w_2 &= \vcenter{\xymatrix@R=1ex@C=2ex{
+				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				(\T\D^{-1})w_1 & & (\T\D^{-1})w_2
+			}}
+		\end{split}\end{equation*}
+		文字数の帰納法により、各$n\in\sizen$で$\T\D^{-1}$が集合同型
+		$\D_n\simeq\T_n$を与えることがわかる。したがって、$\D_*$の文字列の
+		連結による積を$\T_*$に持ち込むことができる。文字列の連結による積を
+		前置記号で$m_0$と書き、$\T_*$でも同じ記号を用いると次のように
+		なる。
+		\begin{alignat*}{2}
+			m_0(\circ\times t) &= m_0(t\times \circ) 
+			= t &&\quad\text{for all } t\in\T_* \\
+			m_0\left(\vcenter{\xymatrix@R=1ex@C=2ex{
+				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				t_1 & & t_2
+			}}\times t\right) &= \vcenter{\xymatrix@R=1ex@C=2ex{
+				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+				t_1 & & m_0(t_2\times t)
+			}} &&\quad\text{for all } t,t_1,t_2\in\T_* \\
+		\end{alignat*}
+		$m_0(t_1\times t_2)$は$t_1$の右端の葉を$t_2$で置き換えるという操作に
+		なっている。
+		\end{description} %}
+	\end{todo} %todo:残りの話題}
+%s1:Dyck言語}
+%
+}\endgroup %}

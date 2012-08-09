@@ -94,8 +94,8 @@ public interface ByteSet {
 			return new Range(lower, upper);
 		}
 
-		protected ByteSet newDisjointOr(short lo0, short hi0, short lo1, short hi1) {
-		}
+//		protected ByteSet newDisjointOr(short lo0, short hi0, short lo1, short hi1) {
+//		}
 		@Override
 		public int getSetType() {
 			return ByteSet.EMPTY_SET;
@@ -212,20 +212,20 @@ public interface ByteSet {
 		public boolean contains(short value) {
 			return this.value == value;
 		}
-		@Override
-		public ByteSet complement() {
-			short hi = this.value;
-			short lo = hi;
-			return this.newDisjointOr(this.newRange(Byte.MIN_VALUE, --lo), this
-					.newRange(++hi, Byte.MAX_VALUE));
-		}
-		@Override
-		public ByteSet or(ByteSet x) {
-			if (x.contains(this.value)) {
-				return x;
-			}
-			return this.newDisjointOr(this, x);
-		}
+//		@Override
+//		public ByteSet complement() {
+//			short hi = this.value;
+//			short lo = hi;
+//			return this.newDisjointOr(this.newRange(Byte.MIN_VALUE, --lo), this
+//					.newRange(++hi, Byte.MAX_VALUE));
+//		}
+//		@Override
+//		public ByteSet or(ByteSet x) {
+//			if (x.contains(this.value)) {
+//				return x;
+//			}
+//			return this.newDisjointOr(this, x);
+//		}
 		@Override
 		public ByteSet and(ByteSet x) {
 			if (x.contains(this.value)) {
@@ -280,24 +280,24 @@ public interface ByteSet {
 		public boolean contains(short value) {
 			return this.lower <= value && value <= this.upper;
 		}
-		@Override
-		public ByteSet complement() {
-			short lo = this.lower;
-			short hi = this.upper;
-			return this.newDisjointOr(this.newRange(Byte.MIN_VALUE, --lo), this
-					.newRange(++hi, Byte.MAX_VALUE));
-		}
-		@Override
-		public ByteSet or(ByteSet x) {
-			return this;
-		}
-		@Override
-		public ByteSet and(ByteSet x) {
-			if (x.contains(this.get())) {
-				return this;
-			}
-			return this.newEmptySet();
-		}
+//		@Override
+//		public ByteSet complement() {
+//			short lo = this.lower;
+//			short hi = this.upper;
+//			return this.newDisjointOr(this.newRange(Byte.MIN_VALUE, --lo), this
+//					.newRange(++hi, Byte.MAX_VALUE));
+//		}
+//		@Override
+//		public ByteSet or(ByteSet x) {
+//			return this;
+//		}
+//		@Override
+//		public ByteSet and(ByteSet x) {
+//			if (x.contains(this.get())) {
+//				return this;
+//			}
+//			return this.newEmptySet();
+//		}
 		@Override
 		public ByteSet minus(ByteSet x) {
 			return x.complement();

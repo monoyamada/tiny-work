@@ -1,0 +1,1753 @@
+\begingroup %{
+\newcommand{\W}{\mycal{W}}
+\newcommand{\T}{\mycal{T}}
+\newcommand{\B}{\mycal{B}}
+\newcommand{\D}{\mycal{D}}
+\newcommand{\Pow}{\mycal{P}}
+\newcommand{\End}{\myop{End}}
+\newcommand{\Map}{\myop{Map}}
+\newcommand{\Lin}{\mathcal{L}}
+\newcommand{\Hol}{\mathcal{H}}
+\newcommand{\Aut}{\myop{Aut}}
+\newcommand{\Mat}{\myop{Mat}}
+\newcommand{\Hom}{\myop{Hom}}
+%
+\newcommand{\id}{\myop{id}}
+\newcommand{\tran}{\mathbf{t}}
+\newcommand{\dfn}{\,\myop{def}\,}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\tr}{\myop{tr}}
+%
+\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
+\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+\newcommand{\rvec}[1]{\overrightarrow{#1}}
+\newcommand{\lvec}[1]{\overleftarrow{#1}}
+\newcommand{\what}{\widehat}
+\newcommand{\wbar}{\widebar}
+\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\ad}{\myop{ad}}
+\newcommand{\Ad}{\myop{Ad}}
+%
+\newcommand{\Alp}[1]{\ensuremath{\,'{#1}'\,}}
+\newcommand{\eos}{\ensuremath{\$}}
+%
+\newcommand{\tofrom}[2]{\underset{#2}{\overset{#1}{\rightleftarrows}}}
+\newcommand{\fromto}{\leftrightarrows}
+%
+{\setlength\arraycolsep{2pt}
+%
+\section{パーサーに関する覚書}\label{s1:パーサーに関する覚書} %{
+	この節では、パーサーとは何かについてはぼんやりとしておく。あえて、パーサー
+	とは何かを定義しようとすると次のようになるだろう。
+	入力文字列を$\Sigma$、文法定義中に現れる変数の作る集合を$V$とする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[メンバーシップ] 与えられた文が文法に従っているか否かを判定する
+		関数を構成する。文法によって写像$\W^*\Sigma\to\fukuso$が与えられる。
+		この場合には、文法中の変数は微分方程式を表すための意味しかない。
+		文の中から文字列を検索する場合にはこの関数が利用される。
+		\item[パターンシップ] 与えられた文が文法に従っている場合、
+		文法中のどのパターンにマッチしているかを判定する関数を構成する。
+		文法によって写像$\W^*\Sigma\to\fukuso\W^*V$が与えられる。
+		この場合には、文法中の変数はパターンを表し、曖昧さの問題が現れる。
+		\item[構文木の作成] 与えらられた文が文法に従っている場合、
+		文の構文木を作成する関数を構成する。構文木をどうやって定義するか。
+	\end{description} %}
+	パターンシップと構文木の作成では曖昧さが異なる。
+	例えば、$a\in\Sigma$として次の文法を考えると、
+	\begin{equation*}\begin{split}
+		X = AA,\quad A = aa + a
+	\end{split}\end{equation*}
+	文$aaa$のパターンは$AA$となるからパターンシップとしては曖昧さはないが、
+	構文木としては$(aa)_A(a)_A+(a)_A(aa)_A$という曖昧さが残る。
+
+	この節では次の記号を使うことにする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 集合$X$に対して、$\W^*X$を$A$から生成された自由モノイドとする。
+		\item 可換環$R$、集合$X$に対して、$RX$を$R$上の$X$から生成された自由加群
+		とする。
+		\item 可換環$R$、集合$X$に対して、$R\W^*X$を自由モノイド$\W^*X$から
+		生成された自由$R$-加群に、$\W^*X$の積によって乗法を定義した$R$-代数と
+		する。$R\W^*X$は自由加群$RX$から生成されたテンソル積$\T_R^*X$と
+		$R$-代数同型$\T_R^*X \simeq R\W^*X$になる。
+	\end{itemize} %}
+
+	慣例に合わせて、入力文字の有限集合を$\Sigma$、スタック文字の加算集合を
+	$\Gamma=\set{\gamma_i\bou i\in\sizen_+}$と書くことにする。
+	そして、$\Gamma$の実数への双対空間を$\jitu\Gamma^\flat$として、
+	$\gamma_i\in\Gamma$の双対元$\gamma_i^\flat\in\jitu\Gamma^\flat$を
+	次のように定義する。
+	\begin{equation}\label{eq:スタック文字の交換関係}\begin{split}
+		\gamma_i\gamma_j^\flat = \jump{i=j} \quad\text{for all } i,j\in\sizen_+
+	\end{split}\end{equation}
+	$\gamma_i^\flat\in\jitu\Gamma^\flat$は次のように負の添え字を用いて
+	表すこともある。
+	\begin{equation*}\begin{split}
+		\gamma_{-i} := \gamma_i^\flat \quad\text{for all } i\in\sizen_+
+	\end{split}\end{equation*}
+	$\Gamma$から生成される実数上のテンソル代数を$\T^*\Gamma:=\T_\jitu^*\Gamma$
+	と略記し、$\T^*\Gamma$の双対空間を$(\T^*\Gamma)^\flat$と書く。
+	また、$\T^*\Gamma\simeq\jitu\W^*\Gamma$の同一視をして、$\T^*\Gamma$
+	の基底系を$\W^*\Gamma$とする。
+	$\bra{0}\in\T^0\Gamma$と$\ket{0}\in(\T^0\Gamma)^\flat$を次のように
+	定義し、
+	\begin{equation*}\begin{split}
+		\bra{0}\gamma_i^\flat = 0 = \gamma_i\ket{0}
+		\quad\text{for all } i\in\sizen_+
+	\end{split}\end{equation*}
+	$\T^n\Gamma$と$(\T^n\Gamma)^\flat$の元をそれぞれ次のような元の線形結合で
+	書き、
+	\begin{equation*}\begin{split}
+		\bra{0}\gamma_{i_1}\cdots\gamma_{i_n}
+		,\quad \gamma_{-i_n}\cdots\gamma_{-i_1}\ket{0}
+	\end{split}\end{equation*}
+	$\T^*\Gamma$と$(\T^*\Gamma)^\flat$に次の内積を定義する。
+	\begin{equation*}\begin{split}
+		\bra{0}\gamma_{i_1}\cdots\gamma_{i_m}
+		\gamma_{-j_n}\cdots\gamma_{-j_1}\ket{0}
+		= \begin{cases}
+			\jump{i_1=j_1}\cdots\jump{i_m=j_m}, &\text{ if } m = n \\
+			0, &\text{ otherwise } \\
+		\end{cases}
+	\end{split}\end{equation*}
+	転置に相当する線形写像$-^\flat:T^*\Gamma\to(\T^*\Gamma)^\flat$を
+	次のように定義すると、
+	\begin{equation*}\begin{split}
+		(\gamma_{i_1}\cdots\gamma_{i_m})^\flat
+		= \gamma_{-i_m}\cdots\gamma_{-i_1}
+	\end{split}\end{equation*}
+	内積は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\bra{0}w_1w_2^\flat\ket{0} = \jump{w_1=w_2}
+		\quad\text{for all } w_1,w_2\in\W^*\Gamma
+	\end{split}\end{equation*}
+	$\End\T^*\Gamma$を$\T^*\Gamma$の自己線形写像全体のつくる集合とすると、
+	$\End\T^*\Gamma$の任意の元は、$\Gamma^\flat$の元を左側に、
+	$\Gamma$の元を右側に並べた次のような形で書くことができる。
+	\begin{equation*}\begin{split}
+		\sum_{w_1,w_2\in\W^*\Gamma} r_{w_1w_2} w_1^\flat w_2 
+		\quad\text{where } r_{w_1w_2}\in\jitu
+	\end{split}\end{equation*}
+	この形を正規積順序ということにする。
+	真空期待値$\braket{-}:\End\T^*\Gamma\to\jitu$を$\T^*\Gamma$の内積に
+	よって次のように定義する。
+	\begin{equation*}\begin{split}
+		\braket{x} = \bra{0}x\ket{0} \quad\text{for all } x\in\End\T^*\Gamma
+	\end{split}\end{equation*}
+
+	$\gamma_1$から$\gamma_n$までの文字で作られるスタック文字の有限部分集合
+	を$\Gamma_n$と書く。
+	\begin{equation*}\begin{split}
+		\Gamma_n := \set{\gamma_1,\dots,\gamma_n} \subset \Gamma
+		,\quad \lim_{n\to\infty}\Gamma_n = \Gamma
+	\end{split}\end{equation*}
+	交換関係\eqref{eq:スタック文字の交換関係}から次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\gamma_{n+1}f\gamma_{-(n+1)} = \braket{f}
+		\quad\text{for all } f\in\End\T^*\Gamma_n
+	\end{split}\end{equation*}
+	この性質を使って代数方程式にスタック文字を追加して変形していく。
+	この性質は交換関係\eqref{eq:スタック文字の交換関係}がBrzozowski代数
+	だから成り立つ性質で、q-変形した次の交換関係では成り立たない性質に
+	なっていることに注意する。
+	\begin{equation*}\begin{split}
+		\gamma_i(\gamma_{-j})_q = q(\gamma_{-j})_q\gamma_i + \jump{i=j}
+		\quad\text{for all } i,j\in\sizen_+
+	\end{split}\end{equation*}
+
+	内積をもったテンソル代数$\T^*\Gamma$とプログラミングとの対応を表
+	\ref{table:テンソル代数とプログラミング}に書いておく。
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{rll} \hline
+			$\T^*\Gamma$ & 代数 & プログラミング \\\hline
+			$\bra{0}$ & 単位射 & 空のスタック \\
+			$\ket{0}$ & 余単位射 & スタックが空か否かのチェック\\
+			$\gamma_i$ & 基底 & 文字$i$をスタックにプッシュ\\
+			$\gamma_{-i}$ & 双対基底 & スタックのトップが文字$i$だったらポップ \\
+			$\End\T^*\Gamma$ & 自己線形写像 & スタック操作の集合 \\
+			正規積順序 & 計算の手段 & スタック操作の最適化 \\
+		\end{tabular}\end{center}
+		\caption{テンソル代数とプログラミング}
+		\label{table:テンソル代数とプログラミング}
+	\end{table} %}
+\subsection{文法の線形化}\label{s2:文法の線形化} %{
+	構文木\footnote{
+		構文木の英訳は、concrete syntax treeまたはparse treeとなる。
+		concrete syntax treeに対して、abstract syntaxk treeとは文法を
+		木構造で表したものである。
+	}を作成していく手続きを代数化すると文法を線形化する操作が得られる。
+	この節では、$V$を実数上の代数、$V[x,y,\dots]$を$V$上の
+	$x,y,\dots$を不定元とする多項式環とする。特に断らない限り、
+	$V$の元と不定元、不定元同士は非可換とする。
+	代数$V$をテンソル代数$\T^*\Sigma$とすれば、通常の言語の理論になるが、
+	テンソル代数特有の性質を使わないので、一般の代数で話を進める。
+
+	この節で進める話は文脈自由文法をGreibachの標準形に書き直す話と同じような
+	流れになる。文脈自由文法をGreibachの標準形に書き直す手続きの流れは
+	次のようになっている。
+	\begin{equation*}\begin{array}{lclcl}
+		\text{文脈自由文法} &\to& \text{Chomskyの標準形} 
+		&\to& \text{Greibachの標準形} \\
+		\text{多項式} && \text{二次形式} && \text{係数から変数を消去} \\
+		x = x_0 + fx && x = x_0 + T_0x + T_xx && x = x_0 + T_0x
+	\end{array}\end{equation*}
+	文脈自由文法は多項式によって与えられた再帰式で、Chomskyの標準形は
+	それを開始状態以外には空遷移を持たない遷移図の形に書き直したものである。
+	Chomskyの標準形では、開始状態以外の状態$x_i$は$x_i\xto{\alpha}x_j,\;
+	\alpha\in V\cup\set{x_1,\dots,x_n}$という形の遷移しか持たない。
+	Chomskyの標準形から左再帰を取り除くとGreibachの標準形になる。
+	この節では、空遷移を取り除くことはしないで、同じような話で文脈自由文法を
+	線形な形に書き直すことを考える。
+
+	$f,g\in V[x,y]$として次の連立多項式は、
+	\begin{equation*}\begin{split}
+		x = f(x,y),\quad y = g(x,y)
+	\end{split}\end{equation*}
+	常に次のように書き直すことができる。
+	\begin{equation*}\begin{split}
+		x = f(x,y)x_0,\quad y = g(x,y)y_0,\quad x_0 = y_0 = 1
+	\end{split}\end{equation*}
+	遷移図で次のように書くことに相当する。
+	\begin{equation*}\begin{split}
+		x\xto{f}x_0,\quad y\xto{g}y_0
+	\end{split}\end{equation*}
+	この$x_0,y_0$のことを連立終状態ということにする。
+	また、$x,y$のことを連立始状態ということにする。通常の言語理論では、
+	始状態と終状態は一つに限定されるので、混乱が起きないように'連立'という
+	接頭語を付けて区別する。
+
+	テンソル積$V(\Gamma):=V\otimes\End\T^*\Gamma$によって文法を線形化する
+	ことを考える。以下では、$V\simeq V\otimes\jitu\subseteq V(\Gamma)$と
+	$\End\T^*\Gamma\simeq R\otimes\End\T^*\Gamma\subseteq V(\Gamma)$という
+	同一視をし、$V(\Gamma)$の中で$V$の元と$\End\T^*\Gamma$の元は互いに
+	可換になっているとして扱う。
+	\begin{equation*}\begin{split}
+		vf = fv := v\otimes f\in V(\Gamma)
+		\quad\text{for all } v\in V,\; f\in\End\T^*\Gamma
+	\end{split}\end{equation*}
+	ただし、構文木を作成する場合、品詞の開始位置と終了位置を把握する
+	必要があり、品詞の開始位置と終了位置のマーカーとしてスタック変数を
+	濫用できるように、$R$の元と$\Gamma$の元の位置を交換しないで書き表すこと
+	にする\footnote{
+		恐らく、線形化のためのスタック変数をマーカーを品詞の位置を把握するため
+		に用いることは限界がある。品詞の区切りを把握するためには、
+		それ用の特別なスタック変数を用意する必要があるだろうと考えている。
+	}。
+	射影$\braket{-}_\Gamma:V(\Gamma)\to V$を真空期待値によって定義する。
+	\begin{equation*}\begin{split}
+		\braket{v\otimes f}_\Gamma = \braket{f}v
+		\quad\text{for all } v\in V,\; f\in\End\T^*\Gamma
+	\end{split}\end{equation*}
+	$\braket{-}_\Gamma$は標準入射$i_V:V\to V(\Gamma)$の双対
+	$\braket{-}_\Gamma i_V=\id_V$になっている。
+	以下、誤解の恐れがないときは、$\braket{-}_\Gamma$の添え字を省略して
+	$\braket{-}$と書く。
+
+	正規積順序によって$V(\Gamma)$に基底系を定義しておく。
+	任意の$V(\Gamma)$の元は一意に次の形の項の和として書くことができる。
+	\begin{equation}\label{eq:正規積順序}\begin{split}
+		a\gamma_{-i_1}\cdots\gamma_{-i_m}\gamma_{j_1}\cdots\gamma_{j_n}
+		\quad\text{where } a\in V,\; i_p,j_q\in\sizen_+
+	\end{split}\end{equation}
+	したがって、$V_{mn}(\Gamma)\subset V(\Gamma)$を次の形の元によって
+	張られる部分空間とすると、
+	\begin{equation*}\begin{split}
+		\gamma_{-i_1}\cdots\gamma_{-i_m}\gamma_{j_1}\cdots\gamma_{j_n}
+		\quad\text{where } a\in V,\; i_p,j_q\in\sizen_+
+	\end{split}\end{equation*}
+	$V(\Gamma)$の直和分解$V(\Gamma)=\oplus_{m,n\in\sizen}V_{mn}(\Gamma)$
+	が得られる。
+	$V(\Gamma)$の元を式\eqref{eq:正規積順序}の形で書くことを正規積順序で
+	書くという。正規積順序で書かれていない元を正規積順序で書き直すと
+	交換関係から真空期待値が現れる。例えば次のようである。
+	\begin{equation*}\begin{split}
+		\phi,\psi\in V_{10}(\Gamma)\oplus V_{01}(\Gamma)
+		\implies \phi\psi = :\phi\psi: + \braket{\phi\psi}
+	\end{split}\end{equation*}
+
+	文法を線形化することを簡単な場合で考えてみる。
+
+	\begin{observation}[線形な文法]\label{obs:線形な文法} %{
+		$a,b,c\in V$が次の条件を満たす時、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $a\neq 0$
+			\item 代数式$x=a+bxc$が$\lim_{b\to0}x=\lim_{c\to0}x=a$となる解
+			$x$を持つ。
+		\end{itemize} %}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\pvec{X}{X_0} = \pvec{0}{1} + \begin{pmatrix}
+				b\gamma_1 & a \\ 0 & \gamma_{-1}c
+			\end{pmatrix}\pvec{X}{X_0}
+			\implies \braket{X} = a + b\braket{X}c
+		\end{split}\end{equation*}
+	\end{observation} %obs:線形な文法}
+	\begin{proof} %{
+		$X=(b\gamma_1)^*a(\gamma_{-1}c)^*$より、命題の式が成り立つことが
+		わかる。
+	\end{proof} %}
+
+	この命題で$a\neq0$という条件を外すと、対応する線形連立方程式の解が
+	得られなくなる。代数式が解を持つという条件を外すと、
+	$a=b=c=1$で$x=1+x$というようなおかしな結果が導かれてしまう。
+
+	\begin{observation}[Dyck言語]\label{obs:Dyck言語} %{
+		$b,c\in V$に対して次の代数式が、
+		\begin{equation*}\begin{split}
+			x = 1 + bxcx
+		\end{split}\end{equation*}
+		$\lim_{b\to0}x=\lim_{c\to0}x=1$となる解$x$を持つとき、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\pvec{X}{X_0} = \pvec{0}{1} + \begin{pmatrix}
+				b\gamma_1 + \gamma_{-1}c & 1 \\ 0 & 0
+			\end{pmatrix}\pvec{X}{X_0}
+			\implies \begin{split}
+				\braket{X} &= 1 + b\braket{X}c\braket{X} \\
+				&= 1 + \braket{X}b\braket{X}c \\
+			\end{split}
+		\end{split}\end{equation*}
+	\end{observation} %obs:Dyck言語}
+	\begin{proof} %{
+		$X=(b\gamma_1+\gamma_{-1}c)^*$となるが、$\gamma_1$を$\nearrow$
+		$\gamma_{-1}$を$\searrow$に対応させると、$X$の真空期待値の各項は
+		次のようにDyck経路に対応する。
+		\begin{equation*}\begin{split}
+			\vcenter{\xymatrix@R=1em@C=1em@!{
+				& \ar[rd]^c \\
+				0 \ar[ru]^b & 1 & 2
+			}} &\mapsto bc \\
+			\vcenter{\xymatrix@R=1em@C=1em@!{
+				& \ar[rd]^c & & \ar[rd]^c \\
+				0 \ar[ru]^b & 1 & 2 \ar[ru]^b & 3 & 4
+			}} &\mapsto bcbc \\
+			\vcenter{\xymatrix@R=1em@C=1em@!{
+				& & \ar[rd]^c & \\
+				& \ar[ru]^b & & \ar[rd]^c \\
+				0 \ar[ru]^b & 1 & 2 & 3 & 4
+			}} &\mapsto bbcc \\
+		\end{split}\end{equation*}
+		$n\in\sizen$として、水平方向の長さ$2(n+1)$のDyck経路を考えると、
+		次の図のような、始点以外の頂点で高さが$0$になる最も左側の頂点$2p$が
+		$0\le p\le n$の範囲で唯一つ存在する。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=1em@C=1em{
+				& & \cdots \ar[rd]^c \\
+				& \ar[ru]^b \ar@{.}[rr] & & \ar[rd]^c & & \cdots \\
+				0 \ar[ru]^b & 1 & \cdots & 2p+1 & 2(p+1) \ar[ru]^b
+			}
+		\end{split}\end{equation*}
+		この時の経路$(1,1)\xtoto{}(2p+1,1)$は真空期待値に対応し、
+		そのような$p$を集めることで、次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\Braket{(b\gamma_1+\gamma_{-1}c)^{2(n+1)}}
+			= \sum_{p=0}^n
+			b\Braket{(b\gamma_1+\gamma_{-1}c)^{2(p)}}c
+			\Braket{(b\gamma_1+\gamma_{-1}c)^{2(n-p)}}
+		\end{split}\end{equation*}
+		したがって、$X$の真空期待値は次のようになる。
+		\begin{equation*}\begin{split}
+			\braket{X} &= 1 + \Braket{(b\gamma_1+\gamma_{-1}c)^+} \\
+			&= 1 + \sum_{n\in\sizen}\sum_{p=0}^n
+				b\Braket{(b\gamma_1+\gamma_{-1}c)^{2(p)}}c
+				\Braket{(b\gamma_1+\gamma_{-1}c)^{2(n-p)}} \\
+			&= 1 + \sum_{p,q\in\sizen}
+				b\Braket{(b\gamma_1+\gamma_{-1}c)^{2(p)}}c
+				\Braket{(b\gamma_1+\gamma_{-1}c)^{2(q)}} \\
+			&= 1 + b\braket{X}c\braket{X} \\
+		\end{split}\end{equation*}
+		終点以外の頂点で高さが$0$になる最も右側の頂点を考えると、同じようにして
+		$\braket{X}=1+\braket{X}b\braket{X}c$が得られる。
+	\end{proof} %}
+
+	\begin{observation}[文脈自由文法の線形化その一]
+	\label{obs:文脈自由文法の線形化その一} %{
+		任意の$a,b,c,g\in\Lin(V\Gamma_n)$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				x &= a + b\gamma_{n+1}y \\
+				y &= g(1 + \gamma_{-(n+1)}c) \\
+			\end{split}\right.\implies \left\{\begin{split}
+				\braket{x} &= \braket{a} + \Braket{b\braket{y}c} \\
+				\braket{y} &= \braket{g} \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+	\end{observation} %obs:文脈自由文法の線形化その一}
+	\begin{proof} %{
+		$\braket{y}=\braket{g}+\braket{g\gamma_{-(n+1)}c}$となるが、
+		命題の仮定から$g,c\in\Lin(V\Gamma_n)$だから、
+		$\braket{g\gamma_{-(n+1)}c}=0$となり、$\braket{y}=\braket{g}$と
+		なることがわかる。また、$g\in\Lin(V\Gamma_n)$から次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			x &= a + b\gamma_{n+1}g + b\gamma_{n+1}g\gamma_{-(n+1)}c \\
+			&= a + b\gamma_{n+1}g + b\braket{g}c \\
+		\end{split}\end{equation*}
+		$b,g\in\Lin(V\Gamma_n)$だから、$\braket{b\gamma_{n+1}g}=0$となり、
+		$\braket{x}=\Braket{b\braket{g}c}$となることがわかる。
+	\end{proof} %}
+
+	\begin{observation}[文脈自由文法の線形化その二]
+	\label{obs:文脈自由文法の線形化その二} %{
+		ある$a,b,c\in\Lin(V\Gamma_n)$に対して次の形式級数が収束すれば、
+		\begin{equation*}\begin{split}
+			\braket{a} + \Braket{b\braket{a}c} + \Braket{b\Braket{b\braket{a}c}c}
+				+ \cdots \in V\\
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				x &= ay + b\gamma_{n+1}x \\
+				y &= 1 + \gamma_{-(n+1)}cy \\
+			\end{split}\right.\implies \left\{\begin{split}
+				\braket{x} &= \braket{a} + \Braket{b\braket{x}c} \\
+				\braket{y} &= 1 \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+	\end{observation} %obs:文脈自由文法の線形化その二}
+	\begin{proof} %{
+		命題から$y=(\gamma_{-(n+1)c})^*$が成り立ち、$\braket{y}=1$
+		となることがわかる。また、$x=(b\gamma_{n+1})^*a(\gamma_{-(n+1)c})^*$
+		より、$a,b,c\in \Lin(V\Gamma_n)$を考慮すると次の式が成り立つことが
+		わかる。
+		\begin{equation*}\begin{split}
+			\braket{x} &= \Braket{(b\gamma_{n+1})^*a(\gamma_{-(n+1)c})^*} \\
+			&= a + \Braket{(b\gamma_{n+1})^+a(\gamma_{-(n+1)c})^+} \\
+		\end{split}\end{equation*}
+		ここで、任意の$Z\in\Lin(V\Gamma_{n+1})$に対して次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			\Braket{b\gamma_{n+1}Z\gamma_{-(n+1)}c} = \Braket{b\braket{Z}c}
+		\end{split}\end{equation*}
+		$\braket{x}$は次のように書けることがわかる。
+		\begin{equation*}\begin{split}
+			\braket{x}
+			&= a + \Braket{(b\gamma_{n+1})^+a(\gamma_{-(n+1)c})^+} \\
+			&= a + \Braket{b\Braket{(b\gamma_{n+1})^*a(\gamma_{-(n+1)c})^*}c} \\
+			&= a + \Braket{b\Braket{x}c} \\
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	この命題から、多項式$a,b,c,g\in V[x,y]$に対して、次の式が解$x,y\in V$を
+	を持てば、
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			x &= a + bycyd \\
+			y &= g \\
+		\end{split}\right.
+	\end{split}\end{equation*}
+	次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			X_1 &= a + b\gamma_1Y_1 \\
+			Y_1 &= g(1 + \gamma_{-1}cyd) \\
+		\end{split}\right. \implies \left\{\begin{split}
+			\braket{X_1} &= x \\
+			\braket{Y_1} &= y \\
+		\end{split}\right.
+	\end{split}\end{equation*}
+	さらに、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			X_2 &= a + b\gamma_1Y_2 \\
+			Y_2 &= g(1 + \gamma_{-1}d)(1 + \gamma_{-2}c\gamma_1d) \\
+			&= g(1 + \gamma_{-1}d)(1 + \gamma_{-2}c\gamma_1d) \\
+		\end{split}\right. \implies \left\{\begin{split}
+			\braket{X_2} &= x \\
+			\braket{Y_2} &= y \\
+		\end{split}\right.
+	\end{split}\end{equation*}
+
+	\begin{todo}[３次元Dyck言語]\label{todo:３次元Dyck言語} %{
+		$b,c,d\in V$に対して次の代数式が、
+		\begin{equation*}\begin{split}
+			x = 1 + bxcxdx
+		\end{split}\end{equation*}
+		$\lim_{b\to0}x=\lim_{c\to0}x=\lim_{d\to0}x=1$となる解$x$を持つとき、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\pvec{X}{X_0} = \pvec{0}{1} + \begin{pmatrix}
+				b\gamma_1 + \gamma_{-1}c\gamma_2 + \gamma_{-2}d & 1 \\ 0 & 0
+			\end{pmatrix}\pvec{X}{X_0} \\
+			\implies \begin{split}
+				\braket{X} &= 1 + b\braket{X}c\braket{X}d\braket{X} \\
+				&= 1 + \braket{X}b\braket{X}c\braket{X}d \\
+			\end{split}
+		\end{split}\end{equation*}
+	\end{todo} %todo:３次元Dyck言語}
+
+	\begin{todo}[正規積順序の計算]\label{todo:正規積順序の計算} %{
+		$\phi_i$を$\gamma_{\pm1}$の次のような一次式とする。
+		\begin{equation*}\begin{split}
+			\phi_i = a_{i+}\gamma_1 + \gamma_{-1}a_{i-},\quad a_{i\pm}\in V
+		\end{split}\end{equation*}
+		Dyck言語の観察\ref{obs:Dyck言語}での考察により、
+		積$\phi_1\cdots\phi_n$の真空期待値は次のようにして、より小さな積の
+		真空期待値の計算に帰着させることができる。
+		\begin{equation*}\begin{split}
+			\braket{\phi_1\cdots\phi_n} &= \sum_{r=2}^n
+			\Braket{\phi_1\braket{\phi_2\cdots\phi_{r-1}}\phi_r}
+			\braket{\phi_{r+1}\cdots\phi_n} \\
+			&= \sum_{r=2}^n \braket{\phi_1\cdots\phi_{r-1}}
+			\Braket{\phi_r\braket{\phi_{r+1}\cdots\phi_{n-1}}\phi_n} \\
+		\end{split}\end{equation*}
+		この真空期待値の計算を正規積順序の計算に応用してみる。
+		積$\phi_1\cdots\phi_n$を正規積順序で書き直すと次のようになる。
+		\begin{equation*}\begin{split}
+			\phi_1\cdots\phi_n = \sum_{p,q=0}^n\gamma_{-1}^p
+				\braket{\gamma_1^p\phi_1\cdots\phi_n\gamma_{-1}^q}\gamma_1^q
+		\end{split}\end{equation*}
+
+		$\Phi_{pq}=\braket{\gamma_1^p\phi_1\cdots\phi_n\gamma_{-1}^q}$となる。
+		$\Phi_{pq}$は、次のようにして、より小さな積の真空期待値の計算に帰着
+		させることができる。
+		\begin{equation*}\begin{split}
+			\braket{\gamma_1^p\phi_1\cdots\phi_n\gamma_{-1}^q}
+			= \braket{\gamma_1^{p-1}\phi_1\cdots\phi_n\gamma_{-1}^{q-1}} \\
+			+ \sum_{1\le r< s\le n}^n
+				\braket{\gamma_1^{p-1}\phi_1\cdots\phi_{r-1}}
+				\braket{\gamma_1\phi_r}
+				\braket{\phi_{r+1}\cdots\phi_{s-1}}
+				\braket{\phi_s\gamma_{-1}}
+				\braket{\phi_{s+1}\cdots\phi_n\gamma_{-1}^{q-1}} \\
+		\end{split}\end{equation*}
+		特に、一次式が一種類だけの場合は、
+		$\phi^n_{pq}=\braket{\gamma_1^p\phi^n\gamma_{-1}^q}$
+		とおくと、次の漸化式で書くことができる。
+		\begin{equation*}\begin{split}
+			\phi^n_{(p+1)(q+1)} = \phi^n_{pq} + \sum_{1\le r< s\le n} 
+				\phi^{r-1}_{p0}\phi^{1}_{10}\phi^{r-s+2}_{00}\phi^{1}_{01}
+				\phi^{n-s}_{0q}
+		\end{split}\end{equation*}
+	\end{todo} %todo:正規積順序の計算}
+
+	\begin{todo}[湧いてきた問題]\label{todo:湧いてきた問題} %{
+		観察から湧いてきた、もしくは積年の問題を書いておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Dyck言語の観察\ref{obs:Dyck言語}で使った次の公式を代数的に
+			証明せよ。
+			\begin{equation*}\begin{split}
+				\braket{\phi^{2(n+1)}} = \sum_{p=0}^n
+				\Braket{\phi\braket{\phi^{2p}}\phi}\braket{\phi^{2(n-p)}}
+				\quad\text{for all } \phi\in V_{10}(\Gamma)\oplus V_{01}(\Gamma)
+				,\; n\in\sizen
+			\end{split}\end{equation*}
+			$\phi=\phi_-+\phi_+
+			,\;\phi_-\in V_{10}(\Gamma)
+			,\;\phi_+\in V_{01}(\Gamma)$とすると、
+			$\phi^2=\phi_-^2+\phi_-\phi_++\phi_+^2+\braket{\phi^2}$より、
+			\begin{equation*}\begin{split}
+				\braket{\phi^{2(n+1)}} = \braket{\phi^2}\braket{\phi^{2n}}
+					+ \braket{\phi_+^2\phi^{2n}} \\
+			\end{split}\end{equation*}
+			となり、次の式が証明できればよい。
+			\begin{equation}\label{eq:証明したい式その一}\begin{split}
+				\braket{\phi_+^2\phi^{2n}}
+				= \sum_{p=1}^n \Braket{\phi_+\braket{\phi^{2p}}\phi_-\phi^{2(n-p)}}
+				\quad\text{for all } n\in\sizen_+
+			\end{split}\end{equation}
+			低次の項を計算してみると次のようになり、確かに成り立っている。
+			\begin{equation*}\begin{split}
+				\phi_+\phi^2\rangle &= \braket{\phi^2}\phi_-\rangle \\
+				\phi_+\phi^4\rangle &= \braket{\phi^2}\phi_-^3\rangle
+				+ \braket{\phi^2}\phi_-\rangle\braket{\phi^2}
+				+ \braket{\phi^4}\phi_-\rangle \\
+			\end{split}\end{equation*}
+			%
+			\item 次の二つの線形連立方程式が同一の言語を生成することを証明せよ。
+			\begin{equation*}\begin{split}
+				\pvec{X}{X_0} &= \pvec{0}{1} + \begin{pmatrix}
+					b\gamma_1 + \gamma_{-1}c & 1 \\ 0 & 0
+				\end{pmatrix}\pvec{X}{X_0} \\
+				\pvec{X}{X_0} &= \pvec{0}{1} + \begin{pmatrix}
+					b\gamma_1 & 1 \\ \gamma_{-1}c\gamma_2 & \gamma_{-2}
+				\end{pmatrix}\pvec{X}{X_0} \\
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{todo} %todo:湧いてきた問題}
+
+	\begin{todo}[Wickの定理]\label{todo:Wickの定理} %{
+		$V(\Gamma)$でのWickの定理に対応する公式を導く。
+		任意の$V(\Gamma)$の元は一意に次の形の項の和として書くことができる。
+		\begin{equation*}\begin{split}
+			a\gamma_{-i_1}\cdots\gamma_{-i_m}\gamma_{j_1}\cdots\gamma_{j_n}
+			\quad\text{where } a\in V,\; i_p,j_q\in\sizen_+
+		\end{split}\end{equation*}
+		したがって、$V_{mn}(\Gamma)\subset V(\Gamma)$を次の形の元によって
+		張られる部分空間とすると、
+		\begin{equation*}\begin{split}
+			\gamma_{-i_1}\cdots\gamma_{-i_m}\gamma_{j_1}\cdots\gamma_{j_n}
+			\quad\text{where } a\in V,\; i_p,j_q\in\sizen_+
+		\end{split}\end{equation*}
+		$V(\Gamma)$の直和分解$V(\Gamma)=\oplus_{m,n\in\sizen}V_{mn}(\Gamma)$
+		が得られる。
+		$V(\Gamma)$の$V$-線形二項演算$\bullet$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\alpha\in V_{mn}(\Gamma),\;\beta\in V_{pq}(\Gamma)
+			\implies \alpha\bullet\beta = \jump{np=0}\alpha\beta
+		\end{split}\end{equation*}
+		成分を使って書くと次のようになる。
+		\begin{equation*}\begin{split}
+			(\gamma_{-i_1}\cdots\gamma_{-i_m}\gamma_{j_1}\cdots\gamma_{j_n})
+			\bullet 
+			(\gamma_{-k_1}\cdots\gamma_{-k_p}\gamma_{l_1}\cdots\gamma_{l_q}) \\
+			= \begin{cases}
+				0, &\text{ if } 1 \le n \text{ and } 1 \le p \\
+				a \gamma_{-i_1}\cdots\gamma_{-i_m}
+				\gamma_{-k_1}\cdots\gamma_{-k_p}
+				\gamma_{l_1}\cdots\gamma_{l_q} , &\text{ else if } n = 0 \\
+				a \gamma_{-i_1}\cdots\gamma_{-i_m}
+				\gamma_{j_1}\cdots\gamma_{j_n}
+				\gamma_{l_1}\cdots\gamma_{l_q} , &\text{ else if } p = 0 \\
+			\end{cases}
+		\end{split}\end{equation*}
+		$\bullet$は$1$を単位元とする積となる。
+		$V_1(\Gamma):=V_{10}(\Gamma)\oplus V_{01}(\Gamma)$と書き、
+		任意の$\phi\in V_1(\Gamma)$に対して次のように書くことにする。
+		\begin{equation*}\begin{split}
+			\phi = \phi_- + \phi_+ \quad\text{where } \phi_-\in V_{10}(\Gamma)
+			\text{ and } \phi_+\in V_{01}(\Gamma)
+		\end{split}\end{equation*}
+		すると、$\bullet$の定義より、任意の$\phi^{(i)}\in V_1(\Gamma)$に対して
+		次のように書くことができることがわかる。
+		\begin{equation*}\begin{split}
+			\phi^{(1)}\bullet\cdots\bullet\phi^{(n)}\bullet\phi^{(n)}
+			&= \phi_-^{(1)}\cdots\phi_-^{(n-1)}\phi_-^{(n)} \\
+			&\; + \phi_-^{(1)}\cdots\phi_-^{(n-1)}\phi_+^{(n)} \\
+			&\; + \phi_-^{(1)}\cdots\phi_+^{(n-1)}\phi_+^{(n)} \\
+			&\; + \cdots \\
+			&\; + \phi_+^{(1)}\cdots\phi_+^{(n-1)}\phi_+^{(n)} \\
+		\end{split}\end{equation*}
+		そして、$\phi_-^{(i)}\phi_+^{(j)}
+		=\braket{\phi_-^{(i)}\phi_+^{(j)}}
+		=\braket{\phi^{(i)}\phi^{(j)}}$より、次のように書けることが
+		わかる。
+		\begin{equation*}\begin{split}
+			(\phi^{(1)}\bullet\cdots\bullet\phi^{(n)}\bullet\phi^{(n)})\phi^{(n+1)}
+			&= \phi_-^{(1)}\cdots\phi_-^{(n-1)}\phi_-^{(n)}\phi_-^{(n+1)} \\
+			&\;+ \phi_-^{(1)}\cdots\phi_-^{(n-1)}\braket{\phi^{(n)}\phi^{(n+1)}} \\
+			&\;+ \phi_-^{(1)}\cdots\phi_+^{(n-1)}\braket{\phi^{(n)}\phi^{(n+1)}} \\
+			&\;+ \cdots \\
+			&\;+ \phi_+^{(1)}\cdots\phi_+^{(n-1)}\braket{\phi^{(n)}\phi^{(n+1)}} \\
+			%
+			&\;+ \phi_-^{(1)}\cdots\phi_-^{(n-1)}\phi_-^{(n)}\phi_+^{(n+1)} \\
+			&\;+ \phi_-^{(1)}\cdots\phi_-^{(n-1)}\phi_+^{(n)}\phi_+^{(n+1)} \\
+			&\;+ \phi_-^{(1)}\cdots\phi_+^{(n-1)}\phi_+^{(n)}\phi_+^{(n+1)} \\
+			&\;+ \cdots \\
+			&\;+ \phi_+^{(1)}\cdots\phi_+^{(n-1)}\phi_+^{(n)}\phi_+^{(n+1)} \\
+		\end{split}\end{equation*}
+		したがって、次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			(\phi^{(1)}\bullet\cdots\bullet\phi^{(n)})
+				\phi^{(n+1)}
+			&= \phi^{(1)}\bullet\cdots\bullet\phi^{(n)}\bullet\phi^{(n)}
+				\bullet\phi^{(n+1)} \\
+			&\;+ \phi^{(1)}\bullet\cdots\bullet\phi^{(n-1)}
+				\bullet\braket{\phi^{(n)}\phi^{(n+1)}} \\
+			%(\phi^{(1)}\bullet\cdots\bullet\phi^{(n)})
+			%	(\phi^{(n+1)}\bullet\phi^{(n+2)})
+			%&= \phi^{(1)}\bullet\cdots\bullet\phi^{(n)}\bullet\phi^{(n)}
+			%	\bullet\phi^{(n+1)}\bullet\phi^{(n+2)} \\
+			%&\;+ \phi^{(1)}\bullet\cdots\bullet\phi^{(n-1)}
+			%	\bullet\braket{\phi^{(n)}\phi^{(n+1)}}\bullet\phi^{(n+2)} \\
+			%&\;+ \phi^{(1)}\bullet\cdots\bullet\phi^{(n-2)}
+			%	\Braket{\phi^{(n-1)}\braket{\phi^{(n)}\phi^{(n+1)}}
+			%	\phi^{(n+2)}} \\
+		\end{split}\end{equation*}
+		この式を使うと、次のように写像の合成を正規積順序に書き直すことが
+		できる。
+		\begin{equation*}\begin{split}
+			\phi^{(1)}\phi^{(2)} &= \phi^{(1)}\bullet\phi^{(2)} 
+				+ \braket{\phi^{(1)}\phi^{(2)}} \\
+			\phi^{(1)}\phi^{(2)}\phi^{(3)}
+			&= \phi^{(1)}\bullet\phi^{(2)}\bullet\phi^{(3)} 
+				+ \phi^{(1)}\bullet\braket{\phi^{(2)}\phi^{(3)}}
+				+ \braket{\phi^{(1)}\phi^{(2)}}\bullet\phi^{(3)} \\
+			\phi^{(1)}\phi^{(2)}\phi^{(3)}\phi^{(4)}
+			&= \phi^{(1)}\bullet\phi^{(2)}\bullet\phi^{(3)}\bullet\phi^{(4)} \\
+			&\;+ \phi^{(1)}\bullet\phi^{(2)}\bullet\braket{\phi^{(3)}\phi^{(4)}}
+			+ \phi^{(1)}\bullet\braket{\phi^{(2)}\phi^{(3)}}\bullet\phi^{(4)}
+			+ \braket{\phi^{(1)}\phi^{(2)}}\bullet\phi^{(3)}\bullet\phi^{(4)} \\
+			&\;+ \braket{\phi^{(1)}\phi^{(2)}}\bullet\braket{\phi^{(3)}\phi^{(4)}}
+			+ \braket{\phi^{(1)}\braket{\phi^{(2)}\phi^{(3)}}\phi^{(4)}}
+		\end{split}\end{equation*}
+		この式は$V(\Gamma)$におけるWickの定理に相当するものである。
+		ここでは、この式もWickの定理と書くことにする。Wickの定理を使って、
+		$\phi^{(1)}\cdots\phi^{(n)}$を正規積順序に書き直すには、
+		テンソル積$\phi^{(1)}\otimes\cdots\otimes\phi^{(n)}$を考えて、
+		隣り合った$V_1(\Gamma)$の元を次々と真空期待値をとっていけばよい。
+		Wickの定理はDyck経路によく似た二次元格子状の経路に対応する。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=2ex@!R@!C{
+				0 \ar[r] & 1 \ar[r] & 2 \ar[r] & 3 \ar[r] & 4
+			} &\mapsto \phi^{(1)}\bullet\phi^{(2)}\bullet\phi^{(3)}
+			\bullet\phi^{(4)} \\
+			\vcenter{\xymatrix@R=2ex@!R@!C{
+				& & \ar[rd] & & \\
+				0 \ar[r] & 1 \ar[ru] & 2 & 3 \ar[r] & 4
+			}} &\mapsto \phi^{(1)}\bullet\braket{\phi^{(2)}\phi^{(3)}}
+			\bullet\phi^{(4)} \\
+			\vcenter{\xymatrix@R=2ex@!R@!C{
+				& & \ar[rd] & & \\
+				& \ar[ru] & & \ar[rd] & \\
+				0 \ar[ru] & 1 & 2 & 3 & 4
+			}} &\mapsto \left\langle\phi^{(1)}\braket{\phi^{(2)}\phi^{(3)}}
+			\phi^{(4)}\right\rangle \\
+		\end{split}\end{equation*}
+		このような二次元面上の経路を不完全Dyck経路といい、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $(0,0)$から$(2n,0)$への
+			\item 右上への辺が$p$本、右下への辺が$p$本の
+		\end{itemize} %}
+		経路全体からなる不完全Dyck経路の集合を$\D^n_p$と書くことにする。
+		$\D^{n}_n$が通常のDyck経路となる。上記の例では、上からそれぞれ
+		$\D^2_0,\D^2_1,\D^2_2$という不完全Dyck経路になっている。
+		与えられた
+		$\phi^{(1)},\dots,\phi^{(2n)}\in V_{10}(\Gamma)\oplus V_{01}(\Gamma)$
+		に対して、写像$\phi^{(*)}:\D^n_p\to V(\Gamma)$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\phi^{(*)}\left(\xymatrix@R=2ex@!R@!C{
+				0 \ar[r] & 1 \ar[r] & 2 \ar[r] & 3 \ar[r] & 4
+			}\right) &= \phi^{(1)}\bullet\phi^{(2)}\bullet\phi^{(3)}
+			\bullet\phi^{(4)} \\
+			\phi^{(*)}\left(\vcenter{\xymatrix@R=2ex@!R@!C{
+				& & \ar[rd] & & \\
+				0 \ar[r] & 1 \ar[ru] & 2 & 3 \ar[r] & 4
+			}}\right) &= \phi^{(1)}\bullet\braket{\phi^{(2)}\phi^{(3)}}
+			\bullet\phi^{(4)} \\
+			\phi^{(*)}\left(\vcenter{\xymatrix@R=2ex@!R@!C{
+				& & \ar[rd] & & \\
+				& \ar[ru] & & \ar[rd] & \\
+				0 \ar[ru] & 1 & 2 & 3 & 4
+			}}\right) &= \left\langle\phi^{(1)}\braket{\phi^{(2)}\phi^{(3)}}
+			\phi^{(4)}\right\rangle \\
+		\end{split}\end{equation*}
+		すると、積$\phi^{(1)}\cdots\phi^{(2n)}$は、不完全Dyck経路の和として、
+		次のように書くことができる。
+		\begin{equation*}\begin{split}
+			\phi^{(1)}\cdots\phi^{(2n)}
+			= \sum_{p=0}^n\sum_{\alpha\in\D^n_p}\phi^{(*)}\alpha
+		\end{split}\end{equation*}
+
+		
+		Wickの定理を使うと、
+		$\phi^{(1)}\cdots\phi^{(2n)}$の真空期待値は、次のように二項の真空期待値
+		の組み合わせで書くできることがわかる。
+		\begin{equation*}\begin{split}
+			\braket{\phi^{(1)}\phi^{(2)}\phi^{(3)}\phi^{(4)}} 
+			&= \braket{\phi^{(1)}\phi^{(2)}}\braket{\phi^{(3)}\phi^{(4)}} 
+			+ \braket{\phi^{(1)}\braket{\phi^{(2)}\phi^{(3)}}\phi^{(4)}} \\
+			\braket{\phi^{(1)}\phi^{(2)}\phi^{(3)}\phi^{(4)}\phi^{(5)}\phi^{(6)}} 
+			&= \braket{\phi^{(1)}\phi^{(2)}}\braket{\phi^{(3)}\phi^{(4)}}\braket{\phi^{(5)}\phi^{(6)}} \\
+			&\;+ \braket{\phi^{(1)}\braket{\phi^{(2)}\phi^{(3)}}\phi^{(4)}}\braket{\phi^{(5)}\phi^{(6)}} \\
+			&\;+ \braket{\phi^{(1)}\phi^{(2)}}\braket{\phi^{(3)}\braket{\phi^{(4)}\phi^{(5)}}\phi^{(6)}} \\
+		\end{split}\end{equation*}
+		この式は次のようにDyck経路に対応する。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=2ex@!R@!C{
+				& \ar[rd] & & \ar[rd] & & \ar[rd] \\
+				\phi^{(1)} \ar[ru] & \phi^{(2)}
+				& \phi^{(3)} \ar[ru] & \phi^{(4)}
+				& \phi^{(5)} \ar[ru] & \phi^{(6)} & 1 \\
+			} \\
+			\leftrightarrow \braket{\phi^{(1)}\phi^{(2)}}
+			\braket{\phi^{(3)}\braket{\phi^{(4)}}
+			\braket{\phi^{(5)}}\phi^{(6)}} \\
+			%
+			\xymatrix@R=2ex@!R@!C{
+				& & & & \ar[rd] \\
+				& \ar[rd] & & \ar[ru] & & \ar[rd] \\
+				\phi^{(1)} \ar[ru] & \phi^{(2)}
+				& \phi^{(3)} \ar[ru] & \phi^{(4)}
+				& \phi^{(5)} & \phi^{(6)} & 1 \\
+			} \\
+			\leftrightarrow \braket{\phi^{(1)}\phi^{(2)}}
+			\braket{\phi^{(3)}\braket{\phi^{(4)}\phi^{(5)}}\phi^{(6)}} \\
+		\end{split}\end{equation*}
+		右上に$n$回、右下に$n$回進むDyck経路全体のつくる集合を$\mycal{D}_n$
+		とすると、$\mycal{D}_m\mycal{D}_n$を経路の連結として、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\mycal{D}_{n+1} = \cup_{p=0}^n \mycal{D}_p\mycal{D}_{n-p}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		この式を真空期待値に当てはめると次の式が得られる。
+		\begin{equation*}\begin{split}
+			\braket{\phi^{(1)}\cdots\phi^{(2n)}}
+			&= \sum_{p=1}^n \left\langle\phi^{(1)}
+				\braket{\phi^{(2)}\cdots\phi^{(2p-1)}}\phi^{(2p)}\right\rangle
+				\braket{\phi^{(2p+1)}\cdots\phi^{(2n)}} \\
+			&= \sum_{p=2}^{2n} \left\langle\phi^{(1)}
+				\braket{\phi^{(2)}\cdots\phi^{(p-1)}}\phi^{(p)}\right\rangle
+				\braket{\phi^{(p+1)}\cdots\phi^{(2n)}} \\
+		\end{split}\end{equation*}
+	\end{todo} %todo:Wickの定理}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		多分、下記の命題\ref{prop:文法の線形化}の証明は間違っている。
+		命題に従うと、任意の$a,b,c,d\in V$に対して次の式が成り立つが、
+		\begin{equation}\label{eq:二次式の線形化}\begin{split}
+			\left\{\begin{split}
+				x^{(2)} &= ax_0^{(2)} + b\gamma_1x^{(2)} \\
+				x_0^{(2)} &= 1 + \gamma_{-2}dx_0^{(2)} 
+				+ \gamma_{-1}c\gamma_2x^{(2)}
+			\end{split}\right. \implies \left\{\begin{split}
+				x &= \braket{x^{(2)}}_\Gamma \\
+				x &= a + bxcxd
+			\end{split}\right.
+		\end{split}\end{equation}
+		この式を証明しようとすると、
+		\begin{equation*}\begin{split}
+			\braket{x^{(2)}}_\Gamma &= a + b\braket{\gamma_1x^{(2)}}_\Gamma \\
+			&= a + b^2\braket{\gamma_1^2x^{(2)}}_\Gamma
+				+ bac\braket{\gamma_2x^{(2)}}_\Gamma \\
+		\end{split}\end{equation*}
+		となって、$\braket{x^{(2)}}_\Gamma$に
+		$\braket{\gamma_{i_1}\cdots\gamma_{i_n}x^{(2)}}_\Gamma$という形の
+		高次の項が次々と現れてくる。命題\ref{prop:文法の線形化}の証明には
+		その話が出てこないので、その証明は間違っていると思う。
+
+		$V$が複素数の場合を考えてみる。$x=a+tx^2$という二次式は二つの解を
+		持つが、線形化によって得られる解$\braket{x^{(2)}}_\Gamma$は$t=0$近傍で
+		正則になる解である。そのために、式\eqref{eq:二次式の線形化}の矢印
+		$\implies$は逆にはならない。
+		$\braket{\gamma_1x^{(2)}}_\Gamma$が収束するための
+		条件が、$\braket{x^{(2)}}_\Gamma$が$t=0$近傍で正則になる条件に
+		繋がると思う。$x=a+tx$という一次式の場合は、解を一つしか持たないため
+		に、矢印$\implies$の逆が得られる。
+		\begin{equation*}\begin{split}
+			x = a + bxc \iff \left\{\begin{split}
+				x^{(1)} &= ax_0^{(1)} + b\gamma_1x^{(1)} \\
+				x_0^{(1)} &= 1 + \gamma_{-1}cx_0^{(1)}  \\
+				\braket{x^{(1)}} &= x \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+	\end{todo} %todo:ここまで}
+
+	連立終状態を用いると、次のように遷移図を書き直すことができる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			x^{(1)} &= ax_0^{(1)} + b\gamma_1y^{(1)} \\
+			x_0^{(1)} &= 1 \\
+			y^{(1)} &= gy_0^{(1)} \\
+			y_0^{(1)} &= 1 + \gamma_{-1}cx_0^{(1)} \\
+		\end{split}\right. \implies \left\{\begin{split}
+			x &:= \braket{x^{(1)}}_\Gamma \\
+			y &:= \braket{y^{(1)}}_\Gamma \\
+			x &= a + bycd \\ 
+			y &= g \\
+		\end{split}\right. \quad\text{forall } a,b,c,d\in V
+	\end{split}\end{equation*}
+	\begin{equation}\label{eq:文法の線形化その一}\begin{split}
+		\left\{\begin{split}
+			x &= ax_0 + bycx_0 \\ 
+			x_0 &= 1 \\
+			y &= dy_0 \\
+			y_0 &= 1 \\
+		\end{split}\right. &\Leftarrow \left\{\begin{split}
+			x &= \braket{x^{(1)}}_\Gamma \\
+			y &= \braket{y^{(1)}}_\Gamma \\
+			x^{(1)} &= ax_0^{(1)} + b\gamma_1y^{(1)} \\
+			x_0^{(1)} &= 1 \\
+			y^{(1)} &= dy_0^{(1)} \\
+			y_0^{(1)} &= 1 + \gamma_{-1}cx_0^{(1)} \\
+		\end{split}\right. \\
+		\implies \xymatrix{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^b & *++[o][F=]{x_0} \\
+			ycx_0 \ar[r]^y & cx_0 \ar[u]_c \\
+			*++[o][F-]{y} \ar[r]^d & *++[o][F=]{y_0} 
+		} &\simeq_V \xymatrix{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^b & *++[o][F=]{x_0} \\
+			ycx_0 \ar[d]^{\gamma_1} & cx_0 \ar[u]_c \\
+			*++[o][F-]{y} \ar[r]^d & *++[o][F=]{y_0} \ar[u]_{\gamma_{-1}}
+		}
+	\end{split}
+	\quad\text{where }a,b,c,d\in V[x,y]
+	\end{equation}
+	ここで、$\braket{x^{(1)}}_\Gamma$は$\T^*\Gamma$について真空期待値をとった
+	ものとし、遷移図の同値関係$\simeq_V$は$\T^*\Gamma$について真空期待値
+	が等しいことを表すものとする。
+
+	この変換をテンソル積$V(\Gamma):=V\otimes\End\T^*\Gamma$によって
+	定式化することを考える。
+	以下では、$V\simeq V\otimes\jitu\subseteq V(\Gamma)$と
+	$\End\T^*\Gamma\simeq R\otimes\End\T^*\Gamma\subseteq V(\Gamma)$という
+	同一視をし、$V(\Gamma)$の中で$V$の元と$\End\T^*\Gamma$の元は互いに
+	可換になっているとして扱う。
+	\begin{equation*}\begin{split}
+		vf = fv := v\otimes f\in V(\Gamma)
+		\quad\text{for all } v\in V,\; f\in\End\T^*\Gamma
+	\end{split}\end{equation*}
+	ただし、構文木を作成する場合、品詞の開始位置と終了位置を把握する
+	必要があり、品詞の開始位置と終了位置のマーカーとしてスタック変数を
+	濫用できるように、$R$の元と$\Gamma$の元の位置を交換しないで書き表すこと
+	にする\footnote{
+		恐らく、線形化のためのスタック変数をマーカーを品詞の位置を把握するため
+		に用いることは限界がある。品詞の区切りを把握するためには、それ用の特別な
+		スタック変数を用意する必要があるだろうと考えている。
+	}。
+	射影$\braket{-}_\Gamma:V(\Gamma)\to V$を真空期待値によって定義する。
+	\begin{equation*}\begin{split}
+		\braket{v\otimes f}_\Gamma = \braket{f}v
+		\quad\text{for all } v\in V,\; f\in\End\T^*\Gamma
+	\end{split}\end{equation*}
+	$\braket{-}_\Gamma$は標準入射$i_V:V\to V(\Gamma)$の双対
+	$\braket{-}_\Gamma i_V=\id_V$になっている。
+
+	\begin{proposition}[文法の線形化]\label{prop:文法の線形化} %{
+		任意の$a,b,c,g\in V[x,y]$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				x &= a + byc \\
+				y &= g \\
+			\end{split}\right. \implies \left\{\begin{split}
+				\braket{x^{(1)}} &= x \\
+				\braket{y^{(1)}} &= y \\
+				x^{(1)} &= ax_0^{(1)} + b\gamma_1y^{(1)} \\
+				x_0^{(1)} &= 1 \\
+				y^{(1)} &= gy_0^{(1)} \\
+				y_0^{(1)} &= 1 + \gamma_{-1}cx_0^{(1)} \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+		また、任意の$a,b,c,d,g\in V[x,y]$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				x &= a + bycyd \\
+				y &= g \\
+			\end{split}\right. \implies \left\{\begin{split}
+				\braket{x^{(2)}} &= x \\
+				\braket{y^{(2)}} &= y \\
+				x^{(2)} &= ax_0^{(2)} + b\gamma_1y^{(2)} \\
+				x_0^{(2)} &= 1 \\
+				y^{(2)} &= gy_0^{(2)} \\
+				y_0^{(2)} &= 1 + \gamma_{-1}c\gamma_2y^{(2)} + \gamma_{-2}dx_0^{(2)} \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+	\end{proposition} %prop:文法の線形化}
+	\begin{proof} %{
+		直接、真空期待値を直接計算すれば命題の一つ目の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\braket{y^{(1)}}_\Gamma &= g\braket{y_0^{(1)}}_\Gamma \\
+			\braket{y_0^{(1)}}_\Gamma &= 1 \\
+			\braket{x^{(1)}}_\Gamma &= a\braket{x_0^{(1)}}_\Gamma
+				+ b\braket{\gamma_1y^{(1)}}_\Gamma \\
+			&= a\braket{x_0^{(1)}}_\Gamma + bg\braket{\gamma_1y_0^{(1)}}_\Gamma \\
+			&= (a + bgc)\braket{x_0^{(1)}}_\Gamma \\
+			\braket{x_0^{(1)}}_\Gamma &= 1 \\
+		\end{split}\end{equation*}
+		二つ目の式も真空期待値を直接計算すれば成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\braket{y^{(2)}}_\Gamma &= g\braket{y_0^{(2)}}_\Gamma \\
+			\braket{y_0^{(2)}}_\Gamma &= 1 \\
+			\braket{x^{(2)}}_\Gamma &= a\braket{x_0^{(2)}}_\Gamma
+				+ b\braket{\gamma_1y^{(2)}}_\Gamma \\
+			&= a\braket{x_0^{(2)}}_\Gamma
+				+ bg\braket{\gamma_1y_0^{(2)}}_\Gamma \\
+			&= a\braket{x_0^{(2)}}_\Gamma
+				+ bgc\braket{\gamma_2y^{(2)}}_\Gamma \\
+			&= a\braket{x_0^{(2)}}_\Gamma
+				+ bgcg\braket{\gamma_2y_0^{(2)}}_\Gamma \\
+			&= (a + bgcgd)\braket{x_0^{(2)}}_\Gamma \\
+			\braket{x_0^{(2)}}_\Gamma &= 1 \\
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	この命題は遷移図で書いた方がわかりやすい。
+	命題の一つ目の式は遷移図の書き換え\eqref{eq:文法の線形化その一}を表し、
+	二つ目の式は次の遷移図の書き換えを表している。
+	\begin{equation*}\begin{split}
+		&\left\{\vcenter{\xymatrix{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^b & *++[o][F=]{x_0} \\
+			ycx_0 \ar[r]^y & cydx_0 \ar[r]^c & ydx_0 \ar[r]^y & dx_0 \ar[ull]_d \\
+			*++[o][F-]{y} \ar[r]^g & *++[o][F=]{y_0} 
+		}}\right. \\
+		&\simeq_V \xymatrix{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^{b\gamma_1} & *++[o][F=]{x_0} \\
+			*++[o][F-]{y} \ar[r]^g & *++[o][F=]{y_0} \ar[r]^{\gamma_{-1}c}
+			& ydx_0 \ar[r]^y & dx_0 \ar[ull]_d \\
+		} \simeq_V \xymatrix{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^{b\gamma_1} & *++[o][F=]{x_0} \\
+			*++[o][F-]{y} \ar[r]^g & *++[o][F=]{y_0} 
+			\ar@(d,d)[l]^{\gamma_{-1}c\gamma_2} \ar[u]_{\gamma_{-2}d} \\
+		}
+	\end{split}\end{equation*}
+	この変換を繰り返したものが次の命題となる。
+
+	\begin{proposition}[文法の線形化その二]\label{prop:文法の線形化その二} %{
+		任意の$n\in\sizen_+$と$a,b,c_1,\dots,c_n,g\in V[x,y]$に対して
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				x &= a + byc_1yc_2\cdots yc_n \\
+				y &= g \\
+			\end{split}\right. \implies \left\{\begin{split}
+				\braket{x^{(n)}} &= x \\
+				\braket{y^{(n)}} &= y \\
+				x^{(n)} &= ax_0^{(1)} + b\gamma_1y^{(n)} \\
+				x_0^{(n)} &= 1 \\
+				y^{(n)} &= gy_0^{(n)} \\
+				y_0^{(n)} &= 1 + \sum_{i=1}^{n-1}\gamma_{-i}c_i\gamma_{i+1}y^{(n)}
+					+ \gamma_{-n}x_0^{(n)} \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+	\end{proposition} %prop:文法の線形化その二}
+	\begin{proof} %{
+		まず、次の式が成り立つことはすぐわかる。
+		\begin{equation*}\begin{split}
+			\braket{y^{(n)}}_\Gamma &= g\braket{y_0^{(n)}}_\Gamma \\
+			\braket{y_0^{(n)}}_\Gamma &= 1 \\
+		\end{split}\end{equation*}
+		また、$\braket{x^{(n)}}_\Gamma$は次のようになるが、
+		\begin{equation*}\begin{split}
+			\braket{x^{(n)}}_\Gamma &= a\braket{x_0^{(n)}}_\Gamma
+				+ bg\braket{\gamma_1y_0^{(n)}}_\Gamma \\
+		\end{split}\end{equation*}
+		$\braket{y_0^{(n)}}_\Gamma$は次のように書けるから、
+		\begin{equation*}\begin{split}
+			y_0^{(n)} &= 1 + Ay_0^{(n)} + \gamma_{-n}c_nx_0^{(n)}
+			= A^*(1 + \gamma_{-n}c_nx_0^{(n)}) \\
+			A &= (\gamma_{-1}c_1\gamma_2 + \cdots 
+				+ \gamma_{-(n-1)}c_{n-1}\gamma_n)g \\
+		\end{split}\end{equation*}
+		次の式が得られて、
+		\begin{equation*}\begin{split}
+			\gamma_1y_0^{(n)}\ket{0}_\Gamma
+			&= c_1g\gamma_2y_0^{(n)}\ket{0}_\Gamma \\
+			\gamma_2y_0^{(n)}\ket{0}_\Gamma
+			&= c_2g\gamma_3y_0^{(n)}\ket{0}_\Gamma \\
+			\cdots \\
+			\gamma_{n-1}y_0^{(n)}\ket{0}_\Gamma
+			&= c_{n-1}g\gamma_ny_0^{(n)}\ket{0}_\Gamma \\
+			\gamma_ny_0^{(n)}\ket{0}_\Gamma
+			&= c_nx_0^{(n)}\ket{0}_\Gamma \\
+		\end{split}\end{equation*}
+		$\braket{x^{(n)}}_\Gamma$は次のようになることがわかる。
+		\begin{equation*}\begin{split}
+			\braket{x^{(n)}}_\Gamma &= (a + bgc_1gc_2\cdots gc_n)
+			\braket{x_0^{(n)}}_\Gamma \\
+		\end{split}\end{equation*}
+		$\braket{x_0^{(n)}}_\Gamma=1$だから、命題が成り立つことがわかる。
+	\end{proof} %}
+
+	この命題を遷移図で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\left\{\vcenter{\xymatrix@C=5em{
+				*++[o][F-]{x} \ar[r]^a \ar[d]^{b} & *++[o][F=]{x_0} \\
+				x_1 \ar[r]^{yc_1\cdots yc_{n-1}y} & x_2 \ar[u]_{c_n} \\
+				*++[o][F-]{y} \ar[r]^g & *++[o][F=]{y_0} \\
+		}}\right. \simeq_V \vcenter{\xymatrix@C=5em{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^{b\gamma_1} & *++[o][F=]{x_0} \\
+			*++[o][F-]{y} \ar[r]^g & *++[o][F=]{y_0} 
+			\ar@(d,d)[l]^{\gamma_{-1}c_1\gamma_2 +\cdots+ \gamma_{-(n-1)}c_{n-1}\gamma_n}
+				\ar[u]_{\gamma_{-n}c_n} \\
+		}}
+	\end{split}\end{equation*}
+	さらに、$y=x$とすると次の遷移図の変換が得られる。
+	\begin{equation*}\begin{split}
+		\left\{\vcenter{\xymatrix@C=5em{
+				*++[o][F-]{x} \ar[r]^a \ar[d]^{b} & *++[o][F=]{x_0} \\
+				x_1 \ar[r]^{yc_1\cdots yc_{n-1}y} & x_2 \ar[u]_{c_n} \\
+				*++[o][F-]{y} \ar[r]^x & *++[o][F=]{y_0} \\
+		}}\right. &\simeq_V \vcenter{\xymatrix@C=12em{
+			*++[o][F-]{x} \ar[r]^a \ar@/^1ex/[d]^{b\gamma_1} 
+			& *++[o][F=]{x_0} \ar@/^1ex/[d]^{\gamma_{-(n+1)}} \\
+			*++[o][F-]{y} \ar@/^1ex/[u]^{\gamma_{n+1}} & *++[o][F=]{y_0}
+			\ar[l]_{\gamma_{-1}c_1\gamma_2 +\cdots+ \gamma_{-(n-1)}c_{n-1}\gamma_n}
+				\ar@/^1ex/[u]^{\gamma_{-n}c_n} \\
+		}} \\
+	\end{split}\end{equation*}
+	したがって、$x$だけの文法にすると次の遷移図の変換が得られる。
+	\begin{equation*}\begin{split}
+		\xymatrix@C=5em{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^{b} & *++[o][F=]{x_0} \\
+			x_1 \ar[r]^{xc_1\cdots xc_{n-1}x} & x_2 \ar[u]_{c_n} \\
+		} &\simeq_V \xymatrix@C=12em{
+			*++[o][F-]{x} \ar[r]^a \ar@(dl,ul)^{b\delta_1}
+			& *++[o][F=]{x_0} \ar@(ur,dr)^{\delta_{-n}c_n}
+				\ar@(d,d)[l]^{\delta_{-1}c_1\delta_2 +\cdots+ \delta_{-(n-1)}c_{n-1}\delta_n}
+		}
+	\end{split}\end{equation*}
+	ここで、$\delta_{\pm i}$は次のように定義され、
+	\begin{equation*}\begin{split}
+		\delta_i := \gamma_i\gamma_{n+1},\quad
+		\delta_{-i} := \gamma_{-(n+1)}\gamma_{-i}
+		\quad\text{for all } i=1,\dots,n
+	\end{split}\end{equation*}
+	次の交換関係を満たす。
+	\begin{equation*}\begin{split}
+		\delta_{-i}\delta_j = \jump{i=j} \quad\text{for all } i,j=1,\dots,n
+	\end{split}\end{equation*}
+	また、Fock空間の基底系に対して次の同型対応が成り立つから、
+	\begin{equation*}\begin{split}
+		\gamma_{-i_1}\gamma_{-i_k}\ket{0}
+		\leftrightarrow \delta_{-i_1}\delta_{-i_k}\ket{0}
+		\quad\text{for all } i_1,\dots,i_k=1,\dots,n
+	\end{split}\end{equation*}
+	次の遷移図の変換が成り立つとみなせる。
+	\begin{equation*}\begin{split}
+		\xymatrix@C=5em{
+			*++[o][F-]{x} \ar[r]^a \ar[d]^{b} & *++[o][F=]{x_0} \\
+			x_1 \ar[r]^{xc_1\cdots xc_{n-1}x} & x_2 \ar[u]_{c_n} \\
+		} &\simeq_V \xymatrix@C=12em{
+			*++[o][F-]{x} \ar[r]^a \ar@(dl,ul)^{b\gamma_1}
+			& *++[o][F=]{x_0} \ar@(ur,dr)^{\gamma_{-n}c_n}
+				\ar@(d,d)[l]^{\gamma_{-1}c_1\gamma_2 +\cdots+ \gamma_{-(n-1)}c_{n-1}\gamma_n}
+		}
+	\end{split}\end{equation*}
+	このことを命題の形でまとめておく。
+
+	\begin{proposition}[文法の線形化その三]\label{prop:文法の線形化その三} %{
+		任意の$n\in\sizen_+$と$a,b,c_1,\dots,c_n\in V[x,y]$に対して
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\begin{split}
+				x = a + bxc_1yc_2\cdots xc_n \\
+			\end{split} \implies \left\{\begin{split}
+				\braket{x^{(n)}} &= x \\
+				x^{(n)} &= ax_0^{(1)} + b\gamma_1x^{(n)} \\
+				x_0^{(n)} &= 1 
+				+ \sum_{i=1}^{n-1}\gamma_{-i}c_i\gamma_{i+1}x^{(n)} 
+				+ \gamma_{-n}c_nx_0^{(n)} \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+	\end{proposition} %prop:文法の線形化その三}
+	\begin{proof} %{
+		上記。
+	\end{proof} %}
+
+	スタック変数を使って線形化を繰り返していけば、二変数多項式による
+	再帰式は、最終的に、ある$n\in\sizen$があって、$V(\Gamma_n)$に値を持つ
+	$4\times4$行列$T$で次のような線形連立方程式に書き換えることができる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			x &= f(x,y) \\
+			y &= g(x,y) \\
+		\end{split}\right. \implies 
+		\left\{\begin{split}
+			x &= \braket{x^{(n)}}_\Gamma \\
+			y &= \braket{y^{(n)}}_\Gamma \\
+		\end{split}\right. \text{ where } \begin{pmatrix}
+				x^{(n)} \\ x_0^{(n)} \\ y^{(n)} \\ y_0^{(n)}
+		\end{pmatrix} &= \begin{pmatrix}
+			0 \\ 1 \\ 0 \\ 1 
+		\end{pmatrix} + T \begin{pmatrix}
+			x^{(n)} \\ x_0^{(n)} \\ y^{(n)} \\ y_0^{(n)}
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	空遷移を許容すれば、$T$の各成分は次の形のスタック変数の双線型形式で
+	書くことができる。
+	\begin{equation*}\begin{split}
+		a + \sum_{i=1}^n b_i\gamma_i + \sum_{i=1}^n \gamma_{-i}c_i + 
+		\sum_{i,j=1}^n \gamma_{-i}d_{ij}\gamma_j
+		\quad\text{where } a,b,c,d\in V
+	\end{split}\end{equation*}
+	$n$の上限は多項式$f$と$g$の中に現れる変数$x$と$y$の数で抑えられる。
+	\begin{equation*}\begin{split}
+		n \le (\text{$f$の中に現れる変数$x$と$y$の数})
+		+ (\text{$g$の中に現れる変数$x$と$y$の数})
+	\end{split}\end{equation*}
+
+	\begin{todo}[何をしているのか]\label{todo:何をしているのか} %{
+		次の二次式を考えてみる。
+		\begin{equation}\label{eq:Catalan数その一}\begin{split}
+			x_t = a + tx_t^2 \quad\text{where } a\in V,\; t\in\jitu
+			\iff x_t = \frac{1 \pm \sqrt{1-4at}}{2t}
+		\end{split}\end{equation}
+		スタック変数を使って線形化すると次の式が得られる。
+		\begin{equation}\label{eq:Catalan数その二}\begin{split}
+			\pvec{X_t}{X_0} = \pvec{0}{1} + \begin{pmatrix}
+				t\gamma_1 & a \\ \gamma_{-1}\gamma_2 & \gamma_{-2}
+			\end{pmatrix}\pvec{X_t}{X_0}
+			,\quad \braket{X}_\Gamma = x
+		\end{split}\end{equation}
+		この式の解は唯一つ定まり次のように書け、
+		\begin{equation*}\begin{split}
+			\braket{X_t}_\Gamma = \Braket{\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}\begin{pmatrix}
+				t\gamma_1 & a \\ \gamma_{-1}\gamma_2 & \gamma_{-2}
+			\end{pmatrix}^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}}_\Gamma \\
+		\end{split}\end{equation*}
+		この解は$\lim_{t\to0}\braket{X_t}_\Gamma=a$となる。したがって、
+		この式によって定まる解は次のようになることがわかる。
+		\begin{equation*}\begin{split}
+			\braket{X_t}_\Gamma &= \frac{1 - \sqrt{1-4at}}{2t}
+		\end{split}\end{equation*}
+		もう一つの解は何処に行ってしまったのだろうか？
+	\end{todo} %todo:何をしているのか}
+
+	\begin{todo}[インデックス言語]\label{todo:インデックス言語} %{
+		スタック変数を使うとインデックス言語のパーサーも連立線形方程式として
+		書くことができる。
+		例えば、$x=\sum_{n\in\sizen}a^nb^nc^n$というインデックス言語の列挙は、
+		次の２次元格子上の遷移図から、
+		\begin{equation*}\xymatrix{
+			\ar[d]_a \\
+			\ar[d]_a \ar[r]^b & \ar[lu]_c \\
+			\ar[d]_a \ar[r]^b & \ar[r]^b & \ar[lu]_c \\
+			\vdots & & & \vdots \ar[lu]_c \\
+		}\end{equation*}
+		次のような真空期待値として書くことができることがわかる。
+		\begin{equation*}\begin{split}
+			x = \Braket{\bigl(a(\gamma\otimes1)\bigr)^*
+				\bigl(b(1\otimes\gamma)\bigr)^*
+				\bigl(c(\gamma^\flat\otimes\gamma^\flat)\bigr)^*}_\Gamma
+		\end{split}\end{equation*}
+		ここで、$\beta_1$と$\beta_2$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\beta_1 := \gamma\otimes1,\quad \beta_2 := 1\otimes\gamma
+		\end{split}\end{equation*}
+		$\beta_1$と$\beta_2$は次の代数を満たし、
+		\begin{equation*}\begin{split}
+			\beta_i\beta_j = \beta_j\beta_i,\quad
+			\beta_i^\flat\beta_j^\flat = \beta_j^\flat\beta_i^\flat,\quad
+			\beta_i\beta_j^\flat = \jump{i=j} + \jump{i\neq j}\beta_j^\flat\beta_i
+		\end{split}\end{equation*}
+		列挙は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			x = \Braket{\bigl(a\beta_1\bigr)^* \bigl(b\beta_2\bigr)^*
+				\bigl(c\beta_1^\flat\beta_2^\flat\bigr)^*}_\Gamma
+		\end{split}\end{equation*}
+		ここで定義した$\beta_i$は次のような形式級数環$\fukuso[[x_1,x_2]]$
+		への表現を{\bf{持たない}}。
+		\begin{equation*}\begin{split}
+			\beta_i \mapsto \frac{1}{1 + N_i}\frac{\partial}{\partial x_i}
+			,\quad \beta_i^\flat \mapsto x_i
+			,\quad N_i := x_i\frac{\partial}{\partial x_i}
+		\end{split}\end{equation*}
+		微分の方は次の交換関係となって、$\beta$と$\beta^\flat$の交換関係と
+		一致しない。
+		\begin{equation*}\begin{split}
+			\frac{1}{1 + N_i}\frac{\partial}{\partial x_i}x_i
+			= \frac{1}{1 + N_i} + 
+			x_i\frac{1}{2 + N_i}\frac{\partial}{\partial x_i}
+		\end{split}\end{equation*}
+	\end{todo} %todo:インデックス言語}
+
+	\begin{todo}[Dyck言語]\label{todo:Dyck言語} %{
+		講義録\cite{bm2000}を読め。下記の$X$や$Y$が下記の文法を満たすことを
+		直接証明するのは難しいが、Dyck経路の分割を使えば証明できそうだ。
+		Dyck経路の分割は真空期待値の因子化に対応する。
+		\begin{equation*}\begin{split}
+			\Braket{(l\gamma + r\gamma^\flat)^{2(m+1)}}_\Gamma
+			= \sum_{p=0}^m l\Braket{(l\gamma + r\gamma^\flat)^{2p}}_\Gamma
+				r\Braket{(l\gamma + r\gamma^\flat)^{2(m-p)}}_\Gamma \\
+			\quad\text{for all } m\in\sizen
+		\end{split}\end{equation*}
+
+		次のDyck言語を考える\cite{bm2000}。
+		\begin{equation*}\begin{split}
+			x = 1 + lxrx,\quad l,r\in V
+		\end{split}\end{equation*}
+		Dyck経路の経路積分を考えると、次の$X$は$x=\braket{X}_\Gamma$となると
+		思われる。
+		\begin{equation*}\begin{split}
+			X = (l\gamma + r\gamma^\flat)^* \iff
+			\pvec{X}{X_0} = \pvec{0}{1} + \begin{pmatrix}
+				l\gamma + r\gamma^\flat & 1 \\ 0 & 0
+			\end{pmatrix}\pvec{X}{X_0}
+		\end{split}\end{equation*}
+		一方、遷移図を使って線形化すると、$x=\braket{Y}_\Gamma$となる
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			\pvec{Y}{Y_0} = \pvec{0}{1} + \begin{pmatrix}
+				l\gamma_1 & 1 \\ \gamma_{-1}r\gamma_2 & \gamma_{-2}
+			\end{pmatrix}\pvec{Y}{Y_0}
+		\end{split}\end{equation*}
+	\end{todo} %todo:Dyck言語}
+
+	\begin{todo}[式の計算]\label{todo:式の計算} %{
+		式\eqref{eq:Catalan数その一}を$t$について摂動計算すると、
+		次のようになることが予想される。
+		\begin{equation*}\begin{split}
+			x_t = C_0a + C_1a^2t + C_2a^3t^2 + \cdots
+			= \sum_{n\in\sizen} C_na^{n+1}t^n
+		\end{split}\end{equation*}
+		ここで、$C_n$はCatalan数である。したがって、
+		式\eqref{eq:Catalan数その二}を計算すると、この式が導かれることが
+		予想される。また、Catalan数はスタック変数を使って次のように書ける
+		ことも予想される。
+		\begin{equation*}\begin{split}
+			C_n = \Braket{(\gamma + \gamma^\flat)^{2n}}
+		\end{split}\end{equation*}
+		これらの予想をまとめると、次の式が成り立つこと予想される。
+		\begin{equation*}\begin{split}
+			x_t = a\sum_{n\in\sizen}\Braket{(t\gamma + a\gamma^\flat)^{2n}}
+			= a\Braket{(t\gamma + a\gamma^\flat)^*}
+		\end{split}\end{equation*}
+		この式に似た形になるように式\eqref{eq:Catalan数その二}を計算すると
+		次のようになる。
+		\begin{equation*}\begin{split}
+			\braket{X_t}_\Gamma &= a\Braket{(t\gamma_1)^*\bigl(
+				a\gamma_{-1}\gamma_2(t\gamma_1)^* + \gamma_{-2}\bigr)^*}_\Gamma \\
+			&= a\Braket{(t\gamma_1)^*(aA_-A_+)^*\gamma_{-2}^*}_\Gamma \\
+		\end{split}\end{equation*}
+		ここで、$A_\pm$を次のようにおいた。
+		\begin{equation*}\begin{split}
+			A_+ = \gamma_2(t\gamma_1)^*,\quad A_- = \gamma_{-2}^*\gamma_{-1}
+		\end{split}\end{equation*}
+		$A_\pm$は次の代数を満たす。
+		\begin{equation*}\begin{split}
+			A_+A_- = tA_+ + A_- \\
+			A_+\gamma_{-1} = tA_+,\quad A_+\gamma_{-2} = 1,\quad
+			\gamma_1A_- = 1,\quad \gamma_2A_- = A_- \\
+		\end{split}\end{equation*}
+		したがって、次の式を使うと、
+		\begin{equation*}\begin{split}
+			(aA_-A_+)^* &= 1 + aA_-A_+ + a^2A_-(A_+A_-)A_+ + a^3A_-(A_+A_-)^2A_+
+				+ \cdots \\
+			&= 1 + aA_-(taA_+ + aA_-)^*A_+ \\
+		\end{split}\end{equation*}
+		$\braket{X_t}_\Gamma$は次のように書けることがわかる。
+		\begin{equation*}\begin{split}
+			\braket{X_t}_\Gamma &= a 
+			+ ta^2\Braket{(t\gamma_1)^*(taA_+ + aA_-)^*\gamma_{-2}^*}_\Gamma \\
+		\end{split}\end{equation*}
+
+
+		の計算は、遷移図を変形していく過程を逆に
+		辿ればよいだろう。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				x \ar[r]^a \ar[dr]_{x} & x_0 \\
+				& x_1 \ar[u]_x
+			} \simeq_V \xymatrix{
+				x \ar[r]^a \ar@(ul,dl)_{\gamma_1} 
+				& x_0 \ar@/^1ex/[d]^{\gamma_{-1}} \\
+				& x_1 \ar@/^1ex/[u]^x
+			} \simeq_V \xymatrix{
+				x \ar[r]^a \ar@(ul,dl)_{\gamma_1} 
+				& x_0 \ar@(ur,dr)^{\gamma_{-2}} \ar@(d,d)[l]^{\gamma_{-1}\gamma_2} \\
+			}
+		\end{split}\end{equation*}
+		線形化した式\eqref{eq:Catalan数その一}で、$X_1:=\gamma_2X$とおくと、
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			\begin{pmatrix}
+				X \\ X_0 \\ X_1
+			\end{pmatrix} = \begin{pmatrix}
+				0 \\ 1 \\ 0
+			\end{pmatrix} + \begin{pmatrix}
+				\gamma_1 & a & 0 \\ 0 & \gamma_{-2} & \gamma_{-1} \\
+				\gamma_2 & 0 & 0 \\
+			\end{pmatrix}\begin{pmatrix}
+				X \\ X_0 \\ X_1
+			\end{pmatrix},\quad \braket{X}_\Gamma = x
+		\end{split}\end{equation*}
+
+		\begin{equation*}\begin{split}
+			X &= \begin{pmatrix}
+				1 & 0
+			\end{pmatrix}\begin{pmatrix}
+				0 & (t\gamma_1)^*a \\ \gamma_{-2}^*\gamma_{-1}\gamma_2 & 0
+			\end{pmatrix}^*\begin{pmatrix}
+				0 \\ \gamma_{-2}^*
+			\end{pmatrix} \\
+			&= \biggl((t\gamma_1)^*a\gamma_{-2}^*\gamma_{-1}\gamma_2\biggr)^*
+				(t\gamma_1)^*a\gamma_{-2}^* \\
+			&= \biggl(a\gamma_{-2}^*\gamma_{-1}\gamma_2 
+				+ ta(t\gamma_1)^*\gamma_2\biggr)^*
+				\biggl(a\gamma_{-2}^* + a(t\gamma_1)^+\biggr) \\
+			\braket{X}_\Gamma &= a\Bra{0,0}
+				\biggl(a\gamma_{-2}^*\gamma_{-1}\gamma_2 
+				+ ta(t\gamma_1)^*\gamma_2\biggr)^*\Ket{0,1} \\
+			&= a + ta^2\Bra{t,0}
+				\biggl(a\gamma_{-2}^*\gamma_{-1}
+				+ ta\gamma_2(t\gamma_1)^*\biggr)^*\Ket{0,1} \\
+		\end{split}\end{equation*}
+	\end{todo} %todo:式の計算}
+	
+	\begin{todo}[空遷移の消去]\label{todo:空遷移の消去} %{
+		パーサーの場合、代数$V$がテンソル代数$\T^*\Sigma$になる。
+		$\T^*\Sigma$の単位射を$u_\Sigma:\jitu\to\T^*\Sigma$とすると、
+		\begin{equation*}\begin{split}
+			u_\Sigma r = r1_\W \quad\text{for all } r\in\jitu
+		\end{split}\end{equation*}
+		その双対$u_\Sigma^\flat:\T^*\Sigma\to\jitu$は次のようになる。
+		\begin{equation*}\begin{split}
+			u_\Sigma^\flat w = \jump{w = 1_\W} \quad\text{for all } w\in\W\Sigma
+		\end{split}\end{equation*}
+		遷移$x\xto{f}y,\;f\in\T^*\Sigma(\Gamma)$が$u_\Sigma^\flat f\neq0$
+		となるとき、この遷移は空遷移を含むという。
+		
+		空遷移は非決定性を引き起こすので、可能な限り空遷移を消去した方が
+		パーサーの実行時速度が上がる。命題\ref{prop:文法の線形化}の方法は、
+		文法に左再帰や右再帰に含まれていても文法を線形化することができるが、
+		得られた線型方程式に空遷移が含まれる可能性がある。多分、大量に含まれる。
+	\end{todo} %todo:空遷移の消去}
+
+	\begin{todo}[ゲージ変換]\label{todo:ゲージ変換} %{
+	\end{todo} %todo:ゲージ変換}
+
+	命題\ref{prop:文法の線形化}の線形化の操作の他に、
+	次の操作は式を簡略化するのに役立つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 遷移図のループでない辺を連結する。
+		\begin{equation}\label{eq:空遷移の消去}\begin{split}
+			\left\{\begin{split}
+				A &= bB + \cdots \\
+				B &= B_0 + cC + dD \\
+			\end{split}\right. &\simeq \left\{\begin{split}
+				A &= bB_0 + bcC + bdD + \cdots \\
+				B &= cC + dD \\
+			\end{split}\right. \\
+			&\quad\text{for all }b,c,d,B_0\in V(\Gamma) \\
+			\vcenter{\xymatrix{
+				& & C \\
+				& A \ar[r]^b \ar[l]_{\cdots} & B \ar[u]_c \ar[d]^d \\
+				& & D \\
+			}} &\simeq \vcenter{\xymatrix{
+				& & C \\
+				& A \ar[ru]^{bc} \ar[rd]_{bd} \ar[l]_{\cdots} & B \ar[u]_c \ar[d]^d \\
+				& & D \\
+			}} \quad\text{for $B$ is not a terminal} \\
+			\vcenter{\xymatrix{
+				& & C \\
+				& A \ar[r]^b \ar[l]_{\cdots} & *++[o][F=]{B} \ar[u]_c \ar[d]^d \\
+				& & D \\
+			}} &\simeq \vcenter{\xymatrix{
+				& & C \\
+				& A \ar[r]^b \ar[ru]^{bc} \ar[rd]_{bd} \ar[l]_{\cdots} 
+				& *++[o][F=]{B} \ar[u]_c \ar[d]^d \\
+				& & D \\
+			}} \quad\text{for $B$ is a terminal}
+		\end{split}\end{equation}
+		\item 遷移図のループとなる辺を連結する。
+		\begin{equation*}\begin{split}
+			A = A_0 + aA + bB + cC &\simeq A = a^*(A_0 + bB + cC) \\
+			&\quad\text{for all }a,b,c,A_0\in V(\Gamma) \\
+			\vcenter{\xymatrix{
+				& B \\
+				A \ar[ru]^b \ar[rd]_c \ar@(lu,ld)_a \\
+				& C \\
+			}} &\simeq \vcenter{\xymatrix{
+				& B \\
+				A \ar[ru]^{a^*b} \ar[rd]_{a^*c} \\
+				& C \\
+			}} \quad\text{for $A$ is not a terminal} \\
+			\vcenter{\xymatrix{
+				& B \\
+				*++[o][F=]{A} \ar[ru]^b \ar[rd]_c \ar@(lu,ld)_a \\
+				& C \\
+			}} &\simeq \vcenter{\xymatrix{
+				& B \\
+				A \ar[ru]^{a^*b} \ar[rd]_{a^*c} \ar[r]^{a^*} & *++[o][F=]{A_0} \\
+				& C \\
+			}} \quad\text{for $A$ is a terminal} \\
+		\end{split}\end{equation*}
+		\item 孤立状態（始状態から可達でない状態、または終状態へ可達でない状態）		を消去する。
+	\end{itemize} %}
+
+	いくつかの簡単な文法を線形化してみる。
+
+\subsubsection{二次式}\label{s3:二次式} %{
+	次の文法は、
+	\begin{equation*}\begin{split}
+		X = a + bXc + dXeXf,\quad a,b,c,d,e,f\in R
+	\end{split}\end{equation*}
+	次のように線形化することができる。
+	\begin{equation*}\begin{split}
+		\vcenter{\xymatrix@R=3ex@C=3ex{
+			Xc \ar[r]^X & c \ar[d]^c \\
+			X \ar[r]^a \ar[u]_b \ar[d]^d & 1_X \\
+			XeXf \ar[r]^X & eXf \ar[r]^e & Xf \ar[r]^X & f \ar@(ul,r)[llu]_f \\
+		}}\simeq_\Gamma \xymatrix{
+			X \ar[r]^a \ar@(ul,dl)_{b\gamma_{-1} + d\gamma_{-2}} 
+			& 1_X \ar@(u,u)[l]_{\gamma_2e\gamma_{-3}} 
+				\ar@(rd,ru)_{\gamma_1c + \gamma_3f}
+		}
+	\end{split}\end{equation*}
+%s3:二次式}
+\subsubsection{左結合の算術式}\label{s3:左結合の算術式} %{
+	次の文法は左結合$x\lhd y\lhd z=(x\lhd y)\lhd z$の中置記法に括弧を
+	組み合わせた文法を表す。
+	\begin{equation*}\begin{split}
+		B = U + BbU,\quad U = v + lBr,\quad b,v,l,r\in R
+	\end{split}\end{equation*}
+	この文法は次のように線形化することができる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			\xymatrix{
+				bU \ar[r]^b & U \ar[d]^U \\
+				B \ar[r]^U \ar[u]_B & 1_B \\
+			} \\
+			\xymatrix{
+				U \ar[r]^v \ar[d]^l & 1_U \\
+				Br \ar[r]^B  & r \ar[u]_r \\
+			}	
+		\end{split}\right. \simeq_\Gamma \vcenter{\xymatrix@C=8em{
+			B \ar@(ul,dl)_{\gamma_{-1}} \ar@/^1ex/[d]^{\gamma_{-2}}
+				& 1_B \ar[ld]_{\gamma_1b\gamma_{-3}} \ar@/^1ex/[d]^{\gamma_4r} \\
+			U \ar@/^1ex/[u]^{l\gamma_{-4}} \ar[r]^v
+			& 1_U \ar@/^1ex/[u]^{\gamma_2 + \gamma_3} \\
+		}}
+	\end{split}\end{equation*}
+	空遷移を消去すると次の遷移図が得られる。
+	\begin{equation*}\xymatrix@C=12em{
+		B \ar@(ul,dl)_{\gamma_{-1}^*\gamma_{-2}l\gamma_{-4}}
+			\ar[rd]|(0.3){\gamma_{-1}^*\gamma_{-2}v}
+			& 1_B \ar[ld]|(0.3){\gamma_1b\gamma_{-3}} \ar@/^1ex/[d]^{\gamma_4r} \\
+		U \ar[u]^{l\gamma_{-4}} \ar[r]^v
+			& 1_U \ar@/^1ex/[u]^{\gamma_2 + \gamma_3} \\
+	}\end{equation*}
+%s3:左結合の算術式}
+\subsubsection{右結合の算術式}\label{s3:右結合の算術式} %{
+	次の文法は右結合$x\rhd y\rhd z=x\rhd(y\rhd z)$の中置記法に括弧を
+	組み合わせた文法を表す。
+	\begin{equation*}\begin{split}
+		B = U + UbB,\quad U = v + lBr,\quad b,v,l,r\in R
+	\end{split}\end{equation*}
+	この文法は次のように線形化することができる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			\xymatrix{
+				bB \ar[r]^b & B \ar[d]^B \\
+				B \ar[r]^U \ar[u]_U & 1_B \\
+			} \\
+			\xymatrix{
+				U \ar[r]^v \ar[d]^l & 1_U \\
+				Br \ar[r]^B  & r \ar[u]_r \\
+			}	
+		\end{split}\right. \simeq_\Gamma \vcenter{\xymatrix@C=8em{
+			B \ar@/^1ex/[d]^{\gamma_{-2}+\gamma_{-3}} 
+			& 1_B \ar@(dr,ur)_{\gamma_1} \ar@/^1ex/[d]^{\gamma_4r} \\
+			U \ar@/^1ex/[u]^{l\gamma_{-4}} \ar[r]^v
+			& 1_U \ar@/^1ex/[u]^{\gamma_2} \ar[ul]_{\gamma_3b\gamma_{-1}} \\
+		}}
+	\end{split}\end{equation*}
+	空遷移を消去すると次の遷移図が得られる。
+	\begin{equation*}\xymatrix@C=12em{
+		B \ar@(ul,dl)_{(\gamma_{-2}+\gamma_{-3})l\gamma_{-4}}
+			\ar@/^1ex/[rd]^{(\gamma_{-2}+\gamma_{-3})v} & 1_B \\
+		U \ar[u]^{l\gamma_{-4}} \ar[r]_v & 1_U \ar[u]_{\gamma_2\gamma_1^*} 
+			\ar@/^1ex/[ul]^{\gamma_3b\gamma_{-1}} 
+			\ar@(dr,ur)_{\gamma_2\gamma_1^*\gamma_4r} \\
+	}\end{equation*}
+%s3:右結合の算術式}
+%s2:文法の線形化}
+%s1:パーサーに関する覚書}
+\section{文脈自由文法}\label{s1:文脈自由文法} %{
+	教科書\cite{hopcroft1984}の文脈自由文法とプシュダウンオートマトンの章
+	のメモを書いておく。
+
+	この節では$\Sigma$を有限集合、$R$を標数$0$の半環とし、
+	$\W\Sigma$を$\Sigma$から生成された自由モノイド、$\mycal{S}:=R\W\Sigma$を
+	$R$上の自由半代数とする。通常は$R$として、orを加法、andを乗法とする
+	ブーリアン$\bool$がとられる。$\bool\W\Sigma$上の連立多項式を
+	自由文脈文法という。
+
+	\begin{definition}[自由文脈文法]\label{def:自由文脈文法} %{
+		$f_1,f_2,\dots,f_n$を$\bool\W\Sigma$上の$n$変数多項式として、
+		次のように定義される連立方程式を自由文脈文法という。
+		\begin{equation*}\begin{split}
+			X_1 &= f_1(X_1,\dots,X_n) \\
+			X_2 &= f_2(X_1,\dots,X_n) \\
+			\cdots \\
+			X_n &= f_n(X_1,\dots,X_n) \\
+		\end{split}\end{equation*}
+		$f_i$の中に現れる$X_1,\dots,X_n$以外の記号を終端記号とか自由変数という。
+		そして、連立方程式の解を$X_1,\dots,X_n$から生成された言語という。
+	\end{definition} %def:自由文脈文法}
+
+	自由文脈文法を一般の半代数$R\W\Sigma$上の多項式に拡張する。
+	単に多項式の解を生成された言語とすると、解釈ができない負係数の項が含まれる
+	ので、文法をBrzozowski微分による微分方程式、生成された言語をその解として
+	定義する。
+	\begin{equation*}\begin{split}
+		\text{文法}\; t^\flat X = V(X) 
+		\implies \text{言語}\; X_t = A + tV(X_t) \\
+		\quad\text{for all } V\in R\W\Sigma[X_1,\dots,X_n]
+		,\; A\in (R\W\Sigma)^n
+	\end{split}\end{equation*}
+\subsection{回文}\label{s2:回文} %{
+	右から読んでも左から読んでも同じになる単語を回文という。
+	回文をBNFで書くと次のようになる。
+	\begin{equation*}\begin{split}
+		P = 1 + \sum_{a\in\Sigma} aPa 
+	\end{split}\end{equation*}
+	回文は文脈自由だが決定性PDAで読めない。直感的には、単語の折り返し地点が
+	わからないので、決定性PDAで読むことができないと思われるし、
+	教科書\cite{hopcroft1984}にもそう書いてある（p.147）。
+	本当に回文は決定性PDAで読めないのか？
+
+	Fock空間
+	\begin{equation*}\begin{split}
+		\gamma_a^\flat\gamma_b=\jump{a=b}
+		,\quad \bra{\Gamma}\gamma_a = 0 = \gamma_a^\flat\ket{\Gamma}
+		\quad\text{for all } a,b\in\Sigma
+	\end{split}\end{equation*}
+	を用いると、回文$P$は次のように書ける。
+	\begin{equation*}\begin{split}
+		P = 1 + \sum_{a\in\Sigma} aPa = \bra{\Gamma}P_+\ket{\Gamma},\quad
+		P_+ := (\alpha^\flat)^*\alpha^*,\quad
+		\alpha := \sum_{a\in A}a\gamma_a
+	\end{split}\end{equation*}
+	そして、$P_+$の摂動を計算すると次のようになる。
+	\begin{equation*}\begin{split}
+		\pvec{P_+}{P_-} = \pvec{0}{1} + \begin{pmatrix}
+			\alpha^\flat & 1 \\ 0 & \alpha
+		\end{pmatrix}\pvec{P_+}{P_-}
+		\implies P = \bra{\Gamma}\pvec{1}{0}^\tran\begin{pmatrix}
+			\alpha^\flat & 1 \\ 0 & \alpha \\
+		\end{pmatrix}^*\pvec{0}{1}\ket{\Gamma}
+	\end{split}\end{equation*}
+	$\ket{0}:=\ket{\Gamma}\ket{\Sigma}$とおき、
+	この式に対して文字$\Sigma$のBrzozowski微分を計算すると次のようになる。
+	\begin{equation*}\begin{split}
+		a^\flat\pvec{P_+}{P_-}\ket{0} = \begin{pmatrix}
+			\gamma_a^\flat & \gamma_a \\ 0 & \gamma_a
+		\end{pmatrix}\pvec{P_+}{P_-}\ket{0}
+	\end{split}\end{equation*}
+	$\gamma_a$の行列がスタック操作として解釈される。
+	$w_\pm\in\W\Gamma$とすると次のようになる。
+	\begin{equation*}\begin{split}
+		a^\flat\bra{\Gamma}\pvec{w_+^\flat}{w_-^\flat}^\tran
+		\pvec{P_+}{P_-}\ket{0} 
+		&= \bra{\Gamma}\pvec{w_+^\flat}{w_-^\flat}^\tran\begin{pmatrix}
+			\gamma_a^\flat & \gamma_a \\ 0 & \gamma_a
+			\end{pmatrix}\pvec{P_+}{P_-}\ket{0} \\
+		&= \bra{\Gamma}\pvec{(\gamma_aw_+)^\flat}
+			{(\gamma_a^\flat w_+)^\flat + (\gamma_a^\flat w_-)^\flat}^\tran
+			\pvec{P_+}{P_-}\ket{0} \\
+	\end{split}\end{equation*}
+	例えば、$ab^4a$のパースをステップ・バイ・ステップで書くと次のようになる。
+	\begin{equation*}\begin{array}{rcll}
+		1\times ab^4a &\mapsto& \young(+,-) \\
+		a\times b^4a &\mapsto& \young(+a,-a) \\
+		ab\times b^3a &\mapsto& \young(+ab,-ab) \\
+		ab^2\times b^2a &\mapsto& \young(+abb,-abb,-a) \\
+		ab^3\times ba &\mapsto& \young(+abbb,-abbb,-ab) \\
+		ab^4\times a &\mapsto& \young(+abbbb,-abbbb,-abb,-a) \\
+		ab^4a\times 1 &\mapsto& \young(+abbbba,-abbbba,-) \\
+	\end{array}\end{equation*}
+
+	回文に限らず文脈自由文法では、スタックの分岐を用いれば1-passで文章を
+	読むことができるだろうと思われる。上記の回文の例だと次のようなスタック
+	の構成となる。
+	\begin{equation*}\begin{array}{rcll}
+		\text{状態} & \text{分岐} \\
+		+ & \text{スタック} \\
+		- & \left\{\begin{split}
+			& \text{スタック-1} \\
+			+ & \text{スタック-2} \\
+			+ & \cdots \\
+		\end{split}\right. \\
+	\end{array}\end{equation*}
+	遅延評価をサポートするプログラミング言語では、この分岐による複数のスタック
+	を構成することが容易にできる。
+%s2:回文}
+\subsection{空遷移の消去}\label{s2:空遷移の消去} %{
+	文法$G(A,B,\dots)$の中に$A=1+\cdots$という形の変数がある場合、
+	次の性質を満たす文法$G'(A',B',\dots)$がある。
+	\begin{equation*}\begin{split}
+		\mycal{L}G = \mycal{L}G' \cup \set{1},\quad 1\not\in\mycal{L}G'
+	\end{split}\end{equation*}
+	$G'$を$G$から空遷移を消去した文法という。
+
+	$x=1+a+x^2$という文法を考えると次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		x &= 1 + a + x^2 = 1 + y \\
+		y &:= a + x^2 = a + (1 + y)^2 = a + 1 + 2y + y^2
+	\end{split}\end{equation*}
+	係数が冪等半環であれば次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		x = 1 + y,\quad y = a + y + y^2
+	\end{split}\end{equation*}
+	$y$が$x$から空遷移を消去した文法になる。実際に解を求めると、
+	$x = a^*,\; y = a^+$となっている。
+
+	係数が冪等でない場合を考えてみる。例えば、係数を複素数とする
+	$x=1+a+x^2$という文法の解は次のようになり、
+	\begin{equation*}\begin{array}{rclcl}
+		x &=& 1 + a + x^2 &=& 1 + x_1 \\
+		x_1 &:=& a + x^2 &=& 1 + x_2 \\
+		x_2 &:=& a + 2x_1 + x_1^2 &=& 3 + x_3 \\
+		\cdots \\
+	\end{array}\end{equation*}
+	空遷移に相当する複素数の定数項が延々と続く。どのように続くかというと、
+	次の式を$t=0$近傍でテイラー展開することになっている。
+	\begin{equation*}\begin{split}
+		\frac{1 - \sqrt{1 - 4(1+at)t}}{2t}
+	\end{split}\end{equation*}
+	係数が冪等半環の場合と違って、空遷移を消去するためには無限回の操作が必要
+	になる。空遷移の消去という手法が使えるのは係数が冪等半環の場合に限られる
+	と思っておいた方が良いだろう。
+%s2:空遷移の消去}
+\subsection{Greibachの標準形}\label{s2:Greibachの標準形} %{
+	自由文脈文法にはいくつかの標準形がある。その一つにGreibachの標準形と
+	呼ばれるものがある。Greibachの標準形は、文法中の全て項が終端記号を左端
+	に持つような形である。Greibachの標準形に書き直す手順を示す。
+	$f_i$を終端記号が左端にある項だけからなる多項式、$g_i,h_i$を任意の多項式
+	とする。$x=a+xb=ab^*$を繰り返し使って、次の手順で$A_1,A_2$が終端記号が
+	左端にある項だけからなる多項式で書き直すことができる。
+	\begin{equation*}\begin{array}{ll}
+		\left\{\begin{split}
+			A_1 &= f_1 + A_1g_1 + A_2 g_2 \\
+			A_2 &= f_2 + A_1h_1 + A_2 h_2 \\
+		\end{split}\right. \\
+		\iff \left\{\begin{split}
+			A_1 &= (f_1 + A_2g_2)B_1, \\
+			A_2 &= f_2 + A_1h_1 + A_2 h_2 \\
+		\end{split}\right. & \begin{split}
+			B_1 &=  1 + g_1B \\
+			\\
+		\end{split} \\
+		\iff \left\{\begin{split}
+			A_1 &= (f_1 + A_2g_2)B_1, \\
+			A_2 &= f_2 + f_1B_1 + A_2(g_2B_1h_1 + h_2) \\
+		\end{split}\right. & \begin{split}
+			B_1 &=  1 + g_1B \\
+			\\
+		\end{split} \\
+		\iff \left\{\begin{split}
+			A_1 &= (f_1 + A_2g_2)B_1, \\
+			A_2 &= (f_2 + f_1B_1)B_2, \\
+		\end{split}\right. & \begin{split}
+			B_1 &= 1 + g_1B \\
+			B_2 &= 1 + (g_2B_1h_1 + h_2)B_2 
+		\end{split} \\
+		\iff \left\{\begin{split}
+			A_1 &= f_1B_1 + (f_2 + f_1B_1)B_2g_2B_1, \\
+			A_2 &= (f_2 + f_1B_1)B_2, \\
+		\end{split}\right. & \begin{split}
+			B_1 &= 1 + g_1B \\
+			B_2 &= 1 + (g_2B_1h_1 + h_2)B_2 
+		\end{split} \\
+	\end{array}\end{equation*}
+	多項式$g_i,h_i$は終端記号と$A_1,A_2$しか含まないので、
+	終端記号が左端にある項だけからなる多項式$g_i^{(0)},\;h_i^{(0)}$を用いる
+	と、$g_i,\;h_i$は次のように書ける。
+	\begin{equation*}\begin{split}
+		g_i &= g_i^{(0)} + A_1g_i^{(1)} + A_2g_i^{(2)} \\
+		h_i &= h_i^{(0)} + A_1h_i^{(1)} + A_2h_i^{(2)} \\
+	\end{split}\end{equation*}
+	ここに現れる$A_i$に上で求めた終端記号が左端にある項だけからなる$A_i$を
+	代入すると、$B_i$も終端記号が左端にある項だけで書くことができる。
+
+	文法の右辺の各項の左端が文字になっているとき、その文法をGreibachの標準形
+	という。任意の文脈自由文法はGreibachの標準形で書くことができると主張する
+	のがGreibachの定理である。
+%s2:Greibachの標準形}
+\subsection{RL}\label{s2:RL} %{
+	RL(0)を簡単な例で書いておく。次の文法を考える。
+	\begin{equation*}\begin{split}
+		S = A\$,\quad A = aA + b
+	\end{split}\end{equation*}
+	まず、$\set{S,A,a,b}$を文字だと思って右辺の余積をとってしまい、
+	\begin{equation*}\begin{split}
+		S &\mapsto 1\otimes A\$ + A\otimes \$ + A\$\otimes 1 \\
+		A &\mapsto 1\otimes (aA + b) + a\otimes A + (aA + b)\otimes 1 \\
+	\end{split}\end{equation*}
+	次のグラフを考える。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			S\mapsto 1\otimes A\$,\; A\mapsto 1\otimes (aA + b) \ar[r]^(0.7){A} \ar[rd]^a \ar[d]^b 
+			& S\mapsto A\otimes \$ \ar[r]^{\$} & S\mapsto A\$\otimes 1 \\
+			A\mapsto b\otimes 1 & A\mapsto a\otimes A \ar[l]_b \ar@(dr,dl)^a \ar[r]^A 
+			& A\mapsto aA\otimes 1 \\
+		}
+	\end{split}\end{equation*}
+%s2:RL}
+%s1:文脈自由文法}
+%
+}\endgroup %}

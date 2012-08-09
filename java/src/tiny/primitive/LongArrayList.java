@@ -47,6 +47,16 @@ public class LongArrayList extends AbLongList implements LongStack {
 	@Override
 	protected LongArrayList doAdd(int index, long value) {
 		final int size = this.size;
+		this.ensureCapacity(size + 1);
+		long[] array = this.array;
+		if (index < size) {
+			System.arraycopy(array, index, array, index + 1, size - index);
+		}
+		array[index] = value;
+		this.size += 1;
+		return this;
+	}
+	public void ensureCapacity(int size) {
 		long[] array = this.array;
 		if (array.length <= size) {
 			int capacity = (size * 3) / 2 + 1;
@@ -62,12 +72,6 @@ public class LongArrayList extends AbLongList implements LongStack {
 			array = ArrayHelper.ensureSize(array, capacity);
 			this.setArray(array);
 		}
-		if (index < size) {
-			System.arraycopy(array, index, array, index + 1, size - index);
-		}
-		array[index] = value;
-		this.size += 1;
-		return this;
 	}
 	@Override
 	protected LongArrayList doRemove(int index) {

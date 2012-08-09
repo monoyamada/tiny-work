@@ -1,5 +1,24 @@
 source("utils.R");
 
+q.catalan <- function (q=0) {
+	Q <- function (n, q=1) {
+		if (q == 0) {
+			return(1)
+		}
+		x <- 0
+		for (i in 1:n) {
+			x <- x + q^(i - 1)
+		}
+		x
+	}
+	c5 <- 2^4 + (2^3)*Q(4,q) + (2^3)*Q(3,q) + (2^2)*Q(2,q) + (2^2)*Q(4,q)*Q(3,q)/Q(2,q) + 2*Q(4,q)*Q(2,q)
+}
+
+print (c(actual=q.catalan (0), expected=factorial (10) / factorial (6) / factorial (5)))
+print (c(actual=q.catalan (1), expected=factorial (5)))
+# print (c(actual=q.catalan (-1), expected=1))
+return
+
 zero.temp <- function(xs, value=1) {
 	exp(- value / xs) / xs;
 }
