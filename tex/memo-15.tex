@@ -32,7 +32,7 @@
 \newcommand{\eos}{\ensuremath{\$}}
 %
 \newcommand{\tofrom}[2]{\underset{#2}{\overset{#1}{\rightleftarrows}}}
-\newcommand{\fromto}{\leftrightarrows}
+\newcommand{\fromto}[2]{\underset{#2}{\overset{#1}{\leftrightarrows}}}
 %
 \newcommand{\lr}[1]{\left({#1}\right)}
 \newcommand{\glr}[1]{\bigl({#1}\bigr)}
@@ -59,41 +59,955 @@
 
 \newcommand{\Brz}{\mycal{B}}
 \newcommand{\cat}[1]{\mybf{{#1}}}
+\newcommand{\onto}{\myop{onto}}
+\newcommand{\er}{\ar@{-}}
+\newcommand{\Maybe}{\myop{Maybe}}
 %
 {\setlength\arraycolsep{2pt}
+%
+\section{Chomsky-Schutzenberger}\label{s1:Chomsky-Schutzenberger} %{
+	論文\cite{Chomsky1963118}のノート。
+	論文中で使われている記号を書いておく。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $V_T$を終端記号の集合、$V_N$を非終端記号の集合とする。
+		\item $F\braket{X}$を有限集合から生成される自由モノイドとする。
+		\item $r:F<V_T>\to\sei$とし、$r$の適用を$f\in F\braket{V_T}$に対して
+		$\braket{r,f}$と書く。さらに、写像と自由加群の同型対応
+		$\cat{Set}_\sei(F\braket{V_T},\sei)\simeq\sei F\braket{V_T}$を使って、
+		$r$を次のように表す。
+		\begin{equation*}\begin{split}
+			r = \sum_{f\in F\braket{V_T}}\braket{r, f}f^\dag
+			\simeq \sum_{f\in F\braket{V_T}}\braket{r,f}f
+		\end{split}\end{equation*}
+		$\sup(r)\subseteq F\braket{V_T}$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\sup(r) := \set{f\in F\braket{V_T}\bou \braket{r,f}\neq0}
+		\end{split}\end{equation*}
+		さらに、次の言葉を定義している。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[正の形式級数] $r$の係数がすべて非負のとき
+			\item[固有の形式級数] $r$の係数がすべて$0$か$1$のとき
+		\end{description} %}
+		$\sei F\braket{V_T}$にカットオフつきの同値関係を次のように定義する。
+		\begin{equation*}\begin{split}
+			r_1 \equiv r_2 (\bmod \deg n) \xiff{\dfn} 
+			\braket{r_1,f} = \braket{r_2,f} \quad\text{for all } |f|\le n
+		\end{split}\end{equation*}
+		%
+		\item 文法$G$に対して$G$から生成される単語の列挙を$r(G)$で表す。
+		すると、$\sup r(G)$が$G$から生成される言語になる。また、
+		$f\in F\braket{V_T}$に対して$\braket{r(G),f}$は$f$の曖昧さの数を
+		表す。曖昧さの数を$N(G,F):=\braket{r(G),f}$と書く。
+		%
+		\item 文法が次のように与えられたする。
+		\begin{equation*}\begin{split}
+			\alpha_i \to \phi_{i,j}(\alpha_1,\dots,\alpha_n)
+			\quad\text{for all } i=1,\dots,n,\; j=1,\dots,m_i
+		\end{split}\end{equation*}
+		すると、次のように書き換えて
+		\begin{equation*}\begin{split}
+			\alpha_i = \cup_{j=1}^{m_i} \phi_{i,j}(\alpha_1,\dots,\alpha_n)
+		\end{split}\end{equation*}
+		$\alpha_i$を$r_i$に置き換えることで、文法に対応する
+		$\sei F\braket{V_T}$の再帰式が定まる。
+		\begin{equation*}\begin{split}
+			r_i = \psi_i(r_1,\dots,r_n) \quad\text{for all } i=1,\dots,n
+		\end{split}\end{equation*}
+		$\psi_i$は$\cup_{j=1}^{m_i} \phi_{i,j}$に対応する多項式である。
+		$\psi:(\sei F\braket{V_T})^n\to(\sei F\braket{V_T})^n$を次のように
+		定義する。
+		\begin{equation*}\begin{split}
+			\psi (x_1,\dots,x_n) := (\psi_1x_1,\dots,\psi_nx_n)
+			\quad\text{for all } x_i\in \sei F\braket{V_T}
+		\end{split}\end{equation*}
+		%
+		\item 文法から生成される$(\sei F\braket{V_T})^n$を考える。
+		$\rho_i\in(\sei F\braket{V_T})^n$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\rho_0 &:= (0,\dots,0) \\
+			\rho_1 &:= \psi\rho_0 \\
+			\rho_2 &:= \psi\rho_1 \\
+			\cdots \\
+		\end{split}\end{equation*}
+		次のような言葉を定義している。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[文法の解] $\rho_\infty$を文法$\psi$の解という。
+			\item[代数的] ある多項式$\xi$があって$\rho=\xi\rho$を満たす$\rho$
+			を代数的な形式級数という。
+			\item[文脈自由] 係数がすべて正の多項式$\xi$があって$\rho=\xi\rho$
+			を満たす$\rho$を文脈自由という。文脈自由は代数的の特別の場合になる。
+		\end{description} %}
+		%
+		\item Hadamard積$\odot$を
+		$\braket{r_1\odot r_2,f}:=\braket{r_1,f}\braket{r_2,f}$によって
+		定義する。Hadamard積の有用性は、
+		$\sup(r_1\odot r_2)=(\sup r_1)\cap(\sup r_2)$となることにある。
+		二つの言語の共通をとるときに便利である。
+		%
+		\item 文字列$f$の反転を$\tilde{f}$と書く。
+		%
+		\item $\phi:\sei F\braket{V_T}\to\sei$を環準同型、$r\in F\braket{V_t}$
+		を代数的な形式級数とすると、$\phi r$は文字列の長さに対して
+		指数関数より小さく増加していく。
+		\begin{equation*}\begin{split}
+			r = \sum_{w\in\W_A}r_ww
+			\implies r_{(n)} := |\sum_{\substack{w\in\W_A\\|w|=n}} r_w| \le n!
+		\end{split}\end{equation*}
+		このことは自明に思えないが、知る限りの例では成り立っている。
+		このことが成り立つことを信じると、Tayler展開$\sum_nr_{(n)}t^n/n!$は収束
+		して、文法と解析との関係をつけることができる。
+		%
+		\item 文法規則を次のように定義している。
+		\begin{alignat*}{2}
+			\alpha &\to f\beta &\quad&\text{右線形} \\
+			\alpha &\to \beta f &\quad&\text{左線形} \\
+			\alpha &\to f\beta g &\quad&\text{線形} \\
+			\alpha &\to f &\quad&\text{終端} \\
+		\end{alignat*}
+		文法の族を次のように定義している。
+		\begin{alignat*}{2}
+			\mycal{P}^+ & \text{多項式} \\
+			\mycal{L}_0^+ & \text{片側線形} \\
+			\mycal{L}^+ & \text{線形} \\
+			\mycal{L}_m^+ & \text{メタ線形} \\
+			\mycal{J}^+ & \text{文脈自由} \\
+		\end{alignat*}
+		%
+		\item 自己埋め込み文法
+		\begin{equation*}\begin{split}
+			\ggdyck{\phi\gdyck{\psi}\xi}
+			\quad\text{where } \phi,\xi\in\sei F\braket{V_T}
+			,\; \psi \text{ is dyck language over $\ldyck$ and $\rdyck$}
+		\end{split}\end{equation*}
+		%
+		\item 次の線形な文法を考える。
+		\begin{equation*}\begin{split}
+			\alpha = a + \sum_{i=1}^n b_i\alpha c_i
+		\end{split}\end{equation*}
+		この解は次のように書ける。
+		\begin{equation*}\begin{split}
+			\alpha = \Braket{B^*aC^*}
+			\quad\text{where } B = \sum_{i=1}^n b_i\eta_i,\;
+			C = \sum_{i=1}^n \eta_i^\dag c_i
+		\end{split}\end{equation*}
+		$\langle B^*$と$C^*\rangle$がコヒーレント状態となり、
+		コヒーレント状態は逆順の準同型を与えることに注意すると、
+		$H_n:=\set{\eta_1,\dots,\eta_n}^*$として、次の式が得られる。
+		\begin{equation*}\begin{split}
+			\alpha = \sum_{w\in H_n}\bra{1}B^*\ket{w}a\bra{w}C^*\ket{1}
+			= \sum_{w\in H_n} (\phi_L w^R)a(\phi_R w) \\ 
+		\end{split}\end{equation*}
+		ここで、$-^R$は文字列の反転を表し、$\phi_L$と$\phi_R$は次の式を
+		満たす代数準同型である。
+		\begin{equation*}\begin{split}
+			\phi_L\eta_i = b_i,\; \phi_R\eta_i = c_i 
+			\quad\text{for all } i=1,\dots, n
+		\end{split}\end{equation*}
+		%
+		\item Dyck言語を生成する文法
+		\begin{equation*}\begin{split}
+			\alpha_i = x_i\lr{\gamma - \alpha_{-i}}^*x_{-i}
+			\quad\text{for all } i=\pm1,\dots,\pm n \\
+			\beta = \gamma^*,\quad \gamma = \sum\alpha_i
+		\end{split}\end{equation*}
+		難しい。
+		\item Chomsky-Schutzenbergerの定理を証明している論文\cite{book1976}
+		を読んでみる。大きさ$2n$の集合
+		$\Delta_n:=\set{a_1,\dots,a_n,a_1^\dag,\dots,a_n^\dag}$
+		を用いてDyck言語$D_n$を定義する。自由モノイド$\Delta_n^*$に合同式
+		$\sim$を次のように定義する。
+		\begin{equation*}\begin{split}
+			aa^\dag \sim 1 \quad\text{for all } a\in\Delta_n^+
+		\end{split}\end{equation*}
+		Dyck言語$D_n$は、合同式$\sim$を用いて
+		$D_n:=\set{w\in\Delta_n^*\bou w\sim 1}$と定義できる。
+		$w\in\Delta_n^*$と$\sim$が等しい単語の集合を$(w)_\sim$と書く。
+		\begin{equation*}\begin{split}
+			(w)_\sim := \set{x\in\Delta_n^*\bou x\sim w}
+		\end{split}\end{equation*}
+		$(w)_\sim$の中には長さが最小の単語が唯一つ必ず存在する。
+		$\sim$をとっても変化しない単語がそれである。それを$\mu w$と書く。
+		\begin{equation*}\begin{split}
+			\mu: \Delta_n^* &\to \Delta_n^* \\
+				w &\mapsto (\mu w)\in\Delta_n^* \text{ such that }
+				\mu w \sim w \\
+				&\quad\text{and } (\mu w) \text{ is already in normal ordered form}
+		\end{split}\end{equation*}
+		$\mu$は次の性質を持つ。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $|\mu w|\le |w|$かつ$|\mu w|=|w|\iff \mu w=w$となる。
+			\item $\mu w=1\iff w\in D_n$となる。
+			\item 任意の$x,y\in\Delta_n^*$に対して$\mu(xy)=\mu\glr{(\mu x)y}$
+			となる。
+			\item 任意の$x\in\Delta_n^*$と$y\in(\Delta_n^+)^*$に対して
+			$\mu(xy)=(\mu x)y$となる。
+		\end{itemize} %}
+		$\mu$は正規積の形に書き直すWickの定理である。
+	\end{itemize} %}
+\subsection{考えたことその二}\label{s2:考えたことその二} %{
+	次の可換図によって、代数射$f,g$と余積$\epsilon$から線形射$f_*$を
+	定義する。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			RA^* \ar[r]^{\myop{dup}} \ar@{.>}[d]^{f_*} 
+			& RA^*\otimes RA^* \ar[r]^{f\otimes g}
+			& V\otimes W \ar[d]^{\id\otimes\epsilon} \\
+			V & & V\otimes R \ar[ll]_{\simeq_R} \\
+		}
+	\end{split}\end{equation*}
+	幾つか疑問がある。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 余単位射$\epsilon$を使うのは必然か？ \\
+		線形射$f_*$を得るためだけであれば、$W\to R$は線形射であれば何でもよい。
+		そこで余単位射を使うこのによるメリットは何であろうか。
+		現状では、たまたま成り立つBrzozowski代数で成り立つ式を利用している
+		だけである。たとえそうだったとしても、この構造を量子変形して役に立つ
+		結果を得ることができるだろうか。形式言語にしか役に立たない理論よりは
+		他の分野と関係する理論であった方が、結果の相互利用ができる点で
+		優れている。
+		\item Rota-Baxter作用素 \\
+		複素数上の多項式環$\fukuso[x]$で微分作用素$\partial_x$は
+		$\partial_xx=1+x\partial_x$という交換関係を満たす。そして、積分作用素
+		$\int_x$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\int_x f_x := \int_0^x dy f_y \quad\text{for all } f_x\in\fukuso[x]
+		\end{split}\end{equation*}
+		すると、$\int_x$は$\partial_x\int_x=1$という交換関係を満たし、
+		次のBaxterの関係を満たす。
+		\begin{equation*}\begin{split}
+			\int_xm\lr{\partial_x\otimes\partial_x}
+			= m\lr{\int_x\partial_x\otimes\id + \id\otimes\int_x\partial_x}
+			- \int_x\partial_xm
+		\end{split}\end{equation*}
+		$P$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			P_x := 1 - \int_x\partial_x
+		\end{split}\end{equation*}
+		$\mycal{C}:=\ker\partial_x=P_x\fukuso[x]$となり、
+		$\mycal{I}:=\ker P_x$とおくと、$\fukuso[x]=\mycal{C}\oplus\mycal{I}$
+		と直和分解できる。
+		$\int_x$を定義する積分の下限を定数$c$で置き換えて、
+		$f_x\mapsto\int_c^xdyf_y$としても同じ代数が得られる。
+	\end{itemize} %}
+%s2:考えたことその二}
+\subsection{考えたこと}\label{s2:考えたこと} %{
+	考えの断片
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 線形化$\phi=a+b\eta+\eta^\dag c$とすると、
+		\begin{equation*}\begin{split}
+			\braket{\phi^*} = \begin{cases}
+				1 + b\braket{\phi^*}c\braket{\phi^*}, &\text{ iff } a = 1 \\
+				1 + \gglr{a + b\braket{\phi^*}c}\braket{\phi^*}
+				, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+		\item 真空期待値$\braket{-}:V\B_A\to V$
+		\item 埋め込み$\bra{1}-:V\B_A\to\cat{Mod}_R(RA^*,V)$
+		\item 射影$\pi_\B:V\W_{A\cup A^\dag}\to V\B_A$
+		\item Dyck言語$V\D_A=\pi_\B^{-1}V\subseteq V\W_{A\cup A^\dag}$
+	\end{itemize} %}
+
+	$V$を環、$V\B_1$を$V$上のBrzozowski代数とする。
+	\begin{equation*}\begin{split}
+		V\B_1 := \frac{V\braket{\eta_1,\eta_{-1}}}
+		{\braket{\eta_1\eta_{-1}=1}}
+	\end{split}\end{equation*}
+	$\Gamma=\set{\gamma_1,\gamma_{-1}}$を集合とし、モノイド射
+	$\mu:\W_\Gamma\to V\B_1$を次のように定義する。
+	\begin{alignat*}{2}
+		\mu\gamma_1 &= \eta_1, &\quad \mu\gamma_{-1} &= \eta_{-1}
+	\end{alignat*}
+	任意のモノイド射$\phi:\W_\Gamma\to V$に対して、
+	$\phi:\W_\Gamma\to V\subseteq V\B_1$という同一視によって、
+	$\lambda\phi\in V\B_1$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		\lambda\phi := \sum_{i=\pm1} (\phi\gamma_i)(\mu\gamma_i)
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\Braket{(\lambda\phi)^n} &= \sum_{i_1,\dots,i_n=\pm1}
+			(\phi\gamma_{i_1})\cdots(\phi\gamma_{i_n})
+			\Braket{(\mu\gamma_{i_1})\cdots(\mu\gamma_{i_n})} \\
+		&= \sum_{i_1,\dots,i_n=\pm1}
+			\glr{\phi\lr{\gamma_{i_1}\cdots\gamma_{i_n}}}
+			\Braket{\mu(\gamma_{i_1}\cdots\gamma_{i_n})} \\
+		&= \sum_{w\in\W_\Gamma} \jump{|w|=n} (\phi w)\Braket{\mu w} \\
+	\end{split}\end{equation*}
+	また、$\braket{\mu w}$は$0$または$1$だが、次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\braket{\mu w} = 1 \iff \text{$w$ is a Dyck word}
+		\quad\text{for all } w\in\W_\Gamma
+	\end{split}\end{equation*}
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\braket{(\lambda\phi)^n} = \sum_{\substack{w\in\W_\Gamma\\
+			\text{$w$ is a Dyck word of length $n$}}} \phi w
+	\end{split}\end{equation*}
+	以上より、次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		x := \sum_{\substack{w\in\W_\Gamma\\\text{$w$ is a Dyck word}}}
+			\phi w \implies x = 1 + (\phi\gamma_1)x(\phi\gamma_{-1})x
+	\end{split}\end{equation*}
+	この式はわからないものを別のわからないもので置き換えただけの式だが、
+	Brzozowski代数とChomsky-Schutzenbergerの定理をつなぐ上でカギとなる式
+	である。
+
+	既に、次の式が成り立つことを知っている。
+	\begin{equation*}\begin{split}
+		x := \Braket{\begin{pmatrix}
+			1 & 0
+		\end{pmatrix}\begin{pmatrix}
+			b + c\eta_1 & a \\
+			\eta_{-1}d & 0
+		\end{pmatrix}^*\begin{pmatrix}
+			0 \\ 1
+		\end{pmatrix}}\implies x = a + bx + cxdx
+	\end{split}\end{equation*}
+	この$x$は行列部分を計算してしまうと次のようになる。
+	\begin{equation*}\begin{split}
+		x = \Braket{\lr{b + c\eta_1}^*\lr{a\eta_{-1}d\lr{b + c\eta_1}^*}^*}a
+	\end{split}\end{equation*}
+	この式の真空期待値の中を次のように置き換えると、
+	\begin{equation*}\begin{split}
+		a\mapsto\alpha_1,\quad b\mapsto\beta_1,\quad c\eta_1\mapsto\gamma_1
+		,\quad \eta_{-1}d\mapsto\gamma_{-1}
+	\end{split}\end{equation*}
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		R := \lr{\beta_1 + \gamma_1}^*
+			\lr{\alpha_1\gamma_{-1}\lr{\beta_1 + \gamma_1}^*}^*\alpha_1
+	\end{split}\end{equation*}
+	これは集合$\Delta=\set{\alpha_1,\beta_1,\gamma_{\pm1}}$から生成された
+	有理言語になっている。$S:=\gamma_{-1}R\in\W_\Delta$とおき、
+	文字のBrzozowski微分を$-^\flat$で表すと、次のようになっていて、
+	既に知っている結果を再現する。
+	\begin{alignat*}{2}
+		\alpha_1^\flat\pvec{R}{S} &= \pvec{1 + S}{0}, &\quad
+		\beta_1^\flat\pvec{R}{S} &= \pvec{R}{0} \\
+		\gamma_1^\flat\pvec{R}{S} &= \pvec{R}{0}, &\quad
+		\gamma_{-1}^\flat\pvec{R}{S} &= \pvec{0}{R}
+	\end{alignat*}
+	したがって、Dyck言語を拡張した部分モノイド$\what{D}_1\subset\W_\Delta$を
+	次のように定義し、
+	\begin{equation*}\begin{split}
+		D_0 := \set{\alpha_1, \beta_1}^*,\quad
+		\what{D}_1 := D_0 \cup\lr{D_0\gamma_1\what{D}_1\gamma_{-1}\what{D}_1}
+	\end{split}\end{equation*}
+	モノイド射$\rho:\W_\Delta\to V$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\rho\alpha_1 = a ,\quad \rho\beta_1 = b ,\quad \rho\gamma_1 = c
+		,\quad \rho\gamma_{-1} = d
+	\end{split}\end{equation*}
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		x = \sum_{w\in\lr{\what{D}_1\cap R}}\rho w \implies x = (\rho\alpha_1) 
+			+ (\rho\beta_1)x + (\rho\gamma_1)x(\rho\gamma_{-1})x
+	\end{split}\end{equation*}
+	以上が、Chomusky-Schutzenbergerの定理を例を使って追ったものである。
+
+	通常使われるChomusky-Schutzenbergerの定理では、ここで定義した$\what{D}_1$
+	のようなDyck言語の拡張を防ぐために、$\Delta$に$\alpha_1$と$\beta_1$の
+	対となる文字を追加して、有理言語がDyck言語に含まれるように、有理言語
+	$R_0$を次のように定義する。
+	\begin{equation*}\begin{split}
+		R_0 &:= \lr{\beta_1\beta_{-1} + \gamma_1}^*
+			\lr{\alpha_1\alpha_{-1}\gamma_{-1}\lr{\beta_1\beta_{-1} 
+			+ \gamma_1}^*}^*\alpha_1\alpha_{-1} \\
+	\end{split}\end{equation*}
+	そして、$R_1,R_2,R_3$は次のように定義すると、
+	\begin{equation*}\begin{split}
+		R_1 := \alpha_{-1}(1 + R_2),\quad R_2 := \gamma_{-1}R_0
+		,\quad R_3 := \beta_{-1}R_0
+	\end{split}\end{equation*}
+	状態遷移は次のようになる。
+	\begin{alignat*}{2}
+		\alpha_1^\flat \begin{pmatrix}
+			R_0 \\ R_1 \\ R_2 \\ R_3
+		\end{pmatrix} &= \begin{pmatrix}
+			R_1 \\ 0 \\ 0 \\ 0
+		\end{pmatrix}, &\quad \alpha_{-1}^\flat\begin{pmatrix}
+			R_0 \\ R_1 \\ R_2 \\ R_3
+		\end{pmatrix} &= \begin{pmatrix}
+			0 \\ 1 + R_2 \\ 0 \\ 0
+		\end{pmatrix} \\
+		\beta_1^\flat\begin{pmatrix}
+			R_0 \\ R_1 \\ R_2 \\ R_3
+		\end{pmatrix} &= \begin{pmatrix}
+			R_3 \\ 0 \\ 0 \\ 0
+		\end{pmatrix} &\quad \beta_{-1}^\flat\begin{pmatrix}
+			R_0 \\ R_1 \\ R_2 \\ R_3
+		\end{pmatrix} &= \begin{pmatrix}
+			0 \\ 0 \\ 0 \\ R_0
+		\end{pmatrix} \\
+		\gamma_1^\flat\begin{pmatrix}
+			R_0 \\ R_1 \\ R_2 \\ R_3
+		\end{pmatrix} &= \begin{pmatrix}
+			R_0 \\ 0 \\ 0 \\ 0
+		\end{pmatrix}, &\quad \gamma_{-1}^\flat\begin{pmatrix}
+			R_0 \\ R_1 \\ R_2 \\ R_3
+		\end{pmatrix} &= \begin{pmatrix}
+			0 \\ 0 \\ R_0 \\ 0
+		\end{pmatrix}
+	\end{alignat*}
+	これを状態遷移図に書き直すと次のようになる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			R_3 \ar@/^1ex/[r]^{\eta_{-2}} 
+			& R_0 \ar[r]^{a\eta_1} \ar@/^1ex/[l]^{b\eta_2} \ar@(ul,ur)^{c\eta_3}
+			& R_1 \ar[r]^{\eta_{-1}} 
+			& *++[o][F=]{R_2} \ar@(d,d)[ll]^{\eta_{-3}d} \\
+		} \xmapsfrom{\substack{\text{ makes}\\\text{ redundant}}} \xymatrix{
+			R_0 + R_3R_0 \ar[r]^{a} \ar@(ul,ur)^{b + c\eta_3}
+			& *++[o][F=]{R_1R_2} \ar@(d,d)[l]^{\eta_{-3}d} \\
+		}
+	\end{split}\end{equation*}
+	次のようにモノイド射$\rho$を定義すると、
+	\begin{equation*}\begin{split}
+		\rho\alpha_1 = a,\quad \rho\alpha_{-1} = 1,\quad 
+		\rho\beta_1 = b ,\quad \rho\beta_{-1} = 1 ,\quad 
+		\rho\gamma_1 = c,\quad \rho\gamma_{-1} = d
+	\end{split}\end{equation*}
+	$D_3$を三つの組$\alpha_{\pm1}$、$\beta_{\pm1}$、$\gamma_{\pm1}$
+	から生成されるDyck言語とすると、言語の生成関数は次のように次のように
+	書くことができる。
+	\begin{equation*}\begin{split}
+		x = \sum_{w\in\lr{D_3\cap R_0}}\rho w \implies x = (\rho\alpha_1) 
+			+ (\rho\beta_1)x + (\rho\gamma_1)x(\rho\gamma_{-1})x
+	\end{split}\end{equation*}
+	これが通常使われるChomusky-Schutzenbergerの定理に沿った形である。
+
+	$\fukuso$上の有限集合$A$から生成された自由代数$A^*$からBrzozowski代数
+	$\fukuso\B_n$への代数射$f$が与えられたとする。$f$を次のように行列で表して、
+	\begin{equation*}\begin{split}
+		f\begin{pmatrix}
+			a_1 \\ \vdots \\ a_{|A|}
+		\end{pmatrix} = \begin{pmatrix}
+			f_{1,0} \\ \vdots \\ f_{|A|,0}
+		\end{pmatrix} + \begin{pmatrix}
+			f_{1,1} & f_{1,-1} & \cdots & f_{1,n} & f_{1,-n} \\
+			\vdots \\
+			f_{|A|,1} & f_{|A|,-1} & \cdots & f_{|A|,n} & f_{|A|,-n} \\
+		\end{pmatrix}\begin{pmatrix}
+			\eta_1 \\ \eta_{-1} \\ \vdots \\ \eta_{n} \\ \eta_{-n}
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	$f\mybf{a}=F_{a0}+F_{a1}\mybf{\eta}$と書くと、
+%s2:考えたこと}
+\subsection{Brzozowski代数}\label{s2:Brzozowski代数} %{
+	Chomsky-Schutzenberberの定理の改良\cite{book1976}で使われている、
+	$n=1,2,\dots$として、Dyck言語の間の写像$h:\D_n\to\D_2$
+	\begin{equation*}\begin{split}
+		ha_i = a_1^ia_2,\quad ha_{-i} = a_{-2}a_{-1}^i
+		\quad\text{for all } i=1,\dots,n
+	\end{split}\end{equation*}
+	について考えてみる。
+
+	$n\in\sizen_+$として、$A_n=\set{a_1,\dots,a_n}$と
+	$A_n^\flat=\set{a_{-1},\dots,a_{-n}}$を有限集合、$R\B_n$を$n$次Brzozowki
+	代数とし、その生成元を$\eta_{\pm1},\dots,\eta_{\pm n}$で表す。
+	モノイド射$\pi_n:(A_n\cup A_n^\flat)^*\to R\B_n$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\pi_n a_i = \eta_i,\quad \pi_n a_{-i} = \eta_{-i} 
+		\quad\text{for all } i = 1,\dots,n
+	\end{split}\end{equation*}
+	すると、$\pi_n^{-1}1\subset(A_n\cup A_n^\flat)^*$がDyck単語のつくる
+	部分モノイドとなる。任意の$n\in\sizen$に対して
+	モノイド射$h_n:(A_n\cup A_n^\flat)^*\to(A_2\cup A_2^\flat)^*$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		h_na_i = a_1^ia_2,\quad h_na_{-i} = a_{-2}a_{-1}^i
+		\quad\text{for all } i=1,\dots,n
+	\end{split}\end{equation*}
+	$h_n$は$1:1$となる。そして、代数射$h_n^\sharp:R\B_n\to R\B_2$を
+	$h_n^\sharp\pi_n=\pi_2h_n$となるように定義できて、次のようになる。
+	\begin{equation*}\begin{split}
+		h_n^\sharp\eta_i = \eta_1^i\eta_2,\quad 
+		h_n^\sharp\eta_{-i} = \eta_{-2}\eta_{-1}^i
+		\quad\text{for all } i=1,\dots,n
+	\end{split}\end{equation*}
+	やはり、$h_n^\sharp$も$1:1$となる。
+	したがって、$(h_n^\sharp\pi_n)^{-1}1=\pi_n^{-1}1$かつ
+	$(\pi_2h_n)^{-1}1=h_n^{-1}\pi_2^{-1}1$より、
+	$\pi_n^{-1}1=h_n^{-1}\pi_2^{-1}1$となる。
+%s2:Brzozowski代数}
+%s1:Chomsky-Schutzenberger}
+
+\section{Brzozowski代数}\label{s1:Brzozowski代数} %{
+\subsection{可換環上のBrzozowski代数}\label{s2:可換環上のBrzozowski代数} %{
+\subsubsection{Brzozowski代数の導出}\label{s3:Brzozowski代数の導出} %{
+	$R$を可換環、$A$を有限集合、$\W_A:=A^*$を$A$から生成された自由モノイド
+	とする。$R\W_A$の元をケットを用いて次のように書き、
+	\begin{equation*}\begin{split}
+		\sum_{w\in\W_A} \ket{w}r_w \quad\begin{split}
+			&\text{where } r_w\in R \text{ for all } w\in\W_A \\
+			&\text{and } r_w\neq 0 \text{ only finitely many } w
+		\end{split}
+	\end{split}\end{equation*}
+	その双対空間$R\W_A^\dag:=\cat{Mod}_R\lr{R\W_A,R}$を次のように書く。
+	\begin{equation*}\begin{split}
+		\sum_{w\in\W_A} r_w\bra{w}
+			\quad\text{where } r_w\in R \text{ for all } w\in\W_A \\
+	\end{split}\end{equation*}
+	ここで、双対基底を次のように定義し、
+	\begin{equation*}\begin{split}
+		\braket{w_1|w_2} = \jump{w_1 = w_2} \quad\text{for all } w_1,w_2\in\W_A
+	\end{split}\end{equation*}
+	線形射$-^\dag\in\cat{Mon}_R\glr{R\W_A,R\W_A^\dag}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\ket{w}^\dag := \bra{w} \quad\text{for all } w\in\W_A
+	\end{split}\end{equation*}
+	積$m_0$を文字列の連結によって次のように定義する。
+	\begin{equation*}\begin{split}
+		m_0\lr{\ket{w_1}\otimes\ket{w_2}} := \ket{w_1w_2}
+		\quad\text{for all } w_1,w_2\in\W_A
+	\end{split}\end{equation*}
+	テンソル積の内積を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\lr{f\otimes g}\lr{x\otimes y} := (fx)\otimes(gx) \simeq_R (fx)(gx) \\
+		\quad\text{for all } f,g\in R\W_A^\dag,\; x,y\in R\W_A
+	\end{split}\end{equation*}
+	$m_0$の畳み込みは次のようになる。
+	\begin{equation*}\begin{split}
+		\bra{w}m_0 = \sum_{\substack{w_1,w_2\in\W_A\\ w=w_1w_2}}
+			\bra{w_1}\otimes\bra{w_2} \quad\text{for all } w\in\W_A
+	\end{split}\end{equation*}
+	$m_0^\dag$を$m_0$の共役として次の式が成り立つように定義する。
+	\begin{equation*}\begin{split}
+		\gglr{m_0(x\otimes y)}^\dag = \glr{x^\dag\otimes y^\dag} m_0^\dag 
+		\quad\text{for all } x,y\in R\W_A
+	\end{split}\end{equation*}
+	線形射$\iota:R\W_A\to\cat{Mod}_R\glr{R\W_A^\dag}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		f\lr{\iota w} = \gglr{\bra{w}\otimes f} m_0^\dag
+		\quad\text{for all } w\in \W_A,\; f\in R\W_A^\dag
+	\end{split}\end{equation*}
+	誤解の無い場合は、$\iota$を省略して次のように書く。
+	\begin{equation*}\begin{split}
+		w := \iota w,\quad w^\dag := \lr{\iota w}^\dag
+		\quad\text{for all } w\in\W_A
+	\end{split}\end{equation*}
+	文字列を使って書くと次のようになり、
+	\begin{alignat*}{4}
+		a^\dag\ket{w} &= \ket{aw} ,&\quad \bra{w}a &= \bra{aw} 
+			&\quad&\text{for all } a\in A,\; w\in\W_A \\
+		a\ket{1} &= 0 ,&\quad \bra{1}a^\dag &= 0
+			&\quad&\text{for all } a\in A \\
+		a\ket{bw} &= \jump{a=b}\ket{w} ,&\quad 
+			\bra{bw}a^\dag &= \jump{a=b}\bra{w}
+			&\quad&\text{for all } a,b\in A,\; w\in\W_A
+	\end{alignat*}
+	次の交換関係、
+	\begin{equation*}\begin{split}
+		ab^\dag = \jump{a=b} \quad\text{for all } a,b\in A
+	\end{split}\end{equation*}
+	もしくは次の交換関係が得られる。
+	\begin{equation*}\begin{split}
+		a^\dag m_0 = m_0(a^\dag\otimes\id),\quad
+		a m_0 = m_0(a\otimes\id + P_0\otimes a) \quad\text{for all } a\in A
+	\end{split}\end{equation*}
+	ここで、$P_0$は真空への射影で$P_0:=\ket{1}\bra{1}$と定義される。
+	部分空間$R\B_A\subseteq\cat{Mod}_R\glr{R\W_A^\dag}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		R\B_A := \myop{span}_R\Set{w_1^\dag w_2\in\cat{Mod}_R\glr{R\W_A^\dag}
+		| w_1,w_2\in\W_A}
+	\end{split}\end{equation*}
+	$R\B_A$は$\iota RA$と$(\iota RA)^\dag$の合成列によって作られる
+	$\cat{Mod}_R\glr{R\W_A^\dag}$の部分空間となっている。
+	$R\B_A$を$R$上のBrzozowski代数ということにする。
+	\begin{definition}[Brzozowski代数]\label{def:Brzozowski代数} %{
+		$R$を可換環とする。$2n$個の元$\eta_{\pm 1},\dots,\eta_{\pm n}$から
+		生成された$R$上の非可換環代数$R\B_n$が、生成元同士が次の関係を
+		持つとき、$R\B_n$を$R$上の$n$次Brzozowski代数ということにする。
+		\begin{equation*}\begin{split}
+			\eta_i\eta_{-j} = \jump{i = j} \quad\text{for all } i,j\in 1,\dots,n
+		\end{split}\end{equation*}
+		代数学でよく使われる記号を用いると次のように書ける。
+		\begin{equation*}\begin{split}
+			R\B_n := \frac{R\braket{\eta_{\pm 1},\dots,\eta_{\pm n}}}
+				{\Braket{\eta_i\eta_{-j} - \jump{i=j}\bou i,j=1,\dots,n}}
+		\end{split}\end{equation*}
+		ここで、$R\braket{x,y,\dots}$は互いに非可換な不定元$x,y,\dots$によって
+		生成される$R$上の多項式を表す。
+	\end{definition} %def:Brzozowski代数}
+
+	有限集合$A$とそのコピー$\wbar{A}$を生成元とする可換環$R$上の
+	Brzozowski代数を$R\B_A$とも書くことにする。
+	\begin{equation*}\begin{split}
+		R\B_A := \frac{R\braket{A, \wbar{A}}}
+		{\Braket{a\wbar{b}-\jump{a=b}\bou a,b\in A}}
+	\end{split}\end{equation*}
+	任意の$a\in A$に対して$a^\dag=\wbar{a}$となる表現がBrzozowski代数の
+	ユニタリ表現となるだろうが、ユニタリー性を仮定しなくても多くの事柄が
+	導かれる。
+%s3:Brzozowski代数の導出}
+
+\subsubsection{Brzozowski代数の表現}\label{s3:Brzozowski代数の表現} %{
+	Brzozowski代数の表現を考える。まず、$\fukuso\B_1$について考える。
+	$\fukuso\B_1$の基底系を$\eta_+\eta_-=1$とし、$\nu:=\eta_-\eta_+$とする。
+	$\nu$はWeyl代数における数演算子に相当する。
+	$\fukuso\B_1$の表現空間を$V$とする。$\nu$はべき等$\nu^2=\nu$だから、
+	$\nu$の固有値は$0$または$1$に限られる。
+	また、命題\ref{prop:べき等作用素の対角化}から$\nu$は任意の表現空間で
+	対角化できるから、$\nu$の固有値$\lambda$を持つ$V$の固有空間を
+	$V_\lambda$とすると、$V=V_0\oplus V_1$と直和分解できる。したがって、
+	表現空間は次の場合分けができる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 自明な表現、$\dim V_0=\dim V_1=0$
+		\item 0-固有空間だけの表現、$0<\dim V_0$かつ$\dim V_1=0$
+		\item 1-固有空間だけの表現、$\dim V_0=0$かつ$0<\dim V_1$
+		\item 両方の固有空間を持つ表現、$0<\dim V_0$かつ$0<\dim V_1$
+	\end{itemize} %}
+	さらに次の性質が成り立つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\eta_-$は$1:1$となる。
+		\begin{equation*}\begin{split}
+			\eta_-v_1 = \eta_-v_2 \implies \eta_+\eta_-v_1 = \eta_+\eta_-v_2 
+			\implies v_1 = v_2 \quad\text{for all } v_1,v_2\in V
+		\end{split}\end{equation*}
+		%
+		\item $\eta_-V\subseteq V_1$となる。
+		\begin{equation*}\begin{split}
+			\nu\eta_- = \eta_-\implies
+			\nu\eta_-v = \eta_-v \quad\text{for all } v\in V
+		\end{split}\end{equation*}
+		%
+		\item $V_0=\ker\eta_+$となる。\\
+		$\nu$の定義より、$\ker\eta_+\subseteq V_0$
+		となるが、$\eta_+\nu=\eta_+$より、任意の$v\in V_0$に対して$\eta_+v=0$
+		となり、$V_0\subseteq\ker\eta_+$となるから、$\ker\eta_+=V_0$となる。
+	\end{itemize} %}
+	$V_0$と$V_1$の次元について場合分けして考える。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $0<\dim V_0$かつ$\dim V_1=0$の場合 \\
+		$\eta_-V\subseteq V_1$より、$V_0=\ker\eta_+=\ker\eta_-$となる。
+		したがって、自明な表現となる。
+		%
+		\item $\dim V_0=0$かつ$0<\dim V_1$の場合 \\
+		$V$への表現を$\rho$とする。
+		この場合は、$(\rho\eta_-)(\rho\eta_+)=1$となり、$\rho\eta_\pm$は共に
+		正則、$\ker\rho\eta_\pm=\set{0}$、になる。また、任意の$n\in\sizen$で
+		$\rho(\eta_-^n\eta_+^n)=1$となるから、$\rho$は忠実な表現ではない。
+		特に、$V$が有限次元の場合、正則な正方行列の左逆行列と右逆行列は
+		一致するので、$(\rho\eta_-)=(\rho\eta_+)^{-1}$となる。
+		%
+		\item $\dim V_0=1$かつ$0<\dim V_1$の場合 \\
+		任意の$v\neq0\in\ker\eta_+$と$n\in\sizen$に対して、
+		$E_n(v):=\set{v,\eta_-v,\dots,\eta_-^nv}$の元は互いに一次独立となる。
+		\begin{proof} %{
+			$E_n(v)$の帰納法で証明する。$v\in\ker\eta_+$かつ$\eta_-v\in V_1$
+			だから、$n=1$のときは命題が成り立つことがわかる。ある$n\in\sizen_+$で
+			命題が成り立つ仮定する。任意の$c_k\in\fukuso$に対して次の式が
+			成り立つから、
+			\begin{equation*}\begin{split}
+				\sum_{k=0}^{n+1} c_k\eta_-^kv = 0
+				&\implies \eta_+\sum_{k=0}^{n+1} c_k\eta_-^kv = 0
+				\implies \eta_-\sum_{k=0}^n c_{k+1}\eta_-^kv = 0 \\
+				&\implies \sum_{k=0}^n c_{k+1}\eta_-^kv = 0
+			\end{split}\end{equation*}
+			帰納法の仮定より、$c_1=c_2=\cdots=c_{n+1}=0$となり、その結果$c_0=0$
+			となり、次の式が成り立ち、$E_{n+1}(v)$でも命題が成り立つことがわかる。
+			\begin{equation*}\begin{split}
+				\sum_{k=0}^{n+1} c_k\eta_-^kv = 0
+				\implies c_0 = c_1 = \cdots = c_{n+1} = 0
+			\end{split}\end{equation*}
+		\end{proof} %}
+		したがって、$W:=\myop{span}_\fukuso E_\infty(v)$とすると、
+		次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			W\subseteq V 
+		\end{split}\end{equation*}
+		$V$が無限次元となることがわかる。そして、$W$が$\fukuso\B_1$の既約表現
+		となることがわかる。
+		図にすると次のようになる。
+		\begin{equation*}\begin{split}
+			0 \xfrom{\eta_+} v \tofrom{\eta_-}{\eta_+} 
+			\eta_-v \tofrom{\eta_-}{\eta_+}
+			\eta_-^2v \tofrom{\eta_-}{\eta_+}
+			\cdots
+		\end{split}\end{equation*}
+		%
+		\item $1<\dim V_0$かつ$0<\dim V_1$の場合 \\
+		$\eta_-$が$1:1$だから、$v_1\in\ker\eta_+$と$v_2\in\ker\eta_+$が互いに
+		一次独立ならば、任意の$n\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\myop{span}_\fukuso E_n(v_1) \cup \myop{span}_\fukuso E_n(v_2)
+			= \myop{span}_\fukuso E_n(v_1) \oplus \myop{span}_\fukuso E_n(v_2)
+		\end{split}\end{equation*}
+		したがって、$V$は$\dim V_0$個の$W$と同型な部分空間を含む。
+		\begin{equation*}\begin{split}
+			\underbrace{W\oplus\cdots\oplus W}_{\dim V_0}\subseteq V
+		\end{split}\end{equation*}
+	\end{itemize} %}
+
+	\begin{proposition}[べき等作用素の対角化]\label{prop:べき等作用素の対角化} %{
+		べき等作用素は対角化可能である。
+	\end{proposition} %prop:べき等作用素の対角化}
+	\begin{proof} %{
+		$V$を実ベクトル空間、線形射$P:V\to V$をべき等とする。
+		$P$の固有値$\lambda$に属する固有空間を$V_\lambda$とする。
+		$V_0\oplus V_1\subseteq V$となるが、$V_0\oplus V_1=\fukuso^n$が
+		証明したいことである。定義より、$\ker P=V_0$が成り立つ。また、
+		次のことから$PV=V_1$が成り立つ。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$v\in V_1$に対して$v=Pv$となるから、
+			$V_1\subseteq PV$が成り立ち、
+			\item 任意の$v\in PV$に対して、ある$w\in V$が存在して$v=Pw$となるが、
+			$Pv=P^2w=Pw=v$となるから、$PV\subseteq V_1$が成り立つ
+		\end{itemize} %}
+		したがって、$(\ker P)\oplus PV=V$を示せば、命題が成り立つことがわかる。
+		任意の$v\in V$は$v=(1-P)v + Pv$と書くことができる。$(1-P)v\in\ker P$
+		かつ$Pv\in PV$だから、$(\ker P)\oplus PV=V$が成り立つことが示される。
+	\end{proof} %}
+
+	\begin{proposition}[左右の逆元]\label{prop:左右の逆元} %{
+		$R$を環、$x\in R$とする。$a\in R$を$x$の左逆元、$b\in R$を$x$の
+		右逆元とする。このとき、$a=b$となる。
+	\end{proposition} %prop:左右の逆元}
+	\begin{proof} %{
+		命題の仮定より、$ax=1$だから、右から$b$を掛けると、$a=b$となる。
+	\end{proof} %}
+%s3:Brzozowski代数の表現}
+%s2:可換環上のBrzozowski代数}
+%s1:Brzozowski代数}
+
+\section{品詞分解の曖昧さについて}\label{s1:品詞分解の曖昧さについて} %{
+	品詞分解の曖昧さには次の二つの要因があるように思える。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 加法によって生じる曖昧さ \\
+		次の文法では、
+		\begin{equation*}\begin{split}
+			A_1 = a,\; A_2 = a^2,\; X = A_1A_2 + A_2A_1
+		\end{split}\end{equation*}
+		入力文字列$aaa$は$A_1A_2$と$A_2A_1$の両方の品詞分解が成り立つ。
+		%
+		\item 乗法によって生じる曖昧さ \\
+		次の文法では、
+		\begin{equation*}\begin{split}
+			X = a + XbX
+		\end{split}\end{equation*}
+		入力文字列$ababa$は$(XbX)bX$と$Xb(XbX)$の両方の品詞分解が成り立つ。
+		平面木で書くと次のようになる。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=1ex@C=1ex{
+				& & X \er[dl] \er[dr] \er[d] \\
+				& X \er[dl] \er[dr] \er[d] & b & X \er[d] \\
+				X \er[d] & b & X \er[d] & a \\
+				a & & a \\
+			},\quad \xymatrix@R=1ex@C=1ex{
+				& X \er[dl] \er[dr] \er[d] \\
+				X & b & X \er[dl] \er[dr] \er[d] \\
+				& X \er[d] & b & X \er[d] \\
+				& a & & a \\
+			},\quad \xymatrix@R=1ex@C=1ex{
+			}
+		\end{split}\end{equation*}
+		$XbX=(Xb)X=X(bX)$だが、$(XbX)bX\neq Xb(XbX)$という自由モノイドとしては
+		訳の分からない規則が入っている。一般的は、与えられた文法で、$X=\cdots$
+		と書かれる右辺の中では乗法は結合的だが、変数に代入した部分の乗法とは
+		結合的でないという規則が暗黙に定めらている。
+		\begin{equation*}\begin{split}
+			X = XY,\; Y = ZW \implies X = X(ZW) \neq XZW
+		\end{split}\end{equation*}
+		通常の数学上の計算は、式を簡単化するために自由に一時的な変数を使うが、
+		\begin{equation*}\begin{split}
+			X = (1 + a)(1 + b + b^2) \iff \left\{\begin{split}
+				X &= (1 + a)Y \\
+				Y &= 1 + b + b^2 \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+		文法の記述では、一般に変数を用いて式の分離には品詞分解という意味が付属
+		する。したがって、上の例で言うと、左の右の式は同値ではなく、次のような
+		関係になる。
+		\begin{equation*}\begin{split}
+			X = (1 + a)(1 + b + b^2) \implies \left\{\begin{split}
+				X &= (1 + a)Y \\
+				Y &= 1 + b + b^2 \\
+			\end{split}\right.\iff X = (1 + a)(\underbrace{1 + b + b^2}_{Y})
+		\end{split}\end{equation*}
+		結合的でない二項演算は扱いにくいので、何とか結合的な二項演算で代用して
+		曖昧さを扱っていきたい。
+	\end{itemize} %}
+
+	文法の曖昧さを検知することについては次のように書かれている。
+	\begin{center}\begin{boxedminipage}{.9\textwidth}
+The general question of whether a grammar is not ambiguous is undecidable. No algorithm can exist to determine the ambiguity of a grammar because the undecidable Post correspondence problem can be encoded as an ambiguity problem. At least, there are tools implementing some semi-decision procedure for detecting ambiguity of context-free grammars, see e.g. (Axelsson, Heljanko \& Lange 2008).
+	\end{boxedminipage}\end{center}
+
+	そこでPost対応問題を調べてみると、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $A$と$B$を有限集合とし、
+		\item 二つの写像$f,g:A\to\W_B$が与えられたとき、
+		\item $(fa_1)\cdots(fa_n)=(ga_1)\cdots(ga_n)$となる$A$の元の系列
+		$a_1,\dots,a_n$が存在するかどうかを調べる
+	\end{itemize} %}
+	という問題だそうだ。例えば、$A=\set{1,2,3}$、$B=\set{a,b}$とし、
+	\begin{equation*}\begin{split}
+		f = \begin{array}{r|r|r|}
+			1 & 2 & 3 \\\hline
+			a & ab & b^2a
+		\end{array},\quad g = \begin{array}{r|r|r|}
+			1 & 2 & 3 \\\hline
+			ba^2 & a^2 & b^2
+		\end{array}
+	\end{split}\end{equation*}
+	とすると、$A$の系列$[3,2,3,1]$がPost問題の肯定的な答えになる。
+	\begin{equation*}\begin{split}
+		(f3)(f2)(f3)(f1) = b^2a^2b^3a^2 = (g3)(g2)(g3)(g1)
+	\end{split}\end{equation*}
+	肯定的な答えは有限回の操作で得られるが、$A$の元からは無数に長い系列を
+	作ることができるので、無限に長い系列を作ってみないと否定的な答えを出す
+	ことができない。もちろん、$f1=f2=f3=a$かつ$g1=g2=g3=b$のような場合は、
+	すぐに否定的な答えを得られるが、一般には無限に長い系列を作って調べるしか
+	方法はないようだ。
+
+	文法$X=a+XcX$の例を考えてみる。次の線形化によって、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			X \ar[r]^{a} \ar@(ld,lu)^{Xc} & 1_X
+		} \mapsto \xymatrix{
+			X \ar@/^1ex/[r]^{a} \ar@(ld,lu)^{\gamma_1} 
+			& 1_X \ar@/^1ex/[l]^{\gamma_{-1}c}
+		} \mapsto \xymatrix{
+			X \ar[r]^{a} \ar@(ul,ur)^{\gamma_1} \ar@(dr,dl)^{a\gamma_{-1}c}
+			& 1_X
+		}
+	\end{split}\end{equation*}
+	$X=\Braket{(\gamma_1+a\gamma_{-1}c)^*}a=\sum_{n\in\sizen}C_n(ac)^na$
+	となることがわかる。ここで、$C_n$はカタラン数であり、文法の曖昧さの度合い
+	を表す。$(ac)^2a$なら$C_2=2$通りの品詞分解の曖昧さがあり、$(ac)^3a$なら
+	$C_3=5$通りの品詞分解の曖昧さがある。
+	文法が$X=a+bXcX$なら曖昧さは生じない。$b$を$1$とすることで曖昧さが生じる。
+	\begin{equation*}\begin{split}
+		b^2(ac)^2a + (bac)^2a \xmapsto{b=1} 2(ac)^2a
+	\end{split}\end{equation*}
+	面白いことに、$c=1$としても曖昧さは生じない。
+	\begin{equation*}\begin{split}
+		b^2(ac)^2a + (bac)^2a \xmapsto{c=1} b^2a^3 + (ba)^2a
+	\end{split}\end{equation*}
+	文法でみると次のようになっている。
+	\begin{alignat*}{2}
+		X &= a + bXcX &\quad&\text{曖昧でない} \\
+		X &= a + bXX &\quad&\text{三次までは曖昧でない} \\
+		X &= a + XcX &\quad&\text{曖昧}
+	\end{alignat*}
+	”三次までは曖昧でない”は四次以上はわからないということである。
+	曖昧さは空遷移のみから生じるものではない。例えば、次の文法も曖昧である。
+	\begin{equation*}\begin{split}
+		X = a + b^2(ac)^2X + bXcX
+	\end{split}\end{equation*}
+
+\subsubsection{品詞分解の代数}\label{s3:品詞分解の代数} %{
+	$R$を可換環、$A$を終端記号の集合、$B$を非終端記号の集合、
+	$R\W_B\W_A^\dag:=\cat{Mod}_R(R\W_A,R\W_B)$とする。
+	$A$は入力文字、$B$は品詞、$\W_B\W_A^\dag$は入力単語の品詞への割り当てに
+	対応する。$R\W_B\W_A^\dag$に畳み込みによって積と余積を定義する。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			R\W_A\otimes R\W_A \ar[r]^{f\otimes g} 
+			& R\W_B\otimes R\W_B \ar[d]^{m} \\ 
+			R\W_A \ar[r] \ar[u]_{m^\dag} \ar@{.>}[r]^{m(f\otimes g)} 
+			& R\W_B \\ 
+		},\quad \xymatrix{
+			R\W_A\otimes R\W_A \ar[d]^{m} \ar@{.>}[r]^{m^\dag f} 
+			& R\W_B\otimes R\W_B \\ 
+			R\W_A \ar[r] \ar[r]^{f} & R\W_B \ar[u]_{m^\dag} \\ 
+		}
+	\end{split}\end{equation*}
+	この積と余積を使って文法を定義する。例えば、次の文法は、
+	\begin{equation*}\begin{split}
+		X = A_1A_2 + A_2A_1,\; A_1 = a,\; A_2 = a^2
+	\end{split}\end{equation*}
+	次の三つの写像$E:=\set{\what{X},\what{A}_1,\what{A}_2}$を定める。
+	\begin{equation*}\begin{split}
+		\what{X}w = \lr{\what{A}_1\what{A}_2}w,\;
+		\what{A}_1w = \jump{w = a}A_1,\; \what{A}_2w = \jump{w = a^2}A_2
+	\end{split}\end{equation*}
+	写像$\what{X}$に曖昧さが生じる。
+	\begin{equation*}\begin{split}
+		\what{X}w = \jump{w = a^3}(A_1A_2 + A_2A_1)
+	\end{split}\end{equation*}
+	一般には次のようになっていて、
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			f &= \sum_{w\in\W_A} f_ww \\
+			g &= \sum_{w\in\W_A} g_ww
+		\end{split}\right. \implies \left\{\begin{split}
+			h &:= fg = \sum_{w\in\W_A}h_ww \\
+			h_w &=  m_B(f\otimes g)m_A^\dag w
+		\end{split}\right.
+	\end{split}\end{equation*}
+	$h_w\in R\W_B$が
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 二つ以上の項を含むか、
+		\item ある項の係数が$2$以上になる
+	\end{itemize} %}
+	場合に、曖昧さが生じる。
+
+	\begin{problem}[有理言語の曖昧さ]\label{prob:有理言語の曖昧さ} %{
+		写像$f$と$g$の遷移状態が共に有限個の場合、$fg$の遷移状態も有限個となる。
+		有限回の分配則の適用（powerset construction）によって$fg$が曖昧かどうか
+		を判定することができるだろうか。
+	\end{problem} %prob:有理言語の曖昧さ}
+%s3:品詞分解の代数}
+	
+\subsubsection{PEGと量子変形}\label{s3:PEGと量子変形} %{
+	$X=\Braket{(\gamma_1+a\gamma_{-1}c)^*}a$の
+	Kleeneスターの中のべき乗の部分を次のように書き換えると、
+	\begin{equation*}\begin{split}
+		\Braket{(\gamma_1+a\gamma_{-1}c)^2(q\gamma_1+a\gamma_{-1}c)^2
+			(q^2\gamma_1+a\gamma_{-1}c)^2\cdots}
+	\end{split}\end{equation*}
+	次のようになって、$q$のべきによって、縮退していたDyck経路が分離される。
+	\begin{equation*}\begin{split}
+		\vcenter{\xymatrix{
+			& & \\
+			& & \ar[u]_{ac} \\
+			\ar[r]^1 & \ar[r]^1 & \ar[u]_{ac} \\
+		}} + \vcenter{\xymatrix{
+			& & \\
+			& \ar[r]^q & \ar[u]_{ac} \\
+			\ar[r]^1 & \ar[u]_{ac} \\
+		}} = (1 + q)(ac)^2
+	\end{split}\end{equation*}
+	PEGでの品詞分解の方法と類似している。PEGでの品詞分解の方法は、
+	qのべきの小さいものから優先的に品詞分解の規則を当てはめていくことに
+	相当する。
+%s3:PEGと量子変形}
+%s1:品詞分解の曖昧さについて}
+
 \section{Dyck言語}\label{s1:Dyck言語} %{
 	通常の定義とは異なるが、ここで扱いやすい形でDyck言語を定義しておく。
 
 	\begin{definition}[Dyck言語]\label{def:Dyck言語} %{
-		文字$\ldyck$と$\rdyck$から生成される自由モノイドを
-		$G=(G,\myspace,1_\W)$とする。任意の$n\in\sizen$に対して部分集合
-		$\D_n\subset G$を次のように定義する。
+		文字$\ldyck$と$\rdyck$から生成される自由モノイドを$G=(G,\myspace,1_\W)$
+		とする。任意の$n\in\sizen$に対して部分集合$D_n\subset G$を次のように
+		定義する。
 		\begin{equation*}\begin{split}
-			\D_0 &:= \set{1_\W} \\
-			\D_{n+1} &:= \cup_{r=0}^n\Set{\dyck{w_1}w_2\in G
-				\bou w_1\in\D_r,\;w_2\in\D_{n-r}} \\
+			D_0 &:= \set{1_\W} \\
+			D_{n+1} &:= \cup_{r=0}^n\Set{\gdyck{w_1}w_2\in G
+				\bou w_1\in D_r,\;w_2\in D_{n-r}} \\
 		\end{split}\end{equation*}
-		$\D_n$を文字$\ldyck$と$\rdyck$から生成された長さ$2n$のDyck言語といい、
-		その合併$\D_*:=\cup_{n\in\sizen}\D_n$を単に
-		文字$\ldyck$と$\rdyck$から生成されたDyck言語という。
+		$D_n$を文字$\ldyck$と$\rdyck$から生成された長さ$2n$のDyck言語といい、
+		その合併$D_*:=\cup_{n\in\sizen}D_n$を単に文字$\ldyck$と$\rdyck$から
+		生成されたDyck言語という。
 	\end{definition} %def:Dyck言語}
 
 	Dyck言語は以下のような文字列の集合である。
 	\begin{equation*}\begin{split}
-		\D_0 &= \Set{1_\W} \\
-		\D_1 &= \Set{\dyck} \\
-		\D_2 &= \Set{\gdyck{\dyck},\; \dyck\dyck} \\
-		\D_3 &= \Set{\ggdyck{\gdyck{\dyck}},\; \gdyck{\dyck\dyck}
+		D_0 &= \Set{1_\W} \\
+		D_1 &= \Set{\dyck} \\
+		D_2 &= \Set{\gdyck{\dyck},\; \dyck\dyck} \\
+		D_3 &= \Set{\ggdyck{\gdyck{\dyck}},\; \gdyck{\dyck\dyck}
 			,\; \gdyck{\dyck}\dyck\;, \dyck\gdyck{\dyck},\; \dyck\dyck\dyck} \\
 	\end{split}\end{equation*}
 	Dyck言語は自由モノイドの部分モノイドとなっている。
-	定義\label{def:Dyck言語}の記号を使うと、部分モノイド$\D_*\subseteq G$
-	となっている。ただし、文字列の連結による積では$\D_1$が$\D_*$の生成系には
+	定義\label{def:Dyck言語}の記号を使うと、部分モノイド$D_*\subseteq G$
+	となっている。ただし、文字列の連結による積では$D_1$が$D_*$の生成系には
 	なっていない。Dyck言語の場合、文字列の長さではなくその半分を次数として
-	勘定した方が都合がよいので、写像$||_\D:\D_*\to\sizen$を次のように
+	勘定した方が都合がよいので、写像$|-|_D:D_*\to\sizen$を次のように
 	定義する。
 	\begin{equation*}\begin{split}
-		|w|_\D = n \xiff{\dfn} w\in \D_n \quad\text{for all } n\in\sizen
+		|w|_D = n \xiff{\dfn} w\in D_n \quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
 
 	一般に有限集合$X$に対して$\lambda X\in \sizen X$を次のように定義する。
@@ -110,40 +1024,42 @@
 	$\lambda$を用いると、集合の元を列挙する操作を線形代数を使って表すことが
 	できる。Dyck言語の列挙は次のように書くことができる。
 	\begin{equation*}\begin{split}
-		\lambda\D_0 &= 1_\W \\ 
-		\lambda\D_{n+1} &= \sum_{r=0}^n \gdyck{(\lambda\D_r)}(\lambda\D_{n-r})
+		\lambda D_0 &= 1_\W \\ 
+		\lambda D_{n+1} &= \sum_{r=0}^n \gdyck{(\lambda D_r)}(\lambda D_{n-r})
 		\quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
-	また、線形射$\rho^t_q:\sizen\D_*\to\fukuso[t,q]$を次のように定義すると、
+
+\subsubsection{q-微分方程式}\label{s3:q-微分方程式} %{
+	線形射$\rho^t_q:\sizen D_*\to\fukuso[t,q]$を次のように定義すると、
 	\begin{equation*}\begin{split}
 		\rho^t_q 1_\W &= 1 \\
 		\rho^t_q \gdyck{w_1}w_2 &= \int_0^t (\rho^s_q w_1)(\rho^s_q w_2) d_qs
-		\quad\text{for all } w_1,w_2\in\D_*
+		\quad\text{for all } w_1,w_2\in D_*
 	\end{split}\end{equation*}
 	次のq-微分方程式が得られる。
 	\begin{equation*}\begin{split}
-		\rho^t_q \lambda\D_{n+1} = \sum_{r=0}^n \int_0^t 
-		(\rho^t_q\lambda\D_r)(\rho^t_q\lambda\D_{n-r}) d_qs
+		\rho^t_q \lambda D_{n+1} = \sum_{r=0}^n \int_0^t 
+		(\rho^t_q\lambda D_r)(\rho^t_q\lambda D_{n-r}) d_qs
 	\end{split}\end{equation*}
-	そして、$\rho^t_q\lambda\D_*:=\sum_{n\in\sizen} \rho^t_q\lambda\D_n$
+	そして、$\rho^t_q\lambda D_*:=\sum_{n\in\sizen} \rho^t_q\lambda D_n$
 	が収束するならば、次のq-微分方程式が得られる。
 	\begin{equation*}\begin{split}
-		\rho^t_q\lambda\D_* = 1 + \int_0^t 
-		(\rho^t_q\lambda\D_*)(\rho^t_q\lambda\D_*) d_qs
+		\rho^t_q\lambda D_* = 1 + \int_0^t 
+		(\rho^t_q\lambda D_*)(\rho^t_q\lambda D_*) d_qs
 	\end{split}\end{equation*}
 	$q=0,1$の場合にはこの式は簡単に解けて次のようになる。
 	\begin{equation*}\begin{split}
-		\rho^t_0\lambda\D_* = \frac{\sqrt{1-4t}}{2t} 
+		\rho^t_0\lambda D_* = \frac{\sqrt{1-4t}}{2t} 
 			= \sum_{n\in\sizen} \frac{(2n)!}{(n+1)!n!}t^n,\quad
-		\rho^t_1\lambda\D_* = \frac{1}{1-t}
+		\rho^t_1\lambda D_* = \frac{1}{1-t}
 	\end{split}\end{equation*}
 	特に、$q=0$の場合から長さ$2n$のDyck言語の大きさがわかる。
 	\begin{equation*}\begin{split}
-		|\D_n| = \frac{(2n)!}{(n+1)!n!}
+		|D_n| = \frac{(2n)!}{(n+1)!n!}
 	\end{split}\end{equation*}
-	$\rho^t_q\lambda\D_*$を次のように級数展開すると、
+	$\rho^t_q\lambda D_*$を次のように級数展開すると、
 	\begin{equation*}\begin{split}
-		\rho^t_q\lambda\D_* := x_t = x_0 + x_1 + x_2t^2 + \cdots
+		\rho^t_q\lambda D_* := x_t = x_0 + x_1 + x_2t^2 + \cdots
 	\end{split}\end{equation*}
 	次の漸化式が得られる。
 	\begin{equation*}\begin{split}
@@ -159,13 +1075,11 @@
 		[5]_q^!\, x_5 &= 2^4 + 2^3[4]_q + 2^3[3]_q + 2^2[2]_q 
 			+ 2^2\frac{[4]_q[3]_q}{[2]_q} + 2[4]_q[2]_q \\
 	\end{split}\end{equation*}
-
-	Dyck言語はいろいろな幾何学的な描像を持つ。
-	ここでは、Dyck経路と平面二分木との関係を書いておく。
-
+%s3:q-微分方程式}
+\subsubsection{Dyck経路}\label{s3:Dyck経路} %{
 	Dyck経路とは二次元格子を右上または右下に動きながら$(0,0)$から$(2n,0)$
 	へ到達する経路のことである。例えば次のようになる。
-	\begin{equation*}\begin{split}
+	\begin{equation}\label{eq:Dyck経路その一}\begin{split}
 		\gdyck{\dyck}\dyck \sim &\vcenter{\xymatrix@R=2ex@C=2ex{
 			(0,2) & & \ar[rd] \\
 			(0,1) & \ar[ru] & & \ar[rd] & & \ar[rd] \\
@@ -177,28 +1091,191 @@
 			(0,0) \ar[ru] & (1,0) & (2,0) \ar[ru] & (3,0) & (4,0) \ar[ru] & (5,0) 
 			& (6,0) \\
 		}} \\
-	\end{split}\end{equation*}
+	\end{split}\end{equation}
 	この描像からDyck言語の列挙をBrzozowski代数を用いて書くことができる。
 	文字$\ldyck$と$\rdyck$は数式の中で書くと紛らわしいので、$b$と$c$で
-	置き換えて書く。$\eta$と$\eta^\flat$に次の交換関係を定義すると、
+	置き換えて書く。$\eta$と$\eta^\dag$に次の交換関係とその表現を定義すると、
 	\begin{equation*}\begin{split}
-		\eta\eta^\flat = 1
+		\eta\eta^\dag = 1,\quad \eta\rangle = \langle\eta^\dag = 0
 	\end{split}\end{equation*}
 	次の因子化が成り立つことから、
 	\begin{equation*}\begin{split}
-		\Braket{\glr{b\eta + \eta^\flat c}^{2(n+1)}} = \sum_{r=0}^n
-			b\Braket{\glr{b\eta + \eta^\flat c}^{2r}}c
-			\Braket{\glr{b\eta + \eta^\flat c}^{2(n-r)}}
+		\Braket{\glr{b\eta + \eta^\dag c}^{2(n+1)}} = \sum_{r=0}^n
+			b\Braket{\glr{b\eta + \eta^\dag c}^{2r}}c
+			\Braket{\glr{b\eta + \eta^\dag c}^{2(n-r)}}
 	\end{split}\end{equation*}
 	$\braket{}=1$より、Dyck言語の列挙が次のように得られる。
 	\begin{equation*}\begin{split}
-		\lambda\D_n = \Braket{\glr{b\eta + \eta^\flat c}^{2n}}
+		\lambda D_n = \Braket{\glr{b\eta + \eta^\dag c}^{2n}}
 		\quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
+	Dyck経路を図\eqref{eq:Dyck経路その一}のように書くことは、Brzozowski代数
+	との対応がつきやすいが、図\eqref{eq:Dyck経路その一}を上下反転して45度回転
+	させた図や、Ferres図形でDyck経路を表すことが多い。
+	\begin{alignat*}{2}
+		\gdyck{\dyck}\dyck \sim &\vcenter{\xymatrix@R=2ex@C=2ex{
+			& & & (6,0) \\
+			& & (4,0) \ar[r] & (5,1) \ar[u] \\
+			& & (3,1) \ar[u] \\
+			(0,0) \ar[r] & (1,1) \ar[r] & (2,2) \ar[u] \\
+		}} &&\sim \yng(3,2,2) \\
+		\dyck\dyck\dyck \sim &\vcenter{\xymatrix@R=2ex@C=2ex{
+			& & & (6,0) \\
+			& & (4,0) \ar[r] & (5,1) \ar[u] \\
+			& (2,0) \ar[r] & (3,1) \ar[u] \\
+			(0,0) \ar[r] & (1,1) \ar[u] \\
+		}} &&\sim \yng(3,2,1) \\
+	\end{alignat*}
+	Dyck言語からFerrers図形への写像を$(FD^{-1})$とすると次のようになる。
+	\begin{equation*}\begin{split}
+		(FD^{-1}) \gdyck{w_1}w_2 = \begin{array}{|c|c|c|}\hline
+			\vdots & \ddots & (FD^{-1}) w_2 \\\hline
+			\quad\; & \cdots \\\cline{1-2}
+			\vdots & (FD^{-1}) w_1 \\\cline{1-2}
+		\end{array} \quad\text{for all } w_1,w_2\in D_*
+	\end{split}\end{equation*}
+	$\phi$は$1:1$だが$\onto$ではない。文字列の連結による積は次のようになる。
+	\begin{equation*}\begin{split}
+		(FD^{-1} w_1w_2 = \begin{array}{|c|c|}\hline
+			\ddots & (FD^{-1}) w_2 \\\hline
+			(FD^{-1}) w_1 \\\cline{1-1}
+		\end{array} \quad\text{for all } w_1,w_2\in D_*
+	\end{split}\end{equation*}
+%s3:Dyck経路}
+\subsubsection{平面上の二分木}\label{s3:平面上の二分木} %{
+	頂点数$2n+1$の平面上の二分木のつくる集合を$T_n$、
+	$T_*:=\cup_{n\in\sizen}T_n$とする。写像$(TD^{-1}):D_*\to T_*$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		(TD^{-1}) 1_\W &= \circ \\
+		(TD^{-1}) \gdyck{w_1}w_2 &= \vcenter{\xymatrix@R=1ex@C=2ex{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			(TD^{-1})w_1 & & (TD^{-1})w_2
+		}}
+	\end{split}\end{equation*}
+	文字数の帰納法により、各$n\in\sizen$で$(TD^{-1})$が集合同型
+	$D_n\simeq T_n$を与えることがわかる。したがって、$D_*$の文字列の
+	連結による積を$T_*$に持ち込むことができる。文字列の連結は、
+	一つ目の木の右端の葉を二つ目の木で置き換えるという操作になる。
+	可換図で書くと次のようになる。
+	\begin{equation*}\begin{CD}
+		\gdyck{w_1}w_2\times w_3 @> {(TD^{-1})\times(TD^{-1})} >>
+		\vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			(TD^{-1})w_1 & & (TD^{-1})w_2
+		}}\times (TD^{-1})w_3 \\
+		@V m_\myspace VV @V m_\myspace VV \\
+		\gdyck{w_1}w_2w_3 @> {(TD^{-1})} >>
+		\vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			(TD^{-1})w_1 & & \glr{(TD^{-1})w_2}\glr{(TD^{-1})w_3}
+		}} \\
+	\end{CD}\end{equation*}
+	この操作では$T_1$から$T_*$を生成しないので、一つ目の木のすべての葉を
+	二つ目の木で置き換える操作を表す作用
+	$-\lhd_q-:\sizen[q]T_*\times \sizen[q]T_*\to \sizen[q]T_*$を次のように
+	定義する。
+	\begin{alignat*}{2}
+		\circ\lhd_q t &= t && \quad\text{for all } t\in T_* \\
+		\vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			t_1 & & t_2
+		}} \lhd_q t_3 &= \vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			t_1 & & t_2\lhd_q t_3
+		}} + q^{|t_2|_D + |t_3|_D} \vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			t_1\lhd_q t_3 & & t_2
+		}} && \quad\text{for all } t_1,t_2,t_3\in T_*
+	\end{alignat*}
+	$\lhd_q$は$q=0$で文字列の連結になり結合性を満たすが、$q\neq0$では結合性
+	を満たさない。例えば、次のようになる。
+	\begin{equation*}\begin{split}
+		\glr{\dyck\lhd_q\dyck}\lhd_q\dyck &= \dyck\lhd_q\glr{\dyck\lhd_q\dyck}
+		+ (q + q^2) \gdyck{\dyck}\dyck{} \\
+	\end{split}\end{equation*}
+	この例で、結合性を満たさない部分は次のような二分木になっている。
+	\begin{equation*}\begin{split}
+		(TD^{-1})\gdyck{\dyck}\dyck{} &= \vcenter{\xymatrix@R=1ex@C=1ex{
+			& & \circ \ar@{-}[dl] \ar@{-}[dr] \\
+			& \circ \ar@{-}[dl] \ar@{-}[d] & & \circ \ar@{-}[d] \ar@{-}[dr] \\
+			\circ & \circ & & \circ & \circ \\
+		}}
+	\end{split}\end{equation*}
+%s3:平面上の二分木}
 
 	\begin{todo}[残りの話題]\label{todo:残りの話題} %{
 		課題を書いておく。
 	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[Chomsky-Schutzenbergerの定理] $L_*$を曖昧の無い文法定義が存在する
+		言語とし、$L_n\subseteq L_*$を$n$文字の単語からなる$L$の部分集合とする。
+		すると、形式和$\gamma_tL_*:=\sum_{n\in\sizen} |L_n|t^n\in\sizen[[t]]$
+		は、ある$n\in\sizen$と次の性質を満たす$p_k\in\bun[t]$が存在する。
+		\begin{equation*}\begin{split}
+			\sum_{k=0}^n p_k(\gamma_tL)^k = 0
+		\end{split}\end{equation*}
+		このことは、数学の方言で$\gamma_tL_*$は$\bun[t]$上で代数的であるという。
+		Dyck言語$D_*$の場合、$x_t:=\gamma_tD_*$とおくと、$x_t=1+t^2x_t^2$
+		だから、$p_0=1,\;p_1=-1,p_2=t^2$とすると、$\sum_{k=0}^2p_kx_t^k=0$
+		となる。
+		\item[Chomsky-Schutzenbergerの定理その二] Chomsky-Schutzenbergerの定理
+		と呼ばれるものは他にもある。それだけChomskyとSchutzenbergerが多くの
+		仕事をしたということだろう。そのうちの一つに次のような言い草がある。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item A language $L$ over the alphabet $A$ is context-free iff 
+			there exists an alphabet $T$ , a rational set $K$ over 
+			$(T\cup T^\dag)^*$ and a morphism $\phi:(T\cup T^\dag)^*\to A^*$, 
+			such that $L=\phi(D_T^*\cup K)$.
+		\end{itemize} %}
+		ここで、$D_T$は$T$と$T^\dag$から生成されるDyck言語である。
+		この言い草は、Brzozowski代数を用いた文法の線形化に他ならない。
+		$\phi$が真空期待値をとることになる。
+		大筋は次のようになる。有限集合$A$から生成されるモノイド環$RA^*$
+		から$R$上の代数$V$への線形射全体のつくる集合
+		$V(A^*)^\dag:=\cat{Mod}_R(RA^*,V)$を考える。まず、
+		$R(A^*)^\dag:=\cat{Mod}_R(RA^*,R)$を考えて、作用素$a$と$a^\dag$を
+		正当化する。これは、文字列の積$m_0$と共役$-^\dag$により定義することが
+		できる。そして、$RA^**$と$R(A^*)^\dag$の基底系が次のように書けることが
+		わかる。
+		\begin{equation*}\begin{split}
+			\ket{a_1a_2\cdots a_n} = a_1a_2\cdots a_n\ket{0}
+			,\quad \bra{a_1\cdots a_{n-1}a_n} 
+			= \bra{0}a_n^\dag a_{n-1}^\dag\cdots a_1^\dag
+		\end{split}\end{equation*}
+		そして、部分空間$\B_RA\subseteq\cat{Mod}_R(RA^*)$を定義することが
+		できる。
+		\begin{equation*}\begin{split}
+			\B_RA := \myop{span}_R\set{w_1^\dag w_2\bou w_1,w_2\in A^*}
+		\end{split}\end{equation*}
+		$\B_RA$は$A$を文字とするスタックの操作を表すと解釈できる。
+		$-m_0:V(A^*)^\dag\to V(A^*)^\dag\otimes V(A^*)^\dag$を次の式が成り立つ
+		ように定義する。
+		\begin{equation*}\begin{split}
+			f\glr{m_0\lr{x\otimes y}} = m_V\lr{fm_0}\lr{x\otimes y}
+			\quad\text{for all } f\in V(A^*)^\dag,\; x,y\in RA^*
+		\end{split}\end{equation*}
+		ここでは次のように定義する。
+		\begin{equation*}\begin{split}
+			v\bra{w}m_0 = \sum_{w_1w_2=w}v\bra{w_1}\otimes\bra{w_2}
+			\quad\text{for all } v\in V,\; w\in A^*
+		\end{split}\end{equation*}
+		また、$-m_0^\dag:V(A^*)^\dag\otimes V(A^*)^\dag\to V(A^*)^\dag$を
+		次の式が成り立つように定義する。
+		\begin{equation*}\begin{split}
+			m_V\lr{f\otimes g}\glr{m_0^\dag x} = \glr{\lr{f\otimes g}m_0}x
+			\quad\text{for all } f,g\in V(A^*)^\dag,\; x\in RA^*
+		\end{split}\end{equation*}
+		\begin{equation*}\begin{split}
+			\gglr{v_1\bra{w_1}\otimes v_2\bra{w_2}}m_0^\dag 
+			= (v_1v_2)\bra{w_1w_2}
+		\end{split}\end{equation*}
+		%
+		\item[正規積] 
+		\begin{equation*}\begin{split}
+			(b + c)^{2n} = \Braket{(\eta)^*(b\eta + c\eta^\dag)^{2n}
+			(\eta^\dag)^*}
+		\end{split}\end{equation*}
+		%
 		\item[Dyck言語の積] Dyck言語は文字列の連結による積$m_0$で閉じている
 		が、$m_0$では$\D_1$から$\D_*$を生成することができない。
 		$\D_1$から$\D_*$を生成されるような積を定義したい。
@@ -210,37 +1287,175 @@
 		$\D_n$を二分木で書いて、深さが最大になる単語が$\D_n$の中で$R$が
 		最小になり、深さが最小になる単語が$\D_n$の中で$R$が最大になる。
 		%
-		\item[平面上の二分木]
-		頂点数$2n+1$の平面上の二分木のつくる集合を$\T_n$、
-		$\T_*:=\cup_{n\in\sizen}\T_n$とする。
-		写像$(\T\D^{-1}):\D_*\to\T_*$を次のように定義する。
+		\item[q-微分方程式] $q$-微分は次のように書けるから、
 		\begin{equation*}\begin{split}
-			(\T\D^{-1}) 1_\W &= \circ \\
-			(\T\D^{-1}) \gdyck{w_1}w_2 &= \vcenter{\xymatrix@R=1ex@C=2ex{
-				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-				(\T\D^{-1})w_1 & & (\T\D^{-1})w_2
-			}}
+			[\partial_t]_q(ft) = \frac{(ft) - (fqt)}{t - qt}
 		\end{split}\end{equation*}
-		文字数の帰納法により、各$n\in\sizen$で$\T\D^{-1}$が集合同型
-		$\D_n\simeq\T_n$を与えることがわかる。したがって、$\D_*$の文字列の
-		連結による積を$\T_*$に持ち込むことができる。文字列の連結による積を
-		前置記号で$m_0$と書き、$\T_*$でも同じ記号を用いると次のように
-		なる。
-		\begin{alignat*}{2}
-			m_0(\circ\times t) &= m_0(t\times \circ) 
-			= t &&\quad\text{for all } t\in\T_* \\
-			m_0\left(\vcenter{\xymatrix@R=1ex@C=2ex{
-				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-				t_1 & & t_2
-			}}\times t\right) &= \vcenter{\xymatrix@R=1ex@C=2ex{
-				& \circ \ar@{-}[dl] \ar@{-}[dr] \\
-				t_1 & & m_0(t_2\times t)
-			}} &&\quad\text{for all } t,t_1,t_2\in\T_* \\
-		\end{alignat*}
-		$m_0(t_1\times t_2)$は$t_1$の右端の葉を$t_2$で置き換えるという操作に
-		なっている。
+		次のLeibnitz則に似た式が成り立つ。
+		\begin{equation*}\begin{split}
+			[\partial_t]_q\gglr{f_tg_t} = \gglr{[\partial_t]_qf_t}g_t
+			+ (g_{qt})\gglr{[\partial_t]_qg_t}
+		\end{split}\end{equation*}
+		この式を使うとKleeneスターについて次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			[\partial_t]_qf_t^* = [\partial_t]_q(1 + f_tf_t^*) 
+			= \gglr{[\partial_t]_qf_t}f_t^* + f_{qt}\gglr{[\partial_t]_qf_t^*} 
+			= f_{qt}^*\gglr{[\partial_t]_qf_t}f_t^*
+		\end{split}\end{equation*}
+		したがって、次のq-微分方程式で、
+		\begin{equation*}\begin{split}
+			[\partial_t]_qx_t = x_t^2
+		\end{split}\end{equation*}
+		解が$x_t=y_tz_t^*$と書けると仮定すると、
+		\begin{equation*}\begin{split}
+			[\partial_t]_qx_t = \gglr{[\partial_t]_qy_t}z_t^* 
+			+ y_{qt}z_{qt}^*\gglr{[\partial_t]z_t}z_t^*,\quad
+			x_t^2 = y_t^2\gglr{z_t^*}^2
+		\end{split}\end{equation*}
+		より、
+		\begin{equation*}\begin{split}
+			[\partial_t]_qy_t + y_{qt}z_{qt}^*\gglr{[\partial_t]z_t} = y_t^2z_t^*
+		\end{split}\end{equation*}
 		\end{description} %}
 	\end{todo} %todo:残りの話題}
 %s1:Dyck言語}
+
+\section{Chomsky-Schutzenbergerの定理}\label{s1:Chomsky-Schutzenbergerの定理} %{
+	Chomsky-Schutzenbergerの名前で呼ばれる定理はいくつかあるようだが、
+	ここでは次の定理をChomsky-Schutzenbergerの定理という。
+
+	\begin{theorem}[Chomsky-Schutzenberger]\label{prop:Chomsky-Schutzenberger} %{
+		有限集合$\Sigma$から生成された言語$L\subseteq\Sigma^*$について、
+		$L$が文脈自由であることと、次の性質を満たすことは同値である。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item ある有限集合$T$とその組$\wbar{T}$、
+			\item $T\cup\wbar{T}$から生成された有理言語$R$、
+			\item 準同型$h:(T\cup T)^*\to\Sigma^*$が存在して、
+			\item $L=h(D_T\cup R)$となる。
+		\end{itemize} %}
+		ここで、$D_T$は$T$と$\wbar{T}$によって生成されるDyck言語である。
+	\end{theorem} %prop:Chomsky-Schutzenberger}
+
+	$R$を可換環、$A$を有限集合、$V=(V,m_V,1)$を$R$上の代数とする。
+	$RA^*$をから生成された$R$の自由モノイドとし、文字列の連結による積を
+	前置記号で$m$と書き、その共役を$m^\dag$と書く。
+	\begin{alignat*}{2}
+		\ket{w_1}\otimes\ket{w_2}
+			&\xmapsto{m} \ket{w_1w_2} &\quad&\text{for all } w_i\in A^* \\
+		\ket{w} &\xmapsto{m^\dag} 
+			\sum_{\substack{w_1,w_2\in A^*\\\jump{w = w_1w_2}}}
+			\ket{w_1}\otimes\ket{w_2} &\quad&\text{for all } w\in A^*
+	\end{alignat*}
+	次の可換図により、$V(A^*)^\dag:=\cat{Mod}_R(RA^*,V)$に積$\wbar{m}$と
+	$R$-線形な余二項演算$m^\dag$を定義する。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			RA^*\otimes RA^* \ar[r]^{f\otimes g} & V\otimes V \ar[d]^{m_V\sigma} \\
+			RA^* \ar[r]^{\wbar{m}(f\otimes g)} \ar[u]_{m^\dag} & V \\
+		},\quad &\xymatrix{
+			RA^*\otimes RA^* \ar[r]^{m^\dag f} \ar[d]^{m} & V\otimes V \\
+			RA^* \ar[r]^{f} & V \ar[u]_{\delta_L}^\simeq \\
+		} \\
+	\end{split}\end{equation*}
+	ここで、$\sigma$と$\delta_L$は次のように定義する。
+	\begin{equation*}\begin{split}
+		\sigma(v_1\otimes v_2) = v_2\otimes v_1
+			\quad\text{for all } v_i\in V,\quad
+		\delta_L v = v\otimes1 \quad \text{for all } v\in V
+	\end{split}\end{equation*}
+	$m^\dag$は左余単位射が定義できないので、余積ではないが、余結合律は満たす。
+	$\wbar{m}$と$m^\dag$を双対基底を用いて書くと次のようになっている。
+	\begin{alignat*}{2}
+		v_1\bra{w_1}\otimes v_2\bra{w_2} &\xmapsto{\wbar{m}}
+			(v_2v_1)\bra{w_1w_2}
+			&\quad&\text{for all } w_i\in A^*,\; v_i\in V \\
+		v\bra{w} &\xmapsto{m^\dag} 
+			\sum_{\substack{w_1,w_2\in A^*\\\jump{w = w_1w_2}}}
+			v\bra{w_1}\otimes\bra{w_2} &\quad&\text{for all } w\in A^*,\; v\in V
+	\end{alignat*}
+	$VA$を$A$の$V$-自由加群として、$\iota\in\cat{Mod}_V\glr{{VA,(VA^*)^\dag}}$
+	を次のように定義する。
+	\begin{equation*}\begin{split}
+		\glr{\iota(va)}
+	\end{split}\end{equation*}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		表記を洗練する。
+	\end{todo} %todo:ここまで}
+	線形射$\lhd-:RA^*\cup V(A^*)^\dag\to\cat{Mod}_R\glr{V(A^*)^\dag}$を次の
+	ように定義する。
+	\begin{alignat*}{2}
+		(f\lhd x)y &= fm(x\otimes y)
+			&\quad&\text{for all } f\in R(A)^*,\; x,y\in RA^* \\
+		f\lhd g &= \wbar{m}(g\otimes f)
+			&\quad&\text{for all } f,g\in V(A^*)^\dag
+	\end{alignat*}
+	$\B_RA\subseteq\cat{Mod}_R\glr{V(A^*)^\dag}$を$\lhd RA^*$と
+	$\lhd R(A^*)^\dag$の合成によって生成される部分空間とする。
+	\begin{equation*}\begin{split}
+		\B_RA := \myop{span}_R\cup_{n\in\sizen}\Set{(\lhd x_1)\cdots(\lhd x_n)
+		\bou x_1,\dots,x_n\in RA^*\cup V(A^*)^\dag}
+	\end{split}\end{equation*}
+	\begin{alignat*}{2}
+		\lhd\ket{a}m &= m\glr{\lhd\ket{a}\otimes\id} 
+			&\quad&\text{for all } a\in A \\
+		(\lhd a) m &= m\glr{(\lhd a)\otimes\id + P_0\otimes (\lhd a)}
+			&\quad&\text{for all } a\in A \\
+	\end{alignat*}
+
+	以降、誤解のない場合はを$\lhd-$省略して次のように書くことにする。
+	\begin{alignat*}{2}
+		fw^\dag &:= f\lhd\ket{w}
+			&\quad&\text{for all } f\in V(A^*)^\dag,\; w\in A^* \\
+		fvw &:= f\lhd\glr{v\bra{w}}
+			&\quad&\text{for all } f\in V(A^*)^\dag,\; v\in V,\; w\in A^*
+	\end{alignat*}
+
+	$\lhd RA^*$と$\lhd V(A^*)^\dag$の積によって生成される
+	$\cat{Mod}_R\glr{V(A^*)^\dag}$の部分空間を$\B_RA$と書くことにする。
+	\begin{equation*}\begin{split}
+		B_RA := \set{()}
+	\end{split}\end{equation*}
+
+	文脈自由文法とプシュダウン-オートマトンをつなぐ
+	$R$を可換環、$V=(V,m_V,u_V)$と$W=(W,m_W,u_W)$を$R$の代数とする。
+	$WV^\dag:=\cat{Mod}_R(V,W)$と書く。
+	双線型射$-\lhd-:WV^\dag\otimes WV^\dag\to WV^\dag$を次のように定義し、
+	\begin{equation*}\begin{split}
+		(f\lhd x) y = fm_V(x\otimes y)
+		\quad\text{for all } f\in WV^\dag,\;x,y\in V
+	\end{split}\end{equation*}
+	双線型射$-\rhd-:W\otimes WV^\dag\to WV^\dag$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(w\rhd f) x = m_W\glr{w\otimes (fx)}
+		\quad\text{for all } w\in W,\; f\in WV^\dag,\;x\in V
+	\end{split}\end{equation*}
+	すると、$WV^\dag$は左$W$-加群、右$V$-加群となる。
+	さらに、$V$に余積$(\delta_V,\epsilon_V)$が定義されているとすると、双線型射
+	$-\lhd-:WV^\dag\otimes WV^\dag\to WV^\dag$を次のように定義することが
+	できる。
+	\begin{equation*}\begin{split}
+		(f\lhd g) x = m_W(f\otimes g)\delta_V^r x
+		\quad\text{for all } f,g\in WV^\dag,\;x\in V
+	\end{split}\end{equation*}
+	ここで、$\delta_V^r:=\sigma_{12}\delta_V$と定義した。
+	すると、$u^\dag:=u_W\epsilon_V$とおくと、次の式より、
+	$WV^\dag=u^\dag\lhd WV^\dag$となることがわかる。
+	\begin{equation*}\begin{split}
+		(u^\dag\lhd f)x = fx \quad\text{for all } f\in WV^\dag,\; x\in V
+	\end{split}\end{equation*}
+	\begin{equation*}\begin{split}
+		\glr{(f\lhd g)\lhd u} v &= m_W(f\otimes g)\delta_V^r m_V (u\otimes v) \\
+		\glr{(f\lhd u)\lhd g} v &= m_W(f\otimes g)(m_V\otimes\id)
+			(\id\otimes\delta_V^r)(u\otimes v) \\
+	\end{split}\end{equation*}
+
+	次の畳み込みにより、$WV^\dag$に積$d_V^\dag$が定義できる。
+	\begin{equation*}\xymatrix{
+		V\otimes V \ar[r]^{f\otimes g} & W\otimes W \ar[d]^{m_W} \\
+		V \ar[u]_{d_V} \ar[r]^{d_V^\dag(f\otimes g)} & W \\
+	}\end{equation*}
+	この積を用いて、
+%s1:Chomsky-Schutzenbergerの定理}
 %
 }\endgroup %}
