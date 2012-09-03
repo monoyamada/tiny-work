@@ -60,11 +60,1550 @@
 \newcommand{\Brz}{\mycal{B}}
 \newcommand{\cat}[1]{\mybf{{#1}}}
 \newcommand{\onto}{\myop{onto}}
-\newcommand{\er}{\ar@{-}}
 \newcommand{\Maybe}{\myop{Maybe}}
+\newcommand{\dabs}[1]{\left\lVert{#1}\right\rVert}
+%
+\newcommand{\smallxy}[1]{\vcenter{\xymatrix@R=4pt@C=4pt{#1}}}
+\newcommand{\hen}{\ar@{-}}
+\newcommand{\er}{\ar@{-}}
+%
+\newcommand{\wordu}{1_\W}
+\newcommand{\treeu}{1_\T}
+\newcommand{\Path}{\mycal{P}}
+\newcommand{\brz}{Brzozowski}
 %
 {\setlength\arraycolsep{2pt}
 %
+\section{覚書}\label{s1:覚書} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Redfordの定理 \\
+		体上の有限次元Hopf代数は行列Hopf代数となる。
+	\end{itemize} %}
+\subsection{単純と直和}\label{s2:単純と直和} %{
+	$R$を一般の環、$V$を$R$-加群とする。
+	indecomposableの日本語訳を知らないので、ここでは分解不可と訳しておく。
+
+	単純と分解不可は次のように定義される。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[単純] $V$の部分空間で$R$の作用で閉じている部分空間は$V$自身または
+		$\set{0}$だけとなるとき、$V$を単純という。
+		\item[半単純] $V$が単純な部分空間の直和になっているとき、$V$を半単純
+		という。
+		\item[分解不可] $V$の直和分解が$\set{0}\oplus V$または$V\oplus\set{0}$
+		に限られるとき、$V$を分解不可という。
+	\end{description} %}
+	$2$次元ベクトル空間をオートマトンとして書くと次のようになっている。
+	\begin{equation*}\begin{array}{ll}
+		1 \to 2 &\quad 1 \tofrom{}{} 2 \\
+		\text{単純でない} &\quad \text{単純} \\
+		\text{分解不可} &\quad \text{分解不可} \\
+	\end{array}\end{equation*}
+	一般に、単純$\implies$分解不可、となる。有理言語の分類を考える場合、
+	単純という性質はオートマトンと記述するのには厳しすぎる性質である。
+	閉路だけから構成されるオートマトンのみが単純になる。
+%s2:単純と直和}
+\subsection{箙の表現と有限オートマトン}
+\label{s2:箙の表現と有限オートマトン} %{
+	箙の表現とオートマトンは同じものを扱っているように見える。
+
+	簡単な例を使って考えてみる。
+	次の箙$Q$から作られる経路代数$RQ$を考える。
+	\begin{equation*}\begin{split}
+		Q := \xymatrix{
+			x \ar@/_1ex/[r]_c \ar@(lu,ld)_b & y \ar@/_1ex/[l]_a
+		}
+	\end{split}\end{equation*}
+	$Q_0$を$Q$の頂点の集合、$Q_1$を$Q$の辺の集合とする。
+	$[i,j]\subset Q_1^*,\;i,j=x,y$を、頂点$j$から頂点$i$に至る経路
+	によって生成される自由モノイド$Q_1^*$の元の集合とする。
+	$\sum[i,j]:=\sum_{w\in[i,j]}w$と略記すると次の漸化式が成り立つ。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			\sum[x,x] & \sum[x,y] \\ \sum[y,x] & \sum[y,y]
+		\end{pmatrix} = \begin{pmatrix}
+			1 & 0 \\ 0 & 1
+		\end{pmatrix} + \begin{pmatrix}
+			b & a \\ c & 0
+		\end{pmatrix}\begin{pmatrix}
+			\sum[x,x] & \sum[x,y] \\ \sum[y,x] & \sum[y,y]
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	任意の$i,j,k\in\set{x,y}$に対して次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		w_1w_2\in[i,k] \quad\text{for all } w_1\in[i,j],\; w_2\in[j,k]
+	\end{split}\end{equation*}
+	これを拡張して、$Q_1^\circ\subset Q_1^*$を次のようにおき、
+	\begin{equation*}\begin{split}
+		Q_1^\circ := \cup_{i,j=x,y}[i,j]
+	\end{split}\end{equation*}
+	$RQ_1^\circ$に積$m_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		w_1*w_2 := \begin{cases}
+			w_1w_2, &\text{ iff } j=k \\
+			0, &\text{ otherwise } \\
+		\end{cases} \quad\text{for all } w_1\in[i,j],\; w_2\in[k,l]
+	\end{split}\end{equation*}
+	$R$-代数$(RQ_1^\circ,m_*,1)$を$Q$の経路代数といい、$RQ$と書かれる。
+	$RQ$は次のように書くこともできる。
+	\begin{equation*}\begin{split}
+		R\Gamma = \frac{R\Braket{a,b,c}}{\Braket{a^2=ba=cb=c^2=0}}
+	\end{split}\end{equation*}
+
+	箙の経路代数とオートマトンとはよく似ている。ここでは、次の言葉の
+	使い方をする。
+	\begin{equation}\begin{array}{l|ll}
+		\text{グラフ表現} & \text{箙} & \text{遷移図} \\
+		\text{代数} & \text{箙の経路代数} & \text{オートマトン} \\
+	\end{array}\end{equation}
+	大雑把には、箙と遷移図はグラフの書き方が違うだけである。
+	文字$e\in Q_1$の{\brz}微分を$e^\dag$と書くと、箙と遷移図は次のような関係
+	になる。
+	\begin{equation*}\begin{array}{ccccc}
+		\text{quiver} &\quad& &\quad& \text{autoamton} \\
+		\xymatrix{
+			x \ar@/_1ex/[r]_c \ar@(lu,ld)_b & y \ar@/_1ex/[l]_a
+		} &\iff& \xymatrix{
+			x \ar@/^1ex/[r]^{a^\dag} \ar@(ld,lu)^{b^\dag} 
+			& y \ar@/^1ex/[l]^{c^\dag}
+		} &\mapsto& \xymatrix{
+			x \ar@/^1ex/[r]^{a} \ar@(ld,lu)^{b} & y \ar@/^1ex/[l]^{c}
+		}
+	\end{array}\end{equation*}
+	箙の辺の向きを逆にして、辺のラベルをその{\brz}微分にしたものが、
+	オートマトンに対応する。箙と遷移図は次の点で異なる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 使用目的 \\
+		箙も遷移図も様々な使い道があるが、ここではそれらの現在の主たる使用方法
+		に限定して述べてみる。
+		箙は箙の経路代数の表現を調べることに使う。経路代数の元の列挙が主な
+		目的ではない。遷移図は経路代数の元を列挙することに使う。経路代数の
+		表現を調べることが主な目的ではない。
+		\item 辺のラベルの重複 \\
+		箙は辺のラベルが重複することは許されない。一方、遷移図は辺のラベルが
+		重複すること許されている。文字列の部分集合を表すには、箙のような制限
+		をすることは無駄である。しかし、辺のラベルが重複することを許す代償が
+		ある。箙では生成元同士の積表を作れば、箙の経路代数は完全に決まって
+		しまうが、遷移図では生成元同士の積表だけでは、オートマトンは決まらな
+		い。例えば、$\bullet\xfrom{a}\bullet\xfrom{a}\bullet$という遷移図では、
+		$a^3=0$という関係が現れるが、これは生成元同士の積表では書くことが
+		できない。
+		\item 始点の指定 \\
+		箙では経路の始点と呼べるものがあるとすれば、それはグラフ構造から
+		決まってしまうものだけである。遷移図では複数の始点をグラフの末端でない
+		頂点に対して指定することができる。始点の指定は経路代数には影響を
+		与えない。終点を指定して経路代数の部分集合を取り出す時に関係する。
+	\end{itemize} %}
+	箙と遷移図とでは、その使用目的の違いにより異なる点もあるが、どちらも
+	グラフから生成される経路代数を使うことには変わりない。大きな違いとして、
+	遷移図では辺のラベルが重複することが許されているが、次のような変形に
+	よって箙に書き直すことができる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			x_4 & x_3 \ar[l]_a & x_2 \ar[l]_b & x_1 \ar[l]_a
+		} \xmapsto{\text{箙へ書き直す}} \xymatrix{
+			x_2 + x_4 \ar@/_1ex/[r]_b & x_1 + x_3 \ar@/_1ex/[l]_a
+		}
+	\end{split}\end{equation*}
+	この図の左の遷移図と右の箙では生成する経路代数は異なる。
+	左の遷移図では$baba=0$となるが、右の箙にはそのような関係式は含まれない。
+	遷移図で、 このように同一のラベルのついた辺が唯一になるように頂点を
+	マージしていく操作を$\phi$とすると、遷移図$A$と箙$\phi A$から生成される
+	経路代数は$RA\subseteq R\lr{\phi A}$という関係になる。
+
+	箙の表現については解説\cite{derksen2005}に簡潔な概要が書かれている。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 箙の分類 \\
+		箙は、有限型、tame型、野生型の三種類に分類される。
+		\item 箙の基礎無向グラフ \\
+		箙の辺の向きを忘れた無向グラフを箙の基礎無向グラフという。
+		\item Gabrielの定理-その一 \\
+		箙が有限型になる。 
+		$\iff$ 基礎無向グラフがA,D,E型のDynkinグラフの合併になる。
+		\item Gabrielの定理-その二 \\
+		有限型の箙では、分解不可な表現と、その基礎無向グラフから定まる
+		ルート系の正のルートとが$1:1$対応する。
+		\item 箙の表現の分類 \\
+		有限型の箙以外では、分解不可な表現をつくる一般的な処方箋を与えることは
+		望み薄と思われる。
+		\item 箙を分類する道具 \\
+		箙に対してEular行列とCartan行列を定義する。
+		\item Lie代数の手法 \\
+		箙のCartan行列に対して、ルート系とLie代数を定義する。
+		\item Kacの定理 \\
+		箙の分解不可な表現はそのルート系の正ルートに対応する。
+		\item 有限次元代数 \\
+		有限次元代数の表現全体のつくる圏は、ある箙$Q$とあるイデアル
+		$I\subseteq Q$があって、$\fukuso Q/I$のつくる圏と等しくなる。
+		\item Drozdの定理 \\
+		任意の有限次元代数は有限型、tame型、野生型のどれか一つに分類される。
+	\end{itemize} %}
+%s2:箙の表現と有限オートマトン}
+\subsection{正方行列での文字列の類似}\label{s2:正方行列での文字列の類似} %{
+	$R$可換環、 $RM_n$を$R$上の$n$行$n$列の正方行列全体のつくる$R$上の代数
+	とし、$RM_n$の通常の乗法を前置記号$m$と書く。
+	$E_{ij}\in RM_n$を$i$行$j$列の成分のみが$1$でその他の成分がすべて
+	$0$となる行列とする。集合$\mycal{E}:=\set{E_{ij}\bou i,j\in1..n}$は
+	$RM_n$の基底系となる。
+	$RM_n^\flat:=\cat{Mod}_R(RM_n)$を$RM_n$の共役空間とし、
+	$RM_n^\flat$の基底系$E_{ij}^\flat\in RM_n^\flat$を次のように定義する。
+	\begin{equation*}\begin{split}
+		E_{ij}^\flat E_{kl} = \jump{i=k}\jump{j=l}
+		\quad\text{for all } i,j,k,l\in1..n
+	\end{split}\end{equation*}
+	共役を線形射$-^\flat:RM_n\tofrom{}{} RM_n^\flat$で表すことにする。
+	\begin{equation*}\begin{split}
+		\lr{E_{ij}}^\flat := E_{ij}^\flat,\quad
+		\lr{E_{ij}^\flat}^\flat = E_{ij} \quad\text{for all } i,j\in1..n
+	\end{split}\end{equation*}
+
+	線形射$-m:RM_n^\flat\to RM_n^\flat\otimes RM_n^\flat$を次の式が成り立つ
+	ように定義する。
+	\begin{equation*}\begin{split}
+		f\lr{m\lr{x\otimes y}} \simeq_R (fm)\lr{x\otimes y}
+		\quad\text{for all } f\in RM_n^\flat,\; x,y\in RM_n
+	\end{split}\end{equation*}
+	$-m$は基底系を用いると次のように書ける。
+	\begin{equation*}\begin{split}
+		E_{ij}^\flat m = \sum_{k,l,p,q\in1..n} E_{ij}^\flat m
+		\lr{E_{kl}\otimes E_{pq}}\lr{E_{kl}^\flat\otimes E_{pq}^\flat}
+		= \sum_{k\in1..n} E_{ik}^\flat\otimes E_{kj}^\flat
+	\end{split}\end{equation*}
+	$-m$は結合的な積$m-$の共役なので、$-m$は余結合的になる。また、
+	線形射$\epsilon^\flat:RM_n^\flat\to R$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\epsilon^\flat E_{ij}^\flat = \jump{i=j} 
+		\quad\text{for all } i,j\in1..n
+	\end{split}\end{equation*}
+	$\epsilon^\flat$は$-m$の余単位射となる。
+
+	$RM_n^\flat$で定義された余積$-m$と余単位$\epsilon^\flat$を共役によって
+	$RM_n$に持ってきたものをそれぞれ$m^\flat$と$\epsilon$と書くことにする。
+	\begin{equation*}\begin{split}
+		m^\flat E_{ij} = \sum_{k\in1..n} E_{ik}\otimes E_{kj},\quad
+		\epsilon E_{ij} = \jump{i=j} \quad\text{for all } i,j\in1..n
+	\end{split}\end{equation*}
+	$m$と$m^\flat$は、次の式で示されるように、圏論的な双対にはならないが、
+	\begin{equation*}\begin{array}{rcl}
+		E_{ij}\otimes E_{kl} 
+		&\xmapsto{m\lr{\id\otimes\sigma\otimes\id}\lr{m^\flat\otimes m^\flat}}&
+			E_{ij}\otimes E_{kl} \\
+		E_{ij}\otimes E_{kl} &\xmapsto{m^\flat m}&
+			\jump{j=k} \sum_{p\in1..n} E_{ip}\otimes E_{pl} \\
+	\end{array}\end{equation*}
+	$mm^\flat=n$という式が成り立つ。
+
+	線形射$\delta:RM_n\to\cat{Mod}_R(RM_n)$を次の式が成り立つように定義
+	すると、
+	\begin{equation*}\begin{split}
+		\lr{\delta A}B \simeq_R \lr{A^\flat\otimes-} m^\flat B
+		\quad\text{for all } A,B\in RM_n
+	\end{split}\end{equation*}
+	次の式より、$\delta$は転置になっていることがわかる。
+	\begin{equation*}\begin{split}
+		\delta E_{ij}
+		\simeq_R \sum_{k,l\in1..n} \lr{E_{ij}^\flat\otimes\id} 
+		m^\flat E_{kl}E_{kl}^\flat
+		\simeq_R \sum_{k\in1..n} E_{jk}E_{ik}^\flat
+		= E_{ij}^\tran
+	\end{split}\end{equation*}
+
+\subsubsection{余単位射の出処}\label{s3:余単位射の出処} %{
+	$X_1\in R^n$を始状態、$X_0\in R^n$を終状態として、余単位射を
+	$M\mapsto X_1^\tran MX_0$と定義したい。上記の標準的な
+	余単位射は$M\mapsto\sum_{k=0}^n\mybf{e}_k^\tran M\mybf{e}_k$と書くことが
+	できるが、これは、始状態と終状態が同一になっているループ状の遷移を
+	ピックアップしていると解釈できる。それを、始状態$X_1$から終状態$X_0$
+	への遷移をピックアップするように変更したい。
+	このように余単位射を定義するためには、余積も変更する必要がある。
+
+	\begin{problem}[余単位射の出処]\label{prob:余単位射の出処} %{
+		パーシングを考えたとき、何故、余単位射が出てくるのだろうか？
+	\end{problem} %prob:余単位射の出処}
+
+	文字列にかぎらず一般の代数で考えてみる。$R$を可換環、$V=(V,m,1)$を$R$上
+	の代数、$V^\dag:=\cat{Mod}_R\lr{V,R}$を$V$の双対空間とする。
+	$V$の積$m$と単位元$1$により$V^\dag$に余積
+	$m^\dag:V^\dag\to V^\dag\otimes V^\dag$とその余単位射
+	$\epsilon:V^\dag\to R$が定まる。
+	\begin{alignat*}{2}
+		\lr{m^\dag f}\lr{x\otimes y} &\simeq_R fm\lr{x\otimes y} 
+		&\quad&\text{for all } f\in V^\dag,\; x,y\in V \\
+		\epsilon f &= f1 &\quad&\text{for all } f\in V^\dag
+	\end{alignat*}
+	そして、線形射$\mu:V\to\cat{Mod}_R\lr{V^\dag}$を次の式が
+	成り立つように定義すると、
+	\begin{equation*}\begin{split}
+		\glr{\lr{\mu x}f} y = fm\lr{x\otimes y}
+		\quad\text{for all } f\in V^\dag,\; x,y\in V
+	\end{split}\end{equation*}
+	$\mu$は逆順の代数射となる。
+	\begin{equation*}\begin{split}
+		\mu1 = \id,\quad \lr{\mu x}\lr{\mu y} = \mu m\lr{y\otimes x}
+		\quad\text{for all } x,y\in V
+	\end{split}\end{equation*}
+	変換$\mu x$と余積$m^\dag$は次の関係になる。
+	\begin{equation*}\begin{split}
+		\lr{\mu x}f \simeq_R \lr{m^\dag f}\lr{x\otimes-}
+		\quad\text{for all } f\in V^\dag,\; x\in V
+	\end{split}\end{equation*}
+	像$\mu V\subseteq\cat{Mod}_R\lr{V^\dag}$がBrzozowski微分に対応する。
+
+	写像$\delta:V\to V\otimes V$が$m\delta=\id$となり、任意の$x\in V$に対して
+	有限の$n\in\sizen$で$\lr{\pi_2\delta}^nx=1$となれば、
+	次のようにして、任意の$f\in V^\dag$と$x\in V$に対して$fx$の計算を
+	$\cat{Mod}_R\lr{V^\dag}$の計算に帰着させることができる。
+	\begin{equation*}\xymatrix{
+		& x_L^1\otimes x_R^1 \ar@<1ex>@{|->}[ld]^{m} \ar[d]^{\pi_2}
+		& \cdots \ar@<1ex>@{|->}[ld]^{m} 
+		& x_L^n\otimes x_R^n \ar@<1ex>@{|->}[ld]^{m} \ar[d]^{\pi_2} \\
+		x \ar@<1ex>@{|->}[ru]^\delta \ar[d]^f
+		& x_R^1 \ar[d]^{\lr{\mu x_L^1}f} \ar@<1ex>@{|->}[ru]^\delta
+		& \cdots \ar@<1ex>@{|->}[ru]^\delta
+		& x_R^n = 1 \ar[d]^{\lr{\mu x_L^n}\cdots\lr{\mu x_L^1}f} \\
+		fx \ar@{=}[r] & \glr{\lr{\mu x_L^1}f}x_R^1 \ar@{=}[r]
+		& \cdots \ar@{=}[r]
+		& \epsilon\lr{\mu x_L^n}\cdots\lr{\mu x_L^1}f
+	}\end{equation*}
+	これが質問\ref{prob:余単位射の出処}の答えになっているだろう。
+	大抵の場合、こうすることは簡単なものをより難しくするが、
+	言語の文法が与えられた場合は、この考えを使って、パーシングを効率的に
+	行う事前準備をすることができる。
+
+	$f\in V^\dag$を固定して考える。$[f]\subseteq V^\dag$を
+	$[f]:=\myop{span}_R\set{\lr{\mu V}f}$によって定義する。すると、
+	$\mu$を$[f]$に制限した代数射$\mu_f:V\to[f]$は代数$\lr{V,m,1}$の表現を
+	与え、
+	\begin{equation*}\begin{split}
+		\lr{\mu_fx}g = \lr{\mu fx}g
+		\quad\text{for all } g\in V^\dag,\; x\in V
+	\end{split}\end{equation*}
+	$m^\dag$を$[f]$に制限した線形射$m^\dag_f:[f]\to V^\dag\otimes[f]$は、
+	\begin{equation*}\begin{split}
+		m^\dag_fg = m^\dag g \quad\text{for all } g\in[f]
+	\end{split}\end{equation*}
+	次の式を満たし、余代数$(V^\dag,m^\dag,\epsilon)$の余表現を与える。
+	\begin{equation*}\begin{split}
+		\lr{\id\otimes m^\dag}m^\dag_f = \lr{m^\dag\otimes\id}m^\dag_f
+		,\quad \lr{\epsilon\otimes\id}m^\dag_f \simeq_R \id
+	\end{split}\end{equation*}
+	$[f]$が$A^\dag$の余表現を与えることは、環$A$のイデアル$I$が$A$の
+	表現となることと同様の事象なのだろう。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $I\subset A$で$I$は加法について$A$の部分群となり、
+		\item 任意の$x\in I$と$a\in A$に対して$ax\in I$かつ$xa\in I$となる
+		とき、
+		\item $I$を$R$の（両側）イデアルという。
+	\end{itemize} %}
+
+	\begin{note}[Sweedler双対]\label{note:Sweedler双対} %{
+		論文\cite{2007arXiv0712.0125D}に積の共役によって定義される余積について
+		成り立つ性質が述べられている。積の共役によって定義される余積または
+		その逆をSweedler双対というらしい。斜め読みした限り、予想以上に多くの
+		ことがわかっている。
+	\end{note} %note:Sweedler双対}
+
+	筋書き。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 文法が与えられる $\iff$ $L\subseteq\Sigma^*$が定まる。
+		\item 転置により指示関数（indicator）
+		$\chi_L^\dag\in\lr{R\Sigma^*}^\dag$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\chi_L^\dag := \sum_{w\in L}w^\dag
+		\end{split}\end{equation*}
+		任意の$w\in\Sigma^*$に対して$\chi_L^\dag w\neq 0 \iff w\in L$が
+		成り立つ。
+		\item $V:=R\Sigma^*$とおく。
+		\item 部分空間$[\chi_L^\dag]\subseteq V^\dag$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			[\chi_L^\dag] 
+			:= \myop{span}_R\Set{\lr{\mu w}\chi_L^\dag\bou w\in\Sigma^*}
+		\end{split}\end{equation*}
+		$\mu $が代数射で$[\chi_L^\dag]$で閉じているから、$\mu V$の作用域
+		を$[\chi_L^\dag]$に制限することで、表現
+		$\mu_L:V\to\cat{Mod}_R\lr{[\chi_L^\dag]}$が得られる。
+		\begin{equation*}\begin{split}
+			\lr{\mu_Lx}f := \lr{\mu x}f
+			\quad\text{for all } f\in[\chi_L^\dag],\; x\in V
+		\end{split}\end{equation*}
+		特に、$L$が有理言語の場合、$[\chi_L^\dag]$が有限次元となり、
+		$\rho_L\Sigma$が行列の形で書ける。$L$が有理言語の場合でも、
+		$\mu$自身は$\cat{Mod}_R\lr{V^\dag}$への写像で$\cat{Mod}_R\lr{V^\dag}$
+		は無限次元なので、$\mu$自身は行列の形で書くことができないことに注意
+		する。
+	\end{itemize} %}
+
+	この筋書きを簡単な有理言語によって見てみる。
+	集合$\Sigma$と$L\subset\Sigma^*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\Sigma := \set{a,b,c},\quad L := \Set{b^nac^n\bou n\in\sizen}
+	\end{split}\end{equation*}
+	すると、指示関数の共役が$\chi_L:=b^*ac^*\in R\Sigma^*$となり、
+	次の式より、
+	\begin{equation*}\begin{split}
+		&\left\{\begin{split}
+			X &= X_0 + TX \\
+			\chi_L &= X_1^\tran X
+		\end{split}\right. \quad\text{where } X := \pvec{b^*ac^*}{c^*} \\
+		&\quad X_0 := \pvec{0}{1},\; X_1 := \pvec{1}{0},\;
+		T := \begin{pmatrix}
+			b & a \\ 0 & c
+		\end{pmatrix} = aT_a + bT_b + cT_c
+	\end{split}\end{equation*}
+	対応する$R\Sigma^*$の部分空間が
+	$\gdyck{\chi_L}:=\myop{span}_R\set{b^*ac^*,c^*}$となる。
+	同一視$\gdyck{\chi_L}\simeq R^2$により、表現
+	$\mu_L^\dag:R\Sigma^*\to\cat{Mod}_R\lr{\gdyck{\chi_L}}\simeq RM_2$が
+	次のように定まる。
+	\begin{equation*}\begin{split}
+		\lr{\mu_L^\dag x}X = T_xX \quad\text{for all } x\in\Sigma
+	\end{split}\end{equation*}
+	$1^\dag:R\Sigma^*\to R$を余単位射とすると、
+	\begin{equation*}\begin{split}
+		1^\dag w=\jump{w=1} \quad\text{for all } w\in\Sigma^*
+	\end{split}\end{equation*}
+	遷移行列$T$が$\sum_{x\in\Sigma}xT_x$と書かれていることにより、
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		1^\dag\lr{X_1^\tran MT^*X_0} = X_1^\tran MX_0
+		\quad\text{for all } M\in RM_2
+	\end{split}\end{equation*}
+	したがって、$x_1,\dots,x_n\in\Sigma$に対して$x_1\cdots x_n\in\Sigma^*$が
+	$L$に属しているかどうかの判定は、次のように書ける。
+	\begin{equation}\label{eq:メンバーシップの判定}\begin{split}
+		\lr{x_1\cdots x_n}^\dag\chi_L
+		= X_1^\tran T_{x_1}\cdots T_{x_n}X_0 \neq 0 \iff x_1\cdots x_n\in L
+	\end{split}\end{equation}
+	ここで、$\mu_L$が逆順準同型であり、$\mu_Lx$の作用とその表現との関係から
+	次のような順序で行列が並ぶことに注意する。
+	\begin{equation*}\begin{split}
+		\lr{\mu_L^\dag\lr{x_1\cdots x_n}}X = \lr{\mu_L^\dag x_n}
+		\cdots\lr{\mu_L^\dag {x_1}}X = T_{x_1}\cdots T_{x_n}X
+	\end{split}\end{equation*}
+
+	単語が$L$に属しているかどうかの判定\eqref{eq:メンバーシップの判定}は、
+	次のように定義された部分空間$[\mu_L\Sigma^*]\subset R\Sigma^*M_2$
+	に、
+	\begin{equation*}\begin{split}
+		\gdyck{\mu_L\Sigma^*} := \myop{span}_R\cup_{n\in\sizen}
+		\Set{M_{x_1}\cdots M_{x_n}\bou x_1,\dots,x_n\in\Sigma}
+	\end{split}\end{equation*}
+	余単位射$\epsilon:\gdyck{\mu_L\Sigma^*}\to R$を次のように定義している
+	ように見える。
+	\begin{equation*}\begin{split}
+		\epsilon M := 1^\dag\lr{X_1^\tran MX}
+		\quad\text{for all } M\in\gdyck{\mu_L\Sigma^*}
+	\end{split}\end{equation*}
+%s3:余単位射の出処}
+%s2:正方行列での文字列の類似}
+\subsection{平面上の二分木と格子上の経路}
+\label{s2:平面上の二分木と格子上の経路} %{
+	頂点数が$n$の平面上の二分木の集合を$\T_n$、
+	$\T_+:=\cup_{n\in\sizen_+}\T_n$と$\T_*:=\T_0\cup\T_+$をその合併とする。
+	\begin{equation*}\begin{split}
+		\T_0 &:= \Set{\treeu} \\
+		\T_1 &:= \Set{\bullet} \\
+		\T_2 &:= \Set{\smallxy{
+			& \bullet \hen[dl] \\
+			\bullet
+		}, \smallxy{
+			\bullet \hen[dr] \\
+			& \bullet
+		}} \\
+		\T_3 &:= \Set{\smallxy{
+			& & \bullet \hen[dl] \\
+			& \bullet \hen[dl] \\
+			\bullet
+		}, \smallxy{
+			& \bullet \hen[dl] \\
+			\bullet \hen[dr] \\
+			& \bullet
+		}, \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \\
+		}, \smallxy{
+			\bullet \hen[dr] \\
+			& \bullet \hen[dl] \\
+			\bullet
+		}, \smallxy{
+			\bullet \hen[dr] \\
+			& \bullet \hen[dr] \\
+			& & \bullet
+		}}
+	\end{split}\end{equation*}
+
+	二項演算$\beta:\T_*\times\T_*\to\T_+$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\beta\lr{\tau_1,\tau_2} := \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\tau_1 & & \tau_2
+		} \quad\text{for all } \tau_1,\tau_2\in\T_*
+	\end{split}\end{equation*}
+	ここで、$\beta$の空の木$\treeu$への作用は次のように定義する。
+	\begin{alignat*}{3}
+		\beta\lr{\tau,\treeu} &= \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\tau & & \treeu
+		} &&:= \smallxy{
+			& \bullet \hen[dl] \\
+			\tau
+		} &\quad\text{for all } \tau\in\T_+ \\
+		\beta\lr{\treeu,\tau} &= \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\treeu & & \tau
+		} &&:= \smallxy{
+			\bullet \hen[dr] \\
+			& \tau
+		} &\quad\text{for all } \tau\in\T_+ \\
+		\bullet\lr{\treeu,\treeu} &= \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\treeu & & \treeu
+		} &&:= \bullet
+	\end{alignat*}
+	$\beta$は次の意味で頂点を一つ追加する操作になっている。
+	\begin{equation*}\begin{split}
+		\beta:\T_m\times\T_n\to\T_{m+n+1}\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	したがって、$\beta$は結合的でないし、単位元を持たない。
+	しかし、"大きな問題を\underline{一意に}小さな問題に分割する"機能を
+	持つので、平面二分木を表現する上でとても便利である。
+
+	\begin{proposition}[Gedel関数もどき]\label{prop:Gedel関数もどき} %{
+		任意の$\tau\in\T_+$に対して$\tau=\beta\lr{\tau_1,\tau_2}$となる
+		$\tau_1,\tau_2\in\T_*$が唯一つ存在する。
+	\end{proposition} %prop:Gedel関数もどき}
+	\begin{proof} %{
+		任意の$\tau\in\T_+$はある$\tau_1,\tau_2\in\T_*$が存在して、$\smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\tau_1 & & \tau_2
+		}$と書くことができる。したがって、$\tau=\beta\lr{\tau_1,\tau_2}$と
+		なる$\tau_1,\tau_2\in\T_*$は存在する。また、ある
+		$\sigma_1,\sigma_2\in\T_*$が存在して、
+		$\smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\tau_1 & & \tau_2
+		}=\smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\sigma_1 & & \sigma_2
+		}$となれば、$\tau_1=\sigma_1$かつ$\tau_2=\sigma_2$となるから、
+		そのような$\tau_1,\tau_2$が一意に定まることもわかる。
+	\end{proof} %}
+
+	この命題より、集合同型$\beta:\T_*\times\T_*\simeq\T_+$が成り立ち、
+	$\beta^{-1}:\T_+\to\T_*\times\T_*$が定義できることがわかる。
+	また、$\T_{n+1}$の大きさが$|\T_{n+1}|=\sum_{k=0}^n|\T_k||\T_{n-k}|$
+	で定まり、それがCatalan数になることがわかる。
+	\begin{equation*}\begin{split}
+		|\T_n| = \frac{(2n)!}{(n+1)!n!} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	頂点と辺の数を数える写像を定義しよう。
+	頂点数を数える写像$N_V:\T_*\to\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		N_V\treeu &:= 0 \\
+		N_V\beta\lr{\tau_1,\tau_2} &:= 1 + \lr{N_V\tau_1}+ \lr{N_V\tau_2}
+		\quad\text{for all } \tau_1,\tau_2\in\T_*
+	\end{split}\end{equation*}
+	二分木の場合、辺は左下へ向かう辺と右下に向かう辺の二種類あるから、
+	それぞれ別に数える写像を定義する。$N_+$を左下に向かう辺の数、
+	$N_-$を右下に向かう辺の数として、写像$N_\pm:\T_*\to\sizen$を次の
+	ように定義し、
+	\begin{equation*}\begin{split}
+		N_+\treeu &:= 0 \\
+		N_+\beta\lr{\tau_1,\tau_2} &:= \jump{\tau_1\neq\treeu} 
+		+ \lr{N_+\tau_1}+ \lr{N_+\tau_2}
+		\quad\text{for all } \tau_1,\tau_2\in\T_* \\
+		N_-\treeu &:= 0 \\
+		N_-\beta\lr{\tau_1,\tau_2} &:= \jump{\tau_2\neq\treeu} 
+		+ \lr{N_-\tau_1}+ \lr{N_-\tau_2}
+		\quad\text{for all } \tau_1,\tau_2\in\T_* \\
+	\end{split}\end{equation*}
+	すべての辺の数を$N_E:=N_++N_-$と定義する。ただし、任意の$\tau\in\T_+$に
+	対して$N_V\tau=\lr{N_E\tau}+1$が成り立つ。
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 次数の定義 \\
+			辺の数で代用できる。Dyck木の場合は、辺の数を$2$で割ったものがDyck木の
+			次数になる。グラフ理論で次数といった場合、別の意味、頂点に入力または
+			出力する辺の数になる。したがって、無用の混乱を避けるために次数という
+			言葉を使わない方がよいかもしれない。
+			\item 自然な成長を経路木で解釈する場合、元の木の葉を追跡しないと、
+			経路木で解釈することができない。したがって、一旦、$\T_*$を$\Path_*$の
+			直積に分解して、それを$\Path_*$の積で連結するという方法がいいかも
+			しれない。$\T_*$を$\Path_*$の直積に分解する際には、元の葉が分解した後
+			にも葉になっているように分解する必要がある。
+			\begin{equation*}\begin{split}
+				\smallxy{
+					& & 1 \hen[dl] \hen[dr] \\
+					& 2 \hen[dl] \hen[d] & & 5 \hen[d] \hen[dr] \\
+					3 & 4 & & 6 & 7 \\
+				} \mapsto \smallxy{
+					& & 1 \hen[dl] \\
+					& 2 \hen[dl] \\
+					3 \\
+				}\times \smallxy{
+					2 \hen[dr] \\
+					& 4 \\
+				}
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{todo} %todo:ここまで}
+
+	任意の$n\in\sizen$に対して$\D_n\subseteq\T_{2n+1}$を次の性質を持つ
+	木全体の集合とする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item すべての頂点が子供を$0$または$2$つ持つ。
+		\item 葉でない頂点が$n$個ある。
+	\end{itemize} %}
+	$\D_n$を$n$次のDyck木（の集合）ということにする。
+	写像$\deg:\T_*\to\sizen$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\deg\tau := \text{$\tau$の葉でない頂点の数}
+		\quad\text{for all } \tau\in\T_*
+	\end{split}\end{equation*}
+	$\tau\in\D_n$ならば$\deg\tau=n$かつ$|\tau|=2n+1$となる。
+
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 任意の$m,n\in\sizen$に対して$\tau_1\in\D_m$かつ$\tau_2\in\D_n$
+		ならば、$\beta\lr{\tau_1,\tau_2}\in\D_{m+n+1}$が成り立ち、
+		\item 任意の$n\in\sizen$に対して$\beta\lr{\tau_1,\tau_2}\in\D_{n+1}$
+		ならば、$\lr{\tau_1,\tau_2}\in\cup_{k=0}^n\D_k\times\D_{n-k}$が成り立つ
+		から、
+	\end{itemize} %}
+	集合同型$\beta:\D_*\times\D_*\simeq\D_+$が成り立つ。
+	可換図にすると次のようになる。
+	\begin{equation*}\xymatrix@C=8ex{
+		\cup_{k=0}^{2(n+1)} \T_k\times\T_{2(n+1)-k} \ar[r]^{\beta}_\simeq 
+		& \T_{2(n+1)+1} \\
+		\cup_{k=0}^{n} \D_k\times\D_{n-k} \ar[r]^{\beta}_\simeq 
+		\ar[u]_{\subseteq}
+		& \D_{n+1} \ar[u]_{\subseteq}
+	}\end{equation*}
+	不思議なことに、任意の$n\in\sizen$に対して$|\T_n|=|\D_n|$が成り立つ。
+	写像$D:\T_*\to\T_+$を次のように定義する。
+	\begin{equation*}\begin{split}
+		D0 &:= \bullet \\
+		D\beta\lr{\tau_1,\tau_2} &:= \beta\lr{D\tau_1,D\tau_2}
+		\quad\text{for all }\tau_1,\tau_2
+	\end{split}\end{equation*}
+	Dは次のように、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 子供を追加する余地のある葉でない頂点と、
+		\item すべての葉に
+	\end{itemize} %}
+	$0$という未来の子供を追加して、$0$を$\bullet$で置き換える操作に
+	なっている。
+	\begin{equation*}\begin{split}
+		D: \smallxy{
+			\bullet \hen[dr] \\
+			& \bullet \hen[dl] \\
+			\bullet
+		} = \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			0 & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & 0 \\
+			0 & & 0
+		} \mapsto \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		}
+	\end{split}\end{equation*}
+	任意の$n\in\sizen$に対して集合同型$D:\T_n\simeq\D_n$が成り立つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 任意の$n\in\sizen$に対して$D:\T_n\to\D_*$となる。\\
+		$D$の定義より、任意の$\tau\in\T_*$に対して$D\tau$は子供を$1$つしか
+		持たない頂点はないから、$D\tau\in\D_*$となる。
+		\item 任意の$n\in\sizen$に対して$D:\T_n\to\D_n$となる。\\
+		$D\T_n\subseteq\T_{2n+1}$となることを頂点数に関する証明する。
+		まず、$|D0|=1=2|0|+1$となる。ある$n\in\sizen$があって、
+		任意の$k\le n$と$\tau\in\T_k$に対して$|D\tau|=2|\tau|+1$となると
+		仮定する。すると、任意の$\tau\in\T_{n+1}$に対して、ある$0\le k\le n$
+		があって、$\tau=\beta\lr{\tau_1,\tau_2}$となる$\tau_1\in\T_k$と
+		$\tau_2\in\T_{n-k}$がある。すると、次の式から頂点数が$n+1$の場合も
+		帰納法の仮定が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			|D\tau| = |D\tau_1|+|D\tau_2|+1 = \lr{2k+1}+\lr{2\lr{n-k}+1}+1
+			= 2|\tau| + 1
+		\end{split}\end{equation*}
+		%
+		\item 写像$E:\D_*\to\T_*$を次のように定義する。
+		\begin{equation*}\begin{split}
+			E\bullet &:= 0 \\
+			E\beta\lr{\tau_1,\tau_2} &:= \beta\lr{E\tau_1,E\tau_2}
+			\quad\text{for all } \tau_1,\tau_2\in\D_*
+		\end{split}\end{equation*}
+		すると、$DE=\id$となるから、集合同型$D:\T_*\simeq\D_*$が成り立つことが
+		わかる。
+	\end{itemize} %}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		Dyck経路はそのまま平面二分木として見ることができる。
+		\begin{equation*}\begin{split}
+			\xymatrix@R=2ex@C=2ex{
+				& & \ar[dr] \\
+				& \ar[ur] & & \ar[dr] & & \ar[dr] \\
+				\ar[ur] & & & & \ar[ur] & & \\
+			} \mapsto \smallxy{
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dl] \\
+				\bullet \hen[dr] \\
+				& \bullet \hen[dr] \\
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dr] \\
+				& & \bullet
+			}
+		\end{split}\end{equation*}
+		Dyck経路による描像はBrzozowski代数を用いた列挙に直接対応するので、
+		Dyck木からDyck経路への対応をつけたい。$\mybf{2}:=\set{b,c}$とする。
+		写像$\omega:\D_*\to\mybf{2}^*$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\omega\bullet = \wordu,\quad 
+			\omega\beta\lr{\tau_1,\tau_2} = b\lr{\omega\tau_1}c\lr{\omega\tau_2}
+			\quad\text{for all } \tau_1,\tau_2\in\D_*
+		\end{split}\end{equation*}
+		$\omega$は$1:1$になる。
+		写像$\pi:\mybf{2}^*\to\T_+$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\pi\wordu = \bullet,\quad
+			\pi\lr{bw} = \beta\lr{\pi w,\treeu},\quad 
+			\pi\lr{cw} = \beta\lr{\treeu, \pi w}
+			\quad\text{for all } w\in\mybf{2}^*
+		\end{split}\end{equation*}
+		$\pi$は$1:1$になる。したがって、$\pi\omega:\D_*\to\T_+$は$1:1$になる。
+		\begin{equation*}\begin{split}
+			\pi\omega\bullet &= \bullet \\
+			\pi\omega\beta\lr{\tau_1,\tau_2} 
+			&= \beta\gglr{\pi\glr{\lr{\omega\tau_1}c\lr{\omega\tau_2}},\treeu}
+			\quad\text{for all } \tau_1,\tau_2\in\D_*
+		\end{split}\end{equation*}
+		この二つ目の式を作用素の形で書くと次のようになる。
+		\begin{equation*}\begin{split}
+			\pi\omega\beta\lr{\tau_1,\tau_2} 
+			= \beta\lr{\pi\times\id}\lr{m\times\id}
+			\lr{\id\times c-\times\id}\lr{\omega\times\omega\times\id}
+			\lr{\tau_1,\tau_2,\treeu}
+		\end{split}\end{equation*}
+
+		定式化してみよう。
+		任意の$n\in\sizen$に対して$\Path_n\subseteq\T_{n+1}$を次の性質を持つ
+		木全体の集合とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item すべての頂点が子供を$0$または$1$つ持つ。
+			\item 葉でない頂点が$n$個ある。
+		\end{itemize} %}
+		$\Path_n$を$n$次の経路木（の集合）ということにする。
+		二項演算$m:\Path_*\times P_*\to\Path_*$を次のように定義する。
+		\begin{alignat*}{2}
+			m\lr{\bullet,\tau} &= m\lr{\tau,\bullet} 
+			= \tau &\quad&\text{for all } \tau\in\Path_* \\
+			m\lr{\beta\lr{\tau_1,\treeu},\tau_2}
+			&= \beta\lr{m\lr{\tau_1,\tau_2},\treeu} 
+			&\quad&\text{for all } \tau_1,\tau_2\in\Path_* \\
+			m\lr{\beta\lr{\treeu,\tau_1},\tau_2}
+			&= \beta\lr{\treeu,m\lr{\tau_1,\tau_2}} 
+			&\quad&\text{for all } \tau_1,\tau_2\in\Path_*
+		\end{alignat*}
+		ここで、$\beta_\pm:\T_*\to\T_+$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\beta_+\tau := \beta\lr{\tau,\treeu},\quad 
+			\beta_-\tau := \beta\lr{\treeu,\tau}
+			\quad\text{for all }\tau\in\T_*
+		\end{split}\end{equation*}
+		$m$の定義の二つ目と三つ目の式は$m\lr{\beta_\pm\times\id}=\beta_\pm m$
+		と書くことができる。$\Path_n$の任意の元は一意に次のように書くことが
+		できるから、
+		\begin{equation*}\begin{split}
+			\beta_1\cdots\beta_n\bullet
+			\quad\text{where } \beta_1,\dots,\beta_n=\beta_\pm
+		\end{split}\end{equation*}
+		任意の$n\in\sizen$に対して集合同型$\Path_n\simeq\mybf{2}^n$が成り立ち、
+		$m$が文字列の連結に対応し、モノイド同型
+		$(\Path_*,m,\bullet)\simeq\mybf{2}^*$が成り立つ。
+
+		$P:\T_+\to\Path_*$を次のように定義する。
+		\begin{alignat*}{2}
+			P\bullet &:= \bullet,\quad P\beta_\pm = \beta_\pm P \\
+			P\beta\lr{\tau_1,\tau_2} &:= m\lr{\beta_+P\tau_1, \beta_-P\tau_2}
+			&\quad& \text{for all }\tau_1,\tau_2\in\T_+ \\
+		\end{alignat*}
+		$P\bullet=\bullet$となり、$P$は$\beta_\pm$と可換だから、任意の
+		$\tau\in\Path_*$に対して$P\tau=\tau$となる。
+		したがって、$P$は$\Path_*$への射影となり、べき等$P^2=\id$になる。
+		\footnote{
+			$\tau\in\Path_*$に対して$P^{-1}\tau\subset\T_*$に代数構造が入れば、
+			ファイバー束に似た構造が入ることになる。
+		}
+		$P$は木を行きがけ順に辿りながら、右側の子供を左側の経路の末端に
+		付け替えるという操作を行う。例えば次のような操作をすることになる。
+		\begin{equation*}\begin{split}
+			\smallxy{
+				& & 1 \hen[dl] \hen[dr] \\
+				& 2 \hen[dl] \hen[d] & & 5 \hen[d] \hen[dr] \\
+				3 & 4 & & 6 & 7
+			} \mapsto \smallxy{
+				& & 1 \hen[dl] \hen[dr] \\
+				& 2 \hen[dl] & & 5 \hen[dl] \hen[dr] \\
+				3 \hen[dr] & & 6 & & 7 \\
+				& 4
+			} \mapsto \smallxy{
+				& & 1 \hen[dl] \\
+				& 2 \hen[dl] \\
+				3 \hen[dr] \\
+				& 4 \hen[dr] \\
+				& & 5 \hen[dl] \hen[dr] \\
+				& 6 & & 7
+			} \mapsto \smallxy{
+				& & 1 \hen[dl] \\
+				& 2 \hen[dl] \\
+				3 \hen[dr] \\
+				& 4 \hen[dr] \\
+				& & 5 \hen[dl] \\
+				& 6 \hen[dr] \\
+				& & 7
+			}
+		\end{split}\end{equation*}
+
+		$P$が$\Path_*$への射影なので、写像
+		$\what{P}:T_*\to\cat{Set}\lr{\Path_*}$を次のように定義することが
+		できる。
+		\begin{equation*}\begin{split}
+			\what{P}\treeu &:= \beta_- \\
+			\lr{\what{P}\tau}\pi &:= P\beta\lr{\tau,\pi}
+			= m\lr{\beta_+P\tau,\beta_-\pi}
+			\quad\text{for all } \tau\in\T_+,\; \pi\in\Path_*
+		\end{split}\end{equation*}
+		特に、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\what{P}\bullet = \beta_+\beta_-
+		\end{split}\end{equation*}
+
+		この対応を$\pi$とすると、$\pi$は写像$\pi:\mybf{3}^*\to\T_*$として
+		次のように定義できる。
+		\begin{alignat*}{2}
+			\pi1 &:= 0 \\
+			\pi\lr{aw} &:= \pi w &\quad& \text{for all } w\in\mybf{3}^* \\
+			\pi\lr{bw} &:= \beta\lr{\pi w,0} &\quad& \text{for all } w\in\mybf{3}^* \\
+			\pi\lr{cw} &:= \beta\lr{0, \pi w} &\quad& \text{for all } w\in\mybf{3}^* \\
+		\end{alignat*}
+		$\bra{0}\lr{b\eta+ac\eta^\dag}^n=\sum_{k=0}^nx_{n,k}\bra{k}$とすると、
+		次の漸化式が得られる。
+		\begin{alignat*}{2}
+			x_{n+1,0} &=  x_{n,1}ac \\
+			x_{n+1,k} &=  x_{n,k-1}b + x_{n,k+1}ac 
+				&\quad& \text{for all } k\in1..(n-1) \\
+			x_{n+1,k} &=  x_{n,k-1}b
+				&\quad& \text{for } k=n-1,n
+		\end{alignat*}
+		うーん、漸化式にすると意味のわからない式になってしまう。
+
+		$T_n:=\lr{b\eta+ac\eta^\dag}^na$とすると、
+		\begin{alignat*}{2}
+			\bra{0}T_0 &= a &&\xmapsfrom{\phi} \bullet \\
+			\bra{0}T_1 &= ba\bra{1} &&\xmapsfrom{\phi} \smallxy{
+				& \bullet \hen[dl] \\
+				\bullet \\
+			} \\
+			\bra{0}T_2 &= b^2a\bra{2} + baca\bra{0} &&\xmapsfrom{\phi} \smallxy{
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dl] \\
+				\bullet \\
+			} + \smallxy{
+				& \bullet \hen[dl] \hen[dr] \\
+				\bullet & & \bullet \\
+			} \\
+			\bra{0}T_3 &= b^3a\bra{3} + \lr{b^2aca+bacba}\bra{1} 
+			&&\xmapsfrom{\phi} \smallxy{
+				& & & \bullet \hen[dl] \\
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dl] \\
+				\bullet \\
+			} + \smallxy{
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dl] \hen[dr] \\
+				\bullet & & \bullet \\
+			} + \smallxy{
+				& \bullet \hen[dl] \hen[dr] \\
+				\bullet & & \bullet \hen[dl] \\
+				& \bullet \\
+			}
+		\end{alignat*}
+		という対応になる。この対応を与える木の成長をどのように定義したら
+		よいだろうか。線形射$\gamma:R\T_*\to R\T_+$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\gamma0 &:= \bullet \\
+			\gamma\beta\lr{\tau_1,\tau_2} 
+			&:= \beta\lr{\gamma\tau_1,\tau_2}
+			+ \jump{\tau_1=\bullet}\beta\lr{\tau_1,\gamma\tau_2}
+			\quad\text{for all } \tau_1,\tau_2\in\T_*
+		\end{split}\end{equation*}
+		次のようになるが、
+		\begin{equation*}\begin{split}
+			\gamma\smallxy{
+				& & & \bullet \hen[dl] \\
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dl] \\
+				\bullet \\
+			} &= \smallxy{
+				& & & & \bullet \hen[dl] \\
+				& & & \bullet \hen[dl] \\
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dl] \\
+				\bullet \\
+			} + \smallxy{
+				& & & \bullet \hen[dl] \\
+				& & \bullet \hen[dl] \\
+				& \bullet \hen[dl] \hen[dr] \\
+				\bullet & & \bullet \\
+			} \\
+		\end{split}\end{equation*}
+	\end{todo} %todo:ここまで}
+
+	$\mybf{3}:=\set{a,b,c}$を大きさ$3$の集合とする。
+	$\mybf{3}$から生成される自由モノイドを$\mybf{3}^*$と書き、
+	長さ$n$の単語全体のつくる$\mybf{3}^*$の部分集合を$\mybf{3}^n$と書く。
+	写像$\omega:\D_*\to\mybf{3}^*$を次のように定義する。
+	\begin{alignat*}{2}
+		\omega\bullet &:= a \\
+		\omega\beta\lr{\tau_1,\tau_2} &:= b(\omega\tau_1)c(\omega\tau_2)
+			&\quad& \text{for all } \tau_1,\tau_2\in\D_*
+	\end{alignat*}
+	$\omega$は次のように
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 葉にラベル$a$を、
+		\item 辺にラベル$b$または$c$を、
+	\end{itemize} %}
+	書いて、それを行きがけ順に辿って文字列化する操作になっている。
+	\begin{equation*}\begin{split}
+		\xymatrix@R=2ex@C=2ex{
+			& & \bullet \ar[dl]_b \ar[dr]^c \\
+			& \bullet \ar[dl]_b \ar[dr]^c & & a \\
+			a & & a \\
+		}
+	\end{split}\end{equation*}
+	$\D_n$の木の辺の数は$2n$、葉の数は$n+1$だから、
+	$\omega:\D_n\to\mybf{3}^{3n+1}$となる。
+	\begin{equation*}\begin{split}
+		\tau\in\D_n \implies \left\{\begin{split}
+			\sharp_a\omega\tau &= n + 1 \\
+			\sharp_b\omega\tau &= \sharp_c\omega\tau = n \\
+		\end{split}\right.
+	\end{split}\end{equation*}
+	ここで、$\sharp$は任意の有限集合$X$に対して定義される写像
+	$\sharp:X\times X^*\to\sizen$で、$x\in X$に対して
+	$\sharp_xw$は$w\in X^*$に含まれる文字$x$を数えるとする。
+	$a$を$1$とすれば、$\omega$はDyck経路への写像になるので、
+	$\omega$は$1:1$になることがわかる。
+
+
+	$\mybf{2}:=\set{b,c}$を大きさ$2$の集合とする。
+	$\mybf{2}$から生成される自由モノイドを$\mybf{2}^*$と書き、
+	長さ$n$の単語全体のつくる部分集合を$\mybf{2}^n$と書く。
+	写像$\phi:\T_+\to\mybf{2}^*$を次のように定義する。
+	\begin{alignat*}{2}
+		\phi\bullet &:= 1 \\
+		\phi\beta\lr{\tau,0} &:= b(\phi\tau) 
+			&\quad& \text{for all } \tau\in\T_+ \\
+		\phi\beta\lr{0,\tau} &:= c(\phi\tau)
+			&\quad& \text{for all } \tau\in\T_+ \\
+		\phi\beta\lr{\tau_1,\tau_2} &:= b(\phi\tau_1)c(\phi\tau_2)
+			&\quad& \text{for all } \tau_1,\tau_2\in\T_+
+	\end{alignat*}
+
+	$\mybf{2}:=\set{b,c}$を大きさ$2$の集合とする。
+	$\mybf{2}$から生成される自由モノイドを$\mybf{2}^*$と書き、
+	長さ$n$の単語全体のつくる部分集合を$\mybf{2}^n$と書く。
+	写像$\phi:\T_+\to\mybf{2}^*$を次のように定義する。
+	\begin{alignat*}{2}
+		\phi\bullet &:= 1 \\
+		\phi\beta\lr{\tau,0} &:= b(\phi\tau) 
+			&\quad& \text{for all } \tau\in\T_+ \\
+		\phi\beta\lr{0,\tau} &:= c(\phi\tau)
+			&\quad& \text{for all } \tau\in\T_+ \\
+		\phi\beta\lr{\tau_1,\tau_2} &:= b(\phi\tau_1)c(\phi\tau_2)
+			&\quad& \text{for all } \tau_1,\tau_2\in\T_+
+	\end{alignat*}
+	$\phi$は次のように平面二分木の頂点にラベルを書いて、
+	\begin{equation*}\begin{split}
+		\smallxy{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& b \hen[dl] \hen[d] & & c \hen[d] \hen[dr] \\
+			b & c & & b & c \\
+		}
+	\end{split}\end{equation*}
+	それを行きがけ順に辿って文字列化する操作になっている。
+	木の頂点は文字列化しないので、頂点数から$1$引いた長さの単語が生成される。
+	したがって、任意の$n\in\sizen$で$\phi:T_{n+1}\to\mybf{2}^n$となることが
+	わかる。
+
+	$\phi$を$\T_3$まで書いてみると次のようになる。
+	\begin{equation*}\begin{split}
+		\phi\bullet = 1,\quad \phi\smallxy{
+			& \bullet \hen[dl] \\
+			\bullet
+		} = b,\quad \phi\smallxy{
+			\bullet \hen[dr] \\
+			& \bullet
+		} = c \\
+		\phi\smallxy{
+			& & \bullet \hen[dl] \\
+			& \bullet \hen[dl] \\
+			\bullet
+		} = b^2,\quad \phi\smallxy{
+			& \bullet \hen[dl] \\
+			\bullet \hen[dr] \\
+			& \bullet
+		} = bc,\quad \phi\smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \\
+		} = bc \\
+		\phi\smallxy{
+			\bullet \hen[dr] \\
+			& \bullet \hen[dl] \\
+			\bullet
+		} = cb,\quad \phi\smallxy{
+			\bullet \hen[dr] \\
+			& \bullet \hen[dr] \\
+			& & \bullet
+		} = c^2
+	\end{split}\end{equation*}
+	$\mybf{2}^n$と$\T_{n+1}$のそれぞれの大きさを表
+	\ref{table:集合の大きさの比較}に書いておいた。
+	$|\mybf{2}^0|=|\T_1|=1$、$|\mybf{2}^1|=|\T_2|=2$となり、それ以降は、
+	任意の$n\in\sizen$に対して$|\mybf{2}^{n+2}|<|\T_{n+3}|$となるから、
+	$\phi$は$1:1$にはならないことがわかる。
+	$\psi:\mybf{2}^*\to\T_+$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\psi 1 := \bullet,\quad \psi\lr{bw} := \beta\lr{\psi w, 0}
+		,\quad \psi\lr{cw} := \beta\lr{0, \psi w} 
+		\quad\text{for all } w\in\mybf{2}^*
+	\end{split}\end{equation*}
+	$\phi\psi=\id$となる。したがって、$\phi$は$\onto$となる。
+	$\psi$はすべての頂点が子供を$0$または$1$つしか持たないリスト状の
+	木に写像する。
+
+\begin{table}[!htpd]\begin{center}\begin{tabular}{rrr}\hline
+$n$ & $|\mybf{2}^n|$ & $|\T_{n+1}|$ \\\hline
+1 & 2 & 2 \\ 
+2 & 4 & 5 \\ 
+3 & 8 & 14 \\ 
+4 & 16 & 42 \\ 
+5 & 32 & 132 \\ 
+6 & 64 & 429 \\ 
+7 & 128 & 1430 \\ 
+8 & 256 & 4862 \\ 
+9 & 512 & 16796 \\ 
+10 & 1024 & 58786 \\ 
+\hline\end{tabular}\end{center}
+\caption{集合の大きさの比較}\label{table:集合の大きさの比較}
+\end{table}
+	次の図の？はどのような対応になるのだろうか。
+	\begin{equation*}\xymatrix{
+		\T_{n+1} \ar[r]^\phi \ar[d]^D_\simeq & \mybf{2}^n \ar@{.>}[d]^{?} \\
+		\D_{n+1} \ar[r]^\phi & \mybf{2}^{2(n+1)} \\
+	}\end{equation*}
+%s2:平面上の二分木と格子上の経路}
+\subsection{再起下降パーサーの構成}\label{s2:再起下降パーサーの構成} %{
+	再起下降パーサーを、Chomsky-Schutzenbergerの定理にならって構成するのが
+	見通しがよいだろう。
+%s2:再起下降パーサーの構成}
+\subsection{モノイド環}\label{s2:モノイド環} %{
+	\begin{proposition}[対合射の一意性]\label{prop:対合射の一意性} %{
+		$B=(B,m,u,\Delta,\epsilon)$を複素数上の双代数とする。
+		$B$に対合射が存在するならば、唯一つ定まる。
+	\end{proposition} %prop:対合射の一意性}
+
+	\begin{proposition}[モノイド環のHopf代数]\label{prop:モノイド環のHopf代数} %{
+		$k$を体、$G$をモノイド、$kG$を$G$の$k$-モノイド環とする。
+		$kG$がHopf代数となることと、$G$が群であることは同値である。
+	\end{proposition} %prop:モノイド環のHopf代数}
+	\begin{proof} %{
+		$kG=(kG,m,u,\Delta,\epsilon)$を双代数とする。$kG$にアンチポード
+		$S\in\cat{Mod}_k(kG)$が定義できれば、$kG$はHopf代数となる。
+		\begin{equation*}\begin{split}
+			m(S\otimes\id)\Delta = u\epsilon = m(\id\otimes S)\Delta
+		\end{split}\end{equation*}
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $G$が群ならばアンチポード$S$が定義できる。\\
+			任意の$g\in G$に対して$Sg=g^{-1}$と定義すると、
+			\begin{equation*}\begin{split}
+				m(S\otimes\id)\Delta g = m(S\otimes\id)\Delta g = 
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{proof} %}
+%s2:モノイド環}
+\subsection{Dyck言語と微分方程式の関係}\label{s2:Dyck言語と微分方程式の関係} %{
+	$R$を可換環、$V$を$R$上の代数、$a,b,c\in V$として、
+	次のq-微分方程式に対するPicardの逐次近似を考える。
+	\begin{equation}\label{eq:q-微分方程式その一}\begin{split}
+		x^q_t = a + \int_0^t(bx^q_scx^q_s)d_qs
+	\end{split}\end{equation}
+	解$x^q_t$が$t$に関して正則と仮定して次のように展開すると、
+	\begin{equation*}\begin{split}
+		x^q_t = \sum_{n\in\sizen}\frac{t^n}{[n]_q^!} x^q_n
+		\quad\text{where } x^q_n\in V
+	\end{split}\end{equation*}
+	係数$x^q_t$に対する次の漸化式が得られる。
+	\begin{equation*}\begin{split}
+		x^q_0 = a,\quad x^q_{n+1} 
+		= \sum_{r=0}^n\qbinom{n}{r}_q bx^q_rcx^q_{n-r}
+	\end{split}\end{equation*}
+	ある$n\in\sizen$があってすべての$k\le n$に対して$x^q_k=y^q_ka$
+	となる$y^q_n\in V$が存在すると仮定すると、この漸化式より、
+	次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		x^q_{n+1} = \lr{\sum_{r=0}^n\qbinom{n}{r}_q by^q_racy^q_{n-r}}a
+	\end{split}\end{equation*}
+	$x^q_{n+1}=y^q_{n+1}a$となる$y^q_{n+1}\in V$が存在することがわかる。
+	したがって、正則解$x^q_t$は、$x^q_t=y^q_ta$と書けることがわかる。
+	そして、この$y^q_t$は次のq-微分方程式を満たす。
+	\begin{equation*}\begin{split}
+		y^q_t = 1 + \int_0^t(by^q_sacy^q_s)d_qs
+	\end{split}\end{equation*}
+	よって、q-微分方程式\eqref{eq:q-微分方程式その一}ではなく、
+	次のq-微分方程式を考えれば十分である。
+	\begin{equation}\label{eq:q-微分方程式その二}\begin{split}
+		x^q_t = 1 + \int_0^t(bx^q_scx^q_s)d_qs
+	\end{split}\end{equation}
+	このq-微分方程式解$x^q_t$が$t$に関して正則と仮定して次のように展開
+	すると、
+	\begin{equation*}\begin{split}
+		x^q_t = \sum_{n\in\sizen}\frac{t^n}{[n]_q^!} x^q_n
+		\quad\text{where } x^q_n\in V
+	\end{split}\end{equation*}
+	係数$x^q_t$に対する次の漸化式が得られる。
+	\begin{equation}\label{eq:q-微分方程式のテイラー級数その二}\begin{split}
+		x^q_0 = a,\quad x^q_{n+1} 
+		= \sum_{r=0}^n\qbinom{n}{r}_q bx^q_rcx^q_{n-r}
+	\end{split}\end{equation}
+	三次までの係数を求めると次のようになる。
+	\begin{equation*}\begin{split}
+		x^q_0 &= 1 \\
+		x^q_1 &= bx^q_0cx^q_0 \\
+		x^q_2 &= bx^q_0cx^q_1 + bx^q_1cx^q_0 \\
+		x^q_3 &= bx^q_0cx^q_2 + [2]_qbx^q_1cx^q_1 + bx^q_2cx^q_0 \\
+	\end{split}\end{equation*}
+	三次の項からqの効果が現れることがわかる。
+	一方、$q=0$の場合は次のように係数を真空期待値として表すことができる。
+	\begin{equation*}\begin{split}
+		x^0_t = \Braket{\begin{pmatrix}
+				1 & 0
+			\end{pmatrix}\begin{pmatrix}
+				tb\eta_1 & 1 \\
+				\eta_{-1}c & 0
+			\end{pmatrix}^*\begin{pmatrix}
+				0 \\ 1
+			\end{pmatrix}} = \Braket{\lr{tb\eta_1 + \eta_{-1}c}^*} \\
+		\implies x^0_n = \Braket{\lr{b\eta_1 + \eta_{-1}c}^{2n}}
+	\end{split}\end{equation*}
+	一般の$q$の場合にも、係数を真空期待値として表すことができないだろうか？
+
+	平面二分木の助けを借りて定式化することを考える。
+	$\T_n$を頂点数$2n+1$の平面二分木の集合、$\T_*:=\cup_{n\in\sizen}\T_n$
+	をその合併とする。
+	\begin{equation*}\begin{split}
+		\T_0 &:= \Set{\circ} \\
+		\T_1 &:= \Set{\vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \er[dl] \er[dr] \\
+			\circ & & \circ \\
+		}}} \\
+		\T_2 &:= \Set{\vcenter{\xymatrix@R=1ex@C=1ex{
+			& & \circ \er[dl] \er[dr] \\
+			& \circ \er[dl] \er[dr] & & \circ \\
+			\circ & & \circ \\
+		}},\; \vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \er[dl] \er[dr] \\
+			\circ & & \circ \er[dl] \er[dr] \\
+			& \circ & & \circ \\
+		}}} \\
+ 		\T_3 &:= \Set{\vcenter{\xymatrix@R=1ex@C=1ex{
+			& & & \circ \er[dl] \er[dr] \\
+			& & \circ \er[dl] \er[dr] & & \circ \\
+			& \circ \er[dl] \er[dr] & & \circ \\
+			\circ & & \circ \\
+		}},\; \vcenter{\xymatrix@R=1ex@C=1ex{
+			& & & \circ \er[dl] \er[dr] \\
+			& & \circ \er[dl] \er[dr] & & \circ \\
+			& \circ & & \circ \er[dl] \er[dr] \\
+			& & \circ & & \circ \\
+		}},\; \vcenter{\xymatrix@R=1ex@C=1ex{
+			& & \circ \er[dl] \er[dr] \\
+			& \circ \er[dl] \er[d] & & \circ \er[dr] \er[d] \\
+			\circ & \circ & & \circ & \circ \\
+		}},\; \vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \er[dl] \er[dr] \\
+			\circ & & \circ \er[dl] \er[dr] \\
+			& \circ \er[dl] \er[dr] & & \circ \\
+			\circ & & \circ \\
+		}},\; \vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \er[dl] \er[dr] \\
+			\circ & & \circ \er[dl] \er[dr] \\
+			& \circ & & \circ \er[dl] \er[dr] \\
+			& & \circ & & \circ \\
+		}}}
+	\end{split}\end{equation*}
+	ここで、双線形射$\beta:R\T_*\otimes R\T_*\to R\T_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\beta\lr{\tau_1\otimes\tau_2} := \vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \er[dl] \er[dr] \\
+			\tau_1 & & \tau_2 \\
+		}} \quad\text{for all } \tau_1,\tau_2\in\T_*
+	\end{split}\end{equation*}
+	$\beta$は結合的でもないし単位元も持たない二項演算だが、
+	\begin{equation*}\begin{split}
+		\beta\lr{\id\otimes\beta}\lr{\tau_1\otimes\tau_2\otimes\tau_3}
+		&= \vcenter{\xymatrix@R=1ex@C=1ex{
+			& \circ \er[dl] \er[dr] \\
+			\tau_1 & & \circ \er[dl] \er[dr] \\
+			& \tau_2 & & \tau_3 \\
+		}} \\
+		\beta\lr{\beta\otimes\id}\lr{\tau_1\otimes\tau_2\otimes\tau_3}
+		&= \vcenter{\xymatrix@R=1ex@C=1ex{
+			& & \circ \er[dl] \er[dr] \\
+			& \circ \er[dl] \er[dr] & & \tau_3 \\
+			\tau_1 & & \tau_2 \\
+		}}
+	\end{split}\end{equation*}
+	$\circ$と$\beta$から$\T_*$を生成することができる。
+	\begin{equation*}\begin{split}
+		\T_0 &= \Set{\circ} \\
+		\T_{n+1} &= \cup_{k=0}^n\Set{\beta\lr{\tau_1\otimes\tau_2}
+		\bou \tau_1\in\T_k,\; \tau_2\in\T_{n-k}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	線形射$\dabs{-}:R\T_*\to R$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\dabs{\tau} = n \xiff{\dfn} \tau\in\T_n
+	\end{split}\end{equation*}
+	$\dabs{\tau}$は$\tau$の中に含まれる$[\circ,\circ]$の個数を数える演算と
+	なっている。$\dabs{\tau}$を$\tau$の次数ということにする。
+
+	線形射$\gamma_q:R\T_*\to R\T_*$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\gamma_q\circ &:= \beta\lr{\circ\otimes\circ} \\
+		\gamma_q\beta\lr{\tau_1\otimes\tau_2} 
+		&:= \beta\lr{\gamma_q\tau_1\otimes\tau_2} 
+			+ q^{\dabs{\tau_1}} \beta\lr{\tau_1\otimes\gamma_q\tau_2} 
+			\quad\text{for all } \tau_1,\tau_2\in\T_*
+	\end{split}\end{equation*}
+	$\gamma_q$を（平面二分木の）自然な成長ということにする。
+	ここで、$q=0$のときは次の約束を使うものとする。
+	\begin{equation*}\begin{split}
+		\lim_{q\to0}q^{\dabs{\tau}}=\jump{\tau=\circ}
+		\quad\text{for all } \tau\in\T_*
+	\end{split}\end{equation*}
+	この約束を使うと、$q=0$の場合は次のようになる。
+	\begin{equation*}\begin{split}
+		\gamma_0\beta\lr{\tau_1\otimes\tau_2} 
+		&= \beta\lr{\gamma_0\tau_1\otimes\tau_2} 
+			+ \jump{\tau_1=\circ}\beta\lr{\tau_1\otimes\gamma_0\tau_2} 
+			\quad\text{for all } \tau_1,\tau_2\in\T_*
+	\end{split}\end{equation*}
+	自然な成長を$\beta$との交換関係で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\gamma_q\beta 
+		= \beta\lr{\gamma_q\otimes\id + q^{\dabs{-}}\otimes\gamma_q}
+	\end{split}\end{equation*}
+	自然な成長は次の式を満たす。
+	\begin{equation*}\begin{split}
+		\gamma_q^{n+1}\circ = \sum_{k=0}^n \qbinom{n}{k}_q
+		\beta\lr{\gamma_q^k\circ\otimes\gamma_q^{n-k}\circ}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	\begin{proof} %{
+		$\gamma_q^{n+1}$の$n$についての帰納法で証明する。
+		$\gamma_q$の定義より次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\gamma_q\circ = \beta\lr{\circ\otimes\circ} 
+			= \sum_{k=0}^0 \qbinom{0}{k}_q
+			\beta\lr{\gamma_q^k\circ\otimes\gamma_q^{n-k}\circ}
+		\end{split}\end{equation*}
+		$n=0$のとき命題が成り立つことがわかる。ある$n\in\sizen$で命題が成り立つ
+		とすると、次の式が成り立つが、
+		\begin{equation*}\begin{split}
+			\gamma_q^{n+2}\circ &= \sum_{k=0}^n \qbinom{n}{k}_q \gamma_q
+				\beta\lr{\gamma_q^k\circ\otimes\gamma_q^{n-k}\circ} \\
+			&= \sum_{k=0}^n \qbinom{n}{k}_q\lr{
+				\beta\lr{\gamma_q^{k+1}\circ\otimes\gamma_q^{n-k}\circ}
+				+ q^k \beta\lr{\gamma_q^k\circ\otimes\gamma_q^{n-k+1}\circ}} \\
+			&= \sum_{k=1}^n \lr{\qbinom{n}{k-1}_q + q^k \qbinom{n}{k}_q}
+				\beta{\gamma_q^k\circ\otimes\gamma_q^{n+1-k}\circ} \\
+			&\; + \qbinom{n}{n}_q 
+			\beta\lr{\gamma_q^{n+1}\circ\otimes\gamma_q^{0}\circ}
+				+ \qbinom{n}{0}_q 
+				\beta\lr{\gamma_q^{0}\circ\otimes\gamma_q^{n+1}\circ} \\
+		\end{split}\end{equation*}
+		q-二項係数について成り立つ次の式を使うと、
+		\begin{alignat*}{2}
+			\qbinom{n+1}{k+1} &= \qbinom{n}{k} + q^{k+1}\qbinom{n}{k+1}
+			&\quad& \text{for all } n\in\sizen,\; k\in1..n \\
+			\qbinom{n}{n}_q &= \qbinom{n+1}{n+1}_q 
+			= \qbinom{n}{0}_q = \qbinom{n+1}{0}_q = 1 
+			&\quad& \text{for all } n\in\sizen
+		\end{alignat*}
+		次の式が成り立ち、$n+1$でも命題が成り立つことが示される。
+		\begin{equation*}\begin{split}
+			\gamma_q^{n+2}\circ &= \sum_{k=0}^{n+1} \qbinom{n+1}{k}_q
+				\beta\lr{\gamma_q^k\circ\otimes\gamma_q^{n+1-k}\circ} \\
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	線形射$\phi:R\T_*\to V$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\phi\circ &:= 1 \\
+		\phi\beta\lr{\tau_1\otimes\tau_2} &:= b(\phi\tau_1)c(\phi\tau_2)
+		\quad\text{for all } \tau_1,\tau_2\in\T_*
+	\end{split}\end{equation*}
+	双線形射$\beta:V\otimes V\to V$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\beta\lr{x\otimes y} := bxcy \quad\text{for all } x,y\in V
+	\end{split}\end{equation*}
+	次の交換関係が成り立つ。
+	\begin{equation*}\begin{split}
+		\phi\beta = \beta\lr{\phi\otimes\phi}
+	\end{split}\end{equation*}
+	$\beta$はDyck言語$\phi R\T_*\subseteq V$だけでなく、$V$全体で定義
+	できることに注意する。$V$の積を$m$とすると、次の交換関係が成り立つから、
+	\begin{equation*}\begin{split}
+		m\lr{\beta\otimes\id} = \beta\lr{\id\otimes m}
+	\end{split}\end{equation*}
+	この交換関係を使って$R\T_*$に積$m$を定義することができる。
+	\begin{alignat*}{2}
+		m\lr{\circ\otimes t} &:= t =: m\lr{t\otimes\circ}
+			&\quad&\text{for all } t\in R\T_* \\
+		m\lr{\beta\otimes\id}\lr{t_1\otimes t_2\otimes t_3} 
+			&:= \beta\lr{\id\otimes m}\lr{t_1\otimes t_2\otimes t_3}
+			&\quad&\text{for all } t_1,t_2,t_3\in R\T_*
+	\end{alignat*}
+	$\tau_1,\tau_2\in\T_*$として、$m\lr{\tau_1\otimes\tau_2}$は、
+	$\tau_1$の右端の葉を$\tau_2$で置き換える操作になる。
+	
+	$X^q_n\in V$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		X^q_n := \phi\gamma_q^n\circ \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$X^q_n$は次の漸化式を満たす。
+	\begin{equation*}\begin{split}
+		X^q_0 &= 1 \\
+		X^q_{n+1} &= \sum_{k=0}^n \qbinom{n}{k}_q bX^q_kcX^q_{n-k}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この式はq-微分方程式\eqref{eq:q-微分方程式その二}の解の係数が満たす漸化式
+	\eqref{eq:q-微分方程式のテイラー級数その二}に他ならない。
+
+	\begin{todo}[ココマデ]\label{todo:ココマデ} %{
+		多項式環$R[t]$の通常の積を$m$とし、q-微分を
+		$\partial_q:=\lr{\partial_t}_q$と書く。
+		線形射$N:R[t]\to R[t]$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			Nt^n = nt^n \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\partial_q m = m\lr{\partial_q\otimes\id + q^N\otimes\partial_q}
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\partial_q^n m = m\lr{\partial_q\otimes\id + q^N\otimes\partial_q}^n
+		\end{split}\end{equation*}
+		ある$n\in\sizen$で次の式が成り立つと仮定すると、
+		\begin{equation}\label{eq:q-Leibnitz則}\begin{split}
+			\lr{\partial_q\otimes\id + q^N\otimes\partial_q}^n
+			= \sum_{k=0}^n \qbinom{n}{k} 
+			\lr{q^{kN}\partial_q^k\otimes\partial_q^{n-k}}
+		\end{split}\end{equation}
+		$\partial_qq^{kN}=q^{k(N+1)}\partial_q$より、次の式が成り立つが、
+		\begin{equation*}\begin{split}
+			\lr{\partial_q\otimes\id + q^N\otimes\partial_q}^{n+1}
+			= \sum_{k=0}^n \qbinom{n}{k}\lr{
+			q^{k(N+1)}\partial_q^{k+1}\otimes\partial_q^{n-k}
+			+ q^{(k+1)N}\partial_q^k\otimes\partial_q^{n-k+1}}
+		\end{split}\end{equation*}
+		q-二項係数に関するいつもの公式を使うと、次のようになって、
+		\begin{equation*}\begin{split}
+			\lr{\partial_q\otimes\id + q^N\otimes\partial_q}^{n+1}
+			= \sum_{k=0}^{n+1} \qbinom{n+1}{k}_q
+			\lr{q^{kN}\partial_q^k\otimes\partial_q^{n+1-k}}
+		\end{split}\end{equation*}
+		$n+1$でも式\eqref{eq:q-Leibnitz則}が成り立つことがわかる。
+		したがって、$\chi_1\chi_{-1}=1$とし、$t$を$R$に値を持つ不定元とすると、
+		\begin{equation*}\begin{split}
+			\Braket{\lr{tb\chi_1 + \chi_{-1}c}^{2(n+1)}}
+			= \sum_{k=0}^n tb\Braket{\lr{tb\chi_1 + \chi_{-1}c}^{2r}}
+				c\Braket{\lr{tb\chi_1 + \chi_{-1}c}^{2(n-r)}}
+		\end{split}\end{equation*}
+		より、\Midline{次の式が成り立ちそうに思える}明らかに成り立たない。
+		\begin{equation*}\begin{split}
+			&\lim_{t\to0} \Braket{\lr{\partial_t}_q^{n+1}
+				\lr{tb\chi_1 + \chi_{-1}c}^{2(n+1)}} \\
+			&= \lim_{s,t\to0}\sum_{k=0}^n \qbinom{n}{k}_q
+				b\Braket{\lr{\partial_s}_q^k
+				\lr{sb\chi_1 + \chi_{-1}c}^{2k}}
+				c\Braket{\lr{\partial_t}_q^{n-k}
+				\lr{tb\chi_1 + \chi_{-1}c}^{2(n-k)}}
+		\end{split}\end{equation*}
+		この式が成り立つと、次のような交換関係を定義して、
+		\begin{equation*}\begin{split}
+			\chi_1\chi_{-1} = 1
+			,\quad \tau_1\tau_{-1} = 1
+			,\quad \chi_i\tau_j = \tau_j\chi_i \quad\text{for all } i,j=\pm1
+		\end{split}\end{equation*}
+		Fock空間を次のように定義して、
+		\begin{equation*}\begin{split}
+			\bra{1}\chi_{-1} = \bra{1}\tau_{-1} = 0
+			,\quad \chi_{1}\ket{1} = \tau_{1}\ket{1} = 0
+		\end{split}\end{equation*}
+		$Y^q_n\in V$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			Y^q_n 
+			:= \Braket{\lr{\tau_1}_q^*\lr{\tau_{-1}b\chi_1 + \chi_{-1}c}^{2n}}
+		\end{split}\end{equation*}
+		$Y^q_n$は漸化式\eqref{eq:q-微分方程式のテイラー級数その二}を満たすこと
+		になる。
+
+		線形射$-^r:R\T_*\to R\T_*$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\circ^r = \circ,\quad \lr{\beta\lr{\tau_1\otimes\tau_2}}^r
+		\end{split}\end{equation*}
+
+		線形射$-!:R\T_*\to R$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\circ! &:= 1 \\
+			\gdyck{\tau_1,\tau_2}! &:= \dabs{\gdyck{\tau_1,\tau_2}}
+				\lr{\tau_1!}\lr{\tau_2!}
+		\end{split}\end{equation*}
+		すると、$-!$はButcherの根付き平面木に対する階乗に一致する。
+
+		次の式より、
+		\begin{equation*}\begin{split}
+			\qbinom{0}{k}_q = 1 \quad\text{for all } k=0,\quad
+			\qbinom{1}{k}_q = 1 \quad\text{for all } k=0,1
+		\end{split}\end{equation*}
+		$\gamma_q$のべきが$2$以下では$q$の値に依らずに同一の係数を与える。
+		\begin{equation*}\begin{split}
+			\phi\gamma_q^n\circ = \phi\gamma_0^n\circ
+			\quad\text{for all } n=0,1,2
+		\end{split}\end{equation*}
+		$\gamma_q$のべきが$3$以上で$q$の効果が現れる。
+
+		次のように、$2$次の自然な成長までは、$q=0$の場合の真空期待値と
+		$q$が$0$でない場合の係数は等しいが、
+		\begin{alignat*}{2}
+			\phi\gamma_q^0\circ &= a 
+			&&= \Braket{\lr{b\eta + \eta^\dag ac}^0}a \\
+			\phi\gamma_q^1\circ &= baca 
+			&&= \Braket{\lr{b\eta + \eta^\dag ac}^2}a \\
+			\phi\gamma_q^2\circ &= b^2(ac)^2a + (bac)^2a 
+			&&= \Braket{\lr{b\eta + \eta^\dag ac}^4}a
+		\end{alignat*}
+		$q$変形の効果により、$3$次の自然な成長から、$q=0$の場合の真空期待値
+		と$q$が$0$でない場合の係数とのズレが現れる。
+		\begin{equation*}\begin{split}
+			\phi\gamma_q^3\circ &= b^3(ac)^3a + b(bac)^2aca 
+				+ [2]_q b^2(ac)^2baca + bacb^2(ac)^2a + (bac)^3a \\
+			&= \Braket{\lr{b\eta + \eta^\dag ac}^6}a
+				+ q b\Braket{\lr{b\eta + \eta^\dag ac}^2}ac
+				\Braket{\lr{b\eta + \eta^\dag ac}^2}a \\
+			&= \sum_{k=0}^2 \qbinom{2}{k}_q
+				b\Braket{\lr{b\eta + \eta^\dag ac}^{2k}}
+				ac \Braket{\lr{b\eta + \eta^\dag ac}^{2(n-k)}}a \\
+			&= \sum_{k=0}^2 \qbinom{2}{k}_q
+				b\lr{\phi\gamma_0^k\circ}ac\lr{\phi\gamma_0^{n-k}\circ} \\
+		\end{split}\end{equation*}
+		この$3$次の自然な成長による式を、代数の変形もしくは、作用素の挿入
+		によって単一の真空期待値として表すことはできないものだろうか。
+
+		Schutzenbergerの公式
+		\begin{equation*}\begin{split}
+			xy = qyx \implies (x + y)^n = \sum_{k=0}^n \qbinom{n}{k} y^kx^{n-k}
+		\end{split}\end{equation*}
+		を使ってみる。$\xi_1,\xi_2$を次の交換関係を満たす不定元とすると、
+		\begin{equation*}\begin{split}
+			\xi_2\xi_1 = q\xi_1\xi_2
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\Braket{\lr{b\xi_1\eta + \eta^\dag\xi_2 ac}^2}a
+			&= baca(\xi_1\xi_2) \\
+			\Braket{\lr{b\xi_1\eta + \eta^\dag\xi_2 ac}^4}a
+			&= b^2(ac)^2a(\xi_1^2\xi_2^2) + (bac)^2a (\xi_1^2\xi_2^2)
+		\end{split}\end{equation*}
+
+		以下の議論はダメだが、バックアップとして残しておく。
+	\end{todo} %todo:ココマデ}
+
+	単純にBrzozowski代数をq-シャッフル積によって変形しただけだと、
+	次のようになって、$q=0$のとき以外は、
+	係数の漸化式\eqref{eq:q-微分方程式のテイラー級数}は満たさない。
+	\begin{equation*}\begin{split}
+		y^q_n := t^{-n}\Braket{\lr{tb\eta_1 + a\lr{\eta_{-1}}_qc}^{2n}}a
+		\quad\text{for all } n\in\sizen \\
+		\implies \left\{\begin{split}
+			y^q_0 &= a \\
+			y^q_1 &= by^q_0cy^q_0 \\
+			y^q_2 &= by^q_0cy^q_1 + [2]_q by^q_1cy^q_0 \\
+			\cdots \\
+		\end{split}\right.
+	\end{split}\end{equation*}
+	もちろん、q-シャッフル積による変形でq-微分方程式の解が得られる根拠は
+	どこにもないので、成り立たなくて当然ではある。
+
+	平面二分木全体のつくる集合を$\T$、$A=\set{a,b,c}$を文字集合とし、
+	$\phi_A\in\cat{Mod}_\fukuso(\fukuso\T,\fukuso A^*)$と
+	$\phi^q_t\in\cat{Mod}_\fukuso(\fukuso\T,\fukuso[q,t])$を次のように
+	定義する。
+	\begin{alignat*}{2}
+		\phi_A\circ &:= a, &\quad
+		\phi_A\lr{\vcenter{\xymatrix@R=2ex@C=2ex{
+			& \circ \er[dl] \er[dr] \\
+			\tau_1 & & \tau_2
+		}}} &:= b\lr{\phi_A\tau_1}c\lr{\phi_A\tau_2} \\
+		\phi^q_t\circ &:= 1, &\quad
+		\phi^q_t\lr{\vcenter{\xymatrix@R=2ex@C=2ex{
+			& \circ \er[dl] \er[dr] \\
+			\tau_1 & & \tau_2
+		}}} &:= \int_0^t\tau_0^t\lr{\phi^q_s\tau_1}\lr{\phi^q_s\tau_2}d_qs
+	\end{alignat*}
+	$X^q_t:=\sum_{\tau\in\T}(\phi^q_t\tau)\otimes(\phi_A\tau)$と定義すると、
+	$\fukuso[q,t]\otimes\fukuso A^*\simeq_\fukuso \fukuso A^*[q,t]$の
+	同一視によって、$X^q_t$はq-微分方程式\eqref{eq:q-微分方程式}の解となる。
+	\begin{equation*}\begin{split}
+		X^q_t &= a + \sum_{\tau_1,\tau_2\in\T}
+			\int_0^t b\lr{\lr{\phi^q_s\tau_1}\lr{\phi_A\tau_1}}
+			c\lr{\lr{\phi^q_s\tau_2}\lr{\phi_A\tau_2}} d_qs \\
+		&= a + \int_0^t bX^q_tcX^q_t d_qs
+	\end{split}\end{equation*}
+
+	q-微分方程式\eqref{eq:q-微分方程式}の解$x^q_t$が$q=0$の時の解$x^0_t$を
+	用いて次のように書けると仮定すると、
+	\begin{equation*}\begin{split}
+		x^q_t = \sum_{n\in\sizen} t^n\xi^q_nx^0_n
+		\quad\text{where } \xi^q_n\in \fukuso[q]
+	\end{split}\end{equation*}
+	次の漸化式が得られるが、
+	\begin{equation*}\begin{split}
+		c^q_0 = 1,\quad [n+1]_q\xi^q_{n+1}\sum_{r=0}^n bx^0_rcx^0_{n-r}
+		= \sum_{r=0}^n \xi^q_r\xi^q_{n-r} bx^0_rcx^0_{n-r}
+	\end{split}\end{equation*}
+	$bx^0_rcx^0_{n-r}$が各$r=0,1,\dots,n$で互いに$R$-線形独立だから、
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		[n+1]_q\xi^q_{n+1} = \xi^q_{r}\xi^q_{n-r} 
+		\quad\text{for all } n\in\sizen,\; r=0,\dots,n
+	\end{split}\end{equation*}
+
+
+	\begin{todo}[宿題]\label{todo:宿題} %{
+		q-二項係数について成り立つ次の式を幾何的に理解したい。
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{r+1}_q = q^r\qbinom{n}{r+1}_q + \qbinom{n}{r}_q
+			\quad\text{for all } n\in\sizen,\; r=0,\dots,n
+		\end{split}\end{equation*}
+	\end{todo} %todo:宿題}
+%s2:Dyck言語と微分方程式の関係}
+%s1:覚書}
 \section{Chomsky-Schutzenberger}\label{s1:Chomsky-Schutzenberger} %{
 	論文\cite{Chomsky1963118}のノート。
 	論文中で使われている記号を書いておく。

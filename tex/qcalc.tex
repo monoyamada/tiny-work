@@ -1,0 +1,74 @@
+\begingroup %{
+\newcommand{\W}{\mycal{W}}
+\newcommand{\T}{\mycal{T}}
+\newcommand{\Pow}{\mycal{P}}
+\newcommand{\End}{\myop{End}}
+\newcommand{\Map}{\myop{Map}}
+\newcommand{\Lin}{\mathcal{L}}
+\newcommand{\Hol}{\mathcal{H}}
+\newcommand{\Aut}{\myop{Aut}}
+\newcommand{\Mat}{\myop{Mat}}
+\newcommand{\Hom}{\myop{Hom}}
+%
+\newcommand{\id}{\myop{id}}
+\newcommand{\tran}{\mathbf{t}}
+\newcommand{\dfn}{\,\myop{def}\,}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\tr}{\myop{tr}}
+%
+\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
+\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+\newcommand{\what}{\widehat}
+\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\ad}{\myop{ad}}
+\newcommand{\Ad}{\myop{Ad}}
+%
+\newcommand{\lr}[1]{\left({#1}\right)}
+\newcommand{\glr}[1]{\bigl({#1}\bigr)}
+\newcommand{\gglr}[1]{\Bigl({#1}\Bigr)}
+\newcommand{\ggglr}[1]{\biggl({#1}\biggr)}
+\newcommand{\gggglr}[1]{\Biggl({#1}\Biggr)}
+%
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
+%
+{\setlength\arraycolsep{2pt}
+%
+\section{q-計算}\label{s1:q-計算} %{
+	\begin{proposition}[Schutzenbergerの公式]
+	\label{prop:Schutzenbergerの公式} %{
+		$R$を可換環、$x,y$を$xy=qyx$となる$R$上の不定元とする。
+		このとき、任意の$n\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			(x + y)^n = \sum_{r=0}^n\qbinom{n}{r}_q y^rx^{n-r}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Schutzenbergerの公式}
+	\begin{proof} %{
+		べきについて帰納法を使う。$n=0$のときに命題は成り立つ。
+		\begin{equation*}\begin{split}
+			(x+y)^0 = 1 = \sum_{r=0}^0\qbinom{0}{r}_q y^rx^{n-r}
+		\end{split}\end{equation*}
+		ある$n\in\sizen$で命題が成り立つとすると、$n+1$では次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			(x+y)^{n+1} &= (x+y)(x+y)^n \\
+			&= \sum_{r=1}^{n+1} \qbinom{(n+1) - 1}{r - 1}_q y^rx^{(n+1) - r}
+				+ \sum_{r=0}^{n} \qbinom{(n+1) - 1}{r}_q (qy)^rx^{(n+1) - r} \\
+			&= \sum_{r=1}^n \lr{
+				\qbinom{(n+1) - 1}{r - 1}_q + q^r\qbinom{(n+1) - 1}{r}_q} 
+				y^rx^{(n+1) - r} + y^{n+1} + x^{n+1} \\
+		\end{split}\end{equation*}
+		q-二項係数について次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{r+1}_q = q^r\qbinom{n}{r+1}_q + \qbinom{n}{r}_q
+			\quad\text{for all } n\in\sizen,\; r=0,\dots,n
+		\end{split}\end{equation*}
+		$n+1$でも命題が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			(x+y)^{n+1} &= \sum_{r=1}^n \qbinom{n+1}{r}_q y^rx^{(n+1)-r}
+			+ \qbinom{n+1}{n+1}_q y^{n+1}x^0 + \qbinom{n+1}{0}_q y^0x^{n+1} \\
+			&= \sum_{r=0}^{n+1} \qbinom{n+1}{r}_q y^rx^{(n+1)-r}
+		\end{split}\end{equation*}
+	\end{proof} %}
+%s1:q-計算}
+%
+}\endgroup %}

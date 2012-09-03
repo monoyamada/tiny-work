@@ -1,4 +1,19 @@
 source("utils.R");
+library(xtable)
+
+do.catalan <- function (n) {
+	factorial (2 * n) / factorial (n + 1) / factorial (n)
+}
+
+if (1) {
+	ns <- 1:10
+	xy <- cbind (n=ns, bits=2^ns, catalan=do.catalan (ns + 1))
+	print (xy)
+	print (as.data.frame (xy))
+	print (xtable (as.data.frame (xy)))
+	matplot (xy, type="l")
+	stop("stopped");
+}
 
 q.catalan <- function (q=0) {
 	Q <- function (n, q=1) {
@@ -14,10 +29,11 @@ q.catalan <- function (q=0) {
 	c5 <- 2^4 + (2^3)*Q(4,q) + (2^3)*Q(3,q) + (2^2)*Q(2,q) + (2^2)*Q(4,q)*Q(3,q)/Q(2,q) + 2*Q(4,q)*Q(2,q)
 }
 
-print (c(actual=q.catalan (0), expected=factorial (10) / factorial (6) / factorial (5)))
-print (c(actual=q.catalan (1), expected=factorial (5)))
+if (0) {
+	print (c(actual=q.catalan (0), expected=factorial (10) / factorial (6) / factorial (5)))
+	print (c(actual=q.catalan (1), expected=factorial (5)))
 # print (c(actual=q.catalan (-1), expected=1))
-return
+}
 
 zero.temp <- function(xs, value=1) {
 	exp(- value / xs) / xs;
