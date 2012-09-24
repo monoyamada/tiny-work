@@ -2,6 +2,7 @@
 \newcommand{\W}{\mycal{W}}
 \newcommand{\T}{\mycal{T}}
 \newcommand{\B}{\mycal{B}}
+\newcommand{\C}{\mycal{C}}
 \newcommand{\D}{\mycal{D}}
 \newcommand{\Pow}{\mycal{P}}
 \newcommand{\End}{\myop{End}}
@@ -71,9 +72,965 @@
 \newcommand{\treeu}{1_\T}
 \newcommand{\Path}{\mycal{P}}
 \newcommand{\brz}{Brzozowski}
+\newcommand{\diff}{\partial}
+\newcommand{\qstar}{q_*}
 %
 {\setlength\arraycolsep{2pt}
 %
+\section{q-Dyck言語}\label{s1:q-Dyck言語} %{
+\subsection{この節で使う道具}\label{s2:この節で使う道具} %{
+	$R$を可換環、$R_q$を$q$を不定元とする$R$上の有理式体\footnote{
+		Wikipediaによると、多項式を分母と分子に持つ分数を有理式というらしい。
+	}とする。不定元$q$は$R$の元と可換とする。
+
+	$A$を有限集合、$R_qA_q^*$を$A^*$の$R_q$上のモノイド環、
+	$R_qA^*[[t]]$を$t$を不定元とする$R_qA^*$上の形式級数環とする。
+	不定元$t$は$R_qA^*$の元と可換とする。
+	
+	$R_qA^*[[t]]$の形式級数で不定元$t$を明示的に表すとき、次のように
+	$\lr{-|-}$を使うことにする。
+	\begin{equation*}\begin{split}
+		\lr{f|t} = \sum_{n\in\sizen} f_nt^n
+		\quad\text{for all } f:\sizen\to R_qA^*
+	\end{split}\end{equation*}
+
+	q-Kleeneスターを写像$\lr{-}_q^*:R_qA^*[[t]]\to R_qA^*[[t]]$として
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\lr{x}_q^* := \sum_{n\in\sizen}\frac{x^n}{[n]_q!}
+		\quad\text{for all } x\in R_qA^*[[t]]
+	\end{split}\end{equation*}
+	q-Kleeneスターは線形射でないことに注意する。同様に、$\lr{-}_q^+$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\lr{x}_q^+ := \sum_{n\in\sizen}\frac{x^{n+1}}{[n+1]_q!}
+		\quad\text{for all } x\in R_qA^*[[t]]
+	\end{split}\end{equation*}
+
+	q-微分は不定元$q$を明示して$\diff_q:R_qA^*[[t]]\to R_qA^*[[t]]$と書く。
+	\begin{equation*}\begin{split}
+		\lr{\diff_qf|t} := \frac{\lr{f|qt} - \lr{f|t}}{qt - t}
+		\quad\text{for all } f:\sizen\to R_qA^*
+	\end{split}\end{equation*}
+	このq-微分の定義式は$q$と$t$を不定元とする有理式$R_{q,t}A^*$に対する
+	定義になっているが、次の式より、$\diff_q$は$R_qA^*[[t]]$で閉じている。
+	\begin{equation*}\begin{split}
+		\diff_qt^n = \jump{1\le n} [n]_qt^{n-1} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+%s2:この節で使う道具}
+\subsection{根付き完全二分木}\label{s2:根付き完全二分木} %{
+	頂点数が$2n+1$の根付き完全二分木\footnote{
+		Wikipediaによると、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 根を唯一つ持ち、
+			\item 任意の頂点は$0$または$2$個の子供を持つ
+		\end{itemize} %}
+		平面二分木を根付き完全二分木というらしい。
+	}の集合を$\D_n$、$\D_*:=\cup_{n\in\sizen}\D_n$と
+	$\D_+:=\cup_{n\in\sizen}\D_{n+1}$をその合併とする。
+
+	写像$\beta:\D_*\times\D_*\to\D_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\beta\lr{\tau_1\times\tau_2} = \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\tau_1 & & \tau_2 \\
+		} \quad\text{for all } \tau_1,\tau_2\in\D_*
+	\end{split}\end{equation*}
+	任意の$w\in\D_+$は$w=\beta\lr{w_1\times w_2}$となる$w_1,w_2\in\D_*$
+	が存在して唯一つ定まる。
+	
+	写像$\dabs{-}:\D_*\to\sizen$を次のように定義し、
+	\begin{equation*}\begin{split}
+		w\in\D_n \implies Nw = nw \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	線形射$N:R_q\D_*\to R_q\D_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		Nw = \dabs{w}w \quad\text{for all } w\in\D_*
+	\end{split}\end{equation*}
+
+	線形射$\gamma_q:R_q\D_*\to R_qD_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\gamma_q\bullet &= \beta\lr{\bullet\otimes\bullet} \\
+		\gamma_q\beta\lr{\tau_1\otimes\tau_2} 
+		&= \beta\lr{\gamma_q\tau_1\otimes\tau_2}
+			+ q^{\dabs{\tau_1}}\beta\lr{\tau_1\otimes\gamma_q\tau_2}
+		\quad\text{for all } \tau_1,\tau_2\in\D_*
+	\end{split}\end{equation*}
+	$\gamma_q$を木の成長ということにする。
+	この定義の二つ目の式は次の交換関係になる。
+	\begin{equation*}\begin{split}
+		\gamma_q\beta = \beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}
+	\end{split}\end{equation*}
+	次の式が成り立つから、
+	\begin{equation}\label{eq:木の成長の因子化その一}\begin{split}
+		\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^n
+		= \sum_{k=0}^n\qbinom{n}{k}_q
+			\gamma_q^kq^{\lr{n-k}N}\otimes\gamma_q^{n-k}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	$\gamma_q^n\bullet$は次のように因子化することができる。
+	\begin{equation}\label{eq:木の成長の因子化その二}\begin{split}
+		\gamma_q^{n+1}\bullet = \gamma_q^n\beta\lr{\bullet\otimes\bullet}
+		= \sum_{k=0}^n\qbinom{n}{k}_q \lr{\gamma_q^k\otimes\gamma_q^{n-k}}
+			\lr{\bullet\otimes\bullet}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	\begin{proof} %{
+		$\gamma_q^n\beta=\beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^n$
+		だから、式\eqref{eq:q-木の成長の因子化その一}が成り立つことを証明する。
+		$\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^n$のべき$n$についての
+		帰納法で証明する。$n=0$で式\eqref{eq:q-木の成長の因子化その一}が
+		成り立つことはすぐわかる。ある$n\in\sizen$で
+		式\eqref{eq:q-木の成長の因子化その一}が成り立つと仮定すると、
+		次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			&\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^{n+1} \\
+			&= \lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}
+				\sum_{k=0}^n \qbinom{n}{k}_q
+				\gamma_q^kq^{\lr{n-k}N}\otimes\gamma_q^{n-k} \\
+			&= q^{\lr{n+1}N}\otimes\gamma_q^{n+1} + \gamma_q^{n+1}\otimes\id
+				\sum_{k=1}^n \lr{\qbinom{n}{k-1}_q + q^k\qbinom{n}{k}}
+				\gamma_q^kq^{\lr{n+1-k}N}\otimes\gamma_q^{n+1-k} \\
+			&= \sum_{k=0}^{n+1} \qbinom{n+1}{k}_q
+				\gamma_q^kq^{\lr{n+1-k}N}\otimes\gamma_q^{n+1-k}
+		\end{split}\end{equation*}
+		べきが$n+1$でも式\eqref{eq:q-木の成長の因子化その一}が成り立つことが
+		わかる。
+	\end{proof} %}
+
+	$b,c\in A$として、線形射$\omega:R_q\D_*\to R_qA^*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\omega\bullet &:= 1 \\
+		\omega\beta\lr{\tau_1\otimes\tau_2} 
+		&:= b\lr{\omega\tau_1}c\lr{\omega\tau_2}
+		 \quad\text{for all } \tau_1,\tau_2\in\D_*
+	\end{split}\end{equation*}
+	$R_qA^*$の積を$m$と書くと、この定義の二つ目の式は次の交換関係になる。
+	\begin{equation*}\begin{split}
+		\omega\beta = m\lr{b\omega\otimes c\omega}
+	\end{split}\end{equation*}
+
+	$\Omega_q\in R_qA^*[[t]]$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\lr{\Omega_q|t} := \omega\lr{t\gamma_q}_q^*\bullet
+	\end{split}\end{equation*}
+	$\Omega_q$は次のq-微分方程式を満たす。
+	\begin{equation}\label{eq:q-Dyck微分方程式}\begin{split}
+		\lr{\Omega_q|t} = 1 + \int_0^t b\lr{\Omega_q|s}c\lr{\Omega_q|s} d_qs
+	\end{split}\end{equation}
+	\begin{proof} %{
+		$\Omega_q$を次のように冪展開すると、
+		\begin{equation*}\begin{split}
+			\lr{\Omega_q|t} = \sum_{n\in\sizen}\frac{\Omega_{q,n}t^n}{[n]_q!}
+			\implies \Omega_{q,n} = \omega\gamma_q^n\bullet
+		\end{split}\end{equation*}
+		証明すべき式は次のようになるが、
+		\begin{equation*}\begin{split}
+			\Omega_{q,n+1} 
+			= \sum_{k=0}^n\qbinom{n}{k}_q b\Omega_{q,k}c\Omega_{q,n-k}
+		\end{split}\end{equation*}
+		木の成長の因子化\eqref{eq:木の成長の因子化その二}により、
+		この式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\Omega_{q,n+1} = \omega\gamma_q^{n+1}\bullet
+			= \omega\sum_{k=0}^n\qbinom{n}{k}_q
+				\beta\lr{\gamma_q^k\bullet\otimes\gamma_q^{n-k}\bullet}
+			= \sum_{k=0}^n\qbinom{n}{k}_q b\Omega_{q,k}c\Omega_{q,n-k}
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	$q=0$の場合は、係数$\Set{\Omega_{0,n}=\omega\gamma_0^n\bullet}$は次の式を
+	満たす。
+	\begin{equation*}\begin{split}
+		\Omega_{0,n+1} = \sum_{k=0}^n b\Omega_{0,k}c\Omega_{0,n-k}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この式はDyck言語の列挙に他ならないので、Brzozowski代数を用いて次のように
+	書くことができる。
+	\begin{equation*}\begin{split}
+		\Omega_{0,n} = \Braket{\lr{b\eta + \eta^\dag c}^{2n}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この式の右辺は、$\eta$と$\eta^\dag$のべき数を考慮すると、
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\Braket{\lr{b\eta + \eta^\dag c}^{2n}}
+		&= \sum_{k_1,\dots,k_n\in\sizen} \Braket{b\eta\lr{\eta^\dag c}^{k_1}
+			\cdots b\eta\lr{\eta^\dag c}^{k_n}} \\
+		&= \sum_{\substack{k_1,\dots,k_n\in\sizen \\
+		k_1 +\cdots+ k_n = n \\
+		k_1 +\cdots+ k_i \le i \\
+		}}\Braket{b\eta\lr{\eta^\dag c}^{k_1}
+			\cdots b\eta\lr{\eta^\dag c}^{k_n}}
+	\end{split}\end{equation*}
+	二つ目の式の和はDyck経路の和に対応している。
+	$b$で右へ、$c$で下へ移動するDyck経路で表すと次のように対応する。
+	\begin{equation*}\begin{split}
+		\Yvcentermath1
+		\yng(1,3,3) &\sim \Braket{b\eta\lr{\eta^\dag c}^1
+			b\lr{\eta^\dag c}^0 b\lr{\eta^\dag c}^2} \\
+		\Yvcentermath1
+		\yng(2,2,3) &\sim \Braket{b\eta\lr{\eta^\dag c}^0
+			b\lr{\eta^\dag c}^2 b\lr{\eta^\dag c}^1}
+	\end{split}\end{equation*}
+	この対応関係を用いて、完全二分木の成長$\gamma_q$をDyck経路の成長に
+	翻訳できれば、$\gamma_q$のBrzozowki代数への翻訳ができそうだ。
+	次節で詳しく考えることにする。
+
+	\begin{todo}[違うものを求めている]\label{todo:違うものを求めている} %{
+	Kleeneスターについて成り立つ式$\lr{A+B}^*=A^*\lr{BA^*}^*$を用いると、
+	右辺の真空期待値は次のように書き換えることができる。
+	\begin{equation*}\begin{split}
+		\Braket{\lr{tb\eta + \eta^\dag c}^*}
+		= \Braket{\lr{tb\eta\lr{\eta^\dag c}^*}^*}
+	\end{split}\end{equation*}
+	この式の右辺をq-変形してコヒーレント状態をとった次の式を考えてみる。
+	\begin{equation*}\begin{split}
+		\Braket{\lr{x\eta}_q^*\lr{b\eta\lr{\eta_q^\dag c}_q^*}^n}
+		= \lr{bc\lr{cx}_q^* + b\lr{cqx}_q^*\lr{\diff_x}_q}^n1
+	\end{split}\end{equation*}
+	ここで、次のような略記を用いて、
+	\begin{equation*}\begin{split}
+		\lr{\diff f|x} := (\diff_x)_q\lr{f|x},\quad \lr{q_*f|x} := \lr{f|qx}
+		\quad\text{for all } f:\sizen\to R_qA^*
+	\end{split}\end{equation*}
+	$\lr{\kappa|x}:=b\lr{cx}_q^*$とおいて整理すると、
+	次の式によって真空期待値が計算できる。
+	\begin{equation*}\begin{split}
+		\Braket{\lr{x\eta}_q^*\lr{b\eta\lr{\eta_q^\dag c}_q^*}^n}
+		= \lr{D_\kappa^n1|x} \quad\text{where }
+		D_f := \lr{\diff f} + \lr{q_* f}\diff \\
+		\quad\text{for all } f:\sizen\to R_qA^*
+	\end{split}\end{equation*}
+	低次の項を計算してみると次のようになる。
+	\begin{equation*}\begin{split}
+		D_\kappa 1 &= \lr{\diff\kappa} \\
+		D_\kappa ^21 &= \lr{\diff\kappa}^2 
+			+ \lr{q_*\kappa}\lr{\diff^2\kappa} \\
+		D_\kappa ^31 &= \lr{\diff\kappa}^3 
+			+ \lr{\diff\kappa}\lr{q_*\kappa}\lr{\diff^2\kappa} \\
+		&\;+ \lr{q_*\kappa}\lr{\diff^2\kappa}\lr{\diff\kappa}
+			+ [2]_q\lr{q_*\kappa}\lr{q_*\diff\kappa}\lr{\diff^2\kappa}
+			+ \lr{q_*\kappa}\lr{q_*^2\kappa}\lr{\diff^3\kappa}
+	\end{split}\end{equation*}
+	ここで、$\diff q_*=qq_*\diff$という交換関係を使っている。
+	任意の$m,n\in\sizen$に対して$\lr{q_*^m\diff^n\kappa|0}=bc^n$となるから、
+	次の式から、
+	\begin{equation*}\begin{split}
+		\lr{D_\kappa^0 1|0} &= 1 \\
+		\lr{D_\kappa 1|0} &= bc \\
+		\lr{D_\kappa^2 1|0} &= \lr{bc}^2 + b^2c^2 \\
+		\lr{D_\kappa^2 1|0} &= \lr{bc}^3 + bcb^2c^2 + b^2c^2bc + [2]_qb^2cbc^2
+			+ b^3c^3
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\lr{D_\kappa^0 1|0} &= 1 \\
+		\lr{D_\kappa 1|0} &= b\lr{D_\kappa^0 1|0}c\lr{D_\kappa^0 1|0} \\
+		\lr{D_\kappa^2 1|0} &= \sum_{k=0}^1\qbinom{1}{k}_q b\lr{D_\kappa^k 1|0}
+			c\lr{D_\kappa^{1-k} 1|0} \\
+		\lr{D_\kappa^3 1|0} &= b\lr{D_\kappa^0 1|0}c\lr{D_\kappa^2 1|0}
+			+ b\lr{D_\kappa^1 1|0}c\lr{D_\kappa^1 1|0}
+			+ b\lr{[2]_q\lr{bc}^2 + b^2c^2}c
+	\end{split}\end{equation*}
+	もし、任意の$n\in\sizen$で次の式が成り立っていれば、
+	\begin{equation*}\begin{split}
+		\lr{D_\kappa^{n+1} 1|0} &= \sum_{k=0}^n\qbinom{n}{k}_q 
+			b\lr{D_\kappa^k 1|0} c\lr{D_\kappa^{n-k} 1|0} \\
+	\end{split}\end{equation*}
+	q-微分方程式\eqref{eq:q-Dyck微分方程式}の解が次のように与えられること
+	になるが、
+	\begin{equation*}\begin{split}
+		\lr{\Omega_q|t} 
+		= \Braket{\lr{tb\eta\lr{\eta_q^\dag c}_q^*}_q^*}
+	\end{split}\end{equation*}
+	残念ながら、$3$次の項で成り立たないことがわかる。
+	\end{todo} %todo:違うものを求めている}
+%s2:根付き完全二分木}
+\subsection{自然数の配列}\label{s2:自然数の配列} %{
+	$\C_0=\set{1}$とし、任意の$n\in\sizen_+$に対して$\C_n\subset\sizen^n$を
+	次の性質を満たす$[k_1,k_2,\dots,k_n]\in\sizen^n$全体のつくる集合とする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $k_1+k_2+\cdots+k_n=n$となる。
+		\item 任意の$i\in1..n$に対して$k_1+\cdots+k_i\le i$となる。
+	\end{itemize} %}
+	また、$\C_*:=\cup_{n\in\sizen}\C_n$、$\C_+:=\cup_{n\in\sizen_+}\C_n$
+	とする。
+
+	$b,c\in A$として、写像$\omega:\D_*\to A^*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\omega1 &:= 1 \\
+		\omega[k_1,k_2,\dots,k_n] &:= bc^{k_1}bc^{k_2}\cdots bc^{k_n}
+		 \quad\text{for all } [k_1,k_2,\dots,k_n]\in\C_+
+	\end{split}\end{equation*}
+	任意の$x\in\C_*$と$w_1,w_2\in A^*$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\omega x = w_1w_2 \implies 
+		\left\{\begin{split}
+			\lr{\sharp_cw_1} &\le \lr{\sharp_bw_1} \\
+			\lr{\sharp_bw_1} + \lr{\sharp_bw_2} 
+			&= \lr{\sharp_cw_1} + \lr{\sharp_cw_2}
+		\end{split}\right. \\
+	\end{split}\end{equation*}
+	この式はDyck単語の定義に用いられる性質である。
+	したがって、$\omega:\C_*\to A^*$は$b$と$c$で生成されるDyck言語
+	$\D_*(b,c)\subset A^*$の中への写像になる。また、$b\neq c$の場合、任意の
+	$w\in\D_*(b,c)$に対して$\omega x=w$となる$x\in\C_*$が存在して唯一つ
+	定まるから、集合同型$\omega:\C_*\simeq\D_*(b,c)$が成り立つ。
+
+	$\sizen^*$に積$\myspace$を文字列の連結によって定義する。
+	\begin{alignat*}{2}
+		w1 &= 1w = w &\quad&\text{for all } w\in\sizen^* \\
+		[k_1,\dots,k_m][l_1,\dots,l_n] &:= [k_1,\dots,k_m,l_1,\dots,l_n]
+		&\quad&\text{for all } [k_1,\dots,k_m],[l_1,\dots,l_n]\in\sizen^+
+	\end{alignat*}
+	積$\myspace$は$\C_*$で閉じている。Dyck言語が文字列の連結について
+	閉じていることに対応する。
+	\begin{equation*}\begin{split}
+		w_1\in\C_m,\; w_2\in\C_n\implies w_1w_2\in\C_{m+n}
+	\end{split}\end{equation*}
+
+	写像$\alpha:\C_*\to\C_+$を次のように定義する。
+	\begin{alignat*}{2}
+		\alpha1 &= [1] \\
+		\alpha[k_1,\dots,k_n] &= [0,k_1,\dots,k_n+1]
+		&\quad& \text{for all } [k_1,\dots,k_n]\in\C_+
+	\end{alignat*}
+	$\alpha$は文字数を一つ上げる操作で、はDyck単語$w$に対する操作
+	$w\mapsto bwc$に対応する。
+
+	$\C_*$の因子化をDyck言語との集合同型を使わずに述べておく。
+
+	\begin{proposition}[Cの因子化]\label{prop:Cの因子化} %{
+		任意の$w\in\C_+$に対して$w=\lr{\alpha w_1}w_2$となる$w_1,w_2\in\C_*$
+		が存在して唯一つ定まる。
+	\end{proposition} %prop:Cの因子化}
+	\begin{proof} %{
+		まず、命題の$w_1,w_2$が存在することを示す。
+		$w:=[k_1,\dots,k_{n+1}]\in\C_{n+1}$とし、$i\in0..n$を
+		$k_1+\cdots+k_{i+1}=i+1$となる最も小さいものとする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $i=0$の時は、$k_1=1$となり、
+			$[k_1,\dots,k_{n+1}]=\lr{\alpha 1}[k_2,\dots,k_{n+1}]$となる。
+			逆に、$k_1=1$の時は$i=0$となる。
+			%
+			\item $0<i$の時は、$k_1=0$となり、$2\le k_{i+1}$となる。
+			何故なら、$k_{i+1}=0$なら$k_1+\cdots+k_i=i+1$となり、$\C_+$の
+			定義に反する。また、$k_{i+1}=1$なら$k_1+\cdots+k_i=i$となるが、
+			これは$i$の定義（最小に関する定義）に反する。
+			したがって、$[k_2,\dots,k_{i+1}-1]\in\C_i$となり、次のようになる。
+			\begin{equation*}\begin{split}
+				[k_1,\dots,k_{n+1}] = \lr{\alpha[k_2,\dots,k_{i+1}-1]}
+					[k_{i+2},\dots,k_{n+1}]
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		以上より、命題の$w=\lr{\alpha w_1}w_2$となる$w_1\in\C_i$と
+		$w_2\in\C_{n-i}$が存在することが示された。
+		次に、命題の$w_1,w_2$が唯一つ定まることを示す。
+		$w_1\in\C_i$と$w_2\in\C_{n-i}$を上記のものとし、
+		$x_1\in\C_j$と$x_2\in\C_{n-j}$が$\lr{\alpha w_1}w_2=\lr{\alpha x_1}x_2$
+		を満たすとする。$i=j$ならば$w_1=x_1$かつ$w_2=x_2$となることがわかる。
+		$i<j$とすると、$[k_2,\dots,k_i,k_{i+1}+1,k_{i+2}\dots,k_{j+1}]\in\C_j$
+		となり、$k_2+\cdots+k_{i+1}+1\le i$となる必要があるが、$w_1\in\C_i$
+		だから$k_2+\cdots+k_{i+1}=i$となってこの条件を満たすことができない。
+		したがって、$i=j$となって$w_1=x_1$かつ$w_2=x_2$となる必要がある。
+	\end{proof} %}
+
+	根付き完全二分木に合わせて、$\C_*$の文字列の連結による積を$m$と書き、
+	線形射$\beta:=m\lr{\alpha\otimes\id}:R_q\C_*\otimes R_q\C_*\to R_q\C_*$
+	とすると、任意の$w\in\C_+$に対して$w=\beta\lr{w_1\otimes w_2}$となる
+	$w_1,w_2\in\C_*$が存在して唯一つ定まる。
+
+	交換関係$\omega m=m\lr{\omega\otimes\omega}$が成り立つから、
+	$\alpha:A^*\to A^*$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\alpha w := bwc \quad\text{for all } w\in A^*
+	\end{split}\end{equation*}
+	$\alpha$はDyck言語で閉じていて、$\omega\alpha=\alpha\omega$となり、
+	可換図式が成り立つという意味で、$\omega$と$\alpha$は可換となる。
+
+	写像$\dabs{-}:\C_*\to\sizen$と線形射$N:R_q\C_*\to R_q\C_*$を次のように
+	定義する。
+	\begin{alignat*}{2}
+		\dabs{w} = n &\xiff{\dfn} w\in \C_n 
+			&\quad& \text{for all } n\in\sizen \\
+		Nw &= \dabs{w}w &\quad& \text{for all } w\in\C_*
+	\end{alignat*}
+	$N$は次の交換関係と、
+	\begin{equation*}\begin{split}
+		Nm = m\lr{N\otimes N},\quad N\alpha = \alpha\lr{N + 1}
+	\end{split}\end{equation*}
+	$\omega N=\sharp_b\omega$という交換関係を満たす。
+
+	完全二分木の成長$\gamma_q$は次のように$C_*$に翻訳される。
+	\begin{equation*}\begin{split}
+		\gamma_q1 = [1],\quad
+		\gamma_q\beta = \beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}
+	\end{split}\end{equation*}
+	任意の$w\in\C_*$に対して次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\gamma_q\alpha w &= \gamma_q\beta\lr{w\otimes1}
+		= \beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}\lr{w\otimes1} \\
+		&= \alpha\gamma_qw + m\lr{\alpha q^N w\otimes[1]}
+	\end{split}\end{equation*}
+	写像$\lvec{-}:\C_*\to\cat{Set}\lr{\C_*}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\lvec{w_1}w_2 = w_2w_1 \quad\text{for all } w_1,w_2\in\sizen^*
+	\end{split}\end{equation*}
+	$\gamma_q$と$\alpha$の交換関係を次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\gamma_q\alpha = \alpha\gamma_q + \lvec{[1]}\alpha q^N
+	\end{split}\end{equation*}
+
+	\begin{todo}[次にやること]\label{todo:次にやること} %{
+		$\gamma_q$と$m$の交換関係が難しい。$A^*$と$\sizen^*$は次の対応関係が
+		ある。
+		\begin{equation*}\begin{split}
+			bw &\sim [0,k_1,\dots,k_n] \\
+			cw &\sim [k_1+1,\dots,k_n] \\
+		\end{split}\end{equation*}
+		$\gamma_q$は何らかの形でシャッフル積が関係していると思われるので、
+		交換関係は摂動的にしか得られないかもしれない。
+	\end{todo} %todo:次にやること}
+%s2:自然数の配列}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+		観察されることを書いておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Ferrers図形との対応 \\
+			形式級数$f\in R\braket{t}$として、微分作用素
+			$D_f:=\partial f=\lr{\partial f}+\lr{q_*f}\partial$について、
+			$D_f^n1$を計算する。$D_f^n1$は、$f_\dag:=f|\eta^\dag$として、
+			コヒーレント状態を用いて次のように書ける。
+			\begin{equation*}\begin{array}{rclcl}
+				D_f1 &=& \bra{t}\eta f_\dag\ket{0} &=& \partial f \\
+				D_f^21 &=& \bra{t}\lr{\eta f_\dag}^2\ket{0} 
+				&=& \lr{\partial f}\lr{\partial f} + \lr{q_*f}\lr{\partial^2 f} \\
+			\end{array}\end{equation*}
+			$\lr{\partial,\partial}:=\lr{\partial f}\lr{\partial f}$
+			、$\lr{q_*,\partial^2}:=\lr{q_*f}\lr{\partial^2 f}$というように
+			、$f$を省略して$\partial$と$q_*$を文字とする二次元配列で略記すると、
+			$D_f^n1$に現れる項は次のようにして求めることができる。
+			\begin{equation*}\xymatrix@R=1em@C=1ex{
+				1 \ar[d] \\
+				\lr{\partial} \ar[d] \ar[drrr] \\
+				\lr{\partial.\partial} \ar[d] \ar[dr] \ar[drr] 
+				& & & \lr{q_*,\partial^2} \ar[d] \ar[dr] \ar[drr] \\
+				\lr{\partial,\partial,\partial} & \lr{q_*,\partial^2,\partial}	
+				& \lr{q_*,\partial q_*,\partial^2}
+				& \lr{\partial,q_*,\partial^2} & \lr{q_*,\partial q_*,\partial^2}
+				& \lr{q_*,q_*^2,\partial^3}
+			}\end{equation*}
+			二次元配列を次のようにFerrers図形で書いてみる。
+			\begin{equation*}{\Yvcentermath1\begin{array}{rclrclrcl}
+				{\young(\diff)} &\sim& \lr{\diff}
+				,& {\young(\diff,\diff)} &\sim& \lr{\diff,\diff}
+				,& {\young(\bullet,\diff\diff)} &\sim& \lr{q_*,\diff^2} \\ \\
+				{\young(\diff,\diff,\diff)} &\sim& \lr{\diff,\diff,\diff}
+				,& {\young(\bullet,\diff\diff,\diff)} &\sim& \lr{q_*,\diff^2,\diff}
+				,& {\young(\bullet,\bullet\diff,\diff\diff)} 
+					&\sim& \lr{q_*,q_*\diff,\diff^2} \\ \\
+				{\young(\diff,\bullet,\diff\diff)} &\sim& \lr{\diff,q_*,\diff^2}
+				,& {\young(\bullet,\diff\bullet,\diff\diff)}
+					&\sim& \lr{q_*,\diff q_*,\diff^2}
+				,& {\young(\bullet,\bullet\bullet,\diff\diff\diff)}
+					&\sim& \lr{q_*,q_*^2,\diff^3}
+			\end{array}}\end{equation*}
+			$q_*$をマス目の$\bullet$で表している。そして、交換関係
+			$\diff q_*=qq_*\diff$をFerrers図形で次のように表すことにする。
+			\begin{equation*}\begin{split}
+				{\young(\bullet,\diff\bullet,\diff\diff)}
+				= q\,{\young(\bullet,\bullet\diff,\diff\diff)} 
+			\end{split}\end{equation*}
+			このように、マス目に$\bullet$を書き込むことができるFerrers図形を
+			$\bullet$-Ferrers図形ということにする。
+			$D_f^n1$は、次のように$\bullet$-Ferrers図形の成長によって
+			表すことができる。
+			\begin{equation*}\xymatrix@R=1em{
+				& & 1 \ar[d] \\
+				& & {\young(\diff)} \ar[dl] \ar[dr] \\
+				& {\young(\diff,\diff)} \ar[dl] \ar[d] \ar[dr]
+				& & {\young(\bullet,\diff\diff)} \ar[dl]_q \ar[d] \ar[dr] \\
+				{\young(\diff,\diff,\diff)} 
+				& {\young(\bullet,\diff\diff,\diff)}
+				& {\young(\bullet,\bullet\diff,\diff\diff)}
+				& {\young(\diff,\bullet,\diff\diff)}
+				& {\young(\bullet,\bullet\bullet,\diff\diff\diff)}
+			}\end{equation*}
+			$D_f^41$に相当する$\bullet$-Ferrers図形の和は次の$14$項になり、
+			\begin{equation*}\begin{array}{rclclclcl}
+				&& \young(\diff,\diff,\diff,\diff)
+				&+& \young(\bullet,\diff\diff,\diff,\diff)
+				&+\qbinom{2}{1}_q& \young(\bullet,\bullet\diff,\diff\diff,\diff)
+				&+\qbinom{2}{1}_q\qbinom{2}{1}_q& \young(\bullet,\bullet\diff,\bullet\diff,\diff\diff) \\
+				&+& \young(\diff,\bullet,\diff\diff,\diff)
+				&&
+				&+& \young(\bullet,\bullet\bullet,\diff\diff\diff,\diff)
+				&+\qbinom{3}{1}_q& \young(\bullet,\bullet\bullet,\bullet\diff\diff,\diff\diff) \\
+				&+\qbinom{2}{1}_q& \young(\diff,\bullet,\bullet\diff,\diff\diff)
+				&& &&
+				&+\qbinom{3}{1}_q& \young(\bullet,\bullet\bullet,\bullet\bullet\diff,\diff\diff\diff) \\
+				&+& \young(\diff,\diff,\bullet,\diff\diff)
+				&+& \young(\bullet,\diff\diff,\bullet,\diff\diff)
+				&&
+				&+\qbinom{2}{1}_q& \young(\bullet,\bullet\diff,\bullet\bullet,\diff\diff\diff) \\
+				&+& \young(\diff,\bullet,\bullet\bullet,\diff\diff\diff)
+				&& &&
+				&+& \young(\bullet,\bullet\bullet,\bullet\bullet\bullet,\diff\diff\diff\diff)
+			\end{array}\end{equation*}
+			$q=0$の時の係数の和は$14$、$q=1$の時の係数の和は$4!$となることが
+			わかる。したがって、次の式は$q=0,1$で$n=4$までq-微分方程式
+			\eqref{eq:q-Dyck微分方程式}を満たしている。
+			\begin{equation*}\begin{split}
+				\sum_{n\in\sizen}\frac{t^n
+					\Braket{\lr{b\eta\lr{c\eta^\dag}_q^*}_q^n}}{[n]_q!}
+			\end{split}\end{equation*}
+			この式は$f_\tran=b\lr{c\eta^\tran}_q^*$としたものである。
+			この$\bullet$-Ferrers図形の成長を漸化式の形で書き表すことが
+			さしあたっての課題となる。
+
+			$f_\tran=b\lr{c\eta^\tran}_q^*$として、$\bullet$-Ferrers図形の作用を
+			Dyck経路で書き表すと次のようになる。
+			\begin{equation*}\begin{split}
+				{\young(\bullet\bullet\bullet,\bullet\bullet\partial\partial,\bullet\partial)} 
+				\mapsto \vcenter{\xymatrix@R=1em@C=1em{
+					\circ \ar[d]_b \\
+					\circ \ar[d]_b \\
+					\circ \ar[r]^c & \circ \ar[r]^c & \circ \ar[d]_b \\
+					& & \circ \ar[r]^c & \circ \\
+				}}
+			\end{split}\end{equation*}
+			$\bullet$-Ferrers図形からDyck経路へは次のようにして変換できる。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 行を$b$に対応させる。
+				\item マス目$\partial$を$c$に対応させる。
+				\item マス目$\bullet$は無視する。
+			\end{itemize} %}
+			したがって、$\bullet$-Ferrers図形のDyck経路へは変換は、
+			次のような$\bullet$-Ferrers図形から通常のFerrers図形への変換
+			で代用できる。
+			\begin{equation*}\begin{split}
+				{\young(\bullet\bullet\bullet,\bullet\bullet\diff\diff,\bullet\diff)} 
+				\mapsto {\young(\hfil\hfil\hfil,\diff\diff\hfil,::\diff)}
+			\end{split}\end{equation*}
+			逆にDyck経路から$\bullet$-Ferrers図形への変換を考えてみる。
+			次の例を考えると、
+			\begin{equation*}\begin{array}{rclclcl}
+				\young(\hfil\hfil\hfil\hfil,\diff\hfil\hfil\hfil,:\diff\hfil\hfil,::\diff\diff)
+				&\xmapsto{\text{extracts $\diff$}}& \yng(0,1,1,2)
+				&\xmapsto{\text{inserts $\bullet$}}& \young(\bullet,\bullet\diff,\bullet\diff,\diff\diff)
+				&\xmapsto{\text{arranges $\bullet$}}&
+				\qbinom{1}{1}_q\qbinom{2}{1}_q\qbinom{2}{1}_q\qbinom{2}{0}_q
+				\young(\bullet,\bullet\diff,\bullet\diff,\diff\diff) \\
+				\young(\hfil\hfil\hfil\hfil,\hfil\hfil\hfil\hfil,\diff\diff\hfil\hfil,::\diff\diff)
+				&\xmapsto{\text{extracts $\diff$}}& \yng(0,0,2,2)
+				&\xmapsto{\text{inserts $\bullet$}}& \young(\bullet,\bullet\bullet,\bullet\diff\diff,\diff\diff)
+				&\xmapsto{\text{arranges $\bullet$}}&
+				\qbinom{1}{1}_q\qbinom{2}{2}_q\qbinom{3}{1}_q\qbinom{2}{0}_q
+				\young(\bullet,\bullet\bullet,\bullet\diff\diff,\diff\diff)
+			\end{array}\end{equation*}
+			キモはDyck経路から変換したFerres図形の各行に挿入$\bullet$の数を
+			計算するところになりそうだ。
+			\begin{equation*}\begin{split}
+				\yng(0,1,1,2) \mapsto \yng(1,1,1,0),\quad
+				\yng(0,0,2,2) \mapsto \yng(1,2,1,0)
+			\end{split}\end{equation*}
+			集合$D_n\subset\sizen^n$を次の性質を持つ元
+			$\lr{k_1,k_2,\dots,k_n}\in\sizen^n$全体のつくる集合とする。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item $k_1 + k_2 +\cdots+ k_n = n$
+				\item $k_1\le 1,\; k_1+k_2\le 2,\dots, k_1+k_2 +\cdots+ k_n\le n$
+			\end{itemize} %}
+			$D_n$はDyck経路に対応することが予想される。
+			$D_n$から各行に挿入する$\bullet$の数は次のようにして計算できる。
+			\begin{equation*}\begin{split}
+				\glr{k_1,k_2,\dots,k_n}
+				\mapsto \glr{1 - k_1, 2 -\lr{k_1 + k_2},\dots, n - \lr{k_1 + k_2 +\cdots+ k_n}}
+			\end{split}\end{equation*}
+			したがって、$\bullet$の配置の仕方の数は次のように計算できる。
+			\begin{equation*}\begin{split}
+				\glr{k_1,k_2,\dots,k_n} \mapsto \qbinom{1}{k_1}_q
+				\qbinom{2-k_1}{k_2}_q
+				\cdots\qbinom{n-\lr{k_1+ k_2 +\cdots+ k_{n-1}}}{k_n}_q
+			\end{split}\end{equation*}
+			この計算を写像$\nu:D_n\to R_q$で表し、$D_n$の$R_q[[t]]$への作用
+			$\rhd$を次のように定義すると、
+			\begin{equation*}\begin{split}
+				\lr{k_1,k_2,\dots,k_n}\rhd f &:= \glr{q_*^{1-k_1}\diff^{k_1}f}
+					\glr{q_*^{1-\lr{k_1+k_2}}\diff^{k_2}f}\cdots
+					\glr{q_*^{1-\lr{k_1+k_2+\cdots+k_n}}\diff^{k_n}f} \\
+			\end{split}\end{equation*}
+			次の式が成り立つことが予想される。
+			\begin{equation*}\begin{split}
+				\sum_{x\in D_n}\lr{\nu x}\lr{x\rhd f} &= D_f^n1 \\
+			\end{split}\end{equation*}
+			%
+			\item 木の成長の因子化\eqref{eq:木の成長の因子化その二}がすべて \\
+			q-微分方程式\eqref{eq:q-Dyck微分方程式}は木の成長の因子化
+			\eqref{eq:木の成長の因子化その二}から直接導かれる。
+			\item 固有値 \\
+			q-微分方程式\eqref{eq:q-Dyck微分方程式}を微分の形で書くと、
+			次のようになるが、
+			\begin{equation*}\begin{split}
+				\lr{\partial_q\Omega_q}t = b\lr{\Omega_qt}c\lr{\Omega_qt}
+			\end{split}\end{equation*}
+			これは微分$\partial_q$の固有値が$b\lr{\Omega_qt}c$になっているように
+			見える。
+			\item 一般の形式級数 \\
+			次のように形式級数を一般化すると、どのようなq-微分方程式が
+			成り立つか？
+			\begin{equation*}\begin{split}
+				F_qt := \omega\sum_{n\in\sizen}
+				\frac{f_n\lr{t\gamma_q}^n}{[n]_q!}\bullet
+				\quad\text{where } f_n\in R_q \text{ for all } n\in\sizen
+			\end{split}\end{equation*}
+			\item 真空期待値の表示 \\
+			次の式を証明してみる。
+			\begin{equation*}\begin{split}
+				\Braket{\lr{b\eta + \eta^\dag c}^{2n}}
+				= \Braket{\lr{b\eta\lr{\eta^\dag c}^*}^n}
+			\end{split}\end{equation*}
+			左辺を直接展開すると、$\eta$と$\eta^\dag$の数勘定により、
+			次のようになるが、
+			\begin{equation*}\begin{split}
+				\Braket{\lr{b\eta + \eta^\dag c}^{2n}}
+				= \sum_{k_1+\cdots+k_n=n} \Braket{b\eta\lr{\eta^\dag c}^{k_1}
+					\cdots b\eta\lr{\eta^\dag c}^{k_n}}
+			\end{split}\end{equation*}
+			$\eta$と$\eta^\dag$の数が合わない項の真空期待値は$0$になるから、
+			次の式が得られる。
+			\begin{equation*}\begin{split}
+				\Braket{\lr{b\eta + \eta^\dag c}^{2n}}
+				= \Braket{\lr{b\eta\lr{\eta^\dag c}^*}^n}
+			\end{split}\end{equation*}
+			これをq-変形した次の式を上記の式変形を逆に辿りたいのだが、それが
+			難しい。
+			\begin{equation*}\begin{split}
+				\Braket{\lr{b\eta\lr{\eta_q^\dag c}_q^*}^n}
+				= \sum_{k_1+\cdots+k_n=n} \Braket{
+					\frac{b\eta\lr{\eta_q^\dag c}^{k_1}}{[k_1]_q!}
+					\cdots \frac{b\eta\lr{\eta_q^\dag c}^{k_n}}{[k_n]_q!}}
+			\end{split}\end{equation*}
+			Rota-Baxter作用素にヒントがあるような気がする。Rota-Baxter作用素
+			から導かれるSpiptzer恒等式がそれに相当するが、Spitzer恒等式は再帰
+			を含むので、即物的な計算に使いにくい気がしている。
+			\item 因子化 \\
+			$q=0$の場合は次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				\bra{0}\lr{b\eta + \eta^\dag c}^{2(n+1)}
+				= b^2\bra{0}\eta\lr{b\eta + \eta^\dag c}^{2n}\eta \\
+				+ \sum_{k=0}^n b\Braket{\lr{b\eta + \eta^\dag c}^{2k}}c
+					\bra{0}\lr{b\eta + \eta^\dag c}^{2(n-k)} \\
+			\end{split}\end{equation*}
+			同じような式が$\bra{0}\lr{b\eta\lr{\eta^\dag c}^*}^n$に対して
+			成り立つはずだ。次の式を使うと、
+			\begin{equation*}\begin{split}
+				m^\dag\lr{c\eta^\dag}^*
+				= \lr{\lr{c\eta^\dag}^*\otimes\id + \sum_{n\in\sizen} 
+					\lr{c\eta^\dag}^*0^Nc^{n+1}\otimes\lr{\eta^\dag}^{n+1}} m^\dag
+			\end{split}\end{equation*}
+			計算は面倒だが次の式が得られる。
+			\begin{equation*}\begin{split}
+				\bra{0}\lr{b\eta\lr{\eta^\dag c}^*}^{n+1}
+				= b\bra{0}\lr{b\eta\lr{\eta^\dag c}^*}^n\eta \\
+				+ \sum_{k=0}^n b\Braket{\lr{b\eta\lr{\eta^\dag c}^*}^k}c
+					\bra{0}\lr{b\eta\lr{\eta^\dag c}^*}^{n-k}
+			\end{split}\end{equation*}
+			この式のq-変形してみる。
+			定数倍を$x_*\lr{fy}=f\lr{xy}$とおき、$\kappa_q:=\lr{\eta_q}_q^*$
+			とおき、$\partial f$を次のようにおくと、
+			\begin{equation*}\begin{split}
+				\lr{\partial f|\eta_q^\dag} 
+				:= \eta\lr{f|\eta_q^\dag}-\lr{q_*f|\eta_q^\dag}\eta
+			\end{split}\end{equation*}
+			次のようになる。
+			\begin{equation*}\begin{split}
+				b\eta c_*\kappa_q 
+				&= b\lr{\partial c_*\kappa_q} + b\lr{q_*c_*\kappa_q}\eta \\
+				\lr{b\eta c_*\kappa_q}^2
+				&= b\lr{\partial c_*\kappa_q}b\glr{\lr{\partial c_*\kappa_q}
+					+ \lr{q_*c_*\kappa_q}\eta} 
+					+ b\lr{q_*c_*\kappa_q}b\lr{\partial^2 c_*\kappa_q} \\
+				&\,+ b\lr{q_*c_*\kappa_q}b\glr{\lr{\partial q_*c_*\kappa_q}\eta
+					+ \lr{q_*\partial c_*\kappa_q}\eta
+					+ \lr{q_*^2c_*\kappa_q}\eta^2} \\
+			\end{split}\end{equation*}
+
+			\begin{equation*}\begin{split}
+				b\eta c_*\kappa_q 
+				&= b\lr{\partial c_*\kappa_q} + b\lr{q_*c_*\kappa_q}\eta \\
+				\lr{b\eta c_*\kappa_q}^2
+				&= b\lr{\partial c_*\kappa_q}b\glr{\lr{\partial c_*\kappa_q}
+					+ \lr{q_*c_*\kappa_q}\eta} \\
+				&\,+ b\lr{q_*c_*\kappa_q}b\glr{\lr{\partial^2 c_*\kappa_q}
+					+ \lr{\partial q_*c_*\kappa_q}\eta} \\
+				&\,+ b\lr{q_*c_*\kappa_q}b\glr{\lr{q_*\partial c_*\kappa_q}
+					+ \lr{q_*^2c_*\kappa_q}\eta}\eta \\
+			\end{split}\end{equation*}
+
+			\begin{todo}[ここまで]\label{todo:ここまで} %{
+			\end{todo} %todo:ここまで}
+			次の式を用いて、
+			\begin{equation*}\begin{split}
+				\eta_qm^\dag = m\lr{\eta_q\otimes\id + q^N\otimes\eta_q}
+			\end{split}\end{equation*}
+			次の式を計算したい。
+			\begin{equation*}\begin{split}
+				m^\dag\lr{c\eta_q^\dag}_q^* = \sum_{n\in\sizen}
+				\frac{\lr{c\eta_q^\dag\otimes\id + cq^N\otimes\eta_q^\dag}^n}
+				{[n]_q!} m^\dag
+			\end{split}\end{equation*}
+			$\id\otimes\eta_q^\dag$の一次近似で次のようになるから、
+			\begin{equation*}\begin{split}
+				\lr{c\eta_q^\dag\otimes\id + cq^N\otimes\eta_q^\dag}^n
+				= \lr{c\eta_q^\dag}^n\otimes\id
+				+ [n]_q\lr{c\eta_q^\dag}^{n-1}cq^N\otimes\eta_q^\dag
+				+ O\lr{\id\otimes\lr{\eta_q^\dag}^2}
+			\end{split}\end{equation*}
+			次の式が得られる。
+			\begin{equation*}\begin{split}
+				m^\dag\lr{c\eta_q^\dag}_q^* = \lr{\lr{c\eta_q^\dag}^*\otimes\id
+				+ \lr{c\eta_q^\dag}^*cq^N\otimes\eta_q^\dag} m^\dag
+				+ O\lr{\id\otimes\lr{\eta_q^\dag}^2} m^\dag
+			\end{split}\end{equation*}
+			$\id\otimes\eta_q^\dag$の二次以上の簡潔な書き方はわからないが、
+			一次近似から次の式が得られる。
+			\begin{equation*}\begin{split}
+				\bra{0}\lr{b\eta\lr{\eta_q^\dag c}_q^*}^{n+1}
+				= b\bra{0}\lr{b\eta\lr{\eta_q^\dag c}_q^*}^n\eta \\
+				+ \sum_{k=0}^n b\bra{0}\lr{b\eta\lr{\eta_q^\dag c}_q^*}^kcq^N
+					\lr{b\eta\lr{\eta_q^\dag c}_q^*}^{n-k}
+			\end{split}\end{equation*}
+			この式は欲している因子化の形になっていない。
+			\item 低次の計算 \\
+			$\bra{0}\lr{b\eta\lr{\eta_q^\dag c}_q^*}^n$を$n$が小さい項で計算して
+			みる。次の式を使って、
+			\begin{equation*}\begin{split}
+				b\eta\lr{\eta_q^\dag c}_q^* = bc\lr{\eta_q^\dag c}_q^*
+				+ b\lr{\eta_q^\dag qc}_q^*\eta
+			\end{split}\end{equation*}
+			次の式が得られる。
+			\begin{equation*}\begin{split}
+				\bra{0}\lr{b\eta\lr{\eta_q^\dag c}_q^*}^1 
+				&= \bra{0}\glr{bc + b\eta} \\
+				\bra{0}\lr{b\eta\lr{\eta_q^\dag c}_q^*}^2
+				&= \bra{0}\glr{bcbc + bcb\eta + b\eta bc + b^2c^2
+					+ b\eta b\eta + q\,b^2c\eta} \\
+			\end{split}\end{equation*}
+
+			そこで、$\lr{b\eta\lr{\eta_q^\dag c}_q^*}^n\ket{0}$を計算すると、
+			次の式が得られる。
+			\begin{equation*}\begin{split}
+				b\eta\lr{\eta_q^\dag c}_q^*\ket{0} 
+				&= bc\lr{\eta_q^\dag c}_q^*\ket{0} \\
+				\lr{b\eta\lr{\eta_q^\dag c}_q^*}^2\ket{0} 
+				&= \lr{bc\lr{\eta_q^\dag c}_q^*}^2\ket{0}
+					+ b\lr{\eta_q^\dag qc}_q^* bc^2\lr{\eta_q^\dag c}_q^*\ket{0} \\
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{todo} %todo:ここまで}
+
+	この式は二分木の次数についての帰納法で証明できる。
+	特に、$q=0$の時はDyck経路の因子化の式に一致して、
+	\begin{equation*}\begin{split}
+		\lr{x_0|t} = 1 + tb\lr{x_0|t}c\lr{x_0|t}
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation}\label{eq:zero-Dyck言語}\begin{split}
+		\lr{x_0|t} = \Braket{\lr{tb\eta + \eta^\dag c}^*}
+	\end{split}\end{equation}
+	この式を$q\neq0$に一般化することを考える。
+
+	Kleeneスターについて成り立つ式$\lr{x+y}^*=y^*\lr{xy^*}$を使うと、
+	式\eqref{eq:zero-Dyck言語}は次のように書ける。
+	\begin{equation*}\begin{split}
+		\omega\gamma_0^n\bullet = \Braket{\lr{b\eta + \eta^\dag c}^{2n}}
+		= \Braket{\lr{b\eta\lr{\eta^\dag c}^*}^n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この二つ目の式を形式級数$f$を用いて次のように変形したものを考える。
+	\begin{equation}\label{eq:Dyck言語の変形}\begin{split}
+		\Braket{\lr{b\eta_q\lr{f|\eta^\dag c}}^n}
+	\end{split}\end{equation}
+	交換関係$\eta_q\eta^\dag=1+\eta^\dag\eta_q$から次の式が成り立つことが
+	わかる。
+	\begin{equation*}\begin{split}
+		\eta_q\lr{f|\eta^\dag c} = c\lr{\partial_qf|\eta^\dag c}
+			+ \lr{f|q\eta^\dag c}\eta \\
+	\end{split}\end{equation*}
+	この式は、次の形でq-Leibnitz則を導く。
+	\begin{equation*}\begin{split}
+		\eta_q\lr{g|\eta^\dag x}\lr{h|\eta^\dag y}
+		= x \lr{\partial_qg|\eta^\dag x}\lr{h|\eta^\dag y}
+		+ \lr{g|q\eta^\dag x}y\lr{\partial_qh|\eta^\dag y} \\
+		+ \lr{g|q\eta^\dag x}\lr{\partial_qh|q\eta^\dag y}\eta_q \\
+		\quad\text{for all } g,h\in R\braket{t},\; x,y\in R_qA^*
+	\end{split}\end{equation*}
+	このq-Leibnitz則を繰り返し適用していくと、式\eqref{eq:Dyck言語の変形}が
+	計算できる。この形のq-Leibnitz則を代数化しておく。
+
+	線形射$-_*:R_qA^*\to\cat{Mod}_{R_q}\lr{R_q\braket{t}}$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		\lr{x_*g|t} := \lr{g|xt} \quad\text{for all } g\in R\braket{t}
+		,\; x\in R_qA^*
+	\end{split}\end{equation*}
+	次の交換関係が成り立ち、
+	\begin{equation*}\begin{split}
+		\partial_qx_* = xx_*\partial_q
+	\end{split}\end{equation*}
+	q-Leibnitz則は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\eta_q\lr{c_*f|\eta^\dag} = \lr{\partial_qc_*f|\eta^\dag}
+		+ \lr{q_*c_*f|\eta^\dag}\eta_q
+	\end{split}\end{equation*}
+	この式は次のように略記しても混乱は無いだろう。
+	\begin{equation*}\begin{split}
+		\eta_q\lr{c_*} = \lr{\partial_qc_*} + \lr{q_*c_*}\eta_q
+	\end{split}\end{equation*}
+	$F:=\lr{f|\eta^\dag c}$と略記すると次のような交換関係と
+	作用によって、交換関係\eqref{eq:形式級数との交換関係}を表すことができる。
+	\begin{equation*}\begin{split}
+		\partial_qq_* = qq_*\partial_q
+		,\quad \eta_qF = \lr{c\partial_q + q_*}F
+	\end{split}\end{equation*}
+	$f_n:=\lr{\partial_q^nf|0}$とおくと次のようになる。
+	\begin{equation*}\begin{array}{rcrcrcr}
+		\Braket{\lr{b\eta_q\lr{f|\eta^\dag c}}^1} &=& bcf_1 \\
+		\Braket{\lr{b\eta_q\lr{f|\eta^\dag c}}^2} 
+		&=& bcf_1bcf_1 &+& bf_0bc^2f_2 \\
+		\Braket{\lr{b\eta_q\lr{f|\eta^\dag c}}^3} 
+		&=& bcf_1bcf_1bcf_1 &+& bf_0bc^2f_2bcf_1 &+& bf_0bcf_1bc^2f_2 \\
+		&+& bcf_1bf_0bc^2f_2 &+& qbf_0bcf_1bc^2f_2 &+& bf_0bf_0bc^3f_3 \\
+	\end{array}\end{equation*}
+	$3$次の式の$5$項目の$q$は次の計算に由来する。
+	\begin{equation*}\begin{split}
+		& b\lr{f|q\eta^\dag c}\eta b\lr{f|q\eta^\dag c}
+			bc^2\lr{\partial_q^2f|\eta^\dag c}\ket{0} \\
+		&= q\, b\lr{f|q\eta^\dag c} bc\lr{\partial_qf|q\eta^\dag c}
+			bc^2\lr{\partial_q^2f|\eta^\dag c}\ket{0} \\
+		&\;+ b\lr{f|q\eta^\dag c} b\lr{f|q^2\eta^\dag c}
+			bc^3\lr{\partial_q^3f|\eta^\dag c}\ket{0} \\
+	\end{split}\end{equation*}
+	$3$次の式の$3$項目と$5$項目は因子$q$以外は同じ係数になっているが、
+	作用$q-$と$\partial_q$が作用する順番によって因子$q$が異なってくる。
+	\begin{equation*}\begin{array}{rcrcr}
+		\lr{f|\eta^\dag c} &\xmapsto{q-}& \lr{f|q\eta^\dag c}
+		&\xmapsto{\partial_q}& qc\lr{\partial_qf|q\eta^\dag c} \\
+		\lr{f|\eta^\dag c} &\xmapsto{\partial_q}& c\lr{\partial_qf|\eta^\dag c}
+		&\xmapsto{q-}& c\lr{\partial_qf|q\eta^\dag c} \\
+	\end{array}\end{equation*}
+	$3$次までの計算を$n$次に一般化すると次のように書けるだろう。
+	\begin{equation*}\begin{split}
+		\Braket{\lr{b\eta_q\lr{f|\eta^\dag c}}^n}
+		= \sum_{\lr{i_1,\dots,i_n}\in F_n}
+		r_{i_1,\dots,i_n} bc^{i_1}f_{i_1}\cdots bc^{i_n}f_{i_n}
+		\quad\text{where } \\
+		r_{i_1,\dots,i_n} \in R_q,\quad
+		F_n\subseteq\sizen^n \text{ such that } \begin{cases}
+			0\le i_k\le k \quad\text{for all } k=1,\dots,n \\
+			i_1 +\cdots+ i_n = n
+		\end{cases}
+	\end{split}\end{equation*}
+	$F_n$は升の合計が$n$で高さ$n$のFerrers図形全体のつくる集合と見ることも
+	できる。$q$-係数$r_{i_1,\dots,i_n}$を求めることは難しいが、
+	多項式$f$に依存しないことがわかる。また、$f$を$q$-Kleeneスターとすると、
+	任意の$n\in\sizen$で$\lr{\partial_q^n\lr{-}_q^*|0}=1$となるから、
+	次の式が成り立ちそうだ。
+	\begin{equation*}\begin{split}
+		\omega\gamma_q^n\bullet = \Braket{\lr{b\eta\lr{\eta^\dag c}_q^*}^n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	上記の計算から$n=0,1,2,3$では成り立っている。
+%s1:q-Dyck言語}
+\section{経路の成長}\label{s1:経路の成長} %{
+	不完全なDyck経路を次のような二次元格子状の経路と定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $(0,0)$から$(m,n)$への経路で、$m\ge n\ge 0$となる。
+		\item 経路上の任意の点$(x,y)$はすべて$x\ge y\ge 0$となる。
+	\end{itemize} %}
+	不完全なDyck経路全体のつくる集合を$C_*$と書く。
+	不完全なDyck経路は次のようになる。
+	\begin{equation*}\begin{split}
+		\smallxy{
+			\bullet
+		},\quad \smallxy{
+			\bullet \hen[r] & \bullet
+		},\quad \smallxy{
+			\bullet \hen[r] & \bullet \hen[r] & \bullet
+		},\quad \smallxy{
+			& \bullet \\
+			\bullet \hen[r] & \bullet \hen[u]
+		},\quad \smallxy{
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[r] & \bullet
+		},\quad \smallxy{
+			& & \bullet \\
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[u]
+		},\quad \smallxy{
+			& \bullet \hen[r] & \bullet \\
+			\bullet \hen[r] & \bullet \hen[u]
+		}
+	\end{split}\end{equation*}
+	不完全なDyck経路は、Brzozowski微分の計算$\bra{0}\lr{b\eta+\eta^\dag c}^n$
+	を図示したものになっていて、不完全なDyck経路はDyck経路を含んでいる。
+
+	任意の$m\ge n\ge 0$に対して$C_{m,n}$を$(0,0)$から$(m,n)$への
+	不完全なDyck経路全体のつくる集合とする。
+	\begin{equation*}\begin{split}
+		C_{0,0} = \Set{
+			\bullet
+		},\quad C_{1,0} = \Set{\smallxy{
+			\bullet \hen[r] & \bullet
+		}},\quad C_{2,0} = \Set{\smallxy{
+			\bullet \hen[r] & \bullet \hen[r] & \bullet
+		}},\quad C_{1,1} = \Set{\smallxy{
+			& \bullet \\
+			\bullet \hen[r] & \bullet \hen[u]
+		}} \\
+		C_{3,0} = \Set{\smallxy{
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[r] & \bullet
+		}},\quad C_{2,1} = \Set{\smallxy{
+			& & \bullet \\
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[u]
+		},\quad \smallxy{
+			& \bullet \hen[r] & \bullet \\
+			\bullet \hen[r] & \bullet \hen[u]
+		}} \\
+		C_{4,0} = \Set{\smallxy{
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[r] & \bullet \hen[r]
+			& \bullet
+		}},\quad C_{2,2} = \Set{\smallxy{
+			& & \bullet \\
+			& & \bullet \hen[u] \\
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[u]
+		},\quad \smallxy{
+			& & \bullet \\
+			& \bullet \hen[r] & \bullet \hen[u] \\
+			\bullet \hen[r] & \bullet \hen[u]
+		}} \\
+		C_{3,1} = \Set{\smallxy{
+			& & & \bullet \\
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[r] & \bullet \hen[u]
+		},\quad \smallxy{
+			& & \bullet \hen[r] & \bullet \\
+			\bullet \hen[r] & \bullet \hen[r] & \bullet \hen[u]
+		},\quad \smallxy{
+			& \bullet \hen[r] & \bullet \hen[r] & \bullet \\
+			\bullet \hen[r] & \bullet \hen[u]
+		}}
+	\end{split}\end{equation*}
+	$C_*=\oplus_{m\ge n\in\sizen}C_{m,n}$となる。
+	任意の$n\in\sizen$に対して$C_n\subset C_*$を、 $n$が偶数の場合と
+	奇数の場合に分けて、次のように定義する。
+	\begin{equation*}\begin{split}
+		C_{2m} := \cup_{k=0}^m C_{2m-k,k},\quad
+		C_{2m + 1} := \cup_{k=0}^m C_{2m-k,k}
+	\end{split}\end{equation*}
+	写像$\sharp_\pm:C_*\to\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\sharp_+w = m,\quad \sharp_-w = n \quad\text{for all } w\in C_{m,n}
+	\end{split}\end{equation*}
+%s1:経路の成長}
 \section{覚書}\label{s1:覚書} %{
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
 		\item Redfordの定理 \\
@@ -175,18 +1132,20 @@
 		\item 使用目的 \\
 		箙も遷移図も様々な使い道があるが、ここではそれらの現在の主たる使用方法
 		に限定して述べてみる。
-		箙は箙の経路代数の表現を調べることに使う。経路代数の元の列挙が主な
-		目的ではない。遷移図は経路代数の元を列挙することに使う。経路代数の
-		表現を調べることが主な目的ではない。
+		箙はその表現（$=$箙から生成される圏）を調べることに使う。
+		経路代数の元の列挙が主な目的ではない。
+		遷移図は経路代数の元を列挙することに使う。
+		遷移図の表現を調べることが主な目的ではない。
 		\item 辺のラベルの重複 \\
-		箙は辺のラベルが重複することは許されない。一方、遷移図は辺のラベルが
-		重複すること許されている。文字列の部分集合を表すには、箙のような制限
-		をすることは無駄である。しかし、辺のラベルが重複することを許す代償が
-		ある。箙では生成元同士の積表を作れば、箙の経路代数は完全に決まって
-		しまうが、遷移図では生成元同士の積表だけでは、オートマトンは決まらな
-		い。例えば、$\bullet\xfrom{a}\bullet\xfrom{a}\bullet$という遷移図では、
-		$a^3=0$という関係が現れるが、これは生成元同士の積表では書くことが
-		できない。
+		使用目的から、 箙は辺のラベルが重複することは許されないが、
+		遷移図は辺のラベルが重複すること許されている。遷移図と箙は次のように
+		それぞれの生成する経路代数で対応させることができる。
+		\begin{equation*}\begin{array}{ccc}
+			A:\;x\xfrom{a}y\xfrom{a}z &\xmapsto{\text{埋め込み}}& 
+				Q:\;x\xfrom{b}y\xfrom{a}z \\
+			\downarrow && \downarrow \\
+			RA \simeq \cfrac{QA}{\braket{a-b}} &\xfrom{\text{関係付け}}& RQ
+		\end{array}\end{equation*}
 		\item 始点の指定 \\
 		箙では経路の始点と呼べるものがあるとすれば、それはグラフ構造から
 		決まってしまうものだけである。遷移図では複数の始点をグラフの末端でない
@@ -194,32 +1153,99 @@
 		与えない。終点を指定して経路代数の部分集合を取り出す時に関係する。
 	\end{itemize} %}
 	箙と遷移図とでは、その使用目的の違いにより異なる点もあるが、どちらも
-	グラフから生成される経路代数を使うことには変わりない。大きな違いとして、
-	遷移図では辺のラベルが重複することが許されているが、次のような変形に
-	よって箙に書き直すことができる。
-	\begin{equation*}\begin{split}
-		\xymatrix{
-			x_4 & x_3 \ar[l]_a & x_2 \ar[l]_b & x_1 \ar[l]_a
-		} \xmapsto{\text{箙へ書き直す}} \xymatrix{
-			x_2 + x_4 \ar@/_1ex/[r]_b & x_1 + x_3 \ar@/_1ex/[l]_a
-		}
-	\end{split}\end{equation*}
-	この図の左の遷移図と右の箙では生成する経路代数は異なる。
-	左の遷移図では$baba=0$となるが、右の箙にはそのような関係式は含まれない。
-	遷移図で、 このように同一のラベルのついた辺が唯一になるように頂点を
-	マージしていく操作を$\phi$とすると、遷移図$A$と箙$\phi A$から生成される
-	経路代数は$RA\subseteq R\lr{\phi A}$という関係になる。
+	グラフから生成される経路代数を使うことには変わりない。
 
+	\begin{note}[箙の分類と有理言語の分類]
+	\label{note:箙の分類と有理言語の分類} %{
+		意味があるかどうかを別として、有理言語を対応する箙によって、
+		有限型、tame型、野生型の次の三つに分類することができる。
+		更に、有限型の場合はDynkin図、tame型の場合は拡大Dynkin図によって、
+		更に細かく分類することができる。
+	\end{note} %note:箙の分類と有理言語の分類}
+
+	\begin{todo}[箙と正規言語]\label{todo:箙と正規言語} %{
+		正規言語はDyck言語と有理言語の交差として書くことができるという
+		強い制約を持つ。したがって、対応する箙にも強い制約があることが予想
+		される。どんな制約？$\implies$木で表される制約になる。
+	\end{todo} %todo:箙と正規言語}
+
+	\begin{todo}[有理言語の性質]\label{todo:有理言語の性質} %{
+		Chomsky-Schutzenbergerの定理、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 文脈自由言語はDyck言語と有理言語の交差として書くことができる
+		\end{itemize} %}
+		を、有理言語に対しても適用すると、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 有理言語は箙の経路代数の部分集合として書くことができる
+		\end{itemize} %}
+		というスローガンになりそうだ。数式で書くと、$Q=(Q_0,Q_1)$を有限箙、
+		$\Sigma$を有限集合とする。$\pi:Q_0\to Q_1$を次のように定義し、
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				\cdots \ar[r] & x \ar[r] \ar@(ur,ul)_{\pi x} & \cdots
+			}
+		\end{split}\end{equation*}
+		写像$\epsilon:Q\to RQ^\dag$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\lr{\epsilon x}w = \begin{cases}
+				1, &\text{ iff } w \text{ is a path to x} \\
+				0, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+		すると、全射$f:Q_1\to\Sigma$と、$X_0\subseteq Q_0$と、
+		$y\in Q_0$が与えられた時、次の式により、$R\Sigma^*$の元が定まる。
+		\begin{equation*}\begin{split}
+			\lr{\id\otimes\epsilon_y}\lr{\sum_{a\in Q_1}fa\otimes a}^*
+			\sum_{x\in X_0}\lr{1\otimes\lr{\pi x}}\in R\otimes R\Sigma
+			\simeq_RR\Sigma^*
+		\end{split}\end{equation*}
+	\end{todo} %todo:有理言語の性質}
+
+	\begin{note}[箙の表現と文法]\label{note:箙の表現と文法} %{
+		箙が与えられたとき、始点と一つ以上定めると、
+		$(1,\dots,1)$表現を遷移行列とする文法が得られる。
+		例えば、$\rho$を次の箙の$(1,1)$表現だとすると、
+		\begin{equation*}\begin{split}
+			Q:\;\xymatrix{
+				x \ar@(lu,ld)_b \ar@/_1ex/[r]_c & y \ar@/_1ex/[l]_a
+			} \xmapsto{\rho} \xymatrix{
+				K \ar@(lu,ld)_1 \ar@/_1ex/[r]_1 & K \ar@/_1ex/[l]_1
+			}
+		\end{split}\end{equation*}
+		表現$\rho$によって記述される次の有理文法が定まる。
+		\begin{equation*}\begin{split}
+			\pvec{x}{y} = \pvec{x_0}{y_0} + T_\rho\pvec{x}{y} \quad\text{where }
+			T_\rho = a\lr{\rho a} + b\lr{\rho b} + c\lr{\rho c}
+		\end{split}\end{equation*}
+		$(x_0,y_0)$は箙の始点（$=$オートマトンの終状態）である。
+		ここで、$\sigma$を$\rho$と同値な表現だとすると、同型射
+		$\phi_i:\rho i\simeq\sigma i,\; i=x,y$があって次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\phi_x\rho a = \lr{\sigma a}\phi_y
+			,\quad \phi_x\rho b = \lr{\sigma b}\phi_x
+			,\quad \phi_y\rho c = \lr{\sigma c}\phi_x
+		\end{split}\end{equation*}
+		$\rho$と$\sigma$は次の式を満たすことになる。
+		\begin{equation*}\begin{split}
+			\lr{\rho a}\lr{\rho c} = \lr{\sigma a}\lr{\sigma c}
+			,\quad \rho b = \sigma b
+		\end{split}\end{equation*}
+		逆に、$\rho$と同値でない$(1,1)$表現$\sigma$が与えられると、
+		$X_\sigma=X_0+\T_\sigma X_\sigma$によって同値でない文法が得られる。
+		ただし、通常、言語の場合はブーリアンを係数として考えるので、
+		表現の同値性を考えても当たり前のことしか出てこない。
+	\end{note} %note:箙の表現と文法}
+	
 	箙の表現については解説\cite{derksen2005}に簡潔な概要が書かれている。
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
 		\item 箙の分類 \\
 		箙は、有限型、tame型、野生型の三種類に分類される。
 		\item 箙の基礎無向グラフ \\
 		箙の辺の向きを忘れた無向グラフを箙の基礎無向グラフという。
-		\item Gabrielの定理-その一 \\
+		\item Gabrielの定理その一 \\
 		箙が有限型になる。 
 		$\iff$ 基礎無向グラフがA,D,E型のDynkinグラフの合併になる。
-		\item Gabrielの定理-その二 \\
+		\item Gabrielの定理その二 \\
 		有限型の箙では、分解不可な表現と、その基礎無向グラフから定まる
 		ルート系の正のルートとが$1:1$対応する。
 		\item 箙の表現の分類 \\
@@ -348,23 +1374,21 @@
 	\end{split}\end{equation*}
 	像$\mu V\subseteq\cat{Mod}_R\lr{V^\dag}$がBrzozowski微分に対応する。
 
-	写像$\delta:V\to V\otimes V$が$m\delta=\id$となり、任意の$x\in V$に対して
-	有限の$n\in\sizen$で$\lr{\pi_2\delta}^nx=1$となれば、
-	次のようにして、任意の$f\in V^\dag$と$x\in V$に対して$fx$の計算を
-	$\cat{Mod}_R\lr{V^\dag}$の計算に帰着させることができる。
+	ここで、$x\in V$に対して$x^\dag:=\mu x$と書くと、
+	任意の$x_1,\dots,x_n\in V$に対して次の可換図が成り立つ。
 	\begin{equation*}\xymatrix{
-		& x_L^1\otimes x_R^1 \ar@<1ex>@{|->}[ld]^{m} \ar[d]^{\pi_2}
-		& \cdots \ar@<1ex>@{|->}[ld]^{m} 
-		& x_L^n\otimes x_R^n \ar@<1ex>@{|->}[ld]^{m} \ar[d]^{\pi_2} \\
-		x \ar@<1ex>@{|->}[ru]^\delta \ar[d]^f
-		& x_R^1 \ar[d]^{\lr{\mu x_L^1}f} \ar@<1ex>@{|->}[ru]^\delta
-		& \cdots \ar@<1ex>@{|->}[ru]^\delta
-		& x_R^n = 1 \ar[d]^{\lr{\mu x_L^n}\cdots\lr{\mu x_L^1}f} \\
-		fx \ar@{=}[r] & \glr{\lr{\mu x_L^1}f}x_R^1 \ar@{=}[r]
-		& \cdots \ar@{=}[r]
-		& \epsilon\lr{\mu x_L^n}\cdots\lr{\mu x_L^1}f
+		x_1x_2\cdots x_n \ar@{|->}[d]^f & \cdots \ar@{|->}[l]_{x_1}
+		& x_n \ar@{|->}[l]_{x_{n-1}}
+			\ar@{|->}[d]^{x_{n-1}^\dag\cdots x_1^\dag f}
+		& 1 \ar@{|->}[l]_{x_n}
+			\ar@{|->}[d]^{x_n^\dag x_{n-1}^\dag\cdots x_1^\dag f} \\
+		f\lr{x_1x_2\cdots x_n} \ar@{=}[r] 
+		&\cdots \ar@{=}[r]
+		& \glr{x_{n-1}^\dag\cdots x_1^\dag f}\lr{x_n} \ar@{=}[r] 
+		& \epsilon x_n^\dag x_{n-1}^\dag\cdots x_1^\dag f
 	}\end{equation*}
 	これが質問\ref{prob:余単位射の出処}の答えになっているだろう。
+
 	大抵の場合、こうすることは簡単なものをより難しくするが、
 	言語の文法が与えられた場合は、この考えを使って、パーシングを効率的に
 	行う事前準備をすることができる。

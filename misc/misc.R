@@ -6,6 +6,14 @@ do.catalan <- function (n) {
 }
 
 if (1) {
+	xs <- 0:5
+	ys <- do.catalan (xs)
+	names (ys) <- xs
+	print (ys)
+	stop("stopped");
+}
+
+if (1) {
 	ns <- 1:10
 	xy <- cbind (n=ns, bits=2^ns, catalan=do.catalan (ns + 1))
 	print (xy)
