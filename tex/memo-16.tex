@@ -1,0 +1,867 @@
+\begingroup %{
+\newcommand{\B}{\mycal{B}}
+\newcommand{\D}{\mycal{D}}
+\newcommand{\J}{\mycal{J}}
+\newcommand{\T}{\mycal{T}}
+\newcommand{\W}{\mycal{W}}
+\newcommand{\Pow}{\mycal{P}}
+\newcommand{\End}{\myop{End}}
+\newcommand{\Map}{\myop{Map}}
+\newcommand{\Lin}{\mathcal{L}}
+\newcommand{\Hol}{\mathcal{H}}
+\newcommand{\Aut}{\myop{Aut}}
+\newcommand{\Mat}{\myop{Mat}}
+\newcommand{\Hom}{\myop{Hom}}
+\newcommand{\Brz}{\myop{Brz}}
+%
+\newcommand{\id}{\myop{id}}
+\newcommand{\tran}{\mathbf{t}}
+\newcommand{\dfn}{\,\myop{def}\,}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\tr}{\myop{tr}}
+%
+\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
+\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+\newcommand{\what}{\widehat}
+\newcommand{\wtilde}{\widetilde}
+\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\ad}{\myop{ad}}
+\newcommand{\Ad}{\myop{Ad}}
+%
+\newcommand{\lr}[1]{\left({#1}\right)}
+\newcommand{\glr}[1]{\bigl({#1}\bigr)}
+\newcommand{\gglr}[1]{\Bigl({#1}\Bigr)}
+\newcommand{\ggglr}[1]{\biggl({#1}\biggr)}
+\newcommand{\gggglr}[1]{\Biggl({#1}\Biggr)}
+%
+\newcommand{\smallxy}[1]{\vcenter{\xymatrix@R=4pt@C=4pt{#1}}}
+\newcommand{\hen}{\ar@{-}}
+\newcommand{\diff}{\partial}
+\newcommand{\dabs}[1]{\left\lVert{#1}\right\rVert}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
+%
+\newcommand\gbraket[1]{\mathinner{\bigl\langle{#1}\bigr\rangle}}
+\newcommand\ggbraket[1]{\mathinner{\Bigl\langle{#1}\Bigr\rangle}}
+\newcommand\gggbraket[1]{\mathinner{\biggl\langle{#1}\biggr\rangle}}
+\newcommand\ggggbraket[1]{\mathinner{\Biggl\langle{#1}\Biggr\rangle}}
+
+\newcommand{\cbra}[1]{\mathinner{\{{#1}|}}
+\newcommand{\cket}[1]{\mathinner{|{#1}\}}}
+\newcommand{\cbraket}[1]{\mathinner{\{{#1}\}}}
+\newcommand{\gcbra}[1]{\mathinner{\bigl\{{#1}|}}
+\newcommand{\gcket}[1]{\mathinner{|{#1}\bigr\}}}
+\newcommand{\gcbraket}[1]{\mathinner{\bigl\{{#1}\bigr\}}}
+\newcommand{\ggcbra}[1]{\mathinner{\Bigl\{{#1}|}}
+\newcommand{\ggcket}[1]{\mathinner{|{#1}\Bigr\}}}
+\newcommand{\ggcbraket}[1]{\mathinner{\Bigl\{{#1}\Bigr\}}}
+
+\newcommand{\lcbraket}[1]{\mathinner{\{{#1}\rangle}}
+\newcommand{\rcbraket}[1]{\mathinner{\langle{#1}\}}}
+\newcommand{\dbra}[1]{\mathinner{\langle\langle{#1}|}}
+\newcommand{\dket}[1]{\mathinner{|{#1}\rangle\rangle}}
+\newcommand{\dbraket}[1]{\mathinner{\langle\langle{#1}\rangle\rangle}}
+%
+{\setlength\arraycolsep{2pt}
+%
+\section{q-コヒーレント状態}\label{s1:q-コヒーレント状態} %{
+	この節では、複素係数で$0\le|q|<1$とする。
+
+	$\fukuso_q$を多項式$\fukuso[q]$の有理式体とし、
+	$\Brz_q\lr{1}$を代数$\fukuso_q\dbraket{\eta_q,\eta_\dag,N}$に対して
+	次の関係で商をとった代数とする。
+	\begin{equation*}\begin{split}
+		\eta_q\eta_\dag = 1 + q\eta_\dag\eta_q
+		,\quad \eta_qN = \lr{N + 1}\eta_q
+		,\quad N\eta_\dag = \eta_\dag\lr{N + 1}
+	\end{split}\end{equation*}
+	$\Brz_q\lr{1}$のFock空間を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\bra{1}\eta_\dag = 0 = \eta_q\ket{1}
+	\end{split}\end{equation*}
+	$\Brz_q\lr{1}$の単位元$I$は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		I = \sum_{n\in\sizen}\eta_\dag^n\ket{1}\frac{1}{[n]!}\bra{1}\eta_q^n
+	\end{split}\end{equation*}
+	コヒーレント状態$\cbra{x:q}$と$\cket{x:q}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\cbra{x:q} := \bra{1}\lr{x\eta_q}_q^*
+		,\quad \cket{x:q} := \lr{x\eta_\dag}_q^*\ket{1}
+	\end{split}\end{equation*}
+	$\cket{x:q}$と$\cbra{x:q}$が$\dag$-共役になっているのは、$q=0$の時のみ
+	である。また、一般には$\cbra{x:0}\not\in\Bra{\Brz\lr{1}}$に対して、
+	$\cket{x:0}\in\Ket{\Brz\lr{1}}$となる。コヒーレント状態によって、
+	$\Brz\lr{1}$と$\fukuso_q[[x,\lr{\partial_x}_q]]$の同型対応が得られる。
+	\begin{alignat*}{3}
+		\cbra{x:q}\eta\cket{f} &= \lr{\partial_x}_q\cbraket{x:q|f}
+		,\quad& \cbra{x:q}\eta_\dag\cket{f} &= x\cbraket{x:q|f} 
+		&\quad& \text{for all } \cket{f}\in\Ket{\Brz\lr{1}} \\
+		\cbra{f}\eta_\dag\cket{x:q} &= \lr{\partial_x}_q\cbraket{f|x:q} 
+		,\quad& \cbra{f}\eta\cket{x:q} &= x\cbraket{f|x:q}
+		&\quad& \text{for all } \cbra{f}\in\Bra{\Brz\lr{1}}
+	\end{alignat*}
+
+	コヒーレント状態を使うと、Gauss積分とCauchy積分を使う二通りの単位元の
+	書き方が得られる。
+
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Gauss積分による単位元 \\
+		q-Kleeneスターの積分表示\eqref{eq:q-Kleeneスターの積分表示}から、
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			|x\bar{y}| < \frac{1}{1 - q} 
+			\implies \cbraket{x:q|\bar{y}:q} = \lr{x\bar{y}}_q^* < \infty
+			\quad\text{for all } x,y\in\fukuso
+		\end{split}\end{equation*}
+		そこで、q-ガンマ関数\eqref{eq:q-ガンマ関数の定義}を横目に見ながら、
+		次のq-積分を計算をすると、
+		\begin{equation*}\begin{split}
+			& \int_0^{\frac{1}{1 - q}} d_qr^2 \int_{-\pi}^{\pi} d\theta
+				\frac{\cket{re^{-i\theta}:q}\cbra{re^{i\theta}:q}}
+				{\cbraket{re^{i\theta}|q^N|re^{-i\theta}}} \\
+			&= \sum_{m,n\in\sizen}\int_0^{\frac{1}{1 - q}} d_qr^2 
+				\int_{-\pi}^{\pi} d\theta
+				\frac{r^{m+n}e^{-i\lr{m-n}}}{\lr{qr^2}^*[m]![n]!}
+				\ket{\eta_\dag^m}\bra{\eta_q^n} \\
+			&= 2\pi \sum_{m\in\sizen}\int_0^{\frac{1}{1 - q}} d_qr^2 
+				\frac{r^{2m}}{\lr{qr^2}^*[m]![m]!}
+				\ket{\eta_\dag^m}\bra{\eta_q^m}
+			= 2\pi \sum_{m\in\sizen} \frac{\ket{\eta_\dag^m}\bra{\eta_q^m}}{[m]!}
+		\end{split}\end{equation*}
+		Gauss積分による$1$の分解が得られる。
+		\begin{equation*}\begin{split}
+			I = \frac{1}{2\pi}\int_0^{\frac{1}{1 - q}} d_q\lr{|z|^2}
+				\int_{-\pi}^{\pi} d\lr{\arg z}
+				\frac{\cket{\bar{z}:q}\cbra{z:q}}{\cbraket{z:q|q^N|\bar{z}:q}}
+		\end{split}\end{equation*}
+		ここで、動径方向だけがq-積分で、回転方は通常の積分になっていることに
+		注意する。
+		%
+		\item Cauchy積分による単位元 \\
+		次の計算により、
+		\begin{equation*}\begin{split}
+			\oint'\frac{dx}{x}\cket{\frac{1}{x}:0}\cbra{x:q}
+			= \sum_{m,n\in\sizen}\oint'\frac{dx}{x} \frac{x^{-\lr{m-n}}}{[n]_q!}
+				\ket{\eta_\dag^m}\bra{\eta_q^n}
+			= \sum_{m\in\sizen} \frac{\ket{\eta_\dag^m}\bra{\eta_q^m}}{[m]_q!}
+		\end{split}\end{equation*}
+		Cauchy積分による$1$の分解が得られる。
+		\begin{equation*}\begin{split}
+			I = \oint'\frac{dx}{x}\cket{\frac{1}{x}:0}\cbra{x:q}
+		\end{split}\end{equation*}
+		ただし、次の内積の収束条件により、
+		\begin{equation*}\begin{split}
+			|x|<|y| \implies
+			\cbraket{x:q|\frac{1}{y}:0} = \lr{\frac{x}{y}}_0^* < \infty
+			\quad\text{for all } x,y\in\fukuso
+		\end{split}\end{equation*}
+		$I$を挿入するとき、Cauchy積分の経路は次のようにとらなければいけない。
+		\begin{equation*}\begin{split}
+			\oint'_{|x|<|y|}\frac{dxdy}{xy}
+			\cket{\frac{1}{x}:0}\cbraket{x:q|\frac{1}{y}:0}\cbra{y:q}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+
+	q-微分をCauchy積分で表してみよう。次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\cbra{x:q}\eta_\dag\cket{f} &= x\cbraket{x:q|f} \\
+		\cbra{x:q}\eta_q\cket{f} &= \lr{\partial_x}_q\cbraket{x:q|f} \\
+	\end{split}
+		\quad\text{for all } \cket{f}\in\Ket{\Brz\lr{1}}
+	\end{equation*}
+	次の式から、
+	\begin{equation*}\begin{split}
+		\cbra{x:q}\eta_q\cket{f}
+		&= \oint'_{|x|<|z|} \frac{dz}{z} \cbra{x:q}\eta_q\cket{\frac{1}{z}:0}
+			\cbraket{z:q|f} \\
+		&= \oint'_{|x|<|z|} \frac{dz}{\lr{z - x}\lr{z - qx}} \cbraket{z:q|f} \\
+		\because\quad \cbra{x:q}\eta_q\cket{\frac{1}{z}:0}
+		&= \frac{1}{z} \lim_{y\to\frac{x}{z}} \lr{\partial_y}_q\lr{y}_0^*
+		= \frac{1}{z} \lim_{y\to\frac{x}{z}} 
+			\frac{\lr{y}_0^* - \lr{qy}_0^*}{y - qy} \\
+		&= \frac{1}{z} \lim_{y\to\frac{x}{z}}
+			\frac{\frac{1}{1 - y} - \frac{1}{1 - qy}}{y - qy}
+		= \frac{1}{z} \lim_{y\to\frac{x}{z}} \frac{1}{\lr{1- y}\lr{1 - qy}} \\
+		&= \frac{z}{\lr{z - x}\lr{z - qx}}
+	\end{split}\end{equation*}
+	q-微分をCauchy積分で次のように書けることがわかる。
+	\begin{equation}\label{eq:q-微分のCauchy積分表示}\begin{split}
+		\cbra{x:q}\eta_q 
+		= \oint'_{|x|<|z|} \frac{dz}{\lr{z - x}\lr{z - qx}} \cbra{z:q}
+		\quad\text{for all } x\in\fukuso
+	\end{split}\end{equation}
+	ケットを作用させて留数を拾ってみると、次のようになって、
+	\begin{equation*}\begin{split}
+		\cbra{x:q}\eta_q\cket{f}
+		= \frac{\cbraket{x:q|f}}{x - qx} - \frac{\cbra{qx:q|f}}{qx - x}
+		= \frac{\cbraket{x:q|f} - \cbraket{qx:q|f}}{x - qx} \\
+		\quad\text{for all } x\in\fukuso_q,\; \cket{f}\in\Ket{\Brz\lr{1}}
+	\end{split}\end{equation*}
+	確かに、Cauchy積分\eqref{eq:q-微分のCauchy積分表示}がq-微分になっている
+	ことがわかる。
+
+	\begin{todo}[課題]\label{todo:課題} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Gauss積分とCauchy積分 \\
+			$q=1$ときは、Gauss積分とCauchy積分は次のデルタ関数を通して繋がると
+			思われる。
+			\begin{equation*}\begin{split}
+				\lr{\delta| x - y} = \partial_{\bar{x}}\frac{1}{x - y}
+			\end{split}\end{equation*}
+			まず、$q=1$の時に確かめて、それから一般の$0\le q<1$で確かめたい。
+			%
+			\item Dyck経路のCauchy積分による解釈 \\
+			Dyck経路の因子化はCauchy積分のどのような性質に対応するのだろうか？
+		\end{itemize} %}
+	\end{todo} %todo:課題}
+%s1:q-コヒーレント状態}
+\section{TODO}\label{s1:TODO} %{
+\subsubsection{積分作用素}\label{s3:積分作用素} %{
+	平面二分木$\D_*$から文字列への写像$\omega$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\smallxy{
+			& \bullet \hen[dl]_b \hen[dr]^d \\
+			\bullet & & \bullet
+		} \mapsto bd ,\quad \smallxy{
+			& & \bullet \hen[dl]_b \hen[dr]^d \\
+			& \bullet \hen[dl]_b \hen[dr]^d & & \bullet \\
+			\bullet & & \bullet
+		} \mapsto b^2d^2 ,\quad \smallxy{
+			& \bullet \hen[dl]_b \hen[dr]^d \\
+			\bullet & & \bullet \hen[dl]_b \hen[dr]^d \\
+			& \bullet & & \bullet
+		} \mapsto b^2d^2 \\
+		\smallxy{
+			& & & \bullet \hen[dl]_b \hen[dr]^d \\
+			& & \bullet \hen[dl]_b \hen[dr]^d & & \bullet \\
+			& \bullet \hen[dl]_b \hen[dr]^d & & \bullet \\
+			\bullet & & \bullet
+		} \mapsto b^3d^3 ,\quad \smallxy{
+			& & \bullet \hen[dl]_b \hen[dr]^d \\
+			& \bullet \hen[dl]_b \hen[dr]^d & & \bullet \\
+			\bullet & & \bullet \hen[dl]_b \hen[dr]^d \\
+			& \bullet & & \bullet
+		} \mapsto b^3d^3 ,\quad \smallxy{
+			& & \bullet \hen[dl]_b \hen[dr]^d \\
+			& \bullet \hen[dl]_b \hen[d]^d & & \bullet \hen[d]_b \hen[dr]^d \\
+			\bullet & \bullet & & \bullet & \bullet
+		} \mapsto b^2dbd^2 \\
+		\smallxy{
+			& \bullet \hen[dl]_b \hen[dr]^d \\
+			\bullet & & \bullet \hen[dl]_b \hen[dr]^d \\
+			& \bullet \hen[dl]_b \hen[dr]^d & & \bullet \\
+			\bullet & & \bullet
+		} \mapsto b^3d^3 ,\quad \smallxy{
+			& \bullet \hen[dl]_b \hen[dr]^d \\
+			\bullet & & \bullet \hen[dl]_b \hen[dr]^d \\
+			& \bullet & & \bullet \hen[dl]_b \hen[dr]^d \\
+			& & \bullet & & \bullet
+		} \mapsto b^3d^3 \\
+	\end{split}\end{equation*}
+	文字に次の交換関係を定義すると、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $b$を生成演算子、
+		\item $d$を消滅演算子、
+		\item $t$を中心として、
+		\item 交換関係を$db = t + qbd$とすると、
+	\end{itemize} %}
+	$G$を次のようにおき、
+	\begin{equation*}\begin{split}
+		\lr{G|x,y,t} 
+		:= \sum_{\tau\in\D_*}\cbra{x:q} \frac{\lr{\omega\tau}}
+			{\left[\dabs{\tau}\right]_q!} \cket{\frac{1}{y}:q}
+	\end{split}\end{equation*}
+	$\lr{X|t}:=\lr{G|tz,1/z,t}$とすると、$X$は次のq-微分方程式の解となる
+	かもしれない。
+	\begin{equation*}\begin{split}
+		\lr{\partial_t}_q\lr{X|t} = \lr{X|t}^2
+	\end{split}\end{equation*}
+%s3:積分作用素}
+\subsubsection{二次元のコヒーレント状態}\label{s3:二次元のコヒーレント状態} %{
+	そのまま$2$次元に拡張すると次のようになる。
+	\begin{equation*}\begin{split}
+		G\lr{\mybf{z_1},\mybf{z_2}} 
+		&:= \bra{\frac{1}{\mybf{z_1}}} \begin{pmatrix}
+			b\eta_1 & a \\ \eta_{-1}c\eta_2 & \eta_{-2}d
+		\end{pmatrix} \ket{\mybf{z_2}}
+		= \frac{\mybf{z_1}}{\mybf{z_1} - \mybf{z_2}} \begin{pmatrix}
+			bz_{21} & a \\ \cfrac{cz_{22}}{z_{11}} & \cfrac{d}{z_{12}}
+		\end{pmatrix} \\
+		\frac{\mybf{z_1}}{\mybf{z_1} - \mybf{z_2}}
+		&:= \frac{z_{11}z_{12}}{\lr{z_{11} - z_{21}}\lr{z_{12} - z_{22}}}
+	\end{split}\end{equation*} 
+	コヒーレント状態を単純に$2$次元に拡張しても$1$の分解が成り立たないので、
+	$G$をつなげたものが真空期待値となる保証はどこにもない。
+	しかし、ハミルトニアンに相当する部分が$\eta_{-i}\eta_j$という双一次形式
+	になっているという特殊事情があるので、何らかのご利益があるかもしれない。
+%s3:二次元のコヒーレント状態}
+\subsubsection{代数式の摂動解}\label{s3:代数式の摂動解} %{
+	一つ目の変数について摂動すると次のようになる。
+	\begin{equation}\label{eq:xの式}\begin{split}
+		x = a + bxcxd
+	\end{split}\end{equation}
+	\begin{equation}\label{eq:xの摂動展開}\begin{split}
+		x = a + bxcxd = \sum_{n\in\sizen} b^na\lr{cxc}^n
+	\end{split}\end{equation}
+	したがって、$X$を不定元とする次の一次式の解が得られれば、
+	\begin{equation*}\begin{split}
+		\lr{x_1|X} = a + b\lr{x_1|X}cXd
+	\end{split}\end{equation*}
+	$\lr{x_1|x}$の右辺は摂動展開\eqref{eq:xの摂動展開}に一致するから、
+	$\lr{x_1|x}$は対応する\eqref{eq:xの式}の摂動解を与えることがわかる。
+%s3:代数式の摂動解}
+%s1:TODO}
+\section{Dyck言語と微分方程式}\label{s1:Dyck言語と微分方程式} %{
+\subsection{この節で使う道具}\label{s2:この節で使う道具} %{
+	$R$を可換環、$R_q$を$q$を不定元とする$R$上の有理式体\footnote{
+		Wikipediaによると、多項式を分母と分子に持つ分数を有理式というらしい。
+	}とする。不定元$q$は$R$の元と可換とする。
+
+	$A$を有限集合、$R_qA^*$を$A^*$の$R_q$上のモノイド環、
+	$R_qA^*[[t]]$を$t$を不定元とする$R_qA^*$上の形式級数環とする。
+	不定元$t$は$R_qA^*$の元と可換とする。形式級数$f\in R_qA^*[[t]]$で
+	不定元$t$を明示的に表すとき、$\lr{f|t}$と書くことにする。
+
+	q-Kleeneスターを写像$\lr{-}_q^*:R_qA^*[[t]]\to R_qA^*[[t]]$として
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\lr{x}_q^* := \sum_{n\in\sizen}\frac{x^n}{[n]_q!}
+		\quad\text{for all } x\in R_qA^*[[t]]
+	\end{split}\end{equation*}
+	q-Kleeneスターは線形射でないことに注意する。
+	q-Kleeneスターは$q=0$で通常のKleeneスター、$q=1$で$exp$になる。
+
+	q-微分は不定元$q$を明示して$\lr{\diff_t}_q:R_qA^*[[t]]\to R_qA^*[[t]]$
+	と書く。
+	\begin{equation*}\begin{split}
+		\lr{\diff_t}_q\lr{f|t} := \frac{\lr{f|qt} - \lr{f|t}}{qt - t}
+		\quad\text{for all } f:\sizen\to R_qA^*
+	\end{split}\end{equation*}
+	このq-微分の定義式は$q$と$t$を不定元とする有理式$R_{q,t}A^*$に対する
+	定義になっているが、次の式より、$\lr{\diff_t}_q$は$R_qA^*[[t]]$で
+	閉じている。
+	\begin{equation*}\begin{split}
+		\lr{\diff_t}_qt^n = \jump{1\le n} [n]_qt^{n-1} 
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+%s2:この節で使う道具}
+\subsection{根付き完全二分木}\label{s2:根付き完全二分木} %{
+	頂点数が$2n+1$の根付き完全二分木\footnote{
+		Wikipediaによると、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 根を唯一つ持ち、
+			\item 任意の頂点は$0$または$2$個の子供を持つ
+		\end{itemize} %}
+		平面二分木を根付き完全二分木というらしい。
+	}の集合を$\D_n$、$\D_*:=\cup_{n\in\sizen}\D_n$と
+	$\D_+:=\cup_{n\in\sizen}\D_{n+1}$をその合併とする。
+
+	写像$\beta:\D_*\times\D_*\to\D_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\beta\lr{\tau_1\times\tau_2} = \smallxy{
+			& \bullet \hen[dl] \hen[dr] \\
+			\tau_1 & & \tau_2 \\
+		} \quad\text{for all } \tau_1,\tau_2\in\D_*
+	\end{split}\end{equation*}
+	任意の$w\in\D_+$は$w=\beta\lr{w_1\times w_2}$となる$w_1,w_2\in\D_*$
+	が存在して唯一つ定まる。
+	したがって、集合同型$\beta:\D_*\times\D_*\simeq\D_*$が成り立つ。
+
+	線形射$\dabs{-}:R_q\D_*\to R_q$と$N:R_q\D_*\to R_q\D_*$を次のように
+	定義する。
+	\begin{alignat*}{2}
+		\dabs{w} = n &\xiff{\dfn} w\in\D_n &\quad&\text{for all } n\in\sizen \\
+		Nw &:= \dabs{w}w &\quad&\text{for all } w\in\D_*
+	\end{alignat*}
+
+	線形射$\gamma_q:R_q\D_*\to R_q\D_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\gamma_q\bullet := \beta\lr{\bullet\otimes\bullet},\quad
+		\gamma_q\beta := \beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}
+	\end{split}\end{equation*}
+	$\gamma_q$を木の成長ということにする。
+	$N\gamma_q=\gamma_q\lr{N+1}$が成り立つから、
+	命題\ref{prop:Schutzenbergerの公式その二}より、
+	任意の$n\in\sizen$で次の式が成り立ち、
+	\begin{equation}\label{eq:木の成長の因子化その一}\begin{split}
+		\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^n
+		= \sum_{k=0}^n\qbinom{n}{k}_q \gamma_q^{n-k}q^{kN}\otimes\gamma_q^k
+	\end{split}\end{equation}
+	$\gamma_q^n\bullet$は任意の$n\in\sizen$で次のように因子化することが
+	できる。
+	\begin{equation}\label{eq:木の成長の因子化その二}\begin{split}
+		\gamma_q^{n+1}\bullet = \gamma_q^n\beta\lr{\bullet\otimes\bullet}
+		= \sum_{k=0}^n\qbinom{n}{k}_q\beta\lr{\gamma_q^{n-k}\bullet
+			\otimes\gamma_q^k\bullet}
+	\end{split}\end{equation}
+	したがって、形式級数$\Gamma_q:\in R_q\D_*[[t]]$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\lr{\Gamma_q|t} := \lr{t\gamma_q}^*\bullet
+	\end{split}\end{equation*}
+	次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\lr{\Gamma_q|t} = 1 + \sum_{n\in\sizen}\sum_{k=0}^n \frac{t}{[n+1]_q}
+			\beta\lr{\frac{\lr{t\gamma_q}^{n-k}}{[n-k]_q!}\bullet
+			\otimes\frac{\lr{t\gamma_q}^k}{[k]_q!}\bullet}
+	\end{split}\end{equation*}
+	この式の中の$t/[n+1]_q$という因子はq-積分$\int_0^t\lr{f|s}d_qt$に
+	他ならないので、$\Gamma_q$は次のように書くことができる。
+	\begin{equation}\label{eq:q-Dyck微分方程式その一}\begin{split}
+		\lr{\Gamma_q|t} = 1 + \int_0^t \beta\glr{\lr{\Gamma_q|s}
+			\otimes\lr{\Gamma_q|s}} d_qs
+	\end{split}\end{equation}
+%s2:根付き完全二分木}
+%s1:Dyck言語と微分方程式}
+\section{Dyck摂動}\label{s1:Dyck摂動} %{
+\subsection{二次式のDyck摂動}\label{s2:二次式のDyck摂動} %{
+	次の遷移図の変換を正当化しよう。
+	\begin{equation*}\begin{split}
+		\xymatrix@C=8ex{
+			*++[o][F-]{x} \ar[r]^{a + bxcxd} & *++[o][F-]{y}
+		} &\mapsto \xymatrix{
+			*++[o][F-]{x} \ar[r]^{a} \ar@(ld,lu)^{b\eta_1} & *++[o][F-]{y}
+				\ar@(ru,rd)^{\eta_{-1}cxd}
+		} \\
+		&\mapsto \xymatrix{
+			*++[o][F-]{x} \ar@<1ex>[r]^{a} \ar@(ld,lu)^{b\eta_1} & *++[o][F-]{y}
+				\ar@<1ex>[l]^{\eta_{-1}c\eta_2} \ar@(ru,rd)^{\eta_{-2}d}
+		}
+	\end{split}\end{equation*}
+	式で書くと、$V:=\sei\braket{a,b,c}$とおいて、
+	$T_0,T_1,T_2\in\Brz\lr{\Mat\lr{V,2},*}$を次のように、
+	\begin{equation*}\begin{split}
+		T_0 := \begin{pmatrix}
+			0 & a + bxcxd \\ 0 & 0
+		\end{pmatrix} 
+		,\quad T_1 := \begin{pmatrix}
+			b\eta_1 & a \\ 0 & \eta_{-1}cxd
+		\end{pmatrix}
+		,\quad T_2 = \begin{pmatrix}
+			b\eta_1 & a \\ \eta_{-1}c\eta_2 & \eta_{-2}d
+		\end{pmatrix} \\
+	\end{split}\end{equation*}
+	$x := e_1^\tran T_0^*e_2\in V$と定義して、
+	$T_0^* = \braket{T_1}^* = \braket{T_2^*}$が成り立つことが示せればよい。
+	Dyck因子化を用いて計算してみよう。
+
+	$\braket{T_1^*}$を計算すると次のようになり、
+	\begin{alignat*}{2}
+		\braket{T_1^*} &= 1 + e_1ae_2^\tran\braket{T_1^*}
+			+ e_1be_1^\tran\braket{T_1^*}e_2cxde_2^\tran\braket{T_1^*} \\
+		&= 1 + e_1\lr{a + b\braket{T_1^*}_{1,2}cxd}e_2^\tran
+			&\quad\text{// } e_2^\tran\bra{1}T_1 = 0
+	\end{alignat*}
+	行列の$(1,2)$成分以外は$T_0^*$と$\braket{T_1^*}$は一致することがわかる。
+	$\braket{T_1^*}$の$(1,2)$成分の解釈は難しいが、次のように読み替えることが
+	できるだろう。
+	\begin{equation*}\begin{split}
+		x = a + bxcxd \iff \left\{\begin{split}
+			x &= y \\
+			y &= a + bycxd
+		\end{split}\right. \iff \left\{\begin{split}
+			\text{imposing} &\quad T_0^* = \braket{T_1^*} \\
+			\text{existence} &\quad \braket{T_1^*} \\
+		\end{split}\right.
+	\end{split}\end{equation*}
+	したがって、$T_0^*=\braket{T_1}^*$は成り立つ式というより、むしろ
+	課した条件と思った方が良いだろう。
+
+	$\braket{T_2^*}$を計算すると次のようになり、
+	\begin{alignat*}{2}
+		\Braket{T_2^*} &= 1
+			+ e_1\Braket{\lr{ae_2^\tran + b\eta_1e_1^\tran}T_2^*}
+			+ e_2\Braket{\eta_{-1}ce_1^\tran T_2^*}e_2de_2^\tran\Braket{T_2^*} \\
+		&= 1 + e_1ae_2^\tran + e_1be_1^\tran\Braket{\eta_1T_2^*}
+			&\quad\text{// } e_2^\tran\bra{1}T_2 = 0
+	\end{alignat*}
+%s2:二次式のDyck摂動}
+\subsection{Brzozowski代数}\label{s2:Brzozowski代数} %{
+	$V$を環、$H_n:=\set{\eta_1,\dots,\eta_n}$、$K\in\sizen$とする。
+	$a,b,c\in\Brz\lr{V,H_K}$として、$x\in\Brz\lr{V,H_{K+1}}$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		x := a + b\eta_{K+1} + \eta_{-\lr{K+1}}c
+	\end{split}\end{equation*}
+	$x^*$から$K+1$成分を'積分'してしまって（integration out）$\Brz\lr{V,H_K}$
+	の作用素として書き表したい。一つの方法として、コヒーレント状態を使って
+	文字通り積分してしまうことが考えられるが、
+	\begin{equation*}\begin{split}
+		\ket{\mybf{z}} := \lr{\sum z_i\eta_{-k}}^*\ket{1}
+		\quad\text{for all } z_1,z_2,\dots\in\fukuso
+		\implies \eta_i|\ket{\mybf{z}} = |\ket{\mybf{z}}z_i
+	\end{split}\end{equation*}
+	次のようになって、コヒーレント状態は$H_K^*$を対称化した部分空間に対する
+	$1$の分割しか与えてくれない。
+	\begin{equation*}\begin{split}
+		\int\frac{d\mybf{z}}{2\pi i\mybf{z}}
+		\ket{\mybf{z}}\braket{\frac{1}{\mybf{z}}|\eta_{i_1}\cdots\eta_{i_n}}
+		&= \int
+		\frac{dz_{i_1}}{2\pi iz_{i_1}} \cdots \frac{dz_{i_n}}{2\pi iz_{i_n}}
+		\frac{\lr{z_{i_1}\eta_{-i_1}+\cdots z_{i_n}\eta_{-i_n}}^*\ket{1}}
+		{z_{i_1}\cdots z_{i_n}} \\
+		&= \sum_{\sigma\in S_n}\ket{\eta_{i_{\sigma1}}\cdots\eta_{i_{\sigma n}}}
+	\end{split}\end{equation*}
+	したがって、コヒーレント状態を使って積分してしまうことは諦める。
+
+	$\Brz\lr{V,K}$の単位元$I_K$を$I_K:=\sum_{w\in H_K}\ket{w}\bra{w}$と定義
+	する。
+	\begin{equation*}\begin{split}
+		I_K\eta_i = \eta_nI_K ,\quad \eta_{-i}I_K = I_K\eta_{-i}
+		\quad\text{for all } i\in1..K \\
+		I_K\eta_{-\lr{K+n+1}} = 0 = \eta_{K+n+1}I_K = 0 
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$I_K$は$\Brz\lr{V,K}$の元と可換で、$\Brz\lr{V,K+n+1}$の元に対しては
+	真空のように作用する。また、真空の作用と次の意味でコンパチになっていて、
+	\begin{equation*}\begin{split}
+		\bra{1}I_K = \bra{1},\quad I_K\ket{1} = \ket{1}
+		\quad\text{for all } K\in\sizen
+	\end{split}\end{equation*}
+	$\set{I_K\bou K\in\sizen}$は次の代数になる。
+	\begin{alignat*}{2}
+		I_KI_L &= I_{\min\lr{K,L}} &\quad&\text{for all } K,L\in\sizen \\
+		I_Km &= m\lr{I_K\otimes I_K} &\quad&\text{for all } K\in\sizen
+	\end{alignat*}
+
+	$x^*$から$\eta_{\pm\lr{K+1}}$を'積分'してしまうことは難しいが、
+	真空期待値$\braket{x^*}$は次の$K+1$階のDyck経路の絵で表される気がする。
+	\begin{equation*}\begin{split}
+		x^* &= \xymatrix@R=1em@C=1em{
+			*++[F-]{a^*}
+		} + \xymatrix@R=1em@C=1em{
+			& *++[F-]{x^*} \ar[dr]^{c} \\
+			*++[F-]{a^*} \ar[ur]^{b} & & *++[F-]{a^*}
+		} + \xymatrix@R=1em@C=1em{
+			& *++[F-]{x^*} \ar[dr]^{c} & & *++[F-]{x^*} \ar[dr]^{c} \\
+			*++[F-]{a^*} \ar[ur]^{b} & & *++[F-]{a^*} \ar[ur]^{b} & & *++[F-]{a^*}
+		} +\cdots \\
+		&= a^*\lr{b\braket{x^*}ca^*}^*
+		= a^* + b\braket{x^*}cx^*
+	\end{split}\end{equation*}
+	$\what{b}:=b\eta_{K+1}$と$\what{c}:=\eta_{-\lr{K+1}}c$とおくと、
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\what{b}a^n\what{c} = b\braket{a^n}c \quad\text{for all }n\in\sizen
+	\end{split}\end{equation*}
+
+%s2:Brzozowski代数}
+
+\subsection{バックアップ}\label{s2:バックアップ} %{
+	\begin{proposition}[Dyck摂動]\label{prop:Dyck摂動} %{
+		$V$を環とする。任意の$a,b,c\in\Brz\lr{V,*}$と$\Brz\lr{V,*}$の
+		標準基底文字$\eta$に対して、$x\in\Brz\lr{V,*}$を次のようにおくと、
+		\begin{equation*}\begin{split}
+			x := a + b\eta + \eta^\dag c
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			x^* &= 1 + b\eta + \lr{a + \eta^\dag c}x^* + bx^*\ket{1}\bra{1}cx^* \\
+			&= 1 + \eta^\dag c + x^*\lr{a + b\eta} + x^*b\ket{1}\bra{1}x^*c \\
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Dyck摂動}
+
+	\begin{proposition}[Dyck摂動]\label{prop:Dyck摂動バックアップ} %{
+		$x\in\Brz\lr{V,*}$を
+		次のように定義すると、
+		\begin{equation*}\begin{split}
+			x := a + b\eta + \eta^\dag c
+		\end{split}\end{equation*}
+		
+		$a,b,c\in \Brz\lr{V,K}$とし、
+		$a^*=1+a^+\in\Brz\lr{V,K}$が成り立つとする。このとき、
+		$x\in \Brz\lr{V,K+1}$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			x := a + b\eta_{K+1} + \eta_{-\lr{K+1}}c
+		\end{split}\end{equation*}
+		任意の$f,g\in\Brz\lr{V,K}$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\bra{f}x^*\ket{g} &= \braket{f|g} + \bra{f}ax^*\ket{g} 
+				+ \bra{f}bx^*\ket{1}\bra{1}cx^*\ket{g} \\
+			&= \braket{f|g} + \bra{f}x^*a\ket{g} 
+				+ \bra{f}x^*b\ket{1}\bra{1}x^*c\ket{g}
+		\end{split}\end{equation*}
+		ここで、$\bra{f}:=\bra{1}f$と$\ket{g}:=g\ket{1}$とおいた。
+	\end{proposition} %prop:Dyck摂動}
+	\begin{proof} %{
+		任意の$n\in\sizen$とに対して次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			\bra{1}fx^{n+2} &= \bra{1}fa^{n+2}
+			+ \sum_{k_1+k_2=n+1} \bra{1}fa^{k_1}bx^{k_2}\eta_{K+1} \\
+			&\;+ \sum_{k_1+k_2+k_3=n} \braket{fa^{k_1}bx^{k_2}}\bra{1}cx^{k_3}
+		\end{split}\end{equation*}
+		$\bra{1}fx=\bra{1}f\lr{a+b\eta_{K+1}}$より、次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\bra{1}fx^* &= \bra{1}fa^* + \braket{fa^*bx^*}\bra{1}cx^* \\
+			&\; + \bra{1}fb\eta_{K+1} + \bra{1}fa^*\lr{ab + bx}x^*\eta_{K+1}
+		\end{split}\end{equation*}
+		$\bra{1}{fx^*}-\bra{1}{fax^*}$を考えると、次の式が成り立つことが
+		わかる。
+		\begin{equation*}\begin{split}
+			\bra{1}fx^* &= \bra{1}f + \bra{1}faT^* + \braket{fbx^*}\bra{1}cx^*
+				+ \bra{1}f\lr{bx + ab}T^+\eta_{K+1}
+		\end{split}\end{equation*}
+		したがって、命題の一つ目の式が成り立つことがわかる。同様にして、
+		任意の$n\in\sizen$とに対して次の式が成り立つことから、
+		\begin{equation*}\begin{split}
+			x^{n+2}g\ket{1} &= a^{n+2}g\ket{1}
+				+ \sum_{k_1+k_2=n+1} \eta_{-\lr{K+1}}x^{k_2}ca^{k_1}g\ket{1} \\
+			&\;+ \sum_{k_1+k_2+k_3=n} x^{k_1}b\ket{1}\braket{x^{k_2}ca^{k_3}g}
+		\end{split}\end{equation*}
+		命題の二つ目の式が成り立つことがわかる。
+	\end{proof} %}
+
+	\begin{proposition}[Dyck摂動その二]\label{prop:Dyck摂動その二} %{
+		$R$を可換環、$V$を$R$上の代数、$K\in\sizen$、$D\in\sizen_+$とする。
+		$A\in\Brz\lr{\Mat\lr{V,D},K}$とし、
+		$A^*=1+AA^*\in\Brz\lr{\Mat\lr{V,D},K}$が成り立つとする。
+		また、$B,C\in\Brz\lr{V^D,K}$、$Y,Z\in R^D$とする。
+		次の式を満たす$X\in\Brz\lr{V^D,K+1}$が存在すれば、
+		\begin{equation*}\begin{split}
+			X = Y + \lr{A + ZB^\tran\eta_{K+1} + \eta_{-\lr{K+1}}YC^\tran}X
+		\end{split}\end{equation*}
+		任意の$F,G\in\Brz\lr{V^D,K}$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\bra{F^\tran}X\ket{G} = \bra{F^\tran}Y\ket{G} + \bra{F^\tran}AX\ket{G}
+				+ Z\bra{F^\tran}B^\tran X\ket{1}\bra{1}C^\tran X\ket{G} \\
+		\end{split}\end{equation*}
+		ここで、$\bra{F^\tran}:=\bra{1}F^\tran$、$\ket{G}:=G\ket{1}$とおいた。
+	\end{proposition} %prop:Dyck摂動その二}
+	\begin{proof} %{
+		$T:=A + ZB^\tran\eta_{K+1} + \eta_{-\lr{K+1}}YC^\tran$とおくと、
+		命題の条件を満たす$X$が存在すれば、$X=T^*Y$と書けるが、
+		命題\ref{prop:Dyck摂動}より、次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\bra{F^\tran}X\ket{G} &= \bra{F^\tran}T^*\ket{G}Y \\
+			&= \bra{F^\tran}\ket{G^\tran}Y + \bra{F^\tran}AT^*\ket{G}Y 
+				+ Z\bra{F^\tran}B^\tran T*\ket{1}\bra{1}ZC^\tran T^*\ket{G}Y \\
+			&= \bra{F^\tran}Y\ket{G^\tran}Y + \bra{F^\tran}AX\ket{G}
+				+ Z\bra{F^\tran}B^\tran X\ket{1}\bra{1}C^\tran X\ket{G} \\
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	$\Sigma:=\set{a,b,c,d}$を有限集合、
+	$V:=R\Sigma^*\otimes\Mat\lr{R,2}\otimes\Brz\lr{R,2}$とする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\Brz\lr{R,2}$の元を$\eta_{\pm i}\;\lr{i=1,2}$とおき、
+		\item $e_1,e_2\in R^2$を次のようにおき、
+		\begin{equation*}\begin{split}
+			e_1 = \pvec{1}{0},\quad e_2 = \pvec{0}{1}
+		\end{split}\end{equation*}
+		\item $A,B,C,D\in R\Sigma^*\otimes\Mat\lr{R,2}$を次のようにおき、
+		\begin{equation*}\begin{split}
+			A := e_1ae_2^\tran ,\quad B := e_1be_1^\tran
+			,\quad C := e_2ce_1^\tran,\quad D := e_2de_2^\tran
+		\end{split}\end{equation*}
+		\item $T\in V$を次のようにおいて、
+		\begin{equation}\label{eq:Tの定義}\begin{split}
+			T := A + B\eta_1 + \eta_{-1}C\eta_2 + \eta_{-2}D
+		\end{split}\end{equation}
+	\end{itemize} %}
+	$\braket{T^*}$を因子化することを考える。次の式から、
+	\begin{equation*}\begin{split}
+		\bra{1}T^{n+1} &= A\bra{1}T^n + B\bra{\eta_1}T^n \\
+		\bra{\eta_1}T^{n+1} &= \bra{1}T^{n+1}\eta_1 
+			+ \sum_{k=0}^n \braket{T^k}C\bra{2}T^{n-k} \\
+		\bra{\eta_2}T^{n+1} &= \bra{1}T^{n+1}\eta_2 
+			+ \sum_{k=0}^n \braket{T^k}D\bra{1}T^{n-k} \\
+	\end{split}\end{equation*}
+	次の式が得られ、
+	\begin{equation*}\begin{split}
+		\bra{1}T^{n+3} &= A\bra{1}T^{n+2} + B\bra{1}T^{n+2}\eta_1
+			+ \sum_{k_1+k_2=n+1} B\braket{T^{k_1}}C\bra{1}T^{k_2}\eta_2 \\
+			&\; + \sum_{k_1+k_2+k_3=n} B\braket{T^{k_1}}C\braket{T^{k_2}}
+				D\bra{1}T^{k_2}
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\braket{T^*} = 1 + \braket{T} + \braket{T^2} + A\braket{T^2T^*} 
+		+ B\braket{T^*}C\braket{T^*}D\braket{T^*}
+	\end{split}\end{equation*}
+	$x:=e_1^\tran\braket{T^*}e_2\in R\Sigma^*$とおくと、次の式から
+	\begin{equation*}\begin{split}
+		e_1^\tran e_2 = 0,\quad e_1^\tran\braket{T}e_2 = a
+		,\quad e_2^\tran\bra{1}T = 0
+	\end{split}\end{equation*}
+	次の式が得られるが、
+	\begin{equation*}\begin{split}
+		x = a + e_1^\tran\braket{T^2}e_2 + bxcxd
+	\end{split}\end{equation*}
+	$e_1^\tran\braket{T^n}e_2$は$n=4k+1$となるときのみ$0$でない値を持つから、
+	次の式が得られる。
+	\begin{equation}\label{eq:冗長なDyck言語の列挙}\begin{split}
+		x = a + bxcxd
+	\end{split}\end{equation}
+
+	\begin{proposition}[計算で使う式その一]\label{prop:計算で使う式その一} %{
+		$T\in V$を式\eqref{eq:Tの定義}で定義されるものとする。
+		$e_1^\tran\braket{T^n}e_2$は$n=4k+1$となる$k\in\sizen$があるときのみ、
+		$0$でない値を持つ。
+	\end{proposition} %prop:計算で使う式その一}
+	\begin{proof} %{
+		$\bra{1}T^*$は次のグラフから生成される頂点$\smallxy{*++[o][F-]{1}}$
+		または$\smallxy{*++[o][F=]{2}}$を始点とする経路の列挙になっている。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				& *++[o][F-]{1} \ar[r]^a \ar[dl]_{b\eta_1} & *++[o][F-]{2} \\
+				1 \ar[r]^a & 2 \ar@(ur,ul)[r]^{\eta_{-1}c\eta_2} & 1 \ar[r]^a
+				& 2 \ar[ul]_{\eta_{-2}d} \\
+			} := \xymatrix{
+				& *++[o][F-]{1} \ar[r]^a \ar[dl]_{b\eta_1} & *++[o][F-]{2} \\
+				1 \ar[r]^a \ar[d]^{b\eta_1} & 2 \ar[r]^{\eta_{-1}c\eta_2} 
+				& 1 \ar[r]^a \ar[d]^{b\eta_1} & 2 \ar[ul]_{\eta_{-2}d} \\
+				\vdots & \vdots \ar[u]_{\eta_{-2}d} 
+				& \vdots & \vdots \ar[u]_{\eta_{-2}d} \\
+			}
+		\end{split}\end{equation*}
+		命題の証明のためには$T^*$の中から$R\Sigma^*$の成分を無視しても構わない。
+		$\cbra{m,n:i}\subset\lr{R^2\otimes R\braket{\eta_1,\eta_2}}^\dag$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			\cbra{m,n:i} := \set{e_i^\tran\bra{\eta_{i_1}\cdots\eta_{i_{m+n}}}|
+			\text{the followings}} \\
+			\text{$m$ peices of $1$ and $n$ pieces of $2$ in }[i_1,\dots,i_{m+n}]
+		\end{split}\end{equation*}
+		$R\Sigma^*$の成分を無視すると、上記のグラフは次のように書くことが
+		できる。
+		\begin{equation*}\xymatrix{
+			& \cbra{m,n:1} \ar[r]^a \ar[dl]_{b\eta_1} & \cbra{m,n:2} \\
+			\cbra{m+1,n:1} \ar[r]^a 
+			& \cbra{m+1,n:2} \ar@(ur,ul)[r]^{\eta_{-1}c\eta_2} 
+			& \cbra{m,n+1:1} \ar[r]^a
+			& \cbra{m,n+1:2} \ar[ul]_{\eta_{-2}d} \\
+		}\end{equation*}
+		このグラフから深さ$k$の任意の頂点$\cbra{m,n:i}$は$m+n=k$となることが
+		わかる。また、任意の$1\le m+n$と$i\in1..2$に対して
+		$\bra{m,n:i}1\rangle=0$となる。したがって、
+		深さ$0$の頂点を始点とする経路は、深さ$0$の頂点を終点とするものだけが
+		真空期待値$\braket{T^*}$に寄与する。そして、深さ$0$の頂点$1$から深さ$0$
+		の頂点$2$への経路の長さはすべて$4n+1$となるから、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			e_1^\tran\braket{T^{4n+k}}e_2 = 0
+			\quad\text{for all } n\in\sizen,\; k=0,2,3
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	式\eqref{eq:冗長なDyck言語の列挙}で$d=1$とすると、通常のDyck言語の列挙に
+	なる。このとき、遷移行列$T$の変化を調べてみる。次の式から、
+	\begin{equation*}\begin{split}
+		T^* &= \lr{\eta_{-2}D}^*
+			\glr{\lr{A + B\eta_1 + \eta_{-1}C\eta_2}\lr{\eta_{-2}D}^*} \\
+		&= \lr{\eta_{-2}D}^*
+			\glr{A\lr{\eta_{-2}D}^* + B\eta_1 + \eta_{-1}C\eta_2}^* \\
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\braket{T^*} 
+		= \Braket{\glr{A\lr{\eta_{-2}D}^* + B\eta_1 + \eta_{-1}C\eta_2}^*}
+	\end{split}\end{equation*}
+	ここで、$\what{a},\what{b},\what{c}\in R\Sigma^*\otimes\Brz\lr{R,2}$
+	を次のようにおくと、
+	\begin{equation*}\begin{split}
+		\what{a} := a\lr{\eta_{-2}d}^*,\quad \what{b} := b\eta_1
+		,\quad \what{c} := \eta_{-1}c\eta_2
+	\end{split}\end{equation*}
+	次のようになり、
+	\begin{equation*}\begin{split}
+		\braket{T^*} &= \Braket{\lr{e_1\what{a}e_2^\tran + e_1\what{b}e_1^\tran
+			+ e_2\what{c}e_1^\tran}^*} \\
+		&= \Braket{\lr{e_2\what{c}e_1^\tran}^*
+			\lr{e_1\what{b}e_1^\tran + e_1\what{a}\what{c}e_1^\tran}^*
+			\lr{e_1\what{a}e_2^\tran}^*}
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		e_1^\tran\braket{T^*}e_2 
+		= \Braket{\lr{\what{b} + \what{a}\what{c}}^*\what{a}}
+	\end{split}\end{equation*}
+	ここで、$d=1$とおき、$\wtilde{\eta_{-1}}\in\Brz{R,2}$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		\wtilde{\eta}_{-1} := \eta_{-2}^*\eta_{-1}\eta_2
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\lim_{d\to1} e_1^\tran\braket{T^*}e_2 
+		= \Braket{\lr{b\eta_1 + \wtilde{\eta}_{-1}c}^*\eta_{-2}^*}a
+	\end{split}\end{equation*}
+	以下では、コヒーレント表示を用いて$|\ket{0,1}:=\eta_{-2}^*\ket{1}$と
+	書くことにする。$\eta_1$と$\wtilde{\eta}_{-1}$を$|\ket{0,1}$に作用
+	させていくと次のようになっている。
+	\begin{alignat*}{2}
+		\eta_1|\ket{0,1} &= 0,\quad&
+		\wtilde{\eta}_{-1}|\ket{0,1} = \eta_{-2}^*\eta_{-1}|\ket{0,1} \\
+		\eta_1\wtilde{\eta}_{-1}|\ket{0,1} &= |\ket{0,1},\quad&
+		\wtilde{\eta}_{-1}^2|\ket{0,1} = \eta_{-2}^*\eta_{-1}^2|\ket{0,1} \\
+		\eta_1\wtilde{\eta}_{-1}^2|\ket{0,1} &= \wtilde{\eta}_{-1}|\ket{0,1},\quad&
+		\wtilde{\eta}_{-1}^3|\ket{0,1} = \eta_{-2}^*\eta_{-1}^3|\ket{0,1}
+	\end{alignat*}
+	絵にすると、系$\eta_1,\wtilde{\eta}_{-1},|\ket{0,1}$と
+	系$\eta_1,\eta_{-1},\ket{0}$が同じ構造を持っていることがわかる。
+	\begin{equation*}\xymatrix{
+		0 & |\ket{0,1} \ar@<1ex>[r]^{\wtilde{\eta}_{-1}} 
+			\ar@<1ex>[l]^{\eta_1}
+		& \eta_{-2}^*\eta_{-1}|\ket{0,1} \ar@<1ex>[r]^{\wtilde{\eta}_{-1}} 
+			\ar@<1ex>[l]^{\eta_1}
+		& \eta_{-2}^*\eta_{-1}^2|\ket{0,1} \ar@<1ex>[r]^{\wtilde{\eta}_{-1}} 
+			\ar@<1ex>[l]^{\eta_1}
+		& \cdots \ar@<1ex>[l]^{\eta_1}
+	}\end{equation*}
+	$\eta_1$と$\wtilde{\eta}_{-1}$の交換関係は
+	$\eta_1\wtilde{\eta}_{-1}=\eta_2$となるが、右側に$|\ket{1,0}$または
+	$\eta_{-2}^*\eta_{-1}^{n+1}|\ket{1,0}$を作用させると
+	$\eta_1$と$\eta_{-1}$の交換関係と同じ形になる。
+	\begin{equation*}\begin{split}
+		\eta_1\wtilde{\eta}_{-1}|\ket{1,0} &= |\ket{1,0} \\
+		\eta_1\wtilde{\eta}_{-1}\eta_{-2}^*\eta_{-1}^{n+1}|\ket{1,0} 
+		&= \eta_{-2}^*\eta_{-1}^{n+1}|\ket{1,0} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	\begin{todo}[直感的な説明]\label{todo:直感的な説明} %{
+		次の文法定義に対して、
+		\begin{equation*}\begin{split}
+			x = a + bxcx
+		\end{split}\end{equation*}
+		次の二通りの線形化が考えられる。
+		\begin{alignat*}{2}
+			\pvec{x}{y} &= \pvec{0}{1} + \begin{pmatrix}
+				bxc & a \\ 0 & 0
+			\end{pmatrix}\pvec{x}{y} &\mapsto& \xymatrix{
+				*++[o][F-]{x} \ar@(ld,lu)^{b\eta_1} \ar@/^1ex/[r]^a 
+				& *++[o][F=]{y} \ar@/^1ex/[l]^{\eta_{-1}c}
+			} \\
+			\pvec{x}{y} &= \pvec{0}{1} + \begin{pmatrix}
+				0 & a + bxcx \\ 0 & 0
+			\end{pmatrix}\pvec{x}{y} &\mapsto& \xymatrix{
+				*++[o][F-]{x} \ar@(ld,lu)^{b\eta_1} \ar[r]^a 
+				& *++[o][F=]{y} \ar@(ru,rd)^{\eta_{-1}cx}
+			} \\
+			& &\mapsto& \xymatrix{
+				*++[o][F-]{x} \ar@(ld,lu)^{b\eta_1} \ar@/^1ex/[r]^a 
+				& *++[o][F=]{y} \ar@/^1ex/[l]^{\eta_{-1}c\eta_2}
+					\ar@(ru,rd)^{\eta_{-2}}
+			}
+		\end{alignat*}
+		この式の右辺に現れる三つの遷移図はすべて等価と考えられる。
+		したがって、次の遷移図の変換を導けばよい。
+		\begin{alignat*}{2}
+			& \xymatrix{
+				*++[o][F-]{x} \ar@(ld,lu)^{b\eta_1} \ar@/^1ex/[r]^a 
+				& *++[o][F=]{y} \ar@/^1ex/[l]^{\eta_{-1}c\eta_2}
+					\ar@(ru,rd)^{\eta_{-2}}
+			} &\mapsto& \xymatrix{
+				*++[o][F-]{x} \ar@(ld,lu)^{b\eta_1} \ar[r]^a 
+				& *++[o][F=]{y} \ar@(ru,rd)^{\eta_{-1}cx}
+			} \\
+			\mapsto& \xymatrix{
+				*++[o][F-]{x} \ar@(ld,lu)^{b\eta_1} \ar@/^1ex/[r]^a 
+				& *++[o][F=]{y} \ar@/^1ex/[l]^{\eta_{-1}c}
+			} &\mapsto& \xymatrix{
+				*++[o][F-]{x} \ar@(ld,lu)^{b\eta_1 + \eta_{-1}ac} \ar[r]^a 
+				& *++[o][F=]{y}
+			}
+		\end{alignat*}
+	\end{todo} %todo:直感的な説明}
+%s2:バックアップ}
+%s1:Dyck摂動}
+%
+}\endgroup %}

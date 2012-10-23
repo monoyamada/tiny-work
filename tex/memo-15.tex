@@ -77,7 +77,7 @@
 %
 {\setlength\arraycolsep{2pt}
 %
-\section{q-Dyck言語}\label{s1:q-Dyck言語} %{
+\section{Dyck言語のq-列挙}\label{s1:Dyck言語のq-列挙-バックアップ} %{
 \subsection{この節で使う道具}\label{s2:この節で使う道具} %{
 	$R$を可換環、$R_q$を$q$を不定元とする$R$上の有理式体\footnote{
 		Wikipediaによると、多項式を分母と分子に持つ分数を有理式というらしい。
@@ -150,107 +150,418 @@
 
 	線形射$\gamma_q:R_q\D_*\to R_qD_*$を次のように定義する。
 	\begin{equation*}\begin{split}
-		\gamma_q\bullet &= \beta\lr{\bullet\otimes\bullet} \\
-		\gamma_q\beta\lr{\tau_1\otimes\tau_2} 
-		&= \beta\lr{\gamma_q\tau_1\otimes\tau_2}
-			+ q^{\dabs{\tau_1}}\beta\lr{\tau_1\otimes\gamma_q\tau_2}
-		\quad\text{for all } \tau_1,\tau_2\in\D_*
+		\gamma_q\bullet := \beta\lr{\bullet\otimes\bullet},\quad
+		\gamma_q\beta := \beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}
 	\end{split}\end{equation*}
 	$\gamma_q$を木の成長ということにする。
-	この定義の二つ目の式は次の交換関係になる。
-	\begin{equation*}\begin{split}
-		\gamma_q\beta = \beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}
-	\end{split}\end{equation*}
-	次の式が成り立つから、
+	$N\gamma_q=\gamma_q\lr{N+1}$が成り立つから、
+	命題\ref{prop:Schutzenbergerの公式その二}より、
+	任意の$n\in\sizen$で次の式が成り立ち、
 	\begin{equation}\label{eq:木の成長の因子化その一}\begin{split}
 		\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^n
-		= \sum_{k=0}^n\qbinom{n}{k}_q
-			\gamma_q^kq^{\lr{n-k}N}\otimes\gamma_q^{n-k}
-		\quad\text{for all } n\in\sizen
+		= \sum_{k=0}^n\qbinom{n}{k}_q \gamma_q^{n-k}q^{kN}\otimes\gamma_q^k
 	\end{split}\end{equation}
-	$\gamma_q^n\bullet$は次のように因子化することができる。
+	$\gamma_q^n\bullet$は任意の$n\in\sizen$で次のように因子化することが
+	できる。
 	\begin{equation}\label{eq:木の成長の因子化その二}\begin{split}
 		\gamma_q^{n+1}\bullet = \gamma_q^n\beta\lr{\bullet\otimes\bullet}
-		= \sum_{k=0}^n\qbinom{n}{k}_q \lr{\gamma_q^k\otimes\gamma_q^{n-k}}
-			\lr{\bullet\otimes\bullet}
-		\quad\text{for all } n\in\sizen
+		= \sum_{k=0}^n\qbinom{n}{k}_q\beta\lr{\gamma_q^{n-k}\bullet
+			\otimes\gamma_q^k\bullet}
 	\end{split}\end{equation}
+	したがって、形式級数$\Gamma_q:\in R_q\D_*[[t]]$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\lr{\Gamma_q|t} := \lr{t\gamma_q}_q^*\bullet
+	\end{split}\end{equation*}
+	次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\lr{\Gamma_q|t} = 1 + \sum_{n\in\sizen}\sum_{k=0}^n \frac{t}{[n+1]_q}
+			\beta\lr{\frac{\lr{t\gamma_q}^{n-k}}{[n-k]_q!}\bullet
+			\otimes\frac{\lr{t\gamma_q}^k}{[k]_q!}\bullet}
+	\end{split}\end{equation*}
+	この式の中の$t/[n+1]_q$という因子はq-積分$\int_0^t\lr{f|s}d_qt$に
+	他ならないので、$\Gamma_q$は次のように書くことができる。
+	\begin{equation}\label{eq:q-Dyck微分方程式その一}\begin{split}
+		\lr{\Gamma_q|t} = 1 + \int_0^t \beta\glr{\lr{\Gamma_q|s}
+			\otimes\lr{\Gamma_q|s}} d_qs
+	\end{split}\end{equation}
+
+	$R_qA^*$の積を$m_0$、$b,c\in A$として、線形射
+	$\omega:R_q\D_*[[t]]\to R_qA^*[[t]]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\omega\bullet := 1,\quad
+		\omega\beta := m_0\lr{b\omega\otimes c\omega}
+	\end{split}\end{equation*}
+	$\omega$を用いると、$R_q\D_*[[t]]$上のq-微分方程式
+	\eqref{eq:q-Dyck微分方程式その一}は次の$R_qA^*[[t]]$上のq-微分方程式に
+	書き換えることができる。
+	\begin{equation}\label{eq:q-Dyck微分方程式その二}\begin{split}
+		\lr{\Gamma_q^\omega|t} = 1 + \int_0^t b\lr{\Gamma_q^\omega|s}c
+			\lr{\Gamma_q^\omega|s} d_qs
+			\quad\text{where } \lr{\Gamma_q^\omega|t} := \omega\lr{\Gamma_q|t}
+	\end{split}\end{equation}
+	さらに、$q=0$のときは次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\lr{\Gamma_0^\omega|t} = \Braket{\lr{tb\eta + \eta^\dag c}_0^*}
+	\end{split}\end{equation*}
 	\begin{proof} %{
-		$\gamma_q^n\beta=\beta\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^n$
-		だから、式\eqref{eq:q-木の成長の因子化その一}が成り立つことを証明する。
-		$\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^n$のべき$n$についての
-		帰納法で証明する。$n=0$で式\eqref{eq:q-木の成長の因子化その一}が
-		成り立つことはすぐわかる。ある$n\in\sizen$で
-		式\eqref{eq:q-木の成長の因子化その一}が成り立つと仮定すると、
-		次の式が成り立ち、
+		積$m_q$を次のように定義すると、
 		\begin{equation*}\begin{split}
-			&\lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}^{n+1} \\
-			&= \lr{\gamma_q\otimes\id + q^N\otimes\gamma_q}
-				\sum_{k=0}^n \qbinom{n}{k}_q
-				\gamma_q^kq^{\lr{n-k}N}\otimes\gamma_q^{n-k} \\
-			&= q^{\lr{n+1}N}\otimes\gamma_q^{n+1} + \gamma_q^{n+1}\otimes\id
-				\sum_{k=1}^n \lr{\qbinom{n}{k-1}_q + q^k\qbinom{n}{k}}
-				\gamma_q^kq^{\lr{n+1-k}N}\otimes\gamma_q^{n+1-k} \\
-			&= \sum_{k=0}^{n+1} \qbinom{n+1}{k}_q
-				\gamma_q^kq^{\lr{n+1-k}N}\otimes\gamma_q^{n+1-k}
+			m_q\ket{\eta^m}\otimes\ket{\eta^n} 
+			= \qbinom{m+n}{m}_q\ket{\eta^{m+n}} \quad\text{for all } m,n\in\sizen
 		\end{split}\end{equation*}
-		べきが$n+1$でも式\eqref{eq:q-木の成長の因子化その一}が成り立つことが
-		わかる。
+		次の交換関係が成り立つ。
+		\begin{equation*}\begin{split}
+			\eta^\dag m_0 = m_0\lr{\eta^\dag\otimes\id},\quad 
+			\eta m_0 = m_0\lr{\eta\otimes\id + 0^N\otimes\eta}
+		\end{split}\end{equation*}
+		したがって、$\phi:=b\eta + \eta^\dag c$とおくと、次の式より、
+		\begin{equation*}\begin{split}
+			m_0^\dag\phi = \lr{\phi\otimes\id + 0^Nc\otimes\eta^\dag}m_0^\dag
+		\end{split}\end{equation*}
+		任意の$n\in\sizen$に対して次の式が成り立ち、
+		\begin{equation}\label{eq:Dyck言語の因子化その一}\begin{split}
+			\bra{0}\phi^{n+2} = b\bra{0}\phi^{n+1}\eta
+				+ \sum_{k=0}^{n} b\braket{\phi^{k}}c\bra{0}\phi^{n-k}
+		\end{split}\end{equation}
+		次の漸化式が得られる。
+		\begin{equation*}\begin{split}
+			\braket{\phi^0} = 1,\quad
+			\braket{\phi^{2\lr{n+1}}} = \sum_{k=0}^n b
+				\braket{\phi^{2k}}c\braket{\phi^{2\lr{n-k}}}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
 	\end{proof} %}
 
-	$b,c\in A$として、線形射$\omega:R_q\D_*\to R_qA^*$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\omega\bullet &:= 1 \\
-		\omega\beta\lr{\tau_1\otimes\tau_2} 
-		&:= b\lr{\omega\tau_1}c\lr{\omega\tau_2}
-		 \quad\text{for all } \tau_1,\tau_2\in\D_*
-	\end{split}\end{equation*}
-	$R_qA^*$の積を$m$と書くと、この定義の二つ目の式は次の交換関係になる。
-	\begin{equation*}\begin{split}
-		\omega\beta = m\lr{b\omega\otimes c\omega}
-	\end{split}\end{equation*}
+	この式により、$q=0$のときは文字列の計算に帰着するので計算機で
+	扱い易くなっている。一般の$q$のときにも文字列の計算に帰着させることを
+	考える。
 
-	$\Omega_q\in R_qA^*[[t]]$を次のように定義すると、
+	線形射$t_q^I:R_q\D_*\to R_q\D_*[[t]]$を次のように定義する。
 	\begin{equation*}\begin{split}
-		\lr{\Omega_q|t} := \omega\lr{t\gamma_q}_q^*\bullet
+		t_q^I\bullet &:= 1 \\
+		t_q^I\beta\lr{\tau_1\otimes\tau_2} 
+		&:= \int_0^t\beta\lr{s_q^I\tau_1\otimes s_q^I\tau_2}d_qs
+		\quad\text{for all } \tau_1,\tau_2\in\D_*
 	\end{split}\end{equation*}
-	$\Omega_q$は次のq-微分方程式を満たす。
-	\begin{equation}\label{eq:q-Dyck微分方程式}\begin{split}
-		\lr{\Omega_q|t} = 1 + \int_0^t b\lr{\Omega_q|s}c\lr{\Omega_q|s} d_qs
-	\end{split}\end{equation}
-	\begin{proof} %{
-		$\Omega_q$を次のように冪展開すると、
-		\begin{equation*}\begin{split}
-			\lr{\Omega_q|t} = \sum_{n\in\sizen}\frac{\Omega_{q,n}t^n}{[n]_q!}
-			\implies \Omega_{q,n} = \omega\gamma_q^n\bullet
-		\end{split}\end{equation*}
-		証明すべき式は次のようになるが、
-		\begin{equation*}\begin{split}
-			\Omega_{q,n+1} 
-			= \sum_{k=0}^n\qbinom{n}{k}_q b\Omega_{q,k}c\Omega_{q,n-k}
-		\end{split}\end{equation*}
-		木の成長の因子化\eqref{eq:木の成長の因子化その二}により、
-		この式が成り立つことがわかる。
-		\begin{equation*}\begin{split}
-			\Omega_{q,n+1} = \omega\gamma_q^{n+1}\bullet
-			= \omega\sum_{k=0}^n\qbinom{n}{k}_q
-				\beta\lr{\gamma_q^k\bullet\otimes\gamma_q^{n-k}\bullet}
-			= \sum_{k=0}^n\qbinom{n}{k}_q b\Omega_{q,k}c\Omega_{q,n-k}
-		\end{split}\end{equation*}
-	\end{proof} %}
-
-	$q=0$の場合は、係数$\Set{\Omega_{0,n}=\omega\gamma_0^n\bullet}$は次の式を
-	満たす。
+	すると、次の式が成り立つから、
 	\begin{equation*}\begin{split}
-		\Omega_{0,n+1} = \sum_{k=0}^n b\Omega_{0,k}c\Omega_{0,n-k}
+		t_q^I\gamma_0^{n+1}\bullet = \sum_{k=0}^n 
+		\int_0^t\beta\lr{s_q^I\gamma_0^k\bullet
+		\otimes s_q^I\gamma_0^{n-k}\bullet} d_qs 
 		\quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
-	この式はDyck言語の列挙に他ならないので、Brzozowski代数を用いて次のように
-	書くことができる。
+	$\lr{\Omega_q'|t}:=t_q^I\lr{\gamma_0}_0^*$とおくと、次の式が成り立つ。
 	\begin{equation*}\begin{split}
-		\Omega_{0,n} = \Braket{\lr{b\eta + \eta^\dag c}^{2n}}
-		\quad\text{for all } n\in\sizen
+		\lr{\Omega_q'|t}
+		= 1 + \int_0^t\beta\lr{\lr{\Omega_q'|s}\otimes\lr{\Omega_q'|s}}d_qs
 	\end{split}\end{equation*}
+	このq-微分方程式は\eqref{eq:q-Dyck微分方程式その一}に他ならない。
+	したがって、次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\lr{t\gamma_q}_q^*\bullet = t_q^I\lr{\gamma_0}_0^*\bullet
+	\end{split}\end{equation*}
+	この式は$\lr{t\gamma_q}_q^*=t_q^I\lr{\gamma_0}_0^*$ではないことに
+	注意する。
+	
+	完全二分木の場合と同様に、$b\neq c$のとき、Dyck言語$\D_*(b,c)$に対して
+	線形射$t_q^I:R_q\D_*(b,c)\to R_q\D_*(b,c)[[t]]$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		t_q^I 1 &:= 1 \\
+		t_q^I bw_1cw_2 &:= \int_0^t b\lr{s_q^Iw_1}c\lr{s_q^Iw_2}d_qs
+		\quad\text{for all } w_1,w_2\in A^*
+	\end{split}\end{equation*}
+	次のようにq-微分方程式の解が得られる。
+	\begin{equation*}\begin{split}
+		\lr{x|t} := t_q^I\Braket{\lr{b\eta + \eta^\dag c}^*}
+		\implies \lr{x|t} = 1 + \int_0^t b\lr{x|s}c\lr{x|s} d_qs
+	\end{split}\end{equation*}
+
+	\begin{todo}[木の成長とLie微分]\label{todo:木の成長とLie微分} %{
+		$A:=\set{a,b,c,d}$を集合として、写像$\omega:\D_*\to A^*$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			\omega\bullet &:= a \\
+			\omega\beta\lr{\tau_1\otimes\tau_2}
+			&:= b\lr{\omega\tau_1}c\lr{\omega\tau_2}d
+				\quad\text{for all } \tau_1,\tau_2\in\D_*
+		\end{split}\end{equation*}
+		線形射$\gamma_q:R_qA^*\to R_qA^*$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\gamma_q1 &:= 0 \\
+			\gamma_qx &:= \jump{x=a}bacad \quad\text{for all } x\in A \\
+			\gamma_qm_0 
+			&:= m_0\lr{\gamma_q\otimes\id + q^{\sharp_d}\otimes\gamma_q}
+		\end{split}\end{equation*}
+		$\gamma_q\omega=\omega\gamma_q$という交換関係が成り立つ。
+		$R_qA^*$上で自然な成長$\gamma_q$はLie微分のように振る舞う。
+		完全二分木の場合と同様に、$\lr{\Gamma_q|t}:=\lr{t\gamma_q}_q^*a$と
+		定義すると次のq-微分方程式を満たす。
+		\begin{equation*}\begin{split}
+			\lr{\Gamma_q|t} = a + \int_0^t b\lr{\Gamma_q|s}c\lr{\Gamma_q|s}d d_qs
+		\end{split}\end{equation*}
+		問題は、$\lr{\Gamma_q|t}$をどのようにして計算するかである。
+	\end{todo} %todo:木の成長とLie微分}
+
+	\begin{todo}[文法の曖昧さと積分]\label{todo:文法の曖昧さと積分} %{
+		$b=c$のときは積分$t_q^I$は定義できないことに注意する。
+		例えば、$b^2c^2bc$と$bcb^2c^2$の積分はそれぞれ次のようになるが、
+		\begin{equation*}\begin{array}{rclcl}
+			t_q^I\lr{b^2c^2bc}
+			&=& \lr{\int_0^t\lr{\int_0^sd_qu}\lr{\int_0^sd_qu}d_qs} b^2c^2bc
+			&=& \cfrac{b^2c^2bc}{[3]_q} \\
+			t_q^I\lr{bcb^2c^2} 
+			&=& \lr{\int_0^t\lr{\int_0^s\lr{\int_0^ud_qv}d_qu}d_qs} bcb^2c^2
+			&=& \cfrac{bcb^2c^2}{[3]_q!} \\
+		\end{array}\end{equation*}
+		$b=c$とすると、両者共に$b^6$となる。
+		\begin{equation*}\begin{split}
+			\lim_{b=c} b^2c^2bc = \lim_{b=c} bcb^2c^2 = b^5
+		\end{split}\end{equation*}
+		同様な例では、$a,c\in A$として、次の文法を考えて、
+		\begin{equation*}\begin{split}
+			x = a + xcx
+		\end{split}\end{equation*}
+		$\set{x}$に積分$t_q^I$を次のように定義しようとすると、
+		\begin{equation*}\begin{split}
+			t_q^Ia &= 1 \\
+			t_q^I\lr{w_1cw_2} &= \int_0^t\lr{s_q^Iw_1}c\lr{s_q^Iw_2}d_qs
+			\quad\text{for all } w_1,w_2\in \set{x}
+		\end{split}\end{equation*}
+		$acacaca\in\set{x}$では、$\lr{aca}c\lr{aca}$と区切った場合と、
+		$ac\lr{ac\lr{aca}}$と区切った場合とでは、$t_q^I$を作用させた結果が
+		異なる。したがって、この文法では単純には積分$t_q^I$は定義できない。
+		余二項演算$\beta^\dag:R\set{x}\to R\set{x}\otimes R\set{x}$を次のように
+		定義すると、
+		\begin{equation*}\begin{split}
+			\beta^\dag a &:= 0 \\
+			\beta^\dag w &:= \sum_{w_1,w_2\in\set{x}} \jump{w = w_1cw_2}
+				w_1\otimes w_2 \quad\text{for all } w\in\set{x}
+		\end{split}\end{equation*}
+		$t_q^I$を次のように定義することができる。
+		\begin{equation*}\begin{split}
+			t_q^Ia &:= 1 \\
+			t_q^Iw &:= \int_0^t \beta\lr{s_q^I\otimes s_q^I}\beta^\dag w d_qs
+			\quad\text{for all } w\in\set{x} \text{ and } 3\le |w|
+		\end{split}\end{equation*}
+		この$t_q^I$を用いると、次のようにしてq-微分方程式の解が得られる。
+		\begin{equation*}\begin{split}
+			\lr{X|t} := t_q^I\sum_{w\in\set{x}} w
+			\implies \lr{X|t} = a + \lr{X|t}c\lr{X|t}
+		\end{split}\end{equation*}
+		また、$\set{x}$の列挙は文法$x$から曖昧さを取り除いた次の文法から
+		得られるから、
+		\begin{equation*}\begin{split}
+			x' = a + acx'
+		\end{split}\end{equation*}
+		q-微分方程式の解は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			\lr{X|t} := t_q^I\lr{\lr{ac}^*a}
+			\implies \lr{X|t} = a + \lr{X|t}c\lr{X|t}
+		\end{split}\end{equation*}
+	\end{todo} %todo:文法の曖昧さと積分}
+
+	\begin{todo}[有理変換とゲージ変換]\label{todo:有理変換とゲージ変換} %{
+		次のことを考えたい。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 有理変換
+			\begin{equation*}\begin{split}
+				\partial_t\frac{y_t}{z_t} = \lr{\frac{y_t}{z_t}}^2 
+				\iff \lr{\partial_ty_t}z_t = y_t\lr{\partial_tz_t + y_t}
+			\end{split}\end{equation*}
+			\item 線形化
+			\begin{equation*}\begin{split}
+				\partial_t\pvec{y_t}{z_t} = \begin{pmatrix}
+					1 & 0 \\ -1 & 1
+				\end{pmatrix}\pvec{y_t}{z_t}
+			\end{split}\end{equation*}
+			\item ゲージ変換
+			\begin{equation*}\begin{split}
+				\pvec{y_t}{z_t} \mapsto g_t\pvec{y_t}{z_t} \text{ with } 
+				\begin{pmatrix}
+					1 & 0 \\ -1 & 1
+				\end{pmatrix} \mapsto \begin{pmatrix}
+					1 & 0 \\ -1 & 1
+				\end{pmatrix} + \lr{\partial_tg_t}g_t^{-1}
+			\end{split}\end{equation*}
+			\item 局所ゲージ変換の消去$\partial_ty_t=0$
+			\begin{equation*}\begin{split}
+				\pvec{y_t}{z_t} \mapsto e^{-t}\pvec{y_t}{z_t} 
+				\implies \partial_t\pvec{y_t}{z_t} = \begin{pmatrix}
+					0 & 0 \\ -1 & 0
+				\end{pmatrix}\pvec{y_t}{z_t}
+				\implies \frac{y_t}{z_t} = \frac{y_0}{z_0 - y_0t}
+			\end{split}\end{equation*}
+			\item Kleeneスターはゲージ固定した結果か？
+			\begin{equation*}\begin{split}
+				\underbrace{\partial_ty_t = 0}_{\text{fix local gauge}} 
+				\text{ and } \underbrace{z_0 = 1}_{\text{fix global gauge}}
+				\implies \text{no gauge trans.}
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{todo} %todo:有理変換とゲージ変換}
+	\begin{todo}[Riccati方程式とSchrodinger方程式]
+	\label{todo:Riccati方程式とSchrodinger方程式} %{
+		$u,v,\psi\in\fukuso[[x]]$とする。次のような変数変換で、Ricatti方程式が
+		Schrodinger方程式に化ける。
+		\begin{equation*}\begin{split}
+			\partial v + v^2 = u \xRightarrow{v = \partial\ln\psi}
+			\partial^2\psi = u\psi
+		\end{split}\end{equation*}
+		変換$u=\partial\ln\psi$をCole-Hopf変換というらいし。
+	\end{todo} %todo:Riccati方程式とSchrodinger方程式}
+	\begin{todo}[Dyck言語のプロパゲーター]
+	\label{todo:Dyck言語のプロパゲーター} %{
+		コヒーレント状態を次のようにおくと、
+		\begin{equation*}\begin{split}
+			\bra{x} := \bra{0}\lr{x\eta}^*
+			,\quad \ket{x} := \lr{x\eta^\dag}^*\ket{0}
+			\quad\text{for all } x\in R
+		\end{split}\end{equation*}
+		式\eqref{eq:Dyck言語の因子化その一}は次のように拡張できる。
+		\begin{equation*}\begin{split}
+			\bra{x}\phi^*\ket{y} &= \braket{x|y} 
+				+ \lr{by + cx}\bra{x}\phi^*\ket{y}
+				+ b\bra{x}\phi^*\ket{0}c\bra{0}\phi^*\ket{y} \\
+			&= \lr{by + cx}^*\lr{xy}^*
+				+ \lr{by + cx}^*b\bra{x}\phi^*\ket{0}c\bra{0}\phi^*\ket{y}
+		\end{split}\end{equation*}
+	\end{todo} %todo:Dyck言語のプロパゲーター}
+%s2:根付き完全二分木}
+\subsection{箙の経路代数と根付き完全二分木}
+\label{s2:箙の経路代数と根付き完全二分木} %{
+	$\omega I_q^t\lr{\gamma_0}_0^*\bullet$を絵で書くと次のようなイメージに
+	なるだろう。
+	\begin{equation*}\xymatrix{
+		& \bullet \ar@<-1ex>[dl]_{b\int_0^t} \ar@<-1ex>[dr]_c \\
+		\bullet \ar@<-1ex>[ur] & & \bullet \ar@<-1ex>[ul]_{d_qs} \\
+	}\end{equation*}
+	文字$b$と$c$から生成されるDyck言語を、完全二分木の行きがけ順に辿って
+	生成する手順を（無限）箙の経路代数として書き表すと次のようになる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			& \bullet \ar@<-1ex>[dl]_{\xi_1} \ar@<-1ex>[dr]_{\xi_2} \\
+			\bullet \ar@<-1ex>[ur]_{\xi_{-1}} & & \bullet \ar@<-1ex>[ul]_{\xi_{-2}} \\
+		}\qquad \begin{split}
+			\begin{array}{r|rrrr}
+				& \xi_1 & \xi_{-1} & \xi_2 & \xi_{-2} \\\hline
+				\xi_1 & \xi_1\xi_1 & \xi_1\xi_{-1} & 0 & 0 \\
+				\xi_{-1} & 0 & 0 & \xi_{-1}\xi_2 & 0 \\
+				\xi_2 & \xi_2\xi_1 & 0 & 0 & \xi_2\xi_{-2} \\
+				\xi_{-2} & 0 & \xi_{-2}\xi_{-1} & 0 & \xi_{-2}\xi_{-2} \\\hline
+			\end{array} \\
+			\xi_1\xi_{-1}\xi_2\xi_{-2} = 1
+		\end{split}
+	\end{split}\end{equation*}
+%s2:箙の経路代数と根付き完全二分木}
+\subsection{保留}\label{s2:保留} %{
+	\begin{todo}[積分作用素]\label{todo:積分作用素} %{
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			x = 1 + bxcxd \iff x = \Braket{
+				\lr{b\eta_1 + \eta_1^\dag c\eta_2 + \eta_2^\dag d}_0^*}
+		\end{split}\end{equation*}
+		ここで、$\phi:=b\eta_1 + \eta_1^\dag c\eta_2 + \eta_2^\dag d$とおくと、
+		次の式から、
+		\begin{equation*}\begin{split}
+			m_0\phi = \lr{\phi\otimes\id}m_0 + \lr{c0^N\eta_2\otimes\eta_1^\dag 
+			+ d0^N\otimes\eta_2^\dag}
+		\end{split}\end{equation*}
+		次の式が導かれて、
+		\begin{equation*}\begin{split}
+			\bra{0}\phi^{n+3} &= b\bra{0}\phi^{n+2}\eta_1
+			+ \sum_{k_1+k_2=n+1} b\Braket{\phi^{k_1}}c\bra{0}\phi^{k_2} \\
+			&\;+ \sum_{k_1+k_2+k_3=n} b\Braket{\phi^{k_1}}c\Braket{\phi^{k_2}}
+				c\bra{0}\phi^{k_3}
+		\end{split}\end{equation*}
+		解$x$を上記のように書くことができることがわかる。
+		次のような代数（？）を用いて、
+		\begin{equation}\label{ea:欲しい代数}\begin{split}
+			\xi^n\lr{\xi_q^\dag}^n = \frac{1}{[n]_q!}
+		\end{split}\end{equation}
+		解$x$を次のように書き換えると、
+		\begin{equation*}\begin{split}
+			y_t = \Braket{\lr{t\xi b\eta_1 + \eta_1^\dag c\eta_2 
+				+ \eta_2^\dag d \xi_q^\dag}_0^*}
+		\end{split}\end{equation*}
+		$y_t$は次のq-微分方程式を満たす。
+		\begin{equation*}\begin{split}
+			y_t = 1 + \int_0^t \lr{by_scy_sd} d_qs
+		\end{split}\end{equation*}
+		式\eqref{ea:欲しい代数}を満たす代数が存在するかどうかが問題となる。
+
+		恐らく、式\eqref{ea:欲しい代数}を満たす代数は存在しない。
+		可能性があるとすれば、式\eqref{ea:欲しい代数}をスケール変換
+		$\lr{\eta_q^\dag}^m\mapsto[m]_q!\lr{\eta_q^\dag}^m$した、
+		次の式を満たす代数だろう。
+		\begin{equation*}\begin{split}
+			\xi^m\lr{\xi_q^\dag}^m \xi^n\lr{\xi_q^\dag}^n = \qbinom{m+n}{m}
+		\end{split}\end{equation*}
+		この式は$\xi^m\lr{\xi_q^\dag}^m$と$\xi^m\lr{\xi_q^\dag}^n$の
+		q-シャッフル積になっている。
+	\end{todo} %todo:積分作用素}
+
+	$\omega I_q^t\lr{\gamma_0}_0^*\bullet$を絵で書くと次のようなイメージに
+	なるだろう。
+	\begin{equation*}\xymatrix{
+		& \bullet \ar@<-1ex>[dl]_{b\int_0^t} \ar@<-1ex>[dr]_c \\
+		\bullet \ar@<-1ex>[ur] & & \bullet \ar@<-1ex>[ul]_{d_qs} \\
+	}\end{equation*}
+	完全二分木の行きがけ順を（無限）箙の経路代数として書き表すと次のように
+	なる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			& \bullet \ar@<-1ex>[dl]_{\xi_1} \ar@<-1ex>[dr]_{\xi_2} \\
+			\bullet \ar@<-1ex>[ur]_{\xi_{-1}} & & \bullet \ar@<-1ex>[ul]_{\xi_{-2}} \\
+		}\qquad \begin{split}
+			\begin{array}{r|rrrr}
+				& \xi_1 & \xi_{-1} & \xi_2 & \xi_{-2} \\\hline
+				\xi_1 & \xi_1\xi_1 & \xi_1\xi_{-1} & 0 & 0 \\
+				\xi_{-1} & 0 & 0 & \xi_{-1}\xi_2 & 0 \\
+				\xi_2 & \xi_2\xi_1 & 0 & 0 & \xi_2\xi_{-2} \\
+				\xi_{-2} & 0 & \xi_{-2}\xi_{-1} & 0 & \xi_{-2}\xi_{-2} \\\hline
+			\end{array} \\
+			\xi_1\xi_{-1}\xi_2\xi_{-2} = 1
+		\end{split}
+	\end{split}\end{equation*}
+	上記で使っている$\eta$と$\eta^\dag$は、この経路代数を用いて
+	次のように書くことができるだろう。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			\eta &= \xi_1\lr{\xi_{-1}}_0^* \\
+			\eta^\dag &= \xi_2\lr{\xi_{-2}}_0^*
+		\end{split}\right. \implies 
+		\eta\eta^\dag = \xi_1\xi_{-1}\xi_2 + \lr{\xi_{-2}}_0^*
+	\end{split}\end{equation*}
+
+	$\Omega_{q,n}$と$\Omega_{0,n}$は文字列の$R_q$係数が異なるだけである。
+	$\Omega_{0,n}$はBrzozowski代数の真空期待値表すことができるので、
+	係数の部分を修正することで$\Omega_{q,n}$もBrzozowski代数の真空期待値表す
+	ことを考える。係数の違いをシャッフル積で表してみる。
+	線形射$t_q:R_q\braket{t}\to R_q\braket{t}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		t_qt^n := [n+1]_qt^{n+1} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$t_q$と$\gamma_0$は可換だから、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\lr{t_q\gamma_0}^n\gamma_0\bullet 
+		&= [n]_q^! t^n\gamma_0^{n+1}\bullet \\
+		&= [n]_q^! t^n\sum_{k=0}^n 
+			\beta\lr{\gamma_0^k\bullet\otimes\gamma_0^{n-k}\bullet} \\
+		&= \qbinom{n}{k} \sum_{k=0}^n 
+			\beta\glr{\lr{t_q\gamma_0}^k\bullet
+			\otimes\lr{t_q\gamma_0}^{n-k}\bullet} \\
+	\end{split}\end{equation*}
+	したがって、$\Omega_q'$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\lr{\Omega_q'|t} := \sum_{n\in\sizen} 
+		\frac{\lr{t_q\gamma_0}^n}{[n]_q^!}\bullet
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\lr{\Omega_q'|t} = 1 + tb\lr{\Omega_q'|t}c\lr{\Omega_q'|t}
+	\end{split}\end{equation*}
+
+	\begin{todo}[保留]\label{todo:保留} %{
 	この式の右辺は、$\eta$と$\eta^\dag$のべき数を考慮すると、
 	次のように書くことができる。
 	\begin{equation*}\begin{split}
@@ -276,6 +587,7 @@
 	この対応関係を用いて、完全二分木の成長$\gamma_q$をDyck経路の成長に
 	翻訳できれば、$\gamma_q$のBrzozowki代数への翻訳ができそうだ。
 	次節で詳しく考えることにする。
+	\end{todo} %todo:保留}
 
 	\begin{todo}[違うものを求めている]\label{todo:違うものを求めている} %{
 	Kleeneスターについて成り立つ式$\lr{A+B}^*=A^*\lr{BA^*}^*$を用いると、
@@ -346,7 +658,7 @@
 	\end{split}\end{equation*}
 	残念ながら、$3$次の項で成り立たないことがわかる。
 	\end{todo} %todo:違うものを求めている}
-%s2:根付き完全二分木}
+%s2:保留}
 \subsection{自然数の配列}\label{s2:自然数の配列} %{
 	$\C_0=\set{1}$とし、任意の$n\in\sizen_+$に対して$\C_n\subset\sizen^n$を
 	次の性質を満たす$[k_1,k_2,\dots,k_n]\in\sizen^n$全体のつくる集合とする。
@@ -942,7 +1254,7 @@
 		\quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
 	上記の計算から$n=0,1,2,3$では成り立っている。
-%s1:q-Dyck言語}
+%s1:Dyck言語のq-列挙-バックアップ}
 \section{経路の成長}\label{s1:経路の成長} %{
 	不完全なDyck経路を次のような二次元格子状の経路と定義する。
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{

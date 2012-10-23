@@ -1,0 +1,973 @@
+\begingroup %{
+\newcommand{\T}{\mycal{T}}
+\newcommand{\W}{\mycal{W}}
+\newcommand{\Pow}{\mycal{P}}
+\newcommand{\End}{\myop{End}}
+\newcommand{\Map}{\myop{Map}}
+\newcommand{\Lin}{\mathcal{L}}
+\newcommand{\Etaol}{\mathcal{H}}
+\newcommand{\Aut}{\myop{Aut}}
+\newcommand{\Mat}{\myop{Mat}}
+\newcommand{\Etaom}{\myop{Hom}}
+\newcommand{\Eta}{\mycal{H}}
+%
+\newcommand{\id}{\myop{id}}
+\newcommand{\tran}{\mathbf{t}}
+\newcommand{\dfn}{\,\myop{def}\,}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\tr}{\myop{tr}}
+%
+\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
+\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+\newcommand{\what}{\widehat}
+\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\ad}{\myop{ad}}
+\newcommand{\Ad}{\myop{Ad}}
+%
+\newcommand{\smallxy}[1]{\vcenter{\xymatrix@R=4pt@C=4pt@M=1pt@W=1pt{#1}}}
+\newcommand{\hen}{\ar@{-}}
+\newcommand{\sbt}{\vcenter{\hbox{\tiny$\bullet$}}}
+%
+{\setlength\arraycolsep{2pt}
+%
+\section{代数的Chomsky-Schutzenbergerの定理}\label{s1:代数的Chomsky-Schutzenbergerの定理} %{
+	Wikipeidaに代数的Chomsky-Schutzenbergerの定理の項目\footnote{
+		英語のWikipediaで次の文字列で検索すればよい。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Chomsky-Schutzenberger
+		\end{itemize} %}
+	}があったので記録しておく。
+
+	$\sizen[[x]]$を自然数を係数とする形式級数全体のつくる集合、
+	$\bun(x):=\bun[x,x^{-1}]$を有理数を係数とする$x$と$x^{-1}$を変数とする
+	多項式全体のつくる集合とする。
+
+	$f\in\sizen[[x]]$が次の性質を満たす時、$f$を$\bun(x)$上で代数的という。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item ある有限個の$p_0,\dots,p_n\in\bun(x)$が存在して、
+		\begin{equation*}\begin{split}
+			p_0 + p_1\cdot f +\cdots+ p_n\cdot f^n = 0
+		\end{split}\end{equation*}
+		となる。ここで、積$\cdot$は次のように定義する。
+		\begin{equation*}\begin{split}
+			\plr{\phi\cdot\psi|x} := \plr{\phi|x}\plr{\psi|x}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+
+	\begin{proposition}[代数的Chomsky-Schutzenberの定理]\label{prop:代数的Chomsky-Schutzenberの定理} %{
+		$A$を有限集合、$L\subseteq A^*$を曖昧さのない文脈自由文法、
+		$L_n:=\set{w\in L\bou |w|=n}$とする。
+		このとき、$\sum_{n\in\sizen}|L_n|t^n$は$\bun(t)$上で代数的となる。
+	\end{proposition} %prop:代数的Chomsky-Schutzenberの定理}
+
+	$A$を文字集合、$f\in\sizen\braket{A,x}$として、
+	文法$x=\plr{f|x}$に曖昧さがなければ、ある言語$L\subseteq A^*$があって、
+	$x=\sum_{w\in L}w$と摂動展開が書ける。
+	したがって、写像$\chi_t:L\to\sizen[t]$を$\chi w=t^{|w|}$と定義すると、
+	$\chi_tx=\sum_{n\in\sizen}|L_n|t^n$となる。$A$が有限集合だから、
+	任意の$n\in\sizen$で$L_n\le|A^n|=|A|^n$となり、少なくとも$|t|<|A|$では
+	$\chi_tx$は収束する。
+
+	$\chi_t$を文法に作用させると、$\chi_tx_1=\chi_t\plr{f|x_1}$という
+	形式級数が得られる。例を使って考えてみよう。
+	文字集合$A:=\set{p,m,l,r,v}$から生成される次の文法を考える。
+	\begin{equation*}\begin{split}
+		X &= Y + YpX + YmX,\quad Y = v^* + lXr 
+	\end{split}\end{equation*}
+	任意の$\alpha\in A$に対して$\chi_t\alpha=t$だから、文法に$\chi_t$を作用
+	させると、次のようになる。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			X_t &= Y_t + 2tY_tX_t \\
+			Y_t &= t^* + t^2X_t
+		\end{split}\right. \iff \left\{\begin{split}
+			X_t &= \plr{t^* + t^2X_t}\plr{1 + 2tX_t} \\
+			Y_t\plr{1 - 2tY_t} &= t^*\plr{1 - 2tY_t} + t^2Y_t
+		\end{split}\right.
+	\end{split}\end{equation*}
+
+	代数的Chomsky-Schutzenberの定理は自由モノイドに対する命題だが、Kontsevich
+	\cite{2011arXiv1109.2469K}によって自由群に対して同様の命題が証明されて
+	いる。\cite{2011arXiv1109.2469K}ではより大きな目標の一貫として自由群に
+	対する代数的Chomsky-Schutzenberの定理が証明されているようだが、
+	Reutenauer達\cite{Reutenauer:2012}が、代数的Chomsky-Schutzenber
+	の定理の部分だけを抜き出して解説している。
+%s1:代数的Chomsky-Schutzenbergerの定理}
+\section{環の中心}\label{s1:環の中心} %{
+	$V$を環、$C$を$V$の中心とする。$C$は$0$と$1$を含むので、空ではない。
+	また、$x,y\in C$なら、任意の$v\in V$に対して次のことが成り立つので、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $(x+y)r=r(x+y)$
+		\item $xyr=rxy$
+	\end{itemize} %}
+	$C$は$V$の部分環となる。
+%s1:環の中心}
+\section{Dyck単語の分割}\label{s1:Dyck単語の分割} %{
+	この節では、$V$を環として、次の部分代数の系列を考える。
+	\begin{equation*}\begin{split}
+		V\Eta_0 \subset V\Eta_1 \subset V\Eta_2 \subset \cdots \subset V\Eta_*
+	\end{split}\end{equation*}
+
+	$V\Eta_n$への射影$I_n\in\End_V\plr{V\Eta_*}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		I_n := \sum_{w\in\Eta_{n+}^*}\ket{w^\flat}\bra{w}
+	\end{split}\end{equation*}
+	$I_n$は$\eta_{\pm1},\dots,\eta_{\pm n}$に対しては可換、
+	$\eta_{\pm\plr{n+1}},\eta_{\pm\plr{n+2}},\dots$に対しては真空のように
+	振る舞う。
+	\begin{alignat*}{2}
+		I_n\eta_{\pm i} &= \eta_{\pm i}I_n &\quad&\text{for all } i\in1..n \\
+		I_n\eta_{-i} &= 0 = \eta_iI_n &\quad&\text{for all } n < i
+	\end{alignat*}
+	$I_n$を用いて射影$\braket{-}_n:V\Eta_*\to V\Eta_n$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\braket{x}_n := I_nxI_n \quad\text{for all } x\in V\Eta_*
+	\end{split}\end{equation*}
+
+	$K\in\sizen$、$a,b,c\in V\Eta_K$とし、$\phi\in V\Eta_{K+1}$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		\phi := a + b\eta_{K+1} + \eta_{-\plr{K+1}}c
+	\end{split}\end{equation*}
+	Kleeneスターの射影$\braket{\phi^*}_K$を計算してみる。
+	まず、次のようになるが、
+	\begin{equation}\label{ea:Dyck単語の分割その一}\begin{split}
+		I_K\phi^{n+2} &= a^{n+2}I_K 
+			+ \sum_{r=0}^{n+1}a^rbI_K\eta_{K+1}\phi^{n+1-r} \\
+	\end{split}\end{equation}
+	$I_K^{1,2}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		I_K^{1,2} := \sum_{w\in\Eta_n^*}\ket{w^\flat}\bra{w}\otimes\bra{1}
+	\end{split}\end{equation*}
+	二項目の和の中は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		I_K\eta_{K+1}\phi^{n+1-r}
+		= I_K^{1,2} \plr{\id\otimes\eta_{K+1}}m_0^\flat\phi^{n+1-r}
+	\end{split}\end{equation*}
+	$\phi$と$m_0^\flat$の交換関係は次の形になるが、
+	\begin{equation}\label{ea:Dyck単語の分割その二}\begin{split}
+		m_0^\flat\phi &= \plr{\Delta_0\phi}m_0^\flat \\
+		\Delta_0\phi &= \phi\otimes\id + I_0c\otimes\eta_{-\plr{K+1}}
+			+ \plr{\cdots}\otimes\plr{\text{operators in $\Eta_{-K}$}}
+	\end{split}\end{equation}
+	生成演算子$\Eta_{K-}$がテンソル積の二項目に現れる項は
+	$I_K\plr{\id\otimes\eta_{K+1}}$に作用すると$0$になるから、			
+	次の式が成り立つ。
+	\begin{equation}\label{ea:Dyck単語の分割その三}\begin{split}
+		I_K\eta_{K+1}\phi^{n+1-r}
+		&= I_K^{1,2} \plr{\id\otimes\eta_{K+1}}m_0^\flat\phi^{n+1-r} \\
+		&= I_K^{1,2} \plr{\phi^{n+1-r}\otimes\eta_{K+1}} m_0^\flat \\
+		&\;+ \sum_{s=0}^n I_K^{1,2} 
+			\plr{\phi^sI_0c\otimes\eta_{K+1}\eta_{-\plr{K+1}}}
+			m_0^\flat\phi^{n-(r+s)} \\
+		&= I_K\phi^{n+1-r}\eta_{K+1} + \sum_{s=0}^n\phi^sI_0c\phi^{n-(r+s)}
+	\end{split}\end{equation}
+	したがって、次の式が得られる。
+	\begin{equation*}\begin{split}
+		I_K\phi^{n+2} &= a^{n+2}I_K 
+			+ \sum_{r=0}^{n+1} a^rbI_K\phi^{n+1-r}\eta_{K+1}
+			+ \sum_{r+s+t=n} a^rbI_K\phi^sI_0c\phi^t
+	\end{split}\end{equation*}
+	また、次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\braket{\phi^{n+2}}_K = a^{n+2} 
+			+ \sum_{r+s+t=n} \braket{a^rb\phi^s}_KI_0\braket{c\phi^t}_K
+	\end{split}\end{equation*}
+	次の式を使うと、
+	\begin{equation*}\begin{split}
+		\braket{\phi^{n+3}}_K &= a^{n+3} + a\sum_{r+s+t=n}
+			\braket{a^rb\phi^s}_KI_0\braket{c\phi^t}_K
+			+ \sum_{r+s=n+1} \braket{b\phi^s}_KI_0\braket{c\phi^t}_K \\
+		&= a\braket{\phi^{n+2}}_K + \sum_{s+t=n+1}
+			\braket{b\phi^s}_KI_0\braket{c\phi^t}_K
+	\end{split}\end{equation*}
+	次の式より、
+	\begin{equation*}\begin{split}
+		\braket{\phi^0}_K &= 1 \\ 
+		\braket{\phi^1}_K &= a\braket{\phi^0}_K \\ 
+		\braket{\phi^2}_K &= a\braket{\phi^1}_K
+			+ \sum_{s+t=0} \braket{b\phi^s}_KI_0\braket{c\phi^t}_K \\
+		\braket{\phi^3}_K &= a\braket{\phi^2}_K 
+			+ \sum_{s+t=1} \braket{b\phi^s}_KI_0\braket{c\phi^t}_K \\
+		\cdots \\
+	\end{split}\end{equation*}
+	任意の$n\in\sizen$に対して次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\sum_{i=0}^{n+2} \braket{\phi^i}_K &= 1 
+			+ \sum_{i=0}^{n+1} a\braket{\phi^i}_K 
+			+ \sum_{s+t=n} \braket{b\phi^s}_KI_0\braket{c\phi^t}_K
+	\end{split}\end{equation*}
+	したがって、$t$を$V\Eta_*$の元と可換な不定元として、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\Braket{\plr{t\phi}^*}_K = 1 + t\Braket{a\plr{t\phi}^*}_K 
+			+ t^2\Braket{b\plr{t\phi}^*}_KI_0\Braket{c\plr{t\phi}^*}_K 
+			\quad\text{up to } t^\infty
+	\end{split}\end{equation*}
+	この式は$t$の有限べきについて成り立つだけで、収束性
+	$\braket{\phi^*}_K\in V\Eta_K$は保証していない。
+	以上のことを命題の形でまとめておく。
+
+	\begin{proposition}[Dyck単語の分割]\label{prop:Dyck単語の分割} %{
+		$V$を環とする。$K\in\sizen$、$a,b,c\in V\Eta_K$として、
+		$\phi\in V\Eta_{K+1}$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\phi := a + b\eta_{K+1} + \eta_{-\plr{K+1}}c
+		\end{split}\end{equation*}
+		形式級数$\braket{\plr{t\phi}^*}_K\in V\Eta_K[[t]]$について、次の式が
+		成り立つ。
+		\begin{alignat*}{2}
+			\Braket{\plr{t\phi}^*}_K &= 1 + t\Braket{a\plr{t\phi}^*}_K 
+				+ t^2\Braket{b\plr{t\phi}^*}_KI_0\Braket{c\plr{t\phi}^*}_K
+				&\quad\text{up to } t^\infty \\
+			&= \ggplr{ta + t^2b\Braket{\plr{t\phi}^*}_KI_0c}^* 
+				&\quad\text{up to } t^\infty
+		\end{alignat*}
+		この式は$t$の有限べきについて成り立つだけで、
+		収束性$\braket{\phi^*}_K\in V\Eta_K$は保証していない\footnote{
+			無限和や無限積を含む場合は、有限和や有限積の場合に成り立つ事柄が
+			そのまま成り立たないことが多い。代数的Chomsky-Schutzenberの定理
+			\ref{s1:代数的Chomsky-Schutzenbergerの定理}を参照すること。
+		}。
+	\end{proposition} %prop:Dyck単語の分割}
+
+	この命題から、$V[[t]]$に対する次の式が導かれる。
+	\begin{equation*}\begin{split}
+		\phi := a + b\eta_1 + \eta_{-1}c 
+		\xRightarrow{x := \Braket{\plr{t\phi}^*}} x = 1 + tax + t^2bxcx
+		\quad\text{for all } a,b,c\in V
+	\end{split}\end{equation*}
+	この式を$x=1+\plr{f|x}x$という形の文法に拡張することを考える。
+
+	まず、二次式の範囲で考えてみる。$a,b_1,\dots,b_N,c_1,\dots,c_N\in V\Eta_K$
+	として、$\phi\in V\Eta_{K+N}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\phi := a + \phi_+ + \phi_-
+		,\quad \phi_+ := \sum_{i=1}^N b_i\eta_{K+i}
+		,\quad \phi_- := \sum_{i=1}^N \eta_{-(K+i)}c_i
+	\end{split}\end{equation*}
+	式\eqref{ea:Dyck単語の分割その二}と同様に、次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		m_0^\flat\phi &= \plr{\Delta_0\phi}m_0^\flat \\
+		\Delta_0\phi &= \phi\otimes\id 
+			+ \sum_{i=1}^N I_0c\otimes\eta_{-\plr{K+i}}
+			+ \plr{\cdots}\otimes\plr{\text{operators in $\Eta_{-K}$}}
+	\end{split}\end{equation*}
+	任意の$n\in\sizen$で次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		I_K\phi^{n+2} &= a^{n+2} + \sum_{r=0}^{n+1} a^rI_K\phi_+\phi^{n+1-r} \\
+		&= a^{n+2} + \sum_{r=0}^{n+1} a^rI_K\phi^{n+1-r}\phi_+
+			+ \sum_{r+s=n}\sum_{i=1}^N a^r\Braket{b_i\phi^s}I_0c_i\phi^{n-(r+s)}
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{alignat*}{2}
+		\Braket{\plr{t\phi}^*}_K &= 1 + ta\Braket{\plr{t\phi}^*}_K 
+			+ t^2\sum_{i=1}^N\Braket{b_i\plr{t\phi}^*}_K
+			I_0\Braket{c_i\plr{t\phi}^*}_K &\quad\text{up to }t^\infty \\
+		&= \ggplr{ta + t^2\sum_{i=1}^N b_i\Braket{\plr{t\phi}^*}_KI_0c_i}^* 
+			&\quad\text{up to } t^\infty
+	\end{alignat*}
+	以上のことを命題の形でまとめておく。
+
+	\begin{proposition}[Dyck単語の分割その二]\label{prop:Dyck単語の分割その二} %{
+		$V$を環とする。$K,N\in\sizen$、
+		$a,b_1,\dots,b_N,c_1,\dots,c_N\in V\Eta_K$として、
+		$\phi\in V\Eta_{K+N}$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\phi := a + \sum_{i=1}^N \plr{b_i\eta_{K+i} + \eta_{-(K+i)}c_i}
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{alignat*}{2}
+			\Braket{\plr{t\phi}^*}_K &= 1 + ta\Braket{\plr{t\phi}^*}_K 
+				+ t^2\sum_{i=1}^N\Braket{b_i\plr{t\phi}^*}_K
+				I_0\Braket{c_i\plr{t\phi}^*}_K &\quad\text{up to }t^\infty \\
+			&= \ggplr{ta + t^2\sum_{i=1}^N b_i\Braket{\plr{t\phi}^*}_KI_0c_i}^* 
+				&\quad\text{up to } t^\infty
+		\end{alignat*}
+	\end{proposition} %prop:Dyck単語の分割その二}
+
+	単項式のべきについては次の命題が成り立つ。
+
+	\begin{proposition}[Dyck単語の分割その三]\label{prop:Dyck単語の分割その三} %{
+		$V$を環とする。$K,N\in\sizen$、$a,b_1,\dots,b_{N+2}\in V\Eta_K$として、
+		$\phi\in V\Eta_{K+N+1}$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\phi := a + b_1\eta_{K+1} + \eta_{-(K+N+1)}b_{N+2} 
+				+ \sum_{r=2}^{N+1} \eta_{-(K+r-1)}b_r\eta_{K+r}
+		\end{split}\end{equation*}
+		形式級数$\braket{\plr{t\phi}^*}_K\in V\Eta_K[[t]]$について、次の式が
+		成り立つ。
+		\begin{alignat*}{2}
+			\Braket{\plr{t\phi}^*}_K &= 1 + t\Braket{A}_K
+				+ t^{N+2}\Braket{B_1}_KI_0\Braket{B_2}\cdots\Braket{B_{N+1}}
+				I_0\Braket{B_{N+2}}_K &\quad\text{up to } t^\infty \\
+			&= \ggplr{ta 
+				+ t^{N+2}\Braket{B_1}_KI_0\Braket{B_2}\cdots\Braket{B_{N+1}}
+				I_0b_{N+2}}^* &\quad\text{up to } t^\infty
+		\end{alignat*}
+		ここで、$A$と$B_i$は次のように定義した。
+		\begin{equation*}\begin{split}
+			A := a\plr{t\phi}^*,\quad B_1 := b_1\plr{t\phi}^*,\dots,\quad 
+			B_{N+2} := b_{N+2}\plr{t\phi}^*
+		\end{split}\end{equation*}
+		$B_1,\dots,B_{N+1}$に対しては部分真空期待値ではなく、
+		完全な真空期待値をとっていることに注意する。
+	\end{proposition} %prop:Dyck単語の分割その三}
+	\begin{proof} %{
+		命題の$N$の帰納法によって証明する。$N=0$のとき命題が成り立つことは
+		Dyck単語の分割\ref{prop:Dyck単語の分割}からわかる。
+		ある$N\in\sizen$で命題が成り立つと仮定し、$\phi_{N+3}\in V\Eta_{K+N+3}$
+		を次のように定義する。
+		\begin{equation*}\begin{split}
+			\phi_{N+3} := a + b_1\eta_{K+1} + \eta_{-(K+N+2)}b_{N+3}
+				+ \sum_{r=2}^{N+2} \eta_{-(K+r-1)}b_r\eta_{K+r}
+		\end{split}\end{equation*}
+		Dyck単語の分割\ref{prop:Dyck単語の分割}によって、$\eta_{\pm(K+N+3)}$を
+		積分してしまうと、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\Braket{\plr{t\phi_{N+3}}^*}_{K+N+2} = \plr{t\phi_{N+2}}^*
+		\end{split}\end{equation*}
+		ここで、$\phi_{N+2}\in V\Eta_{K+N+2}$は次のように定義した。
+		\begin{equation*}\begin{split}
+			\phi_{N+2} &:= a + b_1\eta_{K+1} + t\eta_{-(K+N+1)}c 
+				+ \sum_{r=2}^{N+1} \eta_{-(K+r-1)}b_r\eta_{K+r} \\
+			c &:= b_{N+2}\plr{t\phi_{N+2}}^*I_0 b_{N+3}\plr{t\phi_{N+2}}^*
+		\end{split}\end{equation*}
+		$\phi_{N+2}$は次の性質を持つことに注意して、
+		\begin{equation*}\begin{split}
+			\Braket{f\plr{t\phi_{N+2}}^*g}_K = \Braket{f\plr{t\phi_{N+3}}^*g}_K
+			\quad\text{for all } f,g\in V\Eta_K
+		\end{split}\end{equation*}
+		$\phi_{N+2}$に対して帰納法の仮定を適用すると、次の式が得られるが、
+		\begin{equation*}\begin{split}
+			\Braket{\plr{t\phi_{N+2}}^*}_K
+			= 1 + t\Braket{A}_K + t^{N+3}\Braket{B_1}_KI_0
+				\Braket{B_2}\cdots\Braket{B_{N+1}}I_0
+				\Braket{c\plr{t\phi_{N+2}}^*}_K \\
+		\end{split}\end{equation*}
+		次の式から、
+		\begin{equation*}\begin{split}
+			I_0\Braket{c\plr{t\phi_{N+2}}^*}_K = I_0\Braket{b_{N+2}
+				\plr{t\phi_{N+2}}^*} I_0\Braket{b_{N+3}\plr{t\phi_{N+2}^*}}_K
+			= I_0\Braket{B_{N+2}}I_0\Braket{B_{N+3}}_K
+		\end{split}\end{equation*}
+		次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\Braket{\plr{t\psi}^*}_K = 1 + t\Braket{A}_K 
+				+ t^{N+3}\Braket{B_1}_KI_0\Braket{B_2}\cdots\Braket{B_{N+2}}
+				I_0\Braket{B_{N+3}}_K
+		\end{split}\end{equation*}
+		したがって、
+		$\Braket{\plr{t\phi_{N+3}}^*}_K=\Braket{\plr{t\phi_{N+2}}^*}_K$だから、
+		$N+1$でも命題が成り立つことがわかる。
+	\end{proof} %}
+
+	この命題の$\phi$は次のベクトル$H_0,\; H_\pm$と巡回的な行列$B$を用いて、
+	\begin{equation*}\begin{split}
+		H_0 := \begin{pmatrix}
+			1 \\ 0 \\ 0 \\ \vdots \\ 0 \\ 0
+		\end{pmatrix},\quad H_\pm := \begin{pmatrix}
+			0 \\ \eta_{\pm(K+1)} \\ \eta_{\pm(K+2)} 
+			\\ \vdots \\ \eta_{\pm(K+N)} \\ \eta_{\pm(K+N+1)}
+		\end{pmatrix},\quad B := \begin{pmatrix}
+			0 & b_1 & 0 & 0 & \cdots & 0 \\
+			0 & 0 & b_2 & 0 & \cdots & 0 \\
+			0 & 0 & 0 & b_3 & \cdots & 0 \\
+			\vdots & \vdots & \vdots & \vdots & \ddots & 0 \\
+			0 & 0 & 0 & 0 & \cdots & b_{N+1} \\
+			b_{N+2} & 0 & 0 & 0 & \cdots & 0 \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\phi = a + \plr{H_0 + H_-}^\tran B \plr{H_0 + H_+}
+	\end{split}\end{equation*}
+	メモ\ref{note:Dyck単語の分割その三}を使いつつ、
+	行列の形で$\Braket{\phi^*}_K$を計算してみる。まず、Kleeneスターの摂動から
+	次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\Braket{\phi^*}_K = 1 + \plr{a + H_0^\tran BH_0}\Braket{\phi^*}_K
+			+ H_0^\tran B\Braket{H_+\phi^*}_K
+	\end{split}\end{equation*}
+	計算\eqref{eq:真空期待値の一次微分の計算}から、次の式が成り立つことが
+	わかる。
+	\begin{equation*}\begin{split}
+		\Braket{H_+\phi^*}_K
+		= 1 + \plr{a + H_0^\tran BB_\phi^*H_0}\Braket{\phi^*}_K
+	\end{split}\end{equation*}
+	ここで、$B_\phi\in(V\Eta_K)^{N+2}$は次のように定義する。
+	\begin{equation*}\begin{split}
+		B_\phi := \Braket{\phi^*}_KI_0\plr{1 - H_0H_0^\tran}B
+	\end{split}\end{equation*}
+	ここまでの計算結果は$B$の形に依らない。
+	行列$B$の具体的な形を用いると、計算\eqref{eq:Bの具体形を用いた計算}から、
+	命題の式が得られる。
+	\begin{equation*}\begin{split}
+		\Braket{\phi^*}_K
+		= 1 + \plr{a + H_0^\tran BB_\phi^{N+1}H_0}\Braket{\phi^*}_K
+	\end{split}\end{equation*}
+	\begin{note}[計算メモ]\label{note:Dyck単語の分割その三} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $m_0^\flat\phi=\plr{\Delta_0\phi}m_0$とすると、次の式が
+			成り立つ。
+			\begin{equation*}\begin{split}
+				\Delta_0\phi = \phi\otimes\id 
+					+ I_0{\contraction{}{B(H_0 + H_+)}{\otimes}{H_-^\tran}
+						B(H_0 + H_+)\otimes H_-^\tran}
+					+ \plr{\cdots}\otimes\plr{\text{operators in $\Eta_{-K}$}}
+			\end{split}\end{equation*}
+			ここで、$\contraction{}{X}{\otimes}{Y^\tran}X\otimes Y^\tran$は
+			次のようにテンソル積を跨いだベクトルの内積を表す。
+			\begin{equation*}\begin{split}
+				\contraction{}{X}{\otimes}{Y^\tran}X\otimes Y^\tran 
+				:= \sum_{i=1}^{N+1}X_i\otimes Y_i
+				,\quad \contraction{}{X^\tran}{\otimes}{Y}X^\tran\otimes Y
+				:= \sum_{i=1}^{N+1}X_i\otimes Y_i
+			\end{split}\end{equation*}
+			%
+			\item $\Braket{H_+\phi^*}_K$の計算
+			\begin{equation*}\begin{split}
+				I_KH_+\phi^* & = I_K^{1,2}(\id\otimes H_+)m_0^\flat\phi^* \\
+				& = I_K^{1,2}(\phi^*\otimes H_+)m_0^\flat
+					+ I_K^{1,2}(\phi^*\otimes H_+)
+					\plr{I_0{\contraction{}{B(H_0 + H_+)}{\otimes}{H_-^\tran}
+							B(H_0 + H_+)\otimes H_-^\tran}}
+					m_0^\flat\phi^* \\
+				&= I_K\phi^*H_+ + I_K\phi^*I_0\plr{H_+H_-^\tran}B(H_0 + H_+)\phi^*
+			\end{split}\end{equation*}
+			より、縮約に対する次の式と、
+			\begin{equation*}\begin{split}
+				\plr{\contraction{}{X_1^\tran}{\otimes}{Y_1} X_1^\tran\otimes Y_1}
+				\plr{\contraction{}{X_2}{\otimes}{Y_2^\tran} X_2\otimes Y_2^\tran}
+				&= \sum_{i,j} \plr{X_{1i}X_{2j}}\otimes\plr{Y_{1i}Y_{2j}} \\
+				&= \contraction{(}{X_1}{\otimes1)(1\otimes}{Y_1}
+				\contraction{(X_1\otimes1)(1\otimes Y_1}{Y_2^\tran}{)(}{X_2}
+				(X_1\otimes1)(1\otimes Y_1Y_2^\tran)(X_2\otimes1)
+			\end{split}\end{equation*}
+			$H_\pm$に対する次の式を使って、
+			\begin{equation*}\begin{split}
+				H_+H_-^\tran = 1 - H_0H_0^\tran\in\text{ matrix of center of }V
+			\end{split}\end{equation*}
+			次の式が得られる。
+			\begin{equation}\label{eq:真空期待値の一次微分の計算}\begin{split}
+				\Braket{H_+\phi^*}_K 
+				&= \Braket{\phi^*}_KI_0\plr{H_+H_-^\tran}BH_0\Braket{\phi^*}_K
+				+ \Braket{\phi^*}_KI_0\plr{H_+H_-^\tran}B\Braket{H_+\phi^*}_K \\
+				&= \ggplr{\Braket{\phi^*}_KI_0\plr{H_+H_-^\tran}B}^+H_0\Braket{\phi^*}_K
+			\end{split}\end{equation}
+			%
+			\item $H_0^\tran BB_\phi^*H_0$の計算
+			\begin{equation}\label{eq:Bの具体形を用いた計算}\begin{split}
+				H_0^\tran BB_\phi^*H_0 &= \begin{pmatrix}
+					0 \\ b_1 \\ 0 \\ \vdots \\ 0 \\ 0
+				\end{pmatrix}^\tran\plr{\Braket{\phi^*}_KI_0\begin{pmatrix}
+					0 & 0 & 0 & 0 & \cdots & 0 \\
+					0 & 0 & b_2 & 0 & \cdots & 0 \\
+					0 & 0 & 0 & b_3 & \cdots & 0 \\
+					\vdots & \vdots & \vdots & \vdots & \ddots & 0 \\
+					0 & 0 & 0 & 0 & \cdots & b_{N+1} \\
+					b_{N+2} & 0 & 0 & 0 & \cdots & 0 \\
+				\end{pmatrix}}^*\begin{pmatrix}
+					1 \\ 0 \\ 0 \\ \vdots \\ 0 \\ 0
+				\end{pmatrix} \\
+				&= H_0^\tran BB_\phi^{N+1}H_0
+			\end{split}\end{equation}
+			$\beta_i$を次のようにおくと、
+			\begin{equation*}\begin{split}
+				\beta_1:=b_1,\quad
+				\beta_i:=b_1\Braket{\phi^*}_KI_0b_2\cdots\Braket{\phi^*}_KI_0b_i
+			\end{split}\end{equation*}
+			次のようになっていることから、前記の式が成り立つことがわかる。
+			\begin{equation*}\begin{split}
+				H_0^\tran BB_\phi^0 &= (0\; \beta_1\; 0\; 0\; \cdots\; 0) \\
+				H_0^\tran BB_\phi^1 &= (0\; 0\; \beta_2\; 0\; \cdots\; 0) \\
+				\vdots \\
+				H_0^\tran BB_\phi^N &= (0\; 0\; 0\; 0\; 0\; \cdots\; \beta_{N+1}) \\
+				H_0^\tran BB_\phi^{N+1} H_0 &= (b_{N+2}\; 0\; 0\; 0\; \cdots\; 0) \\
+				H_0^\tran BB_\phi^{N+2} H_0 &= (0\; 0\; 0\; 0\; \cdots\; 0)
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{note} %note:Dyck単語の分割その三}
+\subsection{観察その一}\label{s2:観察その一} %{
+	この節では多項式とその根について考える。
+
+	環$V$を係数とする多項式を$V$-多項式と書く事にする。通常は、多項式の
+	係数は変数変換で変わり得るので、係数を明示することはないが、この節では
+	多項式を変形していくので、係数を明示することにする。
+	また、環$V$、$t$を$V$と可換な不定元として、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $V[t]$を$V$を係数とする$t$の多項式全体のつくる集合、
+		\item $V[[t]]$を$V$を係数とする$t$の形式級数全体のつくる集合、
+		\item $V(t):=V[t,t^{-1}]$、
+		\item $V((t)):=V[[t,t^{-1}]]$、
+	\end{itemize} %}
+	とする。また、通常は用いられることがない記号だが、見やすさを考えて
+	次の記法を使うことにする。
+	\begin{equation*}\begin{split}
+		[V]_t:=V[t],\quad [[V]]_t:=V[[t]],\quad (V)_t:=V[t,t^{-1}]
+		,\quad ((V))_t:=V[[t,t^{-1}]]
+	\end{split}\end{equation*}
+
+	$t$を変数として次の$[\sei]_t$-多項式とその根$x_\pm\in((\fukuso))_t$
+	を考える。
+	\begin{equation}\label{eq:元の多項式}\begin{split}
+		x = 1 + tx^2,\quad x_\pm := \frac{1 \pm \sqrt{1 - 4t}}{2t}
+	\end{split}\end{equation}
+	この多項式を次のプッシュダウンオートマトンを構成する過程に添って変形
+	してみる。
+	\begin{equation*}\begin{array}{rcll}
+		\xymatrix{
+			*++[o][F=]{x} \ar@(dl,ul)^{tx^2}
+		} &\xmapsto{\text{insert final state}}& \xymatrix{
+			*++[o][F-]{x} \ar[r]^{1+tx^2} & *++[o][F=]{y}
+		} \\
+		&\xmapsto{\text{eliminate 1st $x$}}& \xymatrix{
+			*++[o][F-]{x} \ar[r]^{1} \ar@(dl,ul)^{t\eta_1} 
+			& *++[o][F=]{y} \ar@(ru,rd)^{\eta_{-1}x}
+		} \\
+		&\xmapsto{\text{eliminate 2nd $x$}}& \xymatrix{
+			*++[o][F-]{x} \ar@<1ex>[r]^{1} \ar@(dl,ul)^{t\eta_1} 
+			& *++[o][F=]{y} \ar@(ru,rd)^{\eta_{-2}} \ar@<1ex>[l]^{\eta_{-1}\eta_2}
+		}
+	\end{array}\end{equation*}
+
+	元の多項式\eqref{eq:元の多項式}の左辺で、$x=X/Y$という有理変換をして、
+	次のように書き換える。
+	\begin{equation*}\begin{split}
+		X = xY ,\quad X = Y + tx^2Y
+	\end{split}\end{equation*}
+	この式は、任意の$g\neq0\in((\fukuso))_t$に対して
+	$(X,Y)\mapsto\plr{gX,gY}$という変換で不変になっている。
+	したがって、ある$y\neq0\in((\fukuso))_t$を用いて、$Y=y$としてゲージ固定
+	すると、次の$((\fukuso))_t$-連立多項式が得られる。
+	\begin{equation*}\begin{split}
+		X = xY ,\quad X = Y + tx^2Y ,\quad Y = y
+	\end{split}\end{equation*}
+	\begin{equation*}\begin{split}
+		\pvec{X}{Y} = \pvec{0}{y} + \begin{pmatrix}
+			0 & 1 + tx^2 \\ 0 & 0
+		\end{pmatrix}\pvec{X}{Y},\quad X = xY
+	\end{split}\end{equation*}
+
+	次の二つの$((\fukuso))_t$-連立多項式を考えると、
+	それぞれの解$X^{(0\pm)}\in((\fukuso))_t^2$は唯一つ定まる
+	\footnote{
+		この代数式の書き換えはCole-Hopf変換に似ている。
+		ポテンシャルが$x_\pm$、波動関数が$X^{(0\pm)}$に対応する。
+	}。
+	\begin{equation}\label{eq:多項式の線形化その零}\begin{split}
+		X^{(0\pm)} = \pvec{0}{1} + \begin{pmatrix}
+			0 & 1 + tx_\pm^2 \\ 0 & 0
+		\end{pmatrix} X^{(0\pm)}
+		\implies X^{(0\pm)} = \pvec{x_\pm}{1}
+	\end{split}\end{equation}
+	そして、この連立多項式を書き換えた次の二つの$[\fukuso]_t$-連立多項式も、
+	それぞれの解$\what{X}^{(0\pm)}\in((\fukuso))_t^2$は唯一つ定まる。
+	\begin{equation}\label{eq:多項式の線形化その零改}\begin{split}
+		\what{X}^{(0\pm)} = \pvec{0}{1} + \begin{pmatrix}
+			0 & 1 + t\what{X}^{(0\pm)}_1x_\pm \\ 0 & 0
+		\end{pmatrix} \what{X}^{(0\pm)}
+		\implies \what{X}^{(0\pm)} = \pvec{x_\pm}{1}
+	\end{split}\end{equation}
+
+	\begin{todo}[妄想あるいは]\label{todo:妄想あるいは} %{
+		多項式の書き換え、\eqref{eq:多項式の線形化その零}
+		から\eqref{eq:多項式の線形化その零改}、が本質的な気がしてきた。
+		$x_\pm=1+tx_\pm^2$というのがゲージ変換に見えてきた。
+	\end{todo} %todo:妄想あるいは}
+
+	次の二つの$((\fukuso\Eta_1))_t$-連立多項式を考える。
+	\begin{equation}\label{eq:多項式の線形化その一}\begin{split}
+		X^{(1\pm)} = \pvec{0}{1} + T_{1\pm}X^{(1\pm)} 
+		\quad\text{where } T_{1\pm} := \begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & \eta_{-1}x_\pm
+		\end{pmatrix}
+	\end{split}\end{equation}
+	命題\ref{prop:Dyck経路の分割}から次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\braket{T_{1\pm}^*} = 1 + \begin{pmatrix}
+			0 & 1 \\ 0 & 0
+		\end{pmatrix}\braket{T_{1\pm}^*} + \begin{pmatrix}
+			t & 0 \\ 0 & 0
+		\end{pmatrix}\braket{T_{1\pm}^*}\begin{pmatrix}
+			0 & 0 \\ 0 & x_\pm
+		\end{pmatrix}\braket{T_{1\pm}^*}
+	\end{split}\end{equation*}
+	真空期待値は$((\fukuso))_t$-連立多項式\eqref{eq:多項式の線形化その零改}
+	を再現する。
+	\begin{equation*}\begin{split}
+		\braket{X^{(1\pm)}} = \pvec{0}{1} + \begin{pmatrix}
+			0 & 1 + t\braket{X^{(1\pm)}_1}x_\pm \\ 0 & 0
+		\end{pmatrix} \braket{X^{(1\pm)}}
+	\end{split}\end{equation*}
+	ただし、$((\fukuso))_t$-連立多項式\eqref{eq:多項式の線形化その零改}の場合
+	と異なり、遷移行列$T_{1\pm}$に$0$でない対角成分があるために、
+	$\braket{T_{1\pm}^*}$が収束しない可能性がある。実際に$\braket{T_{1\pm}^*}$
+	を計算すると次のようになり、
+	\begin{equation*}\begin{split}
+		\braket{T_{1\pm}^*} = 1 + \begin{pmatrix}
+			0 & \plr{tx_\pm}^* \\ 0 & 0
+		\end{pmatrix} \implies \braket{X^{(1\pm)}} = \pvec{\plr{tx_\pm}^*}{1}
+	\end{split}\end{equation*}
+	$\braket{T_{1\pm}^*}$が収束するためには、次の条件が必要なことがわかる。
+	\begin{equation*}\begin{split}
+		\plr{tx_\pm}^*\in\fukuso((t))
+		\iff |tx_\pm| < 1
+		\iff |1\pm\sqrt{1-4t}| < 2
+	\end{split}\end{equation*}
+	この条件は次の式を反映したものだから、
+	\begin{equation*}\begin{split}
+		x = 1 + tx^2 \iff x = \frac{1}{1 - tx}
+		\implies x = \plr{tx}^* \quad\text{iff}\quad |tx| < 1
+	\end{split}\end{equation*}
+	この条件が満たされるときに限り、$x_\pm=\plr{tx_\pm}^*$となる。
+	つまり、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 真空期待値$\braket{X^{(1\pm)}}$が収束するならば、
+		$\braket{X^{(1\pm)}}=(x_\pm,\; 1)^\tran$となる
+	\end{itemize} %}
+	ということが言える。式で書くと次のようになる。
+	\begin{equation}\label{eq:多項式の収束条件その一}\begin{split}
+		\braket{X^{(1\pm)}}\in((\fukuso))_t
+		\implies \braket{X^{(1\pm)}} = \pvec{x_\pm}{1}
+	\end{split}\end{equation}
+%	そして、$\braket{X^{(1\pm)}}\in((\fukuso))_t$となるときは、
+%	$((\fukuso\Eta_1))_t$-連立多項式\eqref{eq:多項式の線形化その一}を
+%	次のように、$[\fukuso\Eta_1]_t$-連立多項式に書き換えることができる。
+%	\begin{equation}\label{eq:多項式の線形化その一改}\begin{split}
+%		\what{X}^{(1)} = \pvec{0}{1} + \what{T}_{1}\what{X}^{(1)}
+%		\quad\text{where } \what{T}_{1} := \begin{pmatrix}
+%			t\eta_1 & 1 \\ 0 & \eta_{-1}\braket{\what{X}^{(1)}_1}
+%		\end{pmatrix}
+%	\end{split}\end{equation}
+%	この連立多項式には$x_\pm$が現れないので、$t$の多項式を係数とすることに
+%	注意する。
+
+	次の$[\fukuso\Eta_2]_t$-連立多項式を考える。
+	\begin{equation}\label{eq:多項式の線形化その二}\begin{split}
+		X^{(2)} = \pvec{0}{1} + T_{2}X^{(2)} 
+		\quad\text{where } T_{2} := \begin{pmatrix}
+			t\eta_1 & 1 \\ \eta_{-1}\eta_2 & \eta_{-2}
+		\end{pmatrix}
+	\end{split}\end{equation}
+	命題\ref{prop:Dyck経路の分割}から、部分真空期待について次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\braket{T_{2}^*}_1 = 1 + \begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & 0
+		\end{pmatrix}\braket{T_{2}^*}_1 + I_1\begin{pmatrix}
+			0 & 0 \\ \eta_{-1} & 0
+		\end{pmatrix}T_{2}^*I_0\begin{pmatrix}
+			0 & 0 \\ 0 & 1
+		\end{pmatrix}T_{2}^*I_1 
+	\end{split}\end{equation*}
+	$((\fukuso\Eta_1))_t$-連立多項式\eqref{eq:多項式の線形化その一}に似ている
+	が異なる次の$[\fukuso\Eta_1]_t$-連立多項式が得られる。
+	\begin{equation*}\begin{split}
+		Y^{(1)} = \pvec{0}{1} + \begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & \eta_{-1}Y^{(1)}_1I_0
+		\end{pmatrix} Y^{(1)}
+		\quad\text{where } Y^{(1)} := \braket{X^{(2)}}_1
+	\end{split}\end{equation*}
+
+	\begin{todo}[多項式の係数を明示]\label{todo:多項式の係数を明示} %{
+	\end{todo} %todo:多項式の係数を明示}
+
+	\begin{todo}[以下は怪しい]\label{todo:以下は怪しい} %{
+		結果は正しいが、議論はおかしい。
+	\end{todo} %todo:以下は怪しい}
+
+	この連立多項式と連立多項式\eqref{eq:多項式の線形化その一改}は異なるが、
+	真空期待値をとると同じ連立多項式となる。
+	\begin{equation*}\begin{split}
+		\Braket{X^{(1)}} &= \pvec{0}{1} + \Braket{\begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & 0
+		\end{pmatrix} X^{(1)}} \\
+		\Braket{\braket{X^{(2)}}_1} &= \pvec{0}{1} + \Braket{\begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & 0
+		\end{pmatrix} \braket{X^{(2)}}_1}
+	\end{split}\end{equation*}
+
+	\begin{equation*}\begin{split}
+		\braket{T_{2}^*} = 1 + \Braket{\begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & 0
+		\end{pmatrix}T_{2}^*} + \Braket{\begin{pmatrix}
+			0 & 0 \\ \eta_{-1} & 0
+		\end{pmatrix}T_{2}^*}\Braket{\begin{pmatrix}
+			0 & 0 \\ 0 & 1
+		\end{pmatrix}T_{2}^*}
+	\end{split}\end{equation*}
+
+	部分真空期待値として$\fukuso\Eta_1((t))$上の連立代数式
+	\eqref{eq:多項式の線形化その一改}が再現される。
+	\begin{equation*}\begin{split}
+		\braket{X^{(2)}}_1 = \pvec{0}{1} + \begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & \eta_{-1}\braket{X^{(2)}_1}_1
+		\end{pmatrix} \braket{X^{(2)}}_1
+	\end{split}\end{equation*}
+	$\braket{X^{(2)}}$を具体的に計算してみたいところだが、$T_2^*$は次の
+	ようになり、
+	\begin{equation*}\begin{split}
+		T_2^* = U_1\plr{1 + U_2}U_3^* \quad\text{where }
+		U_1 = \begin{pmatrix}
+			\plr{t\eta_1}^* & 0 \\ 0 & \eta_{-2}^*
+		\end{pmatrix},\quad U_2 = \begin{pmatrix}
+			0 & \eta_{-2}^* \\ \eta_{-1}\eta_2\plr{t\eta_1}^* & 0
+		\end{pmatrix} \\
+		U_3 = \begin{pmatrix}
+			\eta_{-2}^*\eta_{-1}\eta_2\plr{t\eta_1}^* & 0 \\
+			0 & \eta_{-1}\plr{\eta_2\plr{t\eta_1}^* + \eta_{-2}^*} \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	収束性を議論できるところまで持っていくことが困難である。
+	したがって、$\braket{T_2^*}$の具体的な計算をせずにその収束性を考える。
+	$T_2$は$t$の一次式だから、$\braket{T_2^*}$は$t$の形式級数となる。
+	\begin{equation*}\begin{split}
+		\braket{T_2^*}\in\fukuso[[t]]\subset\fukuso((t))
+		\implies \braket{X^{(2)}}\in\fukuso[[t]]
+	\end{split}\end{equation*}
+	したがって、真空期待値が収束するための条件は、$\fukuso\Eta_1((t))$上の
+	連立多項式の場合\eqref{eq:多項式の収束条件その一}より更に厳しく、
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\braket{X^{(2)}}\in\fukuso[[t]]
+		\implies \braket{X^{(2)}} = \pvec{x_-}{1}
+	\end{split}\end{equation*}
+	$x_+$は$t=0$近傍で正則でないので、この連立多項式
+	\eqref{eq:多項式の線形化その二}の根に含まれない。
+
+	\begin{todo}[摂動展開の基点]\label{todo:摂動展開の基点} %{
+		ここでの議論は$t=0$近傍で摂動展開しているが、任意の複素数$t_0\in\fukuso$
+		を基点に摂動展開できるはずである。
+	\end{todo} %todo:摂動展開の基点}
+%s2:観察その一}
+\subsection{観察その二}\label{s2:観察その二} %{
+	前節の$\fukuso\Eta_2((t))$上の連立代数式\eqref{eq:多項式の線形化その二}
+	は次のもので、
+	\begin{equation*}\begin{split}
+		X^{(2)} = \pvec{0}{1} + T_{2}X^{(2)} 
+		\quad\text{where } T_{2} := \begin{pmatrix}
+			t\eta_1 & 1 \\ \eta_{-1}\eta_2 & \eta_{-2}
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	部分真空期待は次の式を満たす。
+	\begin{equation*}\begin{split}
+		\braket{T_{2}^*}_1 = 1 + \begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & 0
+		\end{pmatrix}\braket{T_{2}^*}_1 + I_1\begin{pmatrix}
+			0 & 0 \\ \eta_{-1} & 0
+		\end{pmatrix}T_{2}^*\ket{1}\bra{1}\begin{pmatrix}
+			0 & 0 \\ 0 & 1
+		\end{pmatrix}T_{2}^*I_1
+	\end{split}\end{equation*}
+	ここで、次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}0 & 1\end{pmatrix}\bra{1}T_{2} = 0
+	\end{split}\end{equation*}
+	部分真空期待は次のようになる。
+	\begin{equation*}\begin{split}
+		\braket{T_{2}^*}_1 = 1 + \begin{pmatrix}
+			t\eta_1 & 1 \\ 0 & 0
+		\end{pmatrix}\braket{T_{2}^*}_1 + I_1\begin{pmatrix}
+			0 & 0 \\ \eta_{-1} & 0
+		\end{pmatrix}T_{2}^*\ket{1}\bra{1}\begin{pmatrix}
+			0 & 0 \\ 0 & 1
+		\end{pmatrix}I_1
+	\end{split}\end{equation*}
+%s2:観察その二}
+\subsection{バックアップ}\label{s2:バックアップ} %{
+	Dyck経路の分割\ref{eq:Dyck経路の分割}を行列に
+	応用してみる。$V$を環、$K\in\sizen$をBrzozowski代数の階数、
+	$D\in\sizen_+$を$V$上の自由加群の次元、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $X_0\in V^D$を初期値、
+		\item $Y\in\plr{V\Eta_K}^D$をあるベクトル、
+		\item $A,B\in\Mat\plr{V\Eta_K,D}$を行列
+	\end{itemize} %}
+	として、$X\in\plr{V\Eta_{K+1}}^{K+1}$を次の代数式の解とすると、
+	\begin{equation*}\begin{split}
+		X = X_0 + \plr{A + B\eta_{K+1} + \eta_{-\plr{K+1}}X_0Y^\tran}X
+	\end{split}\end{equation*}
+	Dyck経路の分割\ref{eq:Dyck経路の分割}により、
+	次の$\plr{V\Eta_{K+1}}^{K}$の代数式が得られる。
+	\begin{equation*}\begin{split}
+		[X]_K = X_0 + A[X]_K + B[X]_K\ket{1}\bra{1}Y^\tran[X]_K
+	\end{split}\end{equation*}
+%s2:バックアップ}
+%s1:Dyck経路の分割}
+\section{木の成長とDyck経路の成長}\label{s1:木の成長とDyck経路の成長} %{
+	Brzozowski代数によるDyck経路の成長$g:=b\eta\plr{\eta^\flat c}^*$を、
+	$q=0$の平面二分木の成長に対応させてみる。
+
+	一次、$\bra{1}\mapsto\bra{1}g$、は次のように、
+	\begin{equation*}\begin{split}
+		\sbt &\mapsto \smallxy{
+			& \sbt \hen[dl] \\
+			\sbt \\
+		} +  \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \\
+		}
+	\end{split}\end{equation*}
+	二次、$\bra{1}g\mapsto\bra{1}g^2$、は次のように、
+	\begin{equation*}\begin{split}
+		\smallxy{
+			& \sbt \hen[dl] \\
+			\sbt \\
+		} &\mapsto \smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \\
+			\sbt \\
+		} + \smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \\
+		} + \smallxy{
+			& & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[dr] & & \sbt \\
+			\sbt & & \sbt \\
+		} \\
+		\smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \\
+		} &\mapsto \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \\
+			& \sbt \\
+		} + \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt \\
+		}
+	\end{split}\end{equation*}
+	三次、$\bra{1}g^2\mapsto\bra{1}g^3$、は次のようになる。
+	\begin{equation*}\begin{array}{rcccccccc}
+		\smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \\
+			\sbt \\
+		} &\mapsto& \smallxy{
+			& & & \sbt \hen[dl] \\
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \\
+			\sbt \\
+		} &+& \smallxy{
+			& & & \sbt \hen[dl] \\
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \\
+		} &+& \smallxy{
+			& & & \sbt \hen[dl] \\
+			& & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[dr] & & \sbt \\
+			\sbt & & \sbt \\
+		} &+& \smallxy{
+			& & & \sbt \hen[dl] \hen[dr] \\
+			& & \sbt \hen[dl] \hen[dr] & & \sbt \\
+			& \sbt \hen[dl] \hen[dr] & & \sbt \\
+			\sbt & & \sbt \\
+		} \\
+		\smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \\
+		} &\mapsto& \smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \\
+			& \sbt
+		} &+& \smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt
+		} &+& \smallxy{
+			& & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[dr] & & \sbt \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt
+		} \\
+		\smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \\
+			& \sbt \\
+		} &\mapsto& \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \\
+			\sbt \\
+		} &+& \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \\
+		} &+& \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[dr]  & & \sbt \\
+			\sbt & & \sbt \\
+		} \\
+		\smallxy{
+			& & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[dr] & & \sbt \\
+			\sbt & & \sbt \\
+		} &\mapsto& \smallxy{
+			& & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[d] & & \sbt \hen[d] \\
+			\sbt & \sbt & & \sbt \\
+		} &+& \smallxy{
+			& & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[d] & & \sbt \hen[d] \hen[dr] \\
+			\sbt & \sbt & & \sbt & \sbt \\
+		} \\
+		\smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt \\
+		} &\mapsto& \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt \hen[dl] \\
+			& & \sbt \\
+		} &+& \smallxy{
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt \hen[dl] \hen[dr] \\
+			& & \sbt & & \sbt \\
+		} \\
+	\end{array}\end{equation*}
+	成長$\bra{1}g^n\mapsto\bra{1}g^{n+1}$を平面二分木の言葉で書くと次のように
+	なるだろう。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 行きがけ順で最後の葉$p$を見つける。
+		\item $p$に左の子供を付け足す。
+		\item 行きがけ順で$p$の後ろの頂点に右の子供を付け足す。
+	\end{itemize} %}
+	次のように対応する。
+	\begin{equation*}\begin{array}{rcccccccc}
+		\bra{1}(b\eta)(bc)b\eta(\eta^\flat c)^*
+		&=& \bra{1}(b\eta)(bc)(b\eta) &+& \bra{1}(b\eta)(bc)(bc)
+		&+& \bra{1}(b)(bc)(bc^2) \\
+		\smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \\
+		} &\mapsto& \smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \\
+			& \sbt
+		} &+& \smallxy{
+			& & \sbt \hen[dl] \\
+			& \sbt \hen[dl] \hen[dr] \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt
+		} &+& \smallxy{
+			& & \sbt \hen[dl] \hen[dr] \\
+			& \sbt \hen[dl] \hen[dr] & & \sbt \\
+			\sbt & & \sbt \hen[dl] \hen[dr] \\
+			& \sbt & & \sbt
+		} \\
+	\end{array}\end{equation*}
+%s1:木の成長とDyck経路の成長}
+%
+}\endgroup %}

@@ -1,4 +1,5 @@
 \begingroup %{
+\newcommand{\J}{\mycal{J}}
 \newcommand{\W}{\mycal{W}}
 \newcommand{\T}{\mycal{T}}
 \newcommand{\Pow}{\mycal{P}}
@@ -9,6 +10,7 @@
 \newcommand{\Aut}{\myop{Aut}}
 \newcommand{\Mat}{\myop{Mat}}
 \newcommand{\Hom}{\myop{Hom}}
+\newcommand{\Eta}{\mycal{H}}
 %
 \newcommand{\id}{\myop{id}}
 \newcommand{\tran}{\mathbf{t}}
@@ -24,17 +26,12 @@
 \newcommand{\ad}{\myop{ad}}
 \newcommand{\Ad}{\myop{Ad}}
 %
-\newcommand{\lr}[1]{\left({#1}\right)}
-\newcommand{\glr}[1]{\bigl({#1}\bigr)}
-\newcommand{\gglr}[1]{\Bigl({#1}\Bigr)}
-\newcommand{\ggglr}[1]{\biggl({#1}\biggr)}
-\newcommand{\gggglr}[1]{\Biggl({#1}\Biggr)}
-%
 \newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
 %
 {\setlength\arraycolsep{2pt}
 %
 \section{q-計算}\label{s1:q-計算} %{
+\subsection{q-二項係数}\label{s2:q-二項係数} %{
 	\begin{proposition}[Schutzenbergerの公式]
 	\label{prop:Schutzenbergerの公式} %{
 		$R$を可換環、$x,y$を$xy=qyx$となる$R$上の不定元とする。
@@ -53,7 +50,7 @@
 			(x+y)^{n+1} &= (x+y)(x+y)^n \\
 			&= \sum_{r=1}^{n+1} \qbinom{(n+1) - 1}{r - 1}_q y^rx^{(n+1) - r}
 				+ \sum_{r=0}^{n} \qbinom{(n+1) - 1}{r}_q (qy)^rx^{(n+1) - r} \\
-			&= \sum_{r=1}^n \lr{
+			&= \sum_{r=1}^n \plr{
 				\qbinom{(n+1) - 1}{r - 1}_q + q^r\qbinom{(n+1) - 1}{r}_q} 
 				y^rx^{(n+1) - r} + y^{n+1} + x^{n+1} \\
 		\end{split}\end{equation*}
@@ -69,6 +66,454 @@
 			&= \sum_{r=0}^{n+1} \qbinom{n+1}{r}_q y^rx^{(n+1)-r}
 		\end{split}\end{equation*}
 	\end{proof} %}
+
+	\begin{proposition}[Schutzenbergerの公式その二]
+	\label{prop:Schutzenbergerの公式その二} %{
+		$x$と$N$を$xN=\plr{N+1}x$という交換関係を満たし、
+		$x^0=1$とする。このとき、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{x\otimes1 + q^N\otimes x}^n = \sum_{k=0}^n\qbinom{n}{k}_q
+			q^{kN}x^{n-k}\otimes x^k
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Schutzenbergerの公式その二}
+	\begin{proof} %{
+		べきについて帰納法を使う。$n=0$のときに命題は成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{x\otimes1 + q^N\otimes x}^0 = 1\otimes1
+			= \sum_{k=0}^0\qbinom{0}{k}_q q^{kN}x^{n-k}\otimes x^k
+		\end{split}\end{equation*}
+		ある$n\in\sizen$で命題が成り立つとすると、$n+1$でも次の式が成り立ち、
+		$n+1$でも命題が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			&\plr{x\otimes1 + q^N\otimes x}^{n+1} \\
+			&= \plr{x\otimes1 + q^N\otimes x}
+				\sum_{k=0}^n \qbinom{n}{k}_q q^{kN}x^{n-k}\otimes x^k \\
+			&= x^{n+1}\otimes1 + q^{\plr{n+1}N}\otimes x^{n+1} 
+				+ \sum_{k=1}^n \plr{\qbinom{n}{k-1}_q + q^k\qbinom{n}{k}}
+				q^{kN}x^{n+1-k}\otimes x^k \\
+			&= \sum_{k=0}^{n+1} \qbinom{n+1}{k}_q q^{kN}x^{n+1-k}\otimes x^k
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	この命題から次の式が導かれる。
+	\begin{equation*}\begin{split}
+		\plr{x\otimes1 + q^N\otimes x}_q^* = \plr{q^N\otimes x}_q^*
+			\plr{x\otimes1}_q^*
+	\end{split}\end{equation*}
+%s2:q-二項係数}
+\subsection{q-Kleeneスター}\label{s2:q-Kleeneスター} %{
+	この節では、係数を複素数とし、$0\le|q|<1$とする。
+
+	$\plr{x}_q^*$を次のように定義しq-Kleeneスターということにする。
+	通常はq-エクスポーネンシャルというが、$q=0$でKleeneスターになるので、
+	ここではq-Kleeneスターということにする。
+	\begin{equation*}\begin{split}
+		\plr{x}_q^* := \sum_{n\in\sizen}\frac{x^n}{[n]_q!}
+	\end{split}\end{equation*}
+	q-Kleeneスターはq-微分の固有値$1$を持つ。
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{x}_q^* &= \frac{\plr{x}_q^* - \plr{qx}_q^*}{x - qx}
+		= \sum_{n\in\sizen}\frac{1}{[n]_q!}\frac{x^n - \plr{qx}^n}{x - qx}
+		= \sum_{n\in\sizen}\frac{1}{[n]_q!}\frac{\plr{1 - q^n}x^n}{\plr{1 - q}x} \\
+		&= 1 + \sum_{n\in\sizen}\frac{1}{[n+1]_q!}[n+1]_qx^n = \plr{x}_q^*
+	\end{split}\end{equation*}
+	このことから、q-Kleeneスターの（無限）積表示が得られる。
+	\begin{equation*}\begin{split}
+		\plr{x}_q^* &= \plr{qx}_q^* + \plr{1 - q}x\plr{x}_q^* 
+		= \frac{1}{1 - \plr{1 - q}x}\plr{qx}_q^* \\
+		&= \frac{1}{\plr{1 - \plr{1 - q}x}\plr{1 - \plr{1 - q}qx}}\plr{q^2x}_q^*
+		= \cdots \\
+		&= \plr{\prod_{k=0}^n\frac{1}{1 - \plr{1 - q}q^kx}}\plr{q^{n+1}x}_q^* \\
+	\end{split}\end{equation*}
+	q-Kleeneスターの積表示から次の点がその極になっていることがわかる。
+	\begin{equation*}\begin{split}
+		\plr{x}_q^* \text{ has poles }
+		\frac{1}{\plr{1 - q}q^n} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	したがって、q-Kleeneスターを無限積で書くことができて、
+	\begin{equation}\label{eq:q-Kleeneスターの積分表示}\begin{split}
+		\plr{x}_q^* = \prod_{n\in\sizen} \frac{1}{1 - \plr{1 - q}q^nx}
+	\end{split}\end{equation}
+	$n=0$の極$1/\plr{1-q}$が最も原点に近い極になることがわかる。
+
+	q-Kleeneスターの逆数を求める。$q=0,1$の場合はよく使う式となる。
+	\begin{equation*}\begin{split}
+		\frac{1}{\plr{x}_0^*} = \frac{1}{\frac{1}{1 - x}} = 1 - x
+		,\quad \frac{1}{\plr{x}_1^*} = \frac{1}{\plr{\exp|x}} = \plr{\exp|-x}
+	\end{split}\end{equation*}
+	紙面の節約のために、$\plr{x}^{-*}:=\plr{x}_q^*$と書くことにする。
+	q-Kleeneスターの積分表示\eqref{eq:q-Kleeneスターの積分表示}を使うと、
+	\begin{equation*}\begin{split}
+		x^{-*} = \prod_{n\in\sizen} \gplr{1 - \plr{1 - q}q^nx}
+		= \sum_{n\in\sizen} c_n\gplr{-\plr{1 - q}x}^n \quad\text{where} \\
+		c_0  := 1,\quad c_n := \sum_{0\le k_1<\cdots<k_n} q^{k_1 +\cdots+	k_n} 
+			\quad\text{for all } n\in\sizen_+
+	\end{split}\end{equation*}
+	係数$c_n$を求めるために、$c_{n,r}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		c_{0,r} = 1,\quad
+		c_{n,r} = \sum_{r\le k_1<\cdots<k_n} q^{k_1 +\cdots+	k_n}
+	\end{split}\end{equation*}
+	$c_n=c_{n,0}$となり、次の漸化式を満たす。
+	\begin{equation*}\begin{split}
+		c_{n+1,r} = \sum_{s=r}^\infty q^sc_{n,s+1}
+	\end{split}\end{equation*}
+	$n=1,2,3$で計算してみると次のようになるから、
+	\begin{equation*}\begin{split}
+		c_{1,r} = \frac{q^r}{1 - q}
+		,\quad c_{2,r} = \frac{q^{2r + 1}}{\plr{1 - q}\plr{1 - q^2}}
+		,\quad c_{3,r} = \frac{q^{3r + 3}}{\plr{1 - q}\plr{1 - q^2}\plr{1 - q^3}}
+	\end{split}\end{equation*}
+	次のようになると仮定すると、
+	\begin{equation*}\begin{split}
+		c_{n,r} = \frac{q^{nr + a_n}}{\plr{1 - q}\cdots\plr{1 - q^n}}
+	\end{split}\end{equation*}
+	次の式から、
+	\begin{equation*}\begin{split}
+		c_{n+1,r} &= \sum{s=r}^n \frac{q^{n(s+1) + a_n + s}}
+			{\plr{1 - q}\cdots\plr{1 - q^n}} \\
+		&= \frac{q^{n + a_n}}{\plr{1 - q}\cdots\plr{1 - q^n}}
+			\sum_{s=r}^\infty q^{\plr{n+1}s} \\
+		&= \frac{q^{n + a_n + \plr{n+1}r}}{\plr{1 - q}\cdots\plr{1 - q^{n+1}}}
+	\end{split}\end{equation*}
+	$a_n=\sum_{k=0}^{n-1}k=n\plr{n-1}/2$となることがわかる。したがって、
+	$\plr{x}^{-*}$が次のように書けることがわかる。
+	\begin{equation*}\begin{split}
+		\plr{x}^{-*} = \sum_{n\in\sizen} q^{\binom{n}{2}}
+			\frac{\plr{-x}^n}{[n]_q!}
+	\end{split}\end{equation*}
+
+	q-Kleeneスターもq-二項係数と同様の式が成り立つ。不定元$x$と$y$が$xy=qyx$
+	という交換関係を持てば、次の式から$\plr{x+y}_q^*=\plr{x}_q^*\plr{y}_q^*$
+	となることがわかる。
+	\begin{equation*}\begin{split}
+		\plr{x+y}_q^* &= \sum_{n\in\sizen} \frac{\plr{x+y}^n}{[n]_q!}
+		= \sum_{n\in\sizen}\sum_{k=0}^n \qbinom{n}{k}_q\frac{x^ky^{n-k}}{[n]_q!}
+		= \sum_{n\in\sizen}\sum_{k=0}^n \frac{x^ky^{n-k}}{[k]_q![n-k]_q!} \\
+		&= \plr{x}_q^*\plr{y}_q^* \quad\text{when } xy = qyx
+	\end{split}\end{equation*}
+
+	q-Kleeneスターの通常の対数をとってみる。
+	q-Kleeneスターの積表示を使うと、次のようになるが、
+	\begin{equation*}\begin{split}
+		\ln\plr{x}_q^* = - \sum_{k=0}^n \ln\plr{1 - \plr{1 - q}q^kx} 
+			+ \ln\plr{q^{n+1}x}_q^*
+	\end{split}\end{equation*}
+	次の冪展開を使うと、
+	\begin{equation*}\begin{split}
+		\ln\plr{1 - x} = - \int_0^x \frac{1}{1 - y} dy
+		= - \int_0^x \sum_{n\in\sizen} y^n dy
+		= - \sum_{n\in\sizen_+} \frac{x^n}{n}
+	\end{split}\end{equation*}
+	次のようになり、
+	\begin{equation*}\begin{split}
+		- \sum_{k=0}^n \ln\plr{1 - \plr{1 - q}q^kx}
+		&= \sum_{k=0}^n\sum_{j\in\sizen_+} \frac{q^{kj}\plr{\plr{1 - q}x}^j}{j}
+		= \sum_{j\in\sizen_+} \frac{\plr{1 - q^{\plr{n + 1}j}}\plr{\plr{1 - q}x}^j}
+			{\plr{1 - q^j}j} \\
+		&= \sum_{j\in\sizen_+} \frac{[\plr{n + 1}j]_q\plr{\plr{1 - q}x}^j}{[j]_qj}
+	\end{split}\end{equation*}
+	次の式が得られ、
+	\begin{equation*}\begin{split}
+		\ln\plr{x}_q^* = \sum_{j=1}^\infty 
+			\frac{[\plr{n + 1}j]_q\plr{\plr{1 - q}x}^j}{[j]_qj}
+	\end{split}\end{equation*}
+	次の極限より、
+	\begin{equation*}\begin{split}
+		\lim_{n\to\infty}[\plr{n + 1}j]_q = \frac{1}{1 - q}
+	\end{split}\end{equation*}
+	q-Kleeneスターの対数は次の無限和で書かれることがわかる。
+	\begin{equation*}\begin{split}
+		\ln\plr{x}_q^* = \frac{1}{1 - q}
+		\sum_{j\in\sizen_+} \frac{\plr{\plr{1 - q}x}^j}{[j]_qj}
+	\end{split}\end{equation*}
+	この式から次の極限が得られる。
+	\begin{equation*}\begin{split}
+		\lim_{q\to1} \plr{1-q}\ln\plr{\frac{x}{1 - q}}_q^*
+		= \sum_{j\in\sizen_+} \frac{x^j}{j^2}
+	\end{split}\end{equation*}
+	この式の右辺はEulerの多重対数関数$\myop{Li}$の$s=2$の場合になっている。
+	\begin{equation*}\begin{split}
+		\plr{\myop{Li}_s|x} = \sum_{n\in\sizen_+} \frac{x^n}{n^s}
+	\end{split}\end{equation*}
+	この結果はFaddeevとKashaevが昔に見つけている\cite{Faddeev:1993rs}。
+%s2:q-Kleeneスター}
+\subsection{q-微分}\label{s2:q-微分} %{
+	q-微分を次のように定義する。
+	\begin{equation*}\begin{split}
+		\plr{D_qf|x} := \plr{\partial_x}_q\plr{f|x} 
+		:= \frac{\plr{f|x} - \plr{f|qx}}{x - qx}
+	\end{split}\end{equation*}
+	二変数以上では、微分する変数を明示しない$D_q$という書き方はできないが、
+	一変数の場合は、記述が簡潔になる。
+
+	関数の二つの積$m_\cdot$と$m_\circ$を次のように定義して、
+	\begin{equation*}\begin{split}
+		\plr{f\cdot g|x} := \plr{f|x}\plr{g|x}
+		,\quad \plr{f\circ g|x} := \gplr{f|\plr{g|x}}
+	\end{split}\end{equation*}
+	q-微分のLeibnitz則とチェイン則を求める。
+	Leibnitz則は、通常の微分の場合と同様に、次の式から、
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{f\cdot g|x} 
+		&= \frac{\plr{f|x}\plr{g|x} - \plr{f|qx}\plr{g|qx}}{x - qx} \\
+		&= \frac{\plr{f|x}\plr{g|x} - \plr{f|qx}\plr{g|x} 
+			+ \plr{f|qx}\plr{g|x} - \plr{f|qx}\plr{g|qx}}{x - qx}
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{f\cdot g|x} 
+		= \plr{D_qf|x}\plr{g|x} + \plr{f|qx}\plr{D_qg|x}
+	\end{split}\end{equation*}
+	q-微分のチェイン則は次の素晴らし式変形\cite{larsson2003}から、
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{f\circ g|x}
+		&= \frac{\plr{f\circ g|x} - \plr{f\circ g|qx}}{x - qx} \\
+		&= \frac{\gplr{f\circ g|x} - \gplr{f\circ\plr{h\cdot g}|x}}
+			{\plr{g|x} - \plr{h\cdot g|x}} 
+			\frac{\plr{g|x} - \plr{h\cdot g|x}}{x - qx} \\
+		&= \frac{\gplr{f\circ g|x} - \gplr{f\circ\plr{h\cdot g}|x}}
+			{\plr{g|x} - \plr{h\cdot g|x}} 
+			\frac{\plr{g|x} - \plr{g|qx}}{x - qx} \\
+		\plr{h|x} &:= \frac{\plr{g|qx}}{\plr{g|x}}
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{f|\plr{g|x}} = \plr{D_hf\circ g|x}\plr{D_qg|x}
+		\quad\text{where } \plr{h|x} := \frac{\plr{g|qx}}{\plr{g|x}}
+	\end{split}\end{equation*}
+
+	チェイン則は別の形で書くこともできる。線形射$\plr{\sigma_x}_q$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		\plr{\sigma_x}_q\plr{f|x} := \plr{S_qf|x} := \plr{f|qx}
+	\end{split}\end{equation*}
+	次の式から、
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{f\circ g|x}
+		&= \frac{\plr{f\circ g|x}-\plr{f\circ g|qx}}{x-qx} \\
+		&= \frac{\plr{f\circ g|x}-\plr{f\circ S_qg|x}}{\plr{g|x} - \plr{S_qg|x}} 
+			\frac{\plr{g|x} - \plr{S_qg|x}}{x - qx} \\
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{f\circ g|x} 
+		= \ggplr{\plr{D_{S_q}f|g}|x}\plr{D_qg|x}
+	\end{split}\end{equation*}
+%s2:q-微分}
+\subsection{q-積分}\label{s2:q-積分} %{
+	q-微分に対応する積分を作用素として次のように定義する。
+	\begin{equation*}\begin{split}
+		\plr{\J_x}_q x^n := \frac{x^{n+1}}{[n+1]_q} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この定義は$0$から$x$までの定積分$\int_0^x\plr{f|y}dy$に対応する。
+	任意の原点周りで正則な関数$f$に対しては次のようになる。
+	\begin{equation*}\begin{split}
+		\plr{\J_x}_q \plr{f|x} &= \sum_{n\in\sizen} f_n \plr{\J_x}_q x^n
+		= \sum_{n\in\sizen} \frac{f_n}{[n+1]_q} x^{n+1} \\
+		&= \plr{1 - q}x \sum_{n\in\sizen}\sum_{k=0}^n q^{k\plr{n+1}}
+			\frac{f_nx^n}{[n]_q}
+		= \plr{1 - q}x \sum_{n\in\sizen}\sum_{k=0}^n q^k\frac{f_n\plr{q^kx}^n}{[n]_q} \\
+		&= \plr{1 - q}x \sum_{k=0}^n q^k\plr{f|qx}
+	\end{split}\end{equation*}
+	この定義を任意の関数に拡張して作用素$J_q$と$\plr{\J_x}_q$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\plr{J_qf|x} := \plr{\J_x}_q \plr{f|x} 
+		:= \plr{1 - q}x \sum_{k=0}^n q^k\plr{f|q^kx}
+	\end{split}\end{equation*}
+	この作用素をJackson積分という。ここではJackson積分のことをq-積分ということ
+	にする。また、定積分に相当する作用素を次のように定義しておく。
+	\begin{equation*}\begin{split}
+		\int_a^bd_qx := \plr{\lim_{x\to a}\plr{\J_x}_q}
+			- \plr{\lim_{x\to b}\plr{\J_x}_q}
+	\end{split}\end{equation*}
+
+	q-微分とq-積分は次の交換関係を満たす。
+	\begin{equation*}\begin{split}
+		\plr{\partial_x}_q\plr{\J_x}_q = \id
+		,\quad \plr{\J_x}_q\plr{\partial_x}_q = \id - 0^{N_x}
+	\end{split}\end{equation*}
+	二つ目の交換関係の右から積$m_0$を作用させてq-微分のLeibnitz則を使うと、
+	次の部分積分に相当する式が得られる。
+	\begin{equation*}\begin{split}
+		\plr{\J_x}_qm_0\plr{\plr{\partial_x}_q\otimes\id 
+			+ q^{N_x}\otimes\plr{\partial_x}_q} = \plr{\id - 0^{N_x}}m_0
+	\end{split}\end{equation*}
+	この式の右から$\J\otimes\J$を作用させると、
+	$\plr{\id-0^N}\plr{\J\otimes\J}=\J\otimes\J$だから、次の式が得られる。
+	\begin{equation}\label{eq:q-積分と乗法の交換関係その二}\begin{split}
+		\plr{\J_x}_qm_0\plr{\id\otimes\plr{\J_x}_q + q^{N_x}\plr{\J_x}_q\otimes\id}
+		= m_0\plr{\plr{\J_x}_q\otimes\plr{\J_x}_q}
+	\end{split}\end{equation}
+	この式は次の一変数シャッフル積の定義と対称的になっている。
+	\begin{equation*}\begin{split}
+		\gplr{x}_0m_q\plr{\plr{x}_0\otimes\id + q^{N_x}\plr{x}_0\otimes\id}
+		= m_q\gplr{\plr{x}_0\otimes\plr{x}_0} 
+	\end{split}\end{equation*}
+	このことは次の式が成り立つことの要因になっていると思う。
+	\begin{equation*}\begin{split}
+		\gplr{\plr{x}_0}_q^*1 = \gplr{\plr{\J_x}_q}_0^*1
+	\end{split}\end{equation*}
+
+	\begin{note}[Rota-Baxter作用素]\label{note:Rota-Baxter作用素} %{
+		部分積分の式\eqref{eq:q-積分と乗法の交換関係その二}から、
+		q-積分がRota-Baxter作用素になっていると思っていたが、
+		$q=1$のq-積分が重み$0$のRota-Baxter作用素になる以外は、一般のqでは
+		q-積分はRota-Baxter作用素にならないようだ。積$m$を持つ代数での
+		重み$\lambda$のRota-Baxter作用素$P$は次のように定義される\cite{guo2011}。
+		\begin{equation*}\begin{split}
+			m\plr{P\otimes P} = Pm\plr{\id\otimes P + P\otimes\id} + \lambda Pm
+		\end{split}\end{equation*}
+	\end{note} %note:Rota-Baxter作用素}
+%s2:q-積分}
+\subsection{q-ガンマ関数}\label{s2:q-ガンマ関数} %{
+	通常のガンマ関数$\Gamma$は次の積分表示を持つことから、
+	\begin{equation*}\begin{split}
+		\plr{\Gamma|t} = \int_0^\infty \frac{dx}{x}x^te^{-x}
+	\end{split}\end{equation*}
+	任意の自然数$n\in\sizen$に対して$\plr{\Gamma|n+1}=n!$となることがわかる。
+	$\plr{\Gamma_q|n+1}=[n]_q!$となるq-類似を考える。
+	通常のガンマ関数の積分表示をそのまま移行して次の積分を考えてみる。
+	\begin{equation*}\begin{split}
+		\int_0^{\frac{1}{1-q}} \frac{dx}{x}\frac{x^t}{\plr{x}_q^{*}}
+	\end{split}\end{equation*}
+	次の式を使って、
+	\begin{equation*}\begin{split}
+		&\plr{\partial_x}_q\plr{x}^{-*} = - \plr{qx}^{-*} \\
+		&\because\; 0 = \plr{\partial_x}_q\plr{\plr{x}_q^*\plr{x}_q^{-*}}
+		= \plr{\plr{\partial_x}_q\plr{x}_q^*}\plr{x}_q^{-*}
+		+ \plr{x}_q^*\plr{\plr{\partial_x}_q\plr{x}_q^{-*}}
+	\end{split}\end{equation*}
+	部分積分に持ち込むと、次のようになって、それらしい形になる。
+	\begin{equation*}\begin{split}
+		\int_0^{\frac{1}{1-q}} x^t\plr{x}_q^{-*} d_qx
+		&= - \int_0^{\frac{1}{1-q}} 
+			x^t\plr{\plr{\partial_x}_q\plr{\frac{x}{q}}_q^{-*}} d_qx \\
+		&= - \left[x^t\plr{\frac{x}{q}}_q^{-*}\right]_0^{\frac{1}{1-q}}
+			+ \int_0^{\frac{1}{1-q}}
+			\plr{\plr{\partial_x}_qx^t}\plr{x}_q^{-*} d_qx \\
+		&= - \plr{\frac{q}{1 - q}}^t\plr{\frac{1}{q\plr{1 - q}}}_q^{-*}
+			+  \jump{t\neq 0}[t]_q\int_0^{\frac{1}{1-q}}
+			x^{t - 1}\plr{x}_q^{-*} d_qx \\
+	\end{split}\end{equation*}
+	したがって、$\Gamma_q$を次のように定義すると、
+	\begin{equation}\label{eq:q-ガンマ関数の定義}\begin{split}
+		\plr{\Gamma_q|t} := \int_0^{\frac{1}{1 - q}} x^t\plr{qx}_q^{-*}
+			\frac{d_qx}{x}
+	\end{split}\end{equation}
+	上記の計算と同様の計算で、この場合は、$\plr{1/\plr{1-q}}_q^{-*}=0$より、
+	部分積分の表面項が消えて、次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\plr{\Gamma_q|n+1}=[n]_q\plr{\Gamma_q|n} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+%s2:q-ガンマ関数}
 %s1:q-計算}
+\section{q-Brzozowski代数}\label{s1:q-Brzozowski代数} %{
+	方針
+	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+		\item Brzozowski代数を定義する。
+		\item Fock空間が既約なことを示す。\\
+		既約性の判定方法が必要になる。
+		\item Fock空間が自由モノイドのモノイド環と同型なことを示す。
+		\item Fock空間上に自己線形射としてq-シャッフル積を定義する。
+		\item q-シャッフル積を用いてq-Brzozowski代数を定義する。
+	\end{enumerate} %}
+	\begin{definition}[Brzozowski代数]\label{def:Brzozowski代数} %{
+		$R$を可換環とする。$2n+1$の不定元によって生成される$R$上の多項式環
+		$R\braket{\eta_{\pm1},\dots,\eta_{\pm n},\nu}$を次の関係で商をとった
+		代数を、$R$上の$n$階のBrzozowski代数といい、$\Eta\plr{R,n}$と書き、
+		\begin{alignat*}{2}
+			\eta_i\eta_{-j} &= \jump{i=j} &\quad&\text{ for all } i,j\in1..n \\
+			\eta_i\nu &= \plr{\nu + 1}\eta_i &\quad&\text{ for all } i\in1..n \\
+			\nu\eta_{-i} &= \eta_{-i}\plr{\nu + 1} 
+				&\quad&\text{ for all } i\in1..n
+		\end{alignat*}
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\eta_i\;(i\in1..n)$のことを消滅演算子、
+			\item $\eta_{-i}\;(i\in1..n)$のことを生成演算子、
+			\item $\nu$のことを数演算子
+		\end{itemize} %}
+		ということにする。
+	\end{definition} %def:Brzozowski代数}
+
+	可換環$R$上のBrzozowski代数について次の便宜を用いる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		%
+		\item[生成系] $R\Eta_n$の消滅演算子のつくる集合を$\Eta_{n+}$、
+		生成演算子のつくる集合を$\Eta_{n-}$と書くことにする。
+		\begin{equation*}\begin{split}
+			\Eta_{n+} := \set{\eta_1,\dots,\eta_n}
+			,\quad \Eta_{n-} := \set{\eta_{-1},\dots,\eta_{-n}}
+		\end{split}\end{equation*}
+		$\Eta_{n+}^*$と$\Eta_{n-}^*$はそれぞれ自由モノイドとなり、
+		モノイド$\set{w_1^\flat w_2\bou w_1,w_2\in\Eta_{n+}^*}$は
+		$R\Eta_n$の基底系となる。
+		%
+		\item[共役] 線形射$-^\flat:R\Eta_n\to R\Eta_n$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\eta_i1 &:= 1 \\
+			\plr{\eta_{i_1}\cdots\eta_{i_k}}^\flat &:= \eta_{-i_n}\cdots\eta_{-i_1}
+			\quad\text{for all } i_1,\dots,i_k\in\set{\pm1,\dots,\pm n}
+		\end{split}\end{equation*}
+		$-^\flat$はHermite共役に似た性質を持つ。
+		\begin{alignat*}{2}
+			(w^\flat)^\flat &= w &\quad&\text{for all } w\in \Eta_{n+}^* \\
+			ww^\flat &= 1 &\quad&\text{for all } w\in\Eta_{n+}^*
+		\end{alignat*}
+		また、$-^\flat$は逆順モノイド射$\Eta_{n+}^*\xtofrom{}{}\Eta_{n-}^*$
+		としてみることもできる。
+	\end{description} %}
+	また、Brzozowski代数の定義には$0$と$1$しか必要ないので、$V$を可換とは
+	限らない任意の環、$C$をその中心とすると、$C$上のテンソル積
+	$V\Eta_n:=V\otimes_CC\Eta_n$を考えることができる。
+	このとき、テンソル積の記号$\otimes_C$を省略して、$V\Eta_n$の元を
+	次のように書くことにする。
+	\begin{equation*}\begin{split}
+		\sum_{w_1,w_2\in\Eta_{n+}^*} v_{w_1,w_2} w_1^\flat w_2
+		\quad\text{where } v_{w_1,w_2}\in V 
+		\quad\text{for all } w_1,w_2\in\Eta_{n+}^*
+	\end{split}\end{equation*}
+
+	\begin{todo}[Brzozowski代数の既約表現]
+	\label{todo:Brzozowski代数の既約表現} %{
+		Brzozowski代数の定義に数演算子を込めたのは、既約表現を制限するため
+		である。$\pi_+:=\sum_{\xi\in\Eta_{n+}}\xi^\flat\xi$と定義すると、
+		$\pi_+$はべき等$\pi_+^2=\pi_+$となり、$\pi_+$の固有値は$0$と$1$だけに
+		なる。したがって、Brzozowski代数の表現$\rho$は$\pi_+$の固有値によって、
+		次の場合に分類される。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\pi_+$の固有値が$0$だけ \\
+			この場合は自明な表現となる。
+			\item $\pi_+$の固有値が$1$だけ \\
+			表現空間が有限次元の場合は、$\Eta_{n+}$の元は正則行列に写像され、
+			$\flat$-共役は逆行列をとること$\rho\eta_i^\flat=\plr{\rho\eta_i}^{-1}$
+			になる。
+			\item $\pi_+$の固有値が$0$と$1$の両方 \\
+			この場合は表現空間は無限次元になり、多分、それは$\Eta_{n-}$から
+			生成される自由モノイド環と同型になる。
+		\end{itemize} %}
+		さらに、数演算子$\nu$との交換関係を考慮に入れると、$\pi_+$の固有値が$1$
+		だけの表現は許されないのではなかろうか？
+	\end{todo} %todo:Brzozowski代数の既約表現}
+%s1:q-Brzozowski代数}
+\section{q-シャッフル積}\label{s1:q-シャッフル積} %{
+	次の式から、
+	\begin{equation*}\begin{split}
+		\plr{a}_q\plr{b}_q\ket{w} 
+		&= m_q\plr{\id\otimes m_q}\ket{a}\otimes\ket{b}\otimes\ket{w} \\
+		&= m_q\plr{m_q\otimes\id}\ket{a}\otimes\ket{b}\otimes\ket{w} \\
+		&= \gplr{\plr{ab}_q + q\plr{ba}_q}\ket{w}
+		\quad\text{for all } a,b\in A,\; w\in A^*
+	\end{split}\end{equation*}
+	次の交換関係が得られる。
+	\begin{equation*}\begin{split}
+		\plr{a}_q\plr{b}_q &= \plr{ab}_q + q\plr{ba}_q
+		= \plr{ab}_q + q\gplr{\plr{b}_q\plr{a}_q - q{ab}_q} \\
+		&= \plr{1 - q^2}\plr{ab}_q + q\plr{b}_q\plr{a}_q
+		\quad\text{for all } a,b\in A
+	\end{split}\end{equation*}
+	$q=\pm1$の時に交換関係は特別に簡単になる。
+%s1:q-シャッフル積}
 %
 }\endgroup %}

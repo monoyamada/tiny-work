@@ -58,6 +58,8 @@
 \else
   \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}%"
 \fi
+\usepackage{sty/myarrow}
+\usepackage{sty/mybraket}
 %}
 %theorem
 %
@@ -163,8 +165,6 @@
 \newcommand{\fukuso}{\ensuremath{\mathbf{C}}}
 \newcommand{\bun}{\ensuremath{\mathbf{Q}}}
 %
-\newcommand{\xto}[2][]{\ensuremath{\xrightarrow[{#1}]{#2}}}
-\newcommand{\xfrom}[2][]{\ensuremath{\xleftarrow[{#1}]{#2}}}
 \newcommand{\xsimeq}[2][]{\ensuremath{\overset{#2}{\underset{#1}{\simeq}}}}
 \newcommand{\udset}[3]{\ensuremath{\overset{#1}{\underset{#2}{#3}}}}
 %
@@ -173,83 +173,6 @@
 \def\widebar{\accentset{{\cc@style\underline{\mskip10mu}}}}
 \makeatother
 \renewcommand{\bar}[1]{\widebar{#1}}
-%
-%arrows
-%The“number”0395 after \ext@arrow defines the position
-%relative to the extended error and is not a number but four parameters
-%for additional space in the math unit mu. mu is defined as the followings:
-%1st digit: space left
-%2nd digit: space right
-%3rd digit: space left and right
-%4th digit: space relativ to the tip of the “arrow”
-%
-\makeatletter
-%
-\def\eqtofill@{%
-	\arrowfill@\Relbar\Relbar\Rightarrow%
-}
-\newcommand*\eqto[2][]{%
-	\ext@arrow 0395\eqtofill@{#1}{#2}%
-}
-%
-\def\eqfromfill@{%
-	\arrowfill@\Leftarrow\Relbar\Relbar%
-}
-\newcommand*\eqfrom[2][]{%
-	\ext@arrow 0395\eqfromfill@{#1}{#2}%
-}
-%
-\def\xtotofill@{%
-	\arrowfill@\relbar\relbar\twoheadrightarrow%
-}
-\newcommand*\xtoto[2][]{%
-	\ext@arrow 0395\xtotofill@{#1}{#2}%
-}
-%
-\def\xfromfromfill@{%
-	\arrowfill@\twoheadleftarrow\relbar\relbar%
-}
-\newcommand*\xfromfrom[2][]{%
-	\ext@arrow 0395\xfromfromfill@{#1}{#2}%
-}
-%
-\def\xmapstofill@{%
-	\arrowfill@{\mapstochar\relbar}\relbar\rightarrow%
-}
-\newcommand*\xmapsto[2][]{%
-	\ext@arrow 0395\xmapstofill@{#1}{#2}%
-}
-\def\xmapsfromfill@{%
-	\arrowfill@\leftarrow\relbar{\relbar\mapstochar}%
-}
-\newcommand*\xmapsfrom[2][]{%
-	\ext@arrow 0395\xmapsfromfill@{#1}{#2}%
-}
-\def\xMapstofill@{%
-	\arrowfill@{\mapstochar\Relbar}\Relbar\Rightarrow%
-}
-\newcommand*\xMapsto[2][]{%
-	\ext@arrow 0395\xMapstofill@{#1}{#2}%
-}
-\def\xMapsfromfill@{%
-	\arrowfill@\Leftarrow\Relbar{\Relbar\mapstochar}%
-}
-\newcommand*\xMapsfrom[2][]{%
-	\ext@arrow 0395\xMapsfromfill@{#1}{#2}%
-}
-\newcommand{\xRightarrow}[2][]{%
-\ext@arrow 0395{\Rightarrowfill@}{#1}{#2}%
-}
-\def\Rightarrowfill@{\arrowfill@\Relbar\Relbar\Rightarrow}
-\newcommand{\xLeftarrow}[2][]{%
-\ext@arrow 0395{\Leftarrowfill@}{#1}{#2}%
-}
-\def\Leftarrowfill@{\arrowfill@\Leftarrow\Relbar\Relbar}
-\newcommand{\xLongleftrightarrow}[2][]{%
-\ext@arrow 0395{\llrafill@}{#1}{#2}%
-}
-\def\llrafill@{\arrowfill@\Leftarrow\Relbar\Rightarrow}
-\makeatother
 %
 \newcommand{\migi}[1]{\xrightarrow{#1}{}}
 \newcommand{\hidari}[1]{\xleftarrow{#1}{}}
