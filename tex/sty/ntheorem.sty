@@ -66,11 +66,11 @@
   \if@newlist \@noitemerr\fi
   \ifhmode
 		% shirak for japanese {
-    %\ifdim\lastskip >\z@ #1\unskip \par  %<<<<<<<<<<<<<<<<<<<<<<
-    %      \else \unskip \par \fi
+    \ifdim\lastskip >\z@ #1\unskip \par  %<<<<<<<<<<<<<<<<<<<<<<
+          \else \unskip \par \fi
 		% }{
-    \ifdim\lastskip <\z@ \else #1 \fi  %<<<<<<<<<<<<<<<<<<<<<<
-		\unskip \par
+    %\ifdim\lastskip <\z@ \else #1 \fi  %<<<<<<<<<<<<<<<<<<<<<<
+		%\unskip \par
 		% }
   \fi
   \if@noparlist \else

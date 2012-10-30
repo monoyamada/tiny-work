@@ -141,10 +141,10 @@
 		\frac{1}{\plr{x}_0^*} = \frac{1}{\frac{1}{1 - x}} = 1 - x
 		,\quad \frac{1}{\plr{x}_1^*} = \frac{1}{\plr{\exp|x}} = \plr{\exp|-x}
 	\end{split}\end{equation*}
-	紙面の節約のために、$\plr{x}^{-*}:=\plr{x}_q^*$と書くことにする。
+	紙面の節約のために、$\plr{x}_q^{-*}:=\plr{x}_q^*$と書くことにする。
 	q-Kleeneスターの積分表示\eqref{eq:q-Kleeneスターの積分表示}を使うと、
 	\begin{equation*}\begin{split}
-		x^{-*} = \prod_{n\in\sizen} \gplr{1 - \plr{1 - q}q^nx}
+		(x)_q^{-*} = \prod_{n\in\sizen} \gplr{1 - \plr{1 - q}q^nx}
 		= \sum_{n\in\sizen} c_n\gplr{-\plr{1 - q}x}^n \quad\text{where} \\
 		c_0  := 1,\quad c_n := \sum_{0\le k_1<\cdots<k_n} q^{k_1 +\cdots+	k_n} 
 			\quad\text{for all } n\in\sizen_+
@@ -171,15 +171,15 @@
 	次の式から、
 	\begin{equation*}\begin{split}
 		c_{n+1,r} &= \sum{s=r}^n \frac{q^{n(s+1) + a_n + s}}
-			{\plr{1 - q}\cdots\plr{1 - q^n}} \\
-		&= \frac{q^{n + a_n}}{\plr{1 - q}\cdots\plr{1 - q^n}}
+			{\plr{1 - q}\cdots\plr{1 - q^n}}
+		= \frac{q^{n + a_n}}{\plr{1 - q}\cdots\plr{1 - q^n}}
 			\sum_{s=r}^\infty q^{\plr{n+1}s} \\
 		&= \frac{q^{n + a_n + \plr{n+1}r}}{\plr{1 - q}\cdots\plr{1 - q^{n+1}}}
 	\end{split}\end{equation*}
 	$a_n=\sum_{k=0}^{n-1}k=n\plr{n-1}/2$となることがわかる。したがって、
-	$\plr{x}^{-*}$が次のように書けることがわかる。
+	$\plr{x}_q^{-*}$が次のように書けることがわかる。
 	\begin{equation*}\begin{split}
-		\plr{x}^{-*} = \sum_{n\in\sizen} q^{\binom{n}{2}}
+		\plr{x}_q^{-*} = \sum_{n\in\sizen} q^{\binom{n}{2}}
 			\frac{\plr{-x}^n}{[n]_q!}
 	\end{split}\end{equation*}
 
@@ -380,7 +380,7 @@
 	\end{split}\end{equation*}
 	次の式を使って、
 	\begin{equation*}\begin{split}
-		&\plr{\partial_x}_q\plr{x}^{-*} = - \plr{qx}^{-*} \\
+		&\plr{\partial_x}_q\plr{x}_q^{-*} = - \plr{qx}_q^{-*} \\
 		&\because\; 0 = \plr{\partial_x}_q\plr{\plr{x}_q^*\plr{x}_q^{-*}}
 		= \plr{\plr{\partial_x}_q\plr{x}_q^*}\plr{x}_q^{-*}
 		+ \plr{x}_q^*\plr{\plr{\partial_x}_q\plr{x}_q^{-*}}

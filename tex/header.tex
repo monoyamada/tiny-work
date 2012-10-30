@@ -47,6 +47,7 @@
 \usepackage[dvipdfm,dvips]{color}
 \usepackage[dvipdfm,dvips]{graphicx}
 \usepackage[dvipdfm %
+  , hypertex %
   , colorlinks=true %
   , bookmarks=true %
   , bookmarksnumbered=false %
@@ -93,10 +94,11 @@
 %\newshadetheorem{todo}{課題}[section]
 %\newshadetheorem{note}{ノート}[section]
 %\newshadetheorem{procedure}{手順}[section]
-\usepackage[amsmath,thmmarks,hyperref]{sty/ntheorem}
+%\usepackage[amsmath,thmmarks,hyperref]{sty/ntheorem}
+\usepackage[amsmath,hyperref]{sty/ntheorem}
 %\theoremstyle{changebreak}
-\theoremsymbol{\textparagraph}
-%\theoremsymbol{\ensuremath{\textparagraph}}
+%\theoremsymbol{\textparagraph}
+%\theoremsymbol{\ensuremaah{\textparagraph}}
 \newtheorem{theorem}{定理}[section]
 \newtheorem{definition}{定義}[section]
 \newtheorem{proposition}{命題}[section]
@@ -116,7 +118,7 @@
 %\newcommand{\mynorm}[1]{\left\lVert{#1}\right\rVert}
 \newcommand{\kakko}[1]{\left({#1}\right)}
 \newcommand{\bakko}[1]{\left[{#1}\right]}
-\newcommand{\bou}{\;\vert\;}
+\newcommand{\bou}{\,\vert\,}
 \newcommand{\myop}[1]{{\ensuremath{\operatorname{#1}}}}
 \newcommand{\mybf}[1]{{\ensuremath{\mathbf{#1}}}}
 \newcommand{\mycal}[1]{{\ensuremath{{\mathcal{#1}}}}}
