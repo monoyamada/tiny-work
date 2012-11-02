@@ -42,21 +42,106 @@
 \newcommand{\what}{\widehat}
 \newcommand{\rvec}[1]{\overrightarrow{#1}}
 \newcommand{\lvec}[1]{\overleftarrow{#1}}
+\newcommand{\Nhat}{\widehat{N}}
+\newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
 %
 {\setlength\arraycolsep{2pt}
 %
+\section{微分方程式とBrzozowski代数}\label{s1:微分方程式とBrzozowski代数} %{
+	この節では複素係数で考える。
+	根付き平面二分木の成長は次の微分方程式で書き表される。
+	\begin{equation*}\begin{split}
+		\plr{\partial_t}_q\plr{\phi|t} = \plr{\phi|t}^2
+	\end{split}\end{equation*}
+	これをBrzozowski代数に翻訳しよう。コヒーレント状態を使うと、
+	この微分方程式は次のように書ける。
+	\begin{equation*}\begin{split}
+		\braket{t:q|\eta_q|\phi} = \braket{t:q|\phi}^2 \quad\text{where }
+		\bra{t:q} := \bra{1}\plr{t\eta_q}_q^*
+	\end{split}\end{equation*}
+	この式を満たす$\ket{\phi}$を求めることになる。次の式変形により、
+	\begin{equation*}\begin{split}
+		\bra{t:q}\eta_q = \bra{1}\eta_q\plr{t\eta_q}_q^*
+		= \bra{1}\eta_0\plr{t\eta_q}_q^* = \bra{\eta}\plr{t\eta_q}_q^*
+		= \bra{1}\otimes\bra{\eta}m_0^\flat\plr{t\eta_q}_q^*
+	\end{split}\end{equation*}
+	次の交換関係を用いると、
+	\begin{equation*}\begin{split}
+		\eta_qm_0 &= m_0\plr{\eta_q\otimes1 + q^{\Nhat}\otimes\eta_q} \\
+		\eta_q^\flat m_0 &= m_0\plr{\eta_q^\flat\otimes1 
+			+ q^{\Nhat}\otimes\delta_q^\flat} \quad\text{where}\quad 
+			\delta_q := \eta_q - \eta_0
+	\end{split}\end{equation*}
+	$m_0^\flat$と$\plr{t\eta_q}_q^*$の交換関係は次のようになり、
+	\begin{equation*}\begin{split}
+		m_0^\flat\plr{t\eta_q}_q^*
+		&= \sum_{n\in\sizen}\frac{t^n}{[n]_q!}\plr{\eta_q\otimes1 
+			+ q^{\Nhat}\otimes\delta_q}^n m_0^\flat \\
+		&= \sum_{n\in\sizen}\frac{t^n}{[n]_q!}\sum_{k=0}^n\qbinom{n}{k}_q
+			\plr{\eta_q^{n-k}q^{k\Nhat}\otimes\delta_q^k}m_0^\flat \\
+		&= \plr{q^{\Nhat}\otimes t\delta_q}_q^*\ggplr{t\eta_q\otimes1}_q^*m_0^\flat
+	\end{split}\end{equation*}
+	コヒーレント状態の微分は次のようになることがわかる。
+	\begin{equation*}\begin{split}
+		\bra{t:q}\eta_q 
+		= \plr{\bra{t:q}\otimes\bra{\eta}\plr{t\delta_q}_q^*}m_0^\flat
+	\end{split}\end{equation*}
+	ここに現れた作用素$\delta_q$と$\eta_0^\flat$の交換関係は次のようになる。
+	\begin{equation*}\begin{split}
+		\delta_q\eta_0^\flat = q\eta_0^\flat\eta_q
+		\implies \plr{t\delta_q}_q^*\eta_0^\flat = \eta_0^\flat\plr{qt\eta_q}_q^*
+	\end{split}\end{equation*}
+	したがって、$m_0^\flat\ket{u:0} = \ket{u:0}\otimes\ket{u:0}$より、
+	\begin{equation*}\begin{split}
+		\bra{t:q}\eta_q\ket{u:0}
+		&= \plr{\bra{t:q}\otimes\bra{\eta}\plr{t\delta_q}_q^*}m_0^\flat
+			\ket{u:0} \\
+		&\simeq_\fukuso \braket{t:q|u:0}\otimes\braket{\eta|\plr{t\delta_q}_q^*|u:0}
+	\end{split}\end{equation*}
+	となるが、次の式から、
+	\begin{equation*}\begin{split}
+		\plr{t\delta_q}_q^*\ket{u:0} = \ket{1} 
+			+ \plr{t\delta_q}_q^*\plr{u\eta_0^\flat}\ket{u:0}
+		= \ket{1} + \plr{u\eta_0^\flat}\plr{qt\eta_q}_q^*\ket{u:0}
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		\bra{t:q}\eta_q\ket{u:0} = u\braket{t:q|u:0}\braket{qt:q|u:0}
+		\quad\text{for all } t,u\in\fukuso
+	\end{split}\end{equation*}
+
+	\begin{todo}[式の変形]\label{todo:式の変形} %{
+		定数$u$を関数に変更することが考えられる。少なくとも、$q=0$の時は、
+		$\plr{u\eta_0^\flat\plr{t\eta_0}_0^*}_0^*\ket{1}$という状態は意味が
+		ある。
+	\end{todo} %todo:式の変形}
+%s1:微分方程式とBrzozowski代数}
 \section{指数写像}\label{s1:指数写像} %{
-	与えられた$\plr{x|t}\in\fukuso_q[[t]]$に対して
+	与えられた$\plr{a|t}\in\fukuso_q[[t]]$に対して
 	\begin{equation*}\begin{split}
-		\plr{\partial_t}_q\plr{y|t} = \plr{x|t}\plr{y|t}
+		\plr{\partial_t}_q\plr{\phi|t} = \plr{a|t}\plr{\phi|t}
 	\end{split}\end{equation*}
-	となる$\plr{y|t}\in\fukuso_q[[t]]$を求めることを考える。
-	$\plr{x|t}=kx$の場合は、$\plr{y|t}=\plr{kx}_q^*\text{const.}$となるが、
-	$\plr{x|t}$が一般の関数の場合は、次のようになる。
+	となる$\plr{\phi|t}\in\fukuso_q[[t]]$を求めることを考える。
+	$\plr{a|t}=k\in\fukuso$の場合は、$\plr{\phi|t}\propto\plr{kt}_q^*$
+	となるが、$\plr{a|t}$が一般の関数の場合は、
+	$\plr{\phi|t}\propto\plr{\I_qa|t}$となる。
+	ここで、写像$\I_q:\fukuso_q[[t]]\to\fukuso_q[[t]]$は次のように定義する。
 	\begin{equation*}\begin{split}
-		\plr{y|t} \propto \plr{\I_qx|t} \quad\text{where}\quad 
-		\plr{\I_qx|t} := 1 + \int_0^t\plr{x|s}\plr{\I_qx|s}d_qs
+		\plr{\I_qf|t} := 1 + \int_0^t\plr{f|u}\plr{\I_qf|u}d_qu
+		\quad\text{for all } f\in\fukuso_q[[t]]
 	\end{split}\end{equation*}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	\begin{equation*}\begin{split}
+		\plr{\I_{q,0}f|t} &:= 1 \\
+		\plr{\I_{q,n}f|t} &:= \int_0^t\plr{f|u_1}\int_0^{u_1}\plr{f|u_2}\cdots
+			\int_0^{u_{n-1}}\plr{f|u_{n}}du_{n}\cdots du_2du_1
+			\quad\text{for all } n\in\sizen_+
+	\end{split}\end{equation*}
+	$\I_q=\sum_{n\in\sizen}\I_{q,n}$と書くことができる。
+
 	ここで定義した$\I_qx$は、$q=1$のときのみ、次の式が成り立つことから
 	（ノート\ref{note:積分計算その一}）、
 	\begin{equation}\label{eq:繰り返し積分その一}\begin{split}
