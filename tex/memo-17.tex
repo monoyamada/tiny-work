@@ -10,6 +10,7 @@
 \newcommand{\T}{\mycal{T}}
 \newcommand{\W}{\mycal{W}}
 \newcommand{\Z}{\mycal{Z}}
+\newcommand{\cat}[1]{\mybf{{#1}}}
 \newcommand{\Pow}{\mycal{P}}
 \newcommand{\End}{\myop{End}}
 \newcommand{\Map}{\myop{Map}}
@@ -19,6 +20,7 @@
 \newcommand{\Mat}{\myop{Mat}}
 \newcommand{\Etaom}{\myop{Hom}}
 \newcommand{\Eta}{\mycal{H}}
+\newcommand{\Weyl}[1]{\Eta\Braket{#1}}
 %
 \newcommand{\id}{\myop{id}}
 \newcommand{\tran}{\mathbf{t}}
@@ -42,50 +44,1069 @@
 \newcommand{\what}{\widehat}
 \newcommand{\rvec}[1]{\overrightarrow{#1}}
 \newcommand{\lvec}[1]{\overleftarrow{#1}}
-\newcommand{\Nhat}{\widehat{N}}
+\newcommand{\qhat}{{\widehat{q}}}
+\newcommand{\Nhat}{{\widehat{N}}}
+\newcommand{\Phat}{{\widehat{P}}}
 \newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
 %
 {\setlength\arraycolsep{2pt}
 %
+\section{Kempfのメモ}\label{s1:Kempfのメモ} %{
+	\cite{kempf:1994}のメモ
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item アンチポード$S_q$
+		\begin{equation*}\begin{split}
+			S_q\eta_q^n = q^{\binom{n}{2}}(-\eta_q)^n
+		\end{split}\end{equation*}
+		一般に、アンチポードの定義は次の式を満たす線形射$S$である
+		\cite{bk:jinbo.ryousigun}。
+		\begin{equation*}\begin{split}
+			m(S\otimes\id)\Delta = u\epsilon = m(\id\otimes S)\Delta
+		\end{split}\end{equation*}
+		\item q-スケーリング$q^\Nhat$
+		\begin{equation*}\begin{split}
+			q^\Nhat = 1 - (1 - q)\eta_q^\flat\eta_0
+			\implies \left\{\begin{split}
+				q^\Nhat\eta_q^\flat &= (q\eta_q^\flat)q^\Nhat \\
+				\eta_0q^\Nhat &= q^\Nhat(q\eta_0) \\
+			\end{split}\right.
+		\end{split}\end{equation*}
+		q-スケーリングを使うと積分作用素が次のように書ける。
+		\begin{equation*}\begin{split}
+			\int_0^t(f|s)d_qs &= (1-q)\sum_{n\in\sizen} (q^nt)(f|q^nt) \\
+			&= (1-q)\sum_{n\in\sizen}\bra{t:q}q^{n\Nhat}
+				\eta_q^\flat(f|\eta_q^\flat)\ket{1} \\
+			&= \bra{t:q}\frac{1-q}{1-q^\Nhat}\eta_q^\flat(f|\eta_q^\flat)\ket{1} \\
+			\implies & \frac{1-q}{1-q^\Nhat}\eta_q^\flat\mapsto \int_0^td_qs
+		\end{split}\end{equation*}
+		\cite{kempf:1994}では$q^\Nhat$を$L$と書いている。
+	\end{itemize} %}
+%s1:Kempfのメモ}
+\section{計算のメモ}\label{s1:計算のメモ} %{
+	$(\eta_0,\eta_q^\flat)$系での交換関係を計算する。
+	\begin{equation*}\begin{split}
+		\eta_0\eta_q^\flat = 1 + \eta_q^\flat\eta_0
+	\end{split}\end{equation*}
+\subsubsection{$(t\eta_0)_q^*$と$\eta_0^\flat$との交換関係} %{
+	次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		(t\eta_0)_q^*\eta_0^\flat = \eta_0^\flat + \plr{\int_t(t\eta_0)_q^*}
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(t\eta_0)_q^*\eta_0^\flat(\eta_q^\flat)^n 
+		= \eta_0^\flat + \plr{\int_t(t\eta_0)_q^*}
+	\end{split}\end{equation*}
+%s3:$(t\eta_0)_q^*$と$\eta_0^\flat$との交換関係}
+\subsubsection{$(t\eta_0)_q^*$と$\eta_q^\flat$との交換関係} %{
+	次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\eta_0^{n+1}\eta_q^\flat 
+		= [n+1]_q\eta_0^n + \eta_q^\flat(q\eta_0)^{n+1}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(t\eta_0)_q^*\eta_q^\flat = t(t\eta_0)_q^* + \eta_q^\flat(qt\eta_0)_q^*
+	\end{split}\end{equation*}
+	この式からコヒーレント状態$\ket{t:q}$が定義できるが、
+	\begin{equation*}\begin{split}
+		\ket{t:q} := \ket{1}(t\eta_0)_q^*
+		\implies \ket{t:q}\eta_q^\flat = t^n\ket{t:q}
+	\end{split}\end{equation*}
+	ここでは、$(t\eta_0)_q^*$と$\eta_q^\flat$の交換関係を計算してみる。
+	まず、次の式から、
+	\begin{equation*}\begin{split}
+		(t\eta_0)_q^*(\eta_q^\flat)^2 
+		= \sum_{k=0}^2 \qbinom{2}{k}_qt^{2-k}(\eta_q^\flat)^k(q^kt\eta_0)_q^*
+	\end{split}\end{equation*}
+	ある$n\in\sizen$があって、次の式が成り立つと仮定すると、
+	\begin{equation*}\begin{split}
+		(t\eta_0)_q^*(\eta_q^\flat)^m
+		= \sum_{k=0}^m \qbinom{m}{k}_qt^{m-k}(\eta_q^\flat)^k(q^kt\eta_0)_q^*
+		\quad\text{for all } m\le n
+	\end{split}\end{equation*}
+	$n+1$でも成り立つ。
+	\begin{equation*}\begin{split}
+		(t\eta_0)_q^*(\eta_q^\flat)^{n+1}
+		&= \sum_{k=0}^n \qbinom{n}{k}_qt^{n-k}(\eta_q^\flat)^k(q^kt\eta_0)_q^*
+			\eta_q^\flat \\
+		&= \sum_{k=0}^n \qbinom{n}{k}_qt^{n-k}(\eta_q^\flat)^k
+			\ggplr{q^kt(q^kt\eta_0)_q^* + \eta_q^\flat(q^{k+1}t\eta_0)_q^*} \\
+		&= t^{n+1}(t\eta_0)_q^* + (\eta_q^\flat)^{n+1}(q^{n+1}t\eta_0)_q^* \\
+		&\; + \sum_{k=1}^n\plr{q^k\qbinom{n}{k}_q + \qbinom{n}{k-1}_q}
+			t^{n+1-k}(\eta_q^\flat)^k(q^kt\eta_0)_q^* \\
+		&= \sum_{k=0}^{n+1} \qbinom{n+1}{k}_qt^{n+1-k}
+			(\eta_q^\flat)^k(q^kt\eta_0)_q^*
+	\end{split}\end{equation*}
+	したがって、帰納法により、次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		(t\eta_0)_q^*(\eta_q^\flat)^n
+		= \sum_{k=0}^n \qbinom{n}{k}_qt^{n-k}(\eta_q^\flat)^k(q^kt\eta_0)_q^*
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+%s3:$(t\eta_0)_q^*$と$\eta_q^\flat$との交換関係}
+%s1:計算のメモ}
+\section{メモ}\label{s1:メモ} %{
+	経路代数のHopf代数\cite{Cibils:2000}についてのメモ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 頂点$v$と$v$から$v$への辺$e_v^\tran e_v$を同一視する。
+		\item 辺（の連結）の余積を次のように定義する。
+		\begin{equation*}\begin{split}
+			\Delta a_n\cdots a_1 &:= t(a_n)\otimes a_n\cdots a_1
+			+ a_n\cdots a_1\otimes s(a_1) \\
+			&\; + \sum_{i=1}^{n-1} a_n\cdots a_{i+1}\otimes a_i\cdots a_1
+		\end{split}\end{equation*}
+		通常の余積$\Delta x=1\otimes x+x\otimes 1 +\cdots$での単位元$1$を
+		頂点のループに置き換えている。無限箙の場合には単位元が存在することを
+		仮定できないので、無限箙も含めて考える場合には有効な定義だと思う。
+		\begin{equation*}\begin{split}
+			\Delta\xymatrix{
+				x \ar[r]^a & y
+			} = \xymatrix{
+				x\otimes x \ar[r]^{x\otimes a} & x\otimes y
+			} + \xymatrix{
+				x\otimes y \ar[r]^{a\otimes y} & y\otimes y
+			}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+%s1:メモ}
+\section{Brzozowski代数}\label{s1:Brzozowski代数} %{
+\subsection{この節での便宜}\label{s2:この節での便宜} %{
+	この節では多項式を表すのに次の記号を使うことにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[多項式環] $R$を可換環とするとき、$R[t]$を$R$上の多項式環とする。
+		このとき、係数$R$と不定元$t$は可換である。
+		\item[有理式体] $R$を標数$0$の整域とするとき、$R(t)$を$R$上の有理式体
+		とする。このとき、係数$R$と不定元$t$は可換である。
+		\item[自由代数] $R$を可換環、$A$を有限集合とするとき、$R\braket{A}$
+		を$R$上の自由代数とする。このとき、係数$R$と不定元$A$は可換である。
+	\end{description} %}
+	また、この節では量子変形を多用するために、特別に有理式体の不定元を
+	$R_q:=R(q)$というように添え字で表すことにする。
+%s2:この節での便宜}
+\subsection{一般論}\label{s2:一般論} %{
+\subsubsection{環の中心}\label{s3:環の中心} %{
+	$V$を環、$C$を$V$の中心とする。$C$は$0$と$1$を含むので、空ではない。
+	また、任意の$x,y\in C$と$v\in V$に対して次の式が成り立つので、
+	\begin{equation*}\begin{split}
+		(x+y)v = v(x+y) \implies x + y\in C,\quad xyv = vxy \implies xy\in C
+	\end{split}\end{equation*}
+	$C$は$V$の部分環となる。
+%s3:環の中心}
+\subsubsection{既約と分解可能}\label{s3:既約と分解可能} %{
+	$S$を環、$V$を$S$上の加群とする。部分空間$W\subset V$が$SW\subseteq W$と
+	なるとき、$W$を不変な部分空間という。
+	不変な部分空間が$\set{0}$と$V$自身に限られるとき、$V$を既約な加群という。
+	また、任意の不変な部分空間$W\subseteq V$に対して$V=W\oplus W'$と直和分解
+	できるとき、$V$を分解可能または完全可約な加群という。
+%s3:既約と分解可能}
+\subsubsection{整域の標数}\label{s3:整域の標数} %{
+	$R$を整域、$n\in\sizen$を$n1=0$となる最小の自然数とする。
+	ある$p,q\in\sizen$で$n=pq$と書けたとすると、$n1=\plr{p1}\plr{q1}=0$
+	となる。$R$は整域だから、$p1=0$または$q1=0$となるが、それは$n$の定義に
+	反する。したがって、$n$は$0$または素数でなくてはならない。
+	つまり、整域の標数は$0$または素数に限られる。
+%s3:整域}
+%s2:一般論}
+\subsection{Dyck経路メモ}\label{s2:Dyck経路メモ} %{
+	次のDyck言語型の解をq-微分方程式をq-Weyl代数で表すことを考える。
+	\begin{equation}\label{eq:q-Dyck微分方程式}\begin{split}
+		(\partial_t)_q (x|t) = (x|t)^2
+	\end{split}\end{equation}
+	この式を差分で書くと次のようになる。
+	\begin{equation}\label{eq:q-Dyck差分方程式}\begin{split}
+		(x|t) = (x|qt) + (1 - q)t(x|t)^2 
+	\end{split}\end{equation}
+	\eqref{eq:q-Dyck微分方程式}または\eqref{eq:q-Dyck差分方程式}を
+	q-Weyl代数で表す方法はいくつか考えられる。
+\subsubsection{再帰下降}\label{s3:再帰下降section name} %{
+	\eqref{eq:q-Dyck差分方程式}に終状態$y$を次のように付け加えて
+	次の遷移図を考える。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			(x|t) &= (x|qt)y + (1 - q)t(x|t)^2 \\
+			y &= 1
+		\end{split}\right. \xymatrix{
+			x_0 \ar@/^1ex/[d]^{(x|qt)} \ar@(ul,ur)^{(1-q)\eta_0} \\
+			*++[o][F=]{y} \ar[u]^{\eta_0^\flat t}
+		}
+	\end{split}\end{equation*}
+	さらに、$(x|qt)$を定数から状態に変更して次の遷移図を考える。
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			(x|t) &= (x|qt)y + (1 - q)t(x|t)^2 \\
+			(x|qt) &= (x|q^2t)y + (1 - q)qt(x|qt)^2 \\
+			y &= 1
+		\end{split}\right. \xymatrix{
+			x_0 \ar[r]^{\xi_1} \ar@(ul,ur)^{(1-q)\eta_0} 
+			& x_1 \ar@/^1ex/[d]^{(x|q^2t)} \ar@(ul,ur)^{(1-q)q\eta_1} \\
+			& *++[o][F=]{y} \ar[ul]^{\eta_0^\flat t} \ar[u]^{\eta_1^\flat t}
+				\ar@(dr,dl)^{\xi_1^\flat}
+		}
+	\end{split}\end{equation*}
+	\begin{todo}[振動し]\label{todo:振動し} %{
+		$\eta$と$\xi$に$\eta\xi^\flat=q\xi^\flat\eta$のような交換関係
+		を設定すれば何とかなるかもしれない。
+	\end{todo} %todo:振動し}
+%s3:再帰下降section name}
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 代数式として再起下降を適用する。\\
+		\eqref{eq:q-Dyck方程式}を次の代数式に書き直して、
+		次のように変数$(y|t)$を付け加えて、
+		次の遷移図を考える。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				x_t \ar[r]^{(x|qt)} \ar@(dl,ul)^{(1-q)tx_t} & *++[o][F=]{y_t}
+			} \mapsto \xymatrix{
+				x_t \ar@<1ex>[r]^{(x|qt)} \ar@(dl,ul)^{(1-q)\eta} 
+				& *++[o][F=]{y_t} \ar@<1ex>[l]^{\eta^\flat t}
+			}
+		\end{split}\end{equation*}
+		$x_{qt}$にも同様の遷移図を考えて、
+		次のように遷移図を連結する。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				x_t \ar[d]^{\xi} \ar@(dl,ul)^{(1-q)\eta} 
+				& *++[o][F=]{y_t} \ar[l]_{\eta\flat t} \\
+				x_{qt} \ar@<1ex>[r]^{(x|q^2t)} \ar@(dl,ul)^{(1-q)\eta} 
+				& *++[o][F=]{y_{qt}} \ar@<1ex>[l]^{\eta^\flat t} 
+					\ar[u]_{\xi_\flat}
+			}
+		\end{split}\end{equation*}
+		さて、ここから。
+		\item 係数から考える。\\
+		\eqref{eq:q-Dyck方程式}を次の代数式に書き直して、
+		\begin{equation*}\begin{split}
+			(x|t) = (x|qt) + (1 - q)t(x|t)^2 
+		\end{split}\end{equation*}
+		平方完成して$(x|t)$について解くと次のようになる。
+		\begin{equation*}\begin{split}
+			(x|t) &= \frac{1 - \sqrt{1 - 4(1 - q)t(x|qt)}}{2(1 - q)t} \\
+				&= (x|qt) \sum_{n\in\sizen} C_n\ggplr{(1 - q)t(x|qt)}^n
+		\end{split}\end{equation*}
+		\item Jackson積分を使う。\\
+		$\fukuso(q)[[t]]$に線形二項演算$*_q$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			(f|t)*_q(g|t) := \int_0^td_qs \ggplr{(\partial_s)_q(f|s)}
+				\ggplr{(\partial_s)_q(g|s)}
+		\end{split}\end{equation*}
+		$*_q$は積になる。
+		\eqref{eq:q-Dyck方程式}の解は次のように書ける。
+		\begin{equation*}\begin{split}
+			(x|t) = (x|0) + (y|t)*_q(y|t) 
+			,\quad (y|t) = t*_q(x|t)
+		\end{split}\end{equation*}
+	\end{itemize} %}
+%s2:Dyck経路メモ}
+\subsection{q-微分とq-Weyl代数の対応メモ}\label{s2:q-微分とq-Weyl代数の対応メモ} %{
+	q-微分の定義
+	\begin{equation}\label{eq:q-微分の定義}\begin{split}
+		\gplr{\partial_t}_q\gplr{x|t} := \frac{\gplr{x|t} - \gplr{x|qt}}{t - qt}
+	\end{split}\end{equation}
+	は、次のq-Kleeneスターについて成り立つ次の式に対応する。
+	\begin{equation}\label{eq:q-Kleeneスターによるq-微分}\begin{split}
+		\gplr{\phi}_q^* = \gplr{q\phi}_q^* + (1 - q)\phi\gplr{\phi}_q^*
+		\quad\text{for all } \phi\in V_q
+	\end{split}\end{equation}
+	この式は$\gplr{\phi}_q^*-\gplr{q\phi}_q^*$を直接計算すると得られる。
+	$q=0$の時はお馴染みの$\gplr{\phi}_0^*=1+\phi\gplr{\phi}_0^*$という
+	式になる。式\eqref{eq:q-Kleeneスターによるq-微分}はコヒーレント状態を
+	通してq-微分\eqref{eq:q-微分の定義}に繋がる。
+	$\eta_q^\flat$の固有状態$\bra{t:q}$は
+	$\bra{t:q}=\bra{1}\gplr{t\eta_0}_q^*$と書けて\footnote{
+		$\eta_0^\flat$の場合は特別に、固有状態$\bra{t:0}$を次のように
+		書くこともできる。
+		\begin{equation*}\begin{split}
+			\bra{t:0}=\bra{1}\gplr{t\eta_0}_0^*=\bra{1}\gplr{t\eta_q}_q^*
+		\end{split}\end{equation*}
+	}、次の式が成り立つ。
+	\begin{equation}\label{eq:q-コヒーレント状態の展開}\begin{split}
+		\bra{t:q} = \bra{qt:q} + (1 - q)t\bra{t:q}\eta_0
+	\end{split}\end{equation}
+	$|q|<1$の場合、式\eqref{eq:q-Kleeneスターによるq-微分}を次のように
+	展開すると、
+	\begin{equation}\label{eq:q-Kleeneスターによるq-微分その二}\begin{split}
+		\gplr{\phi}_q^* &= \gplr{q\phi}_q^* + (1 - q)\gplr{\phi}_q^+ \\
+		&= \gplr{q^2\phi}_q^* + (1 - q)\ggplr{\gplr{\phi}_q^+ + \gplr{q\phi}_q^+} \\
+		&= \cdots \\
+		&= 1 + (1 - q)\phi \sum_{n\in\sizen} q^n\gplr{q^n\phi}_q^*
+	\end{split}\end{equation}
+	右辺の第二項はJackson積分の形になっている。
+	\begin{equation}\label{eq:Jackson積分の定義}\begin{split}
+		\int d_qx\plr{f|x} := (1 - q)x\sum_{n\in\sizen} q^n\plr{f|q^nx}
+	\end{split}\end{equation}
+	したがって、次のように書くことができ、
+	\begin{equation}\label{eq:q-Kleeneスターの展開その二}\begin{split}
+		\gplr{\phi}_q^* = 1 + \int \gplr{\phi}_q^*d_q\phi
+	\end{split}\end{equation}
+	コヒーレント状態に適用すると次のようになる。
+	\begin{equation}\label{eq:q-コヒーレント状態の展開その二}\begin{split}
+		\bra{t:q} = \bra{1} + \int d_qt \bra{t:q}\eta_0 \\
+	\end{split}\end{equation}
+	この式の両辺に$\eta_0^\flat$を作用させると、$\eta_0^\flat$が積分に
+	対応する作用素になっていることがわかる。
+	\begin{equation*}\begin{split}
+		\bra{t:q}\eta_0^\flat = \int d_qt\bra{t:q}
+	\end{split}\end{equation*}
+	ここで、式\eqref{eq:q-Kleeneスターの展開その二}でのJackson積分は
+	$\fukuso(q)\Eta$での積分になるので、無限次元空間での積分になるが、
+	式\eqref{eq:q-コヒーレント状態の展開その二}でのJackson積分は変数$t$に
+	ついての積分なので、$\fukuso(q)$での積分になることに注意する。
+
+	以上をまとめると、$\fukuso(q)[[\eta_q]]\simeq\fukuso(q)[[\eta]]$だから、
+	コヒーレント状態が線形射$\bra{t:q}:\fukuso(q)[[\eta]]\to\fukuso(q)[[t]]$
+	を与え、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\ket{1}$が単位元$1$、
+		\item $\eta_q^\flat$が変数$t$、
+		\item $\eta_0$がq-微分$(\partial_t)_q$、
+		\item $\eta_0^\flat$がJackson積分$\int d_qt$
+	\end{itemize} %}
+	に対応することがわかる。また、次の式から、
+	\begin{alignat*}{2}
+		\ket{\eta_q^n} &= \ket{\eta_0^n}[n]_q!
+		&\quad&\text{for all } n\in\sizen \\
+		m_q\ket{\eta_q^m}\otimes\ket{\eta_q^n} &= \ket{\eta_q^{m+n}} 
+		&\quad&\text{for all } m,n\in\sizen
+	\end{alignat*}
+	コヒーレント状態は代数射
+	$\bra{t:q}:\ggplr{\fukuso(q)[[\eta]],m_q,\ket{1}}
+	\to\ggplr{\fukuso(q)[[t]],m_\myspace,1}$
+	となっていることがわかる。
+%s2:q-微分とq-Weyl代数の対応メモ}
+\subsection{q-Riccatiとq-Weyl代数の対応メモ}\label{s2:q-Riccatiとq-Weyl代数の対応メモ} %{
+	\cite{hirota:2003}にならって次のq-Ricatti方程式を考える。
+	\begin{equation}\label{eq:可積分q-Riccatiの定義}\begin{split}
+		\plr{\partial_t}_q\plr{x|t}
+		= \plr{a|t} + \plr{b_1|t}\plr{x|t} + \plr{b_2|t}\plr{x|qt}
+			+ \plr{c|t}\plr{x|t}\plr{x|qt}
+	\end{split}\end{equation}
+	この式を次のように書き直す。
+	\begin{equation}\label{eq:可積分q-Riccatiその一}\begin{split}
+		\plr{x|t} = \pi\plr{M|t}\pvec{\plr{x|qt}}{1} \quad\text{where }
+		\plr{M|t} := 1 - \plr{1 - q}t\plr{T|t} \\
+		\plr{T|t} := \begin{pmatrix}
+			-\plr{b_2|t} & -\plr{a|t} \\ \plr{b_1|t} & \plr{c|t}
+		\end{pmatrix}
+	\end{split}\end{equation}
+	ここで、写像$\pi:\fukuso\times\fukuso_\times\to\fukuso$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		\pi\pvec{a}{b} = \frac{a}{b}
+		\quad\text{for all } a\in\fukuso,\; b\in\fukuso_\times
+	\end{split}\end{equation*}
+	式\eqref{eq:可積分q-Riccatiその一}は次のように展開できるが、
+	\begin{equation*}\begin{split}
+		\plr{x|t} = \pi\plr{M|t}\plr{\pvec{0}{1} 
+			+ \pvec{1}{0}\pi\plr{M|qt}\pvec{\plr{x|q^2t}}{1}}
+	\end{split}\end{equation*}
+	$\pi$について成り立つ次の式を使うと、
+	\begin{equation*}\begin{split}
+		\pi\plr{\pvec{a_1}{a_2}+\pvec{b_1}{b_2}\pi\pvec{c_1}{c_2}}
+		&= \pi\frac{1}{c_2}\plr{\pvec{a_1}{a_2}c_2+\pvec{b_1}{b_2}c_1} \\
+		&= \pi\plr{\pvec{a_1}{a_2}c_2+\pvec{b_1}{b_2}c_1} \\
+	\end{split}\end{equation*}
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\plr{x|t} &= \pi\plr{M|t} \plr{\pvec{0}{1}\pvec{0}{1}^\tran
+			+ \pvec{1}{0}\pvec{1}{0}^\tran} \plr{M|qt}\pvec{\plr{x|q^2t}}{1} \\
+		&= \pi\plr{M|t}\plr{M|qt}\pvec{\plr{x|q^2t}}{1}
+	\end{split}\end{equation*}
+	したがって、$|q|<1$のとき、
+	\eqref{eq:可積分q-Riccatiの定義}の解は次のように書ける。
+	\begin{equation*}\begin{split}
+		\plr{x|t} = \pi\plr{\prod_{n\in\sizen}\plr{M|q^nt}}\pvec{\plr{x|0}}{1}
+	\end{split}\end{equation*}
+	さらに、$a,b_i,c$が定数の時は、行列の部分がq-Kleeneスターの逆数
+	\eqref{eq:q-Kleeneスターの逆数を乗積表示}
+	\eqref{eq:q-Kleeneスターの逆数のTayler展開}で書け、
+	\begin{equation*}\begin{split}
+		\prod_{n\in\sizen}\plr{M|q^nt}
+		= \prod_{n\in\sizen}\plr{1 - (1 - q)q^ntT}
+		= \plr{tT}_q^{-*}
+		= \sum_{n\in\sizen} q^{\binom{q}{2}}\frac{\plr{-tT}^n}{[n]_q!}
+	\end{split}\end{equation*}
+	\eqref{eq:可積分q-Riccatiの定義}の解は次のように書ける。
+	\begin{equation*}\begin{split}
+		\plr{x|t} = \pi\plr{tT}_q^{-*}\pvec{\plr{x|0}}{1}
+	\end{split}\end{equation*}
+
+	以上のq-Riccati方程式を解く手順をq-Weyl代数に翻訳することが仕事になる。
+%s2:q-Riccatiとq-Weyl代数の対応メモ}
+\subsection{シャッフル積の結合性}\label{s2:シャッフル積の結合性} %{
+	$R$を標数$0$の整域、$A$を有限集合とし、$V_q:=R(q)\braket{A}$を
+	$A$から生成される$R(q)$上の自由代数とする。
+	$V_q$の線形二項演算$m_q:V_q\otimes V_q\to V_q$を次のように再帰的に
+	定義する。
+	\begin{equation}\label{q-シャッフル積の定義}\begin{split}
+		m_q\ket{1}\otimes\ket{w} = \ket{w} = m_q\ket{w}\otimes\ket{1}
+			&\quad\text{for all } w\in A^* \\
+		m_q\gplr{a^\flat\otimes b} = a^\flat m_q\gplr{\id\otimes b^\flat} 
+			+ b^\flat m_q\gplr{q^{\Nhat}a\otimes\id}
+			&\quad\text{for all } a,b\in A
+	\end{split}\end{equation}
+	$m_q$は文字数を保存するから、次の式が成り立つ。
+	\begin{equation}\label{eq:q-シャッフル積の文字数保存}\begin{split}
+		\Nhat m_q = m_q\gplr{\Nhat\otimes\id + \id\otimes\Nhat}
+	\end{split}\end{equation}
+	\begin{todo}[証明]\label{todo:証明} %{
+		式\eqref{eq:q-シャッフル積の文字数保存}を証明せよ。また、
+		$\nu_n:=\sum_{w\in A^n}w^\flat w$と定義したとき、
+		$\nu_n$と$m_q$の交換関係を求めよ。
+		さらに、$\Phat_n:=\sum_{w\in A^n}\ket{w}\bra{w}$、
+		$\Phat_+:=\sum_{n\in\sizen_+}\Phat_n$と定義したとき、
+		$\Phat_+=\nu_1$となることを証明せよ。
+	\end{todo} %todo:証明}
+	また、次の式が成り立つから、
+	\begin{alignat*}{2}
+		am_q\ket{1}\otimes\ket{w} &= m_q\gplr{a\otimes\id + q^{\Nhat}\otimes a}
+			\ket{1}\otimes\ket{w} &\quad&\text{for all } w\in A^* \\
+		am_q\ket{w}\otimes\ket{1} &= m_q\gplr{a\otimes\id + q^{\Nhat}\otimes a}
+			\ket{w}\otimes\ket{1} &\quad&\text{for all } w\in A^* \\
+		am_q\gplr{b\otimes c} &= m_q\gplr{a\otimes\id + q^{\Nhat}\otimes a}
+			\gplr{b\otimes c} &\quad&\text{for all } a,b,c\in A
+	\end{alignat*}
+	次の交換関係が得られる。
+	\begin{equation}\label{q-シャッフル積と消滅演算子の交換関係}\begin{split}
+		am_q = m_q\gplr{a\otimes\id + q^{\Nhat}\otimes a}
+		\quad\text{for all } a\in A
+	\end{split}\end{equation}
+	式\eqref{eq:q-シャッフル積の文字数保存}から次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		q^{\Nhat}m_q = m_q\gplr{q^{\Nhat}\otimes q^{\Nhat}}
+	\end{split}\end{equation*}
+	この式と交換関係\eqref{q-シャッフル積と消滅演算子の交換関係}を使うと、
+	次の式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		am_q\gplr{m_q\otimes\id} &= m_q\gplr{m_q\otimes\id}\gplr{L_q^3a} \\
+		am_q\gplr{\id\otimes m_q} &= m_q\gplr{\id\otimes m_q}\gplr{L_q^3a} \\
+	\end{split}
+		\quad\text{for all } a\in A
+	\end{equation*}
+	ここで、線形射
+	$L_q^{n+1}:\cat{Mod}\gplr{V_q}\to\cat{Mod}\gplr{V_q^{\otimes(n+1)}}$
+	を次のように定義する。
+	\begin{equation*}\begin{split}
+		L_q^{n+1}\phi &:= \sum_{k=0}^n \gplr{q^{\Nhat}}^{\otimes k}
+			\otimes\phi\otimes\gplr{\id}^{\otimes(n-k)}
+		\quad\text{for all } n\in\sizen,\; \phi\in\cat{Mod}\plr{V_q}
+	\end{split}\end{equation*}
+	この式を使って、$m_q$が結合的であることを、帰納法によって証明することが
+	できる。
+	
+	射影$\Phat_0:V_q\to R_q$と$\Phat_+:V_q\to R_q\ket{A^+}$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		\Phat_0 := \ket{1}\bra{1},\quad \Phat_+ := \sum_{a\in A}a^\flat a
+	\end{split}\end{equation*}
+	$m_q$は文字数を保存するから、任意の
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $1\le n_1 + n_2 + n_3$となる$n_1,n_2,n_3\in\sizen$、
+		\item $u\in R\ket{A^{n_1}}\otimes R\ket{A^{n_2}}\otimes R\ket{A^{n_3}}$
+	\end{itemize} %}
+	に対して次の式が成り立つ。
+	\begin{equation*}\begin{array}{rclcl}
+		m_q\gplr{m_q\otimes\id} u &=& P_+m_q\gplr{m_q\otimes\id} u
+		&=& \sum_{a\in A}a^\flat m_q\gplr{m_q\otimes\id}\gplr{L_q^3a} u \\
+		m_q\gplr{\id\otimes m_q} u &=& P_+m_q\gplr{\id\otimes m_q} u
+		&=& \sum_{a\in A}a^\flat m_q\gplr{\id\otimes m_q}\gplr{L_q^3a} u
+	\end{array}\end{equation*}
+	$\gplr{L_q^3a} u$の文字数は$n_1+n_2+n_3-1$だから、$n_1+n_2+n_3-1$で$m_q$
+	が結合的ならば、
+	\begin{equation*}\begin{split}
+		m_q\gplr{m_q\otimes\id} u 
+		&= \sum_{a\in A}a^\flat m_q\gplr{m_q\otimes\id}\gplr{L_q^3a} u \\
+		&= \sum_{a\in A}a^\flat m_q\gplr{\id\otimes m_q}\gplr{L_q^3a} u
+		= m_q\gplr{\id\otimes m_q} u \\
+	\end{split}\end{equation*}
+	となり、$n_1+n_2+n_3$でも$m_q$が結合的になる。そして、直接の計算により、
+	次の式が成り立つことがわかるので、
+	\begin{equation*}\begin{split}
+		m_q\gplr{m_q\otimes\id}\ket{1}\otimes\ket{1}\otimes\ket{1}
+		= m_q\gplr{\id\otimes m_q}\ket{1}\otimes\ket{1}\otimes\ket{1}
+	\end{split}\end{equation*}
+	帰納法により、$m_q$が$V_q\otimes V_q\otimes V_q$で結合的になることが
+	示される。
+%s2:シャッフル積の結合性}
+\subsection{TODO}\label{s2:TODO} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item テンソル積の内積を変更したので、以下は書き直すこと。
+		\item 妄想
+		\begin{equation*}\begin{split}
+			m_q \overset{?}{=} m_0\gplr{m_q\otimes m_q}\sigma_{23}
+			\gplr{m_0^\flat\otimes m_0^\flat}
+		\end{split}\end{equation*}
+		この式の右辺は次のようになる。
+		\begin{equation*}\begin{split}
+			a m_0\gplr{m_q\otimes m_q}\sigma_{23}
+				\gplr{m_0^\flat\otimes m_0^\flat}
+			= m_0\gplr{m_q\otimes m_q}a_{(4)}\sigma_{23}
+				\gplr{m_0^\flat\otimes m_0^\flat} \\
+			a_{(4)} := a\otimes\id\otimes\id\otimes
+				+ q^{\Nhat}\otimes a\otimes\id\otimes\id \\
+				+ \Phat_0\otimes\Phat_0\otimes a\otimes\id
+				+ \Phat_0\otimes\Phat_0\otimes q^{\Nhat}\otimes a
+		\end{split}\end{equation*}
+	\end{itemize} %}
+%s2:TODO}
+
+\subsection{Brzozowwki代数の定義}\label{s2:Brzozowwki代数の定義} %{
+	$R$を可換環、$A$を空でない有限集合とする。
+	$A$から生成される$R$上のBrzozowski代数\footnote{
+		q-Heisenberg代数の$q=0$としたものをBrzozowski代数と書いている。
+	}を$R\Eta(A)$と書く。
+	\begin{equation*}\begin{split}
+		R\Eta(A) := \frac{R\braket{A,A^\flat}}
+			{ab^\flat = \jump{a=b} \text{ for all }a,b\in A} 
+	\end{split}\end{equation*}
+	$R\Eta(A)$の基底を次のように書くことにする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $A$の元を消滅演算子
+		\item $A^\flat$の元を生成演算子
+	\end{itemize} %}
+	また、文字集合を明記する必要がない場合は、文字集合の大きさだけを明記
+	して$R\Eta_n$と書き、文字集合について次の便宜を用いることにする。
+	\begin{equation*}\begin{split}
+		R\Eta_n := R\Eta(H_n) \quad\text{where } H_n := \set{\eta_1,\dots,e_n}
+	\end{split}\end{equation*}
+	\underline{逆順の}代数射$-^\flat:R\Eta(A)\to R\Eta(A)$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(a)^\flat = a^\flat,\quad (a^\flat)^\flat = a
+		\quad\text{for all } a\in A
+	\end{split}\end{equation*}
+	そして、$R\Eta_n$の場合は特別に次の約束を使う。
+	\begin{equation*}\begin{split}
+		\eta_i^\flat = \eta_{-i} \quad\text{for all } i\in1..n
+	\end{split}\end{equation*}
+
+\subsubsection{数演算子}\label{s3:数演算子} %{
+	$\mu_n\in R\Eta(A)$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\mu_n := \sum_{a\in A} (a^\flat)^na^n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	集合$M\subset R\Eta(A)$を$M:=\set{\mu_n\bou n\in\sizen}$と定義すると、
+	次の式から、
+	\begin{equation*}\begin{split}
+		\mu_m\mu_n = \mu_{\max(m,n)} \quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	$M$はモノイドとなり、モノイド同型$M\simeq(\sizen,\max,0)$が成り立つ。
+	また、$M$の元はすべてべき等$\mu_n^2=\mu_n$になる。
+	特に、$\what{N}_0:=\mu_1$と定義し、$\what{N}_0$を数演算子ということに
+	する。
+%s3:数演算子}
+\subsubsection{Fock空間}\label{s3:Fock空間} %{
+	係数環$R$が複素数の場合は、$\what{N}_0$はべき等なので、固有値は$0$と$1$
+	だけになることが言える。$\what{N}_0$の固有値を拠り所にして表現を考える
+	ために、係数環を複素数に限定する。
+
+	$\fukuso\Eta(A)$の表現空間は、$\what{N}_0$の固有値によって次の三種類
+	に分類される。
+	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+		\item $\what{N}_0$の固有値を$0$だけ持つ。
+		\item $\what{N}_0$の固有値を$1$だけ持つ。
+		\item $\what{N}_0$の固有値を$0$と$1$の両方持つ。
+	\end{enumerate} %}
+	ここでは、三番目の$\what{N}_0$の固有値を$0$と$1$の両方持つ表現空間を
+	考える。
+
+	$V$を$\fukuso\Eta(A)$の表現空間とし、$V_\lambda$を$\what{N}_0$の固有値
+	$\lambda$を持つ$V$の部分空間とすると、$V=V_0\oplus V_1$と直和分解される。
+	そして、$V_0$と$V_1$は空でないとする。任意の$a\in A$に対して次の性質が
+	成り立つ。
+	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+		\item $\ker a^\flat=\set{0}$となる。\\
+		ある$v\in V$に対して$a^\flat v=0$ならば、左から$a$を作用させると、
+		$v=0$となる。
+		%
+		\item $\ker a=V_0$となる。\\
+		任意の$v\in V_0$に対して$\what{N}_0v=0$となるが、左から$a$を作用させる
+		と、$av=0$となる。したがって、$V_0\subseteq \ker a$となる。
+		一方、$\what{N}_0$の定義より、$\ker a\subseteq V_0$となるから、
+		$\ker a=V_0$となることがわかる。
+		%
+		\item $a^\flat V\subseteq V_1$となる。\\
+		任意の$v\in V$に対して$\what{N}_0a^\flat v=a^\flat v$となる。
+		%
+		\item 任意の$v\neq0\in V_0$と$n\in\sizen$に対して
+		$\Set{(a^\flat)^nv\bou n\in\sizen}$は線形独立となる
+		（ノート\ref{note:自然数による基底系}）。
+	\end{enumerate} %}
+	そして、次の性質が成り立つ。
+	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+		\item 任意の$v\neq0\in V_0$に対して集合$(A^\flat)^*v\subset V$を
+		$(A^\flat)^*v:=\Set{w^\flat v\bou w\in A^*}$と定義すると、
+		$(A^\flat)^*v$の元は互いに線形独立となる
+		（ノート\ref{note:単語による基底系}）。
+		したがって、任意の$v\neq0\in V_0$に対してモノイド環$\fukuso\braket{A}$
+		との線形同型$\fukuso(A^\flat)^*v\simeq\fukuso\braket{A}$が成り立つ。
+		%
+		\item $u,v\in V_0$が互いに線形独立であれば、直和分解
+		$\fukuso(A^\flat)^*u\cup\fukuso(A^\flat)^*v
+		=\fukuso(A^\flat)^*u\oplus\fukuso(A^\flat)^*v$が成り立つ
+		（ノート\ref{note:真空の独立性}）。
+	\end{enumerate} %}
+	したがって、次の部分空間の関係が成り立つ。
+	\begin{equation*}\begin{split}
+		\plr{\fukuso\braket{A}}^{\oplus\plr{\dim\ker\what{N}_0}} \subseteq V
+		\quad\text{as vector space}
+	\end{split}\end{equation*}
+	また、$\what{N}_0$の固有値が$0$と$1$の両方を持つような$\fukuso\Eta(A)$
+	の$\fukuso\braket{A}$への表現は既約表現となる
+	（ノート\ref{note:Fock表現の既約性}）。
+	以上を定義と命題の形でまとめておく。
+
+	\begin{definition}[Fock空間]\label{def:Fock空間} %{
+		$R$を可換環、$A$を空でない有限集合、$R\Eta(A)$を$R$上のBrzozowski代数、
+		$R\braket{A}$を$A$から生成される$R$上の自由代数とする。
+		$R\Eta(A)$の$R\braket{A}$への次の表現をFock表現といい、
+		$R\braket{A}$を$R\Eta(A)$のFock空間ということにする。
+		\begin{alignat*}{2}
+			a\ket{1} &= 0 &\quad&\text{for all } a\in A \\
+			a\ket{bw} &= \jump{a=b}\ket{w} 
+				&\quad&\text{for all } a,b\in A,\; w\in A^* \\
+			a^\flat\ket{w} &= \ket{aw} 
+				&\quad&\text{for all } a\in A,\; w\in A^*
+		\end{alignat*}
+		ここで、$\fukuso\Eta(A)$の基底系と$\fukuso\braket{A}$の基底系を区別
+		するために、$\fukuso\braket{A}$の基底系をブラケット記法を使って書いた。
+	\end{definition} %def:Fock空間}
+
+	\begin{proposition}[Fock表現の既約性]\label{prop:Fock表現の既約性} %{
+		複素数上のBrzozowski代数のFock表現は既約表現である。
+	\end{proposition} %prop:Fock表現の既約性}
+
+	\begin{proposition}[数演算子による表現の分類]\label{prop:数演算子による表現の分類} %{
+		$A$を空でない有限集合、$\fukuso\Eta(A)$を複素数上のBrzozowski代数
+		とする。$\fukuso\Eta(A)$の表現$(\rho,V)$が、$\what{N}_0$の固有値
+		$0$と$1$の両方を持てば、次の部分空間の関係が成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{\fukuso\braket{A}}^{\oplus\plr{\dim\ker\what{N}_0}} \subseteq V
+			\quad\text{as vector space}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:数演算子による表現の分類}
+
+	\begin{note}[自然数による基底系]\label{note:自然数による基底系} %{
+		任意の$v\neq0\in V_0$と$n\in\sizen$に対して
+		$\Set{(a^\flat)^iv\bou i\in0..n}$は線形独立となる。
+		\begin{proof} %{
+			$n$に関する帰納法を使う。$n=0$の時は明らかで、ある$n\in\sizen$で
+			命題が成り立つとすると、任意の$c_1,\dots,c_{n+1}\in\fukuso$に対して
+			次の式が成り立つ。
+			\begin{alignat*}{2}
+				& c_1(a^\flat)v +\cdots+ c_{n+1}(a^\flat)^{n+1}v = 0 \\
+				\iff & a^\flat\plr{c_1v +\cdots+ c_{n+1}(a^\flat)^nv} = 0 \\
+				\implies & c_1v +\cdots+ c_{n+1}(a^\flat)^nv = 0 
+					&\quad& \because\quad \ker a^\flat = \set{0} \\
+				\implies & c_1v = 0 \text{ and } 
+					c_2v +\cdots+ c_{n+1}(a^\flat)^nv = 0
+					&\quad& \because\quad V_0\cup V_1 = \set{0} \\
+				\implies & c_1 = c_2 =\cdots= c_{n+1} = 0
+					&\quad& \text{by assumptions}
+			\end{alignat*}
+		\end{proof} %}
+	\end{note} %note:自然数による基底系}
+
+	\begin{note}[単語による基底系]\label{note:単語による基底系} %{
+		任意の$v\neq0\in V_0$、$n\in\sizen$に対して集合
+		$(A^\flat)^n v\subseteq V$を次のように定義し、
+		\begin{equation*}\begin{split}
+			(A^\flat)^n v := \Set{w^\flat v\bou w\in A^n}
+		\end{split}\end{equation*}
+		$(A^\flat)^{\le n} v:=\cup_{r=0}^n(A^\flat)^r v$とする。
+		任意の$n\in\sizen$に対して$(A^\flat)^{\le n} v$の元は互いに線形独立
+		になる。
+		\begin{proof} %{
+			$(A^\flat)^{\le n} v$の$n$についての帰納法で証明する。
+			$n=0$のときは$(A^\flat)^{\le 0} v=\fukuso v$だから、命題が成り立つ
+			ことがわかる。ある$n\in\sizen$で命題が成り立つと仮定する。
+			写像$c:A^{n+1}\to\fukuso$が次の式を満たすとすると、
+			\begin{equation*}\begin{split}
+				\sum_{w\in A^{n+1}} \plr{c|w}w^\flat v = 0
+			\end{split}\end{equation*}
+			任意の$a\in A$で次の式が成り立つ。
+			\begin{alignat*}{2}
+				a\sum_{w\in A^n} \plr{c|w} w^\flat v = 0
+				\implies & \sum_{w\in A^n} \plr{c|wa} w^\flat v = 0 \\
+				\implies & \plr{c|wa} = 0 \quad\text{for all } w\in A^n
+					&\quad& \text{by assumption}
+			\end{alignat*}
+			任意の$k\in\sizen$で$A^{k+1}=\cup_{a\in A}A^ka$が成り立つから、
+			$c=0$となることがわかる。したがって、$n+1$でも命題が成り立つことが
+			わかる。
+		\end{proof} %}
+	\end{note} %note:単語による基底系}
+
+	\begin{note}[真空の独立性]\label{note:真空の独立性} %{
+		ある$u,v\in V_0$、$w\in A^*$と写像$c:A^*\to\fukuso$が次の式を
+		満たすとすると、
+		\begin{equation*}\begin{split}
+			w^\flat v = \sum_{x\in A^*} (c|x)x^\flat u
+		\end{split}\end{equation*}
+		次の式から、
+		\begin{equation*}\begin{split}
+			w^\flat v = \sum_{x\in A^*} (c|x)x^\flat u
+			\implies v = \sum_{x\in A^*} (c|xw)x^\flat u \\
+			\implies (c|w) u = v \quad\text{and}\quad
+			(c|xw) = 0 \quad\text{for all } w\in A^+
+		\end{split}\end{equation*}
+		$u$と$v$は互いに線形従属となる。したがって、$u,v\in V_0$が互いに
+		線形独立であれば、$(A^\flat)^*u$と$(A^\flat)^*v$は互いに線形独立
+		となり、$(A^\flat)^*u\cup(A^\flat)^*v=(A^\flat)^*u\oplus(A^\flat)^*v$
+		となる。
+	\end{note} %note:真空の独立性}
+
+	\begin{note}[Fock表現の既約性]\label{note:Fock表現の既約性} %{
+		部分空間$V\subseteq\fukuso\braket{A}$を$\fukuso\Eta(A)$-不変な部分空間
+		とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $V$が$\what{N}_0$の固有値$0$を持てば、$V=\set{0}$または
+			$\fukuso\ket{1}\subseteq V$となる。$\fukuso\ket{1}$を含む
+			$\fukuso\Eta(A)$-不変な部分空間は$\fukuso\braket{A}$だけだから、$V$は
+			$\set{0}$または$\fukuso\braket{A}$自身となる。
+			%
+			\item $V$が$\what{N}_0$の固有値$1$のみを持てば、$V\subseteq\fukuso A^+$
+			となる。ここで、
+			$\fukuso A^+:=\myop{span}_\fukuso\Set{\ket{w}\bou w\in A^+}$とする。
+			しかし、任意の$w\in A^+$に対して$w\ket{w}=\ket{1}$となるから、
+			$\fukuso A^+$は$\fukuso\Eta(A)$-不変な部分空間ではなく、
+			その部分空間もまた$\fukuso\Eta(A)$-不変な部分空間でない。したがって、
+			$\what{N}_0$の固有値$1$だけを持つ$\fukuso\Eta(A)$-不変な
+			$\fukuso\braket{A}$の部分空間は存在しない。
+		\end{itemize} %}
+		したがって、Fock表現は既約表現となる。
+	\end{note} %note:Fock表現の既約性}
+
+	\begin{note}[係数に対する制限]\label{note:係数に対する制限} %{
+		係数に対する制限を弱めるためには、可換環$R$と$R$上の加群$V$が
+		次の条件をクリアする必要がある。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $V$でべき等作用素$T^2=T$の固有値が$0$と$1$だけになること。
+			\item $V$が固有ベクトル空間で直和分解できること。
+			\item 任意の$r\neq0\in R$と$v\neq0\in V$に対して$rv\neq0$
+			となること。
+		\end{enumerate} %}
+		これらの条件は、$R$が整域で$V$が自由加群$R^D$であればクリアできると
+		思う。
+	\end{note} %note:係数に対する制限}
+
+	\begin{todo}[この後の展開]\label{todo:この後の展開} %{
+		この後の予定
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Fock空間の内積を定義して、自由モノイドの積とその共役の作用版が
+			Brzozowski代数となることを示す。
+			\item 係数環を整域上の多項式環の有理式体とし、自由モノイドの積を
+			変形してq-シャッフル積を定義し、その作用素版を導く。
+			\item 一変数の場合にコヒーレント状態を使ってq-Brzozowski代数の
+			解析的な表現を導く。Kleeneスターに対して成り立つ式$x^*=1+xx^*$を
+			q-Kleeneスターに対して拡張する。多分、q-積分を使うことになる。
+			\item 多変数の場合に拡張する。
+			\item Dyck単語の分割を解析の言葉で理解する。
+		\end{itemize} %}
+	\end{todo} %todo:この後の展開}
+%s3:Fock空間}
+%s2:Brzozowwki代数の定義}
+\subsection{自由代数}\label{s2:自由代数} %{
+	$R$を可換環、$A$を空でない有限集合とする。
+
+	$A^*$を$A$から生成される自由モノイドとして、次の記法を用いる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[積] 文字列の連結による積を記号を省略して書く。
+		\begin{equation*}\begin{split}
+			w_1w_2 := \text{単語$w_1$と$w_2$を連結した単語}
+			\quad\text{for all } w_1,w_2\in A^*
+		\end{split}\end{equation*}
+		\item[単位元] 空の単語を$1$と書く。
+	\end{description} %}
+	$R\ket{A^*}:=R\braket{A}$を$R$から生成される$R$上の自由代数として、
+	次の記法を用いる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[標準基底] $A^*$から$R\ket{A^*}$への標準入射をケットで表す。
+		\begin{equation*}\begin{split}
+			\ket{w}\in R\ket{A^*} \quad\text{for all } w\in A^*
+		\end{split}\end{equation*}
+		\item[積] 文字列の連結による積を
+		$m_0:R\ket{A^*}\otimes R\ket{A^*}\to R\ket{A^*}$と書く。
+		\begin{equation*}\begin{split}
+			m_0\ket{w_1}\otimes\ket{w_2} := \ket{w_1w_2}
+			\quad\text{for all } w_1,w_2\in A^*
+		\end{split}\end{equation*}
+	\end{description} %}
+
+	$R\bra{A^*}:=\cat{Mod}_R\plr{R\ket{A^*},R}$を$R\ket{A^*}$の双対空間
+	として、次の記法を用いる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[標準基底] $A^*$から$R\bra{A^*}$への標準入射をブラで表す。
+		\begin{equation*}\begin{split}
+			\bra{w}\in R\bra{A^*} \text{ such that }
+			\braket{w|x} = \jump{w=x} \quad\text{for all } w,x\in A^*
+		\end{split}\end{equation*}
+		\item[転置と内積] 線形射$-^\flat:R\ket{A^*}\xtofrom{}{}R\bra{A^*}$を
+		次のように定義する。
+		\begin{equation*}\begin{split}
+			\ket{w}^\flat := \bra{w},\quad \bra{w}^\flat := \ket{w}
+			\quad\text{for all } w\in A^*
+		\end{split}\end{equation*}
+		有限次元実ベクトル空間の言葉をそのまま借用して、
+		$-^\flat$を転置、$R\bra{A^*}$の$R\ket{A^*}$への作用を内積ということに
+		する。
+		\item[作用素] 線形射
+		$\cat{Mod}_R\plr{R\ket{A^*}}\to\cat{Mod}_R\plr{R\bra{A^*}}$
+		を次のように定義する。
+		\begin{equation*}\begin{split}
+			(f^\flat\phi)g = f^\flat(\phi g)
+			\quad\text{for all } \phi\in\cat{Mod}_R\plr{R\ket{A^*}}
+			,\; f,g\in R\ket{A^*}
+		\end{split}\end{equation*}
+		\item[作用素の転置] 線形射
+		$-^\flat:\cat{Mod}_R\plr{R\ket{A^*}}\to\cat{Mod}_R\plr{R\ket{A^*}}$
+		を次のように定義する。
+		\begin{equation*}\begin{split}
+			(\phi f)^\flat g = f^\flat\phi^\flat g
+			\quad\text{for all } \phi\in\cat{Mod}_R\plr{R\ket{A^*}}
+			,\; f,g\in R\ket{A^*}
+		\end{split}\end{equation*}
+	\end{description} %}
+
+	任意の$R$上の加群$V$に対して$T^n V$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\T^0 V := R ,\quad \T^n V := V^{\otimes n} 
+		\quad\text{for all } n\in\sizen_++
+	\end{split}\end{equation*}
+	$\T^*V:=\oplus_{n\in\sizen}\T^nV$を$V$から生成されるテンソル代数とする。
+	$\T R\ket{A^*}$の内積について次の記号を用いることにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[内積] 線形射
+		$\T^*R\bra{A^*}\otimes\T^*R\ket{A^*}\to R$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\gplr{f_1^\flat\otimes\cdots\otimes f_m^\flat}
+			\gplr{g_1\otimes\cdots\otimes g_n}
+			:= \jump{m=n}\gplr{f_n^\flat g_1}\cdots\gplr{f_1^\flat g_n} \\
+			\quad\text{for all } f_i,g_i\in R\ket{A^*}
+		\end{split}\end{equation*}
+		環同型$R\otimes R\simeq_R R$を用いると、次のように書くこともできる。
+		\begin{equation*}\begin{split}
+			\gplr{f_1^\flat\otimes\cdots\otimes f_m^\flat}
+			\gplr{g_1\otimes\cdots\otimes g_n} = \jump{m=n}
+			\gplr{f_n^\flat g_1}\otimes\cdots\otimes\gplr{f_1^\flat g_n} \\
+			\quad\text{for all } f_i,g_i\in R\ket{A^*}
+		\end{split}\end{equation*}
+		\item[転置] 逆順の代数射
+		$-^\flat:\T^*R\ket{A^*}\xtofrom{}{}\T^*R\bra{A^*}$
+		を次のように定義する。
+		\begin{equation*}\begin{split}
+			\gplr{f_1\otimes\cdots\otimes f_n}^\flat 
+				:= f_n^\flat\otimes f_1^\flat
+			,\quad \gplr{f_1^\flat\otimes\cdots\otimes f_n^\flat}^\flat 
+				:= f_n\otimes f_1 \\
+			\quad\text{for all } f_1,\dots,f_n\in A^*
+		\end{split}\end{equation*}
+	\end{description} %}
+
+	$\T^nR\ket{A^*}$から$\T^mR\ket{A^*}$への線形射全体のつくる空間を
+	$\T^m_nR\ket{A^*}$とする。
+	\begin{equation*}\begin{split}
+		\T^m_nR\ket{A^*}:=\cat{Mod}_R\plr{\T^nR\ket{A^*},\T^mR\ket{A^*}}
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	形式的には$\T_n^nR\ket{A^*}$の単位元$I_n$は次のように書ける。
+	\begin{equation*}\begin{split}
+		I_n := \sum_{w_1,\dots,w_n} \ket{w_1}\otimes\cdots\otimes\ket{w_n}
+			\bra{w_n}\otimes\cdots\otimes\bra{w_1}
+	\end{split}\end{equation*}
+	$I_2$を用いて積$m_0$の$R\bra{A^*}$への作用を計算すると次のようになる。
+	\begin{equation*}\begin{split}
+		\bra{w}m_0 = \sum_{w_1,w_2\in A^*} \jump{w = w_1w_2}
+			\bra{w_2}\otimes\bra{w_1} \quad\text{for all } w\in A^*
+	\end{split}\end{equation*}
+%s2:自由代数}
+\subsection{非可換な係数}\label{s2:非可換な係数} %{
+	可換上のBrzozowski代数を非可換上のBrzozowskiに拡張する。
+	$V$を可換とは限らない環、$\Z V$を$V$の中心とする。
+	$V\Eta(A):=V\otimes_{\Z V}(\Z V)\Eta(A)$と書き、$\otimes_{\Z V}$を省略して
+	次のように書く。
+	\begin{equation*}\begin{split}
+		vx := v\otimes_{\Z V}x =: xv \\
+		vx^\flat := v\otimes_{\Z V}x^\flat =: x^\flat v 
+	\end{split}
+		\quad\text{for all } v\in V,\; x\in(\Z V)\Eta(A)
+	\end{equation*}
+	また、テンソル積$V\Eta(A)\otimes_{\Z V}(\Z V)\Eta(A)$を多用するが、
+	$V\Eta(A)\otimes\Eta(A):=V\Eta(A)\otimes_{\Z V}(\Z V)\Eta(A)$と略記する。
+%23:非可換な係数}
+%s1:Brzozowski代数}
+
 \section{微分方程式とBrzozowski代数}\label{s1:微分方程式とBrzozowski代数} %{
 	この節では複素係数で考える。
 	根付き平面二分木の成長は次の微分方程式で書き表される。
-	\begin{equation*}\begin{split}
+	\begin{equation}\label{eq:平面二分木の成長}\begin{split}
 		\plr{\partial_t}_q\plr{\phi|t} = \plr{\phi|t}^2
+	\end{split}\end{equation}
+	これをBrzozowski代数に翻訳しよう。次のように定義したコヒーレント状態
+	を使うと、
+		\begin{equation*}\begin{split}
+		\ket{t:q} := \gplr{t\eta_q^\flat}_q^*\ket{1},\quad
+		\bra{t:q} := \bra{1}\gplr{t\eta_q}_q^*
 	\end{split}\end{equation*}
-	これをBrzozowski代数に翻訳しよう。コヒーレント状態を使うと、
-	この微分方程式は次のように書ける。
+	微分方程式\eqref{eq:平面二分木の成長}は次のように書ける。
+	\begin{equation}\label{eq:平面二分木の成長その二}\begin{split}
+		\braket{t:q|\eta_q|\phi} = \braket{t:q|\phi}^2
+	\end{split}\end{equation}
+	この式を満たす$\ket{\phi}$を求めることになる。
+	コヒーレント状態の微分は次のようになり
+	（ノート\ref{note:q-Kleeneスターの余積}）、
 	\begin{equation*}\begin{split}
-		\braket{t:q|\eta_q|\phi} = \braket{t:q|\phi}^2 \quad\text{where }
-		\bra{t:q} := \bra{1}\plr{t\eta_q}_q^*
-	\end{split}\end{equation*}
-	この式を満たす$\ket{\phi}$を求めることになる。次の式変形により、
-	\begin{equation*}\begin{split}
-		\bra{t:q}\eta_q = \bra{1}\eta_q\plr{t\eta_q}_q^*
+		\bra{t:q}\eta_q &= \bra{1}\eta_q\plr{t\eta_q}_q^*
 		= \bra{1}\eta_0\plr{t\eta_q}_q^* = \bra{\eta}\plr{t\eta_q}_q^*
-		= \bra{1}\otimes\bra{\eta}m_0^\flat\plr{t\eta_q}_q^*
+		= \bra{1}\otimes\bra{\eta}m_0^\flat\plr{t\eta_q}_q^* \\
+		&= \plr{\bra{t:q}\otimes\bra{\eta}\plr{t\delta_q}_q^*}m_0^\flat
 	\end{split}\end{equation*}
-	次の交換関係を用いると、
+	求める$\ket{\phi}$は次の式を満たすことがわかる。
 	\begin{equation*}\begin{split}
-		\eta_qm_0 &= m_0\plr{\eta_q\otimes1 + q^{\Nhat}\otimes\eta_q} \\
-		\eta_q^\flat m_0 &= m_0\plr{\eta_q^\flat\otimes1 
-			+ q^{\Nhat}\otimes\delta_q^\flat} \quad\text{where}\quad 
-			\delta_q := \eta_q - \eta_0
+		\bra{t:q}\eta_q\ket{\phi} = \plr{\bra{t:q}\otimes\bra{\eta}
+			\plr{t\delta_q}_q^*}m_0^\flat\ket{\phi}
+		= \braket{t:q|\phi}^2
 	\end{split}\end{equation*}
-	$m_0^\flat$と$\plr{t\eta_q}_q^*$の交換関係は次のようになり、
+
+	$q=1$の時は、次の解ける微分方程式から解を求めることができる。
+	\begin{equation}\label{eq:解ける差分方程式}\begin{split}
+		\bra{t:q}\eta_q\ket{\phi} = \braket{qt:q|\phi}\braket{t:q|\phi}
+	\end{split}\end{equation}
+	この場合、$\ket{\phi}=\ket{1:0}$となる。このことをBrzozowski代数を
+	用いて確かめてみる。$u\in\fukuso$として、
+	$m_0^\flat\ket{u:0} = \ket{u:0}\otimes\ket{u:0}$から、次の式が得られて
+	（ノート\ref{note:delta_qの交換関係}）、確かにコヒーレント状態$\ket{1:0}$
+	が差分方程式\eqref{eq:解ける差分方程式}の解になっていることがわかる。
 	\begin{equation*}\begin{split}
-		m_0^\flat\plr{t\eta_q}_q^*
-		&= \sum_{n\in\sizen}\frac{t^n}{[n]_q!}\plr{\eta_q\otimes1 
-			+ q^{\Nhat}\otimes\delta_q}^n m_0^\flat \\
-		&= \sum_{n\in\sizen}\frac{t^n}{[n]_q!}\sum_{k=0}^n\qbinom{n}{k}_q
-			\plr{\eta_q^{n-k}q^{k\Nhat}\otimes\delta_q^k}m_0^\flat \\
-		&= \plr{q^{\Nhat}\otimes t\delta_q}_q^*\ggplr{t\eta_q\otimes1}_q^*m_0^\flat
+		\bra{t:q}\eta_q\ket{1:0} 
+		&= \braket{t:q|1:0}\braket{\eta|\plr{t\delta_q}_q^*|1:0} \\
+		&= \braket{t:q|1:0}\braket{qt:q|1:0} \\
 	\end{split}\end{equation*}
-	コヒーレント状態の微分は次のようになることがわかる。
+	一方、$q=0$の時は、次の状態が差分方程式\eqref{eq:平面二分木の成長その二}
+	の解になる。
 	\begin{equation*}\begin{split}
-		\bra{t:q}\eta_q 
-		= \plr{\bra{t:q}\otimes\bra{\eta}\plr{t\delta_q}_q^*}m_0^\flat
+		\plr{\eta_0^\flat\gplr{t\eta_0}_0^*}_0^*\ket{1}
 	\end{split}\end{equation*}
+
+	\begin{note}[模索その一]\label{note:模索その一} %{
+		$t_q=(1-q)t$とすると、次のようにして$q=0$と$q=1$の解を補間する状態を
+		定義することができる。
+		\begin{equation*}\begin{split}
+			\plr{\eta_0^\flat\gplr{t\eta_0}_0^*}_0^*\ket{1} \xmapsfrom{q=0} 
+			\plr{\eta_0^\flat\gplr{t_q\eta_q}_q^*}_0^*\ket{1}
+			\xmapsto{q=1} \gplr{\eta_0^\flat}_0^*\ket{1}
+		\end{split}\end{equation*}
+	\end{note} %note:模索その一}
+	
+	\begin{note}[模索その二]\label{note:模索その二} %{
+		$s\in\fukuso$として、$\psi_{q,s}$を次のように定義して、
+		\begin{equation}\label{eq:psiの定義}\begin{split}
+			\psi_{q,s} := \eta_0^\flat\plr{s\eta_q}_q^*
+		\end{split}\end{equation}
+		次の式を使って、
+		\begin{equation*}\begin{split}
+			\psi_{q,s} \ket{\eta^n} 
+			= \eta_0^\flat\sum_{k=0}^n\frac{s^k}{[k]_q!}\eta_q^k\ket{\eta^n}
+			= \sum_{k=0}^n s^k\qbinom{n}{k}\ket{\eta^{n-k+1}}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		真空への作用を低次の項について計算すると次のようになる。
+		\begin{equation*}\begin{split}
+			\psi_{q,s} \ket{1} &= \ket{\eta} \\
+			\psi_{q,s}^2\ket{1} &= \ket{\eta^2} + s \ket{\eta} \\
+			\psi_{q,s}^3\ket{1} &= \ket{\eta^3} + \ggplr{[2]_q + 1}s \ket{\eta^2} 
+				+ 2s^2 \ket{\eta} \\
+			\psi_{q,s}^4\ket{1} 
+				&= \ket{\eta^4} + \ggplr{[3]_q + [2]_q + 1}s \ket{\eta^2} \\
+				&\; + \ggplr{[3]_q + [2]_q^2 + [2]_q + 2}s^2 \ket{\eta^2} 
+				+ \ggplr{[2]_q + 4} s^3\ket{\eta^2} \\
+		\end{split}\end{equation*}
+		不思議なことに、$s=t$とすると、$t$の四次までの範囲で、
+		$\plr{\psi_{q,t}}_q^*\ket{1}$は$q=0,1$で木の成長
+		\eqref{eq:平面二分木の成長その二}の解に一致する。
+		しかし、$0<q<1$では四次で不一致が現れる。
+		\begin{equation*}\begin{split}
+			\bra{t:q}\psi_{q,t}^{n+1}\ket{1} = t \sum_{k=0}^n \qbinom{n}{k}_q
+			\bra{t:q}\psi_{q,t}^k\ket{1} \bra{t:q}\psi_{q,t}^{n-k}\ket{1}
+		\end{split}\end{equation*}
+	\end{note} %note:模索その二}
+
+	\begin{note}[q-Kleeneスターの余積]\label{note:q-Kleeneスターの余積} %{
+		$\eta_q,\;\eta_q^\flat$と$m_0$の交換関係は次のようになることから、
+		\begin{equation*}\begin{split}
+			\eta_qm_0 &= m_0\plr{\eta_q\otimes1 + q^{\Nhat}\otimes\eta_q} \\
+			\eta_q^\flat m_0 &= m_0\plr{\eta_q^\flat\otimes1 
+				+ q^{\Nhat}\otimes\delta_q^\flat} \quad\text{where}\quad 
+				\delta_q := \eta_q - \eta_0
+		\end{split}\end{equation*}
+		$\gplr{t\eta_q}_q^*,\;\gplr{t\eta_q^\flat}_q^*$と$m_0$の交換関係は
+		次のようになる。
+		\begin{equation*}\begin{split}
+			\gplr{t\eta_q}_q^*m_0 &= m_0 \gplr{q^{\Nhat}\otimes t\eta_q}_q^* 
+				\gplr{t\eta_q\otimes1}_q^* \\
+			\gplr{t\eta_q^\flat}_q^*m_0 &= m_0 \gplr{t\eta_q^\flat\otimes1}_q^*
+				\gplr{q^{\Nhat}\otimes t\delta_q^\flat}_q^*
+		\end{split}
+			\quad\text{for all } t\in\fukuso
+		\end{equation*}
+		そして、直接の計算により次の式が得られ、
+		\begin{equation*}\begin{split}
+			\plr{\eta_q\otimes1 + q^{\Nhat}\otimes\eta_q}^2
+			= \sum_{k=0}^2 \qbinom{2}{k} q^{k\Nhat}\eta_q^{n-k}\otimes\eta_q^k
+		\end{split}\end{equation*}
+		帰納法によって次の式が成り立つことが示される。
+		\begin{equation*}\begin{split}
+			\plr{\eta_q\otimes1 + q^{\Nhat}\otimes\eta_q}^n
+			= \sum_{k=0}^n \qbinom{n}{k} q^{k\Nhat}\eta_q^{n-k}\otimes\eta_q^k
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		したがって、次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\gplr{t\eta_q}_q^*m_0 = m_0\gplr{q^{\Nhat}\otimes\eta_q}_q^*
+				\gplr{\eta_q\otimes1}_q^* \quad\text{for all } t\in\fukuso
+		\end{split}\end{equation*}
+		同様に、直接の計算により次の式が得られ、
+		\begin{equation*}\begin{split}
+			\plr{\eta_q^\flat\otimes1 + q^{\Nhat}\otimes\delta_q^\flat}^2
+			= \sum_{k=0}^2 \qbinom{2}{k} \gplr{\eta_q^\flat}^{n-k}q^{k\Nhat}
+				\otimes\gplr{\delta_q^\flat}^k
+		\end{split}\end{equation*}
+		帰納法によって次の式が成り立つことが示され、
+		\begin{equation*}\begin{split}
+			\plr{\eta_q^\flat\otimes1 + q^{\Nhat}\otimes\delta_q^\flat}^n
+			= \sum_{k=0}^n \qbinom{n}{k} \gplr{\eta_q^\flat}^{n-k}q^{k\Nhat}
+				\otimes\gplr{\delta_q^\flat}^k \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		次の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\gplr{t\eta_q^\flat}_q^*m_0 = m_0 \gplr{\eta_q^\flat\otimes1}_q^*
+				\gplr{q^{\Nhat}\otimes\delta_q^\flat}_q^*
+				\quad\text{for all } t\in\fukuso
+		\end{split}\end{equation*}
+		$\gplr{t\eta_q}_q^*$と$\gplr{t\eta_q^\flat}_q^*$の場合では、
+		右辺の因子の積の順序が逆になっていることに注意する。
+	\end{note} %note:q-Kleeneスターの余積}
+
+	\begin{note}[$\delta_q$の交換関係]\label{note:delta_qの交換関係} %{
+		$\delta_q$と$\eta_0^\flat$の交換関係は次のようになる。
+		\begin{equation*}\begin{split}
+			\delta_q\eta_0^\flat = q\eta_0^\flat\eta_q 
+			&\implies \gplr{t\delta_q}_q^*\eta_0^\flat 
+				= \eta_0^\flat\gplr{qt\eta_q}_q^* \\
+			&\implies \gplr{t\delta_q}_q^*\gplr{u\eta_0^\flat}_0^*
+				= \gplr{t\delta_q}_q^* 
+				+ u\eta_0^\flat\gplr{qt\eta_q}_q^*\plr{qt\eta_q}_q^*
+		\end{split}\end{equation*}
+		したがって、$\gplr{t\delta_q}_q^*$のコヒーレント状態への作用を
+		次のようになる。
+		\begin{equation*}\begin{split}
+			\gplr{t\delta_q}_q^*\ket{u:0} = \ket{1} 
+			+ u\eta_0^\flat\gplr{qt\eta_q}_q^*\ket{u:0}
+		\end{split}\end{equation*}
+	\end{note} %note:delta_qの交換関係}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
 	ここに現れた作用素$\delta_q$と$\eta_0^\flat$の交換関係は次のようになる。
 	\begin{equation*}\begin{split}
 		\delta_q\eta_0^\flat = q\eta_0^\flat\eta_q
@@ -112,8 +1133,19 @@
 
 	\begin{todo}[式の変形]\label{todo:式の変形} %{
 		定数$u$を関数に変更することが考えられる。少なくとも、$q=0$の時は、
-		$\plr{u\eta_0^\flat\plr{t\eta_0}_0^*}_0^*\ket{1}$という状態は意味が
-		ある。
+		\begin{equation*}\begin{split}
+			\ket{x:0}:=\plr{u\eta_0^\flat\plr{t\eta_0}_0^*}_0^*\ket{1}
+		\end{split}\end{equation*}
+		という状態は意味がある。
+		この状態を変形することを考えた場合、余積の一項目が
+		$m_0^\flat\ket{x:q}=\ket{x:q}\otimes\ket{y:q}$という形になることが
+		一つめのカギになる。そして、二項目が次の式を満たせば、
+		\begin{equation*}\begin{split}
+			\plr{t\delta_q}_q^*\ket{y:q}
+			\propto \eta_q^\flat\plr{t\eta_q}_q^*\ket{x:q}
+		\end{split}\end{equation*}
+		欲しい微分方程式$\plr{\partial_t}_q\plr{\phi|t}=\plr{\phi|t}^2$の
+		解が得られる。
 	\end{todo} %todo:式の変形}
 %s1:微分方程式とBrzozowski代数}
 \section{指数写像}\label{s1:指数写像} %{
@@ -335,13 +1367,6 @@
 	\end{split}\end{equation*}
 	行列$T$のBrzozowski代数の階数は$\plr{\deg f}\plr{\deg f+1}/2$となる。
 
-	\begin{note}[整域の標数]\label{note:整域の標数} %{
-		$R$を整域とする。$n\in\sizen$を$n1=0$となる最小の自然数とする。
-		ある$p,q\in\sizen$で$n=pq$と書けたとすると、$n1=\plr{p1}\plr{q1}=0$
-		となる。$R$は整域だから、$p1=0$または$q1=0$となるが、それは$n$の定義に
-		反する。したがって、$n$は$0$または素数でなくてはならない。
-		つまり、整域の標数は$0$または素数に限られる。
-	\end{note} %note:整域の標数}
 %s1:代数式と差分式の関係}
 \section{Riccati方程式}\label{s1:Riccati方程式} %{
 	定数を係数とするRiccati方程式を考える。
@@ -527,297 +1552,6 @@
 	Reutenauer達\cite{Reutenauer:2012}が、代数的Chomsky-Schutzenber
 	の定理の部分だけを抜き出して解説している。
 %s1:代数的Chomsky-Schutzenbergerの定理}
-\section{環の中心}\label{s1:環の中心} %{
-	$V$を環、$C$を$V$の中心とする。$C$は$0$と$1$を含むので、空ではない。
-	また、$x,y\in C$なら、任意の$v\in V$に対して次のことが成り立つので、
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item $(x+y)r=r(x+y)$
-		\item $xyr=rxy$
-	\end{itemize} %}
-	$C$は$V$の部分環となる。
-%s1:環の中心}
-\section{既約と分解可能}\label{s1:既約と分解可能} %{
-	$S$を環、$V$を$S$上の加群とする。部分空間$W\subset V$が$SW\subseteq W$と
-	なるとき、$W$を不変な部分空間という。
-	不変な部分空間が$\set{0}$と$V$自身に限られるとき、$V$を既約な加群という。
-	また、任意の不変な部分空間$W\subseteq V$に対して$V=W\oplus W'$と直和分解
-	できるとき、$V$を分解可能または完全可約な加群という。
-%s1:既約と分解可能}
-\section{Brzozowski代数}\label{s1:Brzozowski代数} %{
-	$R$を可換環、$A$を空でない有限集合とする。
-	$A$から生成される$R$上のBrzozowski代数\footnote{
-		q-Heisenberg代数の$q=0$としたものをBrzozowski代数と書いている。
-	}を$R\Eta(A)$と書く。
-	\begin{equation*}\begin{split}
-		R\Eta(A) := \frac{R\braket{A,A^\flat}}
-			{ab^\flat = \jump{a=b} \text{ for all }a,b\in A} 
-	\end{split}\end{equation*}
-	$R\Eta(A)$の基底を次のように書くことにする。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item $A$の元を消滅演算子
-		\item $A^\flat$の元を生成演算子
-	\end{itemize} %}
-	また、文字集合を明記する必要がない場合は、文字集合の大きさだけを明記
-	して$R\Eta_n$と書き、文字集合について次の便宜を用いることにする。
-	\begin{equation*}\begin{split}
-		R\Eta_n := R\Eta(H_n) \quad\text{where } H_n := \set{\eta_1,\dots,e_n}
-	\end{split}\end{equation*}
-	\underline{逆順の}代数射$-^\flat:R\Eta(A)\to R\Eta(A)$を次のように定義する。
-	\begin{equation*}\begin{split}
-		(a)^\flat = a^\flat,\quad (a^\flat)^\flat = a
-		\quad\text{for all } a\in A
-	\end{split}\end{equation*}
-	そして、$R\Eta_n$の場合は特別に次の約束を使う。
-	\begin{equation*}\begin{split}
-		\eta_i^\flat = \eta_{-i} \quad\text{for all } i\in1..n
-	\end{split}\end{equation*}
-
-\subsubsection{数演算子}\label{s3:数演算子} %{
-	$\mu_n\in R\Eta(A)$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\mu_n := \sum_{a\in A} (a^\flat)^na^n \quad\text{for all } n\in\sizen
-	\end{split}\end{equation*}
-	集合$M\subset R\Eta(A)$を$M:=\set{\mu_n\bou n\in\sizen}$と定義すると、
-	次の式から、
-	\begin{equation*}\begin{split}
-		\mu_m\mu_n = \mu_{\max(m,n)} \quad\text{for all } m,n\in\sizen
-	\end{split}\end{equation*}
-	$M$はモノイドとなり、モノイド同型$M\simeq(\sizen,\max,0)$が成り立つ。
-	また、$M$の元はすべてべき等$\mu_n^2=\mu_n$になる。
-	特に、$\what{N}_0:=\mu_1$と定義し、$\what{N}_0$を数演算子ということに
-	する。
-%s3:数演算子}
-
-\subsubsection{Fock空間}\label{s3:Fock空間} %{
-	係数環$R$が複素数の場合は、$\what{N}_0$はべき等なので、固有値は$0$と$1$
-	だけになることが言える。$\what{N}_0$の固有値を拠り所にして表現を考える
-	ために、係数環を複素数に限定する。
-
-	$\fukuso\Eta(A)$の表現空間は、$\what{N}_0$の固有値によって次の三種類
-	に分類される。
-	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
-		\item $\what{N}_0$の固有値を$0$だけ持つ。
-		\item $\what{N}_0$の固有値を$1$だけ持つ。
-		\item $\what{N}_0$の固有値を$0$と$1$の両方持つ。
-	\end{enumerate} %}
-	ここでは、三番目の$\what{N}_0$の固有値を$0$と$1$の両方持つ表現空間を
-	考える。
-
-	$V$を$\fukuso\Eta(A)$の表現空間とし、$V_\lambda$を$\what{N}_0$の固有値
-	$\lambda$を持つ$V$の部分空間とすると、$V=V_0\oplus V_1$と直和分解される。
-	そして、$V_0$と$V_1$は空でないとする。任意の$a\in A$に対して次の性質が
-	成り立つ。
-	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
-		\item $\ker a^\flat=\set{0}$となる。\\
-		ある$v\in V$に対して$a^\flat v=0$ならば、左から$a$を作用させると、
-		$v=0$となる。
-		%
-		\item $\ker a=V_0$となる。\\
-		任意の$v\in V_0$に対して$\what{N}_0v=0$となるが、左から$a$を作用させる
-		と、$av=0$となる。したがって、$V_0\subseteq \ker a$となる。
-		一方、$\what{N}_0$の定義より、$\ker a\subseteq V_0$となるから、
-		$\ker a=V_0$となることがわかる。
-		%
-		\item $a^\flat V\subseteq V_1$となる。\\
-		任意の$v\in V$に対して$\what{N}_0a^\flat v=a^\flat v$となる。
-		%
-		\item 任意の$v\neq0\in V_0$と$n\in\sizen$に対して
-		$\Set{(a^\flat)^nv\bou n\in\sizen}$は線形独立となる
-		（ノート\ref{note:自然数による基底系}）。
-	\end{enumerate} %}
-	そして、次の性質が成り立つ。
-	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
-		\item 任意の$v\neq0\in V_0$に対して集合$(A^\flat)^*v\subset V$を
-		$(A^\flat)^*v:=\Set{w^\flat v\bou w\in A^*}$と定義すると、
-		$(A^\flat)^*v$の元は互いに線形独立となる
-		（ノート\ref{note:単語による基底系}）。
-		したがって、任意の$v\neq0\in V_0$に対してモノイド環$\fukuso\braket{A}$
-		との線形同型$\fukuso(A^\flat)^*v\simeq\fukuso\braket{A}$が成り立つ。
-		%
-		\item $u,v\in V_0$が互いに線形独立であれば、直和分解
-		$\fukuso(A^\flat)^*u\cup\fukuso(A^\flat)^*v
-		=\fukuso(A^\flat)^*u\oplus\fukuso(A^\flat)^*v$が成り立つ
-		（ノート\ref{note:真空の独立性}）。
-	\end{enumerate} %}
-	したがって、次の部分空間の関係が成り立つ。
-	\begin{equation*}\begin{split}
-		\plr{\fukuso\braket{A}}^{\oplus\plr{\dim\ker\what{N}_0}} \subseteq V
-		\quad\text{as vector space}
-	\end{split}\end{equation*}
-	また、$\what{N}_0$の固有値が$0$と$1$の両方を持つような$\fukuso\Eta(A)$
-	の$\fukuso\braket{A}$への表現は既約表現となる
-	（ノート\ref{note:Fock表現の既約性}）。
-	以上を定義と命題の形でまとめておく。
-
-	\begin{definition}[Fock表現]\label{def:Fock表現} %{
-		$R$を可換環、$A$を空でない有限集合、$R\Eta(A)$を$R$上のBrzozowski代数
-		とする。$R\Eta(A)$の自由モノイド環$R\braket{A}$への次の表現をFock表現
-		ということにする。
-		\begin{alignat*}{2}
-			a\ket{1} &= 0 &\quad&\text{for all } a\in A \\
-			a\ket{bw} &= \jump{a=b}\ket{w} 
-				&\quad&\text{for all } a,b\in A,\; w\in A^* \\
-			a^\flat\ket{w} &= \ket{aw} 
-				&\quad&\text{for all } a\in A,\; w\in A^*
-		\end{alignat*}
-		ここで、$\fukuso\Eta(A)$の基底系と$\fukuso\braket{A}$の基底系を区別
-		するために、$\fukuso\braket{A}$の基底系をブラケット記法を使って書いた。
-	\end{definition} %def:Fock表現}
-
-	\begin{proposition}[Fock表現の既約性]\label{prop:Fock表現の既約性} %{
-		複素数上のBrzozowski代数のFock表現は既約表現である。
-	\end{proposition} %prop:Fock表現の既約性}
-
-	\begin{proposition}[数演算子による表現の分類]\label{prop:数演算子による表現の分類} %{
-		$A$を空でない有限集合、$\fukuso\Eta(A)$を複素数上のBrzozowski代数
-		とする。$\fukuso\Eta(A)$の表現$(\rho,V)$が、$\what{N}_0$の固有値
-		$0$と$1$の両方を持てば、次の部分空間の関係が成り立つ。
-		\begin{equation*}\begin{split}
-			\plr{\fukuso\braket{A}}^{\oplus\plr{\dim\ker\what{N}_0}} \subseteq V
-			\quad\text{as vector space}
-		\end{split}\end{equation*}
-	\end{proposition} %prop:数演算子による表現の分類}
-
-	\begin{note}[自然数による基底系]\label{note:自然数による基底系} %{
-		任意の$v\neq0\in V_0$と$n\in\sizen$に対して
-		$\Set{(a^\flat)^iv\bou i\in0..n}$は線形独立となる。
-		\begin{proof} %{
-			$n$に関する帰納法を使う。$n=0$の時は明らかで、ある$n\in\sizen$で
-			命題が成り立つとすると、任意の$c_1,\dots,c_{n+1}\in\fukuso$に対して
-			次の式が成り立つ。
-			\begin{alignat*}{2}
-				& c_1(a^\flat)v +\cdots+ c_{n+1}(a^\flat)^{n+1}v = 0 \\
-				\iff & a^\flat\plr{c_1v +\cdots+ c_{n+1}(a^\flat)^nv} = 0 \\
-				\implies & c_1v +\cdots+ c_{n+1}(a^\flat)^nv = 0 
-					&\quad& \because\quad \ker a^\flat = \set{0} \\
-				\implies & c_1v = 0 \text{ and } 
-					c_2v +\cdots+ c_{n+1}(a^\flat)^nv = 0
-					&\quad& \because\quad V_0\cup V_1 = \set{0} \\
-				\implies & c_1 = c_2 =\cdots= c_{n+1} = 0
-					&\quad& \text{by assumptions}
-			\end{alignat*}
-		\end{proof} %}
-	\end{note} %note:自然数による基底系}
-
-	\begin{note}[単語による基底系]\label{note:単語による基底系} %{
-		任意の$v\neq0\in V_0$、$n\in\sizen$に対して集合
-		$(A^\flat)^n v\subseteq V$を次のように定義し、
-		\begin{equation*}\begin{split}
-			(A^\flat)^n v := \Set{w^\flat v\bou w\in A^n}
-		\end{split}\end{equation*}
-		$(A^\flat)^{\le n} v:=\cup_{r=0}^n(A^\flat)^r v$とする。
-		任意の$n\in\sizen$に対して$(A^\flat)^{\le n} v$の元は互いに線形独立
-		になる。
-		\begin{proof} %{
-			$(A^\flat)^{\le n} v$の$n$についての帰納法で証明する。
-			$n=0$のときは$(A^\flat)^{\le 0} v=\fukuso v$だから、命題が成り立つ
-			ことがわかる。ある$n\in\sizen$で命題が成り立つと仮定する。
-			写像$c:A^{n+1}\to\fukuso$が次の式を満たすとすると、
-			\begin{equation*}\begin{split}
-				\sum_{w\in A^{n+1}} \plr{c|w}w^\flat v = 0
-			\end{split}\end{equation*}
-			任意の$a\in A$で次の式が成り立つ。
-			\begin{alignat*}{2}
-				a\sum_{w\in A^n} \plr{c|w} w^\flat v = 0
-				\implies & \sum_{w\in A^n} \plr{c|wa} w^\flat v = 0 \\
-				\implies & \plr{c|wa} = 0 \quad\text{for all } w\in A^n
-					&\quad& \text{by assumption}
-			\end{alignat*}
-			任意の$k\in\sizen$で$A^{k+1}=\cup_{a\in A}A^ka$が成り立つから、
-			$c=0$となることがわかる。したがって、$n+1$でも命題が成り立つことが
-			わかる。
-		\end{proof} %}
-	\end{note} %note:単語による基底系}
-
-	\begin{note}[真空の独立性]\label{note:真空の独立性} %{
-		ある$u,v\in V_0$、$w\in A^*$と写像$c:A^*\to\fukuso$が次の式を
-		満たすとすると、
-		\begin{equation*}\begin{split}
-			w^\flat v = \sum_{x\in A^*} (c|x)x^\flat u
-		\end{split}\end{equation*}
-		次の式から、
-		\begin{equation*}\begin{split}
-			w^\flat v = \sum_{x\in A^*} (c|x)x^\flat u
-			\implies v = \sum_{x\in A^*} (c|xw)x^\flat u \\
-			\implies (c|w) u = v \quad\text{and}\quad
-			(c|xw) = 0 \quad\text{for all } w\in A^+
-		\end{split}\end{equation*}
-		$u$と$v$は互いに線形従属となる。したがって、$u,v\in V_0$が互いに
-		線形独立であれば、$(A^\flat)^*u$と$(A^\flat)^*v$は互いに線形独立
-		となり、$(A^\flat)^*u\cup(A^\flat)^*v=(A^\flat)^*u\oplus(A^\flat)^*v$
-		となる。
-	\end{note} %note:真空の独立性}
-
-	\begin{note}[Fock表現の既約性]\label{note:Fock表現の既約性} %{
-		部分空間$V\subseteq\fukuso\braket{A}$を$\fukuso\Eta(A)$-不変な部分空間
-		とする。
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item $V$が$\what{N}_0$の固有値$0$を持てば、$V=\set{0}$または
-			$\fukuso\ket{1}\subseteq V$となる。$\fukuso\ket{1}$を含む
-			$\fukuso\Eta(A)$-不変な部分空間は$\fukuso\braket{A}$だけだから、$V$は
-			$\set{0}$または$\fukuso\braket{A}$自身となる。
-			%
-			\item $V$が$\what{N}_0$の固有値$1$のみを持てば、$V\subseteq\fukuso A^+$
-			となる。ここで、
-			$\fukuso A^+:=\myop{span}_\fukuso\Set{\ket{w}\bou w\in A^+}$とする。
-			しかし、任意の$w\in A^+$に対して$w\ket{w}=\ket{1}$となるから、
-			$\fukuso A^+$は$\fukuso\Eta(A)$-不変な部分空間ではなく、
-			その部分空間もまた$\fukuso\Eta(A)$-不変な部分空間でない。したがって、
-			$\what{N}_0$の固有値$1$だけを持つ$\fukuso\Eta(A)$-不変な
-			$\fukuso\braket{A}$の部分空間は存在しない。
-		\end{itemize} %}
-		したがって、Fock表現は既約表現となる。
-	\end{note} %note:Fock表現の既約性}
-
-	\begin{note}[係数に対する制限]\label{note:係数に対する制限} %{
-		係数に対する制限を弱めるためには、可換環$R$と$R$上の加群$V$が
-		次の条件をクリアする必要がある。
-		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
-			\item $V$でべき等作用素$T^2=T$の固有値が$0$と$1$だけになること。
-			\item $V$が固有ベクトル空間で直和分解できること。
-			\item 任意の$r\neq0\in R$と$v\neq0\in V$に対して$rv\neq0$
-			となること。
-		\end{enumerate} %}
-		これらの条件は、$R$が整域で$V$が自由加群$R^D$であればクリアできると
-		思う。
-	\end{note} %note:係数に対する制限}
-
-	\begin{todo}[この後の展開]\label{todo:この後の展開} %{
-		この後の予定
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item Fock空間の内積を定義して、自由モノイドの積とその共役の作用版が
-			Brzozowski代数となることを示す。
-			\item 係数環を整域上の多項式環の有理式体とし、自由モノイドの積を
-			変形してq-シャッフル積を定義し、その作用素版を導く。
-			\item 一変数の場合にコヒーレント状態を使ってq-Brzozowski代数の
-			解析的な表現を導く。Kleeneスターに対して成り立つ式$x^*=1+xx^*$を
-			q-Kleeneスターに対して拡張する。多分、q-積分を使うことになる。
-			\item 多変数の場合に拡張する。
-			\item Dyck単語の分割を解析の言葉で理解する。
-		\end{itemize} %}
-	\end{todo} %todo:この後の展開}
-	\begin{figure}[htbp] %{
-		\begin{center}
-			\includegraphics[width=.96\textwidth]{fig/japan-budget.png}
-		\end{center}
-		\caption{テスト}\label{fig:テスト}
-	\end{figure} %}
-%s3:Fock空間}
-\subsubsection{非可換な係数}\label{s3:非可換な係数} %{
-	可換上のBrzozowski代数を非可換上のBrzozowskiに拡張する。
-	$V$を可換とは限らない環、$\Z V$を$V$の中心とする。
-	$V\Eta(A):=V\otimes_{\Z V}(\Z V)\Eta(A)$と書き、$\otimes_{\Z V}$を省略して
-	次のように書く。
-	\begin{equation*}\begin{split}
-		vx := v\otimes_{\Z V}x =: xv \\
-		vx^\flat := v\otimes_{\Z V}x^\flat =: x^\flat v 
-	\end{split}
-		\quad\text{for all } v\in V,\; x\in(\Z V)\Eta(A)
-	\end{equation*}
-	また、テンソル積$V\Eta(A)\otimes_{\Z V}(\Z V)\Eta(A)$を多用するが、
-	$V\Eta(A)\otimes\Eta(A):=V\Eta(A)\otimes_{\Z V}(\Z V)\Eta(A)$と略記する。
-%s3:非可換な係数}
-%s1:Brzozowski代数}
 \section{Dyck単語の分割}\label{s1:Dyck単語の分割} %{
 	この節では次の便宜を用いることにする。
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{

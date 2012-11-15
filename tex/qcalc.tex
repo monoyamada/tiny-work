@@ -131,7 +131,7 @@
 		\frac{1}{\plr{1 - q}q^n} \quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
 	したがって、q-Kleeneスターを無限積で書くことができて、
-	\begin{equation}\label{eq:q-Kleeneスターの積分表示}\begin{split}
+	\begin{equation}\label{eq:q-Kleeneスターの乗積表示}\begin{split}
 		\plr{x}_q^* = \prod_{n\in\sizen} \frac{1}{1 - \plr{1 - q}q^nx}
 	\end{split}\end{equation}
 	$n=0$の極$1/\plr{1-q}$が最も原点に近い極になることがわかる。
@@ -142,14 +142,19 @@
 		,\quad \frac{1}{\plr{x}_1^*} = \frac{1}{\plr{\exp|x}} = \plr{\exp|-x}
 	\end{split}\end{equation*}
 	紙面の節約のために、$\plr{x}_q^{-*}:=\plr{x}_q^*$と書くことにする。
-	q-Kleeneスターの積分表示\eqref{eq:q-Kleeneスターの積分表示}を使うと、
-	\begin{equation*}\begin{split}
+	q-Kleeneスターの乗積表示\eqref{eq:q-Kleeneスターの乗積表示}を使うと、
+	q-Kleeneスターの逆数を乗積表示で書くことができる。
+	\begin{equation}\label{eq:q-Kleeneスターの逆数を乗積表示}\begin{split}
 		(x)_q^{-*} = \prod_{n\in\sizen} \gplr{1 - \plr{1 - q}q^nx}
-		= \sum_{n\in\sizen} c_n\gplr{-\plr{1 - q}x}^n \quad\text{where} \\
+	\end{split}\end{equation}
+	乗積を分解すると次のようになる。
+	\begin{equation*}\begin{split}
+		(x)_q^{-*} = \sum_{n\in\sizen} c_n\gplr{-\plr{1 - q}x}^n 
+		\quad\text{where} \\
 		c_0  := 1,\quad c_n := \sum_{0\le k_1<\cdots<k_n} q^{k_1 +\cdots+	k_n} 
 			\quad\text{for all } n\in\sizen_+
 	\end{split}\end{equation*}
-	係数$c_n$を求めるために、$c_{n,r}$を次のように定義する。
+	係数$c_n$を求めるために、$c_{n,r}$を次のように定義すると、
 	\begin{equation*}\begin{split}
 		c_{0,r} = 1,\quad
 		c_{n,r} = \sum_{r\le k_1<\cdots<k_n} q^{k_1 +\cdots+	k_n}
@@ -178,10 +183,10 @@
 	\end{split}\end{equation*}
 	$a_n=\sum_{k=0}^{n-1}k=n\plr{n-1}/2$となることがわかる。したがって、
 	$\plr{x}_q^{-*}$が次のように書けることがわかる。
-	\begin{equation*}\begin{split}
+	\begin{equation}\label{eq:q-Kleeneスターの逆数のTayler展開}\begin{split}
 		\plr{x}_q^{-*} = \sum_{n\in\sizen} q^{\binom{n}{2}}
 			\frac{\plr{-x}^n}{[n]_q!}
-	\end{split}\end{equation*}
+	\end{split}\end{equation}
 
 	q-Kleeneスターもq-二項係数と同様の式が成り立つ。不定元$x$と$y$が$xy=qyx$
 	という交換関係を持てば、次の式から$\plr{x+y}_q^*=\plr{x}_q^*\plr{y}_q^*$
