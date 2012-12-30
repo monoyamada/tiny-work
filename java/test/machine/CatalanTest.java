@@ -1,15 +1,21 @@
 package machine;
 
+import java.awt.image.ReplicateScaleFilter;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 import tiny.function.LexicographicalOrders;
 import tiny.lang.ArrayHelper;
 import tiny.lang.Debug;
-import tiny.lang.Messages;
 import tiny.lang.StringHelper;
 
 public class CatalanTest extends TestCase {
@@ -134,61 +140,6 @@ public class CatalanTest extends TestCase {
 		});
 		for (int i = 0; i < array.length; ++i) {
 			Debug.log().debug(StringHelper.join(array[i]));
-		}
-	}
-
-	static class Binomial {
-		List<long[][]> binomials;
-		long[] one;
-
-		public long[] get(int n, int k) {
-			if (n < 0 || k < 0) {
-				String msg = "must be 0<=n and 0<=k";
-				throw new IllegalArgumentException(msg);
-			} else if (n < k) {
-				String msg = "must be k<=n";
-				throw new IllegalArgumentException(msg);
-			}
-			return this.doGet(n, k);
-		}
-
-		protected long[] doGet(int n, int k) {
-			List<long[][]> binoms = this.getBinomials(true);
-			if (n < 1) {
-				if (binoms.size() < 1) {
-					long[][] array = new long[1][];
-					array[0] = this.getOne();
-					binoms.add(array);
-				}
-				return binoms.get(n)[k];
-			}
-			for (int nn = binoms.size(); nn <= n; ++nn) {
-				long[][] array = new long[nn + 1][];
-				array[0] = binoms.get(nn - 1)[0];
-				for (int ll = 1; ll <= nn; ++ll) {
-					int rr = nn - ll;
-					long[] xx = null;
-					if (rr < ll) {
-						xx = array[rr];
-					} else {
-					}
-					array[ll] = xx;
-				}
-			}
-		}
-		protected List<long[][]> getBinomials(boolean anyway) {
-			if (this.binomials == null && anyway) {
-				this.binomials = new ArrayList<long[][]>();
-			}
-			return this.binomials;
-		}
-
-		protected long[] getOne() {
-			if (this.one == null) {
-				this.one = new long[1];
-				this.one[0] = 1;
-			}
-			return this.one;
 		}
 	}
 }

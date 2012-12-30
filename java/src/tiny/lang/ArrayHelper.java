@@ -130,7 +130,7 @@ public class ArrayHelper {
 		case 4:
 			return new int[] { array[0], array[1], array[2], array[3], value };
 		default:
-			break;
+		break;
 		}
 		final int[] newArray = new int[n + 1];
 		System.arraycopy(array, 0, newArray, 0, n);
@@ -163,7 +163,7 @@ public class ArrayHelper {
 		case 4:
 			return new int[] { value, array[0], array[1], array[2], array[3] };
 		default:
-			break;
+		break;
 		}
 		final int[] newArray = new int[n + 1];
 		System.arraycopy(array, 0, newArray, 1, n);
@@ -543,6 +543,18 @@ public class ArrayHelper {
 		}
 		return newArray;
 	}
+	
+	public static int[] ensureSize(int[] array, int size) {
+		final int oldSize = array != null ? array.length : 0;
+		if (size <= oldSize) {
+			return array;
+		}
+		final int[] newArray = new int[size];
+		if (array != null && 0 < array.length) {
+			System.arraycopy(array, 0, newArray, 0, array.length);
+		}
+		return newArray;
+	}
 
 	/**
 	 * <code>
@@ -575,15 +587,15 @@ public class ArrayHelper {
 		case 1:
 			return array[begin] < value ? begin + 1 : begin;
 		default:
-			// if (false) {
-			// final int m = begin + (d >> 1);
-			// if (array[m] < value) {
-			// return getLowerBound(array, m, end, value);
-			// } else {
-			// return getLowerBound(array, begin, m, value);
-			// }
-			// }
-			break;
+		// if (false) {
+		// final int m = begin + (d >> 1);
+		// if (array[m] < value) {
+		// return getLowerBound(array, m, end, value);
+		// } else {
+		// return getLowerBound(array, begin, m, value);
+		// }
+		// }
+		break;
 		}
 		for (int m = 0; 1 < d; d = end - begin) {
 			m = begin + (d >> 1);
@@ -738,23 +750,23 @@ public class ArrayHelper {
 		switch (n) {
 		case 0:
 		case 1:
-			break;
+		break;
 		case 2:
 			swap(array, begin, --end);
-			break;
+		break;
 		case 3: {
 			Object x = array[--end];
 			array[end] = array[end - 1];
 			array[end - 1] = array[begin];
 			array[begin] = x;
 		}
-			break;
+		break;
 		default: {
 			Object x = array[--end];
 			System.arraycopy(array, begin, end, begin + 1, n);
 			array[begin] = x;
 		}
-			break;
+		break;
 		}
 	}
 
@@ -779,5 +791,27 @@ public class ArrayHelper {
 			value = fnc.evaluate(array.get(begin));
 		}
 		return value;
+	}
+
+	public static int sum(int[] array) {
+		return ArrayHelper.sum(array, 0, array.length);
+	}
+	public static int sum(int[] array, int begin, int end) {
+		int x = 0;
+		for (; begin < end; ++begin) {
+			x += array[begin];
+		}
+		return x;
+	}
+	
+	public static long sum(long[] array) {
+		return ArrayHelper.sum(array, 0, array.length);
+	}
+	public static long sum(long[] array, int begin, int end) {
+		long x = 0;
+		for (; begin < end; ++begin) {
+			x += array[begin];
+		}
+		return x;
 	}
 }

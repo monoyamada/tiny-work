@@ -1,4 +1,30 @@
 \begingroup %{
+% 行列にも大文字を使いたいために集合を表す大文字を定義しておく。
+\newcommand{\setA}{\mathbb{A}}
+\newcommand{\setB}{\mathbb{B}}
+\newcommand{\setC}{\mathbb{C}}
+\newcommand{\setD}{\mathbb{D}}
+\newcommand{\setX}{\mathbb{X}}
+%
+\newcommand{\bbA}{\mathbb{A}}
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbX}{\mathbb{X}}
+\newcommand{\bbY}{\mathbb{Y}}
+\newcommand{\bbZ}{\mathbb{Z}}
+%
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+%
+\newcommand{\A}{\mycal{A}}
+\newcommand{\B}{\mycal{B}}
 \newcommand{\C}{\mycal{C}}
 \newcommand{\D}{\mycal{D}}
 \newcommand{\E}{\mycal{E}}
@@ -42,15 +68,2220 @@
 \newcommand{\sbt}{\vcenter{\hbox{\tiny$\bullet$}}}
 %
 \newcommand{\what}{\widehat}
+\newcommand{\wbar}[1]{{\widebar{#1}}}
 \newcommand{\rvec}[1]{\overrightarrow{#1}}
 \newcommand{\lvec}[1]{\overleftarrow{#1}}
 \newcommand{\qhat}{{\widehat{q}}}
+\newcommand{\Ihat}{{\widehat{I}}}
 \newcommand{\Nhat}{{\widehat{N}}}
 \newcommand{\Phat}{{\widehat{P}}}
 \newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
+\newcommand{\ls}{{\lambda}}
+\newcommand{\dupls}{\what{\lambda}}
+% indicator
+\newcommand{\isA}[1]{{\ensuremath{\plr{\mathchar`-\in{#1}}}}}
+% lie algebra
+\newcommand{\sll}{{\mathfrak{sl}}}
+% matrix
+\newcommand{\ei}[2]{{{\mathbf#1}_{#2}}}
+\newcommand{\eij}[3]{{{\mathbf#1}_{#2}{\mathbf#1}_{#3}^\tran}}
+%
+\newcommand{\EOF}{{\diamondsuit}}
+\newcommand{\dif}{{\partial}}
+\newcommand{\uesita}[2]{\genfrac{}{}{0pt}{0}{#1}{#2}}
+\newcommand{\op}[1]{\mathinner{\operatorname{#1}}}
+\newcommand{\Res}{\ensuremath{\mathop\mathrm{Res}}}
+%
+\newcommand{\EOP}{\hspace{\fill}\P}
 %
 {\setlength\arraycolsep{2pt}
 %
+\section{Connes-Kreimer代数}\label{s1:Connes-Kreimer代数} %{
+	\cite{brouder:2004}のメモ。
+\subsection{形式級数の合成}\label{s2:形式級数の合成} %{
+	$f,g$を$\fukuso$上の定数項を持たない形式級数とする。
+	\begin{equation*}\begin{split}
+		(f|x) := \sum_{n\in\sizen_+}f_nx^n
+		,\quad (g|x) := \sum_{n\in\sizen_+}g_nx^n
+		\quad\text{where } f_n,g_n\in\fukuso
+	\end{split}\end{equation*}
+	合成$(f\circ g|x)$の係数$(f\circ g)_n$を求めることを考える。
+	\begin{equation*}\begin{split}
+		(f\circ g|x) = \sum_{n\in\sizen_+} (f\circ g)_nx^n
+		\quad\text{where } (f\circ g)_n\in\fukuso
+	\end{split}\end{equation*}
+	$(f\circ g|x)=\sum_{n\in\sizen_+}f_n(g|x)^n$なので、$(g|x)^n$を計算
+	すると次のようになるので、
+	\begin{equation}\label{eq:形式級数の合成その零}\begin{split}
+		(g|x)^n &= \sum_{m\in\sizen} G_{m+n}^nx^{m+n} \quad\text{where}\quad
+		G_m^n := \sum_{\substack{k_1,\dots,k_n\in\sizen_+\\k_1+\cdots+k_n=m}}
+		g_{k_1}\cdots g_{k_n}
+	\end{split}\end{equation}
+	ここで定義した$G_m^n$を用いると、$(f\circ g|x)$は次のように行列の形で
+	書け、
+	\begin{equation}\label{eq:形式級数の合成その一}\begin{split}
+		(f\circ g|x) &= \sum_{n\in\sizen_+}f_n(g|x)^n
+		= \sum_{n\in\sizen_+}\sum_{m\in\sizen} f_nG^n_{m+n}x^{m+n} \\
+		&= \begin{pmatrix}
+			f_1 & f_2 & f_3 & \cdots
+		\end{pmatrix}\begin{pmatrix}
+			G_1^1 & G_2^1 & G_3^1 & \cdots \\ 
+			0 & G_2^2 & G_3^2 & \cdots \\ 
+			0 & 0 & G_3^3 & \cdots \\
+			\vdots
+		\end{pmatrix}\begin{pmatrix}
+			x \\ x^2 \\ x^3 \\ \vdots
+		\end{pmatrix}
+	\end{split}\end{equation}
+	合成の係数$(f\circ g)_n$は次のようになることがわかる。
+	\begin{equation}\label{eq:形式級数の合成}\begin{split}
+		(f\circ g)_n = \sum_{k=1}^n f_kG_n^k
+		= \sum_{k=1}^n f_k
+		\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
+		g_{r_1}\cdots g_{r_k}
+	\end{split}\end{equation}
+	$G_m^n$が計算できれば、直ちに$(f\circ g)_n$が計算できるが、
+	$G_m^n$は次の分配する仕方を計算することになる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $n$の区別のつかない球を、
+		\item $m$個の区別のつく箱に分配する。
+	\end{itemize} %}
+	低次の項は次のようになっている。
+	\begin{equation*}\begin{split}
+		(f\circ g)_1 &= g_1f_1 \\
+		(f\circ g)_2 &= g_2f_1 + g_1^2f_2 \\
+		(f\circ g)_3 &= g_3f_1 + 2g_1g_2f_2 + g_1^3f_3 \\
+		(f\circ g)_4 &= g_4f_1 + \plr{2g_1g_3+g_2^2}f_2 
+		+ 3g_1^2g_2f_3 + g_1^4f_4 \\
+		(f\circ g)_5 &= g_5f_1 + \plr{2g_1g_4 + 2g_2g_3}f_2 
+		+ \plr{3g_1^2g_3 + 3g_1g_2^2}f_3 + 4g_1^3g_2f_4 + g_1^5f_5 \\
+	\end{split}\end{equation*}
+
+	定数項を含まない形式級数同士の合成だから、簡単な形で話がまとまるが、
+	形式級数が定数項を含む場合は、次のようになって、
+	\eqref{eq:形式級数の合成その一}の行列が三角行列でなくなり、
+	話がもっと複雑になる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $(g|x)$が定数項を含まない場合は、
+		$(g|x)^n = g_1^nx^n + ng_1^{n-1}g_2x^{n+1} + \cdots$となる。
+		\item $(g|x)$が定数項$g_0$を含む場合は、
+		$(g|x)^n = g_0^n + ng_0^{n-1}g_1x + \cdots$となる。
+	\end{itemize} %}
+	定数項を含まない形式級数に制限することで話が簡単になっていることに注意
+	する。
+%s2:形式級数の合成}
+\subsection{形式級数の空間}\label{s2:形式級数の空間} %{
+	前節の形式級数の合成を$\jitu[[x]]$で考えてみる。
+
+\subsubsection{モノイドと余半群の空間}\label{s3:モノイドと余半群の空間} %{
+	形式級数の合成$m_\circ$は結合的で、$x\in\jitu[[x]]$を単位元として
+	もつので、$\plr{\jitu[[x]],m_\circ,x}$はモノイドとなる。
+	ただし、このモノイドは次のように、通常の加法に対して線形ではないので
+	代数とはならないことに注意する。
+	\begin{alignat*}{2}
+		f\circ(g + h) &\neq (f\circ g) + (f\circ g) &&\quad\text{in general} \\
+		(f + g)\circ h &= (f\circ h) + (f\circ h) &&\quad\text{in general}
+	\end{alignat*}
+	$\jitu[[x]]$に余積$\op{dup}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\op{dup}f = f\times f \quad\text{for all } f\in\jitu[[x]]
+	\end{split}\end{equation*}
+	$\op{dup}$は任意の二項演算
+	$\mu:\jitu[[x]]\times\jitu[[x]]\to\jitu[[x]]$
+	に対して次の式を満たす。
+	\begin{equation*}\begin{split}
+		\op{dup}\mu = \plr{\mu\times\mu}\sigma_{23}\plr{\op{dup}\times\op{dup}}
+	\end{split}\end{equation*}
+	したがって、$\op{dup}$と$m_\circ$は互いに準同型となる。
+
+	$\op{dup}$には適当な余単位射は見当たらない。余単位射に近いのものは、
+	次のように定義した線形射$\epsilon:\jitu[[x]]\to\jitu$だろう。
+	\begin{equation}\label{eq:コピーの余単位射}\begin{split}
+		\epsilon f = f_1
+		\quad\text{where } (f|x) = \sum_{n\in\sizen} f_nx^n
+	\end{split}\end{equation}
+	$\epsilon$は$\jitu[[x]]$で$\op{dup}$の余単位射にならないが、
+	$V\subset\jitu[[x]]$を次のようにな形の形式級数全体のつくる部分空間
+	とすると、
+	\begin{equation}\label{eq:群の空間}\begin{split}
+		x + \sum_{n=2}^\infty f_nx_n
+	\end{split}\end{equation}
+	$V$内で$\epsilon$は$\op{dup}$の余単位射となる。
+
+	任意の$n\in\sizen$に対して線形射$x_n^\flat:\jitu[[x]]\to\jitu$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		x_n^\flat f = f_n
+		\quad\text{where } (f|x) = \sum_{n\in\sizen} f_nx^n
+	\end{split}\end{equation*}
+	集合$X_*:=\set{x_n^\flat\bou n\in\sizen}$とすると、$\op{dup}$の畳み込み
+	によってベクトル空間$\jitu X_*$に可換な積が定義される。
+	\begin{equation*}\begin{split}
+		\gplr{\op{dup}^\flat (\alpha\otimes\beta)}f
+		:= (\alpha f)(\beta f)
+		\quad\text{for all } \alpha,\beta\in\jitu X_*,\; f\in\jitu[[x]]
+	\end{split}\end{equation*}
+	$X_*$の$\jitu[[x]]$を定義域とする場合は、$\op{dup}^\flat$は単位元を
+	持たないが、$X_+$の定義域を$V$に制限すると、$\op{dup}^\flat$の単位元は
+	$x_1^\flat$となる。$m_\circ$の畳み込みによってベクトル空間$\jitu X_*$に
+	余積が定義され、
+	\begin{equation*}\begin{split}
+		(m_\circ^\flat\alpha)(f\otimes g) := \alpha(f\circ g)
+		\quad\text{for all } \alpha\in\jitu X_*,\; f,g\in\jitu[[x]]
+	\end{split}\end{equation*}
+	次の線形射$u_\circ^\flat:\jitu X_*\to\jitu$が$m_\circ^\flat$の余単位射
+	となる。
+	\begin{equation*}\begin{split}
+		u_\circ^\flat\alpha := \alpha x
+		\quad\text{for all } \alpha\in\jitu X_*
+	\end{split}\end{equation*}
+	$m_\circ$と$\op{dup}$は互いに準同型だから、
+	$m_\circ^\flat$と$\op{dup}^\flat$も互いに準同型となる。
+
+	$m_\circ^\flat$を基底系$x_m^\flat$について計算すると、次の式から、
+	\begin{equation*}\begin{split}
+		\gplr{m_\circ^\flat x_m^\flat}(x_n\times g|x) 
+		&= x_m^\flat(x^n\circ g|x) = x_m^\flat(g|x)^n \\
+		&= \sum_{\substack{k_1,\dots,k_n\in\sizen\\k_1+\cdots+k_n=m}} 
+		g_{k_1}\cdots g_{k_n}
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		m_\circ^\flat x_m^\flat = \sum_{n\in\sizen} 
+		\sum_{\substack{k_1,\dots,k_n\in\sizen\\k_1+\cdots+k_n=m}} 
+		x_n^\flat\otimes\ggplr{x_{k_1}^\flat\cdots x_{k_n}^\flat}
+	\end{split}\end{equation*}
+	ここで、積$\op{dup}^\flat$の記号を中置記法で省略して書いた。
+	以降も積$\op{dup}^\flat$を中置記法で書く場合は記号を省略することにする。
+%s3:モノイドと余半群の空間}
+\subsubsection{群と余モノイドの空間}\label{s3:群と余モノイドの空間} %{
+	$\jitu[[x]]$の部分空間$V$\eqref{eq:群の空間}を考える。
+	$X_+$の元の定義域を$V$に制限したものを$X_+(V)$とし、そのベクトル空間を
+	$V^\flat:=\jitu X_+(V)$とする。$\op{dup}$を$V$に制限すると、余単位射
+	$\epsilon$\eqref{eq:コピーの余単位射}を持ち、その共役$\op{dup}^\flat$が
+	$V^\flat$の中で単位元$x_1^\flat$を持つようになる。したがって、
+	$\gplr{V^\flat,\op{dup}^\flat,x_1^\flat,m_\circ^\flat,u_\circ^\flat}$は
+	双代数となる。
+	
+	$V^\flat$では$m_\circ^\flat$の和の範囲が次のように修正される。
+	\begin{equation*}\begin{split}
+		m_\circ^\flat x_n^\flat = \sum_{k=1}^n 
+		\sum_{\substack{i_1,\dots,i_k\in\sizen_+\\i_1+\cdots+i_k=n}} 
+		x_k^\flat\otimes\ggplr{x_{i_1}^\flat\cdots x_{i_k}^\flat}
+		\quad\text{for all } n\in\sizen_+
+	\end{split}\end{equation*}
+	ここで、二つ目の和の範囲は次のように有限になり、余積が多項式になること
+	に注意する。
+	\begin{equation*}\begin{split}
+		\sum_{\substack{i_1,\dots,i_k\in\sizen_+\\i_1+\cdots+i_k=n}} 
+		= \sum_{\substack{i_1,\dots,i_k\in1..(n-k+1)\\i_1+\cdots+i_k=n}} 
+	\end{split}\end{equation*}
+	多項式$\beta^n_k$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\gplr{\beta^n_k\bou z_1, z_2,\dots}
+		:= \sum_{\substack{i_1,\dots,i_k\in\sizen_+\\i_1+\cdots+i_k=n}} 
+		z_{i_1}\cdots z_{i_k}
+		\quad\text{for all } k\le n\in\sizen_+
+	\end{split}\end{equation*}
+	余積は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		m_\circ^\flat x_n^\flat = \sum_{k=1}^n 
+		x_k^\flat\otimes\gplr{\beta_k^n\bou\mathbf{x}^\flat}
+		\quad\text{for all } n\in\sizen_+
+	\end{split}\end{equation*}
+
+	\begin{note}[リスケールしたBell多項式]\label{note:リスケールしたBell多項式} %{
+	$\beta^n_k$は次の分配の方法の列挙である。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 区別のつかない$n$個の球を、
+		\item 区別のつく$k$個の箱に、
+		\item 空の箱を許さずに分配する。
+	\end{itemize} %}
+	$\beta^n_k$の分配の方法は次の分配の方法と等しい。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 区別のつかない$n-k$個の球を、
+		\item 区別のつく$k$個の箱に、
+		\item 空の箱を許して分配する。
+	\end{itemize} %}
+	したがって、$\beta^n_k$は次のように書くこともできる。
+	\begin{equation*}\begin{split}
+		\plr{\beta^n_k\bou\mathbf{z}}
+		= \sum_{\substack{i_1,\dots,i_k\in\sizen\\i_1+\cdots+i_k=n-k}} 
+		z_{i_1+1}\cdots z_{i_k+1}
+		\quad\text{for all } k\le n\in\sizen_+
+	\end{split}\end{equation*}
+	また、次の漸化式を満たす。
+	\begin{equation}\label{eq:Bell'の漸化式}\begin{split}
+		\gplr{\beta_{n+1,k+1}\bou\mathbf{z}} 
+		&= \sum_{r=k}^n \gplr{\beta_{r,k}\bou\mathbf{z}}z_{n+1-r} 
+		\quad\text{because} \\
+		\sum_{\substack{r_1,\dots,r_{k+1}\in\sizen_+\\r_1+\cdots+r_{k+1}=n+1}} 
+			z_{r_1}\cdots z_{r_k} z_{r_{k+1}}
+		&= \sum_{r=k}^n
+			\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=r}} 
+			z_{r_1}\cdots z_{r_k} z_{n+1-r} \\
+	\end{split}\end{equation}
+	\EOP
+	\end{note} %note:リスケールしたBell多項式}
+
+	一般的に、群の逆元をとる操作の共役によって双対空間にアンチポードが定義
+	される。以下で、$V$が群になることを見よう。
+
+	次の式により$V$は$m_\circ$について可逆になることがわかる。
+	\begin{equation*}\begin{split}
+		y = x + \sum_{n\in\sizen} f_nx^n
+		\implies x = y - \sum_{n\in\sizen} f_nx^n = y + Oy^2
+	\end{split}\end{equation*}
+	例えば、$(f|x) = x + x^2$を考えてみると、次の式から、
+	\begin{equation*}\begin{split}
+		y = x + x^2 
+		\implies x = \pm\plr{y + \frac{1}{4}}^{\frac{1}{2}} - \frac{1}{2}
+	\end{split}\end{equation*}
+	$V$の元になる方をとって、
+	$(g|x) = \plr{x + \frac{1}{4}}^{\frac{1}{2}} - \frac{1}{2}$とすると、
+	$f\circ g=x=g\circ f$が成り立つ。
+	一般に$f\in V$に対してその逆元$g\in V$を求めてみよう。
+	\eqref{eq:形式級数の合成}から$g\circ f$は次のようになり、
+	\begin{equation*}\begin{split}
+		(g\circ f)_n = \sum_{k=1}^n g_k\gplr{\beta^n_k\bou\mathbf{f}}
+	\end{split}\end{equation*}
+	$g\circ f=x$となるためには、$(g\circ f)_2=(g\circ f)_3=\cdots=0$となる
+	必要がある。行列で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			1 & 0 & 0 & \cdots \\
+			\gplr{\beta^2_1\bou\mathbf{f}} & 1 & 0 & \cdots \\
+			\gplr{\beta^3_1\bou\mathbf{f}} & \gplr{\beta^3_2\bou\mathbf{f}} & 1 & \cdots \\
+			\vdots \\
+		\end{pmatrix}\begin{pmatrix}
+			g_1 \\ g_2 \\ g_3 \\ \vdots
+		\end{pmatrix} = \begin{pmatrix}
+			1 \\ 0 \\ 0 \\ \vdots
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	$f_1=1$だから、$\gplr{\beta^n_n\bou\mathbf{f}}=f_1^n=1$となって、
+	行列の対角成分がすべて$1$になる。そのおかげで厄介な因子がなくなり、
+	次の漸化式に帰着する。
+	\begin{equation}\label{eq:逆形式級数の漸化式}\begin{split}
+		g_n = - \sum_{k=1}^{n-1} \gplr{\beta^n_k\bou\mathbf{f}} g_k 
+		\quad\text{for all } 2\le n\in\sizen
+	\end{split}\end{equation}
+	これ以上は計算できないが、\cite{Figueroa:2005}にはBell多項式の和として
+	書いたものが載っている。
+
+	$V$では次の式が成り立つので、
+	\begin{equation*}\begin{split}
+		m_\circ(-^{-1}\times\id)\op{dup} = u_\circ\epsilon 
+		= m_\circ(\id\times-^{-1})\op{dup}
+	\end{split}\end{equation*}
+	線形射$S:V^\flat\to V^\flat$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		(S\alpha) f = \alpha f^{-1}
+		\quad\text{for all } \alpha\in V^\flat,\; f\in V
+	\end{split}\end{equation*}
+	$S$が双代数
+	$\gplr{V^\flat,\op{dup}^\flat,x_1^\flat,m_\circ^\flat,u_\circ^\flat}$の
+	アンチポードになることがわかる。\eqref{eq:逆形式級数の漸化式}から、
+	アンチポードは次の漸化式で計算できる。
+	\begin{equation*}\begin{split}
+		Sx_1^\flat &= x_1^\flat \\
+		Sx_{n+1}^\flat &= -\sum_{k=1}^n \gplr{Sx_k^\flat}
+		\gplr{\beta^{n+1}_k\bou\mathbf{x}^\flat}
+		\quad\text{for all } n\in\sizen_+
+	\end{split}\end{equation*}
+
+	余積の低次の項は次のようになっている。
+	\begin{equation*}\begin{split}
+		m_\circ^\flat x_1^\flat &= x_1^\flat\otimes x_1^\flat \\
+		m_\circ^\flat x_2^\flat &= x_1^\flat\otimes x_2^\flat 
+			+ x_2^\flat\otimes x_1^\flat \\
+		m_\circ^\flat x_3^\flat &= x_1^\flat\otimes x_3^\flat 
+			+ 2 x_2^\flat\otimes x_2^\flat + x_3^\flat\otimes x_1^\flat \\
+		m_\circ^\flat x_4^\flat &= x_1^\flat\otimes x_4^\flat 
+			+ x_2^\flat\otimes \gplr{2 x_3^\flat + (x_2^\flat)^2} 
+			+ 3 x_3^\flat\otimes x_1^\flat + x_4^\flat\otimes x_1^\flat \\
+		m_\circ^\flat x_5^\flat &= x_1^\flat\otimes x_5^\flat 
+			+ x_2^\flat\otimes \gplr{2 x_4^\flat + 2 x_2^\flat x_3^\flat} 
+			+ x_3^\flat\otimes \gplr{3 x_3^\flat + 3 (x_2^\flat)^2} 
+			+ 4 x_4^\flat\otimes x_2^\flat 
+			+ x_5^\flat\otimes x_1^\flat 
+	\end{split}\end{equation*}
+
+	\begin{todo}[やるべきこと]\label{todo:やるべきこと} %{
+		やり残したことと気づいたこと。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item \Midline{アンチポードを計算する漸化式} \\
+			\cite{Figueroa:2005}に載っている式を導出できていないが、漸化式の
+			形で書いておいた。
+			\Midline{アンチポードを計算する漸化式を尻切れトンボの形で残している。
+			最後まで求めること。そのためには、リスケールしたBell関数%$\beta^n_k$
+			を使うのが良いだろう。}
+			%
+			\item 計算機 \\
+			上記の計算は絶対間違えている。組み合わせ的な列挙はなるべく計算機で
+			計算するようにしよう。厄介なのは余積$m_\circ^\flat$とアンチポード$S$
+			の計算になる。この二つを何とかしたい。
+			%
+			\item 多項式のべき乗 \\
+			余積$m_\circ^\flat$の計算で実質的に計算すべきなのは、
+			リスケールしたBell多項式$(\beta^n_k\bou\mathbf{x}^\flat)$である。
+			これは多項式のべき乗$(g|x)^n$を計算することに他ならない。
+			%
+			\item 微分のチェイン則 \\
+			Fa\'a di Brunoの公式の使い道の一つとして微分のチェイン則の計算
+			がある。$f^{(n)}:=\dif^n(f|x)$と書くと次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				\dif^n\gplr{f\circ g} = \sum_{k=1}^n 
+				\gplr{f^{(k)}\circ g}\gplr{B_{n,k}\bou g^{(1)},g^{(2)},\dots}
+			\end{split}\end{equation*}
+			証明する前に低次の項を見ておこう。
+			$G_{n,k}:=\gplr{B_{n,k}\bou\mathbf{g}}$とおく。
+			\begin{equation*}\begin{split}
+				\dif\gplr{f\circ g} &= \gplr{f^{(1)}\circ g}g^{(1)} 
+				= \gplr{f^{(1)}\circ g}G_{1,1} \\
+				\dif^2\gplr{f\circ g} &= \gplr{f^{(2)}\circ g}G_{1,1}g^{(1)}
+				+ \gplr{f^{(1)}\circ g}G_{1,1}^{(1)}
+			\end{split}\end{equation*}
+			$G_{1,1}^{(1)}=G_{2,1}$、$G_{1,1}g^{(1)}=G_{2,2}$となるから、
+			\begin{equation*}\begin{split}
+				\dif^2\gplr{f\circ g} = \gplr{f^{(2)}\circ g}G_{2,2}
+				+ \gplr{f^{(1)}\circ g}G_{2,1}
+			\end{split}\end{equation*}
+			となる。ここで帰納法に突入すると、
+			\begin{equation*}\begin{split}
+				\dif^{n+1}\gplr{f\circ g} &= \dif \sum_{k=1}^n
+					\gplr{f^{(k)}\circ g}G_{n,k} \\
+				&= \sum_{k=1}^n\ggplr{\gplr{f^{(k+1)}\circ g}G_{n,k}g^{(1)}
+					+ \gplr{f^{(k)}\circ g}G_{n,k}^{(1)}} \\
+				&= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
+					\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
+				&\,+ \gplr{f^{(1)}\circ g}G_{n,1}^{(1)}
+					+ \gplr{f^{(n+1)}\circ g}G_{n,n}g^{(1)}
+			\end{split}\end{equation*}
+			となる。$G_{n,1}^{(1)}=G_{n+1,1}$、$G_{n,n}g^{(1)}=G_{n+1,n+1}$
+			だから、
+			\begin{equation*}\begin{split}
+				\dif^{n+1}\gplr{f\circ g} &= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
+					\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
+				&\,+ \gplr{f^{(1)}\circ g}G_{n+1,1} 
+					+ \gplr{f^{(n+1)}\circ g}G_{n+1,n+1}
+			\end{split}\end{equation*}
+			となる。したがって、$G_{n,k}g^{(1)} + G_{n,k+1}^{(1)} = G_{n+1,k+1}$
+			となることが示せれば良い。$G_{n,k+1}^{(1)}$は
+			\begin{equation*}\begin{split}
+				G_{n,k+1}^{(1)} &= \frac{n!}{(k+1)!}(k+1)
+					\sum_{\substack{r_1,\dots,r_{k+1}\in\sizen_+\\r_1+\cdots+r_{k+1}=n}}
+					\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
+					\frac{g^{(r_{k+1}+1)}}{r_{k+1}!} \\
+				&= \frac{n!}{k!} \sum_{r=k}^{n-1}
+					\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=r}}
+					\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
+					\frac{g^{(n+1-r)}}{(n-r)!} \\
+				&= \sum_{r=k}^{n-1}\binom{n}{r} G_{r,k} g^{(n+1-r)}
+			\end{split}\end{equation*}
+			となるから、
+			\begin{equation*}\begin{split}
+				G_{n,k}g^{(1)} + G_{n,k+1}^{(1)}
+				= \sum_{r=k}^n\binom{n}{r} G_{r,k} g^{(n+1-r)}
+				= G_{n+1,k+1}
+			\end{split}\end{equation*}
+			となることがわかる。
+		\end{itemize} %}
+		\EOP
+	\end{todo} %todo:やるべきこと}
+%s3:群と余モノイドの空間}
+\subsubsection{Faa di Bruno Hopf代数}\label{s3:Faa di Bruno Hopf代数} %{
+	最後に、通常用いられる基底系への変換をしておく。
+	Fa\'a di Brunoの公式は微分のチェイン則を計算するための公式として
+	発見されたので、形式級数を次のように展開したものを基底系としている。
+	\begin{equation*}\begin{split}
+		(f|x) = \sum_{n\in\sizen} \frac{x^n}{n!} f_n
+	\end{split}\end{equation*}
+	この基底系を用いると、合成の係数$(f\circ g)_n$は次のようになる。
+	\begin{equation*}\begin{split}
+		\frac{(f\circ g)_n}{n!} = \sum_{k=1}^n \frac{f_k}{k!}
+		\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
+		\frac{g_{r_1}}{r_1!}\cdots\frac{g_{r_k}}{r_k!}
+	\end{split}\end{equation*}
+	そこで、$B_{n,k}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\gplr{B_{n,k}\bou\mathbf{z}} := \frac{n!}{k!}
+		\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
+		\frac{z_{r_1}}{r_1!}\cdots\frac{z_{r_k}}{r_k!}
+		\quad\text{for all } k\le r\in\sizen_+
+	\end{split}\end{equation*}
+	合成した係数は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		(f\circ g)_n = \sum_{k=1}^n f_k \gplr{B_{n,k}\bou g_1,g_2,\dots}
+	\end{split}\end{equation*}
+	$B_{n,k}$をBell多項式という。
+	
+	$B_{n,k}$と$\beta^n_k$は次の関係になるので、
+	\begin{equation*}\begin{split}
+		\gplr{B_{n,k}\bou z_1,z_2,\dots} = \frac{n!}{k!}
+		\gplr{\beta^n_k\bou \frac{z_1}{1!},\frac{z_2}{2!},\dots}
+	\end{split}\end{equation*}
+	\eqref{eq:Bell'の漸化式}から、$B_{n,k}$は次の漸化式を満たす。
+	\begin{equation*}\begin{split}
+		\gplr{B_{n+1,k+1}\bou\mathbf{z}} = \frac{1}{k+1}\sum_{r=k}^n 
+		\binom{n+1}{r} \gplr{B_{r,k}\bou\mathbf{z}}z_{n+1-r}
+	\end{split}\end{equation*}
+
+	Fa\'a di Brunoの公式は微分のチェイン則についての次の式である。
+	\begin{equation*}\begin{split}
+		\gplr{f\circ g}^{(n)} = \sum_{k=1}^n 
+		\gplr{f^{(k)}\circ g}\gplr{B_{n,k}\bou g^{(1)},g^{(2)},\dots}
+	\end{split}\end{equation*}
+	ここで、$f,g\in\fukuso\dlr{x}$、$f^{(k)}:=\dif^k f$とする。
+	\begin{proof} %{
+		微分の階数の帰納法で証明する。
+		$G_{n,k}:=\gplr{B_{n,k}\bou g^{(1)},g^{(2)},\dots}$とおく。
+		$k=1$の時は、
+		\begin{equation*}\begin{split}
+			\dif^n\gplr{f\circ g} = \gplr{f^{(1)}\circ g}g^{(1)}
+			= \gplr{f^{(1)}\circ g}G_{1,1}
+		\end{split}\end{equation*}
+		となり、命題が成り立つ。ある$k\in\sizen_+$で命題が成り立つとする。
+		すると、
+		\begin{equation*}\begin{split}
+			\dif^{n+1}\gplr{f\circ g} &= \dif \sum_{k=1}^n
+				\gplr{f^{(k)}\circ g}G_{n,k} \\
+			&= \sum_{k=1}^n\ggplr{\gplr{f^{(k+1)}\circ g}G_{n,k}g^{(1)}
+				+ \gplr{f^{(k)}\circ g}G_{n,k}^{(1)}} \\
+			&= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
+				\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
+			&\,+ \gplr{f^{(1)}\circ g}G_{n,1}^{(1)}
+				+ \gplr{f^{(n+1)}\circ g}G_{n,n}g^{(1)}
+		\end{split}\end{equation*}
+		となり、$G_{n,1}^{(1)}=G_{n+1,1}$、$G_{n,n}g^{(1)}=G_{n+1,n+1}$より、
+		\begin{equation*}\begin{split}
+			\dif^{n+1}\gplr{f\circ g} &= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
+				\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
+			&\,+ \gplr{f^{(1)}\circ g}G_{n+1,1} 
+				+ \gplr{f^{(n+1)}\circ g}G_{n+1,n+1}
+		\end{split}\end{equation*}
+		となる。したがって、$G_{n,k}g^{(1)} + G_{n,k+1}^{(1)} = G_{n+1,k+1}$
+		が成り立つことが示せれば$k+1$でも命題が成り立つことが示され、帰納法が
+		完了する。
+		
+		$G_{n,k+1}^{(1)}$は
+		\begin{equation*}\begin{split}
+			G_{n,k+1}^{(1)} &= \frac{n!}{(k+1)!}(k+1)
+				\sum_{\substack{r_1,\dots,r_{k+1}\in\sizen_+\\r_1+\cdots+r_{k+1}=n}}
+				\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
+				\frac{g^{(r_{k+1}+1)}}{r_{k+1}!} \\
+			&= \frac{n!}{k!} \sum_{r=k}^{n-1}
+				\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=r}}
+				\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
+				\frac{g^{(n+1-r)}}{(n-r)!} \\
+			&= \sum_{r=k}^{n-1}\binom{n}{r} G_{r,k} g^{(n+1-r)}
+		\end{split}\end{equation*}
+		となるから、
+		\begin{equation*}\begin{split}
+			G_{n,k}g^{(1)} + G_{n,k+1}^{(1)}
+			= \sum_{r=k}^n\binom{n}{r} G_{r,k} g^{(n+1-r)} = G_{n+1,k+1}
+		\end{split}\end{equation*}
+		となることがわかる。
+	\end{proof} %}
+
+	最後に、Bell多項式を通常使われる形に直しておく。
+	Bell多項式の和の変数を次のように変換すると、
+	\begin{equation*}\begin{split}
+		\begin{cases}
+				r_1,\dots,r_k\in\sizen_+ \\
+				r_1+\cdots+r_k=n
+		\end{cases} &\xmapsto{k!:(\alpha_1!)\cdots(\alpha_n!)} \begin{cases}
+			\alpha_1,\dots,\alpha_n\in\sizen \\
+			\alpha_1 + \alpha_2 +\cdots+ \alpha_n = k \\
+			\alpha_1 + 2\alpha_2 +\cdots+ n\alpha_n = n \\
+		\end{cases} \\
+		z_{r_1}\cdots z_{r_k} &= z_1^{\alpha_1}\cdots z_n^{\alpha_n}
+	\end{split}\end{equation*}
+	Bell多項式は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\gplr{B_{n,k}\bou\mathbf{z}} &= \frac{n!}{k!}
+			\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
+			\frac{z_{r_1}}{r_1!}\cdots\frac{z_{r_k}}{r_k!}
+			\quad\text{for all } k\le n\in\sizen_+ \\
+		&= \sum_{\substack{\alpha_1,\dots,\alpha_n\in\sizen \\
+			\alpha_1+\alpha_2+\cdots+\alpha_n=k \\
+			\alpha_1+2\alpha_2+\cdots+n\alpha_n=n}} 
+			\frac{n!}{(\alpha_1!)\cdots(\alpha_n!)}
+			\plr{\frac{z_1}{1!}}^{\alpha_1}\cdots\plr{\frac{z_n}{n!}}^{\alpha_n}
+	\end{split}\end{equation*}
+	Bell多項式は通常この形で使われる。
+%s3:Faa di Bruno Hopf代数}
+%s2:形式級数の空間}
+%s1:Connes-Kreimer代数}
+\section{パーサーの実装}\label{s1:パーサーの実装} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item q-計算の方法で再帰下降パーサーまで話を進める。
+		\item 例を曖昧さのある文法に変更する。
+		\item 文法を線形化した後にBrzozowski代数の部分を無視すると、
+		正規言語になる。この正規言語によるパーシングが字句解析に相当するの
+		だろうか？
+		\item 右再帰の標準型 \\
+		$(f|x)\in\calA_q\braket{x}$、$a\neq0\in\calA_q$とし、
+		次の微分方程式を考える。
+		\begin{equation*}\begin{split}
+			\plr{x|t} = a + \plr{\calJ_t}_q\plr{f\circ x|t}\plr{x|t}
+		\end{split}\end{equation*}
+		この微分方程式の右から$a^{-1}$を掛けると、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\plr{x'|t}:=\plr{x|t}a^{-1}$
+			\item $\plr{f'|x}:=\plr{f|x}a$
+		\end{itemize} %}
+		として、次のように初期値を$1$とする形に書き直すことができる。
+		\begin{equation*}\begin{split}
+			\plr{x'|t} = 1 + \plr{\calJ_t}_q\plr{f'\circ x'|t}\plr{x'|t}
+		\end{split}\end{equation*}
+		\item q-微分方程式$(x|t)=1+\plr{\calJ_t}_qc(x|t)c(x|t)$の解を
+		$(x|t)=\sum_{n\in\sizen}\frac{t^n}{[n]_q!}x_n$と展開する。
+		すると、$x_{n+1}=\sum_{k=0}^n\qbinom{n}{k}bx_kcx_{n-k}$という漸化式
+		を満たす。そこで、階数$1$のBrzozowski代数を用いて$x_n=\braket{n|x}$
+		と書けると仮定すると、$\braket{n+1|x}=\bra{n}m_qb\ket{x}\otimes
+		c\ket{x}$という漸化式が成り立ち、
+		$\eta\ket{x}=m_qb\ket{x}\otimes c\ket{x}$という漸化式が得られる。
+		\item 関数の再帰呼び出しを利用 \\
+		関数の再帰呼び出しを利用して簡単にパーサーを書く方法が欲しい。
+		スタックの処理の一部を実行プログラムに移譲することになる。
+		%
+		\item $\bbA:=\set{a}$を文字とする文法$x_*=a+x_*^2$を考える。この文法の
+		XML形式での出力は、$\bbB:=\set{x,\wbar{x}}$として、$\bbA+\bbB$を文字
+		とする文法$x_*=\alpha_x\plr{a+x_*^2}$で与えられる。ここで、$\alpha_x$は
+		線形射$\alpha_x:(\bbA+\bbB)^*\to(\bbA+\bbB)^*$で$\alpha_xw=xw\wbar{x}$
+		とする。また、$\beta_x:=\alpha_xm_0$とすると、
+		$x_*=\alpha_xa + \beta_x x_*^{\otimes2}$と書ける。
+		%
+		\item 線形射$f:\setA^*\to(\setA+\setB)^*$
+		から線形射$f':\setA^*\to(\setA+\setB)^*\otimes\setA^*$への変更を
+		どのように定義すればよいだろうか？
+		簡単の為に、$\setA$と$\setB$を有限集合、$R$を可換環とし、$R\setA^*$から
+		$R\setB^*$への線形射の集合を$V:=\cat{Mod}(R\setA^*,R\setB^*)$とする。
+		次の畳み込みにより、$V$に積$m$と余積$m^\flat$が定義できる。
+		\begin{alignat*}{2}
+			\gplr{m\plr{f\otimes g}}w &:= m_B\gplr{f\otimes g}m_A^\flat w
+			&&\quad\text{for all } f,g\in V,\; w\in\setA^* \\
+			\gplr{m^\flat f}\gplr{w_1\otimes w_2} 
+			&:= m_B^\flat fm_A\gplr{w_1\otimes w_2}
+			&&\quad\text{for all } f\in V,\; w_1,w_2\in\setA^*
+		\end{alignat*}
+		積$m$は
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\ket{1}\bra{1}$を単位元とし、
+			\item $\ket{w}\bra{1}\;\plr{w\in\setB}$と
+			$\ket{w}\bra{a}\;\plr{a\in\setA,\; w\in\setB}$を生成元とする
+		\end{itemize} %}
+		代数となる。ただし、任意の$a\in\setA$と$w_1,w_2\in\setB^*$に対して
+		$\ket{w_1w_2}\bra{a}=m\ket{w_1}\bra{1}\otimes\ket{w_2}\bra{a}$となる
+		から、$m$は自由代数とはならない。次のような文法の場合に空変換
+		$\ket{w}\bra{1}$が現れる。
+		\begin{equation*}\begin{split}
+			x_* = 1 + x_*bx_* 
+			&\xmapsto{\text{XML出力}} x_* = x\plr{1 + x_*bx_*}\wbar{x} \\
+			&\implies x_* = \ket{x\wbar{x}}\bra{1} 
+			+ \ket{xx\wbar{x}bx\wbar{x}\wbar{x}}\bra{b} +\cdots
+		\end{split}\end{equation*}
+	\end{itemize} %}
+
+\subsection{構文解析}\label{s2:構文解析} %{
+	$\setA:=\set{b,v}$を文字集合とする次の文法を考える。
+	\begin{equation}\label{eq:曖昧な中置記法}\begin{split}
+		B_* = V + B_*bB_*,\quad V_* = v
+	\end{split}\end{equation}
+	$x,y,z=v$かつ$\lhd,\rhd=b$として、入力文字列$x\lhd y\rhd z$を
+	次のように、$B,\wbar{B},V,\wbar{V}$をタグとするXML形式に変換することを
+	考える。
+	\begin{equation*}\begin{split}
+		x\lhd y\rhd z &\mapsto \smallxy{
+			& B \hen[ld] \hen[d] \hen[rd] \\
+			B \hen[d] & {\lhd} & B \hen[dl] \hen[d] \hen[dr] \\
+			V \hen[d] & B \hen[d] & {\rhd} & B \hen[d] \\
+			x & V \hen[d] & & V \hen[d] \\
+			& y & & z \\
+		} + \smallxy{
+			& & B \hen[ld] \hen[d] \hen[rd] \\
+			& B \hen[dl] \hen[d] \hen[rd] & {\rhd} & B \hen[d] \\
+			B \hen[d] & {\lhd} & B \hen[d] & V \hen[d] \\
+			V \hen[d] & & V \hen[d] & z \\
+			x & & y \\
+		} \\
+		&\sim B^2Vx\wbar{V}\wbar{B}{\lhd}B^2Vy\wbar{V}\wbar{B}{\rhd}BVz\wbar{V}
+			\wbar{B}^3 \\
+		&\;+ B^3Vx\wbar{V}\wbar{B}{\lhd}BVy\wbar{V}\wbar{B}^2{\rhd}BVz\wbar{V}
+			\wbar{B}^2
+	\end{split}\end{equation*}
+	この変換をXML形式への変換ということにする\footnote{
+		$B_*$はXMLのミックス要素に相当する。$B$は子供要素$V$とともに文字列$b$
+		を含むことができるミックス要素になっている。
+		XML形式の文字列から、開始タグを取り除くと逆ポーランド形式の文字列が得
+		られる。今の場合、逆ポーランド形式の文字列からパース木を構成すること
+		ができるので、XML形式での出力は冗長になっているが、定義が容易なので、
+		XML形式での出力を考える。
+	}。また、文法を表す再帰多項式の不定元でない変数を句といい、
+	句の開始を表す出力文字を開始タグ、終了を表す出力文字を終了タグ
+	ということにする。今の例では$B_*,V_*$が句になり、$\set{B,V}$が開始タグ
+	の集合、$\set{\wbar{B},\wbar{V}}$が終了タグの集合となる。
+	開始タグの集合を$\setB$、終了タグの集合を$\wbar{\setB}$と書く。
+	入力文字列をXML形式に変換するプログラムは線形射
+	\begin{equation*}\begin{split}
+		\myop{parse}:\bun\braket{\setA}\otimes\bun\setB
+		\to\bun\braket{\setA\oplus\setB\oplus\wbar{\setB}}
+	\end{split}\end{equation*}
+	として定義することができる。$\myop{parse}$の一つ目のパラメータは開始タグ
+	の指定、二つ目のパラメータは入力文字列である。
+	$\myop{parse}$は次のような用途にも使うことができる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item メンバシップ \\
+		入力文字列が文法に従っているかどうかを判定する。
+		\item パターンシップ \\
+		入力文字列がどのような単語の並びになっているかを調べる。
+	\end{itemize} %}
+	それらは、$B\in\setB$として次のように図示することができる。
+	\begin{equation*}\xymatrix@C=10ex{
+		\uesita{\bun\braket{\setA}}{\text{input words}}
+		\ar[d]^{\myop{parse}(-\otimes B)} \\
+		\uesita{\bun\braket{\setA\oplus\setB\oplus\wbar{\setB}}}{\text{XML}}
+		\ar[r]^{\text{drop $\setA$}}
+		& \uesita{\bun\braket{\setB\otimes\wbar{\setB}}}{\text{pattern-ship}}
+		\ar[r]^{\text{drop $\setB\oplus\wbar{\setB}$}}
+		& \uesita{\bun}{\text{member-ship}}
+	}\end{equation*}
+
+	入力文字列が正規言語であっても、XML形式の出力文字列は開始タグと終了タグが
+	組みとなるDyck言語になる。文法の右辺を開始タグと終了タグで挟み込めば
+	出力言語の文法になる\footnote{
+		YaccやAntlrなどのパーサー生成器では、$X_*\mapsto X^{-1}X_*$とずらした
+		変数のとり方をしている。式\label{eq:二項演算その一の出力}で、
+		$X_*':=X^{-1}X_*$とおくと、出力文字列は次の文法で与えられる。
+		\begin{equation*}\begin{split}
+			B_*' = \plr{V + B_*'bBB_*'}\wbar{B},\quad V_*' = v\wbar{V}
+		\end{split}\end{equation*}
+		こうすると、開始タグ、終了タグに関わらず、任意の$X,Y\in\setB$に対して
+		遷移を$X\xto{\cdots Y\otimes\cdots}Y$という形で統一的に書くことが
+		できる。その代償として、パース開始前に予め最初の開始タグ$X$を出力文字列
+		に入れておく処置が必要になる。
+	}。\eqref{eq:曖昧な中置記法}のXML形式の出力文字列は次の文法で与えられる。
+	\begin{equation}\label{eq:曖昧な中置記法の出力}\begin{split}
+		B_* = B\plr{V_* + B_*bB_*}\wbar{B},\quad V_* = Vv\wbar{V}
+	\end{split}\end{equation}
+
+	以下で$\myop{parse}$を作成することを考える。
+%s2:構文解析}
+\subsection{文法の解}\label{s2:文法の解} %{
+	$A$を有限集合とし、$\calA:=\bun\braket{A}$を有理数上の$A$の元から
+	生成される自由代数とする\footnote{
+		係数環は標数$0$の整域、例えば整数、であれば良いのだが、q-変形して
+		微分方程式と対応付けるために、係数を標数$0$の体にする。
+	}。
+	
+	まず、一変数の場合で考える。$(f|x)\in\calA\braket{x}$を$A$の元と非可換な
+	文字$x$を不定元とする$\calA$上の多項式とする。
+	$x_t\in\calA[[t]]$を$x_0=1$となる次の式の形式解で、
+	\begin{equation}\label{eq:一変数の文法}\begin{split}
+		x_t = 1 + t(f|x_t)
+	\end{split}\end{equation}
+	次のように摂動展開して求めたものとする。
+	\begin{equation}\label{eq:一変数の文法のTayler展開}\begin{split}
+		x_t &= 1 + t(f|x_t) \\
+		&= 1 + t(f|1) + t^2(f_1|t,x_t) \\
+		&= 1 + t(f|1) + t^2(f_1|0,1) + t^3(f_2|t,x_t) \\
+		&= \cdots \\
+		&= 1 + t\sum_{k=0}^n t^k (f_k|0,1) + t^{n+2}(f_{n+1}|t,x_t)
+	\end{split}\end{equation}
+	ここで、$(f_k|t,x)$は次のように定義している。
+	\begin{equation*}\begin{split}
+		(f_0|t,x) &:= (f|x) \\
+		(f_1|t,x) &:= \frac{\gplr{f|1+t(f|x)}-(f|1)}{t} \\
+		(f_2|t,x) &:= \frac{\gplr{f_1|t,1+t(f|x)}-(f_1|0,1)}{t} \\
+		\cdots \\
+		(f_{n+1}|t,x) &:= \frac{\gplr{f_n|t,1+t(f|x)}-(f_n|0,1)}{t} \\
+	\end{split}\end{equation*}
+	$f_n$は次のようになっている。
+	\begin{equation*}\begin{split}
+		(f|x) = bxcx \implies (f_1|t,x) &= b(f|x)c + bc(f|x) + tb(f|x)c(f|x)
+	\end{split}\end{equation*}
+	$f_n$は微分
+	\begin{equation*}\begin{split}
+		\lim_{x\to x_t}\plr{\frac{\dif x_t}{\dif t}\frac{\dif}{\dif x}}^n(f|x)
+	\end{split}\end{equation*}
+	に相当する。この微分をq-微分で書き直せれば、$f_n$をq-微分の形で書くことが
+	できるのだが、この微分はチェイン則を使っている。\cite{kac:2002}によると、
+	q-微分のチェイン則$(\partial)_t(f\circ g|t)$は、$g$が単項式の場合以外は、
+	スッキリした形で得られないそうだ。
+	そこで、多項式をテンソル積上の線形作用素として定義して、$x_t$の係数を
+	見てみる。
+	
+	$R$を可換環、$V$を上の加群とする。$\T_0V=R$、任意の$n\in\sizen_+$に
+	に対して$\T_n:=V^{\otimes n}$と書く。さらに、
+	$\T_*V:=\oplus_{n\in\sizen}\T_nV$及び$\T_+V:=\oplus_{n\in\sizen_+}\T_nV$
+	と書く。
+
+	多項式$(f|x)\in\calA\braket{x}$を次のように展開する。
+	\begin{equation*}\begin{split}
+		(f|x) := \sum_{n\in\sizen} f_nx^{\otimes n}
+	\end{split}\end{equation*}
+	ここで、線形射$f_n:\T_n\calA\to\calA$を次のように定義する。
+	\begin{equation*}\begin{split}
+		f_n\plr{x_1\otimes\cdots\otimes x_n} := \sum_{\alpha_n} 
+			f_{n,1}^{(\alpha_n)} x_1 \cdots f_{n,n}^{(\alpha_n)} 
+			x_n f_{n,n+1}^{(\alpha_n)} \quad\text{where } 
+			f_{n,k}^{(\alpha_n)}\in\calA
+	\end{split}\end{equation*}
+	$\calA_q:=\bun_q\braket{A}$として、次の$\calA_q$上のq-微分方程式を
+	考える。
+	\begin{equation}\label{eq:一変数のq-文法}\begin{split}
+		x_t = 1 + (\J_t)_q(f|x_t)
+	\end{split}\end{equation}
+	この微分方程式は$q=0$で文法\eqref{eq:一変数の文法}になる。
+	$x_t$を次のように級数展開すると、
+	\begin{equation*}\begin{split}
+		x_t = \sum_{n\in\sizen} \frac{t^n}{[n]_q!} x_n 
+		\quad\text{where } x_n\in\calA_q
+	\end{split}\end{equation*}
+	次の漸化式が得られる。
+	\begin{equation}\label{eq:一変数の言語の漸化式}\begin{split}
+		x_0 &= 1 \\
+		x_{n+1} &= \jump{n=0}f_0 + \sum_{k\in\sizen_+} f_k X_{n,k}
+			\quad\text{for all } n\in\sizen \\
+	\end{split}\end{equation}
+	ここで、$X_{n,k}$は次のように定義している。
+	\begin{equation*}\begin{split}
+		X_{n,k} &:= \sum_{n_1+\cdots+n_k=n} \qbinom{n}{n_1,\dots,n_k}_q
+			x_{n_1}\otimes\cdots\otimes x_{n_k} \\
+		\qbinom{n}{n_1,\dots,n_k}_q &:= \frac{[n]_q!}{[n_1]_q!\cdots[n_k]_q!}
+	\end{split}\end{equation*}
+
+	直接的な摂動展開\eqref{eq:一変数の文法のTayler展開}では、一旦、
+	$(f_n|t,x)$を求めてから$(f_n|0,0)$を計算するために、$t=0$で消えてしまう
+	無駄な項も計算する必要があるが、この摂動展開では、その無駄な項の計算
+	が必要ない。
+
+	q-数を用いて、漸化式をもう少し簡潔に書き表そう。
+
+	\begin{todo}[もっと単純に]\label{todo:もっと単純に} %{
+		$\calA_q$上の階数$1$のBrzozowski代数$\calA_q\Eta_1$を考える。
+		$\Eta_1$のq-シャッフル積$m_q$は次のようになるから、
+		\begin{equation*}\begin{split}
+			m_q\ket{m}\otimes\cket{n} = \qbinom{m+n}{n}_q\ket{m+n}
+			\quad\text{for all } m,n\in\sizen
+		\end{split}\end{equation*}
+		共役の余積$m_q^\flat$は次のようになる。
+		\begin{equation*}\begin{split}
+			m_q^\flat\ket{n} = \sum_{k=0}^n \qbinom{n}{k}_q
+				\ket{k}\otimes\ket{n-k} \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		したがって、$\calA_q$-線形射$\chi:\calA_q\Eta_1\to\calA_q$を次のように
+		定義すると、
+		\begin{equation*}\begin{split}
+			\chi\ket{n} := x_n \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		$\chi$は次の漸化式を満たす。
+		\begin{equation*}\begin{split}
+			\chi\ket{n+1} \simeq_{\calA_q} \sum_{k\in\sizen_+}\sum_{\alpha_k} 
+				\gplr{f_{k,1}^{(\alpha_k)}\chi\otimes\cdots\otimes 
+				f_{k,k}^{(\alpha_k)}\chi} \gplr{m_q^\flat}^{k-1}\ket{n}
+		\end{split}\end{equation*}
+		\hfill\P
+	\end{todo} %todo:もっと単純に}
+
+	$\bun_q$上の$\set{\xi_1,\dots,\xi_n}$を生成元とする代数$\Xi_q^n$
+	を次のように定義する。
+	\begin{equation*}\begin{split}
+		\Xi_q^n := \frac{\bun_q\braket{\xi_1,\dots,\xi_n}}
+		{\xi_j\xi_i=q\xi_i\xi_j \quad\text{for all } i<j\in1..n}
+	\end{split}\end{equation*}
+	$\Xi_q^n$の任意の元は、$k_1,\dots,k_n\in\sizen$として
+	$\xi_1^{k_1}\cdots\xi_n^{k_n}$という形で一意に書け、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\plr{\xi_1+\cdots+\xi_n}^k = \sum_{k_1+\cdots+k_n=k}
+			\qbinom{k}{k_1,\dots,k_n}_q \xi_1^{k_1}\cdots\xi_n^{k_n}
+			\quad\text{for all } k\in\sizen
+	\end{split}\end{equation*}
+	$\Xi_q^0=\bun_q$として、$\set{\Xi_q^n\bou n\in\sizen}$に次の包含関係が
+	あるものとする。
+	\begin{equation*}\begin{split}
+		\Xi_q^0\subset \Xi_q^1\subset \Xi_q^2\subset\cdots
+	\end{split}\end{equation*}
+
+	対数をとる線形射$\tau_n:\Xi_q^n\to\T_n\bun_q\sizen$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\tau_n\plr{\xi_1^{k_1}\cdots\xi_n^{k_n}} 
+		:= \ket{k_1}\otimes\cdots\otimes\ket{k_n}
+		\quad\text{for all } k_1,\dots,k_n\in\sizen
+	\end{split}\end{equation*}
+	微分方程式の解の係数$\set{x_n\bou n\in\sizen}$を表す線形射
+	$\chi:\bun_q\sizen\to\calA_q$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\chi\ket{n} = x_n
+	\end{split}\end{equation*}
+	漸化式\eqref{eq:一変数の言語の漸化式}は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\chi\ket{0} &= 1 \\
+		\chi\ket{n+1} &= \jump{n=0}f_0 + \sum_{k\in\sizen_+} f_k
+			\chi^{\otimes k}\tau_k\plr{\xi_1+\cdots+\xi_k}^n
+			\quad\text{for all } n\in\sizen \\
+	\end{split}\end{equation*}
+	$\calX_q^n\subset\calA_q$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\calX_q^0 := \bun_q,\quad
+		\calX_q^n := \op{span}_{\bun_q}\set{x_1,\dots,x_n}
+	\end{split}\end{equation*}
+	$\chi_n:\Xi_q^n\to\T_n\calX_q^n$
+
+%	部分空間$\calX\subseteq\calA_q$を次のように定義する。
+%	\begin{equation*}\begin{split}
+%		\calX := \op{span}_{\bun_q}\set{x_n\bou n\in\sizen}
+%	\end{split}\end{equation*}
+
+\subsubsection{線形代数}\label{s3:線形代数} %{
+%s3:線形代数}
+\subsubsection{メモ}\label{s3:メモ} %{
+	根付き平面木全体のつくる集合を$\calT_*$とし、頂点数が$k$の木の集合を
+	$\calT_k$とする。すると、$\calT_*=\sum_{k\in\sizen}\calT_k$となる。
+	$n$-完全な根付き平面木全体のつくる集合を$\calD^n_*$とし、
+	$\calD^n_*$の元で葉でない頂点の数が$k$個の木の集合を$\calD^n_k$とする。
+	すると、$\calD^n_*=\oplus_{k\in\sizen}\calD^n_k$となる。
+	\begin{equation*}\begin{split}
+		\calD^n_0 = \Set{\bullet},\quad \calD^n_1 = \Set{\smallxy{
+			& \bullet \hen[dl] \hen[d] \hen[drr] \\
+			\bullet & \bullet & \cdots & \bullet \\
+		}} \\
+		\calD^n_2 = \Set{\smallxy{
+			& & \bullet \hen[dl] \hen[d] \hen[drr] \\
+			& \bullet \hen[dl] \hen[d] \hen[drr] & \bullet & \cdots & \bullet \\
+			\bullet & \bullet & \cdots & \bullet \\
+		},\dots, \smallxy{
+			& \bullet \hen[dl] \hen[d] \hen[drr] \\
+			\bullet & \bullet & \cdots & \bullet \hen[dl] \hen[d] \hen[drr] \\
+			& & \bullet & \bullet & \cdots & \bullet \\
+		}}
+	\end{split}\end{equation*}
+
+	線形射$\beta_n:\plr{\bun_q\calT_+}^{\otimes n}\to \bun_q\calT_+$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\beta_n\plr{t_1\otimes\cdots\otimes t_n} := \smallxy {
+			& \bullet \hen[dl] \hen[d] \hen[drr] \\
+			t_1 & t_2 & \cdots & t_n \\
+		} \quad\text{for all } t_1,\dots,t_n\in\calT_+
+	\end{split}\end{equation*}
+	すると、任意の木$t\in\calD^n_{k+1}$に対して
+	$t=\beta\plr{t_1\otimes\cdots\otimes t_n}$となる
+	$t_1,\dots,t_n\in\oplus_{i=0}^k\calD^n_i$が一意に定まり、次の集合同型
+	が成り立つ。
+	\begin{equation*}\begin{split}
+		\beta_n: \oplus_{k_1+\cdots+k_n=k} 
+		\calD^n_{k_1}\times\cdots\times\calD^n_{k_n} \simeq \calD^n_{k+1}
+		\quad\text{for all } k\in\sizen
+	\end{split}\end{equation*}
+
+	葉でない頂点を勘定する線形射$\Nhat:\bun_q\calD^n_*\to \bun_q$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		\Nhat\bullet &:= 0 \\
+		\Nhat\beta\plr{t_1\otimes\cdots\otimes t_n}
+		&:= 1 + \sum_{k=1}^n\Nhat t_k \quad\text{for all } t_1,\dots,t_n
+		\in\calD^n_*
+	\end{split}\end{equation*}
+	すると、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		q^\Nhat\bullet = \bullet,\quad
+		q^\Nhat\beta = q\beta \ggplr{(q^\Nhat)^{\otimes n}}
+	\end{split}\end{equation*}
+
+	木の成長を表す線形射$\gamma_n:\bun_q\calD^n_*\to\bun_q\calD^n_+$を次の
+	ように定義する。
+	\begin{equation*}\begin{split}
+		\gamma_n\bullet := \beta\gplr{\bullet^{\otimes n}},\quad
+		\gamma_n\beta_n := \sum_{k=1}^n\beta_n
+			\ggplr{(q^\Nhat)^{\otimes(k-1)}
+			\otimes\gamma_n\otimes\id^{\otimes(n-k)}}
+	\end{split}\end{equation*}
+%s3:メモ}
+%s2:文法の解}
+\subsection{再帰下降パーサー}\label{s2:再帰下降パーサー} %{
+%s2:再帰下降パーサー}
+
+\subsubsection{Brzozowski微分}\label{s3:Brzozowski微分} %{
+	$\bun_q:=\bun(q)$を不定元$q$の$\bun$上の多項式環のつくる有理式体、
+	$A$を有限集合、$\bun_q\braket{A}$を$\bun_q$上の形式級数環とする。
+	任意の $a\in A$に対して線形射
+	$\plr{a}^\flat_q:\bun_q\braket{A}\to\bun_q\braket{A}$を次のように定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 任意の$b\in A$に対して
+		\begin{equation*}\begin{split}
+			\plr{a}_q^\flat b = \jump{a=b}
+		\end{split}\end{equation*}
+		\item 任意の$f,g\in\bun\braket{A}$に対して
+		\begin{equation*}\begin{split}
+			\plr{a}^\flat_q \ggplr{(f|\mybf{a})(g|\mybf{a})}
+			&= \ggplr{\plr{a}^\flat_q (f|\mybf{a})} (g|\mybf{a}) 
+				+ (f|q\mybf{a}) \ggplr{\plr{a}^\flat_q(g|\mybf{a})}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+	$\plr{a}^\flat_q 1=\plr{a}^\flat_q 1^2=2\plr{a}^\flat_q 1$より、
+	$\plr{a}^\flat_q 1=0$となって、$\plr{a}^\flat_q$の定数への作用は$0$
+	になることがわかる。$\plr{a}^\flat_q$を$a\in A$についてのq-微分という。
+	特に、$q=0$のときはBrzozowski微分といい、qを省略して
+	$a^\flat:=\plr{a}^\flat_0$と書くことにする。
+
+	文字数を勘定する線形射$\Nhat:\bun_q\braket{A}\to\sizen$を次のように定義
+	すると、
+	\begin{equation*}\begin{split}
+		\Nhat 1 = 0,\quad \Nhat(a_1\dots a_n) = n
+		\quad\text{for all } a_1,\dots,a_n\in A
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		q^\Nhat (f|\mybf{a}) = (f|q\mybf{a})
+		\quad\text{for all } f\in \bun_q\braket{A}
+	\end{split}\end{equation*}
+	したがって、$\bun_q\braket{A}$の通常の乗法を$m_0$と書くと、
+	q-微分について次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(a)_q^\flat m_0 = m_0\plr{(a)_q^\flat\otimes\id 
+		+ q^\Nhat\otimes(a)_q^\flat} \quad\text{for all } a\in A
+	\end{split}\end{equation*}
+
+	以下では$q=0$として話を進める。
+%s3:Brzozowski微分}
+
+
+
+\subsubsection{q-微分の拡張}\label{s3:q-微分の拡張} %{
+	二つの文字集合からなる自由代数について考える。
+	$A,B$を互いに交わりのない有限集合とする。任意の$w\in\plr{A\oplus B}^*$
+	は次のように分類することができる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $w$は$A$の文字を含まない。
+		\item $w$は$A$の文字を一つ以上含む。
+	\end{itemize} %}
+	そして、$w$が$A$の文字を一つ以上含むときは、最も左端に現れる$A$の文字に
+	よって、一意に次のように分解することができる。
+	\begin{equation*}\begin{split}
+		w \mapsto w_1\otimes a\otimes w_2 
+		\quad\text{where } w_1\in B^*,\; a\in A,\; w_2\in \plr{A\oplus B}^*
+	\end{split}\end{equation*}
+	この分解を定式化しよう。任意の $a\in A$に対して線形射
+	$\plr{a}^\nabla_q:\bun_q\braket{A\oplus B}
+	\to\bun_q\braket{B}\otimes\bun_q\braket{A\oplus B}$を次のように定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 任意の$w\in B^*$に対して
+		\begin{equation*}\begin{split}
+			\plr{a}_q^\nabla w = 0
+		\end{split}\end{equation*}
+		\item 任意の$b\in A$と$w_1,w_2\in B^*$に対して
+		\begin{equation*}\begin{split}
+			\plr{a}_q^\nabla (w_1bw_2) = \jump{a=b} w_1\otimes w_2
+		\end{split}\end{equation*}
+		\item 任意の$f,g\in\bun\braket{A\oplus B}$に対して
+		\begin{equation*}\begin{split}
+			\plr{a}^\nabla_q \ggplr{(f|\mybf{a}\oplus\mybf{b})
+			(g|\mybf{a}\oplus\mybf{b})}
+			&= \ggplr{\plr{a}^\nabla_q (f|\mybf{a}\oplus\mybf{b})}
+				\ggplr{1\otimes(g|\mybf{a}\oplus\mybf{b})} \\
+			&\,+ \ggplr{(f|q\mybf{a}\oplus\mybf{b})\otimes1} 
+				\ggplr{\plr{a}^\nabla_q(g|\mybf{a}\oplus\mybf{b})}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+	$A$の文字数だけを勘定する線形射$\Nhat_A:\bun_q\braket{A\oplus B}\to\sizen$
+	を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\Nhat_Aw &= 0 \quad\text{for all } w\in B^* \\
+		\Nhat_A(w_1a_1\cdots w_na_nw_{n+1}) &= n 
+		\quad\text{for all } a_i\in A,\; w_i\in B^* \\
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		q^{\Nhat_A} (f|\mybf{a}\oplus\mybf{b}) = (f|q\mybf{a}\oplus\mybf{b})
+		\quad\text{for all } f\in \bun_q\braket{A\oplus B}
+	\end{split}\end{equation*}
+	したがって、$\bun_q\braket{A}$の通常の乗法を$m_0$と書くと、
+	$(a)_q^\nabla$について次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		(a)_q^\nabla m_0 = \ggplr{m_0\otimes\id}\ggplr{(a)_q^\nabla\otimes\id}
+		+ \ggplr{\id\otimes m_0}\ggplr{q^{\Nhat_A}\otimes(a)_q^\nabla} 
+		\quad\text{for all } a\in A
+	\end{split}\end{equation*}
+
+	$(a)_q^\nabla$はq-微分を次の意味で拡張したものになっている。
+	\begin{equation*}\begin{split}
+		(a)_q^\flat:\bun_q\braket{A}\to \bun_q\otimes\bun_q\braket{A} \\
+		\xto{\text{拡張}} (a)_q^\nabla:\bun_q\braket{A\oplus B}
+		\to \bun_q\braket{B}\otimes\bun_q\braket{A\oplus B}
+	\end{split}\end{equation*}
+	したがって、$(a)_q^\nabla$もq-微分ということにする。
+	そして、$q=0$のときはBrzozowski微分といい、qを省略して
+	$a^\nabla:=\plr{a}^\nabla_0$と書くことにする。
+%s3:q-微分の拡張}
+\subsubsection{パーサーの構成}\label{s3:パーサーの構成} %{
+	$a^\nabla$と$0^{\Nhat_\setA}$を使うと、
+	\begin{equation*}\begin{split}
+		\text{出力文字列}\otimes\text{出力の文法の解}\otimes\text{入力文字列}
+	\end{split}\end{equation*}
+	の状態遷移の形で、入力文字列をXMLに変換することができる。
+	\begin{equation*}\xymatrix@C=12ex{
+		1\otimes w_0\otimes \plr{a_1\cdots a_n} 
+			\ar@{|->}[d]^{a_1^\nabla w_0 = x_1\otimes w_1}
+			\ar@{|->}[r]^(.7){a_1^\nabla w_0 = 0} & 0 \\
+		\plr{x_1a_1}\otimes w_1\otimes\plr{a_2\cdots a_n} 
+			\ar@{|->}[d]^{a_2^\nabla w_1 = x_2\otimes w_2}
+			\ar@{|->}[r]^(.7){a_2^\nabla w_1 = 0} & 0 \\
+		\plr{x_1a_1x_2a_2}\otimes w_2\otimes\ket{a_3\cdots a_n}
+			\ar@{|->}[d]
+			\ar@{|->}[r]^(.7){a_3^\nabla w_2 = 0} & 0 \\
+		\vdots \ar@{|->}[d] \\
+		\plr{x_1a_1\cdots x_na_n}\otimes w_n\otimes 1
+			\ar@{|->}[d]^{0^{\Nhat_\setA} w_n = x_{n+1}}
+			\ar@{|->}[r]^(.7){0^{\Nhat_\setA} w_n = 0} & 0 \\
+		\plr{x_1a_1\cdots x_na_nx_{n+1}}\otimes 1\otimes 1
+	}\end{equation*}
+	実際には、出力文字列の文法の解は単項式ではないので、出力文字列も単項式
+	とは限らない多項式として考える必要がある。
+
+	全微分を$\nabla:=\sum_{a\in\setA} (1\otimes a)a^\nabla$とおくと、
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		a^\nabla = \plr{\id\otimes a^\nabla}\nabla
+		\quad\text{for all } a\in\setA
+	\end{split}\end{equation*}
+	\eqref{eq:曖昧な中置記法の出力}の$\nabla$と$0^{\Nhat_\setA}$を計算
+	すると次のようになるが、
+	\begin{alignat*}{2}
+		\nabla B_* &= \gplr{B\otimes 1}\ggplr{\gplr{\nabla V_*} + 
+			\gplr{\nabla B_*}\gplr{1\otimes bB_*}}\gplr{1\otimes \wbar{B}}
+		,\quad& 0^{\Nhat_\setA} B_* &= 0 \\
+		\nabla V_* &= V\otimes v\wbar{V}
+		,\quad& 0^{\Nhat_\setA} V_* &= 0
+	\end{alignat*}
+	$B_*$が非線形のために計算を続けることが難しい。したがって、
+	$\nabla B_*$を計算するために文法を線形化する。
+%s3:パーサーの構成}
+\subsubsection{スタックによる線形化}\label{s3:スタックによる線形化} %{
+	ここでは、それぞれの句$X_*$に対になる変数$\wbar{X}_*$を付け足して、
+	次の文法を考える。
+	\begin{equation}\label{eq:曖昧な中置記法の線形化}\begin{split}
+		B_* = B\plr{V_* + B_*bB_*}\wbar{B}\wbar{B}_*
+		,\quad V_* = Vv\wbar{V}\wbar{V}_*
+		,\quad \wbar{B}_* = \wbar{V}_* = 1
+	\end{split}\end{equation}
+	Brzozowski代数$X_YA_B^\flat=\jump{X=A}\jump{Y=B}$を用いて、
+	この文法の遷移図を次のように変形する。
+	\begin{equation*}\begin{split}
+		\vcenter{\xymatrix{
+			B_* \ar[d]_{B\plr{V_*+B_*bB_*}\wbar{B}} & V_* \ar[d]^{Vv\wbar{V}} \\
+			\underline{\wbar{B}_*} & \underline{\wbar{V}_*} \\
+		}} \mapsto \vcenter{\xymatrix@C=8ex{
+			B_\Eta \ar[r]^{B\otimes B_V} \ar@(ld,lu)^{B\otimes B_B} 
+			& V_\Eta \ar[d]^{Vv\wbar{V}} \\
+			\underline{\wbar{B}_\Eta} \ar[u]^{b\otimes B_B^\flat\wbar{B}_B} 
+			\ar@(ld,lu)^{\wbar{B}\otimes\wbar{B}_B^\flat}
+			& \underline{\wbar{V}_\Eta} \ar[l]^{\wbar{B}\otimes B_V^\flat} \\
+		}}
+	\end{split}\end{equation*}
+	ここで、下線を引いて終状態を表している。
+	この遷移図の変形によって、変数を$X_*\in\bun\braket{\setA\oplus\setB
+	\oplus\wbar{\setB}}$から$X_\Eta\in\bun\braket{\setA\oplus\setB
+	\oplus\wbar{\setB}}\otimes\Eta(\bun,\setC)$へと変更している。
+	Brzozowski代数の真空期待値をとると$X_*\simeq_\bun\braket{X_\Eta}$となる。
+	ここで、$\setC:=\set{B_V,B_B,\wbar{B}_B}$はBrzozowski代数の消滅演算子の
+	集合とする。$\setC$はプッシュダウンオートマトンでのスタックに積む文字の
+	集合に相当する。この遷移図を式にすると次のようになる。
+	\begin{equation*}\begin{split}
+		B_\Eta &= \gplr{B\otimes B_V}V_\Eta + \gplr{B\otimes B_B}B_\Eta \\
+		%&= \gplr{B\otimes B_B}^*\gplr{B\otimes B_V} V_\Eta \\
+		\wbar{B}_\Eta &= 1\otimes 1
+			+ \gplr{b\otimes B_B^\flat\wbar{B}_B}B_\Eta
+			+ \gplr{\wbar{B}\otimes \wbar{B}_B^\flat}\wbar{B}_\Eta \\
+		%&= \gplr{b\otimes B_B^\flat\wbar{B}_B}^*
+		%	\ggplr{\gplr{\wbar{B}\otimes \wbar{B}_B^\flat} B_\Eta}^? \\
+		V_\Eta &= \gplr{Vv\wbar{V}\otimes 1}\wbar{V}_\Eta \\
+		\wbar{V}_\Eta &= 1\otimes1
+			+ \gplr{\wbar{B}\otimes B_V^\flat}\wbar{B}_\Eta \\
+	\end{split}\end{equation*}
+	そして、$0_\Eta^{\Nhat_\setA} :=0^{\Nhat_\setA}\otimes\id$とおくと、
+	次の式が得られ、
+	\begin{alignat*}{2}
+		0_\Eta^{\Nhat_\setA} B_\Eta &= 0
+		&,\quad 0_\Eta^{\Nhat_\setA} \wbar{B}_\Eta 
+		&= \gplr{\wbar{B}\otimes B_B^\flat}^* \\
+		0_\Eta^{\Nhat_\setA} V_\Eta &= 0
+		&,\quad 0_\Eta^{\Nhat_\setA} \wbar{V}_\Eta
+		&= 1\otimes 1 + \gplr{\wbar{B}\otimes B_V^\flat}
+			0_\Eta^{\Nhat_\setA} \wbar{B}_\Eta
+	\end{alignat*}
+	$\nabla_\Eta :=\nabla\otimes\id$とおくと、次の式が得られる。
+	\begin{equation*}\begin{split}
+		\nabla_\Eta B_\Eta &= \gplr{B\otimes 1\otimes B_B}^*
+			\gplr{B\otimes 1\otimes B_V}\nabla_\Eta V_\Eta \\
+		\nabla_\Eta \wbar{B}_\Eta
+		&= \gplr{\wbar{B}\otimes 1\otimes \wbar{B}_B^\flat}^*
+			\gplr{1\otimes b\otimes B_B^\flat\wbar{B}_B}
+			\gplr{1\otimes B_\Eta} \\
+		\nabla_\Eta V_\Eta &= \gplr{V\otimes v\wbar{V}\otimes 1}
+			\gplr{1\otimes \wbar{V}_\Eta} \\
+		\nabla_\Eta \wbar{V}_\Eta 
+		&= \gplr{\wbar{B}\otimes 1\otimes B_V^\flat}\nabla_\Eta \wbar{B}_\Eta
+	\end{split}\end{equation*}
+%s3:スタックによる線形化}
+\subsubsection{プッシュダウンオートマトンの解釈}\label{s3:プッシュダウンオートマトンの解釈} %{
+	線形化した結果を状態遷移$\myop{next}$
+	\begin{equation*}\begin{split}
+		\myop{next} : \uesita{\setA}{\text{入力文字}}
+		\otimes\uesita{\gplr{\setA\oplus\setB\oplus\wbar{\setB}}^*}
+		{\text{出力文字列}}
+		\otimes\uesita{\gplr{\setC}^*}{\text{スタック}}
+		\otimes\uesita{\setB\oplus\wbar{\setB}}{\text{有限状態}} \\
+		\to \uesita{\gplr{\setA\oplus\setB\oplus\wbar{\setB}}^*}
+		{\text{出力文字列}}
+		\otimes\uesita{\gplr{\setC}^*}{\text{スタック}}
+		\otimes\uesita{\setB\oplus\wbar{\setB}}{\text{次の有限状態}}
+	\end{split}\end{equation*}
+	として解釈すると、$a\in\setA$、
+	$w\in\gplr{\setA\oplus\setB\oplus\wbar{\setB}}^*$として、
+	次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\myop{next}\gplr{a\otimes w\otimes B_\Eta}
+		&= \myop{next}\gplr{a\otimes w'\otimes V_\Eta} \\
+		&\text{where } w' := w\lhd \gplr{B\otimes B_B}^*\gplr{B\otimes B_V} \\
+		\myop{next}\gplr{a\otimes w\otimes \wbar{B}_\Eta}
+		&= \jump{a = b} w'\otimes B_\Eta \\
+		&\text{where } w' := w\lhd \gplr{\wbar{B}\otimes \wbar{B}_B^\flat}^*
+			\gplr{a\otimes B_B^\flat\wbar{B}_B} \\
+		\myop{next}\plr{a\otimes w\otimes V_\Eta}
+		&= \jump{a = v} w'\otimes \wbar{V}_\Eta \\
+		&\text{where } w' := w\lhd \gplr{Va\wbar{V}\otimes 1} \\
+		\myop{next}\gplr{a\otimes w\otimes \wbar{V}_\Eta}
+		&= \myop{next}\plr{a\otimes w'\otimes \wbar{B}_\Eta} \\
+		&\text{where } w' := w\lhd \gplr{\wbar{B}\otimes B_V^\flat} \\
+	\end{split}\end{equation*}
+	ここで、$\lhd$は出力文字列については右からの文字の連結、Brzozowski代数
+	についてはBrzozowski代数のケットへの作用を表す。
+	Brzozowski代数の生成演算子$\setC^\flat$を作用させたときは$0$になる
+	可能性がある。したがって、実際のプログラムでは、生成演算子を作用させた
+	後に値が$0$であるかどうかをチェックする必要がある。代数としては、
+	$\bun\braket{\setC}$の値が$0$になっても問題ないので、式中ではそれを
+	省略していることに注意する。
+	そして、入力文字列をすべて読み終えた時に行う処理を$\myop{end}$とすると、
+	\begin{equation*}\begin{split}
+		\myop{end} : \uesita{\gplr{\setA\oplus\setB\oplus\wbar{\setB}}^*}
+		{\text{出力文字列}}
+		\otimes\uesita{\gplr{\setC}^*}{\text{スタック}}
+		\otimes\uesita{\setB\oplus\wbar{\setB}}{\text{有限状態}}
+		\to \uesita{\gplr{\setA\oplus\setB\oplus\wbar{\setB}}^*}
+		{\text{出力文字列}}
+		\otimes\uesita{\gplr{\setC}^*}{\text{スタック}}
+	\end{split}\end{equation*}
+	$w\in\gplr{\setA\oplus\setB\oplus\wbar{\setB}}^*$として、
+	次のように書くことができる。
+	\begin{alignat*}{2}
+		\myop{end}\gplr{w\otimes B_\Eta} &= 0 \\
+		\myop{end}\gplr{w\otimes \wbar{B}_\Eta} &= w'
+		&&\quad\text{where } w' := w\lhd\gplr{\wbar{B}\otimes B_B^\flat}^* \\
+		\myop{end}\gplr{w\otimes V_\Eta} &= 0 \\
+		\myop{end}\gplr{w\otimes \wbar{V}_\Eta} 
+		&= w + \myop{end}\gplr{w'\otimes \wbar{B}_\Eta}
+		&&\quad\text{where } w' := w\lhd \gplr{\wbar{B}\otimes B_V^\flat}
+	\end{alignat*}
+	最後に、$\myop{end}$を呼び出した結果を次のように解釈する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $0$であれば、入力文字列は文法に従っていない。
+		\item スタックが空でなければ、入力文字列は途中で終わって
+		尻切れトンボになっている。
+		\item スタックが空であれば、入力文字列のXML化が得られる。
+	\end{itemize} %}
+%s3:プッシュダウンオートマトンの解釈}
+\subsubsection{ここまで}\label{s3:ここまで} %{
+	XML変換の構成
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 文法が与えられる。$X_i=(f_i|\setA,X_1,\dots,X_n)$
+		\item 文法をXML化する。$Y_i=B_i(f_i|\setA,Y_1,\dots,Y_n)\wbar{B}_i$
+		\item 便宜$\D\setB:=\setB\oplus\wbar{\setB}$
+		\item 文法を線形化する。
+		$V:=\sizen\braket{\setA\oplus\D\setB}\otimes\Eta\plr{\sizen,\setC}$
+		\begin{equation*}\begin{split}
+			\pvec{\mybf{Y}_\Eta}{\wbar{\mybf{Y}}_\Eta}
+			= \pvec{0}{1} + T\pvec{\mybf{Y}_\Eta}{\wbar{\mybf{Y}}_\Eta}
+			\quad\text{where } \begin{split}
+				T\in\Mat\plr{V,2n} \\
+				\mybf{Y}_\Eta,\wbar{\mybf{Y}}_\Eta\in V^n
+			\end{split}
+		\end{split}\end{equation*}
+		\item XML化した文法の摂動解が求まる。
+		$Y_i=\braket{\mybf{e}_i^\tran\mybf{Y}_\Eta}$
+		\item 代数射$\pi:\sizen\braket{\setA\oplus\D\setB}
+		\to\sizen\braket{\setA}$と
+		入射$:\iota:\sizen\braket{\setA}\to\sizen\braket{\setA\oplus\D\setB}$
+		\begin{equation*}\begin{split}
+			\pi a = a \quad\text{for all } a\in\setA
+			,\quad \pi b = 1 \quad\text{for all } b\in\D\setB
+			,\quad \iota a = a \quad\text{for all } a\in\setA
+		\end{split}\end{equation*}
+		\item $\beta$を自由代数の内積とする。
+		\item 線形射の集合が定まる。$\set{\myop{parse}_i\bou i\in1..n}$
+		\begin{equation*}\begin{split}
+			\myop{parse}_i: \sizen\braket{\setA}
+			\to \sizen\braket{\setA\oplus\D\setB}
+			;\quad w \mapsto \sum_{x\in\plr{\setA\oplus\D\setB}^*} x
+			\beta\gplr{\iota w,x}\beta\gplr{Y_i,x}
+		\end{split}\end{equation*}
+		\item 
+		\item 
+		\item 文法の解$B_*\in\sizen\dlr{\setA}$が求まる。
+	\end{itemize} %}
+	$\myop{parse}: \setA^*\otimes\setB
+	\to \gplr{\setA\oplus\setB\oplus\wbar{\setB}}^*$の構成
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item XML変換$\myop{parse}:\sizen\braket{\setA}\otimes\setB
+		\to\sizen\braket{\setA\oplus\D\setB}$を求める。
+		\item $\myop{parse}$は線形射なので、行列要素が定まればよい。
+		\begin{equation*}\begin{split}
+			\myop{parse}\gplr{w_I\otimes B} 
+			= \sum_{w_O\in\gplr{\setA\oplus\D\setB}^*}
+			\ket{w_O}\bra{w_O}\myop{parse}\ket{w_I\otimes B}
+		\end{split}\end{equation*}
+		\item 一意ではないが、プッシュダウンオートマトンを定義できる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $V:=\sizen\braket{\setA\otimes\D\setB}
+			\otimes\sizen\braket{\setC}$
+			\item $\myop{end}:\D\setB\to V\otimes\D\setB$
+			\item $\myop{next}:\setA\otimes\D\setB\to V\otimes\D\setB$
+			\item $\myop{parse}_\Eta:\setA^*\otimes V\otimes\D\setB
+			\to \setA^*\otimes V\otimes\D\setB$
+		\end{itemize} %}
+	\end{itemize} %}
+	\begin{equation*}\begin{split}
+		\myop{parse}_\Eta\gplr{1\otimes v\otimes B}
+		&= \gplr{\id\otimes \lhd\otimes \id}
+		\gplr{\id\otimes\id\otimes \myop{end}}
+		\gplr{1\otimes v\otimes B} \\
+		\myop{parse}_\Eta\gplr{aw\otimes v\otimes B}
+		&= \gplr{\id\otimes \lhd\otimes \id}
+	\end{split}\end{equation*}
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item スタックの処理をホストプログラムの関数呼び出しに行わせた場合、
+		どこまで簡単にできるだろうか？
+		\item バックトレース
+	\end{itemize} %}
+%s3:ここまで}
+\section{Dyck言語の斜体版}\label{s1:Dyck言語の斜体版} %{
+	論文\cite{gelfand:1997}についてのメモ。
+
+	$\setA:=\set{b,c}$を文字とするDyck言語の列挙$x\in\sizen\braket{\setA}$
+	はKleeneスターを用いて次のように書くこともできる。
+	\begin{equation*}\begin{split}
+		x = \plr{bxc}^* = 1 + bxc\plr{bxc}^* = 1 + bxcx
+	\end{split}\end{equation*}
+	$x$を有理数体$\bun\plr{\setA}$に拡張する。写像
+	$\pi:\bun\braket{\setA,\setA^{-1}}^2\to\bun\plr{\setA}$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		\pi\pvec{f}{g} := fg^{-1}
+		\quad\text{for all } f,g\in\sizen\braket{\setA,\setA^{-1}}
+	\end{split}\end{equation*}
+	Dyck言語の列挙$x$は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		x = \plr{bxc}^* = \plr{1 - bxc}^{-1} = c^{-1}\plr{c^{-1} - bx}^{-1}
+		= \pi \begin{pmatrix}
+			0 & c^{-1} \\ -b & c^{-1}
+		\end{pmatrix}\pvec{x}{1}
+	\end{split}\end{equation*}
+
+	ここで、M\"{o}bius変換の非可換版を考える。
+	$R$を可換とは限らない環として、$R$に$R-\set{0}$の逆元を追加した斜体を
+	$\what{R}$と書く。
+	漸化式$\set{x_n\in\what{R}\bou n\in\sizen}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		x_{n+1} = \pi \begin{pmatrix}
+			a_{n+1} & b_{n+1} \\ c_{n+1} & d_{n+1}
+		\end{pmatrix}\pvec{x_n}{1}
+		\quad\text{where } a_{n+1},b_{n+1},c_{n+1},d_{n+1}\in\what{R}
+	\end{split}\end{equation*}
+	次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		x_{n+2} &= \plr{a_{n+2}x_{n+1} + b_{n+2}}
+			\plr{c_{n+2}x_{n+1} + d_{n+2}}^{-1} \\
+		&= \plr{a_{n+2}{\plr{a_{n+1}x_n + b_{n+1}}
+			\plr{c_{n+1}x_n+d_{n+1}}^{-1}} + b_{n+2}} \\
+		&\quad \plr{c_{n+2}{\plr{a_{n+1}x_n + b_{n+1}}
+			\plr{c_{n+1}x_n+d_{n+1}}^{-1} + d_{n+2}}}^{-1} \\
+		&= \plr{a_{n+2}\plr{a_{n+1}x_n + b_{n+1}}
+			+ b_{n+1}\plr{c_{n+1}x_n+d_{n+1}}} \\
+		&\quad \plr{c_{n+2}\plr{a_{n+1}x_n + b_{n+1}}
+			+ d_{n+2}\plr{c_{n+1}x_n+d_{n+1}}}^{-1} \\
+		&= \pi \begin{pmatrix}
+			a_{n+2} & b_{n+2} \\ c_{n+2} & d_{n+2}
+		\end{pmatrix} \begin{pmatrix}
+			a_{n+1} & b_{n+1} \\ c_{n+1} & d_{n+1}
+		\end{pmatrix}\pvec{x_n}{1}
+	\end{split}\end{equation*}
+	漸化式は、可換環上のM\"{o}bius変換と同様に、行列の積に帰着する。
+
+\subsection{観察その一}\label{s2:観察その一} %{
+	$R$を可換とは限らない環とし、$R$上の次の代数式を考える。
+	\begin{equation*}\begin{split}
+		x = a + bx^2 \quad\text{where } a,b\in R
+	\end{split}\end{equation*}
+	この代数式をM\"{o}bius変換を使って書くと、次のようになる。
+	\begin{equation*}\begin{split}
+		x = \pi \begin{pmatrix}
+			0 & a \\ - b & 1
+		\end{pmatrix}\pvec{x}{1}
+		\quad\text{where } \pi\pvec{y}{z} = z^{-1}y
+		\quad\text{for all } y\in R,\; z\in R_\times
+	\end{split}\end{equation*}
+	$\ei{e}{i}\in R^2$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\ei{e}{1} := \pvec{1}{0},\quad \ei{e}{1} := \pvec{0}{1}
+	\end{split}\end{equation*}
+	M\"{o}bius変換の行列$M$は次のように書ける。
+	\begin{equation*}\begin{split}
+		M := \begin{pmatrix}
+			0 & a \\ - b & 1
+		\end{pmatrix} = a\eij{e}{1}{2} - b\eij{e}{2}{1} + \eij{e}{2}{2}
+	\end{split}\end{equation*}
+%s2:観察その一}
+\subsection{擬似行列式の観察}\label{s2:擬似行列式の観察} %{
+	連立線形方程式から擬似行列式を導入してみる。
+	$R$を可換とは限らない環とし、次の連立線形方程式を考える。
+	\begin{equation*}\label{eq:二次元非可換連立線形方程式}\begin{split}
+		A \pvec{x_1}{x_2} = \pvec{\xi_1}{\xi_2}
+		\quad\text{where } A:=\begin{pmatrix}
+			a_{11} & a_{12} \\ a_{21} & a_{22}
+		\end{pmatrix}\in\Mat(R,2),\; \xi_i\in R
+	\end{split}\end{equation*}
+	この連立線形方程式の解は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\pvec{x_1}{x_2} = \begin{pmatrix}
+			|A|_{11}^{-1} & |A|_{21}^{-1} \\ |A|_{12}^{-1} & |A|_{22}^{-1}
+		\end{pmatrix}\pvec{\xi_1}{\xi_2}
+	\end{split}\end{equation*}
+	ここで、$|A|_{ij}\in R$は次のように定義される。
+	\begin{equation}\label{eq:二次元擬似行列式}\begin{split}
+		|A|_{11} := a_{11} - a_{12}a_{22}^{-1}a_{21}
+		,\quad |A|_{12} := a_{12} - a_{11}a_{21}^{-1}a_{22} \\
+		|A|_{21} := a_{21} - a_{22}a_{12}^{-1}a_{11}
+		,\quad |A|_{22} := a_{22} - a_{21}a_{11}^{-1}a_{12} \\
+	\end{split}\end{equation}
+	この式を状態遷移として解釈してみよう。
+	連立線形方程式\eqref{eq:二次元非可換連立線形方程式}を修正した
+	連立線形方程式$x=\xi+Bx$を考える。
+	\begin{equation*}\begin{split}
+		A = 1 - B \quad\text{where } B:=\begin{pmatrix}
+			b_{11} & b_{12} \\ b_{21} & b_{22}
+		\end{pmatrix}\in\Mat(R,2)
+	\end{split}\end{equation*}
+	この式の状態遷移図は次のようになり、
+	\begin{equation*}\xymatrix{
+		x_1 \ar[r]^{\xi_1} \ar@<1ex>[d]^{b_{12}} \ar@(ld,lu)^{b_{11}} & 1_1 \\
+		x_2 \ar[r]^{\xi_2} \ar@<1ex>[u]^{b_{21}} \ar@(ld,lu)^{b_{11}} & 1_2
+	}\end{equation*}
+	遷移和は次のように$A$の擬似行列式の逆数で書けることがわかる。
+	\begin{equation*}\begin{split}
+		|B^*|_{ij} = |A|_{ji}^{-1} \implies
+		x_i\xtoto{|A|_{ji}^{-1}}x_j \quad\text{for all } i,j\in1..2
+	\end{split}\end{equation*}
+	$B$の成分で具体的に書くと次のようになる。
+	\begin{equation*}\begin{split}
+		|A|_{11}^{-1} = \plr{b_{11} + b_{12}b_{22}^*b_{21}}^*
+		,\quad |A|_{12}^{-1} = b_{22}^*b_{21}|A|_{11}^{-1} \\
+		|A|_{21}^{-1} = b_{11}^*b_{12}|A|_{22}^{-1}
+		,\quad |A|_{22}^{-1} = \plr{b_{22} + b_{21}b_{11}^*b_{12}}^*
+	\end{split}\end{equation*}
+	そして、経路和の分解を$A$の成分で書くと、擬似行列式のホモロジー的関係式
+	が得られる。
+	\begin{equation*}\begin{split}
+		x_1\xtoto{}x_2 = x_1\xto{}x_2\xtoto{}x_2
+		&\implies |A|_{21}^{-1} = b_{11}^*b_{12}|A|_{22}^{-1} \\
+		&\iff a_{11}|A|_{21}^{-1} = - a_{12}|A|_{22}^{-1}
+	\end{split}\end{equation*}
+%s2:擬似行列式の観察}
+%s1:Dyck言語の斜体版}
+\section{可積分Dyck言語}\label{s1:可積分Dyck言語} %{
+	$\setA:=\set{b,c}$を大きさ$2$の集合とし、次の$\sizen_q\setA^*[[t]]$上の
+	q-微分方程式を考える。
+	\begin{equation*}\begin{split}
+		(x|t) = 1 + \J_q^t b(x|qt)c(x|t)
+	\end{split}\end{equation*}
+	$\set{x_n\in\sizen_q\setA^*\bou n\in\sizen}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		(x|t) = \sum_{n\in\sizen}\frac{t^n}{[n]_q!} x_n
+	\end{split}\end{equation*}
+	次の漸化式が成り立つ。
+	\begin{equation*}\begin{split}
+		x_0 = 1,\quad x_{n+1} = \sum_{k=0}^n\qbinom{n}{k}_q q^k bx_kcx_{n-k}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	低次の項は次のようになるが、
+	\begin{equation*}\begin{split}
+		x_1 &= bc \\
+		x_2 &= x_1^2 + q\,b^2c^2 \\
+		x_3 &= x_1^3 + q\,x_1b^2c^2 + \gplr{q + q^2}b^2c^2x_1 
+			+ q^2\,bx_1^2c + q^3\,b^3c^3 \\
+		x_4 &= x_1^4 + q\,x_1^2b^2c^2 + \gplr{q + q^2}x_1b^2c^2x_1 
+			+ q^2\,x_1bx_1^2c + q^3\,x_1b^3c^3 \\
+		&\;+ \gplr{q + q^2 + q^3}b^2c^2x_1^2 
+			+ \gplr{q^2 + q^3 + q^4}b^2c^2b^2c^2 \\
+		&\;+ \gplr{q^2 + q^3 + q^4}bx_1^2cx_1 
+			+ \gplr{q^3 + q^4 + q^5}b^3c^3x_1 \\
+		&\;+ q^3\,bx_1^3c + q^4\,b^2cb^2c^3 + \gplr{q^4 + q^5}b^3c^2bc^2 \\
+		&\;+ q^5\,b^2x_1^2c^2 + q^6\,b^4c^4
+	\end{split}\end{equation*}
+	$q$のべきでまとめると次のようになる。
+	\begin{equation*}\begin{split}
+		x_1 &= bc \\
+		x_2 &= x_1^2 + q\plr{b^2c^2} \\
+		x_3 &= x_1^3 + q\plr{x_1b^2c^2 + b^2c^2x_1} 
+			+ q^2\plr{b^2c^2x_1 + bx_1^2c} + q^3\plr{b^3c^3} \\
+		x_4 &= x_1^4 + q\plr{x_1^2b^2c^2 + x_1b^2c^2x_1 + b^2c^2x_1^2} \\
+		&\;+ q^2\plr{x_1b^2c^2x_1 + x_1bx_1^2c + b^2c^2x_1^2 + b^2c^2b^2c^2 
+			+ bx_1^2cx_1} \\
+		&\;+ q^3\plr{x_1b^3c^3 + b^2c^2x_1^2 + b^2c^2b^2c^2 + bx_1^2cx_1 
+			+ b^3c^3x_1 + bx_1^3c} \\
+		&\;+ q^4\plr{b^2c^2b^2c^2 + bx_1^2cx_1 + b^3c^3x_1 + b^2cb^2c^3 
+			+ b^3c^2bc^2} \\
+		&\;+ q^5\plr{b^3c^3x_1 + b^3c^2bc^2 + b^2x_1^2c^2} + q^6\plr{b^4c^4}
+	\end{split}\end{equation*}
+%s1:可積分Dyck言語}
+\section{漸化式}\label{s1:漸化式} %{
+	複素数上の次の漸化式を考える。
+	\begin{equation}\label{eq:一次変換の漸化式}\begin{split}
+		x_{n+1} = \frac{a_{n+1}x_n + b_{n+1}}{c_{n+1}x_n + d_{n+1}}
+		\quad\text{where } a_i,b_i,c_i,d_i\in\fukuso
+	\end{split}\end{equation}
+	漸化式は次のように書くこともできる。
+	\begin{equation*}\begin{split}
+		x_{n+1} = \pi\begin{pmatrix}
+			a_{n+1} & b_{n+1} \\ c_{n+1} & d_{n+1} \\
+		\end{pmatrix}\pvec{x_n}{1}
+		\quad\text{where } \pi\pvec{x}{y} = \frac{x}{y}
+	\end{split}\end{equation*}
+	すると、次の式から、
+	\begin{equation*}\begin{split}
+		\pi\begin{pmatrix}
+			a_{n+1} & b_{n+1} \\ c_{n+1} & d_{n+1} \\
+		\end{pmatrix}\pvec{x_n}{1} 
+		&= \frac{a_{n+1}x_n + b_{n+1}}{c_{n+1}x_n + d_{n+1}} \\
+		&= \frac{a_{n+1}\plr{a_nx_{n-1} + b_n} + b_{n+1}\plr{c_nx_{n-1} + d_n}}
+			{c_{n+1}\plr{a_nx_{n-1} + b_n} + d_{n+1}\plr{c_nx_{n-1} + d_n}} \\
+		&= \pi\begin{pmatrix}
+			a_{n+1} & b_{n+1} \\ c_{n+1} & d_{n+1} \\
+		\end{pmatrix}\begin{pmatrix}
+			a_n & b_n \\ c_n & d_n \\
+		\end{pmatrix}\pvec{x_{n-1}}{1}
+	\end{split}\end{equation*}
+	漸化式の解は行列の積に帰着される。
+	\begin{equation*}\begin{split}
+		x_{n+1} = \pi M_n\cdots M_1\pvec{x_0}{1}
+		\quad\text{where } M_k := \begin{pmatrix}
+			a_k & b_k \\ c_k & d_k \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+
+	これをq-微分方程式に応用してみる。次のq-微分方程式は、
+	\begin{equation*}\begin{split}
+		(\partial_qx|t) = (c|t)(x|qt)(x|t)
+	\end{split}\end{equation*}
+	差分を展開すると、次の漸化式となり、
+	\begin{equation*}\begin{split}
+		(x|t) = \pi\ggplr{1 - (1-q)t(C|t)}\pvec{(x|qt)}{1} \quad\text{where } 
+		(C|t) := \begin{pmatrix}
+			0 & 0 \\ (c|t) & 0
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	$(C|s)(C|t)=0$より、Jackson積分$\J_q^t$を用いて、解が次のように求まる。
+	\begin{equation*}\begin{split}
+		(x|t) &= \pi\ggplr{1 - (1-q)t(C|t)}\cdots
+			\ggplr{1 - (1-q)q^nt(C|q^nt)}\pvec{(x|q^{n+1}t)}{1} \\
+		&= \pi\ggplr{1 - (1-q)\sum_{n\in\sizen}q^nt(C|q^nt)}\pvec{(x|0)}{1} \\
+		&= \pi\plr{1 - \J_q^t(C|t)}\pvec{(x|0)}{1} \\
+		&= \frac{(x|0)}{1 - (x|0)\J_q^t(c|t)}
+	\end{split}\end{equation*}
+
+	一次変換の漸化式\eqref{eq:一次変換の漸化式}で、$d_n=1$とおいて、
+	変換がKleeneスターを用いて書くことができる場合を考える。
+	\begin{equation*}\begin{split}
+		x_{n+1} = \plr{a_{n+1}x_n + b_{n+1}}\plr{1 - c_{n+1}x_n}^*
+	\end{split}\end{equation*}
+	さらに、変換の合成もKleeneスターを用いて同様に書けることを要請すると、
+	次の行列の積から、
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			a_{n+1} & b_{n+1} \\ -c_{n+1} & 1 \\
+		\end{pmatrix}\begin{pmatrix}
+			a_n & b_n \\ -c_n & 1 \\
+		\end{pmatrix} = \begin{pmatrix}
+			a_{n+1}a_n - b_{n+1}c_n & a_{n+1}b_n + b_{n+1} \\ 
+			-c_{n+1}a_n - c_n & 1 - c_{n+1}b_n \\
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	$b_n=0$となる必要があることがわかる。したがって、次の漸化式を考えると、
+	\begin{equation*}\begin{split}
+		x_{n+1} = a_{n+1}x_n\plr{c_{n+1}x_n}^*
+		= \frac{a_{n+1}x_n}{1 - c_{n+1}x_n}
+	\end{split}\end{equation*}
+	変換の合成は次のようになって、$*$の高さが$1$に留まる。
+	\begin{equation*}\begin{split}
+		a_{n+1}x_n\plr{c_{n+1}x_n}^* 
+		&= a_{n+1}\plr{a_nx_{n-1}\plr{c_nx_{n-1}}^*}
+			\plr{c_{n+1}\plr{a_nx_{n-1}\plr{c_nx_{n-1}}^*}}^* \\
+		&= a_{n+1}a_nx_{n-1}\plr{\plr{c_{n+1}a_n + c_n}x_{n-1}}^*
+	\end{split}\end{equation*}
+	一次変換に対応する次の式が$*$の高さの増加を抑えている。
+	\begin{equation*}\begin{split}
+		x^*\plr{yx^*} = \plr{x + y}^* \implies yx^* = \plr{1 - x}\plr{x + y}^*
+	\end{split}\end{equation*}
+
+\subsection{非可換の場合}\label{s2:非可換の場合メモ} %{
+	\begin{equation*}\begin{split}
+		x := \plr{ba^*c}a^*
+	\end{split}\end{equation*}
+	\begin{equation*}\begin{split}
+		x = a^* + ba^*cx = 1 + aa^* + ba^*cx ,\quad y = 1 + ay
+	\end{split}\end{equation*}
+	\begin{equation*}\begin{split}
+		\begin{pmatrix}
+			x \\ y \\ z
+		\end{pmatrix} = \begin{pmatrix}
+			0 \\ 0 \\ 1
+		\end{pmatrix} + \begin{pmatrix}
+			byc & a & 1 \\ 0 & a & 1 \\ 0 & 0 & 0
+		\end{pmatrix} \begin{pmatrix}
+			x \\ y \\ z
+		\end{pmatrix}
+	\end{split}\end{equation*}
+	\begin{equation*}\begin{split}
+		\vcenter{\xymatrix{
+			x \ar@<1ex>[r]^1 \ar[d]_{a + b\eta^\flat} 
+			& *++[o][F=]{z} \ar@<1ex>[l]^{\eta c} \\
+			y \ar[ru]_1 \ar@(ld,lu)^a
+		}} \sim \vcenter{\xymatrix@C=4em {
+			*++[F=:<8pt>]{x + z} \ar@<1ex>[r]^{a + b\eta^\flat} 
+				\ar@(ul,ur)^{\eta c} 
+			& y \ar@(ul,ur)^a \ar@<1ex>[l]^1
+		}}
+	\end{split}\end{equation*}
+	\begin{equation*}\begin{split}
+		\pvec{x}{y} = \pvec{1}{0} + \begin{pmatrix}
+			\eta c & a + b\eta^\flat \\ 1 & a
+		\end{pmatrix}\pvec{x}{y}
+	\end{split}\end{equation*}
+%s2:非可換の場合メモ}
+%s1:漸化式}
+\section{q-シャッフル積}\label{s1:q-シャッフル積} %{
+	$\setA$を有限集合とする。$V:=\fukuso[q_L,q_R]\ket{\setA^*}$とおき、
+	文字列の連結による$V$の積を$m_0$と書く。
+	線形射$\Ihat_0,\Ihat_+:V\to V$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\Ihat_0 := \ket{1}\bra{1},\quad \Ihat_+ := \sum_{a\in\setA} aa^\flat
+	\end{split}\end{equation*}
+
+	q-シャッフル積を拡張した線形射$\mu:V\otimes V\to V$を次のように定義する。
+	\begin{alignat*}{2}
+		\mu\ket{w}\otimes\ket{1} &:= \ket{w}
+		=: \mu\ket{1}\otimes\ket{w} &&\quad\text{for all } w\in\setA^* \\
+		\mu(a\otimes b) &:= a\mu\plr{\id\otimes q_R^{\Nhat}b}
+		+ b\mu\plr{q_L^{\Nhat}a\otimes\id} &&\quad\text{for all } a,b\in A
+	\end{alignat*}
+	線形射$(a)_\mu:V\to V$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		(a)_\mu\ket{w} := \mu\ket{a}\otimes\ket{w} 
+		\quad\text{for all } a\in\setA,\; w\in\setA^*
+	\end{split}\end{equation*}
+	次のように書ける（ノート\ref{note:作用素(a)_muの計算}）。
+	\begin{equation*}\begin{split}
+		(a)_\mu = m_0\gplr{\id\otimes a}\gplr{q_L^\Nhat\otimes q_R^\Nhat}
+			m_0^\flat \quad\text{for all } a\in\setA
+	\end{split}\end{equation*}
+	文字を使って書くと次のようになる。
+	\begin{equation*}\begin{split}
+		(a)_\mu\ket{b_1\cdots a_n} = \sum_{k=0}^n
+		q_L^kq_R^{n-k}\ket{b_1\cdots b_kab_{k+1}\cdots b_n}
+		\quad\text{for all } a,b_1,\dots,b_n\in\setA
+	\end{split}\end{equation*}
+
+	$a^\flat$と$\mu$は次の交換関係を満たし
+	（ノート\ref{note:aとmuとの交換関係}）、
+	\begin{equation*}\begin{split}
+		a^\flat\mu = \mu\gplr{a^\flat\otimes q_R^\Nhat 
+			+ q_L^\Nhat\otimes a^\flat} \quad\text{for all } a\in\setA
+	\end{split}\end{equation*}
+	$\mu$は文字数を保存するから、
+	$0^\Nhat = \lim_{x\to0} x^\Nhat = \Ihat_0$と定義すると、
+	次の交換関係が成り立つ。
+	\begin{equation*}\begin{split}
+		\Nhat\mu = \mu\plr{\Nhat\otimes\id + \id\otimes\Nhat}
+		\implies x^\Nhat\mu = \mu\plr{x^\Nhat\otimes x^\Nhat} 
+		\quad\text{for all } x\in\fukuso
+	\end{split}\end{equation*}
+	そして、次の交換関係と、
+	\begin{equation*}\begin{split}
+		\Ihat_0\mu\plr{\mu\otimes\id} 
+			= \mu\plr{\mu\otimes\id}\Ihat_0^{\otimes3} ,\quad 
+		\Ihat_0\mu\plr{\id\otimes\mu}
+			= \mu\plr{\id\otimes\mu}\Ihat_0^{\otimes3} \\
+	\end{split}\end{equation*}
+	次の交換関係が成り立つことから、
+	\begin{equation*}\begin{split}
+		\Ihat_+\mu\plr{\mu\otimes\id} = \sum_{a\in\setA} a\mu
+			\plr{\mu\otimes\id} \plr{a^\flat}^{(3)} ,\quad 
+		\Ihat_+\mu\plr{\id\otimes\mu} = \sum_{a\in\setA} a\mu
+			\plr{\id\otimes\mu} \plr{a^\flat}^{(3)} \\
+		\quad\text{where } \plr{a^\flat}^{(3)} 
+			:= a^\flat\otimes q_R^\Nhat\otimes q_R^\Nhat
+			+ q_L^\Nhat\otimes a^\flat\otimes q_R^\Nhat
+			+ q_L^\Nhat\otimes q_L^\Nhat\otimes a^\flat
+	\end{split}\end{equation*}
+	$\ket{\setA^*}^{\otimes3}$の文字数の和についての帰納法によって、
+	$\mu$が結合的になることが示される。
+
+	\begin{note}[作用素$(a)_\mu$の計算]\label{note:作用素(a)_muの計算} %{
+		\begin{equation*}\begin{split}
+			(a)_\mu\ket{b_1\cdots b_n} 
+			&= q_R^n\ket{ab_1\cdots b_n} + q_Lb_1(a)_\mu\ket{b_2\cdots b_n} \\
+			&= q_R^n\ket{ab_1\cdots b_n} + q_Lq_R^{n-1}\ket{b_1ab_2\cdots b_n}
+			+ q_L^2b_1b_2(a)_\mu\ket{b_3\cdots b_n} \\
+			&= \cdots \\
+			&= q_L^0q_R^n\ket{ab_1b_2\cdots b_n}
+			+ q_L^1q_R^{n-1}\ket{b_1ab_2\cdots b_n}
+			+\cdots
+			+ q_L^nq_R^0\ket{b_1b_2\cdots b_na}
+		\end{split}\end{equation*}
+	\end{note} %note:作用素(a)_muの計算}
+
+	\begin{note}[$a^\flat$と$\mu$との交換関係]\label{note:aとmuとの交換関係} %{
+		任意の$a,b,c\in\setA$に対して次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			a^\flat\mu\plr{b\otimes c} &= \jump{a=b}
+				\mu\plr{\id\otimes q_R^\Nhat c}
+				+ \jump{a=c}\mu\plr{q_L^\Nhat b\otimes\id} \\
+			&= \mu\plr{a^\flat b\otimes q_R^\Nhat c} 
+				+ \mu\plr{q_L^\Nhat b\otimes a^\flat c} \\
+			&= \mu\plr{a^\flat\otimes q_R^\Nhat + q_L^\Nhat\otimes a^\flat}
+				\plr{b\otimes c}
+		\end{split}\end{equation*}
+		任意の$a\in\setA,\; w\in\setA^*$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			a^\flat\mu\ggplr{\ket{w}\otimes\ket{1}} = a^\flat\ket{w}
+			&= \mu\plr{a^\flat\ket{w}\otimes\ket{1}} \\
+			&= \mu\plr{a^\flat\otimes q_R^\Nhat + q_L^\Nhat\otimes a^\flat}
+				\ggplr{\ket{w}\otimes\ket{1}}
+		\end{split}\end{equation*}
+	\end{note} %note:aとmuとの交換関係}
+%s1:q-シャッフル積}
+\section{双代数の効用}\label{s1:双代数の効用} %{
+	双代数があると、テンソル積表現が容易に作れる。
+	$A=(A,m,\Delta)$を双代数とする。
+	\begin{equation*}\begin{split}
+		\Delta m = (m\otimes m)\sigma_{23}(\Delta\otimes\Delta)
+	\end{split}\end{equation*}
+	$i=1,2$に対して$\rho_i:A\to\End V_i$を表現とする。
+	線形射$\rho_{12}:A\to\End V_1\otimes\End V_2$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\rho_{12}:=(\rho_1\otimes\rho_2)\Delta
+	\end{split}\end{equation*}
+	$\mu_i$を$\End V_i$の通常の積（線形射の合成）とすると、
+	$\rho_{12}$がは次の可換図を満たせば代数射となる。
+	\begin{equation*}\xymatrix@C=12em{
+			A\otimes A \ar[d]^m \ar[r]^{\rho_{12}\otimes\rho_{12}} 
+			& \End V_1\otimes\End V_2\otimes\End V_1\otimes\End V_2
+				\ar[d]^{\plr{\mu_1\otimes\mu_2}\sigma_{23}} \\
+			A \ar[r]^{\rho_{12}} & \End(V_1\otimes V_2) \\
+	}\end{equation*}
+	実際に計算してみると、次のようになり、$\rho_{12}$が代数射となることが
+	わかる。
+	\begin{equation*}\begin{split}
+		\plr{\mu_1\otimes\mu_2}\sigma_{23}\plr{\rho_{12}\otimes\rho_{12}}
+		&= \plr{\mu_1\otimes\mu_2}
+		\plr{\rho_1\otimes\rho_1\otimes\rho_2\otimes\rho_2}\sigma_{23}
+		\plr{\Delta\otimes\Delta} \\
+		&= \plr{\rho_1\otimes\rho_2}\plr{m\times m}\sigma_{23}
+		\plr{\Delta\otimes\Delta} \\
+		&= \plr{\rho_1\otimes\rho_2}\Delta m \\
+		&= \rho_{12} m
+	\end{split}\end{equation*}
+%s1:双代数の効用}
+\section{モノイド射の核}\label{s1:モノイド射の核} %{
+	$A$を有限集合、$G=(G,m_G,1)$をモノイド、$\phi:A^*\to G$をモノイド射と
+	する。
+	$\ker\phi\subset A^*$と$\epsilon_G:G\to\sizen$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\ker\phi = \set{a\in A\bou \phi a=1}
+		,\quad \epsilon_G x = \jump{x=1} \quad\text{for all }x\in G
+	\end{split}\end{equation*}
+	$\ker\phi$の列挙$\ls\ker\phi\in\sizen A^*$を次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\sum_{w\in\ker\phi} w = \sum_{w\in A^*}\plr{\epsilon_G\phi w} w
+		\simeq_\sizen \plr{\epsilon_G\otimes\id}
+			\plr{\sum_{a\in A}\phi a\otimes a}^*
+	\end{split}\end{equation*}
+	他の$\ker\phi$の元の積で書くことができない$\ker\phi$の元を素な$\ker\phi$
+	の元ということにする。
+	\begin{equation*}\begin{split}
+		w \text{ is primitive in }\ker\phi
+		\xiff{\dfn} \left\{\begin{split}
+			w\in\ker\phi &\quad\text{and} \\
+			w = w_1w_2 &\implies w_1 = w\text{ or } w_2 = w \\
+			&\quad\text{for all } w_1,w_2\in\ker\phi
+		\end{split}\right.
+	\end{split}\end{equation*}
+	素な$\ker\phi$の元の集合を$\ker^\circ\phi$と書くことにする。
+	任意の$\ker\phi$の元は$\ker^\circ\phi$の元の積で一意に書くことができる。
+	\begin{proof} %{
+		ある$w\in\ker\phi$が$x_1,\dots,x_m,y_1,\dots,y_n\in\ker^\circ\phi$で
+		$x_1\cdots x_m = w = y_1\cdots y_n$と書かれたとする。
+		$|x_1|\le|y_1|$だとすると、$y_1=x_1z$となる$z\in A^*$が一意に定まるが、
+		$x_1,y_1\in\ker^\circ\phi$なので、$z=1$となる必要がある。したがって、
+		$x_1=y_1$となる。同様に続けると$m=n$かつすべての$i\in1..n$で$x_i=y_i$
+		となることが示される。
+	\end{proof} %}
+%s1:モノイド射の核}
+\section{計算の整理}\label{s1:計算の整理} %{
+	$\setA$を有限集合とし、$\setA^*:=\oplus_{n\in\sizen}\setA^n$を$\setA$
+	から生成される自由モノイド、また$\setA^+:=\oplus_{n\in\sizen_+}\setA^n$
+	とする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[文字数] 単語$w\in\setA^*$の文字数を$|w|$とかき、
+		$w$の中の文字$a\in A$の数を$\sharp_aw$と書く。
+		$|w| = \sum_{a\in\setA}\sharp_aw$という関係が成り立つ。
+		\item[空単語] 文字数$0$の空単語を$1$と書く。
+		\item[乗法] $m_0:\setA^*\times\setA^*\to\setA^*$を文字列の連結による
+		積とする。$1$が$m_0$の単位元となる。また、$m_0$を中置記法で書く時は
+		記号を省略する。
+		\begin{equation*}\begin{split}
+			w_1w_2 := m_0(w_1,w_2) \quad\text{for all } w_1,w_2\in\setA^*
+		\end{split}\end{equation*}
+	\end{description} %}
+
+	互いに異なる$b,c\in\setA$を用いて、二項演算
+	$\beta:\setA^*\times\setA^*\to\setA^*$を次のように定義する。
+	\begin{equation}\label{eq:betaの定義}\begin{split}
+		\beta(w_1, w_2) := bw_1cw_2
+		\quad\text{for all } w_1,w_2\in\setA^*
+	\end{split}\end{equation}
+	次の交換関係が成り立つ。
+	\begin{equation}\label{eq:betaと連結の交換関係}\begin{split}
+		m_0(\beta\times\id) = \beta(\id\times m_0)
+	\end{split}\end{equation}
+
+	$\beta$を使って$\setB_n\subset\setA^{2n}$を次のように定義する。
+	\begin{equation}\label{eq:Bの定義}\begin{split}
+		\setB_0 := \set{1}
+		,\quad \setB_{n+1} := \cup_{k=0}^n \beta(\setB_k, \setB_{n-k})
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	$\setB_n$の単語の文字数は$2n$だから、$m\neq n\in\sizen$ならば
+	$\setB_m\cap\setB_n=\emptyset$となる。
+	$\setB_*:=\oplus_{n\in\sizen}\setB_n$、
+	$\setB_+:=\oplus_{n\in\sizen_+}\setB_n$とする。
+	$\setB_*$を文字の組$(b,c)$によって生成されるDyck言語という。
+
+	任意の$w\in\setB_+$に対して$\beta(w_1,w_2)$となる$w_1,w_2\in\setB_*$
+	が存在して唯一つ定まる。したがって、次の集合同型が成り立ち、
+	\begin{equation}\label{eq:beta分解}\begin{split}
+		\beta:\setB_*\times\setB_*\simeq\setB_+ \quad\text{as set}
+	\end{split}\end{equation}
+	定義\eqref{eq:Bの定義}が重複なく$\setB_{n+1}$の元を定義していることが
+	わかる。
+
+	任意の集合$X$に対して$\ls X\in\sizen X$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\ls X := \sum_{x\in X} x
+	\end{split}\end{equation*}
+	$\ls X$を$X$（の元）の列挙ということにする\footnote{
+		$\ls$は圏で考えるべきものなのだろうが、どのように定義すればよいか
+		わからない。
+	}。集合同型\eqref{eq:beta分解}により、$\setB_n$の定義\eqref{eq:Bの定義}
+	をそのまま加法に置き換えれば、$\setB_n$の列挙が得られる。
+	\begin{equation}\label{eq:Bの列挙その一}\begin{split}
+		\ls\setB_0 = 1,\quad \ls\setB_{n+1} 
+		= \sum_{k=0}^n \beta\plr{\ls\setB_k\otimes\ls\setB_{n-k}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	また、形式級数$\ls^t\setB_*\in\sizen\setB_*[[t]]$を次のように定義すれば、
+	\begin{equation*}\begin{split}
+		\ls^t\setB_* := \sum_{n\in\sizen} t^{2n}\ls\setB_n
+	\end{split}\end{equation*}
+	\eqref{eq:Bの列挙その一}より、$\ls^t\setB_*$は次の二次式を満たすことが
+	わかる。
+	\begin{equation}\label{eq:Bの列挙その二}\begin{split}
+		\ls^t\setB_* = 1 + t^2\beta\plr{\ls^t\setB_*\otimes\ls^t\setB_*}
+	\end{split}\end{equation}
+	$\setB_*$のインジケーター$\isA{\setB_*}:\setA^*\to\sizen$を次のように
+	定義する。
+	\begin{equation*}\begin{split}
+		\isA{\setB_*}w = \jump{w\in\setB_*} \quad\text{for all } w\in\setA^*
+	\end{split}\end{equation*}
+	$\sizen$の通常の乗法を$m_\sizen$と書くと、次の交換関係が成り立つから、
+	\begin{equation*}\begin{split}
+		\isA{\setB_*}\beta = m_\sizen\gplr{\isA{\setB_*}\otimes\isA{\setB_*}}
+	\end{split}\end{equation*}
+	$B_*$の列挙\eqref{eq:Bの列挙その二}より、次の二次式が得られる。
+	\begin{equation*}\begin{split}
+		\isA{\setB_*}{\ls^t\setB_*} = 1 + t^2m_\sizen\gplr{
+			\isA{\setB_*}\ls^t\setB_*\otimes \isA{\setB_*}\ls^t\setB_*}
+	\end{split}\end{equation*}
+	この二次式は簡単に解けて、
+	\begin{equation*}\begin{split}
+		x_t = 1 + (tx_t)^2 \implies x_t = \frac{1 \pm \sqrt{1 - 4t^2}}{2t^2}
+	\end{split}\end{equation*}
+	$t=0$近傍で正則な解が$I_{\setB_*}\ls^t\setB_*$になり、
+	\begin{equation*}\begin{split}
+		\isA{\setB_*}\ls^t\setB_* = \frac{1 - \sqrt{1 - 4t^2}}{2t^2}
+	\end{split}\end{equation*}
+	$\setB_n$の大きさはカタラン数$C_n$で与えられることがわかる。
+	\begin{equation*}\begin{split}
+		|\setB_n| = C_n := \frac{1}{n+1}\binom{2n}{n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	$\setB_*$は文字列の連結で閉じている。
+	\begin{equation*}\begin{split}
+		w_1,w_2\in\setB_*\implies w_1w_2\in\setB_*
+	\end{split}\end{equation*}
+	\begin{proof} %{
+		$w_1$の文字数についての帰納法で証明する。
+		$w_1=1$の時は命題は成り立つ。ある$n\in\in\sizen$があって、
+		$w_1$の文字数が$2n$以下では命題が成り立つと仮定する。
+		$w_1\in\setB_{n+1}$とすると、ある$x,y\in\oplus_{n=0}^n\setB_n$が
+		存在して、$w_1=\beta(x\times y)$と書ける。したがって、
+		$w_1w_2=m_0(\beta\times\id)(x\times y\times w_2)$となるが、
+		交換関係\eqref{eq:betaと連結の交換関係}から、
+		$w_1w_2=\beta(\id\times m_0)(x\times y\times w_2)$となり、
+		帰納法の仮定より、$m_0(y\times w_2)\in\setB_*$だから、
+		$w_1w_2\in\setB_*$が成り立つことがわかる。
+	\end{proof} %}
+
+	\begin{note}[合同関係]\label{note:合同関係} %{
+		$G=(G,m)$をモノイド、$\sim$を$G$の集合としての同値関係とする。
+		$\sim$が次の式を満たす時、$\sim$を合同関係もしくは単に合同という。
+		\begin{equation*}\begin{split}
+			x_1\sim y_1 \text{ and } x_2\sim y_2 \implies 
+			m(x_1\times x_2) \sim m(y_1\times y_2) \\
+			\quad\text{for all } x_1,x_2,y_1,y_2\in G
+		\end{split}\end{equation*}
+		合同関係には$\cong$や$\equiv$という記号がよく使われる。
+	\end{note} %note:合同関係}
+
+	\begin{note}[準同型の観察]\label{note:準同型の観察} %{
+		$A$を有限集合、$G$モノイド、$\phi:A^*\to G$をモノイド準同型とする。
+		$\epsilon:G\to\sizen$を$\epsilon x:=\jump{x=1}$とすると、
+		$\ker\phi\subseteq A^*$の列挙は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			\sum_{x\in\ker\phi} x = \sum_{x\in A^*} (\epsilon\phi x) x
+			\simeq_\sizen \plr{\epsilon\otimes\id}
+			\plr{\sum_{a\in A}\phi a\otimes a}^*
+		\end{split}\end{equation*}
+		$A=\set{b,c}$、$G=\braket{\eta,\eta^\flat\bou\eta\eta^\flat=1}$、
+		$\phi b=\eta,\;\phi c=\eta^\flat$とすると、$\ker\phi$がDyck言語になる。
+	\end{note} %note:準同型の観察}
+	\begin{note}[量子群の観察]\label{note:量子群の観察} %{
+		$\sll(2)$の基底系$L_\pm,L_3$を次のようにとると、
+		\begin{equation*}\begin{split}
+			L_+ := \begin{pmatrix}
+				0 & 1 \\ 0 & 0
+			\end{pmatrix},\quad L_- := \begin{pmatrix}
+				0 & 0 \\ 1 & 0
+			\end{pmatrix},\quad L_3 := \begin{pmatrix}
+				1 & 0 \\ 0 & -1
+			\end{pmatrix}
+		\end{split}\end{equation*}
+		次の交換関係が成り立つ。
+		\begin{equation*}\begin{split}
+			[L_+,L_-] = H,\quad [L_3,L_\pm] = \pm2L_\pm
+		\end{split}\end{equation*}
+		これを量子変形した$L_{q\pm}$を次の交換関係によって定義する。
+		\begin{equation*}\begin{split}
+			[L_{q+},L_{q-}] = \frac{q^{L_2} - q^{-L_3}}{q - q^{-1}},\quad
+			q^{L_3}L_{q\pm}q^{-L_3} = q^2L_{q\pm}
+		\end{split}\end{equation*}
+		そして、余積を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\Delta L_{q+} = L_{q+}\otimes1 + q^{L_3}\otimes L_{q+}
+			,\quad \Delta L_{q-} = L_{q-}\otimes q^{-L_3} + 1\otimes L_{q-} \\
+			\Delta q^{L_3} = q^{L_3}\otimes q^{L_3}
+			,\quad \epsilon L_{q\pm} = 0,\quad \epsilon q^{L_3} = 1
+		\end{split}\end{equation*}
+		アンチポードは次のようになって、
+		\begin{equation*}\begin{split}
+			S L_{q+} = -q^{-L_3}L_{q+} ,\quad S L_{q-} = -L_{q-}q^{L_3}
+			,\quad S q^{L_3} = q^{-L_3}
+		\end{split}\end{equation*}
+		$\myop{span}_\fukuso\set{L_{q\pm},q^{\pm L_3}}$はHopf代数となる。
+		一方、文字列のシャッフル積によって作られたq-Brzozowski代数は次の
+		交換関係を満たす。
+		\begin{equation*}\begin{split}
+			(\eta)_qm_0 = m_0\plr{(\eta)_q\otimes1 + q^\Nhat\otimes(\eta)_q}
+			,\quad \eta^\flat m_0 = m_0\plr{\eta^\flat\otimes1}
+		\end{split}\end{equation*}
+	\end{note} %note:量子群の観察}
+%s1:計算の整理}
+\section{計算のメモ}\label{s1:計算のメモ} %{
+	一方、$D_*$はDyck言語と異なり、文字列の連結では閉じていないことに注意
+	する。
+	\begin{equation*}\begin{split}
+		bcd\in D_1 \quad\text{but}\quad bcdbcd\not\in D_2
+	\end{split}\end{equation*}
+
+	$D_n$の列挙$\ls D_n=\sum_{w\in D_n}w\in \sizen D_n$は、
+	定義\eqref{eq:D_nの定義}を$\sizen D_n$の漸化式に書き換えた次の漸化式
+	によって与えられる。
+	\begin{equation}\label{eq:列挙係数の漸化式}\begin{split}
+		\ls D_0 = 1,\quad \ls D_{n+1} = \sum_{k=0}^n 
+		\beta_D\plr{\ls D_k\otimes\ls D_{n-k}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	そして、形式級数$\ls D_*$と$\ls D_+$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\ls D_* := \sum_{n\in\sizen} \ls D_n
+		,\quad \ls D_+ := \sum_{n\in\sizen_+} \ls D_n
+	\end{split}\end{equation*}
+	$\ls D_0=1$だから、$\ls D_*=1+\ls D_L$となる。
+
+	$\fukuso_q[t]$の通常の乗法を$m_0$、Jackson積分を$(\J_t)_q$と書き、
+	写像$J_q^t:D_*\to\fukuso_q[t]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		J_q^t 1 := 1,\quad J_q^t\beta_D &:= (\J_t)_qm_0\plr{J_q^t\otimes J_q^t}
+	\end{split}\end{equation*}
+	$D_*$では、$D_+$の$\beta_D$による分解の一意性により、$J_q^t$をこのように
+	定義できることに注意する。
+	次の式から、
+	\begin{equation*}\begin{split}
+		w\in D_n\implies J_q^tw \in \fukuso_qt^n
+		\quad\because\; \text{induction by $n$}
+	\end{split}\end{equation*}
+	単語についての次の漸化式が成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		J_q^t1 &= 1 \\
+		J_q^t\beta_D\plr{w_1\otimes w_2} 
+		&= \frac{t}{\gblr{|w_1|_D + |w_2|_D + 1}_q}
+			\plr{J_q^tw_1}\plr{J_q^tw_2} \quad\text{for all } w_1,w_2\in D_*
+	\end{split}\end{equation*}
+	また、$J_q^t\ls D_n$についての次の漸化式が成り立つことがわかる。
+	\begin{equation}\label{eq:微分係数の漸化式}\begin{split}
+		J_q^t\ls D_0 &= 1 \\
+		J_q^t\ls D_{n+1} &= \frac{t}{[n+1]_q}\sum_{k=0}^n
+			\plr{J_q^t\ls D_k}\plr{J_q^t\ls D_{n-k}} 
+			\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	そして、$J_q^t$を形式級数に拡張すると、$J_q^t\ls D_*\in\fukuso_q[[t]]$は
+	次の微分方程式を満たす。
+	\begin{equation*}\begin{split}
+		J_q^t\ls D_* = 1 + \plr{\J_t}_q\plr{J_q^t\ls D_*}^2
+	\end{split}\end{equation*}
+
+	\begin{todo}[課題]\label{todo:課題} %{
+		$J_q^t$を積を使って書き表すことが課題となる。$D_*$にはこれといった
+		積は見つからないし、$\fukuso_q[t]$に二項演算$*$を次のように定義しても、
+		\begin{equation*}\begin{split}
+			f*g := \plr{\J_t}_q(fg) \quad\text{for all } f,g\in\fukuso_q[t]
+		\end{split}\end{equation*}
+		次のようになって、$q=0$の時以外は$*$は結合的にはならない。
+		\begin{equation*}\begin{split}
+			(t^i*t^j)*t^k &= \frac{t^{i+j+k+2}}{[i+j+1]_q[i+j+k+2]_q} \\
+			&\neq \frac{t^{i+j+k+2}}{[j+k+1]_q[i+j+k+2]_q} = t^i*(t^j*t^k)
+		\end{split}\end{equation*}
+	\end{todo} %todo:課題}
+
+	\begin{todo}[修正]\label{todo:修正} %{
+		$\beta_D$による$D_*$の元の分解を一意にする。
+	\end{todo} %todo:修正}
+	Dyck言語の場合と異なり、$\beta_D$は$1:1$でなないが、ここでは$b\neq d$
+	と仮定しているので、$m_0$を文字列の連結とすると、次の式が成り立つ。
+	\begin{equation}\label{eq:Dの曖昧さ}\begin{split}
+		\beta_D(w_1, w_2) = \beta_D(x_1, x_2) 
+		\implies m_0(w_1, w_2) = m_0(x_1, x_2) \\
+		\quad\text{for all } w_i,x_i\in A^*
+	\end{split}\end{equation}
+
+	この定義は重複を含んでいることに注意する\footnote{
+		重複を含まない定義は次のようになるだろう。
+		\begin{equation*}\begin{split}
+			D_{n+1} := \cup_{k=0}^n \jump{k\le n-k} \beta_D(D_k, D_{n-k})
+		\end{split}\end{equation*}
+		Dyck言語との対応と簡便さを考えて$D_n$を\eqref{eq:D_nの定義}で定義
+		している。
+	}。例えば、任意の$n\in\sizen$に対して
+	$\beta_D(D_0\times D_n)=\beta_D(D_1\times D_n)$となっている。
+	低次の$D_n$は次のようになる。
+	\begin{equation*}\begin{split}
+		D_1 &= \set{bd},\quad D_2 = \set{b^2d^2}
+		,\quad D_3 = \set{b^3d^3,\; b^2dbd^2} \\
+		D_4 &= \set{b^4d^4,\; b^3dbd^3,\; b^3d^2bd^2,\; b^2db^2d^3} \\
+	\end{split}\end{equation*}
+	また、$D_*$は文字列の連結で閉じていないことに注意する。
+	例えば、$bd\in D_1$だが$bdbd\not\in D_2$である。
+	一般には、次のようになっている。
+	\begin{equation*}\begin{split}
+		w_1w_2\in D_* \implies w_1 = 1 \text{ or } w_2 = 1
+		\quad\text{for all } w_1,w_2\in D_*
+	\end{split}\end{equation*}
+	\begin{proof} %{
+		背理法で証明する。
+		ある$w_1,w_2\in D_+$が$w_1w_2\in D_+$となっていると仮定する。
+		$w_1,w_2\in D_+$だから、ある$x_i,y_i\in D_*$があって、
+		$w_1=bx_1y_1d,\;w_2=bx_2y_2d$と書け、$w_1w_2\in D_+$だから、
+		ある$z_i\in D_*$があって、$w_1w_2=bz_1z_2d$と書ける。
+		したがって、$x_1y_1dbx_2y_2=z_1z_2$となるが、次の式から、この式は
+		矛盾となる。
+		\begin{equation*}\begin{split}
+			w = uv \implies \sharp_bu\ge\sharp_dv
+			&\quad\text{for all } w\in D_*,\; u,v\in A^* \\
+			\sharp_bw = \sharp_d w &\quad\text{for all } w\in D_*
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	\begin{todo}[必要性]\label{todo:必要性} %{
+		$\dupls D_n$を定義する必要があるかな？
+	\end{todo} %todo:必要性}
+
+	定義\eqref{eq:D_nの定義}を$\fukuso D_n$の漸化式に書き換えた次の漸化式
+	$\dupls D_n$を考える。
+	\begin{equation}\label{eq:列挙係数の漸化式}\begin{split}
+		\dupls D_0 = 1,\quad \dupls D_{n+1} = \sum_{k=0}^n 
+		\beta_D\plr{\dupls D_k\otimes\dupls D_{n-k}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	$\dupls D_n$は$D_n$の列挙$\ls D_n$に係数を掛けたものとなっている。
+	係数は$\beta_D$の対称性\eqref{eq:Dの曖昧さ}に起因していて\footnote{
+		ここで定義した$\sigma_D$は微分方程式の数値解法でのButhcer理論や、
+		Connes-Kreimerの繰り込み理論に現れる根付き平面木の対称性の特別な場合
+		である。例えば\cite{Gubinelli:2008}の$\sigma$の逆数が、ここで定義した
+		$\kappa_D$に対応する。
+		この対称性は、形式言語では文法\eqref{eq:beta_Dの定義}の曖昧さという。
+		物理や数学では対称性は計算を容易にする善なるものとして捉えられるが、
+		パーシングでは対称性は計算に曖昧さをもたらす悪なるものとして捉えられて
+		いる。
+	}、次の写像$\kappa_D:D_*\to\sizen$で与えられる。
+	\begin{equation*}\begin{split}
+		\kappa_D 1 &:= 1 \\
+		\kappa_D w &:= \sum_{w_1,w_2\in D_*} \jump{w = \beta_D(w_1, w_2)}
+			\plr{\kappa_D w_1}\plr{\kappa_D w_2}
+			\quad\text{for all } w\in D_+
+	\end{split}\end{equation*}
+	$\kappa_D$を用いると$\dupls D_n$は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\dupls D_n = \sum_{w\in D_n}\plr{\kappa_D w} w 
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$\dupls D_n$を低次の項について計算すると次のようになる。
+	\begin{equation}\label{低次の列挙係数}\begin{split}
+		\dupls D_1 &= bd,\quad \dupls D_2 = 2 b^2d^2
+		,\quad \dupls D_3 = 4 b^3d^3 + b^2dbd^2 \\
+		\dupls D_4 &= 8 b^4d^4 + 2 b^3dbd^3 + 2 b^3d^2bd^2 + 2 b^2db^2d^3 \\
+	\end{split}\end{equation}
+
+	$\fukuso_q[t]$の通常の乗法を$m_0$、Jackson積分を$(\J_t)_q$と書き、
+	写像$J_q^t:D_*\to\fukuso_q[t]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		J_q^t 1 &:= 1 \\
+		J_q^t w &:= \sum_{w_1,w_2\in D_*} \jump{w = \beta_D(w_1, w_2)}
+			(\J_t)_q\plr{J_q^t w_1}\plr{J_q^t w_2}
+			\quad\text{for all } w\in D_+
+	\end{split}\end{equation*}
+
+	\begin{todo}[描き直し]\label{todo:描き直し} %{
+	\end{todo} %todo:描き直し}
+
+	\begin{todo}[ここまで]\label{todo:ここまで} %{
+	\end{todo} %todo:ここまで}
+
+	$\fukuso D_*[[t]]$の元としては次のようになる。
+	\begin{equation*}\begin{split}
+		(\ls D_*|t) = 1 + t\beta_D\ggplr{(\ls D_*|t)\otimes(\ls D_*|t)}
+	\end{split}\end{equation*}
+
+	低次の項を計算すると次のようになる。
+	\begin{equation}\label{低次の列挙係数}\begin{split}
+		x_1 &= bd,\quad x_2 = 2 b^2d^2,\quad x_3 = 4 b^3d^3 + b^2dbd^2 \\
+		x_4 &= 8 b^4d^4 + 2 b^3dbd^3 + 2 b^3d^2bd^2 + 2 b^2db^2d^3 \\
+		x_5 &= 16 b^5d^5 + 4 b^4dbd^4 + 4 b^4d^2bd^3 + 4 b^4d^3bd^2 
+			+ 4 b^3db^2d^4 + b^3dbd^2bd^2 \\
+		&\; + 4 b^3d^2b^2d^3 + 4 b^2db^3d^4 + b^2db^2dbd^3
+	\end{split}\end{equation}
+	$\fukuso_q[[s]]$の通常の乗法を$m_0$、Jackson積分を$(\J_s)_q$と書き、
+	線形射$J_q^s:\fukuso D_*\to\fukuso_q[[s]]$を次のように定義する。
+	\begin{equation*}\begin{split}
+		J_q^s 1 := 1,\quad 
+		J_q^s\beta_D := \plr{\J_s}_qm_0\plr{J_q^s\otimes J_q^s}
+	\end{split}\end{equation*}
+
+	したがって、$J_q^s$の定義域を$\fukuso B_*$から$\fukuso B_*[[t]]$へ拡張
+	すると、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $s=0$のときは、$J_q^0x$は定数$(J_q^0x|t)=1$になり、
+		\item $s\neq0$のときは、$J_q^sx$は次の微分方程式を満たす。
+		\begin{equation*}\begin{split}
+			(J_q^sx|0) = 1,\quad (\partial_qJ_q^sx|t) = \frac{1}{s}(J_q^sx|t)^2
+		\end{split}\end{equation*}
+	\end{itemize} %}
+	$(C_n)_q\in\fukuso_q$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		J^s_qx_n = (C_n)_q\frac{s^n}{[n]_q!}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	係数の漸化式\eqref{eq:微分係数の漸化式}より、次の漸化式が成り立つ。
+	\begin{equation}\label{eq:微分係数の漸化式その二}\begin{split}
+		(C_{n+1})_q = \sum_{k=0}^n \qbinom{n}{k}_q(C_{k})_q(C_{n-k})_q
+			\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+
+	漸化式\eqref{eq:微分係数の漸化式その二}を解くのではなく、
+	低次の係数\eqref{低次の列挙係数}に対して実直に$J_q^s$の作用を
+	計算すると次のようになる。
+	\begin{equation}\label{低次の微分係数その二}\begin{split}
+		(C_1)_q &= 1 ,\quad (C_2)_q = 2 ,\quad (C_3)_q = 4 + [2]_q \\
+		(C_4)_q &= 8 + 2[2]_q + 2[3]_q + 2[3]_q \\
+		(C_5)_q &= 16 + 4[2]_q + 4[3]_q + 4[4]_q + 4 [3]_q + [2]_q[4]_q 
+			+ 4\frac{[3]_q[4]_q}{[2]_q} + 4[4]_q + [2]_q[4]_q
+	\end{split}\end{equation}
+	すると、奇妙なことが成り立っていることに気がつく。
+	$b$を生成、$d$を消滅演算子だと思って、$\fukuso D_*$に次の同値関係
+	$\sim$を定義する。
+	\begin{equation*}\begin{split}
+		db \sim 1 + qbd
+	\end{split}\end{equation*}
+	すると、$D_*$の元は次のように正規積の形で書くことができるが、
+	\begin{equation*}\begin{split}
+		b^3d^2b^2d^3 \sim (1 + q)b^3d^3 + (q + 2q^2 + q^3)b^4d^4 + q^4 b^5d^5
+	\end{split}\end{equation*}
+	正規積に書き直したときの係数の和が$J_q^s$の作用と等しくなる。
+	\begin{equation*}\begin{split}
+		\plr{[5]_q!}J_q^1(b^3d^2b^2d^3) &= \frac{[3]_q[4]_q}{[2]_q}
+			= 1 + q + 2q^2 + q^3 + q^4 \\
+		&= (1 + q) + 
+	\end{split}\end{equation*}
+
+	\begin{note}[プログラムの確認]\label{note:プログラムの確認} %{
+		低次の微分係数\eqref{低次の微分係数その二}を
+		$q=0$と$q=1$のときを表にすると次のようになる。
+		\begin{equation*}\begin{array}{r|rrrrrrl}
+			& (C_0)_q & (C_1)_q & (C_2)_q & (C_3)_q & (C_4)_q & (C_5)_q 
+				& \quad\cdots \\\hline
+			q=0 & 1 & 1 & 2 & 5 & 14 & 42 & \quad\text{カタラン数}C_n \\
+			q=1 & 1 & 1 & 2 & 6 & 24 & 120 & \quad\text{階乗}n! \\
+		\end{array}\end{equation*}
+	\end{note} %note:プログラムの確認}
+%s1:計算のメモ}
+\section{Kacのメモ}\label{s1:Kacのメモ} %{
+	\cite{kac:2002}のメモ
+
+	$F_3^2$を有限体$F_3:=\set{0,1,2}$上の二次元自由ベクトル空間とする。
+	$F_3^2$の元は原点を含めて$3^2$個あるが、$F_3^2$の$1$次元部分空間は
+	次の元で張られる部分空間の$4$種類になる。
+	\begin{equation*}\begin{split}
+		\pvect{1}{0}^\tran ,\quad \pvect{0}{1}^\tran
+		,\quad \pvect{1}{1}^\tran ,\quad \pvect{1}{2}^\tran
+	\end{split}\end{equation*}
+	表にすると次のようになっている。
+	\begin{equation*}\begin{array}{r|rrrr}
+		& 0 & 1 & 2 \\\hline
+		0 & \pvect{0}{0}^\tran & \pvect{0}{1}^\tran & 2\pvect{0}{1}^\tran \\
+		1 & \pvect{1}{0}^\tran & \pvect{1}{1}^\tran & \pvect{1}{2}^\tran \\
+		2 & 2\pvect{1}{0}^\tran & 2\pvect{1}{2}^\tran & 2\pvect{1}{1}^\tran \\
+	\end{array}\end{equation*}
+%s1:Kacのメモ}
 \section{Kempfのメモ}\label{s1:Kempfのメモ} %{
 	\cite{kempf:1994}のメモ
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
@@ -63,13 +2294,21 @@
 		\begin{equation*}\begin{split}
 			m(S\otimes\id)\Delta = u\epsilon = m(\id\otimes S)\Delta
 		\end{split}\end{equation*}
-		\item q-スケーリング$q^\Nhat$
+		\item q-スケーリング$q^\Nhat$ \\
+		$\eta_q^\flat\eta_0$はq-数演算子になっているので、
 		\begin{equation*}\begin{split}
-			q^\Nhat = 1 - (1 - q)\eta_q^\flat\eta_0
-			\implies \left\{\begin{split}
-				q^\Nhat\eta_q^\flat &= (q\eta_q^\flat)q^\Nhat \\
-				\eta_0q^\Nhat &= q^\Nhat(q\eta_0) \\
-			\end{split}\right.
+			\eta_q^\flat\eta_0\ket{\eta_q^n} = [n]_q\ket{\eta_q^n}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		次のようにして$q^\Nhat$を$\eta_0$と$\eta_q^\flat$で表すことができる。
+		\begin{equation*}\begin{split}
+			\eta_q^\flat\eta_0 = \frac{1 - q^\Nhat}{1 - q}
+			\implies q^\Nhat = 1 - (1 - q)\eta_q^\flat\eta_0
+		\end{split}\end{equation*}
+		$q^\Nhat$の交換関係は次のようになる。
+		\begin{equation*}\begin{split}
+			q^\Nhat\eta_q^\flat = (q\eta_q^\flat)q^\Nhat,\quad
+			\eta_0q^\Nhat = q^\Nhat(q\eta_0)
 		\end{split}\end{equation*}
 		q-スケーリングを使うと積分作用素が次のように書ける。
 		\begin{equation*}\begin{split}
@@ -83,6 +2322,89 @@
 	\end{itemize} %}
 %s1:Kempfのメモ}
 \section{計算のメモ}\label{s1:計算のメモ} %{
+	次の$\fukuso_q\braket{b,c}$上の線形q-微分方程式を考える。
+	\begin{equation}\label{eq:線形q-微分方程式}\begin{split}
+		(\partial_qx|t) = b(x|t)c
+	\end{split}\end{equation}
+	$t_q:=(1-q)t$とおき、差分を展開すると次のようになる。
+	\begin{equation*}\begin{split}
+		(x|t) &= (x|qt) + t_qb(x|t)c \\
+		&= \sum_{n\in\sizen} (t_qb)^n(x|qt)c^n \\
+		&= \sum_{n\in\sizen} \frac{1-q^{n+1}}{1-q}(t_qb)^n(x|q^2t)c^n \\
+		&= \sum_{n\in\sizen} \frac{1-q^{n+1}}{1-q}\frac{1-q^{n+2}}{1-q^2}
+			(t_qb)^n(x|q^3t)c^n \\
+	\end{split}\end{equation*}
+	したがって、次の式が成り立つことが予想される。
+	\begin{equation*}\begin{split}
+		(x|t) \overset{?}{=} 
+		\sum_{n\in\sizen}\qbinom{k+n}{k}_q(t_qb)^n(x|q^{k+1}t)c^n
+		\quad\text{for all } k\in\sizen
+	\end{split}\end{equation*}
+	ある$k\in\sizen$で成り立つとすると、次のようになり、
+	\begin{equation*}\begin{split}
+		(x|t) &= \sum_{n\in\sizen} \qbinom{n+k}{k}_q(t_qb)^n(x|q^{k+1}t)c^n \\
+		&= \sum_{m,n\in\sizen} \qbinom{k+m}{k}_q(t_qb)^m(t_qq^{k+1}b)^n
+			(x|q^{k+2}t)c^{m+n} \\
+		&= \sum_{n\in\sizen}\sum_{r=0}^n q^{r(k+1)}\qbinom{k+n-r}{k}_q(t_qb)^n
+			(x|q^{k+2}t)c^n \\
+	\end{split}\end{equation*}
+	次の式が成り立つかどうかに帰着する。
+	\begin{equation*}\begin{split}
+		\qbinom{k+1+n}{k+1}_q \overset{?}{=} \sum_{r=0}^n 
+			q^{r(k+1)}\qbinom{k+n-r}{k}_q \quad\text{for all } n,k\in\sizen
+	\end{split}\end{equation*}
+	\begin{proof} %{
+		$n$についての帰納法で証明する。$n=0$のときは、次のようになり、
+		命題が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\qbinom{k+1}{k+1}_q = \qbinom{k}{k}_q
+			= \sum_{r=0}^0 q^{r(k+1)}\qbinom{k-r}{k}_q 
+			\quad\text{for all } k\in\sizen
+		\end{split}\end{equation*}
+		ある$n\in\sizen$以下で命題が成り立つと仮定すると、Pascalの恒等式と
+		帰納法の仮定より、次のようになり、
+		\begin{equation*}\begin{split}
+			\qbinom{k+2+n}{k+1}_q 
+			&= \qbinom{k+1+n}{k}_q + q^{k+1}\qbinom{k+1+n}{k+1}_q \\
+			&= \qbinom{k+1+n}{k}_q + q^{k+1}\sum_{r=0}^n q^{r(k+1)}
+				\qbinom{k+n-r}{k}_q \\
+			&= \sum_{r=0}^{n+1} q^{r(k+1)}\qbinom{k+n+1-r}{k}_q
+		\end{split}\end{equation*}
+		$n+1$でも命題が成り立つことがわかる。
+	\end{proof} %}
+	また、\eqref{eq:線形q-微分方程式}の解は次のように書くことができるので、
+	\begin{equation*}\begin{split}
+		(x|t) = \sum_{n\in\sizen}\frac{t^n}{[n]_q!} b^n(x|0)c^n
+	\end{split}\end{equation*}
+	次の式が成り立つことが予想される。
+	\begin{equation*}\begin{split}
+		\lim_{k\to\infty} \qbinom{k+n}{k}_q
+		\overset{?}{=} \frac{1}{(1-q)^n[n]_q!}
+		= \frac{1}{(1-q)\cdots(1-q^n)}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	確かに、次の式から成り立つことがわかる。
+	\begin{equation*}\begin{split}
+		\qbinom{k+n}{k}_q &= \frac{(1-q^{k+1})\cdots(1-q^{k+n})}
+			{(1-q)\cdots(1-q^n)} \\
+		\implies \lim_{k\to\infty}\qbinom{k+n}{k}_q 
+		&= \lim_{k\to\infty}\frac{(1-q^{k+1})\cdots(1-q^{k+n})}
+			{(1-q)\cdots(1-q^n)} \\
+		&= \frac{1}{(1-q)\cdots(1-q^n)} \\
+	\end{split}\end{equation*}
+	以上を命題の形でまとめておく。
+
+	\begin{proposition}[線形q-微分方程式の摂動解]\label{prop:線形q-微分方程式の摂動解} %{
+		$\fukuso_q\braket{b,c}$上の線形q-微分方程式について次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			(\partial_qx|t) = b(x|t)c \implies (x|t) &= \sum_{n\in\sizen}
+				\qbinom{k+n}{k}_q(t_qb)^n(x|q^{k+1}t)c^n
+				\quad\text{for all } k\in\sizen \\
+			&= \sum_{n\in\sizen} \frac{t^n}{[n]_q!} b^n(x|0)c^n
+		\end{split}\end{equation*}
+		ここで、$t_q:=(1-q)t$とおいた。
+	\end{proposition} %prop:線形q-微分方程式の摂動解}
+
 	$(\eta_0,\eta_q^\flat)$系での交換関係を計算する。
 	\begin{equation*}\begin{split}
 		\eta_0\eta_q^\flat = 1 + \eta_q^\flat\eta_0

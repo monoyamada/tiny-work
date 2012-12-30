@@ -1,652 +1,580 @@
 package parser;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
-import parser.ParserTest.GrammarCommand.ExpressionData;
+import javax.management.RuntimeErrorException;
+
+import parser.ParserTest.Node;
+import parser.ParserTest.Z;
 
 import junit.framework.TestCase;
-import tiny.lang.ArrayHelper;
 import tiny.lang.Debug;
-import tiny.lang.Messages;
-import tiny.lang.StringHelper;
 
 public class ParserTest extends TestCase {
-	static class GrammarNode {
-		// generators
-		static final int VARIABLE = 1;
-		static final int STRING = VARIABLE + 1;
-		static final int CHARACTER = STRING + 1;
-		static final int EMPTY_STRING = CHARACTER + 1;
-		static final int EMPTY_CHARACTER = EMPTY_STRING + 1;
-		// unaries
-		static final int CHARACTER_COMPLEMENTS = EMPTY_CHARACTER + 1;
-		static final int STARS = CHARACTER_COMPLEMENTS + 1;
-		// binaries
-		static final int CHARACTER_RANGE = STARS + 1;
-		static final int CHARACTER_MEETS = CHARACTER_RANGE + 1;
-		static final int MULTIPLIES = CHARACTER_MEETS + 1;
-		static final int PLUS = MULTIPLIES + 1;
-		static final int CHARACTER_MINUS = PLUS + 1;
-		static final int ASSIGNS = CHARACTER_MINUS + 1;
-		// end
-		static final int END_OF_TYPE = ASSIGNS + 1;
+	@Override
+	protected void setUp() throws Exception {
+		Debug.setLogLevel("debug");
+		super.setUp();
+	}
+	
+	public void testReader() {
+		
+	}
 
-		// special nodes they do not have data.
-		static final GrammarNode EMPTY_STRING_NODE = new GeneratorNode(EMPTY_STRING);
-		static final GrammarNode EMPTY_CHARACTER_NODE = new GeneratorNode(
-				EMPTY_CHARACTER);
+	static abstract class Node {
+		public static final Node[] EMPTY_ARRAY = {};
 
-		public static String getTypeName(int type) {
-			switch (type) {
-			case VARIABLE:
+		static final int ZERO = 0;
+		static final int ONE = ZERO + 1;
+		static final int INTEGER = ONE + 1;
+		static final int VARIABLE = INTEGER + 1;
+		static final int PLUS = VARIABLE + 1;
+		static final int MULTIPLIES = PLUS + 1;
+		static final int POWERS = MULTIPLIES + 1;
+		static final int ASSINGS = POWERS + 1;
+
+		static String typeName(Node node) {
+			return node != null ? Node.typeName(node.what()) : "null";
+		}
+		static String typeName(int what) {
+			switch (what) {
+			case Node.ZERO:
+				return "0";
+			case Node.ONE:
+				return "1";
+			case Node.INTEGER:
+				return "integer";
+			case Node.VARIABLE:
 				return "variable";
-			case STRING:
-				return "string";
-			case CHARACTER:
-				return "character";
-			case EMPTY_STRING:
-				return "one";
-			case EMPTY_CHARACTER:
-				return "zero";
-			case CHARACTER_COMPLEMENTS:
-				return "complements";
-			case STARS:
-				return "stars";
-			case CHARACTER_RANGE:
-				return "range";
-			case CHARACTER_MEETS:
-				return "meets";
-			case MULTIPLIES:
-				return "multiplies";
-			case PLUS:
+			case Node.PLUS:
 				return "plus";
-			case CHARACTER_MINUS:
-				return "minus";
-			case ASSIGNS:
+			case Node.MULTIPLIES:
+				return "multiplies";
+			case Node.POWERS:
+				return "powers";
+			case Node.ASSINGS:
 				return "assigns";
 			default:
 				return "unknown";
 			}
 		}
-		public static GrammarNode newNode(int type) {
-			switch (type) {
-			case VARIABLE:
-				return new VariableNode();
-			case STRING:
-				return new StringNode();
-			case CHARACTER:
-				return new CharacterNode();
-			case EMPTY_STRING:
-				return EMPTY_STRING_NODE;
-			case EMPTY_CHARACTER:
-				return EMPTY_CHARACTER_NODE;
-			case CHARACTER_COMPLEMENTS:
-			case STARS:
-				return new UnaryNode(type);
-			case CHARACTER_RANGE:
-			case CHARACTER_MEETS:
-			case MULTIPLIES:
-			case PLUS:
-			case CHARACTER_MINUS:
-			case ASSIGNS:
-				return new BinaryNode(type);
-			default: {
-				String msg = "unknown type=" + type;
-				throw new NoSuchElementException(msg);
-			}
-			}
-		}
 
-		final int type;
-
-		public GrammarNode(int type) {
-			this.type = type;
-		}
-		public int getType() {
-			return this.type;
-		}
-		public int getChildSize() {
-			return 0;
-		}
-		public GrammarNode getChild(int index) {
-			throw new NoSuchElementException("leaf dose not have children");
-		}
-		public String toString() {
-			return this.toPreorder();
-		}
-		protected void toStringGenerator(StringBuilder output) {
-			switch (this.type) {
-			case VARIABLE: {
-				VariableNode that = (VariableNode) this;
-				output.append(that.value);
-				return;
-			}
-			case STRING: {
-				StringNode that = (StringNode) this;
-				output.append('"');
-				if (that.utf8) {
-					output.append(new String(that.value, StringHelper.CHARSET_UTF_8));
-				} else {
-					output.append(StringHelper.toHexString(that.value));
-				}
-				output.append(that.value);
-				output.append('"');
-				return;
-			}
-			case CHARACTER: {
-				CharacterNode that = (CharacterNode) this;
-				output.append("'");
-				if (that.ascii) {
-					output.append(Character.toChars(that.value));
-				} else {
-					output.append(StringHelper.toHexString(that.value));
-				}
-				output.append("'");
-				return;
-			}
-			default:
-				output.append(this.getTypeName());
-				return;
+		@Override
+		public Node clone() {
+			try {
+				return (Node) super.clone();
+			} catch (CloneNotSupportedException ex) {
+				throw new Error(ex);
 			}
 		}
-		public String toPreorder() {
-			StringBuilder buffer = new StringBuilder();
-			this.toPreorder(buffer);
-			return buffer.toString();
+		abstract int what();
+		boolean isZero() {
+			return false;
 		}
-		public void toPreorder(StringBuilder output) {
-			int n = this.getChildSize();
-			if (n < 1) {
-				toStringGenerator(output);
-				return;
-			}
-			output.append('(');
-			output.append(this.getTypeName());
-			for (int i = 0; i < n; ++i) {
-				output.append(' ');
-				GrammarNode child = this.getChild(i);
-				if (child != null) {
-					child.toPreorder(output);
-				} else {
-					output.append("null");
-				}
-			}
-			output.append(')');
+		boolean isOne() {
+			return false;
 		}
-		public String toInorder() {
-			StringBuilder buffer = new StringBuilder();
-			this.toInorder(buffer);
-			return buffer.toString();
+		boolean isPrimitive() {
+			return false;
 		}
-		protected static void toChildInorder(StringBuilder output, GrammarNode node) {
-			if (node != null) {
-				if (node.getChildSize() < 1) {
-					node.toInorder(output);
-				} else {
-					output.append('(');
-					node.toInorder(output);
-					output.append(')');
-				}
-			} else {
-				output.append("null");
-			}
+		Node plus(Node x) {
+			Debug.isNotNull("Node", x);
+			return new Binary(Node.PLUS, this, x);
 		}
-		public void toInorder(StringBuilder output) {
-			int n = this.getChildSize();
-			if (n < 1) {
-				toStringGenerator(output);
-				return;
-			}
-			switch (this.type) {
-			case CHARACTER_COMPLEMENTS: {
-				toChildInorder(output, this.getChild(0));
-				output.append('!');
-			}
-			break;
-			case STARS: {
-				toChildInorder(output, this.getChild(0));
-				output.append('*');
-			}
-			break;
-			case CHARACTER_RANGE: {
-				toChildInorder(output, this.getChild(0));
-				output.append(" .. ");
-				toChildInorder(output, this.getChild(1));
-			}
-			break;
-			case CHARACTER_MEETS: {
-				toChildInorder(output, this.getChild(0));
-				output.append(" & ");
-				toChildInorder(output, this.getChild(1));
-			}
-			break;
-			case MULTIPLIES: {
-				toChildInorder(output, this.getChild(0));
-				output.append(' ');
-				toChildInorder(output, this.getChild(1));
-			}
-			break;
-			case PLUS: {
-				toChildInorder(output, this.getChild(0));
-				output.append(" + ");
-				toChildInorder(output, this.getChild(1));
-			}
-			break;
-			case CHARACTER_MINUS: {
-				toChildInorder(output, this.getChild(0));
-				output.append(" - ");
-				toChildInorder(output, this.getChild(1));
-			}
-			break;
-			case ASSIGNS: {
-				toChildInorder(output, this.getChild(0));
-				output.append(" = ");
-				toChildInorder(output, this.getChild(1));
-			}
-			break;
-			default: {
-				String msg = "unknown type=" + type;
-				output.append(msg);
-			}
-			break;
-			}
+		Node times(Node x) {
+			Debug.isNotNull("Node", x);
+			return new Binary(Node.MULTIPLIES, this, x);
 		}
-		public String getTypeName() {
-			return getTypeName(this.type);
+		Node powers(Node x) {
+			Debug.isNotNull("Z", x);
+			return new Binary(Node.POWERS, this, x);
+		}
+		Node powers(int n) {
+			if (n == 0) {
+				return One.INSTANCE;
+			} else if (n == 1) {
+				return this;
+			}
+			return new Binary(Node.POWERS, this, Z.valueOf(n));
 		}
 	}
 
-	static class GeneratorNode extends GrammarNode {
-		public GeneratorNode(int value) {
-			super(value);
+	static class Zero extends Node {
+		static final Zero INSTANCE = new Zero();
+
+		@Override
+		int what() {
+			return Node.ZERO;
+		}
+		@Override
+		boolean isZero() {
+			return true;
+		}
+		@Override
+		boolean isPrimitive() {
+			return true;
 		}
 	}
 
-	static class UnaryNode extends GrammarNode {
-		GrammarNode child;
+	static class One extends Node {
+		static final One INSTANCE = new One();
 
-		public UnaryNode(int value) {
-			this(value, null);
-		}
-		public UnaryNode(int value, GrammarNode child) {
-			super(value);
-			this.setChild(child);
+		@Override
+		int what() {
+			return Node.ONE;
 		}
 		@Override
-		public int getChildSize() {
-			return 1;
+		boolean isOne() {
+			return true;
 		}
 		@Override
-		public GrammarNode getChild(int index) {
-			if (index == 0) {
-				return this.child;
+		boolean isPrimitive() {
+			return true;
+		}
+	}
+
+	static class Z extends Node {
+		final static Z[] cache = new Z[8];
+
+		public static Node valueOf(int n) {
+			if (0 <= n && n < cache.length) {
+				Z x = cache[n];
+				if (x == null) {
+					cache[n] = x = new Z(n);
+				}
+				return x;
 			}
-			throw new NoSuchElementException("unary dose not have child=" + index);
+			return new Z(n);
 		}
-		public UnaryNode setChild(GrammarNode child) {
-			this.child = child;
+
+		long value;
+
+		public Z(long value) {
+			this.value = value;
+		}
+		@Override
+		int what() {
+			return Node.INTEGER;
+		}
+		@Override
+		boolean isZero() {
+			return this.value == 0;
+		}
+		@Override
+		boolean isOne() {
+			return this.value == 1;
+		}
+		@Override
+		boolean isPrimitive() {
+			return true;
+		}
+	}
+
+	static class Variable extends Node {
+		String name;
+
+		public Variable(String name) {
+			this.name = name;
+		}
+		@Override
+		int what() {
+			return Node.VARIABLE;
+		}
+		@Override
+		boolean isPrimitive() {
+			return true;
+		}
+		Node assigns(Node x) {
+			Debug.isNotNull("Node", x);
+			return new Binary(Node.ASSINGS, this, x);
+		}
+	}
+
+	static class Binary extends Node {
+		int what;
+		Node left;
+		Node right;
+
+		public Binary(int what) {
+			this(what, null, null);
+		}
+		public Binary(int what, Node left, Node right) {
+			this.what = what;
+			this.left = left;
+			this.right = right;
+		}
+		@Override
+		int what() {
+			return this.what;
+		}
+		public Binary swap() {
+			Node x = this.left;
+			this.left = this.right;
+			this.right = x;
 			return this;
 		}
 	}
 
-	static class BinaryNode extends GrammarNode {
-		GrammarNode child0;
-		GrammarNode child1;
+	static class EqVariable extends Variable {
+		public EqVariable(String name) {
+			super(name);
+		}
+		Node equationNode;
+		EqGraph equation;
+	}
 
-		public BinaryNode(int value) {
-			this(value, null, null);
+	static class EqVertex {
+		static final EqVertex[] EMPTY_ARRAY = {};
+		EqVariable variable;
+		List<EqVertex> follows;
+
+		public EqVertex(EqVariable node) {
+			this.variable = node;
+			this.follows = null;
 		}
-		public BinaryNode(int value, GrammarNode child0, GrammarNode child1) {
-			super(value);
-			this.setChildren(child0, child1);
+	}
+
+	static class EqGraph {
+		static final EqGraph[] EMPTY_ARRAY = {};
+
+		static Node[] modifyNodes(Node[] eqs) {
+			Map<String, EqVariable> varMap = new HashMap<String, EqVariable>();
+			List<Node> newEqs = new ArrayList<Node>(eqs.length);
+			for (Node node : eqs) {
+				node = EqGraph.eliminateZero(node);
+				node = EqGraph.replaceVariable(varMap, node);
+				node = EqGraph.expandPower(node);
+				newEqs.add(node);
+			}
+			return newEqs.toArray(Node.EMPTY_ARRAY);
 		}
-		@Override
-		public int getChildSize() {
-			return 2;
-		}
-		@Override
-		public GrammarNode getChild(int index) {
-			switch (index) {
-			case 0:
-				return this.child0;
-			case 1:
-				return this.child1;
-			default:
+		private static Node replaceVariable(Map<String, EqVariable> varMap,
+				Node node) {
+			switch (node.what()) {
+			case Node.ZERO:
+			case Node.ONE:
+			case Node.INTEGER:
+				return node;
+			case Node.VARIABLE: {
+				Variable oldVar = (Variable) node;
+				EqVariable newVar = varMap.get(oldVar);
+				if (newVar == null) {
+					newVar = new EqVariable(oldVar.name);
+					varMap.put(oldVar.name, newVar);
+				}
+				return newVar;
+			}
+			case Node.PLUS:
+			case Node.MULTIPLIES:
+			case Node.POWERS: {
+				Binary op = (Binary) node;
+				Node left = EqGraph.replaceVariable(varMap, op.left);
+				Node right = EqGraph.replaceVariable(varMap, op.right);
+				return EqGraph.replaceIfChanged(op, left, right);
+			}
+			case Node.ASSINGS: {
+				Binary op = (Binary) node;
+				EqVariable left = (EqVariable) EqGraph.replaceVariable(varMap, op.left);
+				Node right = EqGraph.replaceVariable(varMap, op.right);
+				
+				
+				return EqGraph.replaceIfChanged(op, left, right);
+				Binary op = (Binary) node;
+				Variable oldVar = (Variable) op.left;
+				EqVariable newVar = varMap.get(oldVar);
+				if (newVar == null) {
+					newVar = new EqVariable(oldVar.name);
+					varMap.put(newVar.name, newVar);
+				} else if (newVar.equation != null) {
+					throw new IllegalArgumentException("duplicated definition of "
+							+ oldVar.name);
+				}
+				EqGraph.replaceVariable(varMap, op.right);
+			}
 			break;
+			default:
+				throw new IllegalArgumentException("unknown type of node="
+						+ Node.typeName(node.what()));
 			}
-			throw new NoSuchElementException("binary dose not have child=" + index);
+			return node;
 		}
-		public BinaryNode setChildren(GrammarNode child0, GrammarNode child1) {
-			this.child0 = child0;
-			this.child1 = child1;
-			return this;
-		}
-	}
-
-	static class VariableNode extends GeneratorNode {
-		String value;
-
-		public VariableNode() {
-			this(null);
-		}
-		public VariableNode(String value) {
-			super(VARIABLE);
-			this.value = value;
-		}
-	}
-
-	static class StringNode extends GeneratorNode {
-		byte[] value;
-		boolean utf8;
-
-		public StringNode() {
-			this(ArrayHelper.EMPTY_BYTE_ARRAY, false);
-		}
-		public StringNode(byte[] value, boolean utf8) {
-			super(STRING);
-			this.value = value;
-			this.utf8 = utf8;
-		}
-	}
-
-	static class CharacterNode extends GeneratorNode {
-		byte value;
-		private boolean ascii;
-
-		public CharacterNode() {
-			this((byte) 0, false);
-		}
-		public CharacterNode(byte value, boolean ascii) {
-			super(CHARACTER);
-			this.value = value;
-			this.ascii = ascii;
-		}
-	}
-
-	static class GrammarCommand {
-		static class ExpressionData {
-			GrammarNode root;
-
-			public ExpressionData(GrammarNode node) {
-				this.root = node;
+		private static Node expandPower(Node node) {
+			switch (node.what()) {
+			case Node.ZERO:
+			case Node.ONE:
+			case Node.INTEGER:
+			case Node.VARIABLE:
+				return node;
+			case Node.PLUS:
+			case Node.MULTIPLIES:
+			case Node.ASSINGS: {
+				Binary op = (Binary) node;
+				Node left = EqGraph.expandPower(op.left);
+				Node right = EqGraph.expandPower(op.right);
+				return EqGraph.replaceIfChanged(op, left, right);
 			}
-			public String toString() {
-				StringBuilder buffer = new StringBuilder();
-				buffer.append('{');
-				buffer.append("expression=");
-				if (root != null) {
-					root.toInorder(buffer);
+			case Node.POWERS: {
+				Binary op = (Binary) node;
+				node = EqGraph.expandPower(op.left);
+				Z power = (Z) op.right;
+				if (power.value < 0) {
+					return op;
+				} else if (power.value == 0) {
+					return One.INSTANCE;
+				} else if (power.value == 1) {
+					return node;
+				}
+				Node unit = node;
+				node = unit;
+				for (long n = power.value; 1 < n--;) {
+					node = node.times(unit);
+				}
+				return node;
+			}
+			default:
+				throw new IllegalArgumentException("unknown type of node="
+						+ Node.typeName(node.what()));
+			}
+		}
+		private static Node eliminateZero(Node node) {
+			switch (node.what()) {
+			case Node.ZERO:
+			case Node.ONE:
+			case Node.INTEGER:
+			case Node.VARIABLE:
+				return node;
+			case Node.PLUS: {
+				Binary op = (Binary) node;
+				Node left = EqGraph.eliminateZero(op.left);
+				if (left.isZero()) {
+					return EqGraph.eliminateZero(op.right);
+				}
+				Node right = EqGraph.eliminateZero(op.right);
+				if (right.isZero()) {
+					return left;
+				}
+				return EqGraph.replaceIfChanged(op, left, right);
+			}
+			case Node.MULTIPLIES: {
+				Binary op = (Binary) node;
+				Node left = EqGraph.eliminateZero(op.left);
+				if (left.isZero()) {
+					return left;
+				} else if (left.isOne()) {
+					return EqGraph.eliminateZero(op.right);
+				}
+				Node right = EqGraph.eliminateZero(op.right);
+				if (right.isZero()) {
+					return right;
+				} else if (right.isZero()) {
+					return left;
+				}
+				return EqGraph.replaceIfChanged(op, left, right);
+			}
+			case Node.POWERS: {
+				Binary op = (Binary) node;
+				node = EqGraph.eliminateZero(op.left);
+				Z power = (Z) EqGraph.eliminateZero(op.right);
+				if (node.isZero()) {
+					return power.isZero() ? One.INSTANCE : node;
+				} else if (power.isZero()) {
+					return One.INSTANCE;
+				} else if (power.isOne()) {
+					return node;
+				}
+				return EqGraph.replaceIfChanged(op, node, power);
+			}
+			case Node.ASSINGS: {
+				Binary op = (Binary) node;
+				Node right = EqGraph.eliminateZero(op.right);
+				return EqGraph.replaceIfChanged(op, op.left, right);
+			}
+			default:
+				throw new IllegalArgumentException("unknown type of node="
+						+ Node.typeName(node.what()));
+			}
+		}
+
+		private static Node replaceIfChanged(Binary op, Node left, Node right) {
+			if (EqGraph.eq(op.left, left) && EqGraph.eq(op.right, right)) {
+				return op;
+			}
+			op = (Binary) op.clone();
+			op.left = left;
+			op.right = right;
+			return op;
+		}
+
+		private static boolean eq(Object x, Object y) {
+			if(x==y){
+				return true;
+			}else if(x!=null&&y!=null&&x.equals(y)){
+				return true;
+			}
+			return false;
+		}
+
+		Node node;
+		List<EqVertex> firsts;
+		List<EqVertex> lasts;
+		boolean geOne;
+
+		public EqGraph(Node node) {
+			this.node = node;
+			this.firsts = new ArrayList<EqVertex>(1);
+			this.lasts = new ArrayList<EqVertex>(1);
+			this.geOne = false;
+		}
+	}
+
+	public void test1() throws IOException {
+		final Map<String, Variable> varMap = new TreeMap<String, Variable>();
+		class Op {
+			Variable v(String name) {
+				return this.getVariable(name, true);
+			}
+			Variable getVariable(String name, boolean anyway) {
+				Variable x = varMap.get(name);
+				if (x == null && anyway) {
+					x = new Variable(name);
+					varMap.put(name, x);
+				}
+				return x;
+			}
+			Node[] modifyNodes(Node[] eqs) {
+				return EqGraph.modifyNodes(eqs);
+			}
+		}
+		Zero zero = Zero.INSTANCE;
+		One one = One.INSTANCE;
+		Op op = new Op();
+		Node[] eqs = {
+				op.v("E")
+						.assigns(op.v("A").times(one.plus(op.v("e").times(op.v("E"))))),
+				op.v("A")
+						.assigns(one.plus(op.v("v").times(op.v("a").times(op.v("P"))))),
+				op.v("P")
+						.assigns(op.v("T").times(one.plus(op.v("p").times(op.v("P"))))),
+				op.v("T")
+						.assigns(op.v("W").times(one.plus(op.v("t").times(op.v("T"))))),
+				op.v("W")
+						.assigns(op.v("U").times(one.plus(op.v("w").times(op.v("d"))))),
+				op.v("U").assigns(
+						op.v("v").plus(op.v("l").times(op.v("P").times(op.v("r"))))),
+				op.v("Test").assigns(
+						one.times(op.v("Test").plus(zero).plus(op.v("Test").powers(3)))), };
+		if (true) {
+			eqs = op.modifyNodes(eqs);
+			PrintWriter writer = new PrintWriter(System.out);
+			writer.write("free variables = ");
+			for (Var v : vertices) {
+				if (v.equation == null) {
+					writer.write(" " + v.variable.name);
+				}
+			}
+			writer.write('\n');
+			writer.flush();
+		}
+		if (true) {
+			PrintWriter writer = new PrintWriter(System.out);
+			for (Node node : eqs) {
+				toString(writer, node);
+				writer.write('\n');
+				writer.flush();
+			}
+		}
+	}
+	static void toString(Appendable writer, Node node) throws IOException {
+		if (node == null) {
+			writer.append("null");
+		} else {
+			switch (node.what()) {
+			case Node.ZERO:
+				writer.append('0');
+			break;
+			case Node.ONE:
+				writer.append('1');
+			break;
+			case Node.INTEGER:
+				writer.append(Long.toString(((Z) node).value));
+			break;
+			case Node.VARIABLE:
+				writer.append(((Variable) node).name);
+			break;
+			case Node.PLUS: {
+				Binary op = (Binary) node;
+				if (op.left.isPrimitive()) {
+					toString(writer, op.left);
 				} else {
-					buffer.append("null");
+					writer.append('(');
+					toString(writer, op.left);
+					writer.append(')');
 				}
-				buffer.append('}');
-				return buffer.toString();
-			}
-		}
-
-		// operational symbols
-		static final int EXPRESSION_SEPARATOR_INDEX = GrammarNode.END_OF_TYPE + 1;
-		public static final GrammarCommand EXPRESSION_SEPARATOR = new GrammarCommand(
-				EXPRESSION_SEPARATOR_INDEX);
-		// generators
-		public static final GrammarCommand EMPTY_STRING = new GrammarCommand(
-				GrammarNode.EMPTY_STRING);
-		public static final GrammarCommand EMPTY_CHARACTER = new GrammarCommand(
-				GrammarNode.EMPTY_CHARACTER);
-		// unaries
-		public static final GrammarCommand CHARACTER_COMPLEMENTS = new GrammarCommand(
-				GrammarNode.CHARACTER_COMPLEMENTS);
-		public static final GrammarCommand STARS = new GrammarCommand(
-				GrammarNode.STARS);
-		// binaries
-		public static final GrammarCommand CHARACTER_RANGE = new GrammarCommand(
-				GrammarNode.CHARACTER_RANGE);
-		public static final GrammarCommand MULTIPLIES = new GrammarCommand(
-				GrammarNode.MULTIPLIES);
-		public static final GrammarCommand PLUS = new GrammarCommand(
-				GrammarNode.PLUS);
-		public static final GrammarCommand CHARACTER_MINUS = new GrammarCommand(
-				GrammarNode.CHARACTER_MINUS);
-		public static final GrammarCommand ASSIGNS = new GrammarCommand(
-				GrammarNode.ASSIGNS);
-
-		public static final GrammarCommand variable(String value) {
-			return new VariableCommand(value);
-		}
-		public static final GrammarCommand string(String value) {
-			if (value == null) {
-				return GrammarCommand.EMPTY_CHARACTER;
-			} else if (value.length() < 1) {
-				return GrammarCommand.EMPTY_STRING;
-			}
-			return new StringCommand(value.getBytes(StringHelper.CHARSET_UTF_8), true);
-		}
-		public static final GrammarCommand character(String value) {
-			if (value == null) {
-				return GrammarCommand.EMPTY_CHARACTER;
-			}
-			byte[] array = value.getBytes(StringHelper.CHARSET_UTF_8);
-			if (array.length != 1) {
-				String msg = "value is not character";
-				throw new IllegalArgumentException(msg);
-			}
-			return new CharacterCommand(array[0], true);
-		}
-
-		public static void makeSystem(Map<String, ExpressionData> output,
-				List<GrammarCommand> input) {
-			GrammarCommand.makeSystem(output, input, 0, input.size());
-		}
-		static String msgStackUnderflow(int expected, int actual) {
-			return "expected stack size <= " + expected + " but actual=" + actual;
-		}
-		public static void makeSystem(Map<String, ExpressionData> output,
-				List<GrammarCommand> input, int begin, int end) {
-			int nCommand = end - begin;
-			ArrayList<GrammarNode> stack = new ArrayList<GrammarNode>(nCommand);
-			for (; begin < end; ++begin) {
-				GrammarCommand cmd = input.get(begin);
-				switch (cmd.type) {
-				case EXPRESSION_SEPARATOR_INDEX: {
-				}
-				break;
-				// generators
-				case GrammarNode.VARIABLE:
-				case GrammarNode.STRING:
-				case GrammarNode.CHARACTER: {
-					GrammarNode node = cmd.newNode();
-					stack.add(node);
-				}
-				break;
-				case GrammarNode.CHARACTER_COMPLEMENTS:
-				case GrammarNode.STARS: {
-					int n = stack.size();
-					if (n < 1) {
-						throw new NoSuchElementException(msgStackUnderflow(1, n));
-					}
-					GrammarNode child = stack.remove(n - 1);
-					UnaryNode parent = (UnaryNode) cmd.newNode();
-					parent.setChild(child);
-					stack.add(parent);
-				}
-				break;
-				case GrammarNode.CHARACTER_RANGE:
-				case GrammarNode.CHARACTER_MEETS:
-				case GrammarNode.MULTIPLIES:
-				case GrammarNode.PLUS:
-				case GrammarNode.CHARACTER_MINUS: {
-					int n = stack.size();
-					if (n < 2) {
-						throw new NoSuchElementException(msgStackUnderflow(2, n));
-					}
-					GrammarNode child1 = stack.remove(n - 1);
-					GrammarNode child0 = stack.remove(n - 2);
-					BinaryNode parent = (BinaryNode) cmd.newNode();
-					parent.setChildren(child0, child1);
-					stack.add(parent);
-				}
-				break;
-				case GrammarNode.ASSIGNS: {
-					int n = stack.size();
-					if (n < 2) {
-						throw new NoSuchElementException(msgStackUnderflow(2, n));
-					}
-					GrammarNode child1 = stack.remove(n - 1);
-					GrammarNode child0 = stack.remove(n - 2);
-					if (child0.getType() != GrammarNode.VARIABLE) {
-						String msg = Messages.getUnexpectedValue("type", "variable", child0
-								.getTypeName());
-						throw new IllegalArgumentException(msg);
-					}
-					VariableNode var = (VariableNode) child0;
-					ExpressionData datum = new ExpressionData(child1);
-					output.put(var.value, datum);
-					stack.add(var);
-				}
-				break;
-				default: {
-					String msg = "unkonwn command=" + GrammarNode.getTypeName(cmd.type);
-					throw new NoSuchElementException(msg);
-				}
+				writer.append(" + ");
+				if (op.right.isPrimitive()) {
+					toString(writer, op.right);
+				} else {
+					writer.append('(');
+					toString(writer, op.right);
+					writer.append(')');
 				}
 			}
-		}
-
-		final int type;
-
-		public GrammarCommand(int type) {
-			this.type = type;
-		}
-		protected GrammarNode newNode() {
-			return GrammarNode.newNode(this.type);
-		}
-	}
-
-	static class VariableCommand extends GrammarCommand {
-		final String value;
-
-		public VariableCommand(String value) {
-			super(GrammarNode.VARIABLE);
-			this.value = value;
-		}
-		@Override
-		protected GrammarNode newNode() {
-			return new VariableNode(this.value);
-		}
-	}
-
-	static class StringCommand extends GrammarCommand {
-		final byte[] value;
-		final boolean utf8;
-
-		public StringCommand(byte[] value, boolean utf8) {
-			super(GrammarNode.STRING);
-			this.value = value;
-			this.utf8 = utf8;
-		}
-		@Override
-		protected GrammarNode newNode() {
-			return new StringNode(this.value, this.utf8);
-		}
-	}
-
-	static class CharacterCommand extends GrammarCommand {
-		final byte value;
-		final boolean ascii;
-
-		public CharacterCommand(byte value, boolean ascii) {
-			super(GrammarNode.CHARACTER);
-			this.value = value;
-			this.ascii = ascii;
-		}
-		@Override
-		protected GrammarNode newNode() {
-			return new CharacterNode(this.value, this.ascii);
-		}
-	}
-
-	protected void setUp() throws Exception {
-		Debug.setLogLevel("debug");
-		super.setUp();
-	}
-	public void testGrammarTree() {
-		List<GrammarCommand> commands = new ArrayList<GrammarCommand>(64);
-		if (true) {
-			commands.add(GrammarCommand.variable("B"));
-			commands.add(GrammarCommand.variable("U"));
-			commands.add(GrammarCommand.variable("b"));
-			commands.add(GrammarCommand.variable("B"));
-			commands.add(GrammarCommand.MULTIPLIES);
-			commands.add(GrammarCommand.STARS);
-			commands.add(GrammarCommand.MULTIPLIES);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.EXPRESSION_SEPARATOR);
-		}
-		if (true) {
-			commands.add(GrammarCommand.variable("U"));
-			commands.add(GrammarCommand.variable("V"));
-			commands.add(GrammarCommand.character("("));
-			commands.add(GrammarCommand.variable("B"));
-			commands.add(GrammarCommand.MULTIPLIES);
-			commands.add(GrammarCommand.character(")"));
-			commands.add(GrammarCommand.MULTIPLIES);
-			commands.add(GrammarCommand.PLUS);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.EXPRESSION_SEPARATOR);
-		}
-		if (true) {
-			commands.add(GrammarCommand.variable("V"));
-			commands.add(GrammarCommand.variable("v0"));
-			commands.add(GrammarCommand.variable("a"));
-			commands.add(GrammarCommand.character("_"));
-			commands.add(GrammarCommand.PLUS);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.variable("v1"));
-			commands.add(GrammarCommand.variable("v0"));
-			commands.add(GrammarCommand.variable("d"));
-			commands.add(GrammarCommand.PLUS);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.STARS);
-			commands.add(GrammarCommand.PLUS);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.EXPRESSION_SEPARATOR);
-		}
-		if (true) {
-			commands.add(GrammarCommand.variable("b"));
-			commands.add(GrammarCommand.character("*"));
-			commands.add(GrammarCommand.character(" "));
-			commands.add(GrammarCommand.PLUS);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.EXPRESSION_SEPARATOR);
-		}
-		if (true) {
-			commands.add(GrammarCommand.variable("a"));
-			commands.add(GrammarCommand.character("a"));
-			commands.add(GrammarCommand.character("z"));
-			commands.add(GrammarCommand.CHARACTER_RANGE);
-			commands.add(GrammarCommand.character("A"));
-			commands.add(GrammarCommand.character("Z"));
-			commands.add(GrammarCommand.CHARACTER_RANGE);
-			commands.add(GrammarCommand.PLUS);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.EXPRESSION_SEPARATOR);
-		}
-		if (true) {
-			commands.add(GrammarCommand.variable("d"));
-			commands.add(GrammarCommand.character("0"));
-			commands.add(GrammarCommand.character("9"));
-			commands.add(GrammarCommand.CHARACTER_RANGE);
-			commands.add(GrammarCommand.ASSIGNS);
-			commands.add(GrammarCommand.EXPRESSION_SEPARATOR);
-		}
-		if (true) {
-			Map<String, ExpressionData> nodes = new TreeMap<String, ExpressionData>();
-			GrammarCommand.makeSystem(nodes, commands);
-			Debug.log().debug(nodes);
+			break;
+			case Node.MULTIPLIES: {
+				Binary op = (Binary) node;
+				if (op.left.isPrimitive()) {
+					toString(writer, op.left);
+				} else {
+					writer.append('(');
+					toString(writer, op.left);
+					writer.append(')');
+				}
+				writer.append(" ");
+				if (op.right.isPrimitive()) {
+					toString(writer, op.right);
+				} else {
+					writer.append('(');
+					toString(writer, op.right);
+					writer.append(')');
+				}
+			}
+			break;
+			case Node.POWERS: {
+				Binary op = (Binary) node;
+				if (op.left.isPrimitive()) {
+					toString(writer, op.left);
+				} else {
+					writer.append('(');
+					toString(writer, op.left);
+					writer.append(')');
+				}
+				writer.append(" ^ ");
+				if (op.right.isPrimitive()) {
+					toString(writer, op.right);
+				} else {
+					writer.append('(');
+					toString(writer, op.right);
+					writer.append(')');
+				}
+			}
+			break;
+			case Node.ASSINGS: {
+				Binary op = (Binary) node;
+				toString(writer, op.left);
+				writer.append(" = ");
+				toString(writer, op.right);
+			}
+			break;
+			default:
+				throw new IllegalArgumentException("unknown type of node="
+						+ Node.typeName(node.what()));
+			}
 		}
 	}
 }

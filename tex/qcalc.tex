@@ -32,6 +32,33 @@
 %
 \section{q-計算}\label{s1:q-計算} %{
 \subsection{q-二項係数}\label{s2:q-二項係数} %{
+	\begin{proposition}[Pascalの公式]\label{prop:Pascalの公式} %{
+		任意の$1\le k<n\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{k}_q = \qbinom{n}{k-1}_q + q^k\qbinom{n-1}{k}_q
+			= q^{n-k}\qbinom{n}{k-1}_q + \qbinom{n-1}{k}_q
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Pascalの公式}
+	\begin{proof} %{
+		任意の$1\le k<n\in\sizen$に対して次の式が成り立つ次の式を使うと、
+		\begin{equation*}\begin{split}
+			[n]_q &= 1 + q +\cdots+ q^{n-1}
+			= \plr{1 + q + q^{k-1}} + \plr{q^{k} +\cdots+ q^{n-1}} \\
+			&= [k]_q + q^k[n-k]_q
+		\end{split}\end{equation*}
+		命題の一つ目の式が得られる。
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{k}_q &= \frac{[n+1]_q!}{[k]_q![n-k]_q!}
+			= \frac{[n]_q![n+1]_q}{[k]_q![n-k]_q!} \\
+			&= \plr{[k]_q + q^k[n-k]_q}\frac{[n]_q!}{[k]_q![n-k]_q!} \\
+			&= \frac{[n]_q!}{[k-1]_q![n-k]_q!} 
+			+ q^k\frac{[n]_q!}{[k]_q![n-k-1]_q!} \\
+			&= \qbinom{n}{k-1}_q + q^k\qbinom{n}{k}_q
+		\end{split}\end{equation*}
+		そして、この式に対して対称性$\qbinom{n}{k}_q=\qbinom{n}{n-k}_q$を
+		使うと、命題の二つ目の式が得られる。
+	\end{proof} %}
+
 	\begin{proposition}[Schutzenbergerの公式]
 	\label{prop:Schutzenbergerの公式} %{
 		$R$を可換環、$x,y$を$xy=qyx$となる$R$上の不定元とする。
@@ -307,6 +334,14 @@
 	\end{split}\end{equation*}
 %s2:q-微分}
 \subsection{q-積分}\label{s2:q-積分} %{
+	$|q|<1$のとき、q-微分方程式の解は次のように無限和で書くことができる。
+	\begin{equation*}\begin{split}
+		(\partial_qF|x) = (f|x) \implies (F|x) &= (F|qx) + (1 - q)x(f|x) \\
+		&= (F|q^2x) + (1 - q)qx(f|qx) +  (1 - q)x(f|x) \\
+		&= \cdots \\
+		&= (F|0) + \sum_{n\in\sizen} (1 - q)q^nx(f|q^nx)
+	\end{split}\end{equation*}
+
 	q-微分に対応する積分を作用素として次のように定義する。
 	\begin{equation*}\begin{split}
 		\plr{\J_x}_q x^n := \frac{x^{n+1}}{[n+1]_q} \quad\text{for all } n\in\sizen

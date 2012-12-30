@@ -30,6 +30,10 @@ public class FileHelper {
 	public static String getSystemEncoding() {
 		return System.getProperty("file.encoding");
 	}
+	
+	public static String getCurrentDirectory() {
+		return System.getProperty("user.dir");
+	}
 
 	public static String avoidNullEncoding(String encoding) {
 		if (encoding != null) {
