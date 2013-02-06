@@ -89,529 +89,637 @@
 \newcommand{\EOF}{{\diamondsuit}}
 \newcommand{\dif}{{\partial}}
 \newcommand{\uesita}[2]{\genfrac{}{}{0pt}{0}{#1}{#2}}
-\newcommand{\op}[1]{\mathinner{\operatorname{#1}}}
+\newcommand{\op}[1]{\mathinner{{\operatorname{#1}}}}
 \newcommand{\Res}{\ensuremath{\mathop\mathrm{Res}}}
 %
 \newcommand{\EOP}{\hspace{\fill}\P}
 %
+\newcommand{\opp}{{\op{op}}}
+%
 {\setlength\arraycolsep{2pt}
 %
+\section{Haskellのメモ}\label{s1:Haskellのメモ} %{
+\subsection{圏論}\label{s2:圏論} %{
+	圏論をおさらいする。随伴関手からモナドを導くことを目標にする。
+\subsubsection{Hom関手}\label{s3:Hom関手} %{
+	$A$を局所的に小さい圏とする。 任意の$a\in A_0$に対して関手
+	$A(a,-):A\to\cat{Set}$と$A(-,a):A\to\cat{Set}$を次のように定義する。
+	\begin{equation}\label{eq:Hom関手の定義}\xymatrix@C=7ex{
+		A(b,a) & b \ar[r]^{A(a,-)} \ar[l]_{A(-,a)} \ar[d]^f 
+		& A(a,b) \ar[d]^{A(a,-)f:=f-} \\
+		A(c,a) \ar[u]^{A(-,a)f:=-f} & c \ar[r]^{A(a,-)} \ar[l]_{A(-,a)} 
+		& A(a,c) \\
+	} \quad\text{for all } \xymatrix{
+		b \ar[d]^f \\ c
+	} \in A
+	\end{equation}
+	$A(a,-)$を$a$を点とする共変Hom関手といい、
+	$A(-,a)$を$a$を点とする反変Hom関手という。
+
+	Hom関手は$\op{hom}$と書かれることが多いが、このノートでは関手$\op{hom}$
+	を$\op{hom}(a,-):A\to\cat{Set}$と$\op{hom}(-,a):A^\opp\to\cat{Set}$と
+	両者共に共変関手として定義する（節\ref{s3:双対圏}）。
+
+	一般に、反変関手というのは射の合成が逆順になる関手に対して使われる。
+	半群の逆順の準同型に対応するものになっている。単に関手といった場合は、
+	共変関手を指す。
+	\begin{equation*}\begin{array}{rl}
+		\text{共変関手} & F(a\xto{f}b\xto{g}c) = Fa\xto{Ff}Fb\xto{Fg} c \\
+		\text{反変関手} & F(a\xto{f}b\xto{g}c) = Fa\xfrom{Ff}Fb\xfrom{Fg} c \\
+	\end{array}\end{equation*}
+%s3:Hom関手}
+\subsubsection{双対圏}\label{s3:双対圏} %{
+	$A$を圏とする。$A$の射の向きを反転させたものもまた圏となる。
+	それを$A$の双対圏といい$A^\opp$と書く。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[対象と射] $a\xto{f}b\in A$ならば$a\xfrom{f^\opp}b\in A^\opp$
+		\item[射の合成] $a\xto{f}b\xto{g}c\in A$ならば
+		$a\xfrom{f^\opp}b\xfrom{g^\opp}c\in A^\opp$
+	\end{description} %}
+
+	圏の双対を次の例を考えてみよう。
+	\begin{equation*}\begin{split}
+		\vcenter{\xymatrix{
+			A \ar[r]^f & B
+		}} \xmapsto{-^\opp} \vcenter{\xymatrix{
+			A & B \ar[l]_{f^\opp}
+		}} \quad\text{where } \begin{split}
+			A := \set{a_1,a_2},\quad B := \set{b} \\
+			fa = b \quad\text{for all } a\in A
+		\end{split}
+	\end{split}\end{equation*}
+	元の圏では射$f$は写像だた、その双対圏では射$f^\opp$は写像ではなく
+	逆写像である。このように、一般には、双対をとると射が意味するものが
+	変わる。
+
+	関手の双対を次のように定義する。
+	\begin{equation*}\begin{split}
+		F:A\to B \implies F^\opp: A^\opp\to B^\opp
+		\quad\text{where } A,B\text{ are categories} \\
+		Fa\xto{Ff}Fb \implies F^\opp a\xfrom{F^\opp f^\opp} F^\opp b
+		\quad\text{for all } a\xto{f}b\in A
+	\end{split}\end{equation*}
+
+	関手$F:A^\opp\to B$は次のような操作だが、
+	\begin{equation*}\begin{split}
+		F\plr{a\xfrom{f^\opp}b} = Fa\xfrom{Ff^\opp}Fb
+		\quad\text{for all } a\xfrom{f^\opp}b\in A^\opp
+	\end{split}\end{equation*}
+	同じことは次の関手$\wbar{F}:A\to B$で実現できる。
+	\begin{equation*}\begin{split}
+		\wbar{F}\plr{a\xto{f}b} = Fa\xfrom{Ff^\opp}Fb
+		\quad\text{for all } a\xto{f}b\in A
+	\end{split}\end{equation*}
+	$F$は共変関手、$\wbar{F}$は反変関手であるが、内容は同じである。
+	一般的に、反変関手は、領域の双対をとることで、共変関手として書くことが
+	できる。このノートでは、\cite{maclane.work}にしたがって、共変関手のみを
+	使って話を進めることにする。
+
+	双対圏を使うと、Hom関手は共変関手のみで書くことができる。
+	$A$を圏として、関手$\op{hom}(a,-)$と$\op{-,a}$を次のように定義する。
+	\begin{equation*}\begin{array}{lclcl}
+		\op{hom}(a,-): A\to\cat{Set}, &\quad& \op{hom}(-,a): A^\opp\to\cat{Set}
+		&\quad& \text{for all } a\in A_0 \\
+		\xymatrix@C=10ex{
+			b \ar[r]^{\op{hom}(a,-)} \ar[d]^f & A(a,b) \ar[d]^{f-} \\
+			c \ar[r]^{\op{hom}(a,-)} & A(a,c) \\
+		}, &\quad&\xymatrix@C=10ex{
+			b \ar[r]^{\op{hom}(-,a)} & A(b,a) \\
+			c \ar[r]^{\op{hom}(-,a)} \ar[u]_{f^\opp} & A(c,a) \ar[u]_{-f} \\
+		} &\quad&\text{for all } \xymatrix{
+			b \ar[d]^f \\ c
+		} \in A
+	\end{array}\end{equation*}
+	前述のHom関手の定義\eqref{eq:Hom関手の定義}と見比べると、
+	共変Hom関手は$\op{hom}(a,-)=A(a,-):A\to\cat{Set}$で記号を書き換えただけ
+	だが、反変Hom関手は$A(-,a):A\to\cat{Set}$から
+	$\op{hom}(-,a):A^\opp\to\cat{Set}$と領域をその双対に変更している。
+%s3:双対圏}
+\subsubsection{圏の積}\label{s3:圏の積} %{
+	$A,B$を圏とするとき、圏の積$A\times B$は次のように定義される。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[対象と射] $a\xto{f}a'\in A$かつ$b\xto{g}b'\in B$ならば
+		$a\times b\xto{f\times g}a'\times b'\in A\times B$とする。
+		\item[射の合成] 
+		$a\times b\xto{f\times g}a'\times b'\xto{f'\times g'}a''\times b''
+		\in A\times B$ならば$a\times b\xto{f'f\times g'g}a''\times b''
+		\in A\times B$とする。
+		\item[射影] 関手$P_1:A\times B\to A$と$P_2:A\times B\to B$が定義され、
+		任意の圏$C$と関手$F_1:C\to A$と$F_2:C\to B$に対して次の図を可換にする
+		関手$G:C\to A\times B$が唯一つ存在する。
+		\begin{equation}\label{射影関手の定義}\begin{split}
+			\xymatrix{
+				& C \ar[dl]_{F_1} \ar[dr]^{F_2} \ar@{.>}[d]^{G} \\
+				A & A\times B \ar[l]_{P_1} \ar[r]^{P_2} & B \\
+			}
+		\end{split}\end{equation}
+	\end{description} %}
+	圏の積は、集合の直積に射の合成を付け加えたものと形式的に同じである。
+
+	圏の積を扱ううえでよく使う関手の族を定義しておく。次の関手の族を、
+	\begin{equation*}\begin{split}
+		-\times b:A\to A\times B \quad\text{for all } b\in B_0 \\
+		a\times-:B\to A\times B \quad\text{for all } a\in A_0
+	\end{split}\end{equation*}
+	任意の$a\times b \xto{f\times g} a'\times b'\in A\times B$に対して
+	次のように定義する。
+	\begin{equation}\label{eq:関手の積への入射族}\begin{split}
+		\xymatrix{
+			a \ar[r]^{-\times b} \ar[d]^f 
+			& a\times b \ar[d]^{(-\times b)f := f\times 1_b} \\
+			a' \ar[r]^{-\times b} & a'\times b \\
+		},\quad\xymatrix{
+			b \ar[r]^{a\times-} \ar[d]^g
+			& a\times b \ar[d]^{(a\times-)g := 1_a\times g} \\
+			b' \ar[r]^{a\times-}
+			& a\times b' 
+		}
+	\end{split}\end{equation}
+	そして、任意の$a\times b \xto{f\times g}a'\times b'\in A\times B$に対して
+	次の簡略化した記法を使うことにする\cite{maclane.work}。
+	\begin{alignat*}{2}
+		f\times b &:= (-\times b) f &&= f\times 1_b \\
+		a\times g &:= (a\times -) g &&= 1_a\times g
+	\end{alignat*}
+
+	圏の積からの関手$S:A\times B\to C$を双関手という。
+	双関手は射影関手\eqref{射影関手の定義}の定義にある$G:C\to A\times B$
+	の逆になる関手である。関手の族\ref{eq:関手の積への入射族}との合成に
+	よって、次の関手が得られる。
+	\begin{equation*}\begin{split}
+		S(-\times b): A\to C \quad\text{for all } b\in B_0 \\
+		S(a\times-): B\to C \quad\text{for all } a\in A_0
+	\end{split}\end{equation*}
+	可換図で書くとに次のようになっている。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			& C \\
+			A \ar@{.>}[ur]^{S(-\times b)} \ar[r]^{-\times b} 
+			& A\times B \ar[u]_{S} 
+			& B \ar@{.>}[ul]_{S(a\times-)} \ar[l]_{a\times-}
+		} \quad\text{for all } a\in A_0,\; b\in B_0 \\
+	\end{split}\end{equation*}
+	逆に、次の関手の族$M_b$と$L_a$が与えられた時、次の図を可換にする関手
+	$T:A\times B\to C$が存在するための条件を述べているのが、次の命題である。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			& C \\
+			A \ar[ur]^{M_b} \ar[r]^{-\times b} & A\times B \ar@{.>}[u]_{T} 
+			& B \ar[ul]_{L_a} \ar[l]_{a\times-}
+		} \quad\text{for all } a\in A_0,\; b\in B_0 \\
+	\end{split}\end{equation*}
+
+	\begin{proposition}[双関手の構成]\label{prop:双関手の構成} %{
+		（\cite{maclane.work} p.37 命題1）
+		$A,B,C$を圏とする。$L_b:A\to C$と$M_a:B\to C$を次の関手の族とする。
+		\begin{equation*}\begin{split}
+			A\xto{L_b} C\xfrom{M_a} B \quad\text{with } L_ba = M_ab
+			\quad\text{for all } a\in A_0,\; b\in B_0
+		\end{split}\end{equation*}
+		このとき、
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{item:双関手の構成その一} 次の可換図が成り立つことと、
+			\begin{equation*}\begin{split}
+				\xymatrix{
+					L_ba=M_ab \ar[r]^{M_ag} \ar[d]^{L_bf} 
+					& L_{b'}a=M_ab' \ar[d]^{L_{b'}f} \\
+					L_ba'=M_{a'}b \ar[r]^{M_{a'}g} & L_{b'}a'=M_{a'}b' \\
+				} \quad\text{for all } \xymatrix{
+					a\times b \ar[d]^{f\times g} \\ a'\times b'
+				}\in A\times B
+			\end{split}\end{equation*}
+			\item\label{item:双関手の構成その二} 次の図を可換にする関手
+			$S:A\times B\to C$が存在することは、
+			\begin{equation*}\begin{split}
+				\xymatrix{
+					& C \\
+					A \ar[ur]^{L_b} \ar[r]^{-\times b} 
+					& A\times B \ar@{.>}[u]_{S} & B \ar[ul]_{M_a} \ar[l]_{a\times-}
+				} \quad\text{for all } a\in A_0,\; b\in B_0 \\
+			\end{split}\end{equation*}
+		\end{enumerate} %}
+		同値である。\EOP
+	\end{proposition} %prop:双関手の構成}
+	\begin{proof} %{
+		\ref{item:双関手の構成その一}の可換図が成り立つとすると、
+		双関手$T:A\times B\to C$を次のように定義するとことができる。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				a\times b \ar[r]^(.3){T} \ar[d]^{f\times g}
+				& T(a\times b) := L_ba = M_ab \ar[d]^{T(f\times g) 
+				:= (L_bf)(M_{a'}g) = (M_ag)(L_{b'}f)} \\
+				a'\times b' \ar[r]^(.3){T} & T(a'\times b') := L_{b'}a' = M_{a'}b'
+			}
+		\end{split}\end{equation*}
+		ここで定義した$T$を$S$とすると、\ref{item:双関手の構成その一}$\implies$
+		\ref{item:双関手の構成その二}が示される。
+		また、圏の積の定義より、次の可換図が成り立つ。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				a\times b \ar[r]^{a\times g} \ar[d]^{f\times b} 
+				& a\times b' \ar[d]^{f\times b'} \\
+				a'\times b \ar[r]^{a'\times g} & a'\times b' \\
+			} \quad\text{for all } \xymatrix{
+				a\times b \ar[d]^{f\times g} \\ a'\times b'
+			}\in A\times B
+		\end{split}\end{equation*}
+		この可換図に$S$を作用させて、\ref{item:双関手の構成その二}の可換図から
+		得られる次の式を代入すると、
+		\begin{equation*}\begin{split}
+			L_b(a\xto{f}a') = S(a\times b\xto{f\times b}a'\times b) \\
+			M_a(b\xto{g}b') = S(a\times b\xto{a\times g}a\times b')
+		\end{split}\end{equation*}
+		\ref{item:双関手の構成その一}の可換図が得られる。
+		したがって、\ref{item:双関手の構成その二}$\implies$
+		\ref{item:双関手の構成その一}が示される。
+	\end{proof} %}
+
+	この命題の条件\ref{item:双関手の構成その一}にある可換図は次の自然変換
+	の組を与えている。
+	\begin{alignat*}{2}
+		L_-f &: M_a\xto{\bullet} M_{a'} 
+		&\quad&\text{for all } a\xto{f}a'\in A \\
+		M_-g &: L_b\xto{\bullet} L_{b'}
+		&\quad&\text{for all } b\xto{g}b'\in B %\\
+	\end{alignat*}
+	この自然変換は米田の補題で重要な役割を果たすようだ。
+
+	双関手の自然変換について考える。
+	$S,T:A\times B\to C$を二つの双関手とし、$\phi$を次の$C$の射の族とする。
+	\begin{equation*}\begin{split}
+		\phi(a, b): S(a\times b)\to T(a\times b)
+		\quad\text{for all } a\in A_0,\; b\in B_0
+	\end{split}\end{equation*}
+	$\phi$が自然変換$S\xto{\bullet}T$ならば、任意の$b\in B_0$に対して
+	次の可換図が成り立ち、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			S(a\times b) = S(-\times b)a 
+			\ar[d]^{S(f\times b) = S(-\times b)f} \ar[r]^{\phi(a,b)}
+			& T(a\times b) = T(-\times b)a 
+			\ar[d]^{T(f\times b) = T(-\times b)f} \\
+			S(a'\times b) = S(-\times b)a' \ar[r]^{\phi(a',b)} 
+			& T(a'\times b) = T(-\times b)a' \\
+		} \quad\text{for all } \xymatrix{
+			a \ar[d]^f \\ a'
+		}\in A
+	\end{split}\end{equation*}
+	$\phi(-,b):S(-\times b)\xto{\bullet}T(-\times b)$は自然変換となる。
+	同様に、任意の$a\in A_0$に対して
+	$\phi(a,-):S(a\times -)\xto{\bullet}T(a\times -)$は自然変換となるから、
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\phi:S\xto{\bullet}T \implies \begin{cases}
+			\phi(-,b): S(-\times b)\xto{\bullet}T(-\times b)
+			&\quad\text{for all } b\in B_0 \\
+			\phi(a,-): S(a\times -)\xto{\bullet}T(a\times -)
+			&\quad\text{for all } a\in A_0 \\
+		\end{cases}
+	\end{split}\end{equation*}
+	また、逆に、次の式が成り立てば、
+	\begin{alignat*}{2}
+		\phi(-,b) &: S(-\times b)\xto{\bullet}T(-\times b)
+		&\quad&\text{for all } b\in B_0 \\
+		\phi(a,-) &: S(a\times -)\xto{\bullet}T(a\times -)
+		&\quad&\text{for all } a\in A_0 \\
+	\end{alignat*}
+	任意の$a\times b \xto{f\times g} a'\times b'$に対して
+	次の可換図が成り立つから、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			S(a\times b) = S(-\times b)a \ar[r]^{\phi(a,b)}
+			\ar[d]^{S(f\times b) = S(-\times b)f}
+			& T(a\times b) = T(-\times b)a 
+			\ar[d]^{T(f\times b) = T(-\times b)f} \\
+			S(a'\times b) = S(-\times b)a' \ar[r]^{\phi(a',b)} 
+			\ar[d]^{S(a'\times g) = S(a'\times -)g}
+			& T(a'\times b) = T(-\times b)a'
+			\ar[d]^{T(a'\times g) = T(a'\times -)g} \\
+			S(a'\times b') = S(a'\times -)b' \ar[r]^{\phi(a',b')} 
+			& T(a'\times b') = T(a'\times -)b'
+		}
+	\end{split}\end{equation*}
+	次の式が成り立つことがわかる。
+	\begin{equation}\label{eq:双関手の自然変換}\begin{split}
+		\phi:S\xto{\bullet}T \iff \begin{cases}
+			\phi(-,b): S(-\times b)\xto{\bullet}T(-\times b)
+			&\text{for all } b\in B_0 \\
+			\phi(a,-): S(a\times -)\xto{\bullet}T(a\times -)
+			&\text{for all } a\in A_0 \\
+		\end{cases}
+	\end{split}\end{equation}
+
+	$A$を圏とし、圏の積$A\times\mathbf{2}$を考える。ここでは、$\mathbf{2}$
+	の対象を$0$と$1$とし、射を$\uparrow:0\to1$とする。
+	関手$-\times0:A\to A\times\mathbf{2}$と
+	$-\times1:A\to A\times\mathbf{2}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		(-\times0)(a\xto{f}a') &:= (a\times0)\xto{f\times0}(a'\times0) \\
+		(-\times1)(a\xto{f}a') &:= (a\times1)\xto{f\times1}(a'\times1)
+	\end{split}
+	\quad\text{for all } a\xto{f}a'\in A
+	\end{equation*}
+	自然変換$\mu:(-\times0)\xto{\bullet}(-\times1)$が次のように定義できる。
+	\begin{equation*}\begin{split}
+		\mu a = a\times\uparrow \quad\text{for all } a\in A_0
+	\end{split}\end{equation*}
+	$B$を圏とし、二つの関手$F,G:A\to B$とのその間の自然変換
+	$\phi:F\xto{\bullet}G$が与えられたとする。このとき、
+	関手$S:A\times\mathbf{2}\to B$を、任意の$a\xto{f}a'\in A$に対して
+	次の可換図が成り立つように定義する。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			a\times0 \ar[d]^{\mu a} \ar[r]^{a\times\uparrow}
+			& a\times1 \ar[d]^{f\times1} \\
+			a'\times0 \ar[r]^{a'\times\uparrow} & a'\times1 \\
+		} \xto{S} \xymatrix@C=8ex{
+			S(a\times0)=Fa \ar[d]^{S(f\times0)=Ff} \ar[r]^{S\mu a=\phi a} 
+			& S(a\times1)=Ga \ar[d]^{S(f\times1)=Gf} \\
+			S(a'\times0)=Fa' \ar[r]^{S\mu a'=\phi a'} & S(a'\times1)=Ga' \\
+		}
+	\end{split}\end{equation*}
+	すると、自然変換が$\phi=S\mu$と書くことができる。このために、$\mu$の
+	ことを普遍自然変換というらしいが、\cite{maclane.work}以外では
+	目にしたことがない。
+%s3:圏の積}
+\subsubsection{関手圏}\label{s3:関手圏} %{
+	$A,B$を圏、$F,G,H:A\to B$を関手、$\phi:F\xto{\bullet}G$と
+	$\psi:G\xto{\bullet}H$を自然変換とする。$\phi$と$\psi$の積$*$を次の
+	ように定義すると、
+	\begin{equation*}\begin{split}
+		(\phi*\psi)a := (\phi a)(\psi a) \quad\text{for all } a\in A_0
+	\end{split}\end{equation*}
+	$\phi*\psi:F\xto{\bullet}H$となる。可換図で書くと次のようになる。
+	\begin{equation*}\xymatrix{
+		Fa \ar[r]^{\phi a} \ar[d]^{Ff} \ar@(ur,ul)[rr]^{(\phi*\psi)a} 
+		& Ga \ar[r]^{\psi a} \ar[d]^{Ff} 
+		& Ha \ar[d]^{Hf} \\
+		Fa' \ar[r]^{\phi a'} \ar@(dr,dl)[rr]_{(\phi*\psi)a} 
+		& Ga' \ar[r]^{\psi a'}	& Ha'
+	} \quad\text{for all } \xymatrix{
+		a \ar[d]^f \\ a'
+	}\in A
+	\end{equation*}
+	さらに、$1_F:F\xto{\bullet}F$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		1_Fa = 1_{Fa} \quad\text{for all } a\in A_0
+	\end{split}\end{equation*}
+	$1_F$が積$*$の単位元となる。したがって、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 関手$A\to B$を対象とし、
+		\item 関手間の自然変換を射とする
+	\end{itemize} %}
+	圏を考えることができる。この圏を関手圏といい$B^A$または$\op{Funct}(A,B)$
+	と書く。
+
+	$M$をモノイド（対象が一つだけの圏）とし、$\cat{Mod}_R$を可換環$R$上の
+	加群の圏とする。$M$は対象が一つだけの圏だから、関手$M\to\cat{Mod}_K$は
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\cat{Mod}_K$の対象のベクトル空間$V$を一つ選びだして、
+		\item モノイドの元を$V$の自己線形射に対応させれば定まる。
+	\end{itemize} %}
+	したがって、$\cat{Mod}_R^M$の対象はモノイドの表現となる。
+	$\cat{Mod}_R^M$の射は何を表すのか考えよう。
+	$F,G:M\to\cat{Mod}_K$を関手とし、$\phi:F\xto{\bullet}G$を自然変換とし、
+	$\bullet$を$M$とすると、次の可換図が成り立つ。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			F\bullet \ar[r]^{\phi} \ar[d]^{Ff} & G\bullet \ar[d]^{Gf} \\
+			F\bullet \ar[r]^{\phi} & G\bullet \\
+		} \quad\text{for all } \xymatrix{
+			\bullet \ar[d]^f \\ \bullet
+		}\in M
+	\end{split}\end{equation*}
+	したがって、$\cat{Mod}_R^M$の射は表現のインターツイナーとなっていることが
+	わかる。
+
+	\begin{equation*}\begin{split}
+		\op{hom}(A\times B, C) \simeq \op{hom}\gplr{A, \op{hom}(B,C)}
+	\end{split}\end{equation*}
+%s3:関手圏}
+\subsubsection{圏の積とHom関手}\label{s3:圏の積とHom関手} %{
+	$A$を局所的に小さい圏として関手$\op{hom}:A^\opp\times A\to\cat{Set}$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			a\times b \ar[r]^{\op{hom}} \ar[d]^{f^\opp\times g} 
+			& A(a,b) \ar[d]^{g-f} \\
+			a'\times b' \ar[r]^{\op{hom}} & A(a',b') 
+		} \quad\text{for all } \xymatrix{
+			a\times b \ar[d]^{f^\opp\times g} \\
+			a'\times b' 
+		} \in A^\opp\times A
+	\end{split}\end{equation*}
+	この$\op{hom}$が関手になることは、実際に計算して確かめることもできるが、
+	\begin{equation*}\begin{split}
+		\op{hom}(f,b) := \op{hom}(-,b) f = -f \\
+		\op{hom}(a,g) := \op{hom}(a,-) g = g-
+	\end{split}
+		\quad\text{for all } a\times b\xto{f^\opp\times g}a'\to b'
+		\in A^\opp\times A
+	\end{equation*}
+	とおくと、次の可換図が成り立つから、
+	\begin{equation}\label{eq:Hom関手の可換性}\begin{split}
+		\xymatrix@C=8ex{
+			\op{hom(a,b)} \ar[r]^{\op{hom}(a,g)} \ar[d]^{\op{hom}(f,b)}
+			& \op{hom(a,b')} \ar[d]^{\op{hom}(f,b')} \\
+			\op{hom(a',b)} \ar[r]^{\op{hom}(a',g)} & \op{hom(a',b')} \\
+		} \quad\text{for all } \xymatrix{
+			a\times b\ar[d]^{f^\opp\times g} \\ a'\times b'
+		} \in A^\opp\times A
+	\end{split}\end{equation}
+	命題\ref{prop:双関手の構成}からわかる。また、この可換図から次の自然変換
+	の組が得られる。
+	\begin{alignat*}{2}
+		\op{hom}(f,-) &: \op{hom}(a,-)\xto{\bullet} \op{hom}(a',-)
+		&\quad&\text{for all } a\xto{f^\opp} a'\in A^\opp \\
+		\op{hom}(-,g) &: \op{hom}(-,b)\xto{\bullet} \op{hom}(-,b')
+		&\quad&\text{for all } b\xto{g} b'\in A %\\
+	\end{alignat*}
+	これを集合の包含関係で書くと次のようになる。
+	\begin{alignat*}{2}
+		A^\opp(a,a') &\subseteq \Set{\op{hom}(a,-)\xto{\bullet}\op{hom}(a',-)}
+		&\quad&\text{for all } a,a'\in A_0 \\
+		A(b,b') &\subseteq \Set{\op{hom}(-,b)\xto{\bullet}\op{hom}(-,b')}
+		&\quad&\text{for all } b,b'\in A_0 %\\
+	\end{alignat*}
+%s3:圏の積とHom関手}
+\subsubsection{Hom集合による随伴関手}\label{s3:Hom集合による随伴関手} %{
+	随伴関手の定義はいくつかあるが、ここでは、Hom集合を用いて随伴関手を
+	定義する。
+	
+	$A,X$を局所的に小さい圏、$X\xtofrom{F}{G}A$を関手とする。このとき、
+	関手$X(F-,-):A\times G\to\cat{Set}$と$A(-,G-):A\times G\to\cat{Set}$を
+	次のように定義することができる。
+	\begin{equation*}\xymatrix@C=8ex{
+		A(a,Gx) \ar[d]^{f\times Gg}
+		& a\times x \ar[r]^{X(F-,-)} \ar[l]_{A(-,G-)} \ar[d]^{f\times g}
+		& X(Fa,x) \ar[d]^{Ff\times g} \\
+		A(b,Gy) & b\times y \ar[r]^{X(F-,-)} \ar[l]_{A(-,G-)} & X(Fb,y) \\
+	} \quad\text{for all } \xymatrix{
+		a\times x \ar[d]^{f\times g} \\ b\times y
+	} \in A\times X
+	\end{equation*}
+	$\cat{Set}$に自然同型$\phi:X(F-,-)\simeq A(-,G-)$が存在するとき、
+	組$(F,G,\phi)$をHom集合による随伴といい、$F$を左随伴、$G$を右随伴という。
+	\begin{equation*}\xymatrix@C=8ex{
+		A(a,Gx) \ar[d]^{f\times Gg}
+		& a\times x \ar[r]^{X(F-,-)} \ar[l]_{A(-,G-)} \ar[d]^{f\times g}
+		& X(Fa,x) \ar[d]^{Ff\times g} \ar@(u,u)[ll]_{\phi_{a,x}} \\
+		A(b,Gy) & b\times y \ar[r]^{X(F-,-)} \ar[l]_{A(-,G-)} & X(Fb,y) 
+		\ar@(d,d)[ll]^{\phi_{b,y}} \\
+	} \quad\text{for all } \xymatrix{
+		a\times x \ar[d]^{f\times g} \\ b\times y
+	} \in A\times X
+	\end{equation*}
+	Hom集合による随伴は自然同型が次の形がベクトルの共役と類似しているために
+	覚えやすい。
+	\begin{equation*}\begin{split}
+		\phi_{a,x}: X(Fa,x)\simeq A(a,Gx)
+		\quad\text{for all } a\in A_0,\; x\in X_0
+	\end{split}\end{equation*}
+
+	Hom集合による随伴$(F,G,\phi)$が与えられると、
+	射の族$u_a:a\to GFa$と$\epsilon_x:FGx\to x$を次のように定義することが
+	できる。
+	\begin{alignat*}{2}
+		u_a &:= \phi_{a,Fa}1_{Fa} &\quad&\text{for all } a\in A_0 \\
+		\epsilon_x &:= \phi_{Gx,x}^{-1}1_{Gx} &\quad&\text{for all } x\in X_0
+	\end{alignat*}
+%s3:Hom集合による随伴関手}
+%s2:圏論}
+%s1:Haskellのメモ}
 \section{Connes-Kreimer代数}\label{s1:Connes-Kreimer代数} %{
-	\cite{brouder:2004}のメモ。
-\subsection{形式級数の合成}\label{s2:形式級数の合成} %{
-	$f,g$を$\fukuso$上の定数項を持たない形式級数とする。
+\subsection{Brzozowski代数}\label{s2:Brzozowski代数} %{
+\subsubsection{Brzozowski代数の準備}\label{s3:Brzozowski代数の準備} %{
+	$\jitu\sizen$の基底系をケットを使って書く。
 	\begin{equation*}\begin{split}
-		(f|x) := \sum_{n\in\sizen_+}f_nx^n
-		,\quad (g|x) := \sum_{n\in\sizen_+}g_nx^n
-		\quad\text{where } f_n,g_n\in\fukuso
+		\jitu\sizen = \op{span}_\jitu\Set{\ket{n}\bou n\in\sizen}
 	\end{split}\end{equation*}
-	合成$(f\circ g|x)$の係数$(f\circ g)_n$を求めることを考える。
+	$\jitu\sizen$の共役空間
+	$\jitu\sizen^\flat:=\cat{Mod}_\jitu(\jitu\sizen,\;\jitu)$の基底系を
+	を次のように書き、
 	\begin{equation*}\begin{split}
-		(f\circ g|x) = \sum_{n\in\sizen_+} (f\circ g)_nx^n
-		\quad\text{where } (f\circ g)_n\in\fukuso
+		\braket{m|n} = \jump{m=n} \quad\text{for all } m,n\in\sizen
 	\end{split}\end{equation*}
-	$(f\circ g|x)=\sum_{n\in\sizen_+}f_n(g|x)^n$なので、$(g|x)^n$を計算
-	すると次のようになるので、
-	\begin{equation}\label{eq:形式級数の合成その零}\begin{split}
-		(g|x)^n &= \sum_{m\in\sizen} G_{m+n}^nx^{m+n} \quad\text{where}\quad
-		G_m^n := \sum_{\substack{k_1,\dots,k_n\in\sizen_+\\k_1+\cdots+k_n=m}}
-		g_{k_1}\cdots g_{k_n}
-	\end{split}\end{equation}
-	ここで定義した$G_m^n$を用いると、$(f\circ g|x)$は次のように行列の形で
-	書け、
-	\begin{equation}\label{eq:形式級数の合成その一}\begin{split}
-		(f\circ g|x) &= \sum_{n\in\sizen_+}f_n(g|x)^n
-		= \sum_{n\in\sizen_+}\sum_{m\in\sizen} f_nG^n_{m+n}x^{m+n} \\
-		&= \begin{pmatrix}
-			f_1 & f_2 & f_3 & \cdots
-		\end{pmatrix}\begin{pmatrix}
-			G_1^1 & G_2^1 & G_3^1 & \cdots \\ 
-			0 & G_2^2 & G_3^2 & \cdots \\ 
-			0 & 0 & G_3^3 & \cdots \\
-			\vdots
-		\end{pmatrix}\begin{pmatrix}
-			x \\ x^2 \\ x^3 \\ \vdots
-		\end{pmatrix}
-	\end{split}\end{equation}
-	合成の係数$(f\circ g)_n$は次のようになることがわかる。
-	\begin{equation}\label{eq:形式級数の合成}\begin{split}
-		(f\circ g)_n = \sum_{k=1}^n f_kG_n^k
-		= \sum_{k=1}^n f_k
-		\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
-		g_{r_1}\cdots g_{r_k}
-	\end{split}\end{equation}
-	$G_m^n$が計算できれば、直ちに$(f\circ g)_n$が計算できるが、
-	$G_m^n$は次の分配する仕方を計算することになる。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item $n$の区別のつかない球を、
-		\item $m$個の区別のつく箱に分配する。
-	\end{itemize} %}
-	低次の項は次のようになっている。
+	線形射$\myhere^\flat:\jitu\sizen\to\jitu\sizen^\flat$と
+	$\myhere^\flat:\jitu\sizen^\flat\to\jitu\sizen$を次のように定義する。
 	\begin{equation*}\begin{split}
-		(f\circ g)_1 &= g_1f_1 \\
-		(f\circ g)_2 &= g_2f_1 + g_1^2f_2 \\
-		(f\circ g)_3 &= g_3f_1 + 2g_1g_2f_2 + g_1^3f_3 \\
-		(f\circ g)_4 &= g_4f_1 + \plr{2g_1g_3+g_2^2}f_2 
-		+ 3g_1^2g_2f_3 + g_1^4f_4 \\
-		(f\circ g)_5 &= g_5f_1 + \plr{2g_1g_4 + 2g_2g_3}f_2 
-		+ \plr{3g_1^2g_3 + 3g_1g_2^2}f_3 + 4g_1^3g_2f_4 + g_1^5f_5 \\
+		\ket{n}^\flat := \bra{n},\quad \bra{n}^\flat := \ket{n}
+		\quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
 
-	定数項を含まない形式級数同士の合成だから、簡単な形で話がまとまるが、
-	形式級数が定数項を含む場合は、次のようになって、
-	\eqref{eq:形式級数の合成その一}の行列が三角行列でなくなり、
-	話がもっと複雑になる。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item $(g|x)$が定数項を含まない場合は、
-		$(g|x)^n = g_1^nx^n + ng_1^{n-1}g_2x^{n+1} + \cdots$となる。
-		\item $(g|x)$が定数項$g_0$を含む場合は、
-		$(g|x)^n = g_0^n + ng_0^{n-1}g_1x + \cdots$となる。
-	\end{itemize} %}
-	定数項を含まない形式級数に制限することで話が簡単になっていることに注意
-	する。
-%s2:形式級数の合成}
-\subsection{形式級数の空間}\label{s2:形式級数の空間} %{
-	前節の形式級数の合成を$\jitu[[x]]$で考えてみる。
+	$m_0:\jitu\sizen\otimes\jitu\sizen\to\jitu\sizen$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		m_0\ket{m}\otimes\ket{n} := \ket{m+n} \quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	$m_0$は$\ket{0}$を単位元に持つ積となり、$\jitu\sizen^\flat$への作用は
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\bra{n}m_0 = \sum_{k=0}^n \bra{k}\otimes\bra{n-k}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	テンソル積の内積を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\gplr{\bra{m_1}\otimes\bra{m_2}}\gplr{\ket{n_1}\otimes\ket{n_2}}
+		:= \braket{m_1|n_1}\braket{m_2|n_2}
+		\quad\text{for all } m_1,m_2,n_1,n_2,\in\sizen
+	\end{split}\end{equation*}
+	$m_0$の共役として線形射
+	$m_0^\flat:\jitu\sizen\to\jitu\sizen\otimes\jitu\sizen$が次のように
+	定義される。
+	\begin{equation*}\begin{split}
+		m_0^\flat\ket{n} = \sum_{k=0}^n \ket{k}\otimes\ket{n-k}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
 
-\subsubsection{モノイドと余半群の空間}\label{s3:モノイドと余半群の空間} %{
+	線形射$\eta^\flat:\jitu\sizen\to\jitu\sizen$を$m_0$によって、
+	次のように定義すると、
+	\begin{equation*}\begin{split}
+		\eta^\flat\phi := m_0\ket{1}\otimes\phi
+		\quad\text{for all } \phi\in\jitu\sizen
+	\end{split}\end{equation*}
+	$\eta^\flat$とその共役$\eta$の基底系への作用は次のようになる。
+	\begin{equation*}\begin{split}
+		\eta\ket{n} = \jump{1\le n}\ket{n-1},\quad
+		\eta^\flat\ket{n} = \ket{n+1} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	$\eta$の固有状態$\ket{x}_c$は、Kleeneスターを用いて次のように書ける。
+	\begin{equation*}\begin{split}
+		\ket{x}_c := (x\eta^\flat)^*\ket{0} \quad\text{for all } x\in\jitu
+	\end{split}\end{equation*}
+	また、$\jitu[x]$の元を用いて$\jitu\sizen$の元を次のように書く事にすると、
+	\begin{equation*}\begin{split}
+		\ket{f}_x := (f|\eta^\flat)\ket{0}
+		\quad\text{for all } f\in\jitu[x]
+	\end{split}\end{equation*}
+	$\jitu\sizen$と$\jitu[x]$は次の関係になる。
+	\begin{equation*}\begin{split}
+		{}_c\braket{x|f}_x = (f|x) \quad\text{for all } f\in\jitu[x]
+	\end{split}\end{equation*}
+	特に、数状態については次のようになる。
+	\begin{equation*}\begin{split}
+		{}_c\braket{x|n} = x^n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	$\Ihat_0:=\ket{0}\bra{0}:\jitu\sizen\to\jitu\sizen$とすると、
+	次の交換関係が成り立つ。
+	\begin{equation*}\begin{split}
+		\eta^\flat m_0 = m_0\gplr{\eta^\flat\otimes\id},\quad
+		\eta m_0 = m_0\gplr{\eta\otimes\id + \Ihat_0\otimes\eta}
+	\end{split}\end{equation*}
+
+	$\jitu\sizen$をq-拡張する。$\jitu_q$を$\jitu[q]$の有理数体とし、
+	$\jitu_q\sizen$を考える。自然な入射$\jitu\sizen\subset\jitu_q\sizen$に
+	よって、$m_0,\eta,\eta^\flat$を$\jitu_q\sizen$でもそのまま用いる。
+	$\jitu_q\sizen$に線形射
+	$m_q:\jitu_q\sizen\otimes\jitu_q\sizen\to\jitu_q\sizen$を次のように
+	定義し、
+	\begin{equation*}\begin{split}
+		m_q\ket{m}\otimes\ket{n} := \qbinom{m+n}{m}\ket{m+n}
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	線形射$\eta_q^\flat:\jitu_q\sizen\to\jitu_q\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\eta_q^\flat\ket{f}_x = m_q\ket{1}\otimes\ket{f}_x
+		\quad\text{for all } f\in\jitu[x]
+	\end{split}\end{equation*}
+	$\eta$と$\eta_q^\flat$は次の交換関係を満たす。
+	\begin{equation*}\begin{split}
+		\eta\eta_q^\flat = 
+	\end{split}\end{equation*}
+	$\eta$と$\eta_q$を用いた数状態は次の関係になる。
+	\begin{equation*}\begin{split}
+		\ket{n} := (\eta^\flat)^n\ket{0} = \frac{1}
+		\eta_q^\flat\ket{n} = 
+	\end{split}\end{equation*}
+%s3:Brzozowski代数の準備}
+\subsubsection{形式級数の合成の表現}\label{s3:形式級数の合成の表現} %{
 	形式級数の合成$m_\circ$は結合的で、$x\in\jitu[[x]]$を単位元として
 	もつので、$\plr{\jitu[[x]],m_\circ,x}$はモノイドとなる。
-	ただし、このモノイドは次のように、通常の加法に対して線形ではないので
-	代数とはならないことに注意する。
+	ただし、このモノイドは次のように、加法に対して線形ではないので、
+	代数とはならない。
 	\begin{alignat*}{2}
 		f\circ(g + h) &\neq (f\circ g) + (f\circ g) &&\quad\text{in general} \\
 		(f + g)\circ h &= (f\circ h) + (f\circ h) &&\quad\text{in general}
 	\end{alignat*}
-	$\jitu[[x]]$に余積$\op{dup}$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\op{dup}f = f\times f \quad\text{for all } f\in\jitu[[x]]
-	\end{split}\end{equation*}
-	$\op{dup}$は任意の二項演算
-	$\mu:\jitu[[x]]\times\jitu[[x]]\to\jitu[[x]]$
-	に対して次の式を満たす。
-	\begin{equation*}\begin{split}
-		\op{dup}\mu = \plr{\mu\times\mu}\sigma_{23}\plr{\op{dup}\times\op{dup}}
-	\end{split}\end{equation*}
-	したがって、$\op{dup}$と$m_\circ$は互いに準同型となる。
+	一つ目の式に着目して、$\plr{\jitu[[x]],m_\circ,x}$の$\jitu\sizen$への
+	表現を構成しよう。
 
-	$\op{dup}$には適当な余単位射は見当たらない。余単位射に近いのものは、
-	次のように定義した線形射$\epsilon:\jitu[[x]]\to\jitu$だろう。
-	\begin{equation}\label{eq:コピーの余単位射}\begin{split}
-		\epsilon f = f_1
-		\quad\text{where } (f|x) = \sum_{n\in\sizen} f_nx^n
-	\end{split}\end{equation}
-	$\epsilon$は$\jitu[[x]]$で$\op{dup}$の余単位射にならないが、
-	$V\subset\jitu[[x]]$を次のようにな形の形式級数全体のつくる部分空間
-	とすると、
-	\begin{equation}\label{eq:群の空間}\begin{split}
-		x + \sum_{n=2}^\infty f_nx_n
-	\end{split}\end{equation}
-	$V$内で$\epsilon$は$\op{dup}$の余単位射となる。
+	線形射$\rho:\jitu[[x]]\to\jitu\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		(\rho g)\ket{f}_x := \ket{f\circ g}_x
+		\quad\text{for all } f,g\in\jitu[[x]]
+	\end{split}\end{equation*}
+	すると、次のようになり、$\rho$は逆順のモノイド射となる。
+	\begin{equation*}\begin{split}
+		\gplr{\rho(g\circ h)}\ket{f}_x = \ket{f\circ g\circ h}_x 
+		= (\rho h)(\rho g)\ket{f}_x
+		\quad\text{for all } f,g,h\in\jitu[[x]]
+	\end{split}\end{equation*}
+%s3:形式級数の合成の表現}
 
-	任意の$n\in\sizen$に対して線形射$x_n^\flat:\jitu[[x]]\to\jitu$を
-	次のように定義する。
-	\begin{equation*}\begin{split}
-		x_n^\flat f = f_n
-		\quad\text{where } (f|x) = \sum_{n\in\sizen} f_nx^n
-	\end{split}\end{equation*}
-	集合$X_*:=\set{x_n^\flat\bou n\in\sizen}$とすると、$\op{dup}$の畳み込み
-	によってベクトル空間$\jitu X_*$に可換な積が定義される。
-	\begin{equation*}\begin{split}
-		\gplr{\op{dup}^\flat (\alpha\otimes\beta)}f
-		:= (\alpha f)(\beta f)
-		\quad\text{for all } \alpha,\beta\in\jitu X_*,\; f\in\jitu[[x]]
-	\end{split}\end{equation*}
-	$X_*$の$\jitu[[x]]$を定義域とする場合は、$\op{dup}^\flat$は単位元を
-	持たないが、$X_+$の定義域を$V$に制限すると、$\op{dup}^\flat$の単位元は
-	$x_1^\flat$となる。$m_\circ$の畳み込みによってベクトル空間$\jitu X_*$に
-	余積が定義され、
-	\begin{equation*}\begin{split}
-		(m_\circ^\flat\alpha)(f\otimes g) := \alpha(f\circ g)
-		\quad\text{for all } \alpha\in\jitu X_*,\; f,g\in\jitu[[x]]
-	\end{split}\end{equation*}
-	次の線形射$u_\circ^\flat:\jitu X_*\to\jitu$が$m_\circ^\flat$の余単位射
-	となる。
-	\begin{equation*}\begin{split}
-		u_\circ^\flat\alpha := \alpha x
-		\quad\text{for all } \alpha\in\jitu X_*
-	\end{split}\end{equation*}
-	$m_\circ$と$\op{dup}$は互いに準同型だから、
-	$m_\circ^\flat$と$\op{dup}^\flat$も互いに準同型となる。
-
-	$m_\circ^\flat$を基底系$x_m^\flat$について計算すると、次の式から、
-	\begin{equation*}\begin{split}
-		\gplr{m_\circ^\flat x_m^\flat}(x_n\times g|x) 
-		&= x_m^\flat(x^n\circ g|x) = x_m^\flat(g|x)^n \\
-		&= \sum_{\substack{k_1,\dots,k_n\in\sizen\\k_1+\cdots+k_n=m}} 
-		g_{k_1}\cdots g_{k_n}
-	\end{split}\end{equation*}
-	次の式が得られる。
-	\begin{equation*}\begin{split}
-		m_\circ^\flat x_m^\flat = \sum_{n\in\sizen} 
-		\sum_{\substack{k_1,\dots,k_n\in\sizen\\k_1+\cdots+k_n=m}} 
-		x_n^\flat\otimes\ggplr{x_{k_1}^\flat\cdots x_{k_n}^\flat}
-	\end{split}\end{equation*}
-	ここで、積$\op{dup}^\flat$の記号を中置記法で省略して書いた。
-	以降も積$\op{dup}^\flat$を中置記法で書く場合は記号を省略することにする。
-%s3:モノイドと余半群の空間}
-\subsubsection{群と余モノイドの空間}\label{s3:群と余モノイドの空間} %{
-	$\jitu[[x]]$の部分空間$V$\eqref{eq:群の空間}を考える。
-	$X_+$の元の定義域を$V$に制限したものを$X_+(V)$とし、そのベクトル空間を
-	$V^\flat:=\jitu X_+(V)$とする。$\op{dup}$を$V$に制限すると、余単位射
-	$\epsilon$\eqref{eq:コピーの余単位射}を持ち、その共役$\op{dup}^\flat$が
-	$V^\flat$の中で単位元$x_1^\flat$を持つようになる。したがって、
-	$\gplr{V^\flat,\op{dup}^\flat,x_1^\flat,m_\circ^\flat,u_\circ^\flat}$は
-	双代数となる。
-	
-	$V^\flat$では$m_\circ^\flat$の和の範囲が次のように修正される。
-	\begin{equation*}\begin{split}
-		m_\circ^\flat x_n^\flat = \sum_{k=1}^n 
-		\sum_{\substack{i_1,\dots,i_k\in\sizen_+\\i_1+\cdots+i_k=n}} 
-		x_k^\flat\otimes\ggplr{x_{i_1}^\flat\cdots x_{i_k}^\flat}
-		\quad\text{for all } n\in\sizen_+
-	\end{split}\end{equation*}
-	ここで、二つ目の和の範囲は次のように有限になり、余積が多項式になること
-	に注意する。
-	\begin{equation*}\begin{split}
-		\sum_{\substack{i_1,\dots,i_k\in\sizen_+\\i_1+\cdots+i_k=n}} 
-		= \sum_{\substack{i_1,\dots,i_k\in1..(n-k+1)\\i_1+\cdots+i_k=n}} 
-	\end{split}\end{equation*}
-	多項式$\beta^n_k$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		\gplr{\beta^n_k\bou z_1, z_2,\dots}
-		:= \sum_{\substack{i_1,\dots,i_k\in\sizen_+\\i_1+\cdots+i_k=n}} 
-		z_{i_1}\cdots z_{i_k}
-		\quad\text{for all } k\le n\in\sizen_+
-	\end{split}\end{equation*}
-	余積は次のように書くことができる。
-	\begin{equation*}\begin{split}
-		m_\circ^\flat x_n^\flat = \sum_{k=1}^n 
-		x_k^\flat\otimes\gplr{\beta_k^n\bou\mathbf{x}^\flat}
-		\quad\text{for all } n\in\sizen_+
-	\end{split}\end{equation*}
-
-	\begin{note}[リスケールしたBell多項式]\label{note:リスケールしたBell多項式} %{
-	$\beta^n_k$は次の分配の方法の列挙である。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 区別のつかない$n$個の球を、
-		\item 区別のつく$k$個の箱に、
-		\item 空の箱を許さずに分配する。
-	\end{itemize} %}
-	$\beta^n_k$の分配の方法は次の分配の方法と等しい。
-	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item 区別のつかない$n-k$個の球を、
-		\item 区別のつく$k$個の箱に、
-		\item 空の箱を許して分配する。
-	\end{itemize} %}
-	したがって、$\beta^n_k$は次のように書くこともできる。
-	\begin{equation*}\begin{split}
-		\plr{\beta^n_k\bou\mathbf{z}}
-		= \sum_{\substack{i_1,\dots,i_k\in\sizen\\i_1+\cdots+i_k=n-k}} 
-		z_{i_1+1}\cdots z_{i_k+1}
-		\quad\text{for all } k\le n\in\sizen_+
-	\end{split}\end{equation*}
-	また、次の漸化式を満たす。
-	\begin{equation}\label{eq:Bell'の漸化式}\begin{split}
-		\gplr{\beta_{n+1,k+1}\bou\mathbf{z}} 
-		&= \sum_{r=k}^n \gplr{\beta_{r,k}\bou\mathbf{z}}z_{n+1-r} 
-		\quad\text{because} \\
-		\sum_{\substack{r_1,\dots,r_{k+1}\in\sizen_+\\r_1+\cdots+r_{k+1}=n+1}} 
-			z_{r_1}\cdots z_{r_k} z_{r_{k+1}}
-		&= \sum_{r=k}^n
-			\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=r}} 
-			z_{r_1}\cdots z_{r_k} z_{n+1-r} \\
-	\end{split}\end{equation}
-	\EOP
-	\end{note} %note:リスケールしたBell多項式}
-
-	一般的に、群の逆元をとる操作の共役によって双対空間にアンチポードが定義
-	される。以下で、$V$が群になることを見よう。
-
-	次の式により$V$は$m_\circ$について可逆になることがわかる。
-	\begin{equation*}\begin{split}
-		y = x + \sum_{n\in\sizen} f_nx^n
-		\implies x = y - \sum_{n\in\sizen} f_nx^n = y + Oy^2
-	\end{split}\end{equation*}
-	例えば、$(f|x) = x + x^2$を考えてみると、次の式から、
-	\begin{equation*}\begin{split}
-		y = x + x^2 
-		\implies x = \pm\plr{y + \frac{1}{4}}^{\frac{1}{2}} - \frac{1}{2}
-	\end{split}\end{equation*}
-	$V$の元になる方をとって、
-	$(g|x) = \plr{x + \frac{1}{4}}^{\frac{1}{2}} - \frac{1}{2}$とすると、
-	$f\circ g=x=g\circ f$が成り立つ。
-	一般に$f\in V$に対してその逆元$g\in V$を求めてみよう。
-	\eqref{eq:形式級数の合成}から$g\circ f$は次のようになり、
-	\begin{equation*}\begin{split}
-		(g\circ f)_n = \sum_{k=1}^n g_k\gplr{\beta^n_k\bou\mathbf{f}}
-	\end{split}\end{equation*}
-	$g\circ f=x$となるためには、$(g\circ f)_2=(g\circ f)_3=\cdots=0$となる
-	必要がある。行列で書くと次のようになる。
-	\begin{equation*}\begin{split}
-		\begin{pmatrix}
-			1 & 0 & 0 & \cdots \\
-			\gplr{\beta^2_1\bou\mathbf{f}} & 1 & 0 & \cdots \\
-			\gplr{\beta^3_1\bou\mathbf{f}} & \gplr{\beta^3_2\bou\mathbf{f}} & 1 & \cdots \\
-			\vdots \\
-		\end{pmatrix}\begin{pmatrix}
-			g_1 \\ g_2 \\ g_3 \\ \vdots
-		\end{pmatrix} = \begin{pmatrix}
-			1 \\ 0 \\ 0 \\ \vdots
-		\end{pmatrix}
-	\end{split}\end{equation*}
-	$f_1=1$だから、$\gplr{\beta^n_n\bou\mathbf{f}}=f_1^n=1$となって、
-	行列の対角成分がすべて$1$になる。そのおかげで厄介な因子がなくなり、
-	次の漸化式に帰着する。
-	\begin{equation}\label{eq:逆形式級数の漸化式}\begin{split}
-		g_n = - \sum_{k=1}^{n-1} \gplr{\beta^n_k\bou\mathbf{f}} g_k 
-		\quad\text{for all } 2\le n\in\sizen
-	\end{split}\end{equation}
-	これ以上は計算できないが、\cite{Figueroa:2005}にはBell多項式の和として
-	書いたものが載っている。
-
-	$V$では次の式が成り立つので、
-	\begin{equation*}\begin{split}
-		m_\circ(-^{-1}\times\id)\op{dup} = u_\circ\epsilon 
-		= m_\circ(\id\times-^{-1})\op{dup}
-	\end{split}\end{equation*}
-	線形射$S:V^\flat\to V^\flat$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		(S\alpha) f = \alpha f^{-1}
-		\quad\text{for all } \alpha\in V^\flat,\; f\in V
-	\end{split}\end{equation*}
-	$S$が双代数
-	$\gplr{V^\flat,\op{dup}^\flat,x_1^\flat,m_\circ^\flat,u_\circ^\flat}$の
-	アンチポードになることがわかる。\eqref{eq:逆形式級数の漸化式}から、
-	アンチポードは次の漸化式で計算できる。
-	\begin{equation*}\begin{split}
-		Sx_1^\flat &= x_1^\flat \\
-		Sx_{n+1}^\flat &= -\sum_{k=1}^n \gplr{Sx_k^\flat}
-		\gplr{\beta^{n+1}_k\bou\mathbf{x}^\flat}
-		\quad\text{for all } n\in\sizen_+
-	\end{split}\end{equation*}
-
-	余積の低次の項は次のようになっている。
-	\begin{equation*}\begin{split}
-		m_\circ^\flat x_1^\flat &= x_1^\flat\otimes x_1^\flat \\
-		m_\circ^\flat x_2^\flat &= x_1^\flat\otimes x_2^\flat 
-			+ x_2^\flat\otimes x_1^\flat \\
-		m_\circ^\flat x_3^\flat &= x_1^\flat\otimes x_3^\flat 
-			+ 2 x_2^\flat\otimes x_2^\flat + x_3^\flat\otimes x_1^\flat \\
-		m_\circ^\flat x_4^\flat &= x_1^\flat\otimes x_4^\flat 
-			+ x_2^\flat\otimes \gplr{2 x_3^\flat + (x_2^\flat)^2} 
-			+ 3 x_3^\flat\otimes x_1^\flat + x_4^\flat\otimes x_1^\flat \\
-		m_\circ^\flat x_5^\flat &= x_1^\flat\otimes x_5^\flat 
-			+ x_2^\flat\otimes \gplr{2 x_4^\flat + 2 x_2^\flat x_3^\flat} 
-			+ x_3^\flat\otimes \gplr{3 x_3^\flat + 3 (x_2^\flat)^2} 
-			+ 4 x_4^\flat\otimes x_2^\flat 
-			+ x_5^\flat\otimes x_1^\flat 
-	\end{split}\end{equation*}
-
-	\begin{todo}[やるべきこと]\label{todo:やるべきこと} %{
-		やり残したことと気づいたこと。
-		\begin{itemize}\setlength{\itemsep}{-1mm} %{
-			\item \Midline{アンチポードを計算する漸化式} \\
-			\cite{Figueroa:2005}に載っている式を導出できていないが、漸化式の
-			形で書いておいた。
-			\Midline{アンチポードを計算する漸化式を尻切れトンボの形で残している。
-			最後まで求めること。そのためには、リスケールしたBell関数%$\beta^n_k$
-			を使うのが良いだろう。}
-			%
-			\item 計算機 \\
-			上記の計算は絶対間違えている。組み合わせ的な列挙はなるべく計算機で
-			計算するようにしよう。厄介なのは余積$m_\circ^\flat$とアンチポード$S$
-			の計算になる。この二つを何とかしたい。
-			%
-			\item 多項式のべき乗 \\
-			余積$m_\circ^\flat$の計算で実質的に計算すべきなのは、
-			リスケールしたBell多項式$(\beta^n_k\bou\mathbf{x}^\flat)$である。
-			これは多項式のべき乗$(g|x)^n$を計算することに他ならない。
-			%
-			\item 微分のチェイン則 \\
-			Fa\'a di Brunoの公式の使い道の一つとして微分のチェイン則の計算
-			がある。$f^{(n)}:=\dif^n(f|x)$と書くと次の式が成り立つ。
-			\begin{equation*}\begin{split}
-				\dif^n\gplr{f\circ g} = \sum_{k=1}^n 
-				\gplr{f^{(k)}\circ g}\gplr{B_{n,k}\bou g^{(1)},g^{(2)},\dots}
-			\end{split}\end{equation*}
-			証明する前に低次の項を見ておこう。
-			$G_{n,k}:=\gplr{B_{n,k}\bou\mathbf{g}}$とおく。
-			\begin{equation*}\begin{split}
-				\dif\gplr{f\circ g} &= \gplr{f^{(1)}\circ g}g^{(1)} 
-				= \gplr{f^{(1)}\circ g}G_{1,1} \\
-				\dif^2\gplr{f\circ g} &= \gplr{f^{(2)}\circ g}G_{1,1}g^{(1)}
-				+ \gplr{f^{(1)}\circ g}G_{1,1}^{(1)}
-			\end{split}\end{equation*}
-			$G_{1,1}^{(1)}=G_{2,1}$、$G_{1,1}g^{(1)}=G_{2,2}$となるから、
-			\begin{equation*}\begin{split}
-				\dif^2\gplr{f\circ g} = \gplr{f^{(2)}\circ g}G_{2,2}
-				+ \gplr{f^{(1)}\circ g}G_{2,1}
-			\end{split}\end{equation*}
-			となる。ここで帰納法に突入すると、
-			\begin{equation*}\begin{split}
-				\dif^{n+1}\gplr{f\circ g} &= \dif \sum_{k=1}^n
-					\gplr{f^{(k)}\circ g}G_{n,k} \\
-				&= \sum_{k=1}^n\ggplr{\gplr{f^{(k+1)}\circ g}G_{n,k}g^{(1)}
-					+ \gplr{f^{(k)}\circ g}G_{n,k}^{(1)}} \\
-				&= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
-					\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
-				&\,+ \gplr{f^{(1)}\circ g}G_{n,1}^{(1)}
-					+ \gplr{f^{(n+1)}\circ g}G_{n,n}g^{(1)}
-			\end{split}\end{equation*}
-			となる。$G_{n,1}^{(1)}=G_{n+1,1}$、$G_{n,n}g^{(1)}=G_{n+1,n+1}$
-			だから、
-			\begin{equation*}\begin{split}
-				\dif^{n+1}\gplr{f\circ g} &= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
-					\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
-				&\,+ \gplr{f^{(1)}\circ g}G_{n+1,1} 
-					+ \gplr{f^{(n+1)}\circ g}G_{n+1,n+1}
-			\end{split}\end{equation*}
-			となる。したがって、$G_{n,k}g^{(1)} + G_{n,k+1}^{(1)} = G_{n+1,k+1}$
-			となることが示せれば良い。$G_{n,k+1}^{(1)}$は
-			\begin{equation*}\begin{split}
-				G_{n,k+1}^{(1)} &= \frac{n!}{(k+1)!}(k+1)
-					\sum_{\substack{r_1,\dots,r_{k+1}\in\sizen_+\\r_1+\cdots+r_{k+1}=n}}
-					\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
-					\frac{g^{(r_{k+1}+1)}}{r_{k+1}!} \\
-				&= \frac{n!}{k!} \sum_{r=k}^{n-1}
-					\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=r}}
-					\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
-					\frac{g^{(n+1-r)}}{(n-r)!} \\
-				&= \sum_{r=k}^{n-1}\binom{n}{r} G_{r,k} g^{(n+1-r)}
-			\end{split}\end{equation*}
-			となるから、
-			\begin{equation*}\begin{split}
-				G_{n,k}g^{(1)} + G_{n,k+1}^{(1)}
-				= \sum_{r=k}^n\binom{n}{r} G_{r,k} g^{(n+1-r)}
-				= G_{n+1,k+1}
-			\end{split}\end{equation*}
-			となることがわかる。
-		\end{itemize} %}
-		\EOP
-	\end{todo} %todo:やるべきこと}
-%s3:群と余モノイドの空間}
-\subsubsection{Faa di Bruno Hopf代数}\label{s3:Faa di Bruno Hopf代数} %{
-	最後に、通常用いられる基底系への変換をしておく。
-	Fa\'a di Brunoの公式は微分のチェイン則を計算するための公式として
-	発見されたので、形式級数を次のように展開したものを基底系としている。
-	\begin{equation*}\begin{split}
-		(f|x) = \sum_{n\in\sizen} \frac{x^n}{n!} f_n
-	\end{split}\end{equation*}
-	この基底系を用いると、合成の係数$(f\circ g)_n$は次のようになる。
-	\begin{equation*}\begin{split}
-		\frac{(f\circ g)_n}{n!} = \sum_{k=1}^n \frac{f_k}{k!}
-		\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
-		\frac{g_{r_1}}{r_1!}\cdots\frac{g_{r_k}}{r_k!}
-	\end{split}\end{equation*}
-	そこで、$B_{n,k}$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		\gplr{B_{n,k}\bou\mathbf{z}} := \frac{n!}{k!}
-		\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
-		\frac{z_{r_1}}{r_1!}\cdots\frac{z_{r_k}}{r_k!}
-		\quad\text{for all } k\le r\in\sizen_+
-	\end{split}\end{equation*}
-	合成した係数は次のように書くことができる。
-	\begin{equation*}\begin{split}
-		(f\circ g)_n = \sum_{k=1}^n f_k \gplr{B_{n,k}\bou g_1,g_2,\dots}
-	\end{split}\end{equation*}
-	$B_{n,k}$をBell多項式という。
-	
-	$B_{n,k}$と$\beta^n_k$は次の関係になるので、
-	\begin{equation*}\begin{split}
-		\gplr{B_{n,k}\bou z_1,z_2,\dots} = \frac{n!}{k!}
-		\gplr{\beta^n_k\bou \frac{z_1}{1!},\frac{z_2}{2!},\dots}
-	\end{split}\end{equation*}
-	\eqref{eq:Bell'の漸化式}から、$B_{n,k}$は次の漸化式を満たす。
-	\begin{equation*}\begin{split}
-		\gplr{B_{n+1,k+1}\bou\mathbf{z}} = \frac{1}{k+1}\sum_{r=k}^n 
-		\binom{n+1}{r} \gplr{B_{r,k}\bou\mathbf{z}}z_{n+1-r}
-	\end{split}\end{equation*}
-
-	Fa\'a di Brunoの公式は微分のチェイン則についての次の式である。
-	\begin{equation*}\begin{split}
-		\gplr{f\circ g}^{(n)} = \sum_{k=1}^n 
-		\gplr{f^{(k)}\circ g}\gplr{B_{n,k}\bou g^{(1)},g^{(2)},\dots}
-	\end{split}\end{equation*}
-	ここで、$f,g\in\fukuso\dlr{x}$、$f^{(k)}:=\dif^k f$とする。
-	\begin{proof} %{
-		微分の階数の帰納法で証明する。
-		$G_{n,k}:=\gplr{B_{n,k}\bou g^{(1)},g^{(2)},\dots}$とおく。
-		$k=1$の時は、
-		\begin{equation*}\begin{split}
-			\dif^n\gplr{f\circ g} = \gplr{f^{(1)}\circ g}g^{(1)}
-			= \gplr{f^{(1)}\circ g}G_{1,1}
-		\end{split}\end{equation*}
-		となり、命題が成り立つ。ある$k\in\sizen_+$で命題が成り立つとする。
-		すると、
-		\begin{equation*}\begin{split}
-			\dif^{n+1}\gplr{f\circ g} &= \dif \sum_{k=1}^n
-				\gplr{f^{(k)}\circ g}G_{n,k} \\
-			&= \sum_{k=1}^n\ggplr{\gplr{f^{(k+1)}\circ g}G_{n,k}g^{(1)}
-				+ \gplr{f^{(k)}\circ g}G_{n,k}^{(1)}} \\
-			&= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
-				\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
-			&\,+ \gplr{f^{(1)}\circ g}G_{n,1}^{(1)}
-				+ \gplr{f^{(n+1)}\circ g}G_{n,n}g^{(1)}
-		\end{split}\end{equation*}
-		となり、$G_{n,1}^{(1)}=G_{n+1,1}$、$G_{n,n}g^{(1)}=G_{n+1,n+1}$より、
-		\begin{equation*}\begin{split}
-			\dif^{n+1}\gplr{f\circ g} &= \sum_{k=2}^n \gplr{f^{(k)}\circ g}
-				\ggplr{G_{n,k-1}g^{(1)} + G_{n,k}^{(1)}} \\
-			&\,+ \gplr{f^{(1)}\circ g}G_{n+1,1} 
-				+ \gplr{f^{(n+1)}\circ g}G_{n+1,n+1}
-		\end{split}\end{equation*}
-		となる。したがって、$G_{n,k}g^{(1)} + G_{n,k+1}^{(1)} = G_{n+1,k+1}$
-		が成り立つことが示せれば$k+1$でも命題が成り立つことが示され、帰納法が
-		完了する。
-		
-		$G_{n,k+1}^{(1)}$は
-		\begin{equation*}\begin{split}
-			G_{n,k+1}^{(1)} &= \frac{n!}{(k+1)!}(k+1)
-				\sum_{\substack{r_1,\dots,r_{k+1}\in\sizen_+\\r_1+\cdots+r_{k+1}=n}}
-				\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
-				\frac{g^{(r_{k+1}+1)}}{r_{k+1}!} \\
-			&= \frac{n!}{k!} \sum_{r=k}^{n-1}
-				\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=r}}
-				\frac{g^{(r_1)}}{r_1!}\cdots\frac{g^{(r_k)}}{r_k!}
-				\frac{g^{(n+1-r)}}{(n-r)!} \\
-			&= \sum_{r=k}^{n-1}\binom{n}{r} G_{r,k} g^{(n+1-r)}
-		\end{split}\end{equation*}
-		となるから、
-		\begin{equation*}\begin{split}
-			G_{n,k}g^{(1)} + G_{n,k+1}^{(1)}
-			= \sum_{r=k}^n\binom{n}{r} G_{r,k} g^{(n+1-r)} = G_{n+1,k+1}
-		\end{split}\end{equation*}
-		となることがわかる。
-	\end{proof} %}
-
-	最後に、Bell多項式を通常使われる形に直しておく。
-	Bell多項式の和の変数を次のように変換すると、
-	\begin{equation*}\begin{split}
-		\begin{cases}
-				r_1,\dots,r_k\in\sizen_+ \\
-				r_1+\cdots+r_k=n
-		\end{cases} &\xmapsto{k!:(\alpha_1!)\cdots(\alpha_n!)} \begin{cases}
-			\alpha_1,\dots,\alpha_n\in\sizen \\
-			\alpha_1 + \alpha_2 +\cdots+ \alpha_n = k \\
-			\alpha_1 + 2\alpha_2 +\cdots+ n\alpha_n = n \\
-		\end{cases} \\
-		z_{r_1}\cdots z_{r_k} &= z_1^{\alpha_1}\cdots z_n^{\alpha_n}
-	\end{split}\end{equation*}
-	Bell多項式は次のように書くことができる。
-	\begin{equation*}\begin{split}
-		\gplr{B_{n,k}\bou\mathbf{z}} &= \frac{n!}{k!}
-			\sum_{\substack{r_1,\dots,r_k\in\sizen_+\\r_1+\cdots+r_k=n}} 
-			\frac{z_{r_1}}{r_1!}\cdots\frac{z_{r_k}}{r_k!}
-			\quad\text{for all } k\le n\in\sizen_+ \\
-		&= \sum_{\substack{\alpha_1,\dots,\alpha_n\in\sizen \\
-			\alpha_1+\alpha_2+\cdots+\alpha_n=k \\
-			\alpha_1+2\alpha_2+\cdots+n\alpha_n=n}} 
-			\frac{n!}{(\alpha_1!)\cdots(\alpha_n!)}
-			\plr{\frac{z_1}{1!}}^{\alpha_1}\cdots\plr{\frac{z_n}{n!}}^{\alpha_n}
-	\end{split}\end{equation*}
-	Bell多項式は通常この形で使われる。
-%s3:Faa di Bruno Hopf代数}
-%s2:形式級数の空間}
+%s2:Brzozowski代数}
 %s1:Connes-Kreimer代数}
 \section{パーサーの実装}\label{s1:パーサーの実装} %{
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
@@ -682,6 +790,19 @@
 			&\implies x_* = \ket{x\wbar{x}}\bra{1} 
 			+ \ket{xx\wbar{x}bx\wbar{x}\wbar{x}}\bra{b} +\cdots
 		\end{split}\end{equation*}
+		%
+		\item XML出力を考えることは特殊なMealyマシンを考えているようだ。
+		%
+		\item lexer hack \\
+		新しい言葉を知ったので書いておく。C言語のパースで$(A)*B$という文は
+		次の二通りの解釈が可能になる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $A$と$B$を引数とする演算$*(A,B)$
+			\item $A$を型名、$B$をポインターとみて、$*B$を型$A$にキャスト
+		\end{itemize} %}
+		こうしたことが問題となる原因はLexerとAnalyzerを分けていることにある。
+		この問題を解決するために、LexerにAnalyzerの結果を渡すことをlexter hack
+		という。
 	\end{itemize} %}
 
 \subsection{構文解析}\label{s2:構文解析} %{

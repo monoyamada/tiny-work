@@ -1,0 +1,218 @@
+\begingroup %{
+\newcommand{\op}[1]{\mathinner{\operatorname{#1}}}
+\newcommand{\EOP}{\hspace{\fill}\P}
+%
+\newcommand{\Pow}{\mycal{P}}
+\newcommand{\End}{\op{End}}
+\newcommand{\Map}{\op{Map}}
+\newcommand{\Lin}{\mathcal{L}}
+\newcommand{\Hol}{\mathcal{H}}
+\newcommand{\Aut}{\op{Aut}}
+\newcommand{\Mat}{\op{Mat}}
+\newcommand{\Hom}{\op{Hom}}
+%
+\newcommand{\id}{\op{id}}
+\newcommand{\tran}{\mathbf{t}}
+\newcommand{\dfn}{\,\op{def}\,}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\tr}{\op{tr}}
+\newcommand{\onto}{\op{onto}}
+%
+\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
+\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+\newcommand{\what}{\widehat}
+\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\ad}{\op{ad}}
+\newcommand{\Ad}{\op{Ad}}
+%
+\newcommand{\cat}[1]{\mybf{{#1}}}
+\newcommand{\opp}{{\op{op}}}
+\newcommand{\obj}{\mathfrak{O}}
+\newcommand{\arr}{\mathfrak{A}}
+\newcommand{\calU}{\mathcal{U}}
+%
+{\setlength\arraycolsep{2pt}
+%
+\section{Pieree}\label{s1:Pieree} %{
+\subsection{F-代数}\label{s2:F-代数} %{
+	\begin{note}[問題2.2.4]\label{note:問題2.2.4} %{
+		(\cite{PIERCE91} p.41 2.2.4 Exercises)
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $(A,a)$が$F\myhere\cat{Alg}$の始対象だとすると、射$FA\xto{a}A$
+			は双射になることを示せ。
+			%
+			\item $F\myhere\cat{Alg}$の始対象は不動点と言われることがある。
+			通常の意味での不動点$fx=x$との関係を示せ。
+		\end{enumerate} %}
+	\end{note} %note:問題2.2.4}
+	\begin{proof} %{
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item 一般に、$(B,b)$を$F\myhere\cat{Alg}$の対象とすると，
+			$(FA,Fb)$も$F\myhere\cat{Alg}$の対象となり、$b^F:(FB,Fb)\to(B,b)$
+			は$F\myhere\cat{Alg}$の射となる。
+			\begin{equation*}\begin{split}
+				\xymatrix{
+					F^2B \ar@{.>}[r]^{Fb} \ar[d]^{Fb} & FB \ar[d]^b \\
+					FB \ar@{.>}[r]^{b} & B \\
+				} \quad\text{for all } (B,b)\in\obj F\myhere\cat{Alg}
+			\end{split}\end{equation*}
+			したがって、$(A,a)$が始対象だとすると、射$h^F:(A,a)\to(FA,Fa)$が唯一つ
+			存在する。また、$a^F:(FA,Fa)\to(A,a)$だから、$a^Fh^F:(A,a)\to(A,a)$
+			となるが、$(A,a)$が始対象だから、$a^Fh^F=1_{A}^F$となり、
+			$ah=1_A:A$かつ$F(ah)=1_{FA}$となる。そして、$F-\cat{Alg}$の射の定義
+			から、次の可換図が成り立ち、
+			\begin{equation*}\begin{split}
+				\xymatrix{
+					FA \ar[r]^{Fh} \ar[d]^a & F^2A \ar[d]^{Fa} \\
+					A \ar[r]^h & FA \\
+				} 
+			\end{split}\end{equation*}
+			$ha=T(ah)=1_{FA}$となって、$a$と$h$が互いに逆の双射になることが
+			わかる。
+		\end{enumerate} %}
+	\end{proof} %}
+%s2:F-代数}
+%s1:Pieree}
+\section{関数プログラミング}\label{s1:関数プログラミング} %{
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[シーケント図]	次のシーケント図は、
+		\begin{equation*}\begin{split}
+			\frac{A\to X}{B\to Y}
+		\end{split}\end{equation*}
+		$A$ならば$X$が成り立つ時$B$ならば$Y$となる、と読む。
+		%
+		\item[pureな関数] pureな関数というのは次の図を可換にする関数
+		$f:X\to X'\in\cat{Set}$のことである。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				X\times Y \ar[r]^{1_X\times g} \ar[d]^{f\times 1_Y} 
+				& X\times Y' \ar[d]^{f\times 1_{Y'}} \\
+				X'\times Y \ar[r]^{1_{X'}\times g} & X'\times Y' \\
+			} \quad\text{for all pure function }  \xymatrix{
+				Y \ar[d]^g \\ Y'
+			} \in\cat{Set}
+		\end{split}\end{equation*}
+		通常は、この可換図を、$g=f$の場合と、$g\neq f$の場合に分けて、
+		pureな関数を定義する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 同一の引数に対して同一の値を返す。
+			\item 見える副作用が無い。
+		\end{itemize} %}
+		見える副作用というのは大域変数の値を変更することである。
+		すべての関数はスタック操作を伴うので見えない副作用を持つ。
+		\underline{見える}副作用というところがキモである。
+		関数がpureかどうかは、遅延評価ができるかどうか以外にも、手続き型の
+		プログラミングを含めて最適化に関係する。$f:\op{uint8}\to\op{int8[]}$を
+		pureな関数として、次のコードを考えると、
+		\begin{lstlisting}[caption=pure関数の最適化
+		, label=code:pure関数の最適化]
+		x = 0;
+		for (i:uint64 = 0; i < uint64.max (); ++i) {
+			x = printf f 10;
+		}
+		\end{lstlisting}
+		$\op{printf}$がpureならば、$\op{for}$の部分を最適化できて、
+		$\op{printf}f10$という命令を一度だけ実行すればよいが、
+		$\op{printf}$がpureでなければ、$\op{printf}f10$という命令は
+		$2^{64}$回実行する必要がある。次のstack-overflowによると、
+		pureな関数を最適化に利用するのは幾つか乗り越えなければならない問題が
+		あるようだ\cite{stackof:1363008}。
+	\end{description} %}
+%s1:関数プログラミング}
+\section{Haskellでの関手}\label{s1:Haskellでの関手} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\op{data}\op{Maybe}$です。
+		\begin{equation*}\begin{split}
+			\op{data}\op{Maybe} a = \op{Nothing} | \op{Just} a
+		\end{split}\end{equation*}
+		\item $\op{class}\op{Functor}$とは$\op{fmap}$が定義された構造体です。
+		\begin{equation*}\begin{split}
+			\op{class}\op{Functor} f \op{where} \op{fmap}:: (a\to b)\to (fa\to fb)
+		\end{split}\end{equation*}
+	\end{itemize} %}
+%s1:Haskellでの関手}
+\section{Haskellでの型の書き方}\label{s1:Haskellでの型の書き方} %{
+	Haskellの$\op{map}$という関数の型宣言とその実装は次のようになっている。
+	\begin{equation*}\begin{array}{cc}
+		\text{Haskell} &\quad \text{数式} \\\hline
+		\begin{split}
+			\op{map} :: (a\to b) &\to [a]\to [b] \\ 
+			\op{map} f [] &= [] \\ 
+			\op{map} f [x:\op{xs}] &= fx:\op{map} f\op{xs} \\ 
+		\end{split} &\quad \begin{split}
+			\op{map} : \cat{Set} &\to \calU\cat{Mon} \\ 
+			\gplr{\op{map}f} 1 &:= 1 \\
+			\gplr{\op{map}f} a_1\cdots a_n &:= (fa_1)\cdots(fa_n) \\
+		\end{split}
+	\end{array}\end{equation*}
+	ここで、数式の$\cat{Set}$は集合の圏、$\cat{Mon}$はモノイドの圏、
+	$\calU$は$\cat{Set}$への忘却関手とする。Haskellの$:$はリストの結合
+	$A^*\times A^*\to A^*$及びリストへの挿入$A\times A^*\to A$を表すの
+	だろう。また、Haskellの$\to$演算子は次のような結合の順序で定義される。
+	\begin{equation*}\begin{array}{ccc}
+		\text{Haskell} &\quad& \text{数式} \\ \hline
+		f::a\to b\to c &\quad& f:a\to\gplr{b\to c} 
+	\end{array}\end{equation*}
+	関手を表すために次のような用語が用いられる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[型変数] "$A$を集合とする"とという文に相当する。
+		\item[多相型（polymorphic type）] 型変数を含む型を多相型という。
+		例えば、$\op{reverse}$という関数は次のように定義されるので、
+		\begin{equation*}\begin{split}
+			\op{reverse} :: [a]\to [a]
+		\end{split}\end{equation*}
+		$\op{reverse}$の型は多相型になる。さらに、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 多相型の型変数に制約をつけたものをアドホック多相、
+			\item 制約のつかない多相型をパラメータ多相
+		\end{itemize} %}
+		という。アドホック多相の制約は次のように$\implies$を用いて
+		次のように記述される。
+		\begin{equation*}\begin{split}
+			\op{sort} :: (\op{Ord} a) \implies [a]\to [a]
+		\end{split}\end{equation*}
+	\end{description} %}
+
+\subsection{圏Hask}\label{s2:圏Hask} %{
+	Haskellの圏はHaskというらしい。Haskと集合の圏はほぼ同じだが、
+	Haskには始対象、終対象が無いいなどのいくつかの違いがある。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item \url{http://www.alpheccar.org/content/74.html}
+		\item \url{http://www.haskell.org/haskellwiki/Hask}
+	\end{itemize} %}
+	この違いの原因は、$\cat{Set}$の射は写像になるが、Haskの射は写像以外にも
+	発散する関数も含まれる。理論的に発散する関数を排除できないので
+	（halting problem）、それらを含めて考える必要がある。
+	神の手によって、Haskから発散する関数を取り除くと、集合の圏と同じになる。
+	それをプラトニックHaskというらしい。
+
+	関数が発散することと無限ループに陥ることは異なる。次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\text{発散する} \implies \text{無限ループに陥る}
+	\end{split}\end{equation*}
+	逆は成り立たない。簡単な例では、$2=1+1/2+1/4+\cdots$という級数和の計算
+	は有理数の範囲で収束するが項が無限個になっている。より間近の問題では、
+	LLパーサーで左再帰文法を取り扱う場合が収束するが無限ループに陥る例である。
+	プログラミングの場合、関数が発散するかどうかより、無限ループに陥るか
+	どうかの方がより切実な問題になると思う。
+
+	関数の収束というと次の考察を思い出す。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Galois Theory of Algorithms \\
+		\url{http://arxiv.org/abs/1011.0014}
+		\item Renormalization and Computation II: Time Cut-off and the Halting Problem \\
+		\url{http://arxiv.org/abs/0908.3430}
+	\end{itemize} %}
+	計算には、無限ループというのはあり得なくて、必ずカットオフが入ると思うこと
+	はリーズナブルな仮定だろう。問題は、カットオフ込の理論を取り扱えるかどうか
+	になる。
+%s2:圏Hask}
+\subsection{圏と型}\label{s2:圏と型} %{
+%s2:圏と型}
+\subsection{モナド}\label{s2:モナド} %{
+	随伴関手とモナドとT-代数は同じものを異なる視点でみている。
+%s2:モナド}
+%s1:Haskellでの型の書き方}
+%
+}\endgroup %}

@@ -1,0 +1,22 @@
+[[diary|日誌]]
+%toc 目次
+
+= 形式言語 =
+昨日の<a href='2013-02-06.html#hopkins'>論文</a>の続きで、
+<a name='lutttenberger'>[[http://arxiv.org/abs/1112.2864|An Extension of Parikh's Theorem beyond Idempotence]]</a>
+から
+<a name='provenance'>[['http://www.cs.ucdavis.edu/~green/|Provenance Semirings]]</a>
+に辿り着いた。
+provenanceは由来を表すフランス語由来の英語らしい。
+Provenance半環とはデータベースのクエリに現れる代数構造らしい。
+
+= vimwiki =
+wikiを書いていて気がついたのだが、javascriptを使えば、
+おらwikiを作るのは簡単なんだな。
+サーバーを設定してサーバーサイドで処理をすることに比べると。
+
+vimwikiでは二つ以上の属性を持つhtmlタグは扱えないらしい。
+{{{xml class='brush: xml;'
+<a name='x' href='b'>c</a>
+}}}
+というコードを書いたら出力htmlが変になった。

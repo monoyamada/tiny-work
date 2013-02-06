@@ -1,0 +1,1522 @@
+\begingroup %{
+\newcommand{\EOP}{\hspace{\fill}\P}
+\newcommand{\Pow}{\mycal{P}}
+\newcommand{\End}{\myop{End}}
+\newcommand{\Map}{\myop{Map}}
+\newcommand{\Lin}{\mathcal{L}}
+\newcommand{\Hol}{\mathcal{H}}
+\newcommand{\Aut}{\myop{Aut}}
+\newcommand{\Mat}{\myop{Mat}}
+\newcommand{\Hom}{\myop{Hom}}
+%
+\newcommand{\id}{\myop{id}}
+\newcommand{\tran}{\mathbf{t}}
+\newcommand{\dfn}{\,\myop{def}\,}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\tr}{\myop{tr}}
+\newcommand{\onto}{\op{onto}}
+%
+\newcommand{\mvec}[2]{\begin{matrix}{#1}\\{#2}\end{matrix}}
+\newcommand{\pvec}[2]{\begin{pmatrix}{#1}\\{#2}\end{pmatrix}}
+\newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
+\newcommand{\what}{\widehat}
+\newcommand{\frk}[1]{\ensuremath{\mathfrak{#1}}}
+\newcommand{\ad}{\myop{ad}}
+\newcommand{\Ad}{\myop{Ad}}
+%
+% cat
+%
+\newcommand{\cat}[1]{\mybf{{#1}}}
+\newcommand{\op}[1]{\mathinner{{\operatorname{#1}}}}
+\newcommand{\opp}{{\op{op}}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\clW}{\mathcal{W}}
+\newcommand{\obj}{\mathfrak{O}}
+\newcommand{\arr}{\mathfrak{A}}
+\newcommand{\dar}{\Big\downarrow}
+%
+{\setlength\arraycolsep{2pt}
+%
+\section{圏の基礎事項}\label{s1:圏の基礎事項} %{
+\subsection{圏の記法}\label{s2:圏の記法} %{
+	このノートで使う便宜を書いておく。
+	変数を表す文字は次のように使い分けることにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[圏] 大文字のアルファベット
+		\item[圏の対象] 小文字のアルファベット
+		\item[圏の射] 小文字のアルファベット
+		\item[関手] 大文字のアルファベット
+		\item[自然変換] 小文字のギリシャ文字
+	\end{description} %}
+	圏の構成要素を表すのに次の記号を使うことにする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[対象] 圏$A$の対象全体の集まりを$\obj A$と書くことにする。
+		\item[射] $a\xto{f}a'\in A$を圏$A$の対象$a$から対象$a'$への射とする。
+		そして、圏$A$の射全体の集まりを$\arr A$と書くことにする。
+		\item[単位射] 単位射は$a\xto{1_a}a\in A$というように文字$1$を用いる。
+		\item[Hom集合] $\hom(a,b)$を対象$a$から対象$b$への射の集まりとする。
+	\end{description} %}
+%s2:圏の記法}
+\subsection{圏}\label{s2:圏} %{
+	次の特別な圏は断りなしに使う。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item[$\mathbf{0}$]を空の圏とする。
+		\item[$\mathbf{1}$]を対象が一つだけで、射が単位射のみの圏とする。
+		$\xymatrix{\bullet \ar@(rd,ru)}$
+		\item[$\mathbf{2}$]を対象が二つだけで、射が単位射と対象を結ぶ一つの射
+		だけの圏とする。\quad
+		$\xymatrix{\bullet \ar@(lu,ld) \ar[r] & \bullet \ar@(rd,ru)}$
+	\end{itemize} %}
+
+	幾つかの数学的な対象は、そのまま圏として解釈することができる。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[離散圏] 射が単位射のみの圏を離散圏という。集合は離散圏とみなす
+		ことができる。
+		\item[モノイド] 通常のモノイド$G=(G,\cdots,1)$は、次のような対応で、
+		対象が一つだけの圏とみなすことができる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item モノイドの元を射に対応させる。特に、単位元を単位射に対応させる。
+			\item モノイドの積を射の積に対応させる。
+		\end{itemize} %}
+		\item[半順序集合] 半順序$\preceq$が定義された集合は、半順序$a\preceq b$
+		を射$a\to b$に対応させることで圏とみなすことができる。半順序の定義から、
+		\begin{equation*}\begin{split}
+			a\preceq b \text{ and } b\preceq a \implies a = b
+		\end{split}\end{equation*}
+		この圏はループを持たないという特徴を持つ（ノート
+		\ref{note:前順序と半順序}）。
+	\end{description} %}
+
+	\begin{note}[前順序と半順序]\label{note:前順序と半順序} %{
+	$A$を集合とする。$A$に次の二項関係が定義されているとき、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item reflexive \quad$a\preceq a \quad\text{for all }a\in A$
+		\item transitve \quad$a\preceq b\preceq c\implies a\preceq c 
+		\quad\text{for all }a,b,c\in A$
+	\end{itemize} %}
+	を前順序（preorder）集合といい、前順序集合$(A,\preceq)$が更に次の性質を
+	持つとき、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item anti-symmetric \quad $a\preceq b\succeq a\implies a=b
+		\quad\text{for all }a,b\in A$
+	\end{itemize} %}
+	を半順序（partial order）集合という。
+	\end{note} %note:前順序と半順序}
+%s2:圏}
+\subsection{関手}\label{s2:関手} %{
+	\begin{definition}[関手]\label{def:関手} %{
+		$A$と$B$を圏とする。$A$と$B$の対応付け$F$が、$A$の対象を$B$の対象に
+		移し、射を次のように移すとき、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 単位射 \quad$a\xto{1_a}a\mapsto Fa\xto{1_{Fa}}Fa
+			\quad\text{for all } a\in\obj A$
+			\item 合成 \quad $a\xto{f}b\xto{g}c\mapsto Fa\xto{Ff}Fb\xto{Fg}Fc
+			\quad\text{for all } a\xto{f}b\xto{g}c\in A$
+		\end{itemize} %}
+		$F$を$A$から$B$への関手といい、$F:A\to B$または$A\xto{F}B$と書く。
+	\end{definition} %def:関手}
+
+	関手の定義での単位射を単位射に移す条件が必要なことは、モノイド射の定義
+	に単位元を単位元に移す条件が必要なことに対応している。ただし、モノイドの
+	場合でも、余領域のモノイドがキャンセル可能な場合は、単位元を単位元に
+	移すということは合成則から導かれる。
+	\begin{equation*}\begin{split}
+		fG\text{ is cancellative} \implies f1 = 1
+		\quad\because fa = (f1)(fa) \quad\text{for all } a\in A
+	\end{split}\end{equation*}
+	圏の射の合成はモノイドの積に対応するが、一般には、射の合成はキャンセル可能
+	ではない。例えば、集合の圏で$B\xto{f,g}C\in\cat{Set}$に対して$B$の部分集合
+	$A:=\set{x\in B\bou fx=gx}$とし、$e:A\to B$を包含写像とすると、$fe=ge$
+	となる。
+\subsubsection{分数化}\label{s3:分数化} %{
+	\cite{maclane.work}p.15の問題1
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 整域とその分数体の関係を関手として見よ。
+	\end{itemize} %}
+	を単純化した次の問題を考える。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 可換モノイドとその分数群の関係を関手として見よ。
+	\end{itemize} %}
+
+	$G=(G,m_\myspace,1)$を可換モノイドとする。
+	$G$の直積$G\times G$に次のように二項演算$m_\myspace$を定義すると、
+	\begin{equation*}\begin{split}
+		(g_1\times g_2)(h_1\times h_2) := (g_1h_1)\times(g_2h_2)
+		\quad\text{for all } g_1,g_2,h_1,h_2\in G
+	\end{split}\end{equation*}
+	$G\times G:=(G\times G,m_\myspace,1\times 1)$は可換モノイドとなる。
+	
+	$G\times G$に関係$\sim$を次のように定義すると（ノート
+	\ref{note:分数化の同値関係とキャンセル可能性}）、
+	\begin{equation}\label{eq:分数化の同値関係の定義}\begin{split}
+		g_1\times g_2 \sim h_1\times h_2 \xiff{\dfn} \text{ exists } 
+		k\in G \text{ such that } g_1h_2k = h_1g_2k \\
+		\quad\text{for all } g_1,g_2,h_1,h_2\in G
+	\end{split}\end{equation}
+	次のことが成り立ち、$\sim$は同値関係となる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item(reflexiveとsymmeric)
+		\begin{equation*}\begin{split}
+			g_1\times g_2\sim g_1\times g_2 \text{ and } 
+			g_1\times g_2\sim g_2\times g_1 \quad\text{for all } g_1,g_2\in G
+		\end{split}\end{equation*}
+		\item(symmetric) $G$は可換だから次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			g_1\times g_2\sim g_2\times g_1 \quad\text{for all } g_1,g_2\in G
+		\end{split}\end{equation*}
+		\item(transitive) 任意の$f_1,f_2,g_1,g_2,h_1,h_2\in G$に対して次の式が
+		成り立つ。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				f_1\times f_2 &\sim g_1\times g_2 \\
+				g_1\times g_2 &\sim h_1\times h_2
+			\end{split}\right.\iff \text{ exists } a,b\in G \text{ such that } 
+			\left\{\begin{split}
+				f_1g_2a &= g_1f_2a \\
+				g_1h_2b &= h_1g_2b
+			\end{split}\right. \\
+			\implies f_1h_2(g_1g_2ab) = h_1f_2(g_1g_2ab)
+			\implies f_1\times f_2 \sim h_1\times h_2
+		\end{split}\end{equation*}
+	\end{itemize} %}
+	$\calF G:=(G\times G)/\sim$を集合とし、$\calF G$の元を分数の記法を使って
+	$g_1/g_2:=(g_1\times g_2)/\sim$と書く。任意の$f_i,g_i,h_i,k_i\in G$
+	に対して次の式が成り立てば（ノート\ref{note:コンパチ条件} ）、
+	\begin{equation}\label{eq:分数化のコンパチ条件}\begin{split}
+		\left\{\begin{split}
+			f_1\times f_2 &\sim g_1\times g_2 \\
+			h_1\times h_2 &\sim k_1\times k_2
+		\end{split}\right.
+		\implies \frac{f_1}{f_2}\frac{h_1}{h_2} = \frac{g_1}{g_2}\frac{k_1}{k_2}
+		\quad\text{for all } f_i,g_i,h_i,k_i\in G
+	\end{split}\end{equation}
+	$G\times G$の積$m_\myspace$の構造が$\calF G$にそのまま移されて、
+	$(\calF G,m_\myspace,1/1)$が可換モノイドとなる。次の式から、
+	この条件が成り立つことわかり、
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			f_1\times f_2 &\sim g_1\times g_2 \\
+			h_1\times h_2 &\sim k_1\times k_2
+		\end{split}\right. &\iff \exists\, a,b\in G \text{ s.t. } 
+		\left\{\begin{split}
+			f_1g_2a &= g_1f_2a \\
+			h_1k_2b &= k_1h_2b
+		\end{split}\right. \\
+		&\implies (f_1h_1)(g_2k_2)(ab) = (g_1k_1)(f_2h_2)(ab) \\
+		&\implies \frac{f_1h_1}{f_2h_2} = \frac{g_1k_1}{g_2k_2}
+		\quad\text{for all } f_i,g_i,h_i,k_i\in G
+	\end{split}\end{equation*}
+	$(\calF G,m_\myspace,1/1)$が可換モノイドとなることがわかる。
+	さらに、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\frac{g_1}{g_2}\frac{g_2}{g_1} = \frac{1}{1}
+		\quad\text{for all } g_1,g_2\in G
+	\end{split}\end{equation*}
+	$(\calF G,m_\myspace,1/1)$は群となることがわかる
+	（ノート\ref{note:零元を持つモノイド}）。
+
+	$\cat{CMon}$を可換モノイドの集まりのつくる圏、$\cat{Ab}$を可換群の集まりの
+	つくる圏とし、関手$\calF:\cat{CMon}\to\cat{Ab}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			G \ar[r]^\calF \ar[d]^f & \calF G \ar[d]^{\calF f} \\
+			H \ar[r]^\calF & \calF H \\
+		} \quad\text{for all } \xymatrix{
+			G \ar[d]^f \\ H
+		}\in \cat{CMon}
+	\end{split}\end{equation*}
+	ここで、任意のモノイド準同型$f:G\to H$に対して
+	$\calF f:\calF G\to\calF H$は次のように定義する。
+	\begin{alignat*}{2}
+		(\calF f)\frac{g_1}{g_2} &:= \frac{fg_1}{fg_2}
+		&\quad&\text{for all } g_1,g_2\in G \\
+		(\calF f)\plr{\frac{g_1}{g_2}\frac{g_1'}{g_2'}} 
+		&:= \frac{fg_1}{fg_2}\frac{fg_1'}{fg_2'}
+		&\quad&\text{for all } g_1,g_2,g_1',g_2'\in G
+	\end{alignat*}
+	任意のモノイド準同型$f:G\to H$に対して$\calF f$は群準同型
+	$\calF G\to\calF H$となるので、$\calF$は関手になっている。
+
+	$\calU:\cat{Ab}\to\cat{CMon}$を忘却関手とし、$\cat{CMon}$の射の族
+	$\eta$を次のように定義する（命題
+	\ref{prop:分数化の単位とキャンセル可能性}）。
+	\begin{equation*}\begin{split}
+		\eta G: G \to \calU\calF G := g \mapsto \frac{g}{1}
+		\quad\text{for all } G\in\cat{CMon}
+	\end{split}\end{equation*}
+	すると、次の命題が成り立つ。
+	
+	\begin{proposition}[モノイド分数化の普遍性]
+	\label{prop:モノイド分数化の普遍性} %{
+	任意の$A\in\obj\cat{Ab}$とモノイド準同型$f:G\to\calU A$に対して
+	次の図を可換にする群準同型$f_*:\calF G\to A$が存在して唯一つ定まる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			G \ar[r]^{\eta G} \ar[rd]_f & \calU\calF G \ar@{.>}[d]^{\calU f_*} \\
+			& \calU A
+		} \xymatrix{
+			\calF G \ar@{.>}[d]^{f_*} \\ A
+		} \quad\text{unique $f_*$ for all } \xymatrix{
+			G\ar[d]^f \\ \calU A
+		} \in\cat{CMon}
+	\end{split}\end{equation*}%\EOP
+	\end{proposition} %prop:モノイド分数化の普遍性}
+	\begin{proof} %{
+		$f_*:\calF G\to A$を次のように定義すれば可換図を満たす。
+		\begin{equation*}\begin{split}
+			f_*\frac{g_1}{g_2} := (fg_1)(fg_2)^{-1}
+			\quad\text{for all } g_1,g_2\in G
+		\end{split}\end{equation*}
+		逆に、$e:\calF G\to A$が可換図を満たせば、次の式が成り立つが、
+		\begin{equation*}\begin{split}
+			e\frac{g}{1} = fg = f_*\frac{g}{1} \quad\text{for all } g\in G
+		\end{split}\end{equation*}
+		群準同型の定義を表す次の式より、
+		\begin{equation*}\begin{split}
+			1 = e\frac{g}{g} = \plr{e\frac{g}{1}}\plr{e\frac{1}{g}}
+			\implies e\frac{1}{g} = \plr{e\frac{g}{1}}^{-1}
+			\quad\text{for all } g\in G
+		\end{split}\end{equation*}
+		$e=f_*$となることがわかり、可換図を満たす群準同型は$f_*$に限られることが
+		わかる。
+	\end{proof} %}
+	この対応関係$f\mapsto f_*$を写像の族$\psi_{G,A}$とすると、
+	$\psi_{G,A}:\cat{CMon}(G,\calU A)\xto{1:1}\cat{Ab}(\calF G,A)$と書ける。
+	また、モノイド準同型の族$\phi_{G,A}:\cat{Ab}(\calF G,A)
+	\to\cat{CMon}(G,\calU A)$を、写像の合成により、次のように定義すると、
+	\begin{equation}\label{eq:分数化の単位}\begin{split}
+		\xymatrix{
+			G \ar[r]^{\eta G} \ar@{.>}[rd]_{\phi_{G,A}f} 
+			& \calU\calF G \ar[d]^{\calU f} \\
+			& \calU A
+		} \quad\text{for all } \xymatrix{
+			\calF G\ar[d]^f \\ A
+		} \in\cat{Ab}
+	\end{split}\end{equation}
+	$\psi_{G,A}\phi_{G,A}=\id\in\cat{Ab}(A,A)$かつ
+	$\phi_{G,A}\psi_{G,A}=\id\in\cat{CMon}(G,G)$となるから、
+	集合同型$\phi_{G,A}:\cat{CMon}(G,\calU A)\simeq\cat{Ab}(\calF G,A)$
+	が成り立つ。
+	
+	$\phi_{G,\calF G}1_{\calF G}=\eta G$が成り立つことが次の可換図で示される。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			G \ar[r]^{\eta G} \ar@{.>}[rd]_{\eta G} 
+			& \calU\calF G \ar[d]^{\calU 1_{\calF G}=1_{\calU\calF G}} \\
+			& \calU\calF G 
+		} \xymatrix{
+			\calF G \ar[d]^{1_{\calF G}} \\ \calF G
+		} \quad\text{for all } G\in\obj\cat{CMod}
+	\end{split}\end{equation*}
+	そして、$\eta$は$\cat{CMon}$の単位関手から$\calU\calF$への
+	自然変換$\eta:1_{\cat{CMon}}\xto{\bullet}\calU\calF$とみることができる。
+	\begin{equation}\label{eq:分数化の単位は自然変換}\begin{split}
+		\xymatrix{
+			G \ar[r]^{\eta G} \ar[d]^f & \calU\calF G \ar[d]^{\calU\calF f} \\
+			H \ar[r]^{\eta H} & \calU\calF H
+		} \quad\text{for all } \xymatrix{
+			G \ar[d]^f \\ H
+		} \in\cat{CMod}
+	\end{split}\end{equation}
+
+	$\eta$の双対を考えよう。群準同型の族$\epsilon$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\epsilon A:=\phi^{-1}_{\calU A,A}1_{\calU A}\in\cat{Ab}(\calF\calU A,A)
+		\quad\text{for all } A\in\obj\cat{Ab}
+	\end{split}\end{equation*}
+	$\phi$の定義\eqref{eq:分数化の単位}から、次の可換図が成り立ち、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\calU A \ar[r]^{\eta\calU A} \ar[rd]_{\phi_{\calU A,A}f} 
+			& \calU\calF\calU A \ar[d]^{\calU f} \\
+			& \calU A
+		} \quad\text{for all } \xymatrix{
+			\calF\calU A\ar[d]^f \\ A
+		} \in\cat{Ab}
+	\end{split}\end{equation*}
+	$\epsilon$は次のようになることがわかる。
+	\begin{equation*}\begin{split}
+		(\epsilon A)\frac{a_1}{a_2} = a_1a_2^{-1} 
+		\quad\text{for all } a_1,a_2\in A\in\obj\cat{Ab}
+	\end{split}\end{equation*}
+	そして、$\phi$の定義\eqref{eq:分数化の単位}に対応する可換図は
+	次のようになり、
+	\begin{equation}\label{eq:分数化の余単位}\begin{split}
+		\xymatrix{
+			A 
+			& \calF\calU A \ar[l]_{\epsilon\calU A} \\
+			& \calF G \ar[u]_{\calF f} \ar[lu]^{\phi_{G,\calU A}^{-1} f}
+		} \quad\text{for all } \xymatrix{
+			\calU A \\ G \ar[u]_f
+		} \in\cat{CMon}
+	\end{split}\end{equation}
+	$\eta$の自然変換\eqref{eq:分数化の単位は自然変換}に対応する可換図は
+	次のようになり、
+	\begin{equation}\label{eq:分数化の余単位は自然変換}\begin{split}
+		\xymatrix{
+			A & \calF\calU A \ar[l]_{\epsilon A} \\
+			B \ar[u]_f & \calF\calU B \ar[l]_{\epsilon B} \ar[u]_{\calF\calU f}
+		} \quad\text{for all } \xymatrix{
+			A \\ B \ar[u]_f
+		} \in\cat{Ab}
+	\end{split}\end{equation}
+	$\epsilon$は自然変換$\epsilon:\calF\calU\xto{\bullet}1_{\cat{Ab}}$とみる
+	ことができることがわかる。
+
+	写像の族$\phi$は何を表しているかを考えよう。次の可換図から、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\cat{Ab}(\calF G,A) \ar[r]^{\phi_{G,A}}_\simeq \ar[d]^{g-(\calF f)} 
+			& \cat{CMon}(G,\calU A) \ar[d]^{(\calU g)-f} \\
+			\cat{Ab}(\calF H,B) \ar[r]^{\phi_{H,B}}_\simeq
+			& \cat{CMon}(H,\calU B)
+		} \quad\text{for all } \xymatrix{
+			G\times A \ar[d]^{f^\opp\times g} \\ H\times B
+		} \in \cat{CMon}^\opp\times\cat{Ab}
+	\end{split}\end{equation*}
+	$\phi$は次の二つの関手
+	\begin{equation*}\begin{split}
+		\cat{CMon}(-,\calU-),\cat{Ab}(\calF-,-) 
+		: \cat{CMon}^\opp\times\cat{Ab}\to\cat{Set} \\
+	\end{split}\end{equation*}
+	の間の自然同型$\phi:\cat{Ab}(\calF-,-)
+	\overset{\bullet}{\simeq}\cat{CMon}(-,\calU-)$
+	になっていることがわかる。
+
+	$\cat{CMod}$内で考えてみよう。合成によって関手
+	$\calT:=\calU\calF:\cat{CMod}\to\cat{CMod}$とおくと、
+	$\eta:1_\cat{CMod}\xto{\bullet}\calT$と書ける。また、
+	$\epsilon$の自然性を表す可換図\ref{eq:分数化の余単位は自然変換}から、
+	次の可換図が成り立ち、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\calT G & \calT^2 G \ar[l]_{\calU\epsilon\calF G} \\
+			\calT H \ar[u]_{\calT f} & \calT^2 H \ar[l]_{\calU\epsilon\calF H} 
+			\ar[u]_{\calT f}
+		} \quad\text{for all } \xymatrix{
+			G \\ H \ar[u]_f
+		} \in\cat{CMon}
+	\end{split}\end{equation*}
+	自然変換$\mu:=\calU\epsilon\calF:\calT^2\xto{\bullet}\calT$が得られる。
+	同様にして、$\cat{Ab}$内で考えてみよう。合成によって関手
+	$\calS:=\calF\calU:\cat{Ab}\to\cat{Ab}$とおくと、
+	$\epsilon:\calT\xto{\bullet}1_\cat{Ab}$と書ける。また、
+	$\eta$の自然性を表す可換図\ref{eq:分数化の単位は自然変換}から、
+	次の可換図が成り立ち、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\calS A \ar[r]^{\calF\eta\calU A} \ar[d]^{\calS f} 
+			& \calS^2 A \ar[d]^{\calS^2 f} \\
+			\calS B \ar[r]^{\calF\eta\calU B} & \calS^2 B
+		} \quad\text{for all } \xymatrix{
+			A \ar[d]^f \\ B
+		} \in\cat{Ab}
+	\end{split}\end{equation*}
+	自然変換$\delta:=\calF\eta\calU:\calS\xto{\bullet}\calS^2$が得られる。
+	以上をまとめると、次のモナドと余モナドになる。
+	\begin{equation*}\begin{array}{cc}
+		\text{monad} & \text{comonad} \\
+		\begin{array}{rcrl}
+			\calT := \calU\calF &:& \cat{CMod} &\to \cat{CMod} \\
+			\eta &:& 1_\cat{CMod} &\xto{\bullet} \calT \\
+			\mu := \calU\,\epsilon\,\calF &:& \calT^2 &\xto{\bullet} \calT \\
+		\end{array} & \begin{array}{rcrl}
+			\calS := \calF\calU &:& \cat{Ab} &\to \cat{Ab} \\
+			\epsilon &:& \calS &\xto{\bullet} 1_\cat{Ab} \\
+			\delta := \calF\,\eta\,\calU &:& \calS &\xto{\bullet} \calS^2 \\
+		\end{array}
+	\end{array}\end{equation*}
+	モナドは代数の積、余モナドは代数の余積の定義と同じ形をしているので、
+	覚えやすい。
+
+	\begin{note}[コンパチ条件]\label{note:コンパチ条件} %{
+	コンパチ条件\eqref{eq:分数化のコンパチ条件}は畳み込みで考えると
+	覚えやすい。$G=(G,m)$を半群、$X$を集合とし、$\onto$写像$\pi:G\xto{\onto}X$
+	が与えられたとする。写像$\sigma:X\to G$を$\pi\sigma=\id_X$となる写像
+	とする。すると、次の畳み込みにより、$X$に積$m_\sigma$を定義することが
+	できる。
+	\begin{equation*}\begin{split}
+		m_\sigma := \pi m(\sigma\times\sigma)
+	\end{split}\end{equation*}
+	写像$\tau:X\to G$を$\pi\tau=\id_X$となるもう一つの写像とする。
+	$\sigma$の場合と同様に$X$の積$m_\tau$を定義すると、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		m_\sigma = m_\tau \iff \pi m(\sigma\times\sigma) = \pi m(\tau\times\tau)
+	\end{split}\end{equation*}
+	したがって、次のコンパチ条件が成り立つならば、
+	\begin{equation}\label{eq:半群のコンパチ条件}\begin{split}
+		\sigma,\tau:X\to G \text{ with } \pi\sigma = \pi\tau = \id_X
+		\implies \pi m(\sigma\times\sigma) = \pi m(\tau\times\tau)
+	\end{split}\end{equation}
+	$X$の積$\pi m(\sigma\times\sigma)$は切断のとり方に依らず、射影$\pi$のみに
+	よって定まることがわかる。特に、$X$が$G$の剰余類$X=G/\sim$の場合には、
+	$\sigma$は剰余類の代表元を定めることになり、
+	条件\eqref{eq:半群のコンパチ条件}は、代表元のとり方に依らず
+	に畳み込みによって$X$に積を定めるための必要十分条件となる。\EOP
+	\end{note} %note:コンパチ条件}
+
+	\begin{note}[分数化の同値関係とキャンセル可能性]
+	\label{note:分数化の同値関係とキャンセル可能性} %{
+	分数化の同値関係$\sim$の定義\eqref{eq:分数化の同値関係の定義}を、
+	整数の引き算や有理数の割り算の場合と同様に、次のように単純化すると、
+	\begin{equation*}\begin{split}
+		g_1\times g_2 \sim' h_1\times h_2 \xiff{\dfn} g_1h_2 = h_1g_2
+		\quad\text{for all } g_1,g_2,h_1,h_2\in G
+	\end{split}\end{equation*}
+	推移性は次のようになり、
+	\begin{equation*}\begin{split}
+		\left\{\begin{split}
+			f_1\times f_2 &\sim' g_1\times g_2 \\
+			g_1\times g_2 &\sim' h_1\times h_2
+		\end{split}\right.\iff \left\{\begin{split}
+			f_1g_2 &= g_1f_2 \\
+			g_1h_2 &= h_1g_2
+		\end{split}\right. \implies f_1h_2(g_1g_2) = h_1f_2(g_1g_2) \\
+		\quad\text{for all } f_i,g_i,h_i\in G
+	\end{split}\end{equation*}
+	$G$がキャンセル可能ならば推移性が成り立つが、キャンセル可能でない場合
+	には、多分、推移性は成り立たない。
+	$\sim$の定義\eqref{eq:分数化の同値関係の定義}にあるexists...という
+	部分はキャンセル可能でない可換モノイドにも適用するための文言となっている。
+	\EOP
+	\end{note} %note:分数化の同値関係とキャンセル可能性}
+
+	\begin{proposition}[分数化の単位とキャンセル可能性]
+	\label{prop:分数化の単位とキャンセル可能性} %{
+		次の事柄は同値である。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{item:キャンセル可能} $G$がキャンセル可能である。
+			\item\label{item:一対一} $\eta$が$1:1$である。
+		\end{enumerate} %}
+	\end{proposition} %prop:分数化の単位とキャンセル可能性}
+	\begin{proof} %{
+		\ref{item:キャンセル可能}$\implies$\ref{item:一対一}は次の式からわかる。
+		\begin{equation*}\begin{split}
+			\frac{g}{1} = \frac{h}{1} 
+			&\iff \exists\, k\in G \text{ s.t. } gk = hk \\
+			&\implies g = h \quad\because\text{ $G$ is cancellative} \\
+			&\quad\text{for all } g,h\in G
+		\end{split}\end{equation*}
+		逆に、\ref{item:一対一}$\implies$\ref{item:キャンセル可能}は次の式から
+		わかる。
+		\begin{equation*}\begin{split}
+			\frac{gk}{1} = \frac{hk}{1}
+			& \implies gk = hk \quad\because\text{ $\eta$ is $1:1$} \\
+			\frac{gk}{1} = \frac{hk}{1}
+			& \implies \frac{g}{1} = \frac{h}{1} 
+			\quad\because\text{ $\calF G$ is a group} \\
+			& \implies g = h \quad\because\text{ $\eta$ is $1:1$} \\
+			&\quad\text{for all } g,h,k\in G
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	\begin{note}[零元を持つモノイド]\label{note:零元を持つモノイド} %{
+	可換モノイド$G$が零元$0\in G$を持つ場合を考えよう。
+	\begin{equation*}\begin{split}
+		0g = 0 \quad\text{for all } g\in G
+	\end{split}\end{equation*}
+	この場合は、次の式より、
+	\begin{equation*}\begin{split}
+		g_1h_20 = 0 = h_1g_20 \implies g_1\times g_2 \sim h_1\times h_2 
+		\quad\text{for all } g_1,g_2,h_1,h_2\in G
+	\end{split}\end{equation*}
+	$\calF G$は元が一つだけの自明な群となる。したがって、整数から有理数を
+	作る場合と異なり、零元での割り算は定義できる。ただし、可換モノイドが
+	零元を持つ場合は、その分数群は自明な群となってしまう。
+	このときは、命題\eqref{prop:モノイド分数化の普遍性}から、$G$から
+	可換群$A$へのモノイド準同型は自明な準同型に限られることがわかる。
+	\begin{equation*}\begin{split}
+		\text{$G$が零元を持つ}
+		\implies \cat{CMon}(G,\calU A) 
+		= \set{f:G\to\calU A} \quad\text{where } \\
+		fg = 1 \quad\text{for all } g\in G
+	\end{split}\end{equation*}
+	例えば、自然数の乗法をモノイド$\sizen^\times:=(\sizen,m_\myspace,1)$を
+	考えると、$0\in\sizen^\times$が零元となり、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\sizen^\times$から$\calU\calF\sizen_+^\times$へのモノイド準同型は
+		$\sizen^\times$のすべての元を$1$に移す定数写像のみなり、
+		\item $\sizen^\times$から可換群$A$へのモノイド準同型も$\sizen^\times$
+		のすべての元を$1$に移す定数写像のみになる。
+	\end{itemize} %}
+	$G$が零元を持つ場合は$G$がキャンセル可能でない極端な例になっている
+	（命題\ref{prop:分数化の単位とキャンセル可能性}）。\EOP
+	\end{note} %note:零元を持つモノイド}
+
+	\begin{definition}[キャンセル可能性]\label{def:キャンセル可能性} %{
+		$G$を可換とは限らない半群とする。$G$のキャンセル可能性を次のように
+		定義する。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[左キャンセル可能] 任意の$g\in G$に対して写像$g-:G\to G$が$1:1$
+			となるとき、$G$を左キャンセル可能という。
+			\begin{equation*}\begin{split}
+				gh=gh'\implies h=h \quad\text{for all } g,h,h'\in G
+			\end{split}\end{equation*}
+			\item[見キャンセル可能] 任意の$g\in G$に対して写像$-g:G\to G$が$1:1$
+			となるとき、$G$を右キャンセル可能という。
+			\begin{equation*}\begin{split}
+				hg=h'g\implies h=h \quad\text{for all } g,h,h'\in G
+			\end{split}\end{equation*}
+		\end{description} %}
+		$G$が左キャンセル可能かつ右キャンセル可能のとき、$G$は両側キャンセル可能
+		または単にキャンセル可能という。\EOP
+	\end{definition} %def:キャンセル可能性}
+
+	\begin{proposition}[キャンセル可能性と群]
+	\label{prop:キャンセル可能性と群} %{
+		$G$を可換とは限らないモノイドとする。$G$有限かつ左キャンセル可能ならば、
+		$G$は群となる。
+	\end{proposition} %prop:キャンセル可能性と群}
+	\begin{proof} %{
+		任意の$g\neq1\in G$に対して部分モノイド$g^*:=\set{g^n\bou n\in\sizen}$を
+		考える。$G$が有限だから$g^*$も有限になり、ある$i<j\in\sizen$が存在して、
+		$g^i=g^j$となる。したがって、$G$が左キャンセル可能だから、次の式が
+		成り立ち、
+		\begin{equation*}\begin{split}
+			g^i1 = g^i = g^j = g^ig^{j-i} \implies g^{j-i}=1
+		\end{split}\end{equation*}
+		$i<j$だから、次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			g^{j-i}=1 \iff g^{j-i-1}g = 1\iff g^{j-i-1} = g^{-1}
+		\end{split}\end{equation*}
+		$g$が逆元を持つことがわかる。
+	\end{proof} %}
+%s3:分数化}
+\subsubsection{Lie代数とその普遍包絡環}\label{s3:Lie代数とその普遍包絡環} %{
+	\cite{maclane.work}p.15の問題1
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Lie群とLie代数の関係を関手として見よ。
+	\end{itemize} %}
+	関連した次の問題を考える。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Lie代数とその普遍包絡環の関係を関手として見よ。
+	\end{itemize} %}
+	calc/lie-algebra.pdfを見よ。
+%s3:Lie代数とその普遍包絡環}
+%s2:関手}
+\subsection{自然変換}\label{s2:自然変換} %{
+	\begin{definition}[自然変換]\label{def:自然変換} %{
+		$F,G:A\to B$を関手とする。関数$\phi:\obj A\to\arr B$
+		\begin{equation*}\begin{split}
+			Fa\xto{\phi a} Ga\in B \quad\text{for all } a\in\obj A
+		\end{split}\end{equation*}
+		が次の図を可換にするとき、
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				Fa \ar[r]^{\phi a} \ar[d]^{Ff} & Ga \ar[d]^{Gf} \\
+				Fa' \ar[r]^{\phi a'} & Ga' \\
+			} \quad\text{for all } \xymatrix{
+				a \ar[d]^f \\ a'
+			} \in A
+		\end{split}\end{equation*}
+		$\phi$を$F$から$G$への自然変換といい、$\phi:F\xto{\bullet}G$と書く。
+		特に、すべての対象$a\in\obj A$で同型射$\phi a:Fa\simeq Ga$となるとき、
+		$\phi$を$F$から$G$への自然同型といい、$\phi:F\overset{\bullet}{\simeq}G$
+		と書く。また、自然変換$F\xto{\bullet}G$全体のつくる集まりを
+		$\op{Nat}(F,G)$と書く。\EOP
+	\end{definition} %def:自然変換}
+%s2:自然変換}
+%s1:圏の定義の基礎}
+\section{随伴}\label{s1:随伴} %{
+\subsection{随伴の定義}\label{s2:随伴の定義} %{
+	\begin{definition}[随伴]\label{def:随伴} %{
+		関手$F:X\xtofrom{F}{G}A$が与えられると、次の関手が定義できる。
+		\begin{equation*}\begin{split}
+			X(-,G-),A(F-,-):X^\opp\times A\to\cat{Set}
+		\end{split}\end{equation*}
+		自然同型$\phi:A(F-,-)\overset{\bullet}{\simeq}X(-,G-)$が存在するとき、
+		組$(F,G,\phi)$を$X$から$A$への随伴といい、$(F,G,\phi):X\to A$と書く。
+		\EOP
+	\end{definition} %def:随伴}
+
+	この定義での$\phi$が自然同型になることは、次の可換図で表される。
+	\begin{equation}\label{eq:随伴の自然変換}\begin{split}
+		\xymatrix{
+			A(Fx,a) \ar[r]^{\phi_{x,a}}_\simeq \ar[d]^{g-(Ff)} 
+			& X(x,Ga) \ar[d]^{(Gg)-f} \\
+			A(Fx',a') \ar[r]^{\phi_{x',a'}}_\simeq & X(x',Ga')
+		} \quad\text{for all } \xymatrix{
+			x\times a \ar[d]^{f^\opp\times g} \\ x'\times a'
+		} \in X^\opp\times A
+	\end{split}\end{equation}
+	式で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		\phi_{x',a'}\gplr{gh(Ff)} = (Gg)(\phi_{x,a}h)f
+		\quad\text{for all } Fx'\xto{Ff}Fx\xto{h}a\xto{g}a' \in A
+	\end{split}\end{equation*}
+
+	関数$\eta:\obj X\to\arr X$と$\epsilon:\obj A\to\arr A$を次のように
+	定義すると、
+	\begin{equation}\label{eq:単位と余単位の定義}\begin{array}{rclcl}
+		\eta x &:=& \phi_{x,Fx}1_{Fx} \in X(x,GFx)
+		&\quad&\text{for all } x\in\obj X \\
+		\epsilon a &:=& \phi_{Ga,a}^{-1}1_{Ga} \in A(FGa,a)
+		&\quad&\text{for all } a\in\obj A \\
+	\end{array}\end{equation}
+	可換図\eqref{eq:随伴の自然変換}から、次の可換図が成り立ち、
+	\begin{equation*}\begin{array}{ccc}
+		\xymatrix{
+			x\times Fx \ar[d]^{1_x^\opp\times g} \\ x\times a
+		} & \xymatrix{
+			A(Fx,Fx) \ar[r]^{\phi_{x,Fx}}_\simeq \ar[d]^{g-(F1_x)} 
+			& X(x,GFx) \ar[d]^{(Gg)-1_x} \\
+			A(Fx,a) \ar[r]^{\phi_{x,a}}_\simeq & X(x,Ga)
+		} & \xymatrix@C=2ex{
+			1_{Fx} \ar@{|->}[r] \ar@{|->}[d] & \eta x \ar@{|->}[d] \\
+			g \ar@{|->}[r] & \phi_{x.a}g = (Gg)(\eta x)
+		} \\
+		\xymatrix{
+			Ga\times a \ar[d]^{f^\opp\times 1_a} \\ x\times a
+		} & \xymatrix{
+			A(FGa,a) \ar@{<-}[r]^{\phi_{Ga,a}^{-1}}_\simeq \ar[d]^{1_a-(Ff)} 
+			& X(Ga,Ga) \ar[d]^{(G1_a)-f} \\
+			A(Fx,a) \ar@{<-}[r]^{\phi_{x,a}^{-1}}_\simeq & X(x,Ga)
+		} & \xymatrix@C=2ex{
+			\epsilon a \ar@{<-|}[r] \ar@{|->}[d] & 1_{Ga} \ar@{|->}[d] \\
+			\phi_{x.a}^{-1}f = (\epsilon a)(Ff) \ar@{<-|}[r] & f
+		} \\
+	\end{array}\end{equation*}
+	$\eta$と$\epsilon$から逆に$\phi$が次のように定まる。
+	\begin{equation}\label{eq:単位と余単位から自然同型}\begin{array}{rclcl}
+		\phi_{x.a}g &=& (Gg)(\eta x)
+		&\quad&\text{for all } Fx\xto{g}a\in A \\
+		\phi_{x.a}^{-1}f &=& (\epsilon a)(Ff)
+		&\quad&\text{for all } x\xto{f}Ga\in X \\
+	\end{array}\end{equation}
+
+	\begin{definition}[随伴の単位と余単位]\label{def:随伴の単位と余単位} %{
+		$(F,G,\phi):X\to A$を随伴とする。
+		関数$\eta:\obj X\to\arr X$と$\epsilon:\obj A\to\arr A$を次のように
+		定義する。
+		\begin{equation*}\begin{array}{rclcl}
+			\eta x &:=& \phi_{x,Fx}1_{Fx} \in X(x,GFx)
+			&\quad&\text{for all } x\in\obj X \\
+			\epsilon a &:=& \phi_{Ga,a}^{-1}1_{Ga} \in A(FGa,a)
+			&\quad&\text{for all } a\in\obj A \\
+		\end{array}\end{equation*}
+		$\eta$を随伴の単位、$\epsilon$を随伴の余単位という。\EOP
+	\end{definition} %def:随伴の単位と余単位}
+
+\subsubsection{自然同型から単位と余単位}
+\label{s3:自然同型から単位と余単位} %{
+	可換図\eqref{eq:随伴の自然変換}から次の可換図が得られ、
+	\begin{equation*}\begin{array}{ccc}
+		\xymatrix{
+			x\times Fx \ar[d]^{1_x^\opp\times Ff} \\ x\times Fx' \\ 
+			x'\times Fx' \ar[u]_{f^\opp\times 1_{Fx'}}
+		} & \xymatrix{
+			A(Fx,Fx) \ar[r]^{\phi_{x,Fx}}_\simeq \ar[d]^{(Ff)-} 
+			& X(x,GFx) \ar[d]^{(GFf)-} \\
+			A(Fx,GFx') \ar[r]^{\phi_{x,Fx'}}_\simeq & X(x,GFx') \\
+			A(Fx',Fx') \ar[r]^{\phi_{x',Fx'}}_\simeq \ar[u]_{-(Ff)} 
+			& X(x',GFx') \ar[u]^{-f} \\
+		} & \xymatrix@C=2ex{
+			1_{Fx} \ar@{|->}[r] \ar@{|->}[d] & \eta_x \ar@{|->}[d] \\
+			Ff \ar@{|->}[r] & \phi_{x,Fx'}Ff = (GFf)(\eta x) = (\eta x')f \\
+			1_{Fx'} \ar@{|->}[r] \ar@{|->}[u] & \eta_{x'} \ar@{|->}[u] \\
+		} \\
+		\xymatrix{
+			Ga\times a \ar[d]^{(Gg)^\opp\times 1_a} \\ Ga'\times a \\
+			Ga'\times a' \ar[u]_{1_{Ga'}\times g}
+		} & \xymatrix{
+			A(FGa,a) \ar@{<-}[r]^{\phi_{Ga,a}^{-1}}_\simeq \ar[d]^{-(FGg)} 
+			& X(Ga,Ga) \ar[d]^{-(Gg)} \\
+			A(FGa',a) \ar@{<-}[r]^{\phi_{Ga',a}^{-1}}_\simeq & X(Ga',Ga) \\
+			A(FGa',a') \ar@{<-}[r]^{\phi_{Ga',a'}^{-1}}_\simeq \ar[u]_{g-} 
+			& X(Ga',Ga') \ar[u]_{(Gg)-} \\
+		} & \xymatrix@C=2ex{
+			\epsilon a \ar@{<-|}[r] \ar@{|->}[d] & 1_{Ga} \ar@{|->}[d] \\
+			\phi_{Ga',a}^{-1}Gg = (\epsilon a)(FGg) = g(\epsilon a') \ar@{<-|}[r]
+			& Gg \\
+			\epsilon a' \ar@{<-|}[r] \ar@{|->}[u] & 1_{Ga} \ar@{|->}[u] \\
+		} \\
+	\end{array}\end{equation*}
+	$\eta$と$\epsilon$はそれぞれ次の自然変換となっていることがわかる。
+	\begin{equation}\label{eq:単位と余単位の自然変換}\begin{split}
+		\eta:1_X\xto{\bullet}GF,\quad \epsilon:FG\xto{\bullet}1_A
+	\end{split}\end{equation}
+	この二つの自然変換に関手を作用させて連結すると、次の可換図が得られ、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			Ga \ar[r]^{\eta Ga} \ar[d]^{Gg} 
+			& GFGa \ar[d]^{GFGg} \ar[r]^{G\epsilon a} & Ga \ar[d]^{Gg} \\
+			Ga' \ar[r]^{\eta Ga'} & GFGa' \ar[r]^{G\epsilon a'} & Ga'\\
+		},\quad \xymatrix{
+			Fx \ar@{<-}[r]^{\epsilon Fx} \ar@{<-}[d]^{Ff} 
+			& FGFx \ar@{<-}[d]^{FGFf} \ar@{<-}[r]^{F\eta x} 
+			& Fx \ar@{<-}[d]^{Ff} \\
+			Fx' \ar@{<-}[r]^{\epsilon Fx'} & FGFx' \ar@{<-}[r]^{F\eta x'} 
+			& Fx' \\
+		}
+	\end{split}\end{equation*}
+	次の自然変換の合成が成り立つことがわかる。
+	\begin{equation}\label{eq:単位と余単位の合成}\begin{split}
+		\xymatrix{
+			G\ar[r]^{\eta G} \ar[rd]_{1_{GA}} & GFG\ar[d]^{G\epsilon} \\
+			& G
+		},\quad \xymatrix{
+			FGF \ar[d]_{\epsilon F} & F\ar[l]_{F\eta} \ar[ld]^{1_{FX}} \\
+			F
+		}
+	\end{split}\end{equation}
+%s3:自然同型から単位と余単位}
+\subsubsection{単位の普遍性から自然同型}
+\label{s3:単位の普遍性から自然同型} %{
+	\eqref{eq:単位と余単位から自然同型}の単位の方をを可換図で書くと
+	次のようになる。
+	\begin{equation*}\begin{array}{cccc}
+		\xymatrix{
+			x \ar[r]^{\eta x} \ar[rd]_{\phi_{x,a}g} & GFx \ar[d]^{Gg} \\
+			& Ga
+		} \text{ for all } & \xymatrix{
+			Fx \ar[d]^g \\ a
+		}\in A
+	\end{array}\end{equation*}
+	逆に、この可換図を満たすような自然変換$\eta:1_X\xto{\bullet}GF$が
+	与えられると、自然同型$\phi:A(F-,-)\overset{\bullet}{\simeq}X(-,G-)$
+	が得られることを示そう。
+
+	関手$X\xtofrom{F}{G}A$と次の可換図を満たす関数
+	$\eta:\obj X\to\obj FGX$が与えられたとする。
+	\begin{equation}\label{単位の普遍性}\begin{split}
+		\xymatrix{
+			x \ar[r]^{\eta x} \ar[rd]_f & GFx \ar@{.>}[d]^{Gf_*} \\
+			& Ga
+		} \text{ exists uniquely }\xymatrix{
+			Fx \ar@{.>}[d]^{f_*} \\ a
+		}\in A \text{ for all }\xymatrix{
+			x \ar[d]^f \\ Ga
+		}\in X
+	\end{split}\end{equation}
+	このとき、次の可換図が成り立ち、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			x \ar[r]^{\eta x} \ar[d]_f & GFx \ar[d]^{GFf} \\
+			x' \ar[r]^{\eta x'} & GFx'
+		}\text{ for all } \xymatrix{
+			x \ar[d]^f \\ x'
+		}\in X
+	\end{split}\end{equation*}
+	$\eta$は自然変換$\eta:I_X\xto{\bullet}GF$となる。また、関数
+	$\phi:\obj X\times\obj A\to\arr\cat{Set}$を次のように定義すると、
+	\begin{equation}\label{eq:単位から自然同型}\begin{split}
+		\phi_{x,a} : A(Fx, a) &\to X(a, Ga) \\
+		g &\mapsto (Gg)(\eta x) \quad\text{for all } Fx\xto{g}a\in A
+	\end{split}\end{equation}
+	集合同型$\phi_{x,a}:A(Fx,a)\simeq X(x,Ga)$が成り立つ。
+	そして、次の可換図から、
+	\begin{equation*}\begin{array}{ccccc}
+		&& -G && \eta:I_X\xto{\bullet}GF \\
+		\xymatrix{
+			Fx \ar[r]^h & a \ar[d]^g \\
+			Fx' \ar[r]^{h'} \ar[u]_{Ff} & a'
+		} &\implies& \xymatrix{
+			GFx \ar[r]^{Gh} & Ga \ar[d]^g \\
+			GFx' \ar[r]^{Gh'} \ar[u]_{GFf} & Ga'
+		} &\implies& \xymatrix{
+			x \ar[r]^{\eta x} & GFx \ar[r]^{Gh} & Ga \ar[d]^g \\
+			x \ar[r]^{\eta x'} \ar[u]_f & GFx' \ar[r]^{Gh'} \ar[u]_{GFf} & Ga'
+		}
+	\end{array}\end{equation*}
+	$\phi$の定義\eqref{eq:単位から自然同型}を使うと、自然変換
+	$\phi:A(F-,-)\xto{\bullet}X(-,G-)$示される。以上より、自然同型
+	$\phi:A(F-,-)\overset{\bullet}{\simeq}X(-,G-)$が成り立つことがわかる。
+%s3:単位の普遍性から自然同型}
+\subsubsection{単位と余単位から自然同型}
+\label{s3:単位と余単位から自然同型} %{
+	逆に、\eqref{eq:単位と余単位の自然変換}と\eqref{eq:単位と余単位の合成}
+	を満たす自然変換$\eta$と$\epsilon$が与えられると、自然変換$\phi$が求まる
+	ことを示そう。
+
+	関手$X\xtofrom{F}{G}A$と\eqref{eq:単位と余単位の自然変換}と
+	\eqref{eq:単位と余単位の合成}を満たす自然変換$\eta:1_X\xto{\bullet}GF$と
+	$\epsilon:1_A\xto{\bullet}FG$が与えられとする。
+	二つの関数$\phi,\psi:\obj X\times\obj A\to\cat{Set}$を次のように定義
+	する\eqref{eq:単位と余単位から自然同型}。
+	\begin{equation*}\begin{array}{rclcl}
+		\phi_{x.a}g &=& (Gg)(\eta x)
+		&\quad&\text{for all } Fx\xto{g}a\in A \\
+		\psi_{x.a}f &=& (\epsilon a)(Ff)
+		&\quad&\text{for all } x\xto{f}Ga\in X \\
+	\end{array}\end{equation*}
+	任意の$x'\xto{f}x\in X$と$Fx\xto{h}a\xto{g}a'\in A$に対して
+	次の可換図が成り立てば、$\phi$が自然変換となることが示されるが
+	\eqref{eq:随伴の自然変換}、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			A(Fx,a) \ar[r]^{\phi_{x,a}} \ar[d]^{g-(Ff)} 
+			& X(x,Ga) \ar[d]^{(Gg)-f} \\
+			A(Fx',a') \ar[r]^{\phi_{x',a'}} & X(x',Ga')
+		}\quad\xymatrix@C=2ex{
+			h \ar@{|->}[r] \ar@{|->}[d] & (Gh)(\eta x) \ar@{|->}[d] \\
+			gh(Ff) \ar@{|->}[r] & (Gg)(Gh)(GFf)(\eta x') \overset{?}{=}
+			(Gg)(Gh)(\eta x)f
+		}
+	\end{split}\end{equation*}
+	$\eta:1_X\xto{\bullet}GF$だから、$(GFf)(\eta x')=(\eta x)f$となり、
+	この可換図が成り立つことがわかる。また、任意の$x\xto{f}Ga\in X$に
+	対して次の式が成り立つ。
+	\begin{alignat*}{2}
+		\phi_{x,a}\psi_{x,a}f &= (G\epsilon a)(GFf)(\eta x) \\
+		&= (G\epsilon a)(\eta Ga)f &\quad&\text{// } \eta:1_X\xto{\bullet}GF \\
+		&= f &\quad&\text{// }\eqref{eq:単位と余単位の合成} %\\
+	\end{alignat*}
+	同様にして、$\psi_{x,a}\phi_{x,a}=1_x$が示されるから、$\phi$が双射になる
+	ことがわかる。以上より、$\phi$が自然同型になることがわかる。
+%s3:単位と余単位から自然同型}
+%s2:随伴の定義}
+\subsection{随伴の変換}\label{s2:随伴の変換} %{
+	二つの随伴を比較するための関手を定義する。
+
+	\begin{definition}[随伴の写像]\label{def:随伴の写像} %{
+		$(F^A,G^A,\eta^A,\epsilon^A):X\to A$と
+		$(F^B,G^B,\eta^B,\epsilon^B):Y\to B$を随伴とする。
+		関手$K:A\to B$と$L:X\to Y$が次の可換図と、
+		\begin{equation}\label{eq:随伴の写像の定義その一}\begin{split}
+			\xymatrix{
+				X \ar[r]^{F^A} \ar[d]^L & A \ar[d]^K \\
+				Y \ar[r]^{F^B} & B \\
+			},\quad \xymatrix{
+				X \ar@{<-}[r]^{G^A} \ar[d]^L & A \ar[d]^K \\
+				Y \ar@{<-}[r]^{G^B} & B \\
+			}
+		\end{split}\end{equation}
+		次の可換図を満たすとき、
+		\begin{equation}\label{eq:随伴の写像の定義その二}\begin{split}
+			\vcenter{\xymatrix@R=4ex{
+				A(F^Ax,a) \ar[r]^{\phi^A_{x,a}} \ar[d]^K & X(x,G^Aa) \ar[d]^L \\
+				B(KF^Ax,Ka) \ar@{=}[d] & Y(Lx,LG^Aa) \ar@{=}[d] \\
+				B(F^BLx,Ka) \ar[r]^{\phi^B_{Lx,Ka}} & Y(Lx,G^BKa) \\
+			}} \text{for all } \begin{cases}
+				x\in \obj X \\
+				a\in \obj A
+			\end{cases}
+		\end{split}\end{equation}
+		組$(K,L)$を$(F^A,G^A,\dots)$から$(F^B,G^B,\dots)$への随伴の写像という。
+		ここで、$C=A,B$として$\phi^C$を次のように定義した。
+		\begin{equation*}\begin{split}
+			\phi^C_{x,c} f = (G^Cf)(\eta^Cx)
+			\quad\text{for all } F^Cx\xto{f}c\in C
+		\end{split}\end{equation*}
+		\EOP
+	\end{definition} %def:随伴の写像}
+
+	次の命題は、単位と余単位を使っても随伴の写像を定義することができることを
+	示す。
+
+	\begin{proposition}[随伴の写像]\label{prop:随伴の写像} %{
+		\footnote{\cite{maclane.work} p.97 IV.7 Proposition 1}
+		$(F^A,G^A,\eta^A,\epsilon^A):X\to A$と
+		$(F^B,G^B,\eta^B,\epsilon^B):Y\to B$を随伴とする。
+		関手$K:A\to B$と$L:X\to Y$が可換図\eqref{eq:随伴の写像の定義その一}を
+		満たすとき、次の性質は同値である。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{item:随伴の写像} $(K,L)$は
+			可換図\eqref{eq:随伴の写像の定義その二}を満たす。
+			\item\label{item:単位と随伴の写像} $\epsilon^BK=K\epsilon^A$
+			かつ$L\eta^A=\eta^BL$が成り立つ。
+		\end{enumerate} %}
+	\end{proposition} %prop:随伴の写像}
+	\begin{proof} %{
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item\ref{item:随伴の写像}$\implies$\ref{item:単位と随伴の写像} \\
+			次の可換図が成り立つためには、
+			\begin{equation*}\xymatrix@R=4ex{
+				F^Ax\xto{1_{F^Ax}}F^Ax \ar@{|->}[r]^{\phi^A_{x,F^Ax}} \ar@{|->}[d]^K
+				& x\xto{\eta^Ax}G^AF^Ax \ar@{|->}[d]^L \\
+				KF^Ax\xto{1_{F^Ax}}KF^Ax \ar@{=}[d] 
+				& Lx\xto{L\eta^Ax}LG^AF^Ax \ar@{=}[d] \\
+				F^BLx\xto{1_{F^BLx}}KF^Ax \ar@{|->}[r]^{\phi^B_{F^Bx,KF^Ax}}
+				& Lx\xto{\eta^BLx}G^BKF^Ax \\
+			}\end{equation*}
+			次の式が成り立つ必要があることがわかる。
+			\begin{equation*}\begin{split}
+				Lx\xto{L\eta^Ax}LG^AF^Ax = Lx\xto{\eta^BLx}LG^AF^Ax
+				\quad\text{for all } x\in\obj X
+			\end{split}\end{equation*}
+			%
+			\item \ref{item:単位と随伴の写像}$\implies$\ref{item:随伴の写像} \\
+			次の可換図が成り立つ。
+			\begin{equation*}\xymatrix@R=4ex{
+				F^Ax\xto{f}a \ar@{|->}[r]^{\phi^A_{x,a}} \ar@{|->}[d]^K
+				& x\xto{(G^Af)(\eta^Ax)}G^Aa \ar@{|->}[d]^L \\
+				KF^Ax\xto{Kf}Ka \ar@{=}[d] 
+				& Lx\xto{(LG^Af)(L\eta^Ax)}LG^Aa \ar@{=}[d] \\
+				F^BLx\xto{Kf}Ka \ar@{<-|}[r]^{(\phi^B_{Lx,Ka})^{-1}}
+				& Lx\xto{(G^BKf)(\eta^BLx)}G^BKa \\
+			} \quad\text{for all } F^Ax\xto{f}a\in A
+			\end{equation*}
+		\end{itemize} %}
+	\end{proof} %}
+%s2:随伴の変換}
+\subsection{随伴の例}\label{s2:随伴の例} %{
+	\begin{todo}[随伴の例]\label{todo:随伴の例} %{
+		随伴の例として抑えておくべきもの。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item Galois接続
+			\item ベクトル空間のGalois接続
+		\end{itemize} %}
+	\end{todo} %todo:随伴の例}
+%s2:随伴の例}
+%s1:随伴}
+\section{モナドと代数}\label{s1:モナドと代数} %{
+\subsection{随伴関手からモナド}\label{s2:随伴関手からモナド} %{
+	随伴関手$(F,\eta,G,\epsilon):X\to A$からモナドを導こう。
+
+	\eqref{eq:単位と余単位の自然変換}から、次の自然変換の合成が得られ、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			1_X \ar[r]^{\eta} \ar[d]^{\eta} & GF \ar[d]^{GF\eta} \\
+			GF \ar[r]^{\eta GF} & (GF)^2 \\
+		} &\xto{F-G} \xymatrix{
+			FG \ar[r]^{F\eta G} \ar[d]^{F\eta G} & (FG)^2 \ar[d]^{FGF\eta G} \\
+			(FG)^2 \ar[r]^{F\eta GFG} & (FG)^3 \\
+		} \\
+		\xymatrix{
+			1_A \ar@{<-}[r]^{\epsilon} \ar@{<-}[d]^{\epsilon} 
+			& FG \ar@{<-}[d]^{FG\epsilon} \\
+			FG \ar@{<-}[r]^{\epsilon FG} & (FG)^2 \\
+		} &\xto{G-F} \xymatrix{
+			GF \ar@{<-}[r]^{G\epsilon F} \ar@{<-}[d]^{G\epsilon F} 
+			& (GF)^2 \ar@{<-}[d]^{GFG\epsilon F} \\
+			(GF)^2 \ar@{<-}[r]^{G\epsilon FGF} & (GF)^3 \\
+		}
+	\end{split}\end{equation*}
+	\eqref{eq:単位と余単位の合成}から、次の自然変換の合成が得られる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			GF \ar[r]^{\eta GF} \ar[dr]_{1_{GFX}} 
+			& (GF)^2 \ar[d]^{G\epsilon F}
+			& GF \ar[l]_{GF\eta} \ar[dl]^{1_{GFX}} \\
+			& GF
+		},\quad \xymatrix{
+			FG \ar@{<-}[r]^{\epsilon FG} \ar@{<-}[dr]_{1_{FGA}} 
+			& (FG)^2 \ar@{<-}[d]^{F\eta G}
+			& FG \ar@{<-}[l]_{FG\epsilon} \ar@{<-}[dl]^{1_{FGA}} \\
+			& FG
+		}
+	\end{split}\end{equation*}
+	そこで、関手$T,S$と自然変換$\mu,\delta$を次のように定義すると、
+	\begin{equation}\begin{array}{rclcrcl}
+		T &:=& GF, &\quad& \mu &:=& G\epsilon F: T^2\xto{\bullet} T \\
+		S &:=& FG, &\quad& \delta &:=& F\eta G: S\xto{\bullet} S^2 \\
+	\end{array}\end{equation}
+	代数と余代数と同じ形の自然変換の合成が得られる。
+	\begin{equation}\label{eq:モナドの定義}\begin{split}
+		\xymatrix{
+			T^3 \ar[r]^{T\mu} \ar[d]^{\mu T} & T^2 \ar[d]^{\mu} \\
+			T^2 \ar[r]^{\mu} & T \\
+		},\quad &\xymatrix{
+			T \ar[r]^{\eta T} \ar[dr]_{1_{TX}} & T^2 \ar[d]^{\mu}
+			& T \ar[l]_{T\eta} \ar[dl]^{1_{TX}} \\
+			& T
+		} \\
+		\xymatrix{
+			S^3 \ar@{<-}[r]^{S\delta} \ar@{<-}[d]^{\delta S} & S^2 \ar@{<-}[d]^{\delta} \\
+			S^2 \ar@{<-}[r]^{\delta} & S \\
+		},\quad &\xymatrix{
+			S \ar@{<-}[r]^{\epsilon S} \ar@{<-}[dr]_{1_{SA}} & S^2 \ar@{<-}[d]^{\delta}
+			& S \ar@{<-}[l]_{S\epsilon} \ar@{<-}[dl]^{1_{SA}} \\
+			& S
+		} \\
+	\end{split}\end{equation}
+	組$(T,\mu,\eta)$をモナド、組$(S,\delta,\epsilon)$を余モナドという。
+	逆に、モナド$(T,\mu,\eta)$を与えた時、対応する随伴があるかという問に
+	yesという答えを与える二つの方法がある。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item モナドのEilenberg-Moore圏
+		\item モナドのKleisli圏
+	\end{itemize} %}
+	この二つの圏を述べる前に、使われるテクニックの理解のために、
+	まず代数系について述べる。
+%s2:随伴関手からモナド}
+\subsection{代数的構造（Algebraic structure）}\label{s2:代数的構造} %{
+	$\Omega$-代数の定義は(\cite{maclane.work} p.120 V.6)にあるが、
+	わからないので、より具体的に書いてある(\cite{PIERCE91} p.4 1.1.7 Example)
+	も参考にしながら$\Omega$-代数を定義しよう。
+	ただし、同じものを表していても数学と計算機科学では言い方が異なるようだ。
+
+	組$\Omega:=(\Omega,\op{ar},\myspace)$を次のものとする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[作用素] 集合$\Omega$で$\Omega$の元を作用素\cite{maclane.work}
+		とかシグネチャー\cite{PIERCE91}という。
+		\item[アリティ] 写像$\op{ar}:\Omega\to\sizen$で作用素の引数の数を
+		表す。アリティによって$\Omega$は次数付き集合となる。
+		\item[合成] $\Omega$の演算$\myspace$
+		\begin{equation*}\begin{split}
+			\op{ar}w= (\op{ar}w_1) +\cdots+ (\op{ar}w_k)
+			\implies \omega(w_1,\dots,w_k)\in\Omega \\
+			\quad\text{for all } w,w_1,\dots,w_k\in\Omega
+		\end{split}\end{equation*}
+	\end{description} %}
+
+	次の組$A:=(X,\alpha)$を$\Omega$-代数という。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[作用域] 集合$X$で、キャリアー\cite{PIERCE91}とも言い、
+		$|A|:=X$と書かれる。
+		\item[作用] 関数$\alpha:\Omega\to\arr\cat{Set}$で次の性質を満たす。
+		\begin{description}\setlength{\itemsep}{-1mm} %{
+			\item[写像] 任意の$w\in\Omega$に対して$\alpha w:X^{\op{ar}w}\to X$
+			\item[合成] 任意の$w,w_1,\dots,w_k\in\Omega$で
+			$\op{ar}w= (\op{ar}w_1) +\cdots+ (\op{ar}w_k)$となるものに対して
+			$\alpha\gplr{w(w_1,\dots,w_k)}
+			=(\alpha w)\gplr{(\alpha w_1),\dots,(\alpha w_k)}$
+		\end{description} %}
+		作用は解釈（interpretation）\cite{PIERCE91}とも言う。
+	\end{description} %}
+	ここで言う代数は、ベクトル空間に積を定義したものではなく、
+	モノイドや加群などを総称したものを一群の写像とそれらの間の等式で捉えよう
+	とする方法を代数と言っている。
+
+	$A:=(|A|,\alpha)$と$B:=(|B|,\beta)$を$\Omega$-代数とし、写像$f:|A|\to|B|$
+	が次の式を満たす時、$f$を$\Omega$-準同型という。
+	\begin{equation*}\begin{split}
+		f(\alpha w)(x_1,\dots,x_{\op{ar} w}) 
+		= (\beta w)(fx_1,\dots,fx_{\op{ar} w})
+		\quad\text{for all } x_i\in|A|,\; w\in\Omega
+	\end{split}\end{equation*}
+	$\Omega$-代数と$\Omega$-準同型で圏$\Omega\myhere\cat{Alg}$を作る。
+
+	さらに、シグネチャーの合成に対して一式の等式$E$で制限をつける。例えば、
+	半群を表すためには次のようにする。
+	\begin{equation*}\begin{split}
+		\Sigma &:= \set{i,m},\quad\op{ar}(i, m) := (1, 2) \\
+		E &:= \set{i^2=1,\; im=m(i,i),\; m(m,i)=m(i,m)}
+	\end{split}\end{equation*}
+	このように$E$によってシグネチャーの合成に制限を付けたものを組$(\Omega,E)$
+	で表し、その代数のつくる圏を$(\Omega,E)\myhere\cat{Alg}$と書く。
+	半群の例では、$(\Sigma,E)\myhere\cat{Alg}\simeq\cat{Smgrp}$となる。
+
+	$(\Omega,E)$を代数系という。代数系の書き方はモノイドの表示
+	（presentation）になぞらえているように見える。
+	\begin{equation*}\begin{split}
+		\text{半群} = \frac{\braket{i:X\to X,\; m:X^2\to X}}
+		{\Braket{i^2 = i,\; im=m(i,i),\; m(i,m) = m(m,i)}}
+	\end{split}\end{equation*}
+	$\Omega$は自由モノイドに相当する。
+
+	ここで終わると一般馬鹿だが、単語モナド$(\clW,\mu,\eta)$と組み合わせて
+	考えてみる(\cite{maclane.work} p.140 VI.4)。
+	\begin{equation*}\begin{array}{rcll}
+		\clW X &:=& \coprod_{n\in\sizen_+} X^n 
+		&\quad\text{for all } X\in\obj\cat{Set} \\
+		(\clW f)[x_1,\dots,x_n] &:=& [fx_1,\dots,fx_n]
+		&\quad\text{for all } X\xto{f}X'\in\cat{Set},\; x_i\in X \\
+		\mu[w_1,\dots,w_n] &:=& w_1\cdots w_n
+		&\quad\text{for all } w_1,\dots,w_n\in\clW X\in\obj\cat{Set} \\
+		\eta x &:=& [x]
+		&\quad\text{for all } x\in X\in\obj\cat{Set} \\
+	\end{array}\end{equation*}
+	自然変換$1\xto[\qquad]{\eta}\clW\xtofrom{\eta\clW+\clW\eta}{\mu}\clW^2$
+	の隙間$1\xfrom{}\clW$を埋める存在として$\clW$-代数を考えるみる。
+	$X$を集合として、写像$h:\clW X\to X$を考える。
+	$h$はアリティが$1,2,\dots$の写像の和として考えることができる。
+	\begin{equation*}\begin{split}
+		hw = h_{|w|}w \quad\text{where } h_n:X^n\to X
+	\end{split}\end{equation*}
+	経路$X\xfrom{h}\clW X\xfrom{\mu X+\clW h}\clW^2X$の可換性を要求すると、
+	次の可換図に帰着する。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\clW^2 X \ar[r]^{\clW h} \ar[d]^{\mu X} & \clW X \ar[d]^h \\
+			\clW X \ar[r]^h & X
+		}\quad\xymatrix{
+			[w_1,\dots,w_n] \ar@{|->}[r] \ar@{|->}[d] 
+			& [hw_1,\dots,hw_n] \ar@{|->}[d] \\
+			w_1\cdots w_n \ar@{|->}[r] & h(w_1\cdots w_n) = h[hw_1,\dots,hw_n]
+		}
+	\end{split}\end{equation*}
+	この可換図は$\clW$-代数のシグネチャーの合成に一致している。この可換図を
+	写像$h_i$で書くと次のようになる。
+	\begin{equation*}\begin{split}
+		h_{n_1+\cdots+n_k} = h_k(h_{n_1},\dots,h_{n_k})
+		\quad\text{for all } n_1,\dots,n_k\in\sizen_+,\; k\in\sizen_+
+	\end{split}\end{equation*}
+	低次の項を見ると次のようになっていて、
+	\begin{equation*}\begin{split}
+		1 = 1 &\implies h_1 = h_1^2 \\
+		2 = 1 + 1 &\implies h_2 = h_2(h_1,h_1) \\
+		3 = 1 + 2 &\implies h_3 = h_2(h_1,h_2) = h_2(h_2,h_1)
+	\end{split}\end{equation*}
+	$h_{n+2}=h_{n+1}(h_1^n,h_2)$によって$h_1$と$h_2$から$h_3,h_4,\dots$は
+	すべて決まってしまうことがわかる。
+	さらに、単位性$h(\eta X)=1_X$を要求すると、$h_1$が恒等写像となる。
+	\begin{equation*}\begin{split}
+		h_1[x] = x \text{ for all }x\in X
+	\end{split}\end{equation*}
+	したがって、次の可換性を満たす射$X\xfrom{h}\clW X$を考えることで、
+	\begin{equation}\label{eq:半群の性質}\begin{array}{lcrcl}
+		\text{結合性} &\quad& h(\mu X) &=& h(Wh) \\
+		\text{単位性} &\quad& h(\eta X) &=& 1_X
+	\end{array}\end{equation}
+	随伴の相方である$\cat{Smgrp}$の性質が再現できたことになる。
+
+	モナド内で随伴を再現する構造\eqref{eq:半群の性質}を単語モナドから
+	一般のモナドへ持って行くとEilenberg-Moore圏になる。
+%s2:代数的構造}
+\subsection{モナドのEilenberg-Moore圏}\label{s2:モナドのEilenberg-Moore圏} %{
+	\begin{definition}[Eilenberg-Moore圏]\label{def:Eilenberg-Moore圏} %{
+		$X$を圏、$T=(T,\mu,\nu)$を$X$のモナドとする。組$(h,x)$を
+		次の二つの可換図を満たす$Tx\xto{h}x\in X$とする。
+		\begin{equation}\label{eq:T-代数の対象の定義}\begin{split}
+			\xymatrix{
+				T^2x \ar[r]^{\mu x} \ar[d]^{Th} & Tx \ar[d]^h \\
+				Tx \ar[r]^{h} & x \\
+			},\quad \xymatrix{
+				x \ar[r]^{\eta x} \ar[rd]_{1_x} & Tx \ar[d]^h \\
+				& x
+			}
+		\end{split}\end{equation}
+		組$(h,x)$を$T$-代数という。$(h,x)$と$(h',x)$を$T$-代数として、
+		次の可換図を満たす$x\xto{f}x'\in X$に対して、
+		\begin{equation}\label{eq:T-代数の射の定義}\begin{split}
+			\xymatrix{
+				Tx \ar[r]^{h} \ar[d]^{Tf} & x \ar[d]^f \\
+				Tx' \ar[r]^{h'} & x' \\
+			}
+		\end{split}\end{equation}
+		$f^T:(h,x)\to(h',x')$とすると、$f^T$は$T$-代数の射となり、
+		$T$-代数の集まりとそれらの間の射は圏をつくる。
+		この圏を$T$のEilenberg-Moore圏または$T$-代数の圏といい$X^T$と書く。
+		そして、$T$-代数$(h,x)$に対して、$h$を構造写像、$x$を基底集合という。
+		\EOP
+	\end{definition} %def:Eilenberg-Moore圏}
+	\begin{proof} %{
+		定義の$f:x\to x'$がT-代数の射になることを証明する。
+		$(h,x)$をT-代数とすると、$1_x^T:(x,h)\to(x,h)$だから、$1_x^T$が
+		単位射となる。また、$(h,x)\xto{f^T}(i,y)\xto{g^T}(j,z)
+		\implies(x,h)\xto{(gf)^T}(z,j)$だから、$(gf)^T$がT-代数の射になり、
+		射の合成則を満たす。
+	\end{proof} %}
+
+	$X$を圏、$(T,\mu,\eta)$を$X$のモナドとすると、$T$-代数の圏について
+	次の性質が成り立つ。
+	\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+		\item\label{item:left} $x\in\obj X\implies (\mu x,Tx)\in X^T$
+		\item\label{item:right} 
+		$(h,x)\in\obj X^T\implies (\mu x,Tx)\xto{h^T}(h,x)\in X^T$
+	\end{enumerate} %}
+	この性質\ref{item:left}から関手$F:X\to X^T$を次のように定義できる。
+	\begin{equation*}\begin{split}
+		F\xymatrix{
+			x \ar[d]^f \\ x'
+		} := \xymatrix{
+			(\mu x, Tx) \ar[d]^{(Tf)^T} \\ (\mu x', Tx')
+		} \quad\text{for all }\xymatrix{
+			x \ar[d]^f \\ x'
+		}\in X
+	\end{split}\end{equation*}
+	また、関手$G:X^T\to X$を次のように定義できる。
+	\begin{equation*}\begin{split}
+		G\xymatrix{
+			(h,x) \ar[d]^{f^T} \\ (h', x')
+		} := \xymatrix{
+			x \ar[d]^{f} \\ x'
+		} \quad\text{for all }\xymatrix{
+			(h,x) \ar[d]^{f^T} \\ (h', x')
+		}\in X^T
+	\end{split}\end{equation*}
+	次の可換図から、
+	\begin{equation*}\begin{split}
+		GF\xymatrix{
+			x \ar[d]^f \\ x'
+		} = \xymatrix{
+			Tx \ar[d]^{Tf} \\ Tx'
+		} \quad\text{for all }\xymatrix{
+			x \ar[d]^f \\ x'
+		}\in X
+	\end{split}\end{equation*}
+	$GF=T$となることがわかる。また、性質\ref{item:right}から、次の可換図が
+	成り立つ。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			FG(h,x) = (\mu x, Tx) \ar[d]^{FGf^T = (Tf)^T} \ar[r]^(.7){h^T}
+			& (h,x) \ar[d]^{f^T} \\ 
+			FG(h',x') = FG(\mu x', Tx') \ar[r]^(.7){h'} & (h', x')
+		} \quad\text{for all }\xymatrix{
+			(h,x) \ar[d]^{f^T} \\ (h', x')
+		}\in X^T
+	\end{split}\end{equation*}
+	したがって、関数$\epsilon:\obj X^T\to\arr X^T$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\epsilon(h,x) := h^T \quad\text{for all } (h,x)\in\obj X^T
+	\end{split}\end{equation*}
+	自然変換$\epsilon:FG\xto{\bullet}1$になることがわかり、
+	$T$-代数の単位性の定義\eqref{eq:T-代数の対象の定義}と組み合わせると、
+	次の可換図が成り立つことがわかり、
+	\begin{equation*}\begin{split}
+		\xymatrix@C=12ex{
+			x = G(x,h) \ar[r]^{\eta x = \eta G(x,h)} \ar[dr]_{1_x}
+			& TX = GFG(x,h) \ar[d]^{h = G\epsilon(x,h)} \\
+			& x = G(x,h) \\
+		} \text{ for all }\xymatrix{
+			FG(h,x) \ar[d]^{h = \epsilon(x,h)} \\ (h, x)
+		}\in X^T
+	\end{split}\end{equation*}
+	$(G\epsilon)(\eta G)=1:G\xto{\bullet}G$となることがわかる。また、
+	モナド$(T,\mu,\eta)$の単位性の定義と組み合わせると、
+	次の可換図が成り立つことがわかり、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			Fx \ar[r]^(.3){F\eta x} \ar[dr]_{1_{Fx}}
+			& FG(\mu x, Tx) = FGFx \ar[d]^{\epsilon(\mu x,Tx) = \epsilon Fx} \\
+			& (\mu x, Tx) = Fx \\
+		} \text{ for all }\xymatrix{
+			FG(\mu x,Tx) \ar[d]^{\epsilon(\mu x,Tx)} \\ (\mu x, Tx)
+		}\in X^T
+	\end{split}\end{equation*}
+	$(\epsilon F)(F\eta)=1:F\xto{\bullet}F$となることがわかる。
+	以上より、$(F,G,\eta,\epsilon):X\to X^T$が随伴になることがわかる。
+%s2:モナドのEilenberg-Moore圏}
+\begin{todo}[Eilenberg-Moore圏の例]\label{todo:Eilenberg-Moore圏の例} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Closure
+		\item モノイドの作用$TX=G\times X$
+	\end{itemize} %}
+\end{todo} %todo:Eilenberg-Moore圏の例}
+\subsection{代数との比較}\label{s2:代数との比較} %{
+	随伴からモナドが得られ、モナドから$T$-代数が得られる。
+	元の随伴と$T$-代数の関係を考えよう。
+
+	$A$と$X$を圏として、随伴$(F,G,\eta,\epsilon):A\to X$が与えられとする。
+	この随伴から得られるモナドを次のようにおき、
+	\begin{equation*}\begin{split}
+		T:=(T:=GF, \mu:=G\epsilon F, \eta): X\to X
+	\end{split}\end{equation*}
+	$(F^T,G^T,\eta,\epsilon^T):X^T\to X$を$T$-代数の圏とする。
+	$A \xfromto{F}{G} X \xtofrom{F^T}{G^G} X^T$
+
+	$\epsilon:FG\xto{\bullet}1_A$から、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			(FG)^2 \ar[r]^{FG\epsilon} \ar[d]^{\epsilon FG} 
+			& FG \ar[d]^{\epsilon} \\
+			FG \ar[r]^{\epsilon} & 1_A \\
+		}\implies \xymatrix{
+			T^2G \ar[r]^{TG\epsilon} \ar[d]^{G\epsilon FG = \mu G} 
+			& TG \ar[d]^{G\epsilon} \\
+			TG \ar[r]^{G\epsilon} & G \\
+		},\quad \xymatrix{
+			G \ar[r]^{\mu G} \ar[dr]_{1_X} & TG \ar[d]^{G\epsilon} \\
+			& G
+		}
+	\end{split}\end{equation*}
+	任意の$a\in\obj A$に対して組$(G\epsilon a,Ga)$は$T$-代数になる。
+	したがって、関手$K:A\to X^T$を次のように定義できる。
+	\begin{equation*}\begin{split}
+		K\begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix} := \begin{matrix}
+			(G\epsilon a, Ga) \\ \dar{(Gf)^T} \\ (G\epsilon a', Ga')
+		\end{matrix} \quad\text{for all } \begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix} \in A
+	\end{split}\end{equation*}
+	すると、次の式から、
+	\begin{equation*}\begin{split}
+		KF\begin{pmatrix}
+			x \\ \dar{f} \\ x'
+		\end{pmatrix} = \begin{matrix}
+			(G\epsilon Fx, GFx) \\ \dar{(GFf)^T} \\ (G\epsilon Fx', GFx')
+		\end{matrix} = \begin{matrix}
+			(\mu x, Tx) \\ \dar{(Tf)^T} \\ (\mu x', Tx')
+		\end{matrix} = F^T \begin{pmatrix}
+			x \\ \dar{f} \\ x'
+		\end{pmatrix} \text{ for all } \begin{pmatrix}
+			x \\ \dar{f} \\ x'
+		\end{pmatrix} \in X
+	\end{split}\end{equation*}
+	$KF=F^T$が成り立ち、次の式から、
+	\begin{equation*}\begin{split}
+		G^TK\begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix} = \begin{matrix}
+			Ga \\ \dar{Gf} \\ Ga'
+		\end{matrix} = G\begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix} \text{ for all } \begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix}\in A
+	\end{split}\end{equation*}
+	$G^TK=G$が成り立つことがわかる。また、次の式から、
+	\begin{equation*}\begin{split}
+		K\begin{pmatrix}
+			FGa \\ \dar{\epsilon a} \\ a
+		\end{pmatrix} = \begin{matrix}
+			(G\epsilon FGa, Ga) \\ \dar{(G\epsilon a)^T 
+			= \epsilon^T(G\epsilon a, Ga)} \\ (G\epsilon a, Ga)
+		\end{matrix} \text{ for all } a\in\obj A
+	\end{split}\end{equation*}
+	$K\epsilon = \epsilon^TK$が成り立ち、$K$が$(F,G,\dots)$から
+	$(F^T,G^T,\dots)$への随伴の写像になることがわかる。
+
+	逆に、関手$L:A\to X^T$を$(F,G,\dots)$から$(F^T,G^T,\dots)$への随伴の
+	写像とする。
+	\begin{equation*}\begin{split}
+		LF = F^T ,\quad G^TL = G ,\quad L\epsilon = \epsilon^TL
+	\end{split}\end{equation*}
+	すると、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		G^TL=G \implies \begin{matrix}
+			G^TLa = Ga \\ \dar{G^TLf = (Gf)^T} \\ G^TLa' = Ga'
+		\end{matrix} \implies \begin{matrix}
+			La = (\lambda a, Ga) \\ \dar{Lf=(Gf)^T} \\ La' = (\lambda a', Ga')
+		\end{matrix} \text{ for all } \begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix}\in X \\
+		\text{where some structure maps } TGa \xto{\lambda a} Ga \in X
+	\end{split}\end{equation*}
+	構造写像の部分以外は$L$は$K$に一致するすることがわかる。
+	$a\in\obj A$とすると、$La=(\lambda a,Ga)$の構造写像の部分は
+	$\epsilon^TLa=(\lambda a)^T$で与えられるが、命題\ref{prop:随伴の写像}を
+	使うと、$L$は随伴の写像だから、$L\epsilon=\epsilon^TL$が成り立ち、
+	$\epsilon^TLa=(\lambda a)^T=L\epsilon a$となることがわかる。そして、
+	任意の$f:a\to a'\in A$に対して$Lf=(Gf)^T:La\to La'\in X^T$だから、
+	$L\epsilon a=(G\epsilon a)^T$となり、$\epsilon^TLa=(\lambda a)^T
+	=(G\epsilon a)^T$となる。したがって、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		L\begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix} = \begin{matrix}
+			(G\epsilon a, Ga) \\ \dar{(Gf)^T} \\ (G\epsilon a', Ga')
+		\end{matrix} \text{ for all } \begin{pmatrix}
+			a \\ \dar{f} \\ a'
+		\end{pmatrix} \in X \\
+	\end{split}\end{equation*}
+	$L=K$となることがわかる。以上を命題の形でまとめておく。
+
+	\begin{proposition}[随伴と代数の比較]\label{prop:随伴と代数の比較} %{
+		$X,A$を圏、$(F,G,\eta,\epsilon):X\to A$を随伴、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $(GF,\eta,G\epsilon F):X\to X$を随伴$(F,G,\dots)$によって
+			定義されたモナド、
+			\item $(F^T,G^T,\eta,\epsilon^T):X\to X^T$をモナド$T:=(GF,\dots)$に
+			よって定義された$T$-代数
+		\end{itemize} %}
+		とする。このとき、次の条件を満たす関手$K:A\to X^T$は唯一つ定まる。
+		\begin{equation*}\begin{split}
+			KF = F^T ,\quad G^TK = G ,\quad K\epsilon = \epsilon^TK
+		\end{split}\end{equation*}
+	\end{proposition} %prop:随伴と代数の比較}
+	\begin{proof} %{
+		上記。
+	\end{proof} %}
+%s2:代数との比較}
+\subsection{モナドの自由代数}\label{s2:モナドの自由代数} %{
+	\begin{definition}[Kleisli圏]\label{def:Kleisli圏} %{
+		$T:=(T,\mu,\eta):X\to X$をモナドとする。$X$のコピー$X_T$を次のように
+		構成する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item すべての対象$x\in\obj X$に対象$x_T\in X_T$を対応させる。
+			\item すべての射$x\xto{f}Ty\in X$に射$x_T\xto{f_T}y_T\in X_T$を
+			対応させる。
+			\item $X_T$の射の合成を次のように定義する。
+			\begin{equation*}\begin{split}
+				x_T\xto{f_T}y_T\xto{g_T}z_T \implies 
+				x_T\xto{\gplr{(\mu z)(Tg)f}_T}z_T
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		この圏を$T$のKleisli圏という。\EOP
+	\end{definition} %def:Kleisli圏}
+	\begin{proof} %{
+		射の定義と合成の定義が整合的なことは、次の式からわかる。
+		\begin{equation*}\begin{split}
+			x_T\xto{f_T}y_T\xto{g_T}z_T &\implies \begin{cases}
+				x\xto{f}Ty \\
+				y\xto{g}Tz
+			\end{cases} \implies x\xto{f}Ty\xto{Tg}T^2z \\
+			&\implies x\xto{f}Ty\xto{Tg}T^2z\xto{\mu z}Tz
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	$T:=(T,\mu,\eta):X\to X$をモナド、$X_T$を$T$のKleisli圏とする。
+	$X_T$の単位射は$1_{X_T}=(\eta x)_T:x_T\to x_T$となり、任意の
+	$x\xto{f}y\in X$に対して$x\xto{f}y\xto{\eta y}Ty$となるから、
+	関手$F_T:X\to X_T$を次のように定義することができる。
+	\begin{equation*}\begin{split}
+		F_T \begin{pmatrix}
+			x \\ \dar{f} \\ y
+		\end{pmatrix} := \begin{matrix}
+			x_T \\ \dar{\gplr{(\eta y)f}_T} \\ y_T
+		\end{matrix} \quad\text{for all } \begin{pmatrix}
+			x \\ \dar{f} \\ y
+		\end{pmatrix}\in X
+	\end{split}\end{equation*}
+	また、$G_TF_T=T$となるように、対応$G_T$を次のように定義する。
+	\begin{equation*}\begin{split}
+		G_T \begin{pmatrix}
+			x_T \\ \dar{f_T} \\ y_T
+		\end{pmatrix} := \begin{matrix}
+			Tx \\ \dar{(\mu y)(Tf)} \\ Ty
+		\end{matrix} \quad\text{for all } \begin{pmatrix}
+			x_T \\ \dar{f_T} \\ y_T
+		\end{pmatrix}\in X_T
+	\end{split}\end{equation*}
+	次の式から、確かに、$G_TF_T=T$となることがわかる。
+	\begin{equation*}\begin{split}
+		G_TF_G \begin{pmatrix}
+			x \\ \dar{f} \\ y
+		\end{pmatrix} = \begin{matrix}
+			Tx \\ \dar{(\mu y)(T\eta y)(Tf)=Tf} \\ Ty
+		\end{matrix} \quad\text{for all }\begin{pmatrix}
+			x \\ \dar{f} \\ y
+		\end{pmatrix}\in X
+	\end{split}\end{equation*}
+	次の式から、$G_T$は単位射を単位射に移すことがわかる。
+	\begin{equation*}\begin{split}
+		G_T \begin{pmatrix}
+			x_T \\ \dar{1_{x_T}=(\eta x)_T} \\ x_T
+		\end{pmatrix} := \begin{matrix}
+			Tx \\ \dar{(\mu x)(T\eta x)=1_{Tx}} \\ Tx
+		\end{matrix} \quad\text{for all } x\in\obj X
+	\end{split}\end{equation*}
+	次の式が成り立てば、$G_T$は射の合成を射の合成に移すことになるが、
+	\begin{equation*}\begin{array}{ccc}
+		x_T\xto{f_T}y_T\xto{g_T}z_T &\xmapsto{G_T}&
+		Tx\xto{Tf}T^2y\xto{\mu y}Ty\xto{Tg}T^2z\xto{\mu z}Tz \\
+		\Downarrow & & \Downarrow \\
+		x_T\xto{\gplr{(\mu z)(Tg)f}_T}z_T &\xmapsto{G_T}&
+		Tx\xto{Tf}T^2y\xto{T^2g}T^3z\xto{T\mu z}T^2z\xto{\mu z}Tz
+	\end{array}\end{equation*}
+	$\mu:T^2\xto{\bullet}T$から、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		T^2y\xto{\mu y}Ty\xto{Tg}T^2z = T^2y\xto{T^2g}T^3z\xto{T\mu z}T^2z
+	\end{split}\end{equation*}
+	射の合成が射の合成に対応することがわかる。したがって、$G_T:X_T\to X$が
+	関手になることがわかる。
+
+	Kleisli圏の定義から、次の自然同型が成り立ち、
+	\begin{equation*}\begin{split}
+		(\phi_T)_{x,y_T}:
+		X_T(F_Tx,y_T) = X_T(x_T,y_T) \simeq X(x,Ty) = X(x,G_Ty_T) \\
+		\quad\text{for all } x,y\in\obj X
+	\end{split}\end{equation*}
+	$(F_T,G_T,\phi_T):X\to X_T$は随伴となることがわかる。
+	$\phi_T$は単に$f_T\mapsto f$とする関数になっている。
+	$G_TF_T=T$より、この随伴の単位は$\eta$となり、余単位$\epsilon_T$は
+	$\epsilon_Tx_T=(\phi_T)^{-1}_{Tx,x_T}1_{Tx}$で与えられて次のようになる。
+	\begin{equation*}\begin{split}
+		\epsilon_Tx_T = (1_{Tx})_T: (Tx)_T\to x_T
+		\quad\text{for all } x\in\obj X
+	\end{split}\end{equation*}
+	そして、次の式から、
+	\begin{equation*}\begin{split}
+		G_T\epsilon_TF_Tx = G_T(1_{Tx})_T = (\mu x)(1_{T^2x}) = \mu x
+		\quad\text{for all } x\in\obj X
+	\end{split}\end{equation*}
+	確かに、$G_T\epsilon_TF=\mu$となることがわかる。
+
+	\begin{todo}[定理の証明]\label{todo:定理の証明} %{
+		\cite{maclane.work} p.144 Theorem 2を証明すること。
+		この定理は、モナド$T$を与える随伴のつくる圏で、Kleisli圏が始対象に
+		なることを示す。終対象がEilenberg-Moore圏である。
+		さらに、\cite{maclane.work} p.144 Exercise 1を証明すると、
+		Kleisli圏が$T$を与える随伴の最小のものになっていることがわかる。
+	\end{todo} %todo:定理の証明}
+%s2:モナドの自由代数}
+%s1:モナドと代数}
+%
+}\endgroup %}

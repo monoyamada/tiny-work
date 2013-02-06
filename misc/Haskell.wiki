@@ -1,0 +1,108 @@
+= リソース =
+* [[http://www.haskell.org/platform/| The Haskell Platform]]
+	GHCを含む統合開発環境のようだ。TexLiveのようなものだろうと思っている。
+* [[http://www.kotha.net/ghcguide_ja/latest/| 栄光のグラスゴーHaskellコンパイルシステム]]
+	GHCのマニュアルを日本語訳したもの。
+* [[http://www.haskell.org/haskellwiki/Haskell_Tutorial_for_C_Programmers| Haskell_Tutorial_for_C_Programmers]] 
+	有り難や。
+* [[http://ja.wikibooks.org/wiki/Haskell/Denotational_semantics | 表示的意味論]]
+	有り難や。
+* [[http://tanakh.jp/posts/2011-12-25-partial-function-considered-harmful.html#fn1 | 部分関数]]
+	部分関数を解説している。
+
+= データ型 =
+
+== 単位 ==
+単位型と呼ばれる型はシングルトンで、形名が()で値が()と書かれるややこしい
+仕様になっている。
+
+== 列挙 ==
+Cのenumと同じ機能が次のように書ける。
+{{{
+data Color = Red | Green | Blue
+}}}
+GHCiは次のことを教えてくれる。
+{{{
+Prelude> :type Red
+Red :: Color
+}}}
+さらに、dataは構造体を入れることができる。
+{{{
+data Color = Red | Green | Blue | RGB Int Int Int
+}}}
+GHCiは次のことを教えてくれる。
+{{{
+Prelude> :type RGB
+RGB :: Int -> Int -> Int -> Color
+Prelude> :type RGB 1 2 3
+RGB 1 2 3 :: Color
+}}}
+$\op{Color}:=\set{\op{Red},\op{Gleen},\op{Blue}}\coprod(\op{RGB}:=\bfN^3)$と集合を定義したようになっている。
+構造体RGBのメンバー変数には次のようにしてアクセスする。
+{{{
+instance Show Color where
+	show Red = "red";
+	show Green = "green";
+	show Blue = "blue";
+	show (RGB r g b) = "r=" ++ (show r) ++ " g=" ++ (show g) ++ " b=" ++ (show b);
+}}}
+RGB(Int,Int,Int)::Colorと同じようにしてMaybeが定義されている。
+{{{
+data Maybe a = Just a | Nothing
+}}}
+MaybeはNothingとの直和を与える関数$\op{Maybe}:\obj\cat{Set}\to\obj\cat{Set}$に対応して、
+JustはNothingとの直和への標準入射$a\xto{\op{Just}}a\coprod\op{Nothing}$に対応する。
+
+= 計算理論から見たデータ型 = 
+== 表示的意味論 ==
+英語ではdenotational semanticsとなる。日本語でも英語でも何のことかわからない専門用語である。
+プログラムを自由モノイドの部分集合とみて、プログラムから何らかの数学的な対象への対応関係を表示的意味論というらしい。
+つまり、専門用語としてもはっきり決まった定義がないようだ。
+はっきり決まった定義がなくても有効な言葉はある。
+数学で使われる量子群ははっきりとした定義はないが、計算に役立っている。
+
+文字列から数学的な対象への対応は$[[-]]$を用いて表される。例えば、
+HaskellのIntというデータ型は$[[\op{Int}]]=F_{2^{32}}$という対応になる。
+
+== 部分関数とボトム ==
+Haskellで表示的意味論を実現することを困難にしている要因として部分関数がある。
+部分関数は定義域をちゃんと書いていない関数である。
+例えば、$3/0$というように、割り算は本当は$-/-:\bfN\times\bfN_+\to\bfN$という定義なのだが、
+プログラムを書く時にいちいち第二引数を型変換するのが面倒なので、
+$-/-:\bfN\times\bfN\to\bfN$という型宣言文をしておいて、第二引数に0が来た場合は実行時エラーとして処理してしまう。
+
+Haskellでは部分関数を扱うために、未定義を表すシングルトン$\op{U}:=\set{\bot}$を導入して、
+$\bfN$ではなく$\bfN\coprod\op{U}$という対象を扱うようにしている。
+Haskellでは$\bot$のことを_またはundefinedと表す。
+プログラムコード中では_を用いて、エラー出力などではundefinedと表示されるようだ。
+CHCiの出力を見ると、undefinedの型は次のようになっている。
+{{{
+Prelude> :type undefined
+undefined :: a
+}}}
+
+部分関数はプログラマの怠惰を助長するためだけに存在するのではない。
+
+* ここまで
+
+例えば、階乗を計算する再帰関数$f:\bfN\to\bfN$
+{{$
+fn = \begin{cases}
+	1 & \text{iff } n = 0 \\
+	n * f (n-1) & \text{otherwise}
+\end{cases}
+}}$
+は、$f_0,f_1,f_2,\dots$という関数列の極限として定義することができる。
+{{$%split%
+f_n:\set{0,1,\dots,n} &\to \bfN \quad\text{for all } n\in\bfN_+ \\
+	k &\mapsto \begin{cases}
+		k * \gplr{f_{n-1}(k-1)} & \text{iff } k = n \\
+		f_{n-1}k & \text{otherwise}
+	\end{cases}
+}}$
+写像のつくる集合$\set{X\to\bfN\,|\,X\subseteq\bfN}$に半順序$\preceq$を定義すると、
+{{$
+	f\preceq g \xiff{\op{def}} \op{dom}f\subseteq\op{dom}g \text{ and }
+	fx = gx \text{ for all } x\in\op{dom}f
+}}$
+再帰で定義した階乗関数$f$は増加列$f_0\preceq f_1\preceq\cdots$の極大値として定義できる。
