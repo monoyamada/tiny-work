@@ -39,18 +39,6 @@ $\deg_\bot$は次の式を満たす。
 * $fx=1+x,\; g=-1+x$とすると、$\deg_\bot f=\deg_\bot g=0$だが、$\deg_\bot(f+g)=1$となる
 といった状況を反映している。
 
-* ブーリアン上の形式級数半環$\bool\bblr{q}$を考える。
-* $\bool\bblr{q}$に半順序$\preceq$を定義する。
-	$f\preceq g\iff\exists h\mid f+h=g$
-* $\bool\bblr{q}$に二項演算$\land$を定義する。
-	$\dlr{f\land g,n}:=\dlr{f,n}\dlr{g,n}$
-* $(\bool\bblr{a},\land,+)$が半環になっていることを確かめる。
-* $(\bool\bblr{a},\land,+)$と半順序$\preceq$がコンパチになっていることを確かめる。
-* $\blr{\sizen_\infty}_q:=\set{1+q+\cdots+q^n\mid n\in\sizen}$で張られる部分空間が$(+,\cdot)$と$(\land,+)$の両方で部分半環となっていることを確かめる。
-* $\blr{\sizen_\infty}_q$で張られる部分空間が$\preceq$で完備になっていることを確かめる。
-* $\deg_q:K\bblr{x}\to\bool\dlr{\sizen_\infty}_q$を$\deg_qf:=[\deg_\bot f]_q$で定義する。
-* $\deg_q$を考えると何が嬉しいのかを考える。
-
 === 形式級数の次数 ===
 形式級数の次数$\deg_\bot$について成り立つ性質を書いておく。
 
@@ -78,24 +66,6 @@ $f=1+x$を考えると、次の降下列になる。
 \supset \bot(f,3)=\set{1+x+a_3x^3+\cdots}
 \supset \cdots 
 \supset \bot(f,\infty)=\set{1+x}
-}}$
-
-=== 保留 ===
-ここで、形式級数の係数を体ではなく、次の性質を満たす半環$R$に変更すると、
-{{$%split%
-a + b = 0 &\iff a = b = 0 &\quad\text{for all } a,b\in R \\
-ab = 0 &\iff a = 0 \text{ or } b = 0 &\quad\text{for all } a,b\in R \\
-}}$
-$\deg_\bot:R\bblr{x}\to\sizen$は半環準同型
-$\deg_\bot:(R\bblr{x},+,\cdot)\to(\sizen,\min,+)$になる。
-自然数、非負の有理数、非負の実数などが$R$に相当する。
-自然数上の$\min$は可換かつ結合的になり、次のように$+$と分配則を満たす。
-{{$
-a + \min(b,\; c) = \min(a + b,\; a + c) \quad\text{for all } a,b,c\in\sizen
-}}$
-そして、$\deg_\bot$を次のようにq-変形した写像$\deg_q:R\bblr{x}\to\sizen\bblr{q}$を考える。
-{{$
-\deg_q f := \blra{\deg_\bot f}_q \quad\text{for all } f\in R\bblr{x}
 }}$
 
 == 非可換な形式級数 ==

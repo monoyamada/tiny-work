@@ -1,7 +1,4 @@
 // MathJax
-if (MathJax === void 0) {
-	alert ('non MathJax')
-}
 MathJax.Hub.Config({
 	TeX: {
 		 Macros: {
@@ -61,7 +58,7 @@ MathJax.Hub.Config({
 			, clrgg: ['\\biggl\\{{#1}\\biggr\\}', 1]
 			//
 			, cclra: ['\\left\\{\\!\\left\\{{#1}\\right\\}\\!\\right\\}', 1]
-			, cclr: ['[\\!\\{{#1}\\}\\!\\}', 1]
+			, cclr: ['\\{\\!\\{{#1}\\}\\!\\}', 1]
 			, cclrg: ['\\bigl\\{\\!\\bigl\\{{#1}\\bigr\\}\\!\\bigr\\}', 1]
 			, cclrgg: ['\\biggl\\{\\!\\biggl\\{{#1}\\biggr\\}\\!\\biggr\\}', 1]
 			//
@@ -85,8 +82,7 @@ MathJax.Hub.Config({
 			, ketg: ['\\bigl|{#1}\\bigr\\rangle', 1]
 			, ketgg: ['\\biggl|{#1}\\biggr\\rangle', 1]
 		}
-	}
-	, 'HTML-CSS': {scale: 80}
+	}, 'HTML-CSS': {scale: 80}
 });
 
 // SyntaxHighlighter

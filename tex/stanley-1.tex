@@ -43,8 +43,33 @@
 	ことに注意する。通常の多項式の次数は$\dlr{f,n}\neq0$となる最大の$n$である。
 
 	$\deg_\bot$は、$n=\deg_\bot(f-g)$とした時、$f$と$g$は$0..(n-1)$次の各係数
-	が一致しているということを表す。また、$\deg_\bot$によって、$K\bblr{x}$は
-	次数付き$K$-代数となる。
+	が一致しているということを表す。例えば、$f,g\in K\bblr{x}$として、
+	$\deg_\bot(f-g)=n$なら、$f$と$g$は互いに、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $0..(n-1)$次の各係数が一致して、
+		\item $n$次の係数が異なり、
+		\item $n+1$次以上の係数は一致してるかどうかわからない
+	\end{itemize} %}
+	となる。また、$\deg_\bot$によって、$K\bblr{x}$は次数付き$K$-代数となる。
+
+	$(f)_\bot^n\subseteq K\bblr{x}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		(f)_\bot^n := \set{g\in K\bblr{x}\mid n\le \deg_\bot(g-f)}
+		\quad\text{for all } f\in K\bblr{x},\; n\in\sizen\cup\set{\infty}
+	\end{split}\end{equation*}
+	次の部分集合の降下列が成り立つ。
+	\begin{equation*}\begin{split}
+		K\bblr{x} = (f)_\bot^0 \supseteq (f)_\bot^1 \supseteq (f)_\bot^2
+		\supseteq \cdots \supseteq (f)_\bot^\infty = \set{f}
+	\end{split}\end{equation*}
+	例えば、係数体を標数$2$の体$\sei_2$、$f:=1+x\in\sei_2\bblr{x}$とすると、
+	次のようになる。
+	\begin{equation*}\begin{split}
+		(f)_\bot^0 = \sei_2\bblr{x} 
+		\supset (f)_\bot^1 = \set{1 + f_1 x + \cdots}
+		\supset (f)_\bot^2 = \set{1 + x + f_2x^2 + \cdots} \\
+		\supset \cdots \supset (f)_\bot^\infty = \set{1 + x}
+	\end{split}\end{equation*}
 
 	係数体が複素数の場合には、$\deg_\bot$は次のように書ける。
 	\begin{equation*}\begin{split}
