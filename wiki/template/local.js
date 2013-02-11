@@ -1,4 +1,7 @@
 // MathJax
+if (MathJax === void 0) {
+	alert ('non MathJax')
+}
 MathJax.Hub.Config({
 	TeX: {
 		 Macros: {
