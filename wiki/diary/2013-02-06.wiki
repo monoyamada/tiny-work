@@ -1,5 +1,5 @@
 [[diary|日誌]]
-%toc 目次
+%toc 2013-02-06
 
 = 日誌を始めた =
 vimwikiのdiaryという機能を使って日誌をつけてみる。
@@ -71,41 +71,28 @@ $x_f:=(f'\circ f|0)^*(f|0)$は次の性質を満たす
 * $x_f\ge (f|x_f)$
 * $x\ge (f|x)\implies x\ge x_f$
 </div>
-ことを証明している。
-$a:=(f|0)$、$(v|x):=(f'|x)$とすると、次の式から、
-{{$
-\begin{alignat}{3}
-x_f &= (f'\circ f|0)^*(f|0) &&= (f|0) + (f'\circ f|0) x_f &&= a + (v|a)x_f \\
-& (f|x) &&= (f|0) + (f'|x)x &&= a + (v|x)x
-\end{alignat}
-}}$
-次のことが成り立つ。
-* $x=a+(v|a)x$が一意に解を持つならば、それは$x_f$となり、
-* $a+(v|x)x\le x\implies x_f\le x$となる
-ここで、$x=a+(v|a)x$は、解が存在すことも、解が一意に定まることも保証されていない。
-例えば、$a=0$の場合は、$(v|a)^\infty\in K$とならない限り、解は存在しない。
-仮に、$(v|a)^\infty\in K$だったとしても、$a=0$かつ$(v|a)=1$の場合は、
-任意の$x\in K$が$x=a+(v|a)x$の解となる。
-<a href='#faa'>Faà di Bruno代数との類似</a>
+ことを証明している。この論文の中では$K$が完備であることを仮定していないので、
+$x_f$が$x\ge(f|x)$を満たす解の最小値を与えることは、
+$K$が完備な場合での$x=(f|x)$を満たす解の最小値を与えることに相当する。
 
-<a href='#hopkins'>論文</a>から、
-もう少し突っ込んで$x_f$を調べてみる。
-次の式から、$n\le2\in\bfN$で$x_f^n=a^n(f'|a)$となる。
+<a href='#hopkins'>論文</a>の仮定から、もう少し突っ込んで$x_f$を調べてみる。
+$f_0:=(f|0)$とおくと、次の式から、
+$n\le2\in\bfN$で$x_f^n=f_0^n(f'|f_0)^*$となる。
 {{$
 	a^*b^* = \sum_{m,n\in\bfN} a^mb^n 
 	= \sum_{n\in\bfN}\sum_{k=0}^n a^kb^{n-k}
 	\overset{!}{=} \sum_{n\in\bfN} (a + b)^n = (a + b)^*
 	\quad\text{! idempotency and commutativity}
 }}$
-したがって、
+したがって、次の式が成り立ち、
 {{$
 (f|x_f) = \sum_{n\in\bfN} f_nx_f^n 
-= f_0 + \left(\sum_{n\in\bfN} f_{n+1} f_{n+1}(f|0)^n\right) x_f
+= f_0 + \left(\sum_{n\in\bfN} f_{n+1}f_0^n\right) x_f
 = (f|0) + (f'\circ f|0) x_f
 }}$
-となって、$x_f$が$f$の不動点$x_f=(f|x_f)$になっていることがわかる。
+$x_f$が$f$の不動点$x_f=(f|x_f)$になっていることがわかる。
 したがって、最初に挙げた定理から、$x_f$が不動点$x_f=(f|x_f)$の最小値になっていることがわかる。
-<a href='#hopkins'>論文</a>では、
+<a href='#prop-1'>命題</a>では、
 $(f|x_f)\le x_f$という不等式の形で留まっているが、ここでは、
 $(f|x)=\sum_{n\in\bfN}f_nx^n$と級数展開できるという、
 より強い仮定の元で計算している。
@@ -143,10 +130,10 @@ $\hat{K}$の文脈自由文法を$\hat{x}=(\hat{f}|\hat{x})$とすると、
 この等式の解は、$f:=\pi\hat{f}$とすると、<a href='#prop-1'>命題</a>から、
 $x_f=(f'\circ f|0)^*(f|0)$となる。この解は思いっきり正規言語なので、
 文脈自由言語から正規言語への代数準同型が得られたことになる。
-そして、$\pi$は文字の並びを対称化しているだけだから、多分、
+そして、$\pi$は文字の並びを対称化しているだけだから、~~多分~~
+<a href='#sym'><sup>下記</sup></a>、
 $A^*$から可換モノイド$M$への任意のモノイド準同型$\psi:A^*\to M$に対して、
 モノイド同型$\psi\hat{K}\simeq\psi\pi\hat{K}$が成り立つ。
-（修正：<a href='#sym'>成り立つ。</a>）
 したがって、<a href='#hopins'>論文</a>で主張しているように、
 彼らの結果は、Parikhの定理を任意の可換モノイドへの任意のモノイド準同型に拡張したものになっている。
 
@@ -160,6 +147,24 @@ $\clU$をモノイドから集合への忘却関手とすると、
 
 <a name='#faa'/>
 == Faà di Bruno代数との類似 ==
+<a href='#prop-1'>命題</a>で、$a:=(f|0)$、$(v|x):=(f'|x)$とすると、
+次の式から、
+{{$
+\begin{alignat}{3}
+x_f &= (f'\circ f|0)^*(f|0) &&= (f|0) + (f'\circ f|0) x_f &&= a + (v|a)x_f \\
+& (f|x) &&= (f|0) + (f'|x)x &&= a + (v|x)x
+\end{alignat}
+}}$
+次のことが成り立つ。
+* $x=a+(v|a)x$が一意に解を持つならば、それは$x_f$となり、
+* $a+(v|x)x\le x\implies x_f\le x$となる
+ここで、$x=a+(v|a)x$は、解が存在すことも、
+解が一意に定まることも保証されていないことに注意する。
+例えば、$a=0$の場合は、$(v|a)^\infty\in K$とならない限り、解は存在しない。
+仮に、$(v|a)^\infty\in K$だったとしても、$a=0$かつ$(v|a)=1$の場合は、
+任意の$x\in K$が$x=a+(v|a)x$の解となる。任意の$a,b\in K$に対して
+$x=b^*a\implies x=a+bx$だが、逆は必ずしも成り立たないことに起因する。
+
 複素数上の形式級数環$\bfC[[x]]$を写像の合成によって$\bfC[[x]]\subseteq\op{end}\bfC[[x]]$とみた時、
 $V\subset\bfC[[x]]$を$x+\sum_{n\in\bfN} f_{n+2}x^{n+2}$の形の形式級数全体の作る集合とすると、
 * $V$は部分モノイドとなり、
@@ -170,16 +175,22 @@ $V\subset\bfC[[x]]$を$x+\sum_{n\in\bfN} f_{n+2}x^{n+2}$の形の形式級数全
 $V$が双モノイドとなる場合の形式級数の形と全く同じになっている。
 
 == 問題 ==
+* <a name='lutttenberger'>
+	[[http://arxiv.org/abs/1112.2864|An Extension of Parikh's Theorem beyond Idempotence]]
+	</a>を読むこと。
 * Kleeneスターが級数展開できることはどのような仮定しているのかを明らかにせよ。
-	連続性に関係していると思っている。<a href='##hopkins'>論文</a>では、
-	$K$が完備かどうかに関わらずに成り立つところを議論している。
+	連続性に関係していると思っている。<a href='#hopkins'>論文</a>では、
+	$K$が完備かどうかに関わらずに成り立つことを議論している。
 	$K$が完備であれば、$x=(f'\circ f|0)^*(f|0)\implies x=(f|x)$が言えるのではないかと思っている。
 * 文法$x=a+bax$と$x=a+xbx$は自然数上で考えると異なる多項式を解に持つが、
 	ブーリアン上で考えると同じ多項式$x=(ba)^*a$を解に持つ。
 	$a^*b^*=(a+b)^*$の計算がカギになるかも。
 	Litvinovなどがやっているべき等代数
+	<a name='litvinov'>
 	[[http://arxiv.org/abs/1005.1247|Tropical Mathematics, Idempotent Analysis, Classical Mechanics and Geometry]]
-	とも関係するのだろうが、有理数または整数からブーリアンへ移行する方法が思いつかない。
+	</a>
+	や<a href='#lutttenberger'>論文</a>とも関係するのだろうが、
+	有理数または整数からブーリアンへ移行する方法が思いつかない。
 * <a href='##faa'>Faà di Bruno代数との類似</a>を考えてみたい。
 	等式$x=a+x$では、$a\neq0$の時は$x=a$が解になるが、$a=0$の時は任意の$x\in K$が解になる。
 	$a=0$で対称性が一気に高くなるとみることができる。
@@ -188,9 +199,9 @@ $V$が双モノイドとなる場合の形式級数の形と全く同じにな�
 == ラムダ式と不動点 ==
 ラムダ式を写像として解釈することを考えて、Y-コンビネータ$Y$
 {{$
-Y := \lambda{x}.\plr{X_x X_x},\quad X_x := \lambda{y}.\gplr{x\plr{y y}}
+Y := \lambda{x}.\plr{X_x X_x},\quad X_x := \lambda{y}.\plrg{x\plr{y y}}
 \implies
-Yf = X_fX_f = \lambda{y}.\gplr{f\plr{y y}}X_f = f\plr{X_f X_f} = f\plr{Y f}
+Yf = X_fX_f = \lambda{y}.\plrg{f\plr{y y}}X_f = f\plr{X_f X_f} = f\plr{Y f}
 }}$
 を写像として表そうとすると、$(Yf)x=f(Yf)x$より、$(Yf)x$は$f$の不動点となる。
 したがって、写像$f$の不動点の集合を$\op{Fix}f$とすると、

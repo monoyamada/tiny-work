@@ -1,11 +1,77 @@
 %
 % ()
 %
-\def\plr#1{\mathinner{\left({#1}\right)}}
-\def\gplr#1{\mathinner{\bigl({#1}\bigr)}}
-\def\ggplr#1{\mathinner{\Bigl({#1}\Bigr)}}
-\def\gggplr#1{\mathinner{\biggl({#1}\biggr)}}
-\def\ggggplr#1{\mathinner{\Biggl({#1}\Biggr)}}
+\def\plr#1{\mathinner{({#1})}}
+\def\plrg#1{\mathinner{\bigl({#1}\bigr)}}
+\def\plrgg#1{\mathinner{\Bigl({#1}\Bigr)}}
+\def\plrggg#1{\mathinner{\biggl({#1}\biggr)}}
+\def\plrgggg#1{\mathinner{\Biggl({#1}\Biggr)}}
+\def\plra#1{\mathinner{\left({#1}\right)}}
+%
+% []
+%
+\def\blr#1{\mathinner{[{#1}]}}
+\def\blrg#1{\mathinner{\bigl[{#1}\bigr]}}
+\def\blrgg#1{\mathinner{\Bigl[{#1}\Bigr]}}
+\def\blrggg#1{\mathinner{\biggl[{#1}\biggr]}}
+\def\blrgggg#1{\mathinner{\Biggl[{#1}\Biggr]}}
+\def\blra#1{\mathinner{\left[{#1}\right]}}
+%
+% {}
+%
+\def\clr#1{\mathinner{\{{#1}\}}}
+\def\clrg#1{\mathinner{\bigl\{{#1}\bigr\}}}
+\def\clrgg#1{\mathinner{\Bigl\{{#1}\Bigr\}}}
+\def\clrggg#1{\mathinner{\biggl\{{#1}\biggr\}}}
+\def\clrgggg#1{\mathinner{\Biggl\{{#1}\Biggr\}}}
+\def\clra#1{\mathinner{\left\{{#1}\right\}}}
+%
+% <>
+%
+\def\dlr#1{\mathinner{\langle{#1}\rangle}}
+\def\dlrg#1{\mathinner{\bigl\langle{#1}\bigr\rangle}}
+\def\dlrgg#1{\mathinner{\Bigl\langle{#1}\Bigr\rangle}}
+\def\dlrggg#1{\mathinner{\biggl\langle{#1}\biggr\rangle}}
+\def\dlrgggg#1{\mathinner{\Biggl\langle{#1}\Biggr\rangle}}
+\def\dlra#1{\mathinner{\left\langle{#1}\right\rangle}}
+%
+% (())
+%
+\def\pplr#1{\mathinner{(\!({#1})\!)}}
+\def\pplrg#1{\mathinner{\bigl(\!\bigl({#1}\bigr)\!\bigr)}}
+\def\pplrgg#1{\mathinner{\Bigl(!\Bigl({#1}\Bigr)\!\Bigr)}}
+\def\pplrggg#1{\mathinner{\biggl(!\biggl({#1}\biggr)\!\biggr)}}
+\def\pplrgggg#1{\mathinner{\Biggl(!\Biggl({#1}\Biggr)\!\Biggr)}}
+\def\pplra#1{\mathinner{\left(!\left({#1}\right)\!\right)}}
+%
+% [[]]
+%
+\def\bblr#1{\mathinner{[\![{#1}]\!]}}
+\def\bblrg#1{\mathinner{\bigl[\!\bigl[{#1}\bigr]\!\bigr]}}
+\def\bblrgg#1{\mathinner{\Bigl[\!\Bigl[{#1}\Bigr]\!\Bigr]}}
+\def\bblrggg#1{\mathinner{\biggl[\!\biggl[{#1}\biggr]\!\biggr]}}
+\def\bblrgggg#1{\mathinner{\Biggl[\!\Biggl[{#1}\Biggr]\!\Biggr]}}
+\def\bblra#1{\mathinner{\left[\!\left[{#1}\right]\!\right]}}
+%
+% {{}}
+%
+\def\cclr#1{\mathinner{\{\{{#1}\}}}
+\def\cclrg#1{\mathinner{\bigl\{\!\bigl\{{#1}\bigr\}\!\bigr\}}}
+\def\cclrgg#1{\mathinner{\Bigl\{\!\Bigl\{{#1}\Bigr\}\!\Bigr\}}}
+\def\cclrggg#1{\mathinner{\biggl\{\!\biggl\{{#1}\biggr\}\!\biggr\}}}
+\def\cclrgggg#1{\mathinner{\Biggl\{\!\Biggl\{{#1}\Biggr\}\!\Biggr\}}}
+\def\cclra#1{\mathinner{\left\{\!\left\{{#1}\right\}\!\right\}}}
+%
+% <<>>
+%
+\def\ddlr#1{\mathinner{\langle\!\langle{#1}\rangle\!\rangle}}
+\def\ddlrg#1{\mathinner{\bigl\langle\!\bigl\langle{#1}\bigr\rangle\!\bigr\rangle}}
+\def\ddlrgg#1{\mathinner{\Bigl\langle\!\Bigl\langle{#1}\Bigr\rangle\!\Bigr\rangle}}
+\def\ddlrggg#1{\mathinner{\biggl\langle\!\biggl\langle{#1}\biggr\rangle\!\biggr\rangle}}
+\def\ddlrgggg#1{\mathinner{\Biggl\langle\!\Biggl\langle{#1}\Biggr\rangle\!\Biggr\rangle}}
+\def\ddlra#1{\mathinner{\left\langle\!\left\langle{#1}\right\rangle\right\!\rangle}}
+%
+% until
 %
 \def\pket#1{\mathinner{|{#1})}}
 \def\gpket#1{\mathinner{\bigl|{#1}\bigr)}}
@@ -19,14 +85,6 @@
 \def\gggpbra#1{\mathinner{\biggl({#1}\biggr|}}
 \def\ggggpbra#1{\mathinner{\Biggl({#1}\Biggr|}}
 %
-% []
-%
-\def\blr#1{\mathinner{\left[{#1}\right]}}
-\def\gblr#1{\mathinner{\bigl[{#1}\bigr]}}
-\def\ggblr#1{\mathinner{\Bigl[{#1}\Bigr]}}
-\def\gggblr#1{\mathinner{\biggl[{#1}\biggr]}}
-\def\ggggblr#1{\mathinner{\Biggl[{#1}\Biggr]}}
-%
 \def\bket#1{\mathinner{|{#1}]}}
 \def\gbket#1{\mathinner{\bigl|{#1}\bigr]}}
 \def\ggbket#1{\mathinner{\Bigl|{#1}\Bigr]}}
@@ -38,14 +96,6 @@
 \def\ggbbra#1{\mathinner{\Bigl[{#1}\Bigr|}}
 \def\gggbbra#1{\mathinner{\biggl[{#1}\biggr|}}
 \def\ggggbbra#1{\mathinner{\Biggl[{#1}\Biggr|}}
-%
-% {}
-%
-\def\clr#1{\mathinner{\left\{{#1}\right\}}}
-\def\gclr#1{\mathinner{\bigl\{{#1}\bigr\}}}
-\def\ggclr#1{\mathinner{\Bigl\{{#1}\Bigr\}}}
-\def\gggclr#1{\mathinner{\biggl\{{#1}\biggr\}}}
-\def\ggggclr#1{\mathinner{\Biggl\{{#1}\Biggr\}}}
 %
 \def\cket#1{\mathinner{|{#1}\}}}
 \def\gcket#1{\mathinner{\bigl|{#1}\bigr\}}}
@@ -72,9 +122,3 @@
 \def\ggdKet{{\Bigr\rangle\Bigr\rangle}}
 \def\gggdKet{{\biggr\rangle\biggr\rangle}}
 \def\ggggdKet{{\Biggr\rangle\Biggr\rangle}}
-%
-\def\dlr#1{\mathinner{\dBra{{#1}\dKet}}}
-\def\gdlr#1{\mathinner{\gdBra{#1}\gdKet}}
-\def\ggdlr#1{\mathinner{\ggdBra{#1}\ggdKet}}
-\def\gggdlr#1{\mathinner{\gggdBra{#1}\gggdKet}}
-\def\ggggdlr#1{\mathinner{\ggggdBra{#1}\ggggdKet}}

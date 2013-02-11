@@ -2,3 +2,32 @@
 	border-left: thin solid black;
 	padding:0px 0px 0px 8px;
 }
+
+theorem, proposition, definition, proof {
+  display: block;
+  margin: 12px 0px 12px 0px;
+}
+theorem:before {
+  content: '定理: ';
+  font-weight: bold;
+}
+proposition:before {
+  content: '命題: ';
+  font-weight: bold;
+}
+definition:before {
+  content: '定義: ';
+  font-weight: bold;
+}
+proof:before {
+  content: '証明: ';
+  font-weight: bold;
+}
+span.theorem:before {
+  content: '\00b6';
+  float:right;
+}
+span.proof:before {
+  content: '\25fb';
+  float:right;
+}

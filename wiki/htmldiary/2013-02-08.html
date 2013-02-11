@@ -1,0 +1,355 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>2013-02-08</title>
+		<link rel="Stylesheet" type="text/css" href="../style.css" />
+		<link rel="Stylesheet" type="text/css" href="../local.css" />
+		<link type="text/css" rel="stylesheet"
+			href="../syntaxhighlighter_3.0.83/styles/shCore.css" /> 
+		<link type="text/css" rel="stylesheet"
+			href="../syntaxhighlighter_3.0.83/styles/shThemeDefault.css" /> 
+		<script type="text/javascript"
+			src="../syntaxhighlighter_3.0.83/scripts/shCore.js">
+		</script> 
+		<script type="text/javascript"
+			src="../syntaxhighlighter_3.0.83/scripts/shBrushXml.js">
+		</script>
+		<script type="text/javascript"
+			src="../syntaxhighlighter_3.0.83/scripts/shBrushJava.js">
+		</script>
+		<script type="text/javascript"
+			src="../syntaxhighlighter_3.0.83/scripts/shBrushCpp.js">
+		</script>
+		<script type="text/javascript"
+			src="../syntaxhighlighter_3.0.83/scripts/shBrushHaskell.js">
+		</script>
+		<script type="text/javascript"
+			src="../syntaxhighlighter_3.0.83/scripts/shBrushPlain.js">
+		</script>
+		<script type="text/javascript"
+			src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		</script>
+		<script type="text/javascript" src="../local.js"></script>
+	</head>
+	<body>
+		<div class="content">
+			
+<p>
+<a href="diary.html">日誌</a>
+<h1>目次</h1>
+<div class="toc">
+<ul>
+<li><a href="#toc_1">形式言語</a>
+<ul>
+<li><a href="#toc_1.1">可換な形式級数</a>
+<li><a href="#toc_1.2">非可換な形式級数</a>
+<ul>
+<li><a href="#toc_1.2.1">一変数の場合</a>
+</ul>
+</ul>
+</ul>
+</div>
+</p>
+
+<h1 id="toc_1">形式言語</h1>
+<p>
+買っておいたstanleyの本
+<a name='stanley-2'>
+<a href="http://www.cambridge.org/us/knowledge/isbn/item1167618">Enumerative Combinatrics Volume 2</a>
+</a>
+の六章を読み始める。しばらく掛かりそうだ。
+１巻の方は筆者のホームページからダウンロードできる。
+<a name='stanley-1'>
+<a href="http://www-math.mit.edu/~rstan/ec/">Enumerative Combinatrics Volume 1</a>
+</a>
+</p>
+
+<h2 id="toc_1.1">可換な形式級数</h2>
+<p>
+<a href='stanley-1'>教科書の1.1</a>について書く。
+</p>
+
+<p>
+\(K\)を体、\(K\dlr{x}\)を\(x\)を不定元とする\(K\)上の多項式全体の作る集合とする。
+\(K\)上の形式級数\(K\ddlr{x}\)を次の形の級数和全体の作る集合とする。
+</p>
+\[
+\sum_{n\in\bfN} f_nx^n \quad\text{where } f_n\in K \text{ for all } n\in\bfN
+\]
+<p>
+多項式の場合と同様に、\(K\ddlr{x}\)に加法、乗法、スカラー積を次のように定義すると、
+\(K\dlr{x}\)は\(K\)上の代数となる。
+</p>
+\begin{split}
+\aplr{\sum_{n\in\bfN} f_nx^n} + \aplr{\sum_{n\in\bfN} g_nx^n} 
+	&amp;:= \sum_{n\in\bfN} (f_n + g_n) x^n
+	&amp;\quad\text{for all } f,g\in K\dlr{x} \\
+\aplr{\sum_{n\in\bfN} f_nx^n} \aplr{\sum_{n\in\bfN} g_nx^n} 
+	&amp;:= \sum_{n\in\bfN} \aplr{\sum_{k=0}^n f_kg_{n-k}} x^n
+	&amp;\quad\text{for all } f,g\in K\dlr{x} \\
+r\aplr{\sum_{n\in\bfN} f_nx^n} &amp;:= \sum_{n\in\bfN} (rf_n) x^n 
+	&amp;\quad\text{for all } f\in K\dlr{x},\; x\in K \\
+\end{split}
+<p>
+ただし、無限回の加法、無限回の乗法、無限回のスカラー積は無制限には許さないとする。
+\(\aplr{\sum_{k\in\bfN}r_k}x^n\)や\(\aplr{\prod{k\in\bfN}r_k}x^n\)という\(K\)の無限個の加法や乗法を含む係数を無制限には許さないということである。
+</p>
+
+<p>
+\(K\ddlr{x}\)に収束を定義する。
+不定元の文字に依らずに、形式級数の係数を表すために、
+\(K\ddlr{x}\)について線形な写像\(\blr{-,-}:K\ddlr{x}\times\bfN\to K\)を次のように定義する。
+</p>
+\[
+\blr{f,n} := f_n \quad\text{where } f=\sum_{k\in\bfN} f_kx^n
+\text{ with } f_k\in K \text{ for all } k\in\bfN
+\]
+<p>
+写像\(\deg_\bot:K\ddlr{x}\to\gplr{\bfN+\set{\infty}}\)を次のように定義する。
+</p>
+\begin{split}
+\deg_\bot f &amp;:= \begin{cases}
+	\infty, &amp;\text{ iff } f = 0 \\
+	\op{argmin}_{n\in\bfN}\blr{f,n}\neq0, &amp;\text{ otherwise } \\
+\end{cases} \quad\text{for all } f\in K\ddlr{x}
+\end{split}
+<p>
+\(K\ddlr{x}\)は\(\deg_\bot\)によって、次数付きの代数となる。
+\(\deg_\bot\)は通常の多項式の次数とは逆の意味になっていることに注意する。
+通常、多項式の次数は\(f_n\neq0\)となる最大の\(n\)である。
+</p>
+
+<p>
+係数体が複素数の場合には次のようになり、
+</p>
+\begin{split}
+\deg_\bot(f + g) &amp;\le \max(\deg f, \deg g)
+&amp;\quad\text{for all } f,g\in \bfC\ddlr{x}_\times \\
+\deg_\bot(fg) &amp;= (\deg f) + (\deg g)
+&amp;\quad\text{for all } f,g\in \bfC\ddlr{x}_\times \\
+\end{split}
+<p>
+\(\deg_\bot\)は次のように書くこともできる。
+</p>
+\[
+\deg_\bot f = \begin{cases}
+	\infty, &amp;\text{ iff } f = 0 \\
+	\lim_{x\to0}\frac{\ln f}{\ln x}, &amp;\text{ otherwise } \\
+\end{cases} \quad\text{for all } f\in \bfC\ddlr{x}
+\]
+
+<p>
+\(K\ddlr{x}\)の収束を次のように定義する。
+<div class='prop' id='def:convergence'>
+\(K\ddlr{x}\)の加算な部分集合\(\set{f_n}:=\set{f_n\in K\ddlr{x}\bou n\in\bfN}\)が、
+\(\lim_{n\to\infty}\deg_\bot(f_{n+1}-f_n)=\infty\)となる時、
+\(\set{f_n}\)は収束するという。さらに、ある\(f\in K\ddlr{x}\)があって、
+\(\lim_{n\to\infty}\deg_\bot(f-f_n)=\infty\)となる時、
+\(\set{f_n}\)は\(f\)に収束するといい、\(\lim_{n\to\infty}f_n=f\)と書く。
+</div>
+<div>
+<proof>
+</proof>
+</div>
+係数体についての連続性を仮定していないので、このような離散位相を考える。
+</p>
+
+<p>
+次の式から、\(\lim_{n\to\infty}f_n=f\)ならば、\(\set{f_n}\)は収束し、
+</p>
+\[
+\deg_\bot(f - f_n) = \deg_\bot(f - f_{n+1} + f_{n+1} - f_n)
+= \max\gplr{\deg_\bot(f - f_{n+1}),\deg_\bot(f_{n+1} - f_n)}
+\le \deg_\bot(f_{n+1} - f_n)
+\]
+<p>
+次の式から、\(\lim_{n\to\infty}f_n=f\)ならば、\(\set{f_n}\)は収束することがわかる。
+</p>
+\[
+\deg_\bot(f_{n+1} - f_n) = \deg_\bot(f_{n+1} - f + f - f_n)
+= \max\gplr{\deg_\bot(f_{n+1} - f),\deg_\bot(f - f_n)}
+\le \deg_\bot(f - f_n)
+\]
+<p>
+したがって、\(\set{f_n}\)が収束することと、
+収束点\(\lim_{n\to\infty}f_n\in K\ddlr{x}\)が存在することは同値になる。
+</p>
+
+<p>
+<div class='prop' id='prop:convergence'>
+\(\set{f_n}:=\set{f_n\in K\ddlr{x}\bou n\in\bfN}\)とする。
+</p>
+<ol>
+<li>
+\(\sum_{n=0}^\infty f_n\)が収束するための必要十分条件は、
+	\(\lim_{n\to\infty}f_n=0\)となることである。
+
+<li>
+\(\prod_{n=0}^\infty(1 + f_n)\)が収束するための必要十分条件は、
+	\(\lim_{n\to\infty}f_n=0\)となることである。
+
+</ol>
+<p>
+</div>
+</p>
+<ol>
+<li>
+\(F_n:=\sum_{n=0}^n f_k\)とすると、任意の\(n\in\bfN\)に対して\(F_{n+1}-F_n=f_n\)となり、
+	\(\lim_{n\to\infty}\deg_\bot(F_{n+1}-F_n)=\infty\iff\lim_{n\to\infty}\deg_\bot f_n\)
+	となるから、命題が成り立つことがわかる。
+
+<li>
+\(F_n:=\prod_{n=0}^n(1 + f_k)\)とすると、次の式から、
+\[
+\deg_\bot(F_{n+1}-F_n) = \plr{\deg_\bot f_{n+1}} + \plr{\deg_\bot F_n} 
+\quad\text{for all } n\in\bfN
+\]
+	\(\lim_{n\to\infty}\f_n=0\)ならば、\(\lim_{n\to\infty}F_n\)は収束することがわかる。
+	逆に、\(\lim_{n\to\infty}F_n\)が収束するならば、\(\lim_{n\to\infty}f_n=0\)
+	または\(\lim_{n\to\infty}F_n=0\)となる必要があるが、
+
+</ol>
+
+<p>
+<a href='#stanley-2'>命題1.1.8と1.1.9</a>
+</p>
+
+<h2 id="toc_1.2">非可換な形式級数</h2>
+<p>
+\(K\)を体、\(A\)を有限集合とする。
+\(A^*:=\plr{\coprod_{n\in\bfN}A,m_0,1_\clW}\)を\(A\)から生成される自由モノイド、
+\(K\blr{A}\)を\(A\)の元を不定元とする\(K\)上の多項式全体のつくる集合、
+\(K\bblr{A}\)を\(A\)の元を不定元とする\(K\)上の形式級数全体のつくる集合とする。
+\(K\blr{A}\)と\(K\blr{A}\)の違いは、\(K\blr{A}\)は有限和しか許さず、
+\(K\bblr{A}\)は無限和を許すことである。
+</p>
+
+<p>
+\(K\bblr{A}\)について線形な写像\(\blr{-,-}:K\bblr{A}\times A^*\to K\)を次のように定義し、
+</p>
+\[
+\blr{w_1,w_2} := \is{w_1=w_2} \quad\text{for all } w_1,w_2\in A^*
+\]
+<p>
+畳み込みによって、\(K\bblr{A}\)に二項演算\(+\)と\(\cdot\)を次のように定義する。
+</p>
+\begin{split}
+\blr{f+g,w} &amp;:= \blr{f,w} + \blr{g,w}
+&amp;\quad\text{for all } f,g\in K\bblr{A},\; w\in A^* \\
+\blr{f\cdot g,w} &amp;:= \blr{f,w}\blr{g,w}
+&amp;\quad\text{for all } f,g\in K\bblr{A},\; w\in A^* \\
+\end{split}
+<p>
+すると、次のことが成り立つ。
+</p>
+<ul>
+<li>
+\(+\)は\(0\in K\)への定数写像を単位元とする可換な積となる。
+
+<li>
+\(\cdot\)は\(1\in K\)へ定数写像を単位元とする可換な積となる。
+
+<li>
+\(+\)を加法、\(\cdot\)を乗法とする分配則を満たし、
+	\((K\bblr{A},+,\cdot)\)は可換な環となる。
+
+<li>
+\(K\)への定数写像と\(K\)を同一視すると、
+	\((K\bblr{A},+,\cdot)\)は\(K\)上の可換な代数となる。
+
+</ul>
+<p>
+以降、二項演算\(\cdot\)は省略して、単に\(fg:=f\cdot g\)と書く。
+また、'内積'\(\blr{-,-}\)の定義域を\(K\bblr{A}\otimes K\blr{A}\)へ双線型に拡張する。
+</p>
+
+<p>
+\(A^*\)の文字列の連結\(m_0\)の畳み込みより、余積\(m_0^\trn:K\bblr{A}\to K\bblr{A}\otimes K\bblr{A}\)とその余単位射\(\epsilon_0:K\bblr{A}\to K\)を次のように定義することができる。
+</p>
+\begin{split}
+\blr{m_0^\trn f,x_1\otimes x_2} &amp;:= \blr{f,m_0(x_1\otimes x_2)}
+&amp;\quad\text{for all } f\in K\blr{\blr{A}},\; x_1,x_2\in K\blr{A} \\
+\epsilon_0 f &amp;:= \blr{f,1_\clW}
+&amp;\quad\text{for all } f\in K\blr{\blr{A}} \\
+\end{split}
+<p>
+ここで、テンソル積同士の内積は次のように定義する。
+</p>
+\[
+\blr{f\otimes g,x\otimes y} := \blr{f,x}\blr{g,y}
+\quad\text{for all } f,g\in K\blr{\blr{A}},\; x,y\in K\blr{A} \\
+\]
+<p>
+\(m_0^\trn\)を文字列で表すと次のようになる。
+</p>
+\[
+m_0^\trn w = \sum_{w_1,w_2\in A^*} \is{w_1w_2=w}
+w_1\otimes w_2 \quad\text{for all } w\in A^*
+\]
+<p>
+また、\(K\bblr{A}\)の積\(m_0\)を次のように定義できるが、
+</p>
+\[
+\blr{m_0(f\otimes g),x} := \blr{f\otimes g,m_0^\trn x}
+\quad\text{for all } f,g\in K\bblr{A},\; x\in K\blr{A}
+\]
+<p>
+\(\blr{m_0(f\otimes g),-}:K\blr{A}\to K\)の定義域は\(A^*\)に収まりきらずに、
+\(K\blr{A}\)を定義域にする必要があることに注意する。
+</p>
+
+<p>
+\(K\bblr{A}\)は、何も付け足さなくてもそのままで、ほぼ体になっている。
+</p>
+\[
+f_0 := \epsilon_0f \neq 0 \implies \left\{\begin{split}
+	f^{-1} &amp;:= \frac{1}{f_0}\sum_{n\in\bfN}
+		\aplr{\frac{f_0-f}{f_0}}^n \in K\bblr{A} \\
+	\blr{ff^{-1},w} &amp;= 1 = \blr{f^{-1}f,w}
+		\quad\text{for all } w\in A^*
+\end{split}\right.
+\]
+<p>
+\(K\bblr{A}\)に\(a\in A\)の逆元\(a^{-1}\)を付け足したものを\(K\bblr{A}\blr{A^{-1}}\)と書くと、
+\(\epsilon_0f\neq0\)という制限が外れて、\(K\bblr{A}\blr{A^{-1}}\)は体になる。
+</p>
+
+<h3 id="toc_1.2.1">一変数の場合</h3>
+<p>
+文字集合がシングルトン\(A:=\set{a}\)の場合は、べきを表すの二項演算\(*\)を次のように定義できる。
+</p>
+\[
+a^m*a^n := a^{mn} \quad\text{for all } m,n\in\bfN
+\]
+<p>
+\((A^*,m,m_*)\)は、通常の加法と乗法による自然数のつくる半環と同型になる。
+</p>
+
+<p>
+作用素\((-)_+,(-)_*:\bfN\to\cat{Set}(A^*,A^*)\)を次のように定義すると、
+</p>
+\begin{split}
+(m)_+a^n &amp;:= a^{m+n} &amp;\quad\text{for all } m,n\in\bfN \\
+(m)_*a^n &amp;:= a^{mn} &amp;\quad\text{for all } m,n\in\bfN \\
+\end{split}
+<p>
+次の交換関係が成り立つ。
+</p>
+\[
+(m)_*(n)_+ = (mn)_+(m)_* \quad\text{for all } m,n\in\bfN
+\]
+<p>
+この交換関係は、自然数の分配則を作用素の形で表している。
+また、余積\(m_*^\trn:K\bblr{A}\to K\bblr{A}\otimes K\bblr{A}\)は次のようになり、
+</p>
+\[
+m_*^\trn a^n = \sum_{r,s\in\bfN} \is{rs=n}
+a^r\otimes a^s \quad\text{for all } n\in\bfN
+\]
+<p>
+自然数の因数分解に対応する。
+</p>
+
+		</div>
+	</body>
+</html>

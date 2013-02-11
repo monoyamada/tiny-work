@@ -1,18 +1,9 @@
 [[diary|日誌]]
 %toc 目次
 
-= 形式言語 =
-昨日の<a href='2013-02-06.html#hopkins'>論文</a>の続きで、
-<a name='lutttenberger'>[[http://arxiv.org/abs/1112.2864|An Extension of Parikh's Theorem beyond Idempotence]]</a>
-から
-<a name='provenance'>[['http://www.cs.ucdavis.edu/~green/|Provenance Semirings]]</a>
-に辿り着いた。
-provenanceは由来を表すフランス語由来の英語らしい。
-Provenance半環とはデータベースのクエリに現れる代数構造らしい。
-
 = vimwiki =
 wikiを書いていて気がついたのだが、javascriptを使えば、
-おらwikiを作るのは簡単なんだな。
+自作のwikiを作るのは簡単なんだな。
 サーバーを設定してサーバーサイドで処理をすることに比べると。
 
 vimwikiでは二つ以上の属性を持つhtmlタグは扱えないらしい。
@@ -20,3 +11,19 @@ vimwikiでは二つ以上の属性を持つhtmlタグは扱えないらしい。
 <a name='x' href='b'>c</a>
 }}}
 というコードを書いたら出力htmlが変になった。
+
+mathjaxは単純な$\TeX$の移植ではなく、拡張している部分もあるようだ。
+vimwiki+mathjax:
+{{{plain class='brush: plain;'
+{{$%split%
+x + y &= z & \quad\text{for all } x,y,z\in A \\
+z_1 +\cdots+ z_n &= x + y & \quad\text{for all } x,y,z_1,z_2,\dots\in A \\
+}}$
+}}}
+html:
+{{$%split%
+x + y &= z & \quad\text{for all } x,y,z\in A \\
+z_1 +\cdots+ z_n &= x + y & \quad\text{for all } x,y,z_1,z_2,\dots\in A \\
+}}$
+splitという$\TeX$の環境は、本来であれば、&は各行につき一つまでしか使えないが、
+mathjaxでは&を各行にいくつでも配置できるようだ。

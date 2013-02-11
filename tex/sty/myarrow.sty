@@ -84,18 +84,21 @@
 % to from
 %
 \newcommand{\xto}[2][]{\ensuremath{\xrightarrow[{#1}]{#2}}}
+%
 \newcommand{\xfrom}[2][]{\ensuremath{\xleftarrow[{#1}]{#2}}}
+%
 \newcommand{\xleftrightarrows}[2][]{\mathrel{%  
 	\raise.40ex\hbox{\ext@arrow 3095\leftarrowfill@{\phantom{#1}}{#2}$}%  
 	\setbox0=\hbox{$\ext@arrow 0359\rightarrowfill@{#1}{\phantom{#2}}$}%  
 	\kern-\wd0 \lower.40ex\box0}}
+%
 \newcommand{\xtofrom}[2]{\mathrel{%  
 	\raise.40ex\hbox{$\ext@arrow 3095\rightarrowfill@{\phantom{#2}}{#1}$}%  
 	\setbox0=\hbox{$\ext@arrow 0359\leftarrowfill@{#2}{\phantom{#1}}$}%  
 	\kern-\wd0 \lower.40ex\box0}}
+%
 \newcommand{\xfromto}[2]{\mathrel{%  
 	\raise.40ex\hbox{$\ext@arrow 3095\leftarrowfill@{\phantom{#2}}{#1}$}%  
-	\setbox0=\hbox{$\ext@arrow 0359\rightarrowfill@{#2}{\phantom{#1}}$}%  
+	\setbox0=\hbox{$\ext@arrow 0359\rightarrowfill@{#2}{\phantom{#1}}$}%
 	\kern-\wd0 \lower.40ex\box0}}
-
 \makeatother

@@ -1,0 +1,207 @@
+[[diary|日誌]]
+%toc 2013-02-08
+
+= 形式言語 =
+買っておいたstanleyの本
+<a name='stanley-2'>
+[[http://www.cambridge.org/us/knowledge/isbn/item1167618|Enumerative Combinatrics Volume 2]]
+</a>
+の六章を読み始める。しばらく掛かりそうだ。
+１巻の方は筆者のホームページからダウンロードできる。
+<a name='stanley-1'>
+[[http://www-math.mit.edu/~rstan/ec/|Enumerative Combinatrics Volume 1]]
+</a>
+
+<a href='#stanley-1'>教科書</a>で扱う形式級数は単に多項式を拡張したものではない。
+例えば、次の二つの級数はどちらも$\exp(1+x)$のTayler展開ではあるが、
+片方は$\bfC\bblr{x}$の元になっていて、
+もう片方は$\bfC\bblr{x}$の元になっていない。
+{{$
+\sum_{n\in\bfN} \frac{ex^n}{n!}\in\fukuso\bblr{x} \quad\text{but}\quad 
+\sum_{n\in\bfN} \frac{(1 + x)^n}{n!}\not\in\fukuso\bblr{x}
+}}$
+そのココロは、形式級数の次数によって$K\bblr{x}$の完備化を行なっているところにある。
+形式級数の次数は次の写像$\deg_\bot: K\bblr{x}\to\plra{\sizen\cup\set{\infty}}$
+によって与えられる。
+{{$
+\deg_\bot f := \begin{cases}
+	\infty, &\text{ iff } f = 0 \\
+	\op{argmin}_{n\in\sizen} \dlr{f, n}\neq 0, &\text{ otherwise } \\
+\end{cases} \quad\text{for all } f\in K\bblr{x}
+}}$
+$\deg_\bot$は$\blr{f,n}\neq0$となる最小の$n$を与える関数である。
+$\deg_\bot$は次の式を満たす。
+{{$%split%
+\deg_\bot(f+g) &\ge \min(\deg_\bot f,\; \deg_\bot g) \\
+\deg_\bot(f\cdot g) &= \deg_\bot f + \deg_\bot g \\
+}}$
+一つ目の式の不等号は、
+* $fx=1+x,\; g=-1+x$とすると、$\deg_\bot f=\deg_\bot g=0$だが、$\deg_\bot(f+g)=1$となる
+といった状況を反映している。
+
+* ブーリアン上の形式級数半環$\bool\bblr{q}$を考える。
+* $\bool\bblr{q}$に半順序$\preceq$を定義する。
+	$f\preceq g\iff\exists h\mid f+h=g$
+* $\bool\bblr{q}$に二項演算$\land$を定義する。
+	$\dlr{f\land g,n}:=\dlr{f,n}\dlr{g,n}$
+* $(\bool\bblr{a},\land,+)$が半環になっていることを確かめる。
+* $(\bool\bblr{a},\land,+)$と半順序$\preceq$がコンパチになっていることを確かめる。
+* $\blr{\sizen_\infty}_q:=\set{1+q+\cdots+q^n\mid n\in\sizen}$で張られる部分空間が$(+,\cdot)$と$(\land,+)$の両方で部分半環となっていることを確かめる。
+* $\blr{\sizen_\infty}_q$で張られる部分空間が$\preceq$で完備になっていることを確かめる。
+* $\deg_q:K\bblr{x}\to\bool\dlr{\sizen_\infty}_q$を$\deg_qf:=[\deg_\bot f]_q$で定義する。
+* $\deg_q$を考えると何が嬉しいのかを考える。
+
+=== 形式級数の次数 ===
+形式級数の次数$\deg_\bot$について成り立つ性質を書いておく。
+
+$\deg_\bot(f - g)=n$なら、$f$と$g$は$0..(n-1)$次の係数が一致していて、
+$g$は次ののように書ける。
+{{$
+gx = f_0 + \cdots + f_{n-1}x^{n-1} + g_nx^n + g_{n+1}x^{n+1} + \cdots
+\quad\text{and}\quad f_n\neq g_n
+}}$
+$\bot(f,n)$を$f$と$0..(n-1)$次の係数が一致する形式級数全体の作る集合とすると、
+{{$%split%
+\bot: K\bblr{x}\times\sizen_\infty &\to \clP\plr{K\bblr{x}} \\
+(f,n) &\mapsto \set{g\in K\bblr{x}\mid n\le\deg_\bot(f,g)}
+}}$
+任意の$f\in K\bblr{x}$に対して部分集合の可算な降下列が次のように得られる。
+{{$
+K\bblr{x}=\bot(f,0)\supseteq \bot(f,1)\supseteq\cdots\supseteq \bot(f,\infty)=f
+}}$
+例えば、$\set{0,1}$を元とする標数$2$の体$\sei_2$を係数体として、
+$f=1+x$を考えると、次の降下列になる。
+{{$
+\bot(f,0)=\sei_2\bblr{x}
+\supset \bot(f,1)=\set{1+a_1x^1+\cdots}
+\supset \bot(f,2)=\set{1+x+a_2x^2+\cdots}
+\supset \bot(f,3)=\set{1+x+a_3x^3+\cdots}
+\supset \cdots 
+\supset \bot(f,\infty)=\set{1+x}
+}}$
+
+=== 保留 ===
+ここで、形式級数の係数を体ではなく、次の性質を満たす半環$R$に変更すると、
+{{$%split%
+a + b = 0 &\iff a = b = 0 &\quad\text{for all } a,b\in R \\
+ab = 0 &\iff a = 0 \text{ or } b = 0 &\quad\text{for all } a,b\in R \\
+}}$
+$\deg_\bot:R\bblr{x}\to\sizen$は半環準同型
+$\deg_\bot:(R\bblr{x},+,\cdot)\to(\sizen,\min,+)$になる。
+自然数、非負の有理数、非負の実数などが$R$に相当する。
+自然数上の$\min$は可換かつ結合的になり、次のように$+$と分配則を満たす。
+{{$
+a + \min(b,\; c) = \min(a + b,\; a + c) \quad\text{for all } a,b,c\in\sizen
+}}$
+そして、$\deg_\bot$を次のようにq-変形した写像$\deg_q:R\bblr{x}\to\sizen\bblr{q}$を考える。
+{{$
+\deg_q f := \blra{\deg_\bot f}_q \quad\text{for all } f\in R\bblr{x}
+}}$
+
+== 非可換な形式級数 ==
+$K$を体、$A$を有限集合とする。
+$A^*:=\plr{\coprod_{n\in\bfN}A,m_0,1_\clW}$を$A$から生成される自由モノイド、
+$K\blr{A}$を$A$の元を不定元とする$K$上の多項式全体のつくる集合、
+$K\bblr{A}$を$A$の元を不定元とする$K$上の形式級数全体のつくる集合とする。
+$K\blr{A}$と$K\blr{A}$の違いは、$K\blr{A}$は有限和しか許さず、
+$K\bblr{A}$は無限和を許すことである。
+
+$K\bblr{A}$について線形な写像$\blr{-,-}:K\bblr{A}\times A^*\to K$を次のように定義し、
+{{$
+\blr{w_1,w_2} := \is{w_1=w_2} \quad\text{for all } w_1,w_2\in A^*
+}}$
+畳み込みによって、$K\bblr{A}$に二項演算$+$と$\cdot$を次のように定義する。
+{{$%split%
+\blr{f+g,w} &:= \blr{f,w} + \blr{g,w}
+&\quad\text{for all } f,g\in K\bblr{A},\; w\in A^* \\
+\blr{f\cdot g,w} &:= \blr{f,w}\blr{g,w}
+&\quad\text{for all } f,g\in K\bblr{A},\; w\in A^* \\
+}}$
+すると、次のことが成り立つ。
+* $+$は$0\in K$への定数写像を単位元とする可換な積となる。
+* $\cdot$は$1\in K$へ定数写像を単位元とする可換な積となる。
+* $+$を加法、$\cdot$を乗法とする分配則を満たし、
+	$(K\bblr{A},+,\cdot)$は可換な環となる。
+* $K$への定数写像と$K$を同一視すると、
+	$(K\bblr{A},+,\cdot)$は$K$上の可換な代数となる。
+以降、二項演算$\cdot$は省略して、単に$fg:=f\cdot g$と書く。
+また、'内積'$\blr{-,-}$の定義域を$K\bblr{A}\otimes K\blr{A}$へ双線型に拡張する。
+
+$A^*$の文字列の連結$m_0$の畳み込みより、余積$m_0^\trn:K\bblr{A}\to K\bblr{A}\otimes K\bblr{A}$とその余単位射$\epsilon_0:K\bblr{A}\to K$を次のように定義することができる。
+{{$%split%
+\blr{m_0^\trn f,x_1\otimes x_2} &:= \blr{f,m_0(x_1\otimes x_2)}
+&\quad\text{for all } f\in K\blr{\blr{A}},\; x_1,x_2\in K\blr{A} \\
+\epsilon_0 f &:= \blr{f,1_\clW}
+&\quad\text{for all } f\in K\blr{\blr{A}} \\
+}}$
+ここで、テンソル積同士の内積は次のように定義する。
+{{$
+\blr{f\otimes g,x\otimes y} := \blr{f,x}\blr{g,y}
+\quad\text{for all } f,g\in K\blr{\blr{A}},\; x,y\in K\blr{A} \\
+}}$
+$m_0^\trn$を文字列で表すと次のようになる。
+{{$
+m_0^\trn w = \sum_{w_1,w_2\in A^*} \is{w_1w_2=w}
+w_1\otimes w_2 \quad\text{for all } w\in A^*
+}}$
+また、$K\bblr{A}$の積$m_0$を次のように定義できるが、
+{{$
+\blr{m_0(f\otimes g),x} := \blr{f\otimes g,m_0^\trn x}
+\quad\text{for all } f,g\in K\bblr{A},\; x\in K\blr{A}
+}}$
+$\blr{m_0(f\otimes g),-}:K\blr{A}\to K$の定義域は$A^*$に収まりきらずに、
+$K\blr{A}$を定義域にする必要があることに注意する。
+
+$K\bblr{A}$は、何も付け足さなくてもそのままで、ほぼ体になっている。
+{{$
+f_0 := \epsilon_0f \neq 0 \implies \left\{\begin{split}
+	f^{-1} &:= \frac{1}{f_0}\sum_{n\in\bfN}
+		\aplr{\frac{f_0-f}{f_0}}^n \in K\bblr{A} \\
+	\blr{ff^{-1},w} &= 1 = \blr{f^{-1}f,w}
+		\quad\text{for all } w\in A^*
+\end{split}\right.
+}}$
+$K\bblr{A}$に$a\in A$の逆元$a^{-1}$を付け足したものを$K\bblr{A}\blr{A^{-1}}$と書くと、
+$\epsilon_0f\neq0$という制限が外れて、$K\bblr{A}\blr{A^{-1}}$は体になる。
+
+=== 一変数の場合 ===
+文字集合がシングルトン$A:=\set{a}$の場合は、べきを表すの二項演算$*$を次のように定義できる。
+{{$
+a^m*a^n := a^{mn} \quad\text{for all } m,n\in\bfN
+}}$
+$(A^*,m,m_*)$は、通常の加法と乗法による自然数のつくる半環と同型になる。
+
+作用素$(-)_+,(-)_*:\bfN\to\cat{Set}(A^*,A^*)$を次のように定義すると、
+{{$%split%
+(m)_+a^n &:= a^{m+n} &\quad\text{for all } m,n\in\bfN \\
+(m)_*a^n &:= a^{mn} &\quad\text{for all } m,n\in\bfN \\
+}}$
+次の交換関係が成り立つ。
+{{$
+(m)_*(n)_+ = (mn)_+(m)_* \quad\text{for all } m,n\in\bfN
+}}$
+この交換関係は、自然数の分配則を作用素の形で表している。
+また、余積$m_*^\trn:K\bblr{A}\to K\bblr{A}\otimes K\bblr{A}$は次のようになり、
+{{$
+m_*^\trn a^n = \sum_{r,s\in\bfN} \is{rs=n}
+a^r\otimes a^s \quad\text{for all } n\in\bfN
+}}$
+自然数の因数分解に対応する。
+
+= vimwiki =
+
+== mathjax ==
+[[http://boolesrings.org/scoskey/writing-math-on-the-web/|mathjaxの定理環境]]
+いつからHTMLは野良タグが使えるようになったのだろう。
+完璧なcssさえ用意すれば、野良タグでもブラウザーは理解できるはずだが。
+
+== vimwikiと$TeX$ ==
+vimwikiは通常の文章を書くことには適しているが、
+文章の中に定義、定理、証明などブロックを挿入していくスタイルの記述には適していないかもしれない。
+<a href='#stanley-1'>教科書</a>のノートをvimwikiで取りながら思った。
+
+ブロックのタイプごとに表示方法をカスタマイズすることは、
+htmlより$\TeX$の方がやりやすい上に、カスタマイズが多くなると、
+vimwikiを使わずにhtmlを直書きした方が早いということになってしまう。
+vimwikiを使う場合には、文章をメインにして、
+数式も書ける位の気持ちで使うのが良いと思う。

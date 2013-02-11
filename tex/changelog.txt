@@ -1,7 +1,14 @@
+2013-02-11  shirakata
+
+	* renewed: moved old stuff into backup and deleted almost tex files from
+	toplevel directory. it is to reduce compiling time of tex.
+
 2013-02-03  shirakata
 
 	* fnc-1.tex: renamed from hask-1.tex
 	functional programming related matters.
+	* stanley-1.tex: new
+	memo to read stanley's enumerative combinatorics.
 
 2013-01-18  shirakata
 	* bruno-1.tex: new 

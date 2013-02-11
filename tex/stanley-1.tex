@@ -1,0 +1,250 @@
+\begingroup %{
+{\setlength\arraycolsep{2pt}
+%
+\section{Stanley}\label{s1:Stanley} %{
+	\cite{stanley-2}六章の有理言語に関する部分を読む。
+	形式級数の無限和と無限積を扱うための準備で\cite{stanley-1}が必要になる。
+
+\subsection{可換な形式級数}\label{s2:可換な形式級数} %{
+	$K$を体、$K\blr{x}$を$K$上の１変数の多項式環、$K\bblr{x}$を$K$上の１変数の
+	形式級数環とする。不定元の文字に依らずに係数を得るために、$K\bblr{x}$の元
+	について線形な写像$\dlr{\here,\here}:K\bblr{x}\times\sizen\to K$を
+	次のように定義する。
+	\begin{equation*}\begin{split}
+		\dlr{f,n} := f_n \quad\text{where } fx = \sum_{n\in\sizen} f_nx^n
+		\text{ with } f_n\in K \text{ for all } n\in\sizen
+	\end{split}\end{equation*}
+	$K\bblr{x}$の加法を$+$、乗法を$\cdot$で表すと、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\dlr{f + g, n} &= \dlr{f, n} + \dlr{g, n} \\
+		\dlr{f \cdot g, n} &= \dlr{f, n}\dlr{g, n} \\
+	\end{split}
+	\quad\text{for all } f,g\in K\bblr{x},\; n\in\sizen
+	\end{equation*}
+
+	$K\bblr{x}$は係数の無限和や無限積は無制限には許さない。
+	例えば、$\set{\sum_{k\in\sizen}a_k}x^n$のような係数が無限和によって定義
+	された項は無制限には許さない。どのような無限和や無限積を許すかをはっきり
+	させるために、$K\bblr{x}$に位相と収束を定義する。係数体の位相に依らずに
+	形式級数の位相を定義するために、まず、形式級数の次数というものを定義する。
+
+	\begin{definition}[形式級数の次数]\label{def:形式級数の次数} %{
+		写像$\deg_\bot:K\bblr{x}\to\sizen+\set{\infty}$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\deg_\bot f := \begin{cases}
+				\infty, &\text{ iff } f = 0 \\
+				\op{argmin}_{n\in\sizen} \dlr{f,n}\neq0, &\text{ otherwise } \\
+			\end{cases} \quad\text{for all } f\in K\bblr{x}
+		\end{split}\end{equation*}
+		つまり、$\deg_\bot f$を$\dlr{f,n}\neq0$となる最小の$n$とする。\EOP
+	\end{definition} %def:形式級数の次数}
+
+	ここで定義した$\deg_\bot$は、通常の多項式の次数とは逆の意味になっている
+	ことに注意する。通常の多項式の次数は$\dlr{f,n}\neq0$となる最大の$n$である。
+
+	$\deg_\bot$は、$n=\deg_\bot(f-g)$とした時、$f$と$g$は$0..(n-1)$次の各係数
+	が一致しているということを表す。また、$\deg_\bot$によって、$K\bblr{x}$は
+	次数付き$K$-代数となる。
+
+	係数体が複素数の場合には、$\deg_\bot$は次のように書ける。
+	\begin{equation*}\begin{split}
+		\deg_\bot f = \begin{cases}
+			\infty, &\text{ iff } f = 0 \\
+			\lim_{x\to0}\cfrac{\ln f}{\ln x}, &\text{ otherwise } \\
+		\end{cases} \quad\text{for all } f\in \fukuso\bblr{x}
+	\end{split}\end{equation*}
+	Maslov量子化に似ている気がするが話を続ける。
+
+	$\deg_\bot$は次の式を満たす。
+	\begin{alignat*}{2}
+		\deg_\bot f= \infty &\iff f = 0 
+			&&\quad\text{for all } f\in K\bblr{x} \\
+		\deg_\bot(f + g) &\ge \min\plrg{\deg_\bot f,\; \deg_\bot g}
+			&&\quad\text{for all } f,g\in K\bblr{x} \\
+		\deg_\bot(f\cdot g) &= (\deg_\bot f) + (\deg_\bot g)
+			&&\quad\text{for all } f,g\in K\bblr{x} %\\
+	\end{alignat*}
+	係数体が複素数の場合からわかるように、対数に似た演算になる。
+	そして、ほぼ距離の定義を満たす。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[非負] $0\le \deg_\bot(f - g)$
+		\item[反射] $f = g\iff \deg_\bot(f - g) = \infty$
+		\item[対称] $\deg_\bot(f - g) = \deg_\bot(g - f)$
+		\item[三角] $\deg_\bot(f + g)\ge\min\plrg{\deg_\bot f,\;\deg_\bot g}$
+	\end{description} %}
+	距離の定義の$0$を$\infty$に置き換えて不等号の向きを反転した形になっている。
+	距離$d$の場合は、反射律が$f=g\implies d(f,g)=0$となり、
+	三角不等式が$d(f,g)\le d(f,h)+g(h,g)$となる。そして、三角不等式が
+	$d(f,g)\le\max\plrg{d(f,h),\;d(h,g)}$となっている時は、
+	$d(f,g)\le\max\plrg{d(f,h),\;d(h,g)}\le d(f,h)+d(h,g)$となるから、
+	通常の三角不等式より強い不等式となる。このように$\max$で表される三角不等式
+	を非アルキメデス距離というらしい\footnote{
+		wikipediaの距離空間
+	}。
+
+	形式級数の次数を使って収束を定義する。
+
+	\begin{definition}[形式級数の収束]\label{def:形式級数の収束} %{
+		$\set{f_n}:=\set{f_n\in K\bblr{x}\mid n\in\sizen}$が次の性質を満たす時、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$N\in\sizen$に対してある$n\in\sizen$が存在して、
+			次の式を満たす。
+			\begin{equation*}\begin{split}
+				N\le \deg_\bot(f_{k+1} - f_k) \quad\text{for all } n\le k\in\sizen
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		$\set{f_n}$は収束するという。
+		また、ある$f\in K\bblr{x}$に対して次の性質を満たす時、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$N\in\sizen$に対してある$n\in\sizen$が存在して、
+			次の式を満たす。
+			\begin{equation*}\begin{split}
+				N\le \deg_\bot(f - f_k) \quad\text{for all } n\le k\in\sizen
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		$\set{f_n}$は$f$に収束するとか、$f$を$\set{f_n}$を収束点という。\EOP
+	\end{definition} %def:形式級数の収束}
+
+	$\set{f_n}$が$f\in K\bblr{x}$に収束するならば、$\set{f_n}$は収束する。
+	\begin{proof} %{
+		任意の$N\in\sizen$に対してある$n\in\sizen$があって、
+		\begin{equation*}\begin{split}
+			N\le\deg_\bot(f - f_k) \quad\text{for all }n\le k\in\sizen
+		\end{split}\end{equation*}
+		となるが、
+		\begin{equation*}\begin{split}
+			\deg_\bot(f_{k+1} - f_k)
+			&\ge\min\plrg{\deg_\bot(f_{k+1} - f),\;\deg_\bot(f - f_k)} \\
+			&\ge\min\plrg{N,\;N} = N \quad\text{for all }n\le k\in\sizen
+		\end{split}\end{equation*}
+		となる。
+	\end{proof} %}
+	この逆、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\set{f_n}$が収束するならば、ある$f\in K\bblr{x}$が唯一つ定まり、
+		$\set{f_n}$が$f$に収束する
+	\end{itemize} %}
+	という文言が成り立つ時、$K\bblr{x}$は完備となる。
+	$\set{f_n}$が収束するならば、$f_\infty:=\lim_{n\to\infty}f_n$とおいてしまえば、
+	次の意味で$f\in K\bblr{x}$となる。
+	\begin{equation*}\begin{split}
+		\dlr{f_\infty,n} = \lim_{p\to\infty} \dlr{f_p,n}\in K
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	また、${f_n}$が$g$に収束するならば、任意の$N\in\sizen$に対してある
+	$n\in\sizen$が存在して、次の式を満たし、
+	\begin{equation*}\begin{split}
+		N\le\deg_\bot(f_\infty - f_k) \text{ and } N\le\deg_\bot(g - f_k)
+		\quad\text{for all }n\le k\in\sizen
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\deg_\bot(f_\infty - g)
+		&\ge\min\plrg{\deg_\bot(f_\infty - f_k),\;\deg_\bot(g - f_k)} \\
+		&\ge\min\plrg{N,\;N} = N \quad\text{for all }n\le k\in\sizen
+	\end{split}\end{equation*}
+	したがって、$K\bblr{x}$が完備になることがわかる。
+
+	厳密には、多項式環$K\blr{x}$を$\deg_\bot$で完備化したものを$K\bblr{x}$
+	とすべきなのだろうが、\cite{stanley-1}では直感的であることを優先して、
+	集合同型$K\bblr{x}\simeq\cat{Set}(\sizen,K)$によって形式級数を定義しておいて、
+	後から位相を入れるという手順を踏んでいる。
+
+	\begin{proposition}[形式級数の収束その一]\label{prop:形式級数の収束その一} %{
+		（\cite{stanley-1} p.15 1.1.8）
+		$\set{f_n}$を$K\bblr{x}$の加算部分集合とする。
+		$\sum_{n\in\sizen}f_n$が収束することと、$\lim_{n\to\infty}f_n=0$となる
+		ことは同値である。\EOP
+	\end{proposition} %prop:形式級数の収束その一}
+	\begin{proof} %{
+		$F_n:=\sum_{k=0}^n f_k$とすると、$F_{n+1}-F_n=f_{n+1}$となるから、
+		$\deg_\bot(F_{n+1}-F_n)=\deg_\bot f_{n+1}=\deg_\bot(f_{n+1}-0)$となる。
+	\end{proof} %}
+
+	\begin{proposition}[形式級数の収束その二]\label{prop:形式級数の収束その二} %{
+		（\cite{stanley-1} p.15 1.1.9）
+		$\set{f_n}$を$K\bblr{x}$の加算部分集合とし、各$n\in\sizen$で
+		$\dlr{f_n,0}=0$となるとする。
+		この時、$\prod_{n\in\sizen}(1 + f_n)$が収束することと、
+		$\lim_{n\to\infty}f_n=0$となることは同値である。\EOP
+	\end{proposition} %prop:形式級数の収束その二}
+	\begin{proof} %{
+		$F_n:=\prod_{k=0}^n(1 + f_k)$とすると、$F_{n+1}-F_n=f_{n+1}F_n$となる。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $f_\infty=0$ならば$\set{F_n}$は収束する。\\
+			任意の$N\in\sizen$に対してある$n\in\sizen$が存在して、次の式を満たし、
+			\begin{equation*}\begin{split}
+				N\le \deg_\bot f_k \quad\text{for all } n\le k\in\sizen
+			\end{split}\end{equation*}
+			次の式を満たす。
+			\begin{equation*}\begin{split}
+				\deg_\bot(F_{k+1}-F_k) &= \deg_\bot f_k + \deg_\bot F_k \\
+				&\ge N + \deg_\bot F_k\ge N \quad\text{for all } n\le k\in\sizen
+			\end{split}\end{equation*}
+			\item $\set{F_n}$が収束するならば$f_\infty=0$となる。\\
+			任意の$N\in\sizen$に対してある$n\in\sizen$が存在して、次の式を満たすが、
+			\begin{equation*}\begin{split}
+				N\le \deg_\bot(F_{k+1} - F_k)
+				= \deg_\bot f_{k+1} + \deg_\bot F_k
+				\quad\text{for all } n\le k\in\sizen
+			\end{split}\end{equation*}
+			$\dlr{F_k,0}=1$だから、$\deg_\bot F_k=0$となり、次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				N\le\deg_\bot f_{k+1} \quad\text{for all } n\le k\in\sizen
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{proof} %}
+
+	この命題から次の命題が得られる。
+
+	\begin{proposition}[形式級数の収束その三]\label{prop:形式級数の収束その三} %{
+		$f,g\in K\bblr{x}$とし、$\dlr{g,0}=0$とする。この時、合成$f\circ g$
+		\begin{equation*}\begin{split}
+			(f\circ g)x := \sum_{n\in\sizen} f_n\plr{gx}^n
+		\end{split}\end{equation*}
+		は収束する。\EOP
+	\end{proposition} %prop:形式級数の収束その三}
+	\begin{proof} %{
+		$g0=0$から$1\le\deg_\bot g$となり、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\deg_\bot g^n = n\deg_\bot g \ge n \quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		したがって、次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\lim_{n\to\infty} \deg_\bot\plrg{f_n\plr{gx}^n}
+			&= \lim_{n\to\infty}\plrg{\deg_\bot f_n + n \deg_\bot g} \\
+			&\ge \lim_{n\to\infty}\plrg{\deg_\bot f_n + n} = \infty
+		\end{split}\end{equation*}
+		命題\ref{prop:形式級数の収束その一}から$f\circ g$が収束することがわかる。
+	\end{proof} %}
+
+	この命題を使って、直感に反して形式級数でない例を挙げることができる。
+	
+	\begin{example}[収束しない形式級数]\label{eg:収束しない形式級数} %{
+		$f,g\in\fukuso\bblr{x}$を次のように定義して、
+		\begin{equation*}\begin{split}
+			fx := \sum_{n\in\sizen}\frac{x^n}{n!}
+			,\quad gx = 1 + x
+		\end{split}\end{equation*}
+		合成$f\circ g$を考える。$\deg_\bot g^n=0$かつ$\deg_\bot f_n=0$なので、
+		$\lim_{n\to\infty}\deg_\bot\plrg{f_n(gx)}=0$となり、
+		命題\ref{prop:形式級数の収束その一}から、$f\circ g$は収束しない。
+		一方、$f\circ g$を通常の写像として解釈すると、
+		$(f\circ g)x=e^{1+x}=e(fx)$となり、$e(fx)\in\fukuso\bblr{x}$となる。
+		つまり、次の奇妙な関係になっている。
+		\begin{equation*}\begin{split}
+			\sum_{n\in\sizen}\frac{ex^n}{n!}\in\fukuso\bblr{x}
+			\text{ but }
+			\sum_{n\in\sizen}\frac{(1 + x)^n}{n!}\not\in\fukuso\bblr{x}
+		\end{split}\end{equation*}
+		一つ目の級数と二つ目の級数が一致することを示すためには
+		$e=\sum_{n\in\sizen}(n!)^{-1}$という無限和を含む式が必要になる。
+		一方、$\deg_\bot$は係数体$K$の性質に依存せずに定義されていて、
+		一般には、$K$の元の無限和が$K$の元になるという保証はないので、
+		形式級数の範囲内では係数の無限和を取り扱うことができない。
+		このために、上記のような直感に反したことになる。\EOP
+	\end{example} %eg:収束しない形式級数}
+%s2:可換な形式級数}
+%s1:Stanley}
+%
+}\endgroup %}
