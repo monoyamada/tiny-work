@@ -2,5 +2,82 @@
 %toc 2013-02-11
 
 = プログラミング =
+
+== 有限体の演算表 ==
+有限モノイドの演算表をrで書いてみた。outerの使い方の例になっている。
+{{{r class='brush: r;'
+show.table <- function (n) {
+	xs <- 1:(n-1)
+	mul <- outer (xs, xs, function (x, y) (x * y) %% n)
+	colnames (mul) = rownames (mul) = xs
+	mul
+}
+}}}
+
+== 仮想マシン ==
+圏的抽象機械というものがあるそうだ。
+[[http://en.wikipedia.org/wiki/Categorical_abstract_machine|Categorical abstract machine]]
+ほぼLandinのSECDと同じようだが、ラムダ式から逆ポーランド計算機への変換がより明示的に書かれている気がする。
+CAMは、組み込みの定数や関数を仮定していないので、ラムダ式の簡約しかしないが、
+仮想機械の基本機能として考えることができる。
+
+== 圏論によるデータベース ==
 [[http://math.mit.edu/~dspivak/|圏論によるデータベース]]
 データベースの圏論による定式化を目指しているようだ。
+
+== 仮想マシン ==
+日誌をつけ始めて感じたことだが、vimwikiを使い始めたばかりなので、
+設定を頻繁に修正する。
+vimwiki用のsnippets、html用のcssやjavascript等を頻繁に修正している。
+何か新しいことを始めた時にいつも起こることなので、これはしょうがないのだが、
+html用のcssやjavascript等のデプロイが面倒なことは何とかしたい。
+javaを用いればantタスクで一撃なのだが、javaは起動が重いので、
+起動の軽い軽量言語でデプロイをしたいのだが、
+なかなかこれだというものが見つからない。
+bashまたはluaでできないかと思ったのだが、両者とも解決策が見つからなかった。
+* cygwinのbash
+	* ファイルの最終更新日時を得る方法がわからない。
+	* 文法が難しい。
+* lua
+	* ファイルの最終更新日時を得る方法がわからない。
+luaを拡張するのが一番汎用性が高いかなと思っているが、
+自分でミニ言語を作っても手間は変わらないかもしれない。
+
+$8+9$を計算するプログラムを考えてみる。
+組み込み型uint64を数値として扱うためのnumericクラスをロードして、
+numericクラスからメソッドplusを呼び出すとする。
+スタックは逆ポーランドで処理する。
+{{{cpp class='brush: c++;'
+push_uint64 8
+set_type -1 numeric
+push_uint64 9
+set_type -1 numeric
+call_method plus 2
+pop 1
+}}}
+無駄の多い処理だが、一つのスタックで処理しようとすると、しょうがないだろう。
+スタックの数を増やせば、無駄は減らせるが、仮想機械の仕様は複雑になる。
+* 型numericが定義されている。
+* 型numericに関数plusが定義されている。
+* 関数plusが入力二つに出力一つということが定義されている。
+* 関数plusの二つ目の入力にnumericをとれるということが定義されている。
+* データuint64に型numericをセットできることが定義されている。
+
+== ラムダ式と不動点 ==
+ラムダ式を写像として解釈することを考えて、Y-コンビネータ$Y$
+{{$
+Y := \lambda{x}.\plr{X_x X_x},\quad X_x := \lambda{y}.\plrg{x\plr{y y}}
+\implies
+Yf = X_fX_f = \lambda{y}.\plrg{f\plr{y y}}X_f = f\plr{X_f X_f} = f\plr{Y f}
+}}$
+を写像として表そうとすると、$(Yf)x=f(Yf)x$より、$(Yf)x$は$f$の不動点となる。
+したがって、写像$f$の不動点の集合を$\op{Fix}f$とすると、
+$Yf:\op{dom}f\to\op{Fix}f$となる。しかし、
+$\op{next}:\bfN\to\bfN$で$\op{next}n=n+1$などは不動点を持たないので、
+{{$
+(Y\op{next})x = 1 + (Y\op{next})x \implies 0 = 1
+}}$
+$Y$の領域を不動点を持つ写像に限定する必要がある。
+したがって、ラムダ式を写像として表すためには、
+それが作用する適切な空間を見つける必要がある。
+そこで領域理論の出番となる。

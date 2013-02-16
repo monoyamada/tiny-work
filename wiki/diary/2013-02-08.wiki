@@ -1,7 +1,7 @@
 [[diary|日誌]]
 %toc 2013-02-08
 
-= 形式言語 =
+= 代数的な形式級数 =
 買っておいたstanleyの本
 <a name='stanley-2'>
 [[http://www.cambridge.org/us/knowledge/isbn/item1167618|Enumerative Combinatrics Volume 2]]
@@ -12,6 +12,25 @@
 [[http://www-math.mit.edu/~rstan/ec/|Enumerative Combinatrics Volume 1]]
 </a>
 
+多項式の種類を表す名前と記号を整理しておく。$K$を体とする。
+
+|               | 自然数のべき         | 整数のべき                                   | 有理数のべき                                                                    |
+|---------------|----------------------|----------------------------------------------|---------------------------------------------------------------------------------|
+| <b>有限和</b> | 多項式　 $K\blr{x}$  | Laurent多項式 $K\plr{x}:=K\blr{x}[x^{-1}]$   | Puiseux多項式 $K\clr{x}:=K\plr{x}\blr{x^{\frac{1}{2}},x^{\frac{1}{3}},\dots}$   |
+| <b>無限和</b> | 形式級数 $K\bblr{x}$ | Laurent級数　 $K\pplr{x}:=K\bblr{x}[x^{-1}]$ | Puiseux級数　 $K\cclr{x}:=K\pplr{x}\blr{x^{\frac{1}{2}},x^{\frac{1}{3}},\dots}$ |
+
+表の左から右へは代数拡大、上から下へは有限和から無限和へと集合を拡大している。
+Laurent級数でもべきの下限は有限に抑えられていることに注意する。
+ある$m\in\sizen$があって$x^{-m}\sum_{n\in\sizen}f_nx^n$という形をしている。
+
+形式級数の操作を表す記号を整理しておく。
+* $f\in K\bblr{x}$とは、$fx=\sum_{n\in\sizen}f_nx^n$と書けるとする。
+* $(f+g)x:=(fx)+(gx)$、$(f\cdot g)x:=(fx)(gx)$、$(f\circ g)x:=fgx$という記号を使う。
+* $\dlr{f,n}$を$x^n$の係数を取り出す操作とする。
+
+== 形式級数 ==
+<a href='#stanley-1'>1.1 数え上げ組合せ論て何？</a>
+
 <a href='#stanley-1'>教科書</a>で扱う形式級数は単に多項式を拡張したものではない。
 例えば、次の二つの級数はどちらも$\exp(1+x)$のTayler展開ではあるが、
 片方は$\bfC\bblr{x}$の元になっていて、
@@ -20,8 +39,16 @@
 \sum_{n\in\bfN} \frac{ex^n}{n!}\in\fukuso\bblr{x} \quad\text{but}\quad 
 \sum_{n\in\bfN} \frac{(1 + x)^n}{n!}\not\in\fukuso\bblr{x}
 }}$
-そのココロは、形式級数の次数によって$K\bblr{x}$の完備化を行なっているところにある。
-形式級数の次数は次の写像$\deg_\bot: K\bblr{x}\to\plra{\sizen\cup\set{\infty}}$
+そのココロは、係数体$K$の性質に深く関わらないことにある。
+上の例では、$e=\sum_{n\in\sizen}1/n!$という式を知らないと、
+二つの級数が同一になることはわからない。
+一般には、体で無限和を許すためには、完備化の操作が必要になる。
+この教科書では、係数体の完備化について知らなくてもできる範囲で議論する。
+つまり、係数体の有限和のみを使って議論する。
+
+一方、形式級数自体は、形式級数の次数を使って完備化している。
+形式級数の次数は次の写像
+$\deg_\bot: K\bblr{x}\to\plra{\sizen\cup\set{\infty}}$
 によって与えられる。
 {{$
 \deg_\bot f := \begin{cases}
@@ -38,35 +65,141 @@ $\deg_\bot$は次の式を満たす。
 一つ目の式の不等号は、
 * $fx=1+x,\; g=-1+x$とすると、$\deg_\bot f=\deg_\bot g=0$だが、$\deg_\bot(f+g)=1$となる
 といった状況を反映している。
-
-=== 形式級数の次数 ===
-形式級数の次数$\deg_\bot$について成り立つ性質を書いておく。
-
 $\deg_\bot(f - g)=n$なら、$f$と$g$は$0..(n-1)$次の係数が一致していて、
 $g$は次ののように書ける。
 {{$
 gx = f_0 + \cdots + f_{n-1}x^{n-1} + g_nx^n + g_{n+1}x^{n+1} + \cdots
 \quad\text{and}\quad f_n\neq g_n
 }}$
-$\bot(f,n)$を$f$と$0..(n-1)$次の係数が一致する形式級数全体の作る集合とすると、
-{{$%split%
-\bot: K\bblr{x}\times\sizen_\infty &\to \clP\plr{K\bblr{x}} \\
-(f,n) &\mapsto \set{g\in K\bblr{x}\mid n\le\deg_\bot(f,g)}
-}}$
-任意の$f\in K\bblr{x}$に対して部分集合の可算な降下列が次のように得られる。
+
+任意の$f\in K\bblr{x}$と$n\in\sizen$に対して$(f)_\bot^n\subseteq K\bblr{x}$
+を次のように定義すると、
 {{$
-K\bblr{x}=\bot(f,0)\supseteq \bot(f,1)\supseteq\cdots\supseteq \bot(f,\infty)=f
+(f)_\bot^n := \set{g\in K\bblr{x}\mid n\le\deg_\bot(f,g)}
 }}$
-例えば、$\set{0,1}$を元とする標数$2$の体$\sei_2$を係数体として、
-$f=1+x$を考えると、次の降下列になる。
+部分集合の可算な降下列が次のように得られる。
 {{$
-\bot(f,0)=\sei_2\bblr{x}
-\supset \bot(f,1)=\set{1+a_1x^1+\cdots}
-\supset \bot(f,2)=\set{1+x+a_2x^2+\cdots}
-\supset \bot(f,3)=\set{1+x+a_3x^3+\cdots}
+K\bblr{x}=(f)_\bot^0\supseteq (f)_\bot^1\supseteq\cdots\supseteq 
+(f)_\bot^\infty=set{f}
+}}$
+例えば、標数$2$の体$\sei_2$を係数体として、$f=1+x$を考えると、次の降下列になる。
+{{$
+(f)_\bot^0=\sei_2\bblr{x}
+\supset (f)_\bot^1=\set{1+f_1x^1+\cdots}
+\supset (f)_\bot^2=\set{1+x+f_2x^2+\cdots}
+\supset (f)_\bot^3=\set{1+x+f_3x^3+\cdots}
 \supset \cdots 
-\supset \bot(f,\infty)=\set{1+x}
+\supset (f)_\bot^\infty=\set{1+x}
 }}$
+
+== 代数的な生成関数 ==
+<a href='#stanley-2'>6.1 代数的生成関数</a>
+
+* D-有限$\impliedby$代数的$\impliedby$有理的
+* 代数的な形式級数
+	* $\eta\in K\bblr{x}$が代数的 $\xiff{\dfn}$
+		ある$d\in\sizen$と$P_0,\dots,P_d\in K\blr{x}$があって、
+		次のことが成り立つ。
+		* $P_0=P_1=\cdots=P_d=0$でない。
+		* $P_0+P_1\eta+\cdots+P_d\eta^d=0$となる。
+	* $\eta\in K\bblr{x}$の代数的次数が$d$ $\xiff{\dfn}$
+		上記の条件が成り立つ最小の$d$
+* <a name='eg-1'>代数的な形式級数の例</a>:
+	$\frac{1}{\sqrt{1-4x}}=\sum_{n=0}^\infty\binom{2n}{n}x^n$
+	* カタラン数が
+	$\frac{1-\sqrt{1-4x}}{2x}=\sum_{n=0}^\infty\frac{1}{n+1}\binom{2n}{n}x$
+	で与えられることを知っているから、両辺に$x$を掛けてから$x$で微分すると、
+	上記の式が得られる。
+	* <a href='#stanley-2'>二巻</a>では問題1.4と書かれているが、
+	<a href='#stanley-1'>二版の一巻</a>では問題1.8となっている。
+	* 右辺を$\eta x$とおくと、$(1 - 4x)(\eta x)^2 - 1 = 0$となって、
+	$\eta$が代数的になる。
+	* $K$の標数が$2$の時は、$\eta x=1$となる。
+		* $1\le n$で$\binom{2n}{n}$は偶数となるから、$\eta$の一次以上の項は$0$になる。
+		したがって、この時は$\eta$の代数的次数は$1$となる。
+	* $K$の標数が$2$以外の時は、$\eta$の代数的次数は$2$となるのは、
+	<a href='#stanley-2'>教科書</a>のとおり。
+* $K\bblr{x}$は局所領域で、$x$は極大イデアルを生成する。
+	* この呪文は、$K\bblr{x}$は、そのままでほぼ体になっていて、
+	$x$の逆元$x^{-1}$を付け加えると正真正銘の体となると言っている。
+	* $f\in K\bblr{x}$が$f_0:=\dlr{f,0}\neq0$ならば、
+	$f^{-1}=\frac{1}{f_0}\frac{1}{1 + \frac{f-f_0}{f_0}}=\frac{1}{f_0}\plra{\frac{f-f_0}{f_0}}^*$
+	となって、$\dlra{\frac{f-f_0}{f_0},0}=0$だから、$f^{-1}\in K\bblr{x}$となる。
+	（ノートの命題:形式級数の収束その三を見よ。）
+	このことを指して、$K\bblr{x}$がほぼ体と言っている。
+* $K\pplr{x}:=K\bblr{x}\blr{x^{-1}}$を$K\bblr{x}$に$x^{-1}$を付け加えた体とする。
+	* 体で考えたい理由は、$\dlr{f,0}\neq0$という条件を外したいことと、
+	複素数上の代数式との類似という動機がある。
+	<a href='#galois'>ガロア理論の応用</a>が効く。
+	* $K\pplr{x}$の解析での対応はLaurent展開になる。
+	一方、$K\bblr{x}$はTayler展開に対応する。
+	* $K\pplr{x}$をLaurent級数ということにする。
+* 代数的なLaurent級数
+	* $\eta\in K\pplr{x}$が代数的 $\xiff{\dfn}$
+		ある$d\in\sizen$と$P_0,\dots,P_d\in K\plr{x}$があって、
+		次のことが成り立つ。
+		* $P_0=P_1=\cdots=P_d=0$でない。
+		* $P_0+P_1\eta+\cdots+P_d\eta^d=0$となる。
+		<a name='irreducible'>既約多項式</a>
+	* $\eta\in K\pplr{x}$の代数的次数が$d$ $\xiff{\dfn}$
+		上記の条件が成り立つ最小の$d$
+* <a name='galois'>ガロア理論入門</a>p.29から
+	* 最高次数の係数が$1$の既約多項式をモニックという。
+	* $\eta\in K\pplr{x}$が$K\plr{x}$を代数的、$d$をその次数、
+	$F\in K\plr{x}\blr{\xi}$をその既約なモニックとする。
+		* $G\in K\plr{x}\blr{\xi}$が$G\eta=0$となるならば、$G$は$F$で割り切れる。
+			* 証明: $\deg_{K\blr{x}}R<d$となる$R\in K\plr{x}\blr{\xi}$と、
+			ある$Q\in K\plr{x}\blr{\xi}$を用いて、$G=QF+R$と書ける。
+			仮定から$R\eta=0$となるが、$F$が既約であることに反する。
+		* したがって、既約なモニックは一意に定まる。
+* $\eta\in K\pplr{x}$が$K\plr{x}$で代数的で、$F\in K\plr{x}\blr{\xi}$をその既約多項式とすると、
+	$F$の各係数の分母の公倍数を$F$に書けると、$K\blr{x}\blr{\xi}$の多項式となる。
+	したがって、$\eta\in K\bblr{x}\subseteq K\pplr{x}$となっていれば、
+	$\eta$は$K\blr{x}$で代数的となる。
+	つまり、集合同型$K_{\op{alg}}\bblr{x}=K_{\op{alg}}\pplr{x}\cap K\bblr{x}$が成り立つ。
+* <a href='#eg-1'>代数的な形式級数の例</a>$(1 - 4x)(\eta x)^2 - 1$
+	* 体$L$上の二次式$fx=a+bx+x^2=\plra{x+\frac{b}{2}}^2-\frac{b^2-4a}{4}$
+		* $L$の標数$2$とすると、$2$の倍数で割れないから、平方完成ができない。
+		* $L$の標数が$2$でないとする。
+			判別式$b^2-4a$が$L$の中で二乗になっていれば、$f$は$L$で既約でない。
+			判別式が$L$の中で二乗になっていなければ、$f$は既約になる。
+	* $K$の標数が$2$でなければ、判別式$4(1-4x)$の多項式次数は$1$だから、
+		判別式は$K\blr{x}$の中で二乗にならない。したがって、
+	$(1 - 4x)(\eta x)^2 - 1$は$K\plr{x}$の既約多項式となる。
+	* $K\pplr{x}$上の２次の代数式$F$を考える。$F$の判別式は$K\plr{x}$の元になる。
+		判別式の次数が奇数であれば、判別式が$K\pplr{x}$の元の二乗になることはないので、
+		$F$は$K\plr{x}$上で既約となる。
+* Puiseux級数はLaurent級数に分数べきを付け加えたもの。
+	$K\cclr{x}:=K\pplr{x}[x^{\frac{1}{2}},x^{\frac{1}{3}},\dots]$
+* Puiseux級数$K\cclr{x}$はLaurent級数$K\pplr{x}$の代数拡大になっている。
+	* 拡大体: $K\pplr{x}$が$K\cclr{x}$の部分体
+	* 代数的: 任意の$\eta\in K\cclr{x}$に対して、
+	次の性質を満たす$P_0,\dots,P_n\in K\pplr{x}$が存在する。
+		* $P_0=\cdots=P_n=0$でない。
+		* $P_0+P_1\eta+\cdots+P_n\eta^n=0$となる。
+* $K$が代数的閉体かつ標数が$0$であれば、Puiseux級数$K\cclr{x}$は代数的閉体になる。
+	* Laurent級数$K\pplr{x}$が代数的閉体となることは言えない。例えば、
+	$P\in\pplr{x}$に対して$\eta^2=P$となる解$\eta$が$K\pplr{x}$に存在することは保証されない。
+* 体の拡大の種類
+	* 拡大: 部分体$K\subseteq L$となるとき、$L$は$K$の拡大体という。
+	* 代数的拡大: 体の拡大$K\subseteq L$で、$L$の任意の元$y$に対して、
+	$y$を根とする$K$係数の多項式が存在する。
+	{{$
+	\sei\subset\bun\text{は代数的拡大である}\quad\because\quad
+	\frac{m}{n}\in\bun\implies n\frac{m}{n} = m
+	}}$
+	* 代数的閉包: 体の拡大$K\subseteq L$で、$L$は$K$の代数的拡大かつ、
+	$L$は代数閉体である。
+	* $L$を体とする。任意の$L$係数の多項式のすべての根が$L$の元になるとき、
+	$L$を代数的閉体という。
+	{{$
+	\sei\subset\bun\text{は代数的閉包でない}\quad\because\quad
+	x^2 = 2 \implies x\not\in\bun
+	}}$
+		* $\sei_2$は代数的閉体とならない。$\sei_2$の元を$\set{0,1}$と書くと、
+		$x(x-1)+1$は$x$に$0$を代入しても$1$を代入してもにならない。
+		* 同様の議論で、有限体$F$は代数的閉体とならない。$F=\set{a_1,\dots,a_n}$
+		を有限体とすると、$(x-a_1)\cdots(x-a_n)+1$は$F$に根を持たない。
 
 == 非可換な形式級数 ==
 $K$を体、$A$を有限集合とする。
@@ -126,7 +259,7 @@ $K\bblr{A}$は、何も付け足さなくてもそのままで、ほぼ体にな
 {{$
 f_0 := \epsilon_0f \neq 0 \implies \left\{\begin{split}
 	f^{-1} &:= \frac{1}{f_0}\sum_{n\in\bfN}
-		\aplr{\frac{f_0-f}{f_0}}^n \in K\bblr{A} \\
+		\plra{\frac{f_0-f}{f_0}}^n \in K\bblr{A} \\
 	\blr{ff^{-1},w} &= 1 = \blr{f^{-1}f,w}
 		\quad\text{for all } w\in A^*
 \end{split}\right.
@@ -157,21 +290,3 @@ m_*^\trn a^n = \sum_{r,s\in\bfN} \is{rs=n}
 a^r\otimes a^s \quad\text{for all } n\in\bfN
 }}$
 自然数の因数分解に対応する。
-
-= vimwiki =
-
-== mathjax ==
-[[http://boolesrings.org/scoskey/writing-math-on-the-web/|mathjaxの定理環境]]
-いつからHTMLは野良タグが使えるようになったのだろう。
-完璧なcssさえ用意すれば、野良タグでもブラウザーは理解できるはずだが。
-
-== vimwikiと$TeX$ ==
-vimwikiは通常の文章を書くことには適しているが、
-文章の中に定義、定理、証明などブロックを挿入していくスタイルの記述には適していないかもしれない。
-<a href='#stanley-1'>教科書</a>のノートをvimwikiで取りながら思った。
-
-ブロックのタイプごとに表示方法をカスタマイズすることは、
-htmlより$\TeX$の方がやりやすい上に、カスタマイズが多くなると、
-vimwikiを使わずにhtmlを直書きした方が早いということになってしまう。
-vimwikiを使う場合には、文章をメインにして、
-数式も書ける位の気持ちで使うのが良いと思う。
