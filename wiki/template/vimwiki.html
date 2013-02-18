@@ -24,16 +24,22 @@
 			src="%root_path%syntaxhighlighter_3.0.83/scripts/shBrushHaskell.js">
 		</script>
 		<script type="text/javascript"
+			src="%root_path%syntaxhighlighter_3.0.83/scripts/shBrushJScript.js">
+		</script>
+		<script type="text/javascript"
 			src="%root_path%syntaxhighlighter_3.0.83/scripts/shBrushPlain.js">
 		</script>
 		<script type="text/javascript"
 			src="%root_path%syntaxhighlighter_3.0.83/scripts/shBrushR.js">
 		</script>
-		<!--
-		<script type="text/javascript"
-			src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+		<script type="text/x-mathjax-config">
+			MathJax.Hub.Config({
+				TeX: {extensions: ["xypic.js", "AMSmath.js","AMSsymbols.js"]}
+				//                  ^^^^^^^^load xypic.js
+				, extensions: ["tex2jax.js","fp.js"]
+				//                         ^^^^^load fp.js
+			});
 		</script>
-		-->
 		<script type="text/javascript"
 			src="%root_path%MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 		</script>

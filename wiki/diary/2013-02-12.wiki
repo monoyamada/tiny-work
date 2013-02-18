@@ -3,6 +3,24 @@
 
 = 形式言語 =
 
+== 空遷移の消去 ==
+$A:=\set{a,b,l,r}$上の文法
+{{$
+\left\{\begin{split}
+	X &= Y + YbX:B \\
+	Y &= a:V + lXr:U \\
+\end{split}\right.\implies \left\{\begin{split}
+	X &= Y + BYbX\bar{B} \\
+	Y &= Va\bar{V}Z + UlXr\bar{U}Z \\
+	Z &= 1 \\
+\end{split}\right. \sim \vcenter{\xymatrix{
+	X \ar@/_1ex/[d]_{1 + \eta_1} \\
+	Y \ar[r]^a \ar@/_1ex/[u]_{l\eta_2} 
+	& *++[o][F=]{Z} \ar@(rd,ru)[]_{\eta_2^\trn r}
+	\ar@(u,r)[ul]_{\eta_1^\trn b}
+}}
+}}$
+
 == 本質的に曖昧な文脈自由言語 ==
 === Villalpando ===
 * <a name='2013-02-15'>

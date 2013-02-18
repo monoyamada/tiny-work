@@ -3,6 +3,38 @@
 
 = vimwiki =
 
+== xypic ==
+[[http://sonoisa.github.com/xyjax/xyjax.html|xyjax]]
+に従って、次の謎のjavascriptをhtmlに直に埋め込むと、
+{{{js class='brush: js;'
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+	TeX: {extensions: ["xypic.js", "AMSmath.js","AMSsymbols.js"]}
+	//                  ^^^^^^^^load xypic.js
+	, extensions: ["tex2jax.js","fp.js"]
+	//                         ^^^^^load fp.js
+});
+</script>
+}}}
+xypicが使えるようになる。
+<div class='first'>
+{{{
+{{$%xy%
+\xymatrix{
+	A \ar[r] & B \\
+	C \ar[ur]
+}
+}}$
+}}}
+</div><div class='next'>
+{{$%xy%
+\xymatrix{
+	A \ar[r] & B \\
+	C \ar[ur]
+}
+}}$
+</div><div class='last'/>
+
 == リンクの取り扱い ==
 `VimwikiLinkHandler`と`VimwikiWikiIncludeHandler`を見よ。
 
@@ -10,6 +42,7 @@
 コマンド`:VimwikiAll2HTML`がビジーループした。
 `VimwikiAll2HTML`がビジーループしても、vimは閉じることができるので、
 則、vimを閉じて、一括でのhtml変換を諦めること。
+2013-02-18:: ubuntu上ではビジーループしなかったので、windows上でのファイルアクセツの問題だと思う。
 
 == vimwikiの特性 ==
 vimwikiはファイル内の特定の箇所へのリンクが張れないという制限から、
