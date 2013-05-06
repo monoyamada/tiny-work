@@ -76,6 +76,38 @@ public class ArrayHelper {
 		return newArray;
 	}
 
+	public static boolean equalArray(Object[] xs, Object[] ys) {
+		if (xs == ys) {
+			return true;
+		} else if (xs == null || ys == null) {
+			return false;
+		} else if (xs.length != ys.length) {
+			return false;
+		}
+		for (int i = 0, n = xs.length; i < n; ++i) {
+			if (!ObjectHelper.equals(xs[i], ys[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean equalArray(int[] xs, int[] ys) {
+		if (xs == ys) {
+			return true;
+		} else if (xs == null || ys == null) {
+			return false;
+		} else if (xs.length != ys.length) {
+			return false;
+		}
+		for (int i = 0, n = xs.length; i < n; ++i) {
+			if (xs[i] != ys[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static <T0, T1> boolean equals(T0[] array0, int begin0, T1[] array1,
 			int begin1, int size) {
 		return ArrayHelper.equals(array0, begin0, array1, begin1, size,
@@ -543,13 +575,25 @@ public class ArrayHelper {
 		}
 		return newArray;
 	}
-	
+
 	public static int[] ensureSize(int[] array, int size) {
 		final int oldSize = array != null ? array.length : 0;
 		if (size <= oldSize) {
 			return array;
 		}
 		final int[] newArray = new int[size];
+		if (array != null && 0 < array.length) {
+			System.arraycopy(array, 0, newArray, 0, array.length);
+		}
+		return newArray;
+	}
+
+	public static byte[] ensureSize(byte[] array, int size) {
+		final int oldSize = array != null ? array.length : 0;
+		if (size <= oldSize) {
+			return array;
+		}
+		final byte[] newArray = new byte[size];
 		if (array != null && 0 < array.length) {
 			System.arraycopy(array, 0, newArray, 0, array.length);
 		}
@@ -566,8 +610,8 @@ public class ArrayHelper {
 	 * @param value
 	 * @return
 	 */
-	public static int getLowerBound(int[] array, int value) {
-		return getLowerBound(array, 0, array.length, value);
+	public static int lowerBound(long[] array, long value) {
+		return lowerBound(array, 0, array.length, value);
 	}
 	/**
 	 * <code>
@@ -579,7 +623,7 @@ public class ArrayHelper {
 	 * @param value
 	 * @return
 	 */
-	public static int getLowerBound(int[] array, int begin, int end, int value) {
+	public static int lowerBound(long[] array, int begin, int end, long value) {
 		int d = end - begin;
 		switch (d) {
 		case 0:
@@ -590,9 +634,113 @@ public class ArrayHelper {
 		// if (false) {
 		// final int m = begin + (d >> 1);
 		// if (array[m] < value) {
-		// return getLowerBound(array, m, end, value);
+		// return lowerBound(array, m, end, value);
 		// } else {
-		// return getLowerBound(array, begin, m, value);
+		// return lowerBound(array, begin, m, value);
+		// }
+		// }
+		break;
+		}
+		for (int m = 0; 1 < d; d = end - begin) {
+			m = begin + (d >> 1);
+			if (array[m] < value) {
+				begin = m;
+			} else {
+				end = m;
+			}
+		}
+		return array[begin] < value ? end : begin;
+	}
+
+	/**
+	 * <code>
+	 * array[0] <= ... <= array[index - 1] < value <= array[index] <= ...  <= array[length - 1]
+	 * </code>
+	 * 
+	 * @param array
+	 *          sorted array with the order <=.
+	 * @param value
+	 * @return
+	 */
+	public static int lowerBound(int[] array, int value) {
+		return lowerBound(array, 0, array.length, value);
+	}
+	/**
+	 * <code>
+	 * array[begin] <= ... <= array[index - 1] < value <= array[index] <= ... <= array[end - 1]
+	 * </code>
+	 * 
+	 * @param array
+	 *          sorted array with the order <=.
+	 * @param value
+	 * @return
+	 */
+	public static int lowerBound(int[] array, int begin, int end, int value) {
+		int d = end - begin;
+		switch (d) {
+		case 0:
+			return begin;
+		case 1:
+			return array[begin] < value ? begin + 1 : begin;
+		default:
+		// if (false) {
+		// final int m = begin + (d >> 1);
+		// if (array[m] < value) {
+		// return lowerBound(array, m, end, value);
+		// } else {
+		// return lowerBound(array, begin, m, value);
+		// }
+		// }
+		break;
+		}
+		for (int m = 0; 1 < d; d = end - begin) {
+			m = begin + (d >> 1);
+			if (array[m] < value) {
+				begin = m;
+			} else {
+				end = m;
+			}
+		}
+		return array[begin] < value ? end : begin;
+	}
+
+	/**
+	 * <code>
+	 * array[0] <= ... <= array[index - 1] < value <= array[index] <= ...  <= array[length - 1]
+	 * </code>
+	 * 
+	 * @param array
+	 *          sorted array with the order <=.
+	 * @param value
+	 * @return
+	 */
+	public static int lowerBound(byte[] array, byte value) {
+		return lowerBound(array, 0, array.length, value);
+	}
+	/**
+	 * <code>
+	 * array[begin] <= ... <= array[index - 1] < value <= array[index] <= ... <= array[end - 1]
+	 * </code>
+	 * 
+	 * @param array
+	 *          sorted array with the order <=.
+	 * @param value
+	 * @return
+	 */
+	public static int lowerBound(byte[] array, int begin, int end, byte value) {
+		int d = end - begin;
+		switch (d) {
+		case 0:
+			return begin;
+		case 1:
+			return array[begin] < value ? begin + 1 : begin;
+		default:
+		// if (false) {
+		// final int m = begin + (d >> 1);
+		// if (array[m] < value) {
+		// return lowerBound(array, m, end, value);
+		// } else {
+		// return lowerBound(array, begin, m, value);
 		// }
 		// }
 		break;
@@ -803,7 +951,7 @@ public class ArrayHelper {
 		}
 		return x;
 	}
-	
+
 	public static long sum(long[] array) {
 		return ArrayHelper.sum(array, 0, array.length);
 	}

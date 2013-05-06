@@ -49,7 +49,7 @@ public class TreeNodeTest extends TestCase {
 			writePostNode(writer, node);
 			node = node.getNext();
 			if (node == null && 0 < stack.size()) {
-				node = stack.peekValue(null);
+				node = stack.topValue(null);
 				stack.pop();
 				writePostNode(writer, node);
 				node = node.getNext();

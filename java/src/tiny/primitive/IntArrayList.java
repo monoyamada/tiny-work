@@ -1,6 +1,7 @@
 package tiny.primitive;
 
 import tiny.lang.ArrayHelper;
+import tiny.lang.Messages;
 
 public class IntArrayList extends AbIntList implements IntStack {
 	private int[] array;
@@ -10,8 +11,7 @@ public class IntArrayList extends AbIntList implements IntStack {
 		this.array = ArrayHelper.EMPTY_INT_ARRAY;
 	}
 	public IntArrayList(int capacity) {
-		this.array = 0 < capacity ? new int[capacity]
-				: ArrayHelper.EMPTY_INT_ARRAY;
+		this.array = 0 < capacity ? new int[capacity] : ArrayHelper.EMPTY_INT_ARRAY;
 	}
 	/**
 	 * @param array
@@ -84,9 +84,9 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return this;
 	}
 	@Override
-	public IntList removeAll() {
+	public IntArrayList removeAll() {
 		this.setSize(0);
-		return null;
+		return this;
 	}
 	@Override
 	protected Number doGetValue(int index) {
@@ -133,7 +133,7 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return true;
 	}
 	@Override
-	public int peek(int def) {
+	public int top(int def) {
 		int n = this.size;
 		if (n < 1) {
 			return def;
@@ -141,11 +141,37 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return this.doGet(n - 1);
 	}
 	@Override
-	public Number peekValue(Number def) {
+	public Number topValue(Number def) {
 		int n = this.size;
 		if (n < 1) {
 			return def;
 		}
 		return this.doGetValue(n - 1);
+	}
+	@Override
+	public boolean isTop(int value) {
+		int n = this.size;
+		if (n < 1) {
+			return false;
+		}
+		return this.doGet(n - 1) == value;
+	}
+	@Override
+	public boolean isTopValue(Number value) {
+		return value != null ? this.isTop(value.byteValue()) : false;
+	}
+	public IntArrayList set(int index, int value) {
+		if (index < 0 || this.getLength() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+			throw new IndexOutOfBoundsException(msg);
+		}
+		return this.doSet(index, value);
+	}
+	protected IntArrayList doSet(int index, int value) {
+		this.array[index] = value;
+		return this;
+	}
+	public IntArrayList setTop(int value) {
+		return this.set(this.getLength() - 1, value);
 	}
 }

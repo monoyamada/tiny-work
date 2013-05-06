@@ -1,0 +1,265 @@
+随伴に関する話題を書く。
+
+\section{分数群}\label{s1:分数群} %{
+	自然数から分数を通して有理数を作る方法を一般化する。
+
+\subsection{可換半群の分数群}\label{s2:可換半群の分数群} %{
+	$A$を可換半群とする。$A^2$は自由積$m$によって半群になる。
+	\begin{equation*}\begin{split}
+		m\plrg{(a_1, a_2),(b_1, b_2)} := (a_1b_1, a_2b_2)
+		\quad\text{for all } a_i,b_i\in S
+	\end{split}\end{equation*}
+	$A^2$に関係$\sim$を次のように定義する。
+	\begin{equation}\label{2013-02-27:分数化の定義}\begin{split}
+		(a_1, a_2)\sim(b_1, b_2) \xiff{\dfn} \exists\;
+		x\in S\mid a_1b_2x = b_1a_2x \quad\text{for all } a_i,b_i\in A
+	\end{split}\end{equation}
+	$\sim$は同値関係となり、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 反射的: 任意の$(a_1,a_2)\in A^2$に対して$(a_1,a_2)\sim(a_1,a_2)$
+		となる。
+		%
+		\item 対称的: 任意の$(a_1,a_2),(b_1,b_2)\in A^2$に対して
+		$(a_1,a_2)\sim(b_1,b_2)\implies (b_1,b_2)\sim(a_1,a_2)$となる。
+		%
+		\item 推移的: $a_i,b_i,c_i\in A$が$(a_1,a_2)\sim(b_1,b_2)$かつ
+		$(b_1,b_2)\sim(c_1,c_2)$となるならば、ある$x,y\in S$があって、
+		$a_1b_2c=b_1a_2x$かつ$b_1c_2x=c_1b_2y$となる。したがって、
+		$a_1c_2(b_1b_2xy)=c_1a_2(b_1b_2xy)$となって、$b_1b_2xy$を仲介して、
+		$(a_1,a_2)\sim(c_1,c_2)$が成り立つ。
+	\end{itemize} %}
+	積$m$とコンパチになる。
+	\begin{equation}\label{2013-02-27:コンパチ条件}\begin{split}
+		\left\{\begin{split}
+			\mathbf{a} &\sim\mathbf{b} \\
+			\mathbf{c} &\sim\mathbf{d}
+		\end{split}\right.\implies m(\mathbf{a},\mathbf{c})
+		\sim m(\mathbf{b},\mathbf{d})
+		\quad\text{for all } \mathbf{a},\mathbf{b},\mathbf{c},\mathbf{d}\in A^2
+	\end{split}\end{equation}
+	\begin{proof} %{
+		任意の$a_i,b_i\in A$に対して次の式が成り立つことから、
+		\begin{equation*}\begin{split}
+			(a_1,a_2)\sim(b_1,b_2)
+			&\iff \text{there exists } x\in A\mid a_1b_2x = b_1a_2x \\
+			&\implies (a_1c_1)(b_2c_2)x = (b_1c_1)(a_2c_2)x
+			\quad\text{for all } c_1,c_2\in A \\
+			&\iff (a_1c_1,a_2c_2) \sim (b_1c_1,b_2c_2)
+			\quad\text{for all } c_1,c_2\in A \\
+		\end{split}\end{equation*}
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			\mathbf{a}\sim\mathbf{b}\implies
+			m(\mathbf{a},\mathbf{c}) \sim m(\mathbf{b},\mathbf{c})
+			\quad\text{for all } \mathbf{a},\mathbf{b}\in A^2
+		\end{split}\end{equation*}
+		そして、積$m$が可換だから、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\left\{\begin{split}
+				\mathbf{a} &\sim\mathbf{b} \\
+				\mathbf{c} &\sim\mathbf{d}
+			\end{split}\right.
+			\implies m(\mathbf{a},\mathbf{c}) \sim m(\mathbf{b},\mathbf{c})
+			\sim m(\mathbf{b},\mathbf{d})
+		\end{split}\end{equation*}
+	\end{proof} %}
+	写像$\pi:A^2\to A^2/\sim$を$\sim$による商とする。
+	$\sim$の同値類の代表元を選ぶと、同値類にその代表元へ対応させることで、
+	次の性質を満たす写像$\sigma:A^2/\sim\to A^2$が一つ定まり、
+	\begin{equation}\label{2013-02-27:切断}\begin{split}
+		\pi\sigma = \id
+	\end{split}\end{equation}
+	\eqref{2013-02-27:コンパチ条件}から、次の式が成り立つ。
+	\begin{equation}\label{2013-02-27:コンパチ}\begin{split}
+		\pi m(\sigma\pi,\sigma\pi) = \pi m
+	\end{split}\end{equation}
+	そして、$A^2/\sim$の二項演算$m_\sigma$を次のように定義すると、
+	\begin{equation}\label{2013-02-27:畳み込み}\begin{split}
+		m_\sigma := \pi m(\sigma,\sigma)
+	\end{split}\end{equation}
+	次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		m_\sigma(m_\sigma,\id) = \pi m(m,\id)(\sigma,\sigma,\sigma)
+		= \pi m(\id,m)(\sigma,\sigma,\sigma) = m_\sigma(\id,m_\sigma)
+	\end{split}\end{equation*}
+	$m_\sigma$が結合的になることがわかる。
+
+	$\sigma$は同値類の代表元の選び方によって決まるが、
+	$m_\sigma$は同値類の代表元の選び方に依らない。
+	$\sigma':A^2/\sim\to A^2$を別の代表元の選び方に対応する写像とすると、
+	任意の$x,y\in A^2/\sim$に対して$\mathbf{a},\mathbf{b}\in A^2
+	\mid \pi\mathbf{a}=x,\pi\mathbf{b}=y$があって、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		m_\sigma(x,y) = \pi m(\sigma\pi,\sigma\pi)(\mathbf{a},\mathbf{b})
+		= \pi m(\mathbf{a},\mathbf{b})
+		= \pi m(\sigma'\pi,\sigma'\pi)(\mathbf{a},\mathbf{b}) = m_{\sigma'}(x,y)
+	\end{split}\end{equation*}
+	したがって、$m_\sigma$を$\wtilde{m}$と書くことにする。
+
+	\begin{definition}[分数群]\label{def:分数群} %{
+		$A$を半群とする。$(A^2/\sim,\wtilde{m},\wtilde{1})$を$A$の分数群
+		という。\EOP
+	\end{definition} %def:分数群}
+
+	分数群をもう少し詳しく調べてみる。
+	$\wtilde{A}:=A^2/\sim$の元を分数の記法を用いて次のように書き、
+	\begin{equation*}\begin{split}
+		\wtilde{A} := \seta{\frac{a}{b}\mid a,b\in A}
+	\end{split}\end{equation*}
+	$\wtilde{m}$を二項演算では記号を省略して書く事にする。
+
+	$\wtilde{A}$の対角成分はすべて等しくなり、
+	\begin{equation*}\begin{split}
+		\frac{a}{a} = \frac{b}{b} \quad\text{for all } a,b\in A
+	\end{split}\end{equation*}
+	$\wtilde{m}$の単位元となる。
+	\begin{equation*}\begin{split}
+		\frac{a}{a}\frac{b}{c} = \frac{b}{c} \quad\text{for all } a,b,c\in A
+	\end{split}\end{equation*}
+	したがって、$\wtilde{A}$の対角成分を$1$と書く事にする。
+	そして、次の式が成り立つことから、
+	\begin{equation*}\begin{split}
+		\frac{a}{b}\frac{b}{a} = \wtilde{1} \quad\text{for all } a,b\in A
+	\end{split}\end{equation*}
+	モノイド$(\wtilde{A},\wtilde{m},\wtilde{1})$は群となる。
+	また、$A$の積のキャンセル可能（定義\ref{def:キャンセル可能な半群}）
+	に関する次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		ac = bc \implies \frac{a}{b} = \frac{b}{a} = \wtilde{1}
+		\quad\text{for all } a,b,c
+	\end{split}\end{equation*}
+	$A$がキャンセル可能でない場合は、$A$から$\wtilde{A}$に移行する際に、
+	情報の損失が生じる。特に、$A$がゼロ元を持つ場合は、$\wtilde{A}$は
+	$\wtilde{1}$だけからなる自明な群になる。
+	$A$がキャンセル可能な場合は、$\sim$の定義\eqref{2013-02-27:分数化の定義}を
+	次のように簡単にすることができる。
+	\begin{equation*}\begin{split}
+		(a_1, a_2)\sim(b_1, b_2) \xiff{\dfn} a_1b_2 = b_1a_2
+		\quad\text{for all } a_i,b_i\in A
+	\end{split}\end{equation*}
+	多くの場合、この形で分数群が定義される。
+%s2:可換半群の分数群}
+
+\subsection{可換モノイドの分数群}\label{s2:可換モノイドの分数群} %{
+	可換半環$A$がベキ等な元$e$を持つ場合、モノイド準同型
+	$\eta_e:A\to\wtilde{A}:=a\mapsto a/e$が定義できる。
+	特に、$A$が単位元$1$を持つ場合を考える。
+
+	$\cat{CMon}$を可換モノイドの圏、$\cat{Ab}$を可換群圏、
+	$\clU:\cat{Ab}\to\cat{CMon}$を忘却関手とする。
+	関手$\clF:\cat{CMon}\to\cat{Ab}$を次のように定義する。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 対象: 任意の$A\in\obj\cat{CMon}$に対して$\clF A\in\obj\cat{Ab}$を
+		$A$の分数群とする。
+		\item 射:	任意の$A\xto{f}B\in\cat{CMon}$に対して
+		$\clF A\xto{Ff}\clF B\in\cat{Ab}$を次のように定義する。
+		\begin{alignat*}{2}
+			(\clF f)\frac{a_1}{a_2} &:= \frac{fa_1}{fa_2} 
+			&\quad&\text{for all } a_1,a_2\in A \\
+			(\clF f)\plr{\frac{a_1}{a_2}\frac{a_1'}{a_2'}} 
+			&:= \frac{fa_1}{fa_2}\frac{fa_1'}{fa_2'}
+			&\quad&\text{for all } a_1,a_2,a_1',a_2'\in A
+		\end{alignat*}
+		$\clF f$は群準同型$\clF A\to\clF B$となる
+	\end{itemize} %}
+
+	\begin{proposition}[分数群の普遍性]\label{prop:分数群の普遍性} %{
+		$A\in\cat{CMon}$、$G\in\cat{Ab}$とする。
+		関数$\eta:\obj\cat{CMon}\to\arr\cat{CMon}$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\eta A: A\to\clU\clF A := a \mapsto \frac{a}{1} 
+			\quad\text{for all } a\in A
+		\end{split}\end{equation*}
+		すると、任意の$A\xto{f}\clU G\in\cat{CMon}$に対して、次の図を可換にする
+		群準同型$\clF A\xto{f_*}G\in\cat{Ab}$が存在して唯一つ定まる。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				A \ar[r]^{\eta A} \ar[rd]_f & \clU\clF A \ar@{.>}[d]^{\clU f_*} \\
+				& \clU G
+			} \quad\text{unique }\xymatrix{
+				\clF A \ar@{.>}[d]^{f_*} \\ G
+			}\in\cat{Ab} \quad\text{for all } \xymatrix{
+				A\ar[d]^f \\ \clU G
+			} \in\cat{CMon}
+		\end{split}\end{equation*}\EOP
+	\end{proposition} %prop:分数群の普遍性}
+	\begin{proof} %{
+		$f_*:\clF A\to G$を次のように定義すれば可換図を満たす。
+		\begin{equation*}\begin{split}
+			f_*\frac{a}{b} := (fa)(fb)^{-1} \quad\text{for all } a,b\in G
+		\end{split}\end{equation*}
+		$g:\clF A\to G$を可換図を満たす群準同型とすると、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			g\frac{a}{1} = fa = f_*\frac{a}{1} \quad\text{for all } a\in A
+		\end{split}\end{equation*}
+		また、群準同型の定義より、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			1 = g\frac{a}{a} = \plra{g\frac{a}{1}}\plra{g\frac{1}{a}}
+			\implies g\frac{1}{a} = \plra{g\frac{a}{1}}^{-1}
+			\quad\text{for all } g\in G
+		\end{split}\end{equation*}
+		したがって、任意の$x\in\clF A$に対して$fx=gx$とり、$g=f_*$となることが
+		わかる。よって、可換図を満たす群準同型は$f_*$に限られることがわかる。
+	\end{proof} %}
+
+	関数$\epsilon:\obj\cat{Ab}\to\arr\cat{Ab}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\epsilon G: \clF\clU G\to G := \frac{g}{h} \mapsto gh^{-1} 
+		\quad\text{for all } g,h\in G
+	\end{split}\end{equation*}
+	次の普遍性の可換図が成り立ち、
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			G \ar@{<-}[r]^{\epsilon G} \ar@{<-}[rd]_f 
+			& \clF\clU G \ar@{<.}[d]^{\clF f_*} \\
+			& \clF A
+		} \quad\text{unique } \xymatrix{
+			\clU G \ar@{<.}[d]^{f_*} \\ A
+		}\in\cat{CMon} \quad\text{for all } \xymatrix{
+			G\ar@{<-}[d]^f \\ \clF A
+		}\in\cat{Ab}
+	\end{split}\end{equation*}
+	随伴$(\clF,\clU,\eta,\epsilon):\cat{CMon}\to\cat{Ab}$が得られる。
+%s2:可換モノイドの分数群}
+
+\subsection{キャンセル可能性}\label{s2:キャンセル可能性} %{
+	\begin{definition}[キャンセル可能な半群]\label{def:キャンセル可能な半群} %{
+		$A$を可換とは限らない半群とする。$A$のキャンセル可能性を次のように
+		定義する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 任意の$a\in A$に対して写像$a-:A\to A$が$1:1$となるとき、
+			$A$を左キャンセル可能という。
+			\begin{equation*}\begin{split}
+				ab=ac\implies b=c \quad\text{for all } a,b,c\in A
+			\end{split}\end{equation*}
+			\item 任意の$a\in A$に対して写像$-a:A\to A$が$1:1$ となるとき、
+			$A$を右キャンセル可能という。
+			\begin{equation*}\begin{split}
+				ba=ca\implies h=h \quad\text{for all } a,b,c\in A
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		$A$が左キャンセル可能かつ右キャンセル可能のとき、$A$は両側キャンセル可能
+		または単にキャンセル可能という。\EOP
+	\end{definition} %def:キャンセル可能な半群}
+
+	\begin{proposition}[キャンセル可能な有限モノイドは群]
+	\label{prop:キャンセル可能な有限モノイドは群} %{
+		$A$を可換とは限らないモノイドとする。$A$が有限かつ左キャンセル可能ならば、
+		$A$は群となる。\EOP
+	\end{proposition} %prop:キャンセル可能な有限モノイドは群}
+	\begin{proof} %{
+		任意の$a\neq1\in A$に対して部分モノイド$a^*:=\set{a^n\mid n\in\sizen}$を
+		考える。$A$が有限だから$a^*$も有限になり、ある$i<j\in\sizen$が存在して、
+		$a^i=a^j$となる。したがって、$A$が左キャンセル可能だから、次の式が
+		成り立ち、
+		\begin{equation*}\begin{split}
+			a^i1 = a^i = a^j = a^ia^{j-i} \implies a^{j-i}=1
+		\end{split}\end{equation*}
+		$i<j$だから、次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			a^{j-i}=1 \iff a^{j-i-1}a = 1\iff a^{j-i-1} = a^{-1}
+		\end{split}\end{equation*}
+		$a$が逆元を持つことがわかる。
+	\end{proof} %}
+%s2:キャンセル可能性}
+%s1:分数群}

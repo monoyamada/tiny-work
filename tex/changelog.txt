@@ -1,3 +1,10 @@
+2013-02-28  shirakata
+
+	* adj-1.tex: new
+	adjunctions and relatated topics.
+	* obj-1.tex: new
+	topics on basis of categories.
+
 2013-02-11  shirakata
 
 	* renewed: moved old stuff into backup and deleted almost tex files from

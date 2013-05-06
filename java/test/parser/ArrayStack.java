@@ -17,7 +17,7 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
 		super(c);
 	}
 	@Override
-	public T peekValue(T def) {
+	public T topValue(T def) {
 		if (this.size() < 1) {
 			return def;
 		}
@@ -43,5 +43,14 @@ public class ArrayStack<T> extends ArrayList<T> implements Stack<T> {
 	@Override
 	public boolean isFull() {
 		return this.size() == Integer.MAX_VALUE;
+	}
+	@Override
+	public boolean isTopValue(T value) {
+		if (this.size() < 1) {
+			return false;
+		}
+		T x = this.get(this.size() - 1);
+		return x == value ? true : x != null ? value != null ? x.equals(value)
+				: false : false;
 	}
 }

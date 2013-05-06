@@ -5,21 +5,14 @@ import java.io.IOException;
 public class Euclid {
 	protected static final double ZERO_TOLERANCE = 1.0E-12;
 
-	public static String dividesByZero(String what) {
-		if (what == null) {
-			return "divides by zero";
-		}
-		return "divides by zero " + what;
-	}
-
-	int gcd(int x, int y) {
+	public static int gcd(int x, int y) {
 		if (y == 0) {
 			throw new IllegalArgumentException(dividesByZero("y"));
 		}
 		while (y != 0) {
 			int r = x % y;
 			x = y;
-			y = r; /* swap */
+			y = r;
 		}
 		return x;
 	}
@@ -85,14 +78,21 @@ public class Euclid {
 		output[1] = z01;
 		return n0;
 	}
+	
+	protected static String dividesByZero(String what) {
+		if (what == null) {
+			return "divides by zero";
+		}
+		return "divides by zero " + what;
+	}
 
-	public static String notMonic(String what) {
+	protected static String notMonic(String what) {
 		if (what == null) {
 			return "not a monic";
 		}
 		return "not a monic  " + what;
 	}
-	public static String notDividable(String what, long x, long y) {
+	protected static String notDividable(String what, long x, long y) {
 		if (what == null) {
 			return "not a long=" + x + "/" + y;
 		}

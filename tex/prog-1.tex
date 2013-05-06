@@ -1,0 +1,180 @@
+\begingroup %{
+{\setlength\arraycolsep{2pt}
+%
+\section{操車場アルゴリズム}\label{s1:操車場アルゴリズム} %{
+	中置記法で書かれた数式を後置記法に書き直す操車場アルゴリズムという方法が
+	ある。英語ではshunting-yard algorithmという。
+	shuntには入れ替えるという意味があって、日本語ではシャントと言う。
+
+	次の記号を使って文字を表すことにする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $V$を変数を表す集合とする。
+		\item $B_L$を左結合の二項演算子を表す集合とする。
+		\item $B_R$を右結合の二項演算子を表す集合とする。
+		\item $B:=B_L+B_R$を二項演算子を表す集合とする。
+		\item $l$を括弧の開始を表す文字とする。
+		\item $r$を括弧の終了を表す文とする。
+	\end{itemize} %}
+	次の文法で生成される言語で中置記法で書かれた数式を表す。
+	\begin{equation}\label{eq:二項演算の文法}\begin{split}
+		T = S + SB_RT + TB_LS,\quad S = V + lTr
+	\end{split}\end{equation}
+	$B$は次の関数が定義されているとする。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 結合の向き $\op{dir}:B\to\set{\op{left},\op{right}}$
+		\item 結合の優先順位 $\op{pri}:B\to\sizen$
+	\end{itemize} %}
+	通常使われる二項演算子の殆どは左結合だが、プログラミングで使われる
+	代入演算子$\xfrom{}$は、$x\xfrom{}y\xfrom{}1\iff x\xfrom{}(y\xfrom{}1)$
+	というように右結合で定義されている。結合の優先順位は頻繁に使う
+	$x+y*z\iff x+(y*z)\;\because \op{pri}*>\op{pri}+$といった規則を表す。
+
+	$T$の文字列を後置記法で書き直すことは、二分木を経由するとわかりやすい。
+	$a,b,c,d\in\set{S}$、$\op{pri}+<\op{pri}*$とすると、次のようになる。
+	\begin{equation*}\begin{split}
+		\begin{split}
+			\begin{array}{|c|c|c|c|c|c|c|}\hline
+				a & + & b & * & c & + & d \\\hline
+			\end{array} &\xmapsto{\op{tree}} \\
+			\begin{array}{|c|c|c|c|c|c|c|}\hline
+				a & b & c & * & + & d & + \\\hline
+			\end{array} &\xmapsfrom{\op{post}}
+		\end{split} \;\vcenter{\xymatrix@R=1ex@C=1ex{
+			& & + \ar@{-}[ld] \ar@{-}[rd] \\
+			& + \hen[ld] \hen[rd] & & d \\
+			a & & {*} \hen[ld] \hen[rd] \\
+			& b & & c \\
+		}}
+	\end{split}\end{equation*}
+	文字列の中に優先順位が等しい演算子が複数あると、二分木の作り方は一意で
+	なくなるが、ここでは、上記の例や文法\eqref{eq:二項演算の文法}で表される
+	規則を適用する。
+
+	\begin{definition}[優先順位の規則]\label{def:優先順位の規則} %{
+		同一の優先順位を持つ演算子同士では次のような規則とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 左結合の演算子では、左側を優先する。
+			$\begin{array}{|c|c|c|c|c|}\hline
+				a & + & b & + & c \\\hline
+			\end{array}\mapsto\xymatrix@R=1ex@C=1ex{
+				& & + \hen[ld] \hen[rd] \\
+				& + \hen[ld] \hen[rd] & & c \\
+				a & & b
+			}$
+			\item 右結合の演算子では、右側を優先する。
+			$\begin{array}{|c|c|c|c|c|}\hline
+				a & \xfrom{} & b & \xfrom{} & c \\\hline
+			\end{array}\mapsto\xymatrix@R=1ex@C=1ex{
+				& \xfrom{} \hen[ld] \hen[rd] \\
+				a & & \xfrom{} \hen[ld] \hen[rd] \\
+				& b & & c
+			}$
+		\end{itemize} %}
+	\end{definition} %def:優先順位の規則}
+
+	操車場アルゴリズムは組
+	$\plr{V+B+l+r}^*\times\plr{B+l}^*\times\plr{V+B}^*$
+	の自己写像$\op{shunt}$として表すことができる。
+	\begin{equation*}\begin{split}
+		1\times y\times z &\xmapsto{\op{shunt}} 1\times y\times zy^R \\
+		ax\times y\times z &\xmapsto{\op{shunt}}
+		\begin{cases}
+			x\times y\times za, &\text{ case } a\in V \\
+			x\times ya\times z, &\text{ case } a = l \\
+			x\times y_1\times zy_2^R \quad\text{where }\left\{\begin{split}
+				y = y_1ly_2 \\
+				l \not\in \set{y_2} \\
+			\end{split}\right., &\text{ case } a = r \\
+			x\times y_1a\times zy_2^R \quad\text{where }\left\{\begin{split}
+				y = y_1y_2 \\
+				l \not\in \set{y_2} \\
+				\text{and more}
+			\end{split}\right., &\text{ case } a\in B \\
+		\end{cases} \\
+	\end{split}\end{equation*}
+	ここで、$-^R$は文字列の並びの反転を表す。$(abc)^R=cba$となる。
+	中継バッファ$y$は演算子の並びを反転させることに使っている。
+	$a\in B$の時は、$a$の結合の向きによって$y$の分割の仕方が異なる。
+	上の式のand moreの部分は次のようになる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $a$が左結合の時は、$\op{pri}a\le\min\op{pri}\set{y_2}$が成り立ち、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $y_1$は空か、
+			\item $y_1$の右端の文字$b$が、$b=l$または$\op{pri}b<\op{pri}a$
+		\end{itemize} %}
+		が成り立つ。
+		\item $a$が右結合の時は、$\op{pri}a<\min\op{pri}\set{y_2}$かつ、
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $y_1$は空か、
+			\item $y_1$の右端の文字$b$が、$b=l$または$\op{pri}b\le\op{pri}a$
+		\end{itemize} %}
+		となる。
+	\end{itemize} %}
+	この部分は言葉で書いた方がわかりやすい。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $a$が左結合の時は、$a$より優先順位が小さいか等しい最も右端の文字
+		で$y$を分割する。
+		\item $a$が右結合の時は、$a$より優先順位が小さい最も右端の文字で$y$を
+		分割する。
+	\end{itemize} %}
+	この分割の仕方は規則\ref{def:優先順位の規則}を反映したものになっている。
+
+	次の例は、右側の中置記法を後置記法に書き直す手順を操車場アルゴリズムで
+	表している。
+	\begin{equation*}\begin{split}
+		\begin{array}{rclcl}
+			\begin{array}{|c|c|c|}\hline
+				+_1 & * & +_2 \\\hline
+			\end{array} &\times& 1 &\times& 1 \\
+			\begin{array}{|c|c|c|}\hline
+				* & +_2 \\\hline
+			\end{array} &\times& \begin{array}{|c|}\hline
+				+_1 \\\hline
+			\end{array} &\times& 1 \\
+			\begin{array}{|c|c|}\hline
+				+_2 \\\hline
+			\end{array} &\times& \begin{array}{|c|c|}\hline
+				+_1 & * \\\hline
+			\end{array} &\times& 1 \\
+			1 &\times& \begin{array}{|c|}\hline
+				+_2 \\\hline
+			\end{array} &\times& \begin{array}{|c|c|}\hline
+				* & +_1 \\\hline
+			\end{array} \\
+			1 &\times& 1 &\times& \begin{array}{|c|c|c|}\hline
+				* & +_1 & +_2 \\\hline
+			\end{array}
+		\end{array} \quad \begin{split}
+			\begin{array}{|c|c|c|c|c|c|c|}\hline
+				a & + & b & * & c & + & d \\\hline
+			\end{array} \\
+			\xymatrix@R=1ex@C=1ex{
+				& & + \ar@{-}[ld] \ar@{-}[rd] \\
+				& + \hen[ld] \hen[rd] & & d \\
+				a & & {*} \hen[ld] \hen[rd] \\
+				& b & & c \\
+			} \\
+			\begin{array}{|c|c|c|c|c|c|c|}\hline
+				a & b & c & * & + & d & + \\\hline
+			\end{array}
+		\end{split}
+	\end{split}\end{equation*}
+
+	操車場アルゴリズムでの文字の流れを図で表すと次のようになる。
+	\begin{equation*}\begin{split}
+		\xymatrix{
+			\plr{V+B+l+r}^* \ar[rr]^{V} \ar[rd]_{B+l} & & \plr{V+B}^* \\
+			& \plr{B+l}^* \ar[ru]_{B}
+		}
+	\end{split}\end{equation*}
+	次のようなアナロジーから操車場アルゴリズムというのだろう。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $B$を電車として、入ってきた電車$(V+B+l+r)^*$を、
+		出発時刻$\op{pri}$に合うように、
+		操車場$(B+l)^*$を使って順序を入れ替えて、
+		待機場所$(V+B)^*$に誘導する。
+	\end{itemize} %}
+
+%s1:操車場アルゴリズム}
+%
+}\endgroup %}

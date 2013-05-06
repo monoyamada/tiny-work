@@ -75,7 +75,7 @@ public class SimpleGrammar {
 				break;
 			default: {
 				output.append(')');
-				Expression parent = stack.peekValue(null);
+				Expression parent = stack.topValue(null);
 				node = getNextChild(parent, node);
 				if (node == null) {
 					node = parent;

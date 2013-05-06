@@ -25,12 +25,16 @@ import java.nio.channels.FileChannel;
 
 public class FileHelper {
 	public static final String UTF_8 = "UTF-8";
+	public static final String UTF_16 = "UTF-16";;
 	public static final char FILE_EXTENSION_SEPARATOR = '.';
+	public static final int BOM_0 = 0xEF;
+	public static final int BOM_1 = 0xBB;
+	public static final int BOM_2 = 0xBF;
 
 	public static String getSystemEncoding() {
 		return System.getProperty("file.encoding");
 	}
-	
+
 	public static String getCurrentDirectory() {
 		return System.getProperty("user.dir");
 	}
@@ -170,11 +174,16 @@ public class FileHelper {
 			FileHelper.close(reader);
 		}
 	}
+	public static String readText(Reader reader) throws IOException {
+		StringBuilder buffer = new StringBuilder(1024);
+		FileHelper.readText(buffer, reader);
+		return buffer.toString();
+	}
 	public static void readText(Appendable output, Reader reader)
 			throws IOException {
-		final CharBuffer buffer = CharBuffer.allocate(1024 * 64);
+		final CharBuffer buffer = CharBuffer.allocate(1024);
 		while (0 <= reader.read(buffer)) {
-			output.append(buffer.toString());
+			output.append((CharSequence) buffer.flip());
 			buffer.clear();
 		}
 	}
@@ -220,8 +229,8 @@ public class FileHelper {
 	public static boolean copyFile(File output, URL input,
 			boolean ignoreModifiedTime) throws IOException {
 		if (output.isDirectory()) {
-			throw new IOException(Messages.getUnexpectedValue(output
-					.getAbsolutePath(), "file", "directtory"));
+			throw new IOException(Messages.getUnexpectedValue(
+					output.getAbsolutePath(), "file", "directtory"));
 		}
 		URLConnection cnn = null;
 		InputStream in = null;
@@ -258,13 +267,13 @@ public class FileHelper {
 		if (inputFile == null) {
 			throw new NullPointerException(Messages.getNull("input file"));
 		} else if (!inputFile.isFile()) {
-			throw new IllegalArgumentException(Messages.getUnexpectedValue(inputFile
-					.getAbsolutePath(), "file", "not file"));
+			throw new IllegalArgumentException(Messages.getUnexpectedValue(
+					inputFile.getAbsolutePath(), "file", "not file"));
 		} else if (outputFile == null) {
 			throw new NullPointerException(Messages.getNull("output file"));
 		} else if (inputFile.isDirectory()) {
-			throw new IllegalArgumentException(Messages.getUnexpectedValue(outputFile
-					.getAbsolutePath(), "is not directory", "directory"));
+			throw new IllegalArgumentException(Messages.getUnexpectedValue(
+					outputFile.getAbsolutePath(), "is not directory", "directory"));
 		}
 
 		if (inputFile.equals(outputFile)) {
@@ -313,7 +322,6 @@ public class FileHelper {
 		return name.substring(0, ind);
 	}
 	public static String getFileBody(String name) {
-		return FileHelper.getFileBody(name,
-				FileHelper.FILE_EXTENSION_SEPARATOR);
+		return FileHelper.getFileBody(name, FileHelper.FILE_EXTENSION_SEPARATOR);
 	}
 }

@@ -1,6 +1,7 @@
 package tiny.lang;
 
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 

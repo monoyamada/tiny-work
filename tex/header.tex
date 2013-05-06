@@ -4,6 +4,7 @@
 % installed in the system by hand
 \usepackage{shuffle}
 \usepackage{listings}
+\usepackage{float}
 \lstset{language=java %
 %	, numbers=left %
 %	, numberstyle ={\tiny \emph} %
@@ -73,15 +74,19 @@
 \newcommand{\bun}{\ensuremath{\mathbf{Q}}}
 %
 \newcommand{\op}[1]{\mathinner{\operatorname{#1}}}
-\newcommand{\cat}[1]{\mathbf{#1}}
 \newcommand{\id}{\op{id}}
 \newcommand{\dfn}{\op{def}}
 \newcommand{\onto}{\op{onto}}
+\newcommand{\der}{{\partial}}
 \newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
 \newcommand{\ximplies}[2][]{\xRightarrow[#1]{#2}}
 \newcommand{\ximpliedby}[2][]{\xLeftarrow[#1]{#2}}
 \newcommand{\here}{{\ensuremath{\mathchar`-}}}
-\newcommand{\set}[1]{\clra{#1}}
+\newcommand{\opp}{{\op{op}}}
+%
+\newcommand{\cat}[1]{{\mathbf{#1}}}
+\newcommand{\obj}{{\mathfrak{O}}}
+\newcommand{\arr}{{\mathfrak{A}}}
 %
 \newcommand{\qbinom}[2]{\genfrac{[}{]}{0pt}{0}{#1}{#2}}
 %
@@ -90,4 +95,17 @@
 \newcommand{\bvec}[2]{\begin{bmatrix}{#1}\\{#2}\end{bmatrix}}
 \newcommand{\tr}{\op{tr}}
 %
+\newcommand{\what}[1]{{\widehat{#1}}}
+\newcommand{\wbar}[1]{{\widebar{#1}}}
+\newcommand{\wtilde}[1]{{\widetilde{#1}}}
+%
+\newcommand{\clA}{{\mathcal{A}}}
+\newcommand{\clB}{{\mathcal{B}}}
+\newcommand{\clC}{{\mathcal{C}}}
+\newcommand{\clD}{{\mathcal{D}}}
+\newcommand{\clF}{{\mathcal{F}}}
+\newcommand{\clU}{{\mathcal{U}}}
+%
 \newcommand{\EOP}{\hspace{\fill}\P}
+%
+\newcommand{\hen}{\ar@{-}}

@@ -1,6 +1,194 @@
 \begingroup %{
+
 {\setlength\arraycolsep{2pt}
 %
+\section{記号など}\label{s1:記号など} %{
+	\begin{table}[H] %{
+		\begin{center}\begin{tabular}{l|ll} \hline
+			記号 & 説明 & 代数 \\ \hline
+			$K\blr{x}$ & $K$上の多項式 & 環 \\
+			$K\bblr{x}$ & $K$上の形式級数 & 環 \\
+			$K\plr{x}$ & $K$上の有理多項式 & 体 \\
+			& $K\plr{x} := \set{\frac{f}{g}\mid f,g\neq0\in K\blr{x}}$ \\
+			$K\pplr{x}$ & $K$上のLaurent級数 & 体 \\
+			& $K\pplr{x} := \set{\frac{f}{g}\mid f,g\neq0\in K\bblr{x}}$ \\
+			$K\plr{x}^*$ & $K$上のPuiseux多項式 & 少なくとも環 \\
+			& $K\plr{x}^*:=\cup_{n\in\sizen_+}K\plr{x^{\frac{1}{n}}}$ \\
+			$K\pplr{x}^*$ & $K$上のPuiseux級数 & 少なくとも環 \\
+			& $K\pplr{x}^*:=\cup_{n\in\sizen_+}K\pplr{x^{\frac{1}{n}}}$ \\
+		\end{tabular}\end{center}
+		\caption{多項式を表す記号}
+	\end{table} %}
+
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $K\bblr{x}$はほぼ体になっている。\\
+		定数項が$0$でない形式級数は逆元が定まり、定数項が$0$となる形式級数のみが
+		$K\bblr{x}$内に逆元を持たない。
+	\end{itemize} %}
+
+	\begin{todo}[示すべきこと]\label{todo:示すべきこと} %{
+		示すべきことを書いておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $K\pplr{x}=K\bblr{x}[x^{-1}]$となることを示す。
+			\item 形式級数は体になるか。
+			\item Puseux多項式は体になるか。
+		\end{itemize} %}
+	\end{todo} %todo:示すべきこと}
+%s1:記号など}
+\section{体の基礎事項}\label{s1:体の基礎事項} %{
+	\cite{artin1959}\,p.58\,を参考にする。
+\subsection{有限標数の体}\label{s2:有限標数の体} %{
+	\begin{observation}[素数の剰余類]\label{obs:素数の剰余類} %{
+		$p\in\sizen_+$を素数として、$\sei_p:=\sei/p\sei$を考える。
+		$\sei_p^\times:=\sei_p-\set{0}$とする。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $\sei_p^\times$は群になり、
+			\item 任意の$m\in\sei_p^\times$に対して$m^p=m$が成り立つから、
+		\end{enumerate} %}
+		任意の$m\in\sei_p$に対して$m^p=m$が成り立つ。
+	\end{observation} %obs:素数の剰余類}
+	\begin{proof} %{
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item $\sei_p^\times$が有限集合だから、任意の$m\in\sei_p^\times$に
+			対して写像$m-:\sei_p\to\sei_p:= n\mapsto mn$が$1:1$になることを示せば
+			よい。次の式は$m-$が$1:1$になることを示す。
+			\begin{equation*}\begin{split}
+				r\le s\in\sei_p^\times\mid mr = ms &\iff m(s-r) = 0 \\
+					&\implies m(s-r) \text{は$p$の倍数} \implies s=r
+			\end{split}\end{equation*}
+			\item $\sei_p^\times$は有限群だから、任意の$m\in\sei_p^\times$に対して
+			ある$k\in\sizen_+$があって、$m^k=1$となる。
+			$k=\op{argmin}_{r\in\sizen_+}m^r=1$とすると、Lagrangeの定理から、
+			$k$は$p$の約数となる。$m=1$の時は、$k=1$となり、$m\neq1$の時は、
+			$k=p$となる。
+		\end{enumerate} %}
+	\end{proof} %}
+	
+	$K$を標数$p>0$の体とし、$1_K$を$K$の乗法の単位元とする。
+	$K$の部分集合$\sizen1_K$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\sizen1_K:=\set{0,1_K,21_K,\dots,(p-1)1_K}
+	\end{split}\end{equation*}
+	$\sizen1_K$は$K$の部分体となる。そして、$K$の任意の部分体は$\sizen1_K$を
+	部分体に持つから、$\sizen1_K$は$K$の最小の部分体となる。
+	また、写像$\rho:\sei_p\to\sizen1_K:=m\mapsto m1_K$は$1:1$になり、
+	加法と乗法についてそれぞれ準同型性が成り立つから、
+	体同型$\rho:\sei_p\simeq\sizen1_K$が成り立つ。
+
+	任意の$a,b\in K$に対して次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		(a + b)^p = a^p + b^p \quad\text{because }
+		\binom{p}{k}\in p\sizen  \quad\text{for all } k=1,\dots,p-1
+	\end{split}\end{equation*}
+	$(ab)^p=a^pb^p$だから、写像$\mu:K\to K:=a\mapsto a^p$は体準同型となる。
+	そして、$p$が素数、特に奇数、だから、$(a-b)^p=a^p-b^p$となり、
+	$\mu$は$1:1$となることがわかる。
+%s2:有限標数の体}
+\subsection{標数0の体}\label{s2:標数0の体} %{
+	$K$を標数$p>0$の体とし、$1_K$を$K$の乗法の単位元とする。
+	$K$の部分集合$\bun1_K$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\bun1_K:=\set{q1_K\mid q\in\bun}
+	\end{split}\end{equation*}
+	$\bun1_K$は$K$の部分体となる。そして、$K$の任意の部分体は$\bun1_K$を
+	部分体に持つから、$\bun1_K$は$K$の最小の部分体となる。
+	また、写像$\rho:\bun\to\bun1_K:=q\mapsto q1_K$は$1:1$になり、
+	加法と乗法についてそれぞれ準同型性が成り立つから、
+	体同型$\rho:\bun\simeq\bun1_K$が成り立つ。
+%s2:標数0の体}
+%s1:体の基礎事項}
+\section{多項式の重根}\label{s1:多項式の重根} %{
+	$K$を体とする。
+
+	観察\ref{obs:素数の剰余類}からわかるように、$K$の標数が$0$でない場合は、
+	係数がすべてゼロの多項式$f=0\in K\blr{x}$の他にも、
+	任意の$K$の元を根に持つ多項式が存在する。
+	紛らわしいので多項式に特別の名前を付けておく。
+
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[ゼロ多項式] すべての係数が$0$の多項式 \\
+		$f=0$と書く。
+		\item[定数多項式] 次数が$0$の多項式 \\
+		ゼロ多項式$\implies$定数多項式
+		\item[ゼロ関数多項式] 係数体のすべての元が根になる多項式 \\
+		ゼロ多項式$\implies$零関数多項式
+	\end{description} %}
+
+	ゼロ関数多項式は、多項式を$K$の自己写像としてみた時、$0$への定数写像全体
+	の作る部分代数となる。
+	ゼロ多項式でないがゼロ関数多項式になる多項式は、可約な多項式となる。
+
+	零関数多項式は、標数が有限な有限体に特有な現象になっている。
+	標数が$0$の場合は、体の大きさに関わらず、ゼロ関数多項式$=$ゼロ多項式となる。
+	一般に、多項式の根の数は多項式の次数以下となる。
+	したがって、標数に関わらず無限体の場合は、
+	多項式は無限個の根を持ち得えないから、零関数多項式$=$ゼロ多項式となり、
+	標数が有限な有限体の場合には、ゼロでない零関数多項式があったとしても、
+	その次数は体の大きさ以上になる\cite{cox:2000}。
+
+	\begin{todo}[証明すべきこと]\label{todo:証明すべきこと} %{
+		この文言には、幾つか証明すべきことが残されている。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 標数が$0$の時、ゼロ関数多項式$=$ゼロ多項式となる。
+			\item 多項式の根の数は多項式の次数以下となる。
+		\end{itemize} %}
+	\end{todo} %todo:証明すべきこと}
+
+	多項式の重根について次の命題が成り立つ。
+
+	\begin{proposition}[多項式の重根]\label{prop:多項式の重根} %{
+		$f\in K\blr{x}$に対して次の性質は同値である。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{item:mult-1} $f$は重根を持つ。
+			\item\label{item:mult-2} $f$と$\partial f$が同一の根を持つ。
+			\item\label{item:mult-3} $f$と$\partial f$が$K\blr{x}$に次数が
+			$1$以上の共通因数を持つ。
+		\end{enumerate} %}
+	\end{proposition} %prop:多項式の重根}
+	\begin{proof} %{
+		$a\in E\supseteq K\mid fa=0$とする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item \ref{item:mult-1}$\iff$\ref{item:mult-2} \\
+			ある$g\in E\blr{x}$があって、$fx=(x-a)(gx)$と書くことができる。
+			すると、$(\der f)x=(gx)+(x-a)\plrg{(\der g)x}$となって、
+			$a$が$f$の重根$\iff$$ga=0\iff(\der f)a=0$となる。
+			%
+			\item \ref{item:mult-2}$\iff$\ref{item:mult-3} \\
+			$fa=(\der f)a=0$ならば、$a$を根に持つ$K\blr{x}$の既約多項式は、
+			$f$と$\der f$の共通因数となる。逆に、$f$と$\der f$が共通因数を持てば、
+			共通因数の根は$f$と$\der f$の根になる。
+		\end{itemize} %}
+	\end{proof} %}
+
+	$K$の標数を$p\le2$をとすると、多項式$x^p\in K\blr{x}$は$0$を重根として
+	持ち、その微分は、$px^{p-1}=0$から、ゼロ多項式となる。次の命題は、
+	このような状況を考慮している。
+
+	\begin{proposition}[多項式の重根その二]\label{prop:多項式の重根その二} %{
+		既約多項式$f\in K\blr{x}$が重根を持たない。
+		$\iff$ $\der f$がゼロ多項式でない。
+	\end{proposition} %prop:多項式の重根その二}
+	\begin{proof} %{
+		$\der f=0$かそうでないかで場合分けする。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\der f$がゼロ多項式でない。$\implies$$f$が重根を持たない。 \\
+			$\der f$がゼロ多項式でなければ、$\der f$の次数は$f$の次数より小さい。
+			したがって、$\der f$と$f$の共通因数は定数になる。
+			よって、命題\ref{prop:多項式の重根}から、$f$は重根を持たない。
+			%
+			\item $\der f$がゼロ多項式である。$\implies$$f$が重根を持つ。 \\
+			$\der f$がゼロ多項式ならば、$f$の任意の根が$\der f$の根になり、
+			命題\ref{prop:多項式の重根}から、$f$は重根を持つ。
+		\end{itemize} %}
+	\end{proof} %}
+
+	\begin{proposition}[多項式の重根その三]\label{prop:多項式の重根その三} %{
+		$K$の標数が$0$の時は、$K\blr{x}$の既約多項式は重根を持たない。
+	\end{proposition} %prop:多項式の重根その三}
+	\begin{proof} %{
+		この場合は、微分がゼロ多項式になるのは定数多項式のみになる。
+	\end{proof} %}
+%s1:多項式の重根}
 \section{Stanley}\label{s1:Stanley} %{
 	\cite{stanley-2}六章の有理言語に関する部分を読む。
 	形式級数の無限和と無限積を扱うための準備で\cite{stanley-1}が必要になる。

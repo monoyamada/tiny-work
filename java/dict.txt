@@ -4,3 +4,6 @@ destructing
 gcm
 lcm
 iff
+wikipedia
+semiring
+monoid

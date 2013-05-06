@@ -1,6 +1,7 @@
 package tiny.primitive;
 
 import tiny.lang.ArrayHelper;
+import tiny.lang.Messages;
 
 public class LongArrayList extends AbLongList implements LongStack {
 	private long[] array;
@@ -84,9 +85,9 @@ public class LongArrayList extends AbLongList implements LongStack {
 		return this;
 	}
 	@Override
-	public LongList removeAll() {
+	public LongArrayList removeAll() {
 		this.setSize(0);
-		return null;
+		return this;
 	}
 	@Override
 	protected Number doGetValue(int index) {
@@ -133,7 +134,7 @@ public class LongArrayList extends AbLongList implements LongStack {
 		return true;
 	}
 	@Override
-	public long peek(long def) {
+	public long top(long def) {
 		int n = this.size;
 		if (n < 1) {
 			return def;
@@ -141,11 +142,37 @@ public class LongArrayList extends AbLongList implements LongStack {
 		return this.doGet(n - 1);
 	}
 	@Override
-	public Number peekValue(Number def) {
+	public Number topValue(Number def) {
 		int n = this.size;
 		if (n < 1) {
 			return def;
 		}
 		return this.doGetValue(n - 1);
+	}
+	@Override
+	public boolean isTop(long value) {
+		int n = this.size;
+		if (n < 1) {
+			return false;
+		}
+		return this.doGet(n - 1) == value;
+	}
+	@Override
+	public boolean isTopValue(Number value) {
+		return value != null ? this.isTop(value.byteValue()) : false;
+	}
+	public LongArrayList set(int index, long value) {
+		if (index < 0 || this.getLength() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+			throw new IndexOutOfBoundsException(msg);
+		}
+		return this.doSet(index, value);
+	}
+	protected LongArrayList doSet(int index, long value) {
+		this.array[index] = value;
+		return this;
+	}
+	public LongArrayList setTop(long value) {
+		return this.set(this.getLength() - 1, value);
 	}
 }
