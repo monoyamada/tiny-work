@@ -1,0 +1,31 @@
+\section{ドラゴンブック}\label{s1:ドラゴンブック} %{
+	ドラゴンブックで気を付けておくべきことを書いておく。
+	$\Sigma$を末端記号、$\Xi$を非末端記号とする。
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[導出と文形式] $A\in\Xi$に対する置換によって得られる文字列
+		$\alpha\in(\Sigma+\Xi)^*$を$A$から導出された文字列といい、
+		$A\eqto{}{}\alpha$と書く。
+		また、$0$回以上の繰り返しの導出を$A\eqto{*}{}\alpha$、
+		$1$回以上の繰り返しの導出を$A\eqto{+}{}\alpha$と書く。
+		$A\eqto{*}{}\alpha$となる文字列$\alpha\in(\Sigma+\Xi)^*$を文形式といい、
+		特に、$\alpha\in\Sigma^*$となる時は、$\alpha\in\Sigma^*$を文という。
+		%
+		\item[文法の同値性] 二つの文法が同一の文を導出する時、その二つの文法は
+		等価であるという。$X=a+XbX$、$X=a+abX$、$X=a+Xba$はすべて等価になる。
+		%
+		\item[最左導出と左文形式] 文形式の中で最も左にある非終端記号のみを置換
+		することを最左導出といい、$A\eqto[\op{lm}]{}\alpha$と書く。
+		最左導出のみで得られた文形式を左文形式という。
+		%
+		\item[解析木] 末端記号を葉、非末端記号を葉でない頂点で表した木を解析木
+		という。
+		%
+		\item[構文規則と字句規則] 文法を二つの規則の集合に分割すること。
+		構文規則と字句規則を分ける明確な定義はないが、字句規則は正規表現のみで
+		構成されることは共通している。Chomsky-Schützenbergerの定理
+		\begin{equation*}\begin{split}
+			\text{文脈自由言語} = \text{Dyck言語}\cap\text{正規言語}
+		\end{split}\end{equation*}
+		から、原理的には、構文解析と字句解析を分離することはできる。
+	\end{description} %}
+%s1:ドラゴンブック}

@@ -1,3 +1,8 @@
+2013-05-08  shirakata
+
+	* dragon-1.tex: new
+	note for dragon book.
+
 2013-02-28  shirakata
 
 	* adj-1.tex: new

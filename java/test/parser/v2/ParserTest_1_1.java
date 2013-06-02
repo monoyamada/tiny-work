@@ -435,13 +435,13 @@ public class ParserTest_1_1 extends ParserTest_1_0 {
 			break;
 			}
 			Map<Term, ScaledTerm> map = new TreeMap<Term, ScaledTerm>();
-			for(int i=0,n=this.size();i<n;++i){
+			for (int i = 0, n = this.size(); i < n; ++i) {
 				Term term = this.get(i);
 				ScaledTerm scaled = map.get(term);
-				if(scaled==null){
-					scaled=term.toScaledTerm();
+				if (scaled == null) {
+					scaled = term.toScaledTerm();
 					map.put(term, scaled);
-				}else{
+				} else {
 					++scaled.scale;
 				}
 			}
@@ -477,7 +477,7 @@ public class ParserTest_1_1 extends ParserTest_1_0 {
 
 	static class ScaledTerm extends Term {
 		public static final ScaledTerm[] EMPTY_ARRAY = {};
-		
+
 		long scale;
 
 		public ScaledTerm(Variable[] variables) {
@@ -1968,6 +1968,17 @@ public class ParserTest_1_1 extends ParserTest_1_0 {
 					"flatten: " + StringHelper.join(eqs, ", ", FlattenEquation.TO_INFIX));
 			FlattenEquation.enumerate(3, analyzer);
 		}
+		{
+			FlattenEquation[] eqs = FlattenEquation.build(analyzer);
+			Debug.log().debug(
+					"flatten: " + StringHelper.join(eqs, ", ", FlattenEquation.TO_INFIX));
+			int dn = 5;
+			TermArray[][] xs = FlattenEquation.enumerate(dn, analyzer);
+			for (int di = 0; di <= dn; ++di) {
+				Debug.log().debug(
+						"x:" + di + " = " + xs[0][di].toScaledTermArray().toInfix());
+			}
+		}
 	}
 
 	public void testCatalan() throws IOException {
@@ -1983,7 +1994,74 @@ public class ParserTest_1_1 extends ParserTest_1_0 {
 			int dn = 12;
 			TermArray[][] xs = FlattenEquation.enumerate(dn, analyzer);
 			for (int di = 0; di <= dn; ++di) {
-				Debug.log().debug("x:" + di + " = " + xs[0][di].toScaledTermArray().toInfix());
+				Debug.log().debug(
+						"x:" + di + " = " + xs[0][di].toScaledTermArray().toInfix());
+			}
+		}
+	}
+
+	public void test_1() throws IOException {
+		File file = new File("data/test_1.tiny");
+		FileInputStream in = null;
+		ParseNode node = null;
+		try {
+			in = new FileInputStream(file);
+			AsciiParser parser = new AsciiParser();
+			long[] lines = AsciiParser.newLines(in.getChannel());
+			parser.setLines(lines);
+			ByteInput input = new ByteFileInput(in.getChannel().position(0), 512);
+			node = parser.parse(input);
+			parser.clearNodes();
+			Debug.log().debug(node != null ? node.toInfix() : null);
+		} finally {
+			FileHelper.close(in);
+		}
+		TreeAnalyzer analyzer = new TreeAnalyzer(node);
+		{
+			FlattenEquation[] eqs = FlattenEquation.build(analyzer);
+			Debug.log().debug(
+					"flatten: " + StringHelper.join(eqs, ", ", FlattenEquation.TO_INFIX));
+			int dn = 10;
+			TermArray[][] xs = FlattenEquation.enumerate(dn, analyzer);
+			for (int di = 0; di <= dn; ++di) {
+				for (int i = 0, n = eqs.length; i < n; ++i) {
+					Debug.log().debug(
+							eqs[i].variable().name() + ':' + di + " = "
+									+ xs[i][di].toScaledTermArray().toInfix());
+				}
+			}
+		}
+	}
+	
+	public void test_2() throws IOException {
+		File file = new File("data/test_2.tiny");
+		FileInputStream in = null;
+		ParseNode node = null;
+		try {
+			in = new FileInputStream(file);
+			AsciiParser parser = new AsciiParser();
+			long[] lines = AsciiParser.newLines(in.getChannel());
+			parser.setLines(lines);
+			ByteInput input = new ByteFileInput(in.getChannel().position(0), 512);
+			node = parser.parse(input);
+			parser.clearNodes();
+			Debug.log().debug(node != null ? node.toInfix() : null);
+		} finally {
+			FileHelper.close(in);
+		}
+		TreeAnalyzer analyzer = new TreeAnalyzer(node);
+		{
+			FlattenEquation[] eqs = FlattenEquation.build(analyzer);
+			Debug.log().debug(
+					"flatten: " + StringHelper.join(eqs, ", ", FlattenEquation.TO_INFIX));
+			int dn = 5;
+			TermArray[][] xs = FlattenEquation.enumerate(dn, analyzer);
+			for (int di = 0; di <= dn; ++di) {
+				for (int i = 0, n = eqs.length; i < n; ++i) {
+					Debug.log().debug(
+							eqs[i].variable().name() + ':' + di + " = "
+									+ xs[i][di].toScaledTermArray().toInfix());
+				}
 			}
 		}
 	}
