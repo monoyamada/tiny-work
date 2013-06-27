@@ -6,6 +6,19 @@ do.catalan <- function (n) {
 }
 
 if (1) {
+	ns <- 0:9;
+	ks <- 0:9;
+	xs <- sapply(ns, function(n) {
+		as.integer (choose(n + ks, n));
+	});
+	rownames (xs) <- ns;
+	colnames (xs) <- ks + 1;
+	print (xs);
+	print (xtable (as.data.frame (xs)));
+	stop("stopped");
+}
+
+if (1) {
 	xs <- 0:5
 	ys <- do.catalan (xs)
 	names (ys) <- xs
