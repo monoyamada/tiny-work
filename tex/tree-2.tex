@@ -1,0 +1,278 @@
+\begingroup %{
+{\setlength\arraycolsep{2pt}
+%
+\section{二分木}\label{s1:二分木} %{
+	\begin{description}\setlength{\itemsep}{-1mm} %{
+		\item[列挙$\lambda$] $A$を集合、$\clP A$を$A$の冪集合とする。
+		元の列挙を表す写像$\lambda_R:\clP A\to\sizen A$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\lambda B = \sum_{b\in B}b \quad\text{for all } B\subseteq A
+		\end{split}\end{equation*}
+	\end{description} %}
+
+	$\clT_*$を二分木のつくる集合、$\clT_n\subset\clT_*$を葉でない頂点が$n$個
+	ある二分木の集合とする。$\clT_*=\cup_{n\in\sizen}\clT_n$
+	木の頂点を$\bullet$で表すと、$\clT_n$は次のようになる。
+	\begin{equation*}\begin{split}
+		\lambda\clT_0 &= \bullet \\
+		\lambda\clT_1 &= \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet
+		} \\
+		\lambda\clT_2 &= \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} + \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet
+		}
+	\end{split}\end{equation*}
+	二分木の大きさ$|-|:\clT_*\to\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		|t| = n \xiff{\dfn} t\in \clT_n
+	\end{split}\end{equation*}
+	$\clT_*$の二項演算$\beta$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\beta(t_1\times t_2) := \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			t_1 & & t_2
+		} \quad\text{for all } t_1,t_2\in\clT_*
+	\end{split}\end{equation*}
+	$\beta$を線形射に拡張すると、次の式が成り立つ。
+	\begin{equation}\label{eq:ベータによる二分木の列挙}\begin{split}
+		\lambda\clT_{n+1} = \sum_{k=0}^n\beta\plr{\lambda\clT_k\otimes\lambda\clT_{n-k}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+
+	二分木の左右反転を写像$\rho:\clT_*\to\clT_*$で表す。$\rho$は次の式を満たす。
+	\begin{equation*}\begin{split}
+		\rho\bullet = \bullet,\quad \rho\beta = \beta\sigma_{1,2}\plr{\rho\times\rho}
+	\end{split}\end{equation*}
+	ここで、$\sigma_{i,j}$は直積の$i$番目と$j$番目の要素を入れ替える操作と
+	する。
+
+	$\clT_*$の二項演算$m_0$を次のように定義する。
+	\begin{equation*}\begin{split}
+		m_0\plr{\bullet\times t} &:= t \quad\text{for all } t\in\clT_* \\
+		m_0\plr{\beta\times\id} &:= \beta\plr{\id\times m_0}
+	\end{split}\end{equation*}
+	$m_0$は積になり、単位元$\bullet$を持つ。
+
+	線形射$\epsilon:\sizen\clT_*\to\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\epsilon t = \is{|t|=0} \quad\text{for all } t\in\clT_*
+	\end{split}\end{equation*}
+	線形射$\alpha:\sizen\clT_*\to\clT_*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\alpha\bullet = \beta(\bullet\otimes\bullet),\quad 
+		\alpha\beta = \beta\plr{\alpha\otimes\id + \epsilon\otimes\alpha}
+	\end{split}\end{equation*}
+	$\alpha$を二分木の左成長ということにする。次の式を証明しよう。
+	\begin{equation}\label{eq:左成長は列挙になる}\begin{split}
+		\lambda\clT_{n+1}=\alpha\lambda\clT_n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+
+	左端の葉（行きがけ順に見て最初の葉）と頂点を結ぶ辺の数に変更する。
+	\begin{equation*}\begin{split}
+		\kappa_0\bullet = 0,\quad 
+		\kappa_0\beta\plr{t_1\times t_2} = \plr{\kappa_0t_1} + 1
+		\quad\text{for all } t_1,t_2\in\clT_*
+	\end{split}\end{equation*}
+	$\kappa_0$は根と左端の葉を結ぶ辺の数を表す。
+	\begin{equation*}\begin{split}
+		\kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet
+		} = \kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet
+		} = 1,\quad \kappa\xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} = 2
+	\end{split}\end{equation*}
+	$\clT^n_k\subseteq\clT^n$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\clT^n_k := \set{t\in\clT^n\mid \kappa_0t=k}
+	\end{split}\end{equation*}
+	次の性質が成り立つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\clT_n=\oplus_{k=0}^n\clT^n_k$と直和分解される。
+		%
+		\item 任意の$n\in\sizen$に対して$\clT^{n+1}_0=\emptyset$となる。
+		%
+		\item 写像$\beta_-:\clT_*\to\op{Set}(\clT_*,\clT_*)$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\beta_t u = \beta(t\times u) \quad\text{for all } t,u\in\clT_*
+		\end{split}\end{equation*}
+		任意の$n\in\sizen$に対して$\clT^n_n=\set{\rho\beta_\bullet^n\bullet}$となる。
+		%
+		\item 式\eqref{eq:ベータによる二分木の列挙}から、次の漸化式が成り立つ。
+		\begin{equation}\label{eq:ベータによる二分木の列挙その二}\begin{split}
+			\lambda\clT^{n+1}_{k+1} 
+			= \sum_{r=k}^n\beta\plr{\lambda\clT^r_k\otimes\lambda\clT_{n-r}}
+			\quad\text{for all } n\in\sizen,; k\in0..n
+		\end{split}\end{equation}
+	\end{itemize} %}
+	$\clT^n_k$は次のようになる。
+	\begin{equation*}\begin{split}
+		\lambda\clT^0_0 = \bullet,\quad
+		\lambda\clT^1_1 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet
+		},\quad 
+		\lambda\clT^2_1 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet
+		},\quad
+		\lambda\clT^2_2 = \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} \\
+		\lambda\clT^3_1 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		}	+ \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet & & \bullet \\
+		},\quad \lambda\clT^3_2 = \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[d] & & \bullet \hen[d] \hen[dr] \\
+			\bullet & \bullet & & \bullet & \bullet \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \\
+		} \\
+		\lambda\clT^3_3 = \xymatrix@R=4pt@C=4pt{
+			& & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet \hen[dl] \hen[dr] & & \bullet \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \\
+		}  
+	\end{split}\end{equation*}
+
+	\begin{todo}[左右反転]\label{todo:左右反転} %{
+	\end{todo} %todo:左右反転}
+	
+	右端の葉（行きがけ順に見て最後の葉）に着目して$\clT_n$を分解する。
+	写像$\kappa:\clT_*\to\sizen$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\kappa\bullet = 0,\quad 
+		\kappa\beta\plr{t_1\times t_2} = \plr{\kappa t_2} + 1
+		\quad\text{for all } t_1,t_2\in\clT_*
+	\end{split}\end{equation*}
+	$\kappa$は根と右端の葉を結ぶ辺の数を表す。
+	\begin{equation*}\begin{split}
+		\kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet
+		} = \kappa\xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} = 1,\quad \kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet
+		} = 2
+	\end{split}\end{equation*}
+	$\clT^n_k\subseteq\clT^n$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\clT^n_k := \set{t\in\clT^n\mid \kappa t=k}
+	\end{split}\end{equation*}
+	$\clT_n=\oplus_{k=0}^n\clT^n_k$と直和分解される。
+	任意の$n\in\sizen$に対して$\clT^{n+1}_0=\emptyset$かつ
+	$\clT^n_n=\set{\beta_\bullet^n\bullet}$となる。
+	\begin{equation*}\begin{split}
+		\lambda\clT^0_0 = \bullet,\quad \lambda\clT^1_1 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet
+		},\quad \lambda\clT^2_1 = \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		},\quad \lambda\clT^2_2 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet
+		} \\
+		\lambda\clT^3_1 = \xymatrix@R=4pt@C=4pt{
+			& & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet \hen[dl] \hen[dr] & & \bullet \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \\
+		},\quad \lambda\clT^3_2 = \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[d] & & \bullet \hen[d] \hen[dr] \\
+			\bullet & \bullet & & \bullet & \bullet \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} \\
+		\lambda\clT^3_3 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet & & \bullet \\
+		} \\
+	\end{split}\end{equation*}
+	式\eqref{eq:ベータによる二分木の列挙}から、次の漸化式が成り立つ。
+	\begin{equation}\label{eq:ベータによる二分木の列挙その二}\begin{split}
+		\lambda\clT^{n+1}_{k+1} 
+		= \sum_{r=0}^{n-k}\beta\plr{\lambda\clT_r\otimes\lambda\clT^{n-r}_k}
+		\quad\text{for all } n\in\sizen,; k\in0..n
+	\end{split}\end{equation}
+	二分木の左成長は$\clT^n_k$の$k$をほぼ保存する。
+	\begin{equation*}\begin{split}
+		\xymatrix@R=2ex@C=2ex{
+			\ar[dddd]_\alpha & \clT^0_0 \ar[rd] \\
+			& & \clT^1_1 \ar[d] \ar[rd] \\
+			& & \clT^2_1 \ar[d] & \clT^2_2 \ar[d] \ar[rd] \\
+			& & \clT^3_1 \ar[d] & \clT^3_2 \ar[d] & \clT^3_3 \ar[d] \ar[rd] \\
+			& & \vdots & \vdots & \vdots & \cdots \\
+		}
+	\end{split}\end{equation*}
+	したがって、証明したい式\eqref{eq:左成長は列挙になる}は次の式に帰着する。
+	\begin{equation}\label{eq:アルファによる二分木の列挙}\begin{split}
+		\alpha\lambda\clT^n_k = \lambda\clT^{n+1}_k + \is{k=n}\beta_\bullet^{n+1}\bullet
+		\quad\text{for all } n\in\sizen,\; k\in0..n
+	\end{split}\end{equation}
+	この式が成り立つことは帰納法により簡単に証明できる。
+	\begin{proof} %{
+		まず、$\alpha\clT^0_0=\clT^1_1$となる。そして、ある$N\in\sizen$があって、
+		$N$以下の自然数$n$でこの式が成り立つとすると、
+		式\eqref{eq:ベータによる二分木の列挙その二}から、
+		\begin{equation*}\begin{split}
+			\alpha\lambda\clT^{N+1}_{k+1}
+			&= \sum_{r=0}^{N-k}\alpha\beta\plr{\lambda\clT_r\otimes\lambda\clT^{N-r}_k} \\
+			&= \sum_{r=0}^{N-k}\beta\plr{\alpha\lambda\clT_r\otimes\lambda\clT^{N-r}_k}
+				+ \beta\plr{\lambda\clT_0\otimes\alpha\lambda\clT^N_k} \\
+			&= \sum_{r=0}^{N-k}\beta\plr{\lambda\clT_{r+1}\otimes\lambda\clT^{N-r}_k}
+				+ \beta\plr{\lambda\clT_0\otimes\alpha\lambda\clT^{N+1}_k}
+				+ \is{k=N}\beta\plr{\lambda\clT_0\otimes\beta^{N+1}\bullet} \\
+			&= \lambda\clT^{N+2}_{k+1} + \is{k=N}\beta^{N+2}\bullet
+		\end{split}\end{equation*}
+		となって、$n$が$N+1$でも成り立つことがわかる。
+	\end{proof} %}
+%s1:二分木}
+%
+}\endgroup %}

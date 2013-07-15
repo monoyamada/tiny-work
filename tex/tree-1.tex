@@ -1,0 +1,1013 @@
+\begingroup %{
+\newcommand{\word}[1]{{\blra{#1}}}
+\newcommand{\hbeta}{{\what{\beta}}}
+\newcommand{\hg}{{\what{g}}}
+\newcommand{\hx}{{\what{x}}}
+\newcommand{\hG}{{\what{G}}}
+{\setlength\arraycolsep{2pt}
+%
+\section{多項式}\label{s1:多項式} %{
+	まず、可換代数で考えてみる。次の代数式の摂動解$x_t\in R\bblr{t}$を考える。
+	\begin{equation*}\begin{split}
+		x_t = x_0 + t(g|x_t)x_t \quad\text{where } \left\{\begin{split}
+			x_0\neq 0 &\in R \\
+			g &\in R\bblr{x}\mid (g|0) = 0
+		\end{split}\right.
+	\end{split}\end{equation*}
+	$x_t=\sum_{n\in\sizen}t^nx_n$と級数展開する。そして、
+	代数元$\set{e_I,e_I^\dag\mid I\in\sizen}$を次のようにおき、
+	\begin{equation*}\begin{split}
+		e_I^\dag e_J := \is{i=j} \quad\text{for all } I,J\in\sizen
+	\end{split}\end{equation*}
+	$G$と$X_t$を次のようにおくと、
+	\begin{equation*}\begin{split}
+		G := \sum_{k\in\sizen_+}g_ke_k,\quad X_t := \sum_{k\in\sizen_+}x_t^ke_k
+	\end{split}\end{equation*}
+	$(g|x_t)=G^\dag X_t$と書ける。そして、次の級数を考えることにする。
+	\begin{alignat*}{2}
+		X_t &:= \sum_{n\in\sizen}t^nX_n \\
+		X_n &= \sum_{I\in\sizen_+}X_n^I e_I &&\quad\text{for all } n\in\sizen \\
+		X_n^I &:= \sum_{r_1,\dots,r_i\in\sizen} \is{r_1+\cdots+r_I=n} 
+			x_{r_1}\cdots x_{r_I}
+		= \what{x}\lambda\clC_{n+I,I}
+		&&\quad\text{for all } I,n\in\sizen
+	\end{alignat*}
+	ここで、代数射$\what{x}:R\sizen_+^*\to R$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\what{x}\word{} = 1,\quad
+		\what{x}\word{n+1} := x_n \quad\text{for all }n\in\sizen
+	\end{split}\end{equation*}
+	これらの記号を用いると、$x_n$は次の漸化式を満たすが、\footnote{
+		この式がすべての基点になりそうだ。
+	}
+	\begin{equation}\begin{split}
+		x_{n+1} = \sum_{r=0}^n(G^\dag X_r)x_{n-r} 
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	この漸化式から$X_n$の漸化式を導こう。
+
+	任意の$n,I\in\sizen$で次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		X_{n+1}^{I+1} &= \what{x}C_{n+I+2,I+1}
+		= \sum_{r=1}^{n+2}\what{x}\plr{C_{r,1}C_{n+I+2-r,I}}
+		= \sum_{r=1}^{n+2}x_{r-1}X_{n+2-r}^I \\
+		&= x_0X_{n+1}^I + \sum_{r=0}^n\sum_{s=0}^r
+			(G^\dag X_s)x_{r-s}X_{n-r}^I
+	\end{split}\end{equation*}
+	この式の二項目の和の範囲は次のようになるから、
+	\begin{equation*}\begin{array}{r|ccccccccc|c}
+		r & (s,r-s) &&&&&&&&& n-r \\\hline
+		0 & (0,0) &&&&&&&&& n \\
+		1 & (0,1) &+& (1,0) &&&&&&& n-1 \\
+		2 & (0,2) &+& (1,1) &+& (0,2) &&&&& n-2 \\
+		\vdots & \vdots && \vdots && \vdots && \ddots &&& \vdots \\
+		n & (0,n) &+& (1,n-1) &+& (2,n-2) &+& \cdots &+& (n,0) & 0 \\
+	\end{array}\end{equation*}
+	和の順序を交換して、次のようになり、
+	\begin{equation*}\begin{split}
+		&\sum_{r=0}^n\sum_{s=0}^r (G^\dag X_s)x_{r-s}X_{n-r}^I
+		= \sum_{s=0}^n (G^\dag X_s) \sum_{r=s}^n x_{r-s}X_{n-r}^I
+		= \sum_{s=0}^n (G^\dag X_s) \sum_{r=0}^{n-s} x_rX_{n-s-r}^I \\
+		&= \sum_{s=0}^n (G^\dag X_s) \sum_{r=0}^{n-s} 
+			\what{x}\plr{\clC_{r+1,1}\clC_{n-s-r+I,I}}
+		= \sum_{s=0}^n (G^\dag X_s)\what{x}\clC_{n-s+I+1,I+1}
+		= \sum_{s=0}^n (G^\dag X_s)X_{n-s}^I
+	\end{split}\end{equation*}
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		X_{n+1}^{I+1} = x_0X_{n+1}^I + \sum_{r=0}^n(G^\dag X_r)X_{n-r}^I
+		\quad\text{for all } n,I\in\sizen
+	\end{split}\end{equation*}
+	ここで、$E:=\set{e_0,e_1,\dots}$とおき、線形射$S:RE\to RE$を次のように
+	定義すると、
+	\begin{equation*}\begin{split}
+		Se_I := x_0e_{I+1} \quad\text{for all } I\in\sizen
+	\end{split}\end{equation*}
+	次の形にまとまり、
+	\begin{equation*}\begin{split}
+		X_{n+1} = SX_{n+1} + \sum_{r=0}^n(G^\dag X_r)X_{n-r}
+	\end{split}\end{equation*}
+	二分木に対応する次の漸化式が得られる。
+	\begin{equation*}\begin{split}
+		X_{n+1} = \sum_{r=0}^n(G^\dag X_r)TX_{n-r} 
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	ここで、$T:=S^*$とおいた。
+	\begin{equation*}\begin{split}
+		Te_I := \sum_{J=0}^\infty x_0^Je_{I+J} \quad\text{for all } I\in\sizen
+	\end{split}\end{equation*}
+	以上より、$X_t$は次の式を満たすことがわかる。
+	\begin{equation}\label{eq:文法の二分木への対応}\begin{split}
+		X_t = X_0 + t(G^\dag X_t)TX_t
+	\end{split}\end{equation}
+	二分木への対応を利用して、漸化式を更に書き換えよう。
+
+	$\beta$によって、線形射$\hbeta:R\clB_*\to\cat{Mod}_R(R\clB_*)$
+	を次のように定義する。
+	\begin{equation*}\begin{split}
+		\plr{\hbeta t_1}t_2 := \beta\plr{t_1\otimes t_2}
+		\quad\text{for all } t_1,t_2\in\clB_*
+	\end{split}\end{equation*}
+	任意の$t\in\clB_+$に対して$t=\beta(t_1\otimes t_2)$となる$t_1,t_2\in\clB_*$
+	は唯一つ必ず定まる。したがって、$t=(\hbeta t_1)\cdots(\hbeta t_n)\bullet$
+	となる$t_1,\dots,t_n\in\clB_*$が唯一つ必ず定まる。よって、集合同型
+	$\clB_*^+\simeq\clB_+$が成り立つ。さらに、$\bullet$を$\word{}$に
+	対応させることで集合同型$\clB_*^*\simeq\clB_*$が成り立つこともわかる。
+	したがって、$\hbeta$を代数射$\hbeta:R\clB_*^*\to\cat{Mod}_R(R\clB_*)$に
+	拡張すると次の可換図が成り立つ。
+	\begin{equation*}\xymatrix{
+		R\clB_*^* \ar[r]^{\hbeta} \ar[rd]_{\simeq} 
+		& \cat{Mod}_R(R\clB_*) \ar[d]^{-\bullet} \\
+		& R\clB_*
+	}\end{equation*}
+	線形射$\gamma_u:R\clB_*^*\to R\clB_*$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\gamma_uv := \plr{\hbeta v}u
+		\quad\text{for all } v\in R\clB_*^*,\; u\in R\clB_* 
+	\end{split}\end{equation*}
+	逆$\gamma_\bullet^{-1}:R\clB_*\to R\clB_*^*$が定義できて、
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\gamma_\bullet^{-1}\bullet = 1,\quad
+		\gamma_\bullet^{-1}\beta = m_0\plr{\iota_\clW\otimes\gamma_\bullet^{-1}}
+	\end{split}\end{equation*}
+	ここで、$\iota_\clW$は文字から文字列への標準入射で次のように定義される。
+	\begin{equation*}\begin{split}
+		\iota_\clW t := \word{t} \quad\text{for all } t\in\clB_*
+	\end{split}\end{equation*}
+	$\gamma_u$を図示すると次のようになる。
+	\begin{equation*}\begin{split}
+		t_1\otimes t_2\otimes\cdots\otimes t_k \xmapsto{\gamma_u}
+		\xymatrix@R=4pt@C=4pt{
+			\bullet \hen[d]\hen[r] & \circ\hen[d]\hen[r] & \cdots\hen[r]
+			& \circ\hen[d]\hen[r] & u \\
+			t_1 & t_2 & \cdots & t_k \\
+		} \quad\text{for all } t_1,\dots,t_k,u\in\clB_*
+	\end{split}\end{equation*}
+	$\gamma_\bullet$を用いると、任意の$n\in\sizen_+$に対して列挙に関する
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\gamma_\bullet^{-1}\lambda\clB_n = \sum_{k=1}^n
+			\sum_{n_1,\dots,n_k\in\sizen} \is{n_1+\cdots+n_k+k=n} 
+			\plr{\lambda\clB_{n_1}\otimes\cdots\otimes\lambda\clB_{n_k}} \\
+		\quad\text{for all } n\in\sizen_+
+	\end{split}\end{equation*}
+	そこで、代数射$\delta:R\sizen_+^*\to R\clB_*^*$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\delta\word{n+1} = \lambda\clB_n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	列挙は、$n=0$の場合も含めて、次のように書くことできる。
+	\begin{equation}\label{eq:二分木の直和分解}\begin{split}
+		\gamma_\bullet^{-1}\lambda\clB_n = \delta\clC_n
+		= \sum_{k=0}^n\delta\clC_{n,k} \quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+
+	線型射$\hg:RE\to\cat{Mod}_R(RE)$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\hg Y := \plr{G^\dag Y}T \quad\text{for all } Y\in RE
+	\end{split}\end{equation*}
+	写像の適用を$m_\rhd:\cat{Mod}_R(RE)\otimes RE\to RE$と書き、
+	線形射$\hx:R\clB_*\to RE$を次のように定義すると、
+	\begin{equation}\label{eq:二分木によるパラメータづけ}\begin{split}
+		\hx\bullet := X_0,\quad \hx\beta = m_\rhd\plr{\hg\hx\otimes\hx}
+	\end{split}\end{equation}
+	$X_t$の摂動係数を次のように書くことができる。
+	\begin{equation*}\begin{split}
+		X_n = \hx\lambda\clB_n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この式を、$\delta$\eqref{eq:二分木の直和分解}と$\gamma_\bullet$を用いて、
+	次のように変形すると、
+	\begin{equation*}\begin{split}
+		X_n = \hx\lambda\clB_n 
+		= \hx\gamma_\bullet\gamma_\bullet^{-1}\lambda\clB_n
+		= \hx\gamma_\bullet\delta\clC_n
+	\end{split}\end{equation*}
+	$\hx\gamma_\bullet$は次の式を満たすから、
+	\begin{equation*}\begin{split}
+		\hx\gamma_\bullet\plr{t_1\otimes\cdots\otimes t_k}
+		= \plr{\hg\hx t_1}\cdots\plr{\hg\hx t_k}\plr{\hx\bullet}
+		= \plr{G^\dag\hx t_1}\cdots\plr{G^\dag\hx t_k}T^kX_0 \\
+		\quad\text{for all } t_1,\dots,t_k\in\clB_*
+	\end{split}\end{equation*}
+	代数射$\hG:R\clB_*^*\to R$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\hG t = G^\dag\hx t \quad\text{for all } t\in\clB_*
+	\end{split}\end{equation*}
+	$X_n$は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		X_n = \sum_{k=0}^n \plr{\hG\delta\clC_{n,k}}T^kX_0
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この式から一階の漸化式が導かられる。
+	$G_{n,k}:=\hG\delta\clC_{n,k}$とおくと、$\hG\delta$が代数射だから、
+	次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		G_{n+1,k+1} &= \sum_{r=0}^{n-k} G_{n-r,k}G_{r+1,1}
+		= \sum_{r=0}^{n-k} G_{n-r,k}G^\dag X_r \\
+		&= \sum_{r=0}^{n-k} G_{n-r,k} \sum_{l=0}^r G_{r,l}G^\dag T^l X_0
+		= \sum_{l=0}^r\sum_{r=l}^{n-k} G_{n-r,k}G_{r,l} G^\dag T^l X_0 \\
+		&= \sum_{l=0}^{n-k} G_{n,k+l}G^\dag T^l X_0 \\
+	\end{split}\end{equation*}
+	次の漸化式を満たす$G_{n,k}\in R$によって、
+	\begin{equation}\label{eq:摂動係数の漸化式}\begin{split}
+		G_{n,0} = \is{n=0},\quad 
+		G_{n+1,k+1} = \sum_{l=0}^{n-k} G_{n,k+l}G^\dag T^lX_0
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	$X_n$は次のように書くことできることがわかる。
+	\begin{equation*}\begin{split}
+		X_n = \sum_{k=0}^n G_{n,k}T^kX_0 \quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	$T^kX_0$を計算しよう。ある$C_{I,k}\in R$を用いて
+	$T^kX_0=\sum_{I\in\sizen_+}c_{I,k}x_0^Ie_I$と書けると仮定すると、
+	\begin{equation*}\begin{split}
+		T^{k+1}X_0 = \sum_{I\in\sizen_+}c_{I,k}\sum_{J\in\sizen}x_0^{I+J}e_{I+J}
+		= \sum_{I\in\sizen_+}\plra{\sum_{J=1}^Ic_{J,k}}x_0^Ie_J
+	\end{split}\end{equation*}
+	となり、$c_{I,k+1}=\sum_{J=1}^Ic_{J,k}$という漸化式が得られる。
+	$c_{I,k}=\binom{k+I-1}{k}$と仮定すると、次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		c_{I,k+1} &= \binom{k+I}{k+1} = \binom{k+I-1}{k} + \binom{k+I-1}{k+1} \\
+		&= \binom{k+I-1}{k} + \binom{k+I-2}{k} + \binom{k+I-2}{k+1}
+		= \cdots \\
+		&= \binom{k+I-1}{k} + \binom{k+I-2}{k} +\cdots+ \binom{k+1}{k} 
+			+ \binom{k+1}{k+1} \\
+		&= \sum_{J=1}^I \binom{k+J-1}{k}
+	\end{split}\end{equation*}
+	帰納法から、$c_{I,k}=\binom{k+I}{k+1}$となることがわかり、
+	次の式が得られる。
+	\begin{equation*}\begin{split}
+		T^kX_0 = \sum_{I\in\sizen_+} \binom{k+I-1}{k}x_0^Ie_I
+	\end{split}\end{equation*}
+	したがって、$x_n=e_1^\dag X_n$だから、次の式が得られる。
+	\begin{alignat*}{2}
+		x_n &= \sum_{k=0}^n G_{n,k}x_0 &&\quad\text{for all } n\in\sizen \\
+		G_{n,0} &= \is{n=0} &&\quad\text{for all } n\in\sizen \\
+		G_{n+1,k+1} &= \sum_{l=0}^{n-k}G_{n,k+l}g_{(l)} 
+			&&\quad\text{for all } k\le n\in\sizen \\
+		g_{(k)} &= \sum_{I\in\sizen_+}\binom{k+I-1}{k}g_Ix_0^I 
+			&&\quad\text{for all } k\in\sizen
+	\end{alignat*}
+
+	\begin{todo}[課題]\label{todo:課題} %{
+		思いついたこと等のメモを書いておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item 波動方程式を考える。
+			$X_{n+1}=HX_n$として、$H\in\cat{Mod}_R(RE)$を求める。
+			%
+			\item 微分方程式の場合を考える。
+			%
+			\item \cite{Hopkins99}との関係を考える。
+			$x_t=x_0+t(g|x_t)x_t$の摂動解は次の数列に帰着される。
+			\begin{equation*}\begin{array}{r|ccccc}
+				n\backslash k & 0 & 1 & 2 & 3 \\\hline
+				0 & G_{0,0} & 0 & 0 & 0 \\
+				1 & 0 & G_{1,1} & 0 & 0 \\
+				2 & 0 & G_{2,1} & G_{2,2} & 0 \\
+				3 & 0 & G_{3,1} & G_{3,2} & G_{3,3} \\
+			\end{array}\end{equation*}
+			漸化式\eqref{eq:摂動係数の漸化式}は$n$についての摂動を与える。
+			この漸化式は有限和の形で摂動を進めることができる。
+			一方、次のような摂動を考えることもできる。
+			\begin{equation*}\begin{split}
+				H_{t,0} = \sum_{n\in\sizen} G_{n,n}t^n,\quad
+				H_{t,1} = t\sum_{n\in\sizen} G_{n+1,n}t^n ,\quad
+				H_{t,2} = t^2\sum_{n\in\sizen} G_{n+2,n}t^n 
+			\end{split}\end{equation*}
+			特に、$H_{t,0}=\sum_{n\in\sizen}(g|x_0)^nt^n$となる。
+		\end{itemize} %}
+	\end{todo} %todo:課題}
+%s1:多項式}
+\section{列挙}\label{s1:列挙} %{
+	$R$を環、$A$を集合、$\clP A$を$A$の冪集合、$RA$を$A$の元を基底に持つ自由$R$-加群
+	とする。元の列挙を表す写像$\lambda_R:\clP A\to RA$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\lambda_R B = \sum_{b\in B}b \quad\text{for all } B\subseteq A
+	\end{split}\end{equation*}
+
+	係数環の標数が$0$の時は、$\lambda$は集合同型を示すことに使える。
+	集合射$f:A\to B$で$R$の標数が$0$であれば、$\lambda_RB=\lambda_RfA$が成り立つ
+	ことと、$f$が同型射になることは同値になる。$R$の標数が$0$でない時は、
+	$f$が同型射でなくても$\lambda_RB=\lambda_RfA$となることがある。
+	例えば、$A=\set{a_1,a_2,a_3},\;B=\set{b}$で$f:A\to B$は唯一つ定まり、
+	$3:1$の写像になるが、$R=\sei_2:=\sei/2\sei$の場合、
+	$\lambda_{\sei_2}B=\lambda_{\sei_2}fA$となる。
+
+	逆のことは係数環の標数に依らずに成り立つ。$f:A\to B$が集合同型であれば、
+	係数環$R$の標数に依らずに$\lambda_R B=\lambda_R fA$が成り立つ。
+	\begin{equation*}\begin{split}
+		f:A\simeq B \text{ as set} \implies \lambda_R B=\lambda_R fA
+		\quad\text{for all } R\in\obj\cat{Ring}
+	\end{split}\end{equation*}
+	この形で用いられることが多いように感じる。
+
+	係数環$R$を明示する必要がない時は、$\lambda_R$を$\lambda$と略記する。
+%s1:列挙}
+\section{文字列}\label{s1:文字列} %{
+	$A$を集合、$A^*$を$A$の文字列の集合とする。文字列を明示的に書く時には、
+	$\word{\dots}$を使うことにする。
+	\begin{equation*}\begin{split}
+		a_1,a_2,\dots,a_n\in A\implies \word{a_1,a_2,\dots,a_n}\in A^* 
+	\end{split}\end{equation*}
+	文字列の連結を前置記法で$m_0$で表し、中置記法では記号を省略することにする。
+	\begin{equation*}\begin{split}
+		w_1w_2 := m_0\plr{w_1\otimes w_2} \quad\text{for all } w_1,w_2\in A^*
+	\end{split}\end{equation*}
+	余積$m_0^\dag$を次のように定義する。
+	\begin{equation*}\begin{split}
+		m_0^\dag w := \sum_{w_1,w_2\in A^*} w_1\otimes w_2
+	\end{split}\end{equation*}
+	$m_0$の単位射$\eta_0$と$m_0^\dag$の余単位射$\eta_0^\dag$は次のようになる。
+	\begin{equation*}\begin{split}
+		\eta_0 w = \is{w=\word{}} \quad\text{for all } w\in A^*,\quad
+		\eta_0^\dag r := r\word{} \quad\text{for all } r\in R
+	\end{split}\end{equation*}
+
+	形式言語を扱う場合、文字列の文字列なども考える必要があるので、文字列を
+	記号$\clW$を用いて$\clW_nA:=A^n$とも書くことにする。例えば、二次元配列全体の
+	集合は$\clW_*^2A$と書く。テンソル積についても同様に、可換環$R$上の加群$V$
+	から生成されるテンソル代数を$\clT_*V:=\oplus_{n\in\sizen}V^{\otimes n}$と
+	書くことにする。
+%s1:文字列}
+\section{数の合成}\label{s1:数の合成} %{
+	$\op{sum}:\sizen_+^*\to\sizen$を文字の数字の和とする。
+	\begin{equation*}\begin{split}
+		\op{sum}\word{} := 0,\; \op{sum}\word{n_1,\dots,n_k} = n_1 +\cdots+ n_k
+		\quad\text{for all } n_1,\dots,n_k\in\sizen_+
+	\end{split}\end{equation*}
+	$\op{sum}$によってが分類できる。$\clC_{n,k}\in\sizen_+^+$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\clC_{n,k} &:= \set{w\in\sizen_+^k\mid \op{sum}w=n}
+			\quad\text{for all } k,n\in\sizen
+	\end{split}\end{equation*}
+	次の直和分解が成り立つ。
+	\begin{equation*}\begin{split}
+		\sizen_+^* = \oplus_{n\in\sizen}\clC_n,\quad \clC_n := \oplus_{k=0}^n\clC_{n,k}
+	\end{split}\end{equation*}
+	一般に、$\clC_n$の元を$n$の合成という。
+	以下で、$\clC_{n,k}$の元を摂動で列挙することを考える。$R$を整域とする。
+
+	まず、文字の数字を一つずつインクリメントしていくことを考えてみる。
+	線形射$\op{inc}:R\sizen_+^*\to R\sizen_+^+$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\op{inc}\word{n} = \word{n+1} \quad\text{for all } n\in\sizen_+,\quad
+		\op{inc}m_0 := m_0\plr{\op{inc}\otimes\id + \id\otimes\op{inc}}
+	\end{split}\end{equation*}
+	次の式が成り立つが、
+	\begin{equation*}\begin{split}
+		\op{inc}\lambda\clC_{n,k}\in\sizen_+\clC_{n+1,k}
+			\quad\text{for all } 1\le k\le n\in\sizen
+	\end{split}\end{equation*}
+	$\op{inc}\lambda\clC_{n,k}=\lambda\clC_{n+1,k}$とはならない。
+	例えば、次の例は$\word{2,2}$が重複する。
+	\begin{equation*}\begin{split}
+		\op{inc}\word{2,1} = \word{3,1} + \word{2,2},\quad
+		\op{inc}\word{1,2} = \word{2,2} + \word{1,3}
+	\end{split}\end{equation*}
+	そこで、$\op{inc}$を制限して次のような線形射を考えてみよう。
+	\begin{equation*}\begin{split}
+		\word{n} &\mapsto \word{n+1} \\
+		\word{1,1} &\mapsto \word{2,1} + \word{1,2} \\
+		\word{2,1} &\mapsto \word{3,1} \\
+		\word{1,2} &\mapsto \word{2,2}  + \word{1,3} \\
+		\word{1,1,1} &\mapsto \word{2,1,1}  + \word{1,2,1} + \word{1,1,2} \\
+	\end{split}\end{equation*}
+	線形射$\op{one}:R\sizen_+^*\to R\sizen_+^*$を次のように定義して、
+	\begin{equation*}\begin{split}
+		\op{one} w = \is{|w|=\op{sum}w} w
+	\end{split}\end{equation*}
+	$\op{inc-new}$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\op{inc-new}\word{n} &:= \word{n+1} \quad\text{for all } n\in\sizen_+ \\
+		\op{inc-new}m_0 &:= m_0\plr{\op{inc-new}\otimes\id + \op{one}\otimes\op{inc-new}}
+	\end{split}\end{equation*}
+	右端の文字に着目すると、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\clC_{n+1,k+1} = \oplus_{r=0}^n \word{r+1}\clC_{n-r,k}
+		\quad\text{for all } k\le n\in\sizen
+	\end{split}\end{equation*}
+	この式の左から$\op{inc-new}$を作用させると、次の式が成り立つので、
+	\begin{equation*}\begin{split}
+		\op{inc-new}\lambda\clC_{n+1,k+1} &= \sum_{r=0}^n\lambda[r+2]\clC_{n-r,k}
+			+ [1]\op{inc-new}\lambda\clC_{n,k} \\
+		&= \sum_{r=1}^{n+1}\lambda[r+1]\clC_{n+1-r,k} + [1]\lambda\clC_{n+1,k} \\
+		&= \lambda\clC_{n+2,k+1}
+	\end{split}\end{equation*}
+	帰納法から$\lambda\clC_{n+1,k}=\op{inc-new}\lambda\clC_{n,k}$となることがわかる。
+	以上のことを定義も含めた命題の形でまとめておこう。
+
+	\begin{proposition}[数の合成の増分]\label{prop:数の合成の増分} %{
+		線形射$\pi_\sizen\in\cat{Mod}_R(R\sizen_+^*)$を次のように定義し、
+		\begin{equation*}\begin{split}
+			\pi_\sizen w := \is{|w|=\op{sum}w} w \quad\text{for all } w\in\sizen_+^*
+		\end{split}\end{equation*}
+		線形射$\op{inc}\in\cat{Mod}_R(R\sizen_+^*)$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\op{inc}\word{n} &:= \word{n+1} \quad\text{for all } n\in\sizen_+ \\
+			\op{inc}m_0 &:= m_0\plr{\op{inc}\otimes\id + \pi_\sizen\otimes\op{inc}} \\
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\lambda\clC_{n+1,k} = \op{inc}\lambda\clC_{n,k}
+				\quad\text{for all } k\le n\in\sizen
+		\end{split}\end{equation*}
+		さらに、$\op{add}:=[1]\pi_\sizen$、$\alpha:=\op{inc}+\op{add}$と定義すると、
+		次の交換関係を満たし、
+		\begin{equation*}\begin{split}
+			\alpha m_0 = m_0\plr{\op{inc}\otimes\id + \pi_\sizen\otimes\alpha}
+		\end{split}\end{equation*}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\lambda\clC_{n+1} = \alpha\lambda\clC_{n} \quad\text{for all } n\in\sizen
+				\qquad\EOP
+		\end{split}\end{equation*}
+	\end{proposition} %prop:数の合成の増分}
+%s1:数の合成}
+%s1:文法の摂動解}
+\section{メモ}\label{s1:メモ} %{
+\subsection{漸化式}\label{s2:漸化式} %{
+	二項係数は一階の漸化式として表すことができる。
+	\begin{equation*}\begin{split}
+		\binom{n+1}{k+1} = \binom{n}{k+1} + \binom{n}{k}
+	\end{split}\end{equation*}
+	生成関数$b_{n,t}:=\sum_{k=0}^n\binom{n}{k}t^k$を用いると、次のようになる。
+	\begin{equation*}\begin{split}
+		b_{n+1,t} = b_{n,t} + tb_{n,t}
+	\end{split}\end{equation*}
+	この手の漸化式はプログラミングでは、メモ化の時のメモリの節約を助ける。
+%s2:漸化式}
+\subsection{二分木の成長}\label{s2:二分木の成長} %{
+	線形射$\phi:R\clB_*\to R\set{b,c}^*$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\phi\bullet = \word{},\quad \phi\beta = \beta_\clW\plr{\phi\otimes\phi}
+		,\quad \beta_\clW\plr{w_1\otimes w_2} := bw_1cw_2
+	\end{split}\end{equation*}
+	木の成長$\alpha$は次の式を満たす。
+	\begin{equation*}\begin{split}
+		\phi\alpha\beta = \beta_\clW\plr{\phi\alpha\otimes\phi 
+		+ \phi\eta\epsilon\otimes\phi\alpha}
+	\end{split}\end{equation*}
+	$\alpha$の$R\set{b,c}^*$上での作用を簡潔な式で得ることができるか？
+%s2:二分木の成長}
+\subsection{ライプニッツ則}\label{s2:ライプニッツ則} %{
+	数の合成で、各文字を一つインクリメントする操作と文字$\word{1}$を連結する操作を
+	合わせると、$\clC_n$から$\clC_{n+1}$を得ることができる。ただし、次のように重複
+	が現れる。
+	\begin{equation*}\begin{split}
+		\lambda\clC_1 &= \word{1} \\
+		\lambda\clC_2 &= \word{2} + \word{1, 1} \\
+		\lambda\clC_3 &= \word{3} + 2\word{2, 1} + \word{1,2} + \word{1,1,1} \\
+		\lambda\clC_4 &= \word{4} + 3\word{3, 1} + 3\word{2,2} + \word{1,3} 
+			+ 2\word{2,1,1} + 2\word{1,2,1} + \word{1,1,2} + \word{1,1,1,1} \\
+	\end{split}\end{equation*}
+	ライプニッツ則のようにインクリメントすれば、重複が防げそうだ。
+	\begin{equation*}\begin{split}
+		\word{n_1,n_2,n_3,\dots,n_k} \mapsto &\word{n_1+1,n_2,n_3,\dots,n_k} \\
+		+ \is{n_1=1} &\word{1,n_2+1,n_3,\dots,n_k} \\
+		+ \is{n_1=n_2=1} &\word{1,1,n_3+1,\dots,n_k}
+		+ \cdots
+	\end{split}\end{equation*}
+	この操作を定式化しよう。
+
+	線形射$\alpha:R\sizen_+^*\to R\sizen_+^*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\alpha\word{} := \word{1},\quad \alpha m_0 := m_0\plr{
+			\alpha\otimes\id + \epsilon\otimes\alpha}
+	\end{split}\end{equation*}
+	この操作を$\partial^\dag:\sizen_+^*\to\sizen_+^*$と書こう。
+	空の文字列に対する操作を次のように定義する。
+	\begin{equation*}\begin{split}
+		\partial^\dag\word{} &= \word{} \\
+	\end{split}\end{equation*}
+%s2:ライプニッツ則}
+%s1:メモ}
+\section{二分木}\label{s1:二分木} %{
+	$\clB_*$を二分木全体のつくる集合、$\clB_n\subset\clB_*$を葉でない頂点が$n$個
+	ある二分木の集合とする。$\clB_n$は異なる$n$に対して共通を持たないので、
+	$\clB_*=\oplus_{n\in\sizen}\clB_n$という直和分解が成り立つ。
+	また、$\clB_+:=\oplus_{n\in\sizen_+}\clB_n$とする。
+	木の根を$\bullet$、根でない頂点を$\circ$で表すと、$\clB_n$は次のようになる。
+	\begin{equation*}\begin{split}
+		\lambda\clB_0 = \bullet,\quad
+		\lambda\clB^1 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\circ & & \circ
+		},\quad
+		\lambda\clB_2 = \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \circ \hen[dl] \hen[dr] & & \circ \\
+			\circ & & \circ
+		} + \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\circ & & \circ \hen[dl] \hen[dr] \\
+			& \circ & & \circ
+		} \\
+		\lambda\clB_3 = \xymatrix@R=4pt@C=4pt{
+			& & & \bullet \hen[dl] \hen[dr] \\
+			& & \circ \hen[dl] \hen[dr] & & \circ \\
+			& \circ \hen[dl] \hen[dr] & & \circ \\
+			\circ & & \circ \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \circ \hen[dl] \hen[dr] & & \circ \\
+			\circ & & \circ \hen[dl] \hen[dr] \\
+			& \circ & & \circ \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \circ \hen[dl] \hen[d] & & \circ \hen[d] \hen[dr] \\
+			\circ & \circ & & \circ & \circ \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\circ & & \circ \hen[dl] \hen[dr] \\
+			& \circ \hen[dl] \hen[dr] & & \circ \\
+			\circ & & \circ
+		} \\
+		+ \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\circ & & \circ \hen[dl] \hen[dr] \\
+			& \circ & & \circ \hen[dl] \hen[dr] \\
+			& & \circ & & \circ \\
+		}
+	\end{split}\end{equation*}
+
+	二分木の扱う上で役に立つ操作を挙げておく。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 二分木の大きさ$|-|:\clB_*\to\sizen$を次のように定義する。
+		\begin{equation*}\begin{split}
+			|t| = n \xiff{\dfn} t\in \clB_n
+		\end{split}\end{equation*}
+		%
+		\item $\clB_*$の二項演算$\beta$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\beta(t_1\times t_2) := \xymatrix@R=4pt@C=4pt{
+				& \bullet \hen[dl] \hen[dr] \\
+				t_1 & & t_2
+			} \quad\text{for all } t_1,t_2\in\clB^*
+		\end{split}\end{equation*}
+		$\beta$は次の式を満たすので、
+		\begin{equation}\label{eq:二分木の列挙}\begin{split}
+			\clB_{n+1} = \oplus_{k=0}^n\beta\plr{\clB_k\times\clB_{n-k}}
+			\quad\text{for all }n\in\sizen
+		\end{split}\end{equation}
+		二分木の操作の多くは$\beta$を使って定義される。
+		%
+		\item 二分木の左右反転の操作を写像$\rho$で表す。$\rho$は次の式を満たす。
+		\begin{equation*}\begin{split}
+			\rho\bullet = \bullet,\quad \rho\beta = \beta\sigma_{1,2}\plr{\rho\times\rho}
+		\end{split}\end{equation*}
+		ここで、$\sigma_{i,j}$は直積の$i$番目と$j$番目の要素を入れ替える操作とする。
+	\end{itemize} %}
+
+	以下では、$R$を整域とし、写像$\beta,\rho$は$R$-線形に拡張したものとする。
+	また、$A$を集合、$RA$を$A$の$R$-加群として、任意の$n\in\sizen$に対して
+	代数同型$RA^n\simeq(RA)^{\otimes n}$を同一視する。そして、
+	$RA^+:=\oplus_{n\in\sizen_+}RA^n$、$RA^*:=R\oplus RA^+$と書くことにする。
+	更に、文字の種類に関わらず文字列の連結を
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 前置記法で$m_0$と書き、
+		\item 中置記法では省略して書く
+	\end{itemize} %}
+	ことにする。
+
+	$\beta$によって、線形射$\hbeta:R\clB_*\to\cat{Mod}_R(R\clB_*)$を次のように定義し、
+	\begin{equation*}\begin{split}
+		(\hbeta u) v := \beta\plr{u\otimes v} \quad\text{for all } u,v\in R\clB_*
+	\end{split}\end{equation*}
+	これを次のように$R\clB_*^*\to\cat{Mod}_R(R\clB_*)$に拡張する。
+	\begin{alignat*}{2}
+		(\hbeta\word{}) v &:= v &&\quad\text{for all } v\in R\clB_* \\
+		\plrg{\hbeta\plr{u_1\otimes u_2}} u &:= \plr{\hbeta u_1}\plr{\hbeta u_2} v
+			&&\quad\text{for all } u_1,u_2\in R\clB_*^*,\; v\in R\clB_*
+	\end{alignat*}
+	すると、$\hbeta$は代数射となる。$\hbeta$を絵で書くと次のようになり、
+	\begin{equation*}\begin{split}
+		\plrg{\hbeta\plr{u_1\otimes\cdots\otimes u_k}} v = \xymatrix@R=4pt@C=4pt{
+			\bullet \hen[d] \hen[r] & \circ \hen[d] \hen[r] & \cdots \hen[r] 
+			& \circ \hen[d] \hen[r] & v \\
+			u_1 & u_2 & \cdots & u_k \\
+		}  
+	\end{split}\end{equation*}
+	次の式が成り立つことがわかる\footnote{
+		係数環$R$の標数が$0$でないと同値関係$\iff$は成り立たず、$\impliedby$の片方
+		だけが成り立つ。
+	}。
+	\begin{alignat}{2}\label{eq:右三角は単射}
+		(\hbeta u_1) v = (\hbeta u_2) v &\iff u_1 = u_2 
+			&&\quad\text{for all } u_1,u_2\in R\clB_*^*,\; v\in R\clB_* \\
+		(\hbeta u) v_1 = (\hbeta u) v_2 &\iff v_1 = v_2
+			&&\quad\text{for all } u\in R\clB_*^*,\; v_1,v_2\in R\clB_*
+	\end{alignat}
+	このことを言葉にすると、次のようにとなる。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\hbeta$は$R\clB_*$の自己線形射の中への$1:1$の代数射となり、
+		\item 任意の$t\in\clB_*$に対して$\hbeta t$も$1:1$になる。
+	\end{itemize} %}
+
+	集合$\clB_{n,k}\subseteq\clB_n$を次のように定義する。
+	\begin{alignat*}{2}
+		\clB_{n,k} &= \emptyset &&\quad\text{for all } n<k\in\sizen \\
+		\clB_{0,0} &:= \clB_0 \\
+		\clB_{n,0} &= \emptyset &&\quad\text{for all } n\in\sizen_+ \\
+		\clB_{n,k} &:= \setg{(\hbeta w)\bullet\mid 
+			w\in \clB_*^k\text{ and } |(\hbeta w)\bullet| = n}
+			&&\quad\text{for all } k\le n\in\sizen_+
+	\end{alignat*}
+	$\hbeta$が$1:1$であること\eqref{eq:右三角は単射}を使うと、$\clB_{n,k}$は
+	次のように書け、
+	\begin{equation}\label{eq:B-n-kその一}\begin{split}
+		\lambda\clB_{n,k} = \sum_{r_1,\dots,r_k\in\sizen} \is{r_1+\cdots+r_k=n-k}
+			\plrgg{\hbeta\plr{\lambda\clB_{r_1}\otimes\cdots\otimes\lambda\clB_{r_k}}}
+			\bullet
+	\end{split}\end{equation}
+	直和分解$\clB_n=\oplus_{k=0}^n\clB_{n,k}$が得られる。
+	また、$\hbeta$の定義から、次の式が成り立つ。
+	\begin{alignat}{2}\label{eq:二分木の列挙その二}
+		\clB_n &= \oplus_{k=0}^n \clB_{n,k}
+			&&\quad\text{for all } n\in\sizen \\
+		\clB_{n+1,k+1} &= \oplus_{r=0}^{n-k} \beta\plr{\clB_r\times\clB_{n-r,k}}
+			&&\quad\text{for all } k\le n\in\sizen
+	\end{alignat}
+	この式は列挙\eqref{eq:二分木の列挙}をより詳細に見たものになっている。
+
+	式\eqref{eq:B-n-kその一}の和は数の合成になっている。そこで、
+	$\clC_{n,k}\subseteq\sizen_+^k$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\clC_{n,k} := \seta{\word{r_1,\dots,r_k}\in\sizen_+^k\mid
+			r_1+\cdots+r_k=n} \quad\text{for all } k\le n\in\sizen_+
+	\end{split}\end{equation*}
+	$\clB_{n,k}$の定義に合わせて$n,k$を自然数全体に拡張する。
+	\begin{alignat*}{2}
+		\clC_{n,k} &:= \emptyset &&\quad\text{for all } n<k\in\sizen \\
+		\clC_{n,0} &:= \emptyset &&\quad\text{for all } n\in\sizen_+ \\
+		\clC_{0,0} &:= \seta{\word{}}
+	\end{alignat*}
+	そして、$\clC_+:=\oplus_{k=1}^n\clC_{n,k}$、$\clC_*:=\clC_0\oplus\clC_+$と
+	書くことにする。$\clC_*$は文字列の連結についてモノイドとなる。
+	写像$\tau_\clC:\sizen_+^*\to\set{\clB_0,\clB_1,\dots}^*$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\tau_\clC\word{} = \word{},\quad
+		\tau_\clC\word{r_1,\dots,r_k} = \word{\clB_{r_1-1},\dots,\clB_{r_k-1}}
+		\quad\text{for all } r_1,\dots,r_k\in\sizen_+
+	\end{split}\end{equation*}
+	$\tau_\clC$はモノイド同型となり、$\clB_{n,k}$は次のように書ける。
+	\begin{equation*}\begin{split}
+		\clB_{n,k} = \plr{\hbeta\tau_\clC\clC_{n,k}}\bullet
+		\quad\text{for all } k\le n\in\sizen
+	\end{split}\end{equation*}
+	次の$1:1$のモノイド準同型が得られたことになる。
+	\begin{equation*}\begin{split}
+		\clC_* \xto[\simeq]{\tau_\clC} \clB_*^* \xto[1:1]{\hbeta} \cat{Set}(\clB_*)
+	\end{split}\end{equation*}
+
+	$\clC_{n,k}$について次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\clC_{n,k} = \oplus_{r=0}^{n-k}\clC_{n-r,k-l}\clC_{r,l}
+		\quad\text{for all } l< k\le n\sizen
+	\end{split}\end{equation*}
+	この式で、$l=1$としたものが\eqref{eq:二分木の列挙その二}の二つ目の式である。
+
+	\begin{todo}[線形化]\label{todo:線形化} %{
+		集合同型と線形射の議論に書き直す。
+	\end{todo} %todo:線形化}
+
+	\begin{todo}[文字列の変換]\label{todo:文字列の変換} %{
+		$\tau_\clC^{-1}\tau_\clD$は次のように定義できるかな？
+		\begin{equation*}\begin{split}
+			\op{sum}\word{0} &:= \word{} \\
+			\op{sum}\word{k_1,\dots,k_n} &:= \word{k_1+\cdots+k_n} \\
+			\tau_\clC^{-1}\tau_\clD\word{0} &:= \word{} \\
+			\tau_\clC^{-1}\tau_\clD\beta_\clD
+			&:= m_0\plr{\op{sum}\otimes \tau_\clC^{-1}\tau_\clD} \\
+		\end{split}\end{equation*}
+	\end{todo} %todo:文字列の変換}
+
+	\begin{todo}[集合]\label{todo:集合} %{
+		もう少し集合レベルで話をする。あとで、同型射$RA^n\simeq(RA)^{\otimes n}$
+		でテンソル積へ拡張すればよい。
+	\end{todo} %todo:集合}
+
+	以下では、$R$を整域とし、写像$\beta,\mu,\rho$は$R$-線形に拡張したものとする。
+	また、$A$を集合、$RA$を$A$の$R$-加群として、$RA$のテンソル積を
+	$RA^n:=\plr{RA}^{\otimes n}$と書き、$RA^+:=\oplus_{n\in\sizen_+}RA^n$、
+	$RA^*:=R\oplus RA^+$と書くことにする。
+
+	$\beta$によって、線形射$-\rhd:R\clB_*\to\cat{Mod}_R(R\clB_*,R\clB_*)$を
+	次のように定義し、
+	\begin{equation*}\begin{split}
+		f\rho g := \beta\plr{f\otimes g} \quad\text{for all } f,g\in R\clB_*
+	\end{split}\end{equation*}
+	これを次のように$R\clB_*^*\to\cat{Mod}_R(R\clB_*^*,R\clB_*)$に拡張する。
+	\begin{alignat*}{2}
+		r\rhd g &:= rg &\quad\text{for all } r\in R,\; g\in R\clB_* \\
+		\plr{f_1\otimes f_2}\rhd g &:= f_1\rhd\plr{f_2\rhd g}
+			&\quad\text{for all } f_1,f_2\in R\clB_*^*,\; g\in R\clB_*
+	\end{alignat*}
+	そして、$R\clB_*^{\otimes*}:=\oplus_{n\in\sizen}(R\clB_*)^{\otimes n}$
+	さらに、$R\clB_*\to\cat{Mod}_R(R\clB_*^*,R\clB_*)$に次のように拡張する。
+	\begin{equation*}\begin{split}
+		\plr{t_1\times\cdots\times t_k\times t_{k+1}}\rhd u
+		:= \plr{t_1\times\cdots\times t_k}\rhd\plr{t_{k+1}\rhd u} \\
+		\quad\text{for all } t_1,\dots,t_{k+1},u\in\clB^*
+	\end{split}\end{equation*}
+
+	\begin{todo}[積とベータの関係]\label{todo:積とベータの関係} %{
+		$\clB_*$の二項演算$\mu$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\mu\plr{\bullet\times t} &:= t \quad\text{for all } t\in\clB_* \\
+			\mu\plr{\id\times\beta} &:= \beta\plr{\mu\times\id}
+		\end{split}\end{equation*}
+		$\mu$は積になり、単位元$\bullet$を持つ。$\mu(t_1\times t_2)$は$t_2$の左端の葉を
+		$t_1$に置き換える操作になる。
+		$\mu$と$\beta$は次の関係を持つ。
+		\begin{equation*}\begin{split}
+			\beta = \mu\plr{\id\times\beta_\bullet}
+		\end{split}\end{equation*}
+		この関係を図示すると次のようになる。
+		\begin{equation*}\begin{split}
+			\beta(t_1\otimes t_2) = \vcenter{\xymatrix@R=4pt@C=4pt{
+				& \bullet \hen[dl] \hen[dr] \\
+				t_1 & & t_2
+			}} = \mu\plra{t_1\times\vcenter{\xymatrix@R=4pt@C=4pt{
+				& \bullet \hen[dl] \hen[dr] \\
+				\bullet & & t_2 
+			}}} \quad\text{for all } t_1,t_2\in\clB_*
+		\end{split}\end{equation*}
+		\EOP
+	\end{todo} %todo:積とベータの関係}
+%s1:二分木}
+\section{二分木}\label{s1:二分木} %{
+	$\clB^*$を二分木全体のつくる集合、$\clB^n\subset\clB^*$を葉でない頂点が$n$個
+	ある二分木の集合とする。
+	二分木の扱う上で役に立つ操作を挙げておく。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 二分木の大きさ$|-|:\clB^*\to\sizen$を次のように定義する。
+		\begin{equation*}\begin{split}
+			|t| = n \xiff{\dfn} t\in \clB^n
+		\end{split}\end{equation*}
+		%
+		\item $\clB^*$の二項演算$\beta$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\beta(t_1\times t_2) := \xymatrix@R=4pt@C=4pt{
+				& \bullet \hen[dl] \hen[dr] \\
+				t_1 & & t_2
+			} \quad\text{for all } t_1,t_2\in\clB^*
+		\end{split}\end{equation*}
+		$\beta$を線形射に拡張すると、次の式が成り立ち、
+		\begin{equation}\label{eq:ベータによる二分木の列挙}\begin{split}
+			\lambda\clB_{n+1} = \sum_{k=0}^n\beta\plr{\lambda\clB_k\otimes\lambda\clB_{n-k}}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation}
+		%
+		\item $\beta$から写像$\beta_-:\clB^*\to\cat{Set}\clB^*$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\beta_tu := \beta(t\times u) \quad\text{for all } t,u\in\clB^*
+		\end{split}\end{equation*}
+		$\beta$は二分木を重複なく列挙する方法を与えることがわかる。
+		%
+		\item 二分木の左右反転の操作を線形射$\rho$で表す。$\rho$は次の式を満たす。
+		\begin{equation*}\begin{split}
+			\rho\bullet = \bullet,\quad \rho\beta = \beta\sigma_{1,2}\plr{\rho\times\rho}
+		\end{split}\end{equation*}
+		ここで、$\sigma_{i,j}$は直積の$i$番目と$j$番目の要素を入れ替える操作とする。
+		%
+		\item $\clB^*$の二項演算$\mu$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\mu\plr{\bullet\times t} &:= t \quad\text{for all } t\in\clB^* \\
+			\mu\plr{\id\times\beta} &:= \beta\plr{\mu\times\id}
+		\end{split}\end{equation*}
+		$\mu$は積になり、単位元$\bullet$を持つ。$\mu(t_1,t_2)$は$t_2$の左端の葉を
+		$t_1$に置き換える操作になる。$\mu$と$\beta$は次の関係を持つ。
+		\begin{equation*}\begin{split}
+			\beta = \mu\plr{\id\times\beta_\bullet}
+		\end{split}\end{equation*}
+		この関係を図示すると次のようになる。
+		\begin{equation*}\begin{split}
+			\beta(t_1\otimes t_2) = \vcenter{\xymatrix@R=4pt@C=4pt{
+				& \bullet \hen[dl] \hen[dr] \\
+				t_1 & & t_2
+			}} = \mu\plra{t_1\times\vcenter{\xymatrix@R=4pt@C=4pt{
+				& \bullet \hen[dl] \hen[dr] \\
+				\bullet & & t_2 
+			}}}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+
+	以下では、$R$をを整域とする。
+
+	線形射$\epsilon:R\clB^*\to R$を次のように定義し、
+	\begin{equation*}\begin{split}
+		\epsilon t = \is{|t|=0} \quad\text{for all } t\in\clB^*
+	\end{split}\end{equation*}
+	線形射$\alpha:R\clB^*\to R\clB^*$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\alpha\bullet = \beta(\bullet\otimes\bullet),\quad 
+		\alpha\beta = \beta\plr{\alpha\otimes\id + \epsilon\otimes\alpha}
+	\end{split}\end{equation*}
+	$\alpha$を二分木の左成長ということにする。$\alpha$が重複なく二分木を列挙することを
+	示す次の式を証明しよう。
+	\begin{equation}\label{eq:左成長は列挙になる}\begin{split}
+		\lambda\clB_{n+1}=\alpha\lambda\clB_n \quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+
+	自然数を文字とする文字列$\sizen^+$に二項演算$\beta_\clW$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\beta_\clW\plrgg{(k_1,\dots,k_{m+1})\otimes(l_1,\dots,l_{n+1})}
+		:= (k_1,\dots,k_{m+1},l_2,\dots,l_n,l_{n+1} + 1)
+	\end{split}\end{equation*}
+	$\beta_\clW$は文字列を連結して、最後の文字の数字を一つインクリメントとする操作
+	である。写像$\kappa:\clB^*\to\sizen^+$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\kappa\bullet = (0),\quad \kappa\beta = \beta_\clW(\kappa\times\kappa)
+	\end{split}\end{equation*}
+	$\kappa$は葉の左上にある辺の数を数える操作で、次のようになる。
+	\begin{equation*}\begin{split}
+		\kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet
+		} = (0, 1),\quad \kappa\xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} = (0,1,1)	,\quad \kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet
+		} = (0,0,2) \\
+		\kappa\xymatrix@R=4pt@C=4pt{
+			& & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet \hen[dl] \hen[dr] & & \bullet \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \\
+		} = (0,1,1,1),\quad \kappa\xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \\
+		} = (0,0,2,1) \\
+		\kappa\xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[d] & & \bullet \hen[d] \hen[dr] \\
+			\bullet & \bullet & & \bullet & \bullet \\
+		} = (0,1,0,2),\quad\kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} = (0,0,1,2) \\
+		\kappa\xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet & & \bullet \\
+		} = (0,0,0,3)
+	\end{split}\end{equation*}
+
+	$\kappa$は$1:1$になる。任意の$t\in\clB^{n+1}$に対して、ある$k\in1..(n+1)$
+	と$t_1,\dots,t_k\in\clB^*$が一意に定まり、$t=\beta_{t_1}\cdots\beta_{t_k}\bullet$
+	と書け、$\kappa t$は次のような文字列の連結の形になる。
+	\begin{equation*}\begin{split}
+		t = \beta_{t_1}\cdots\beta_{t_k}\bullet = \xymatrix@R=6pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			t_1 & & \bullet \hen[dl] \ar@{.}[dr] \\
+			& t_2 & & \bullet \hen[dl] \hen[dr] \\
+			& & t_k & & \bullet \\
+		} \xmapsto{\kappa} (\kappa t_1)\cdots(\kappa t_k)(k)
+	\end{split}\end{equation*}
+	したがって、$\kappa t$の文字列を右から左へ読んでいけば、再帰的に元の$t$を
+	一意に復元することができ、$\kappa^{-1}$を一意に定義することができる。
+	\begin{todo}[具体化]\label{todo:具体化} %{
+		$\kappa^{-1}$を具体的に書くこと。プログラム的な書き方になると思う。
+	\end{todo} %todo:具体化}
+
+	文字列の最後の文字を取り出す操作を写像$\op{right}$とし、
+	\begin{equation*}\begin{split}
+		\op{right}(a_0,\dots,a_n) = a_n
+	\end{split}\end{equation*}
+	$\kappa_R:=\op{right}\kappa:\clB^*\to\sizen$とする。
+	$\kappa_R$は右端の葉と頂点を結ぶ辺を数える操作になる。
+	そして、$\clB^n_k\subseteq\clB^n$を次のように定義する。
+	\begin{equation*}\begin{split}
+		\clB^n_k := \set{t\in\clB^n\mid \kappa_R t=k}
+	\end{split}\end{equation*}
+	$\clB^n_k$は次のようになる。
+	\begin{equation*}\begin{split}
+		\lambda\clB^0_0 = \bullet,\quad \lambda\clB^1_1 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet
+		},\quad \lambda\clB^2_1 = \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		},\quad \lambda\clB^2_2 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet
+		} \\
+		\lambda\clB^3_1 = \xymatrix@R=4pt@C=4pt{
+			& & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet \hen[dl] \hen[dr] & & \bullet \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \\
+		},\quad \lambda\clB^3_2 = \xymatrix@R=4pt@C=4pt{
+			& & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[d] & & \bullet \hen[d] \hen[dr] \\
+			\bullet & \bullet & & \bullet & \bullet \\
+		} + \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet \hen[dl] \hen[dr] & & \bullet \\
+			\bullet & & \bullet
+		} \\
+		\lambda\clB^3_3 = \xymatrix@R=4pt@C=4pt{
+			& \bullet \hen[dl] \hen[dr] \\
+			\bullet & & \bullet \hen[dl] \hen[dr] \\
+			& \bullet & & \bullet \hen[dl] \hen[dr] \\
+			& & \bullet & & \bullet \\
+		} \\
+	\end{split}\end{equation*}
+	$\clB^n_k$は次の性質を持つ。
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item $\clB_n=\oplus_{k=0}^n\clB^n_k$と直和分解される。
+		%
+		\item 任意の$n\in\sizen$に対して$\clB^{n+1}_0=\emptyset$となる。
+		%
+		\item 任意の$n\in\sizen$に対して$\clB^n_n=\set{\beta_\bullet^n\bullet}$となる。
+		%
+		\item 式\eqref{eq:ベータによる二分木の列挙}から、次の漸化式が成り立つ。
+		\begin{equation}\label{eq:ベータによる二分木の列挙その二}\begin{split}
+			\lambda\clB^{n+1}_{k+1} 
+			= \sum_{r=0}^{n-k}\beta\plr{\lambda\clB^r\otimes\lambda\clB^{n-r}_k}
+			\quad\text{for all } n\in\sizen,; k\in0..n
+		\end{split}\end{equation}
+	\end{itemize} %}
+
+	$\clB^n_k$を用いて、式\eqref{eq:左成長は列挙になる}を証明しよう。
+	二分木の左成長は$\clB^n_k$の$k$をほぼ保存する。
+	\begin{equation*}\begin{split}
+		\xymatrix@R=2ex@C=2ex{
+			\ar[dddd]_\alpha & \clB^0_0 \ar[rd] \\
+			& & \clB^1_1 \ar[d] \ar[rd] \\
+			& & \clB^2_1 \ar[d] & \clB^2_2 \ar[d] \ar[rd] \\
+			& & \clB^3_1 \ar[d] & \clB^3_2 \ar[d] & \clB^3_3 \ar[d] \ar[rd] \\
+			& & \vdots & \vdots & \vdots & \cdots \\
+		}
+	\end{split}\end{equation*}
+	したがって、証明したい式\eqref{eq:左成長は列挙になる}は次の式に帰着する。
+	\begin{equation}\label{eq:アルファによる二分木の列挙}\begin{split}
+		\alpha\lambda\clB^n_k = \lambda\clB^{n+1}_k + \is{k=n}\beta_\bullet^{n+1}\bullet
+		\quad\text{for all } n\in\sizen,\; k\in0..n
+	\end{split}\end{equation}
+	この式が成り立つことは帰納法により簡単に証明できる。
+	\begin{proof} %{
+		まず、$\alpha\clB^0_0=\clB^1_1$となる。そして、ある$N\in\sizen$があって、
+		$N$以下の自然数$n$でこの式が成り立つとすると、
+		式\eqref{eq:ベータによる二分木の列挙その二}から、
+		\begin{equation*}\begin{split}
+			\alpha\lambda\clB^{N+1}_{k+1}
+			&= \sum_{r=0}^{N-k}\alpha\beta\plr{\lambda\clB_r\otimes\lambda\clB^{N-r}_k} \\
+			&= \sum_{r=0}^{N-k}\beta\plr{\alpha\lambda\clB_r\otimes\lambda\clB^{N-r}_k}
+				+ \beta\plr{\lambda\clB_0\otimes\alpha\lambda\clB^N_k} \\
+			&= \sum_{r=0}^{N-k}\beta\plr{\lambda\clB_{r+1}\otimes\lambda\clB^{N-r}_k}
+				+ \beta\plr{\lambda\clB_0\otimes\alpha\lambda\clB^{N+1}_k}
+				+ \is{k=N}\beta\plr{\lambda\clB_0\otimes\beta^{N+1}\bullet} \\
+			&= \lambda\clB^{N+2}_{k+1} + \is{k=N}\beta^{N+2}\bullet
+		\end{split}\end{equation*}
+		となって、$n$が$N+1$でも成り立つことがわかる。
+	\end{proof} %}
+
+	\begin{todo}[考えること]\label{todo:考えること} %{
+		二分木関連でやれそうなことをメモしておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\kappa$が$1:1$になることを示す。
+			\begin{itemize}\setlength{\itemsep}{-1mm} %{
+				\item 課題\ref{todo:具体化}が残っているが、ほぼ完了した。
+			\end{itemize} %}
+			%
+			\item 二分木の左成長の左右反転したもの$\alpha^\rho:=\rho\alpha\rho$
+			から二項係数のPascal三角形に似た式を導き出す。
+			\begin{equation*}\begin{split}
+				\lambda\clB^{n+1}_{k+1} = f\lambda\clB^n_k + g\lambda\clB^n_{k+1}
+			\end{split}\end{equation*}
+			$f$と$g$は線形射で$f$は$1:1$になる。
+			%
+			\item 多重線形射$g_n:V^{\otimes n}\to V$が次の式を満たすとき、
+			\begin{equation*}\begin{split}
+				g_{m+1}\plr{g_n\otimes\id^m}
+				= g_{m+1}\plr{\id\otimes g_n\otimes\id^{m-1}}
+				=\cdots
+				= g_{m+1}\plr{\id^m\otimes g_n}
+			\end{split}\end{equation*}
+			文法$x=x_0+(g|x)$の摂動解は、実質的に$V$を可換として求めることができる。
+			与えられた文脈自由文法が（言語理論の意味で）正規言語と同値となるための
+			十分条件を与える。
+		\end{itemize} %}
+	\end{todo} %todo:考えること}
+%s1:二分木}
+%
+}\endgroup %}
