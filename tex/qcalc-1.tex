@@ -1,0 +1,25 @@
+\begingroup %{
+{\setlength\arraycolsep{2pt}
+%
+\section{q-積分}\label{s1:q-積分} %{
+	次の式によって、$q$-微分から$q$-積分を導くことができる。
+	\begin{equation*}\begin{split}
+		\partial_t = \frac{1-q_t}{(1-q)t}
+		\implies 1 = \frac{1-q_t}{(1-q)t}\int_t
+		\implies \int_t = \frac{1-q}{1-q_t}t
+	\end{split}\end{equation*}
+	この式から$q_t$と$\int_t$の次の交換関係を導くことができる。
+	\begin{equation*}\begin{split}
+		q_t\int_t = q\int_tq_t
+	\end{split}\end{equation*}
+
+	部分積分は次のようにして導くことができる。
+	\begin{equation*}\begin{split}
+		\plr{1 - u_t\epsilon_t}m_0 = \int_t\partial_tm_0
+		= \int_tm_0\plr{\partial_t\otimes1 + q_t\otimes\partial_t} \\
+		\implies \plr{1 - u_t\epsilon_t}m_0\plra{\int_t\otimes1} 
+		= \int_tm_0 + \int_tm_0\plra{q_t\int_t\otimes\partial_t}
+	\end{split}\end{equation*}
+%s1:q-積分}
+%
+}\endgroup %}

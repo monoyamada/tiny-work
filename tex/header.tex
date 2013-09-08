@@ -31,6 +31,7 @@
 \usepackage[enableskew]{sty/youngtab}
 \usepackage{sty/jumoline}
 \usepackage{sty/boxedminipage}
+\usepackage{stmaryrd}
 %{
 \usepackage[dvipdfm,dvips]{color}
 \usepackage[dvipdfm,dvips]{graphicx}
@@ -47,6 +48,7 @@
 \else
   \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}%"
 \fi
+\usepackage{verbatim}
 \usepackage{sty/myarrow}
 \usepackage{sty/mybraket}
 %}
@@ -129,3 +131,8 @@
 \newcommand{\EOP}{\hspace{\fill}\P}
 %
 \newcommand{\hen}{\ar@{-}}
+\newcommand{\arto}{\ar@{|->}}
+%
+\usepackage{pifont}
+%
+\DeclareMathOperator*{\Res}{Res}

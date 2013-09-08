@@ -1,7 +1,7 @@
 package tiny.lang;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -100,7 +100,11 @@ public class StringHelper {
 	public static <T> String join(Iterable<T> array, String delim,
 			Function<? super T, ?> fnc) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim, fnc);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static <T> String join(T[] array, String delim) {
@@ -109,51 +113,85 @@ public class StringHelper {
 	public static <T> String join(T[] array, String delim,
 			Function<? super T, ?> fnc) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim, fnc);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static String join(long[] array, String delim) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static String join(int[] array, String delim) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static String join(short[] array, String delim) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static String join(byte[] array, String delim) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static String join(boolean[] array, String delim) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static String join(double[] array, String delim) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 	public static String join(float[] array, String delim) {
 		StringBuilder buffer = new StringBuilder();
-		StringHelper.join(buffer, array, delim);
+		try {
+			StringHelper.join(buffer, array, delim);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		return buffer.toString();
 	}
 
-	public static void join(StringBuilder buffer, Iterable<?> array, String delim) {
-		StringHelper.join(buffer, array, delim, null);
+	public static Appendable join(Appendable buffer, Iterable<?> array,
+			String delim) throws IOException {
+		return StringHelper.join(buffer, array, delim, null);
 	}
-	public static <T> void join(StringBuilder buffer, Iterable<T> array,
-			String delim, Function<? super T, ?> fnc) {
-		Debug.isNotNull(buffer);
+	public static <T> Appendable join(Appendable output, Iterable<T> array,
+			String delim, Function<? super T, ? extends CharSequence> fnc)
+			throws IOException {
+		Debug.isNotNull(output);
 		Debug.isNotNull(array);
 		if (delim == null) {
 			delim = StringHelper.DEFAULT_SEPARATOR;
@@ -162,29 +200,31 @@ public class StringHelper {
 		if (fnc == null) {
 			for (int i = 0; p.hasNext(); ++i) {
 				if (i != 0) {
-					buffer.append(delim);
+					output.append(delim);
 				}
-				buffer.append(p.next());
+				output.append(toString(p.next()));
 			}
 		} else {
 			for (int i = 0; p.hasNext(); ++i) {
 				if (i != 0) {
-					buffer.append(delim);
+					output.append(delim);
 				}
 				try {
-					buffer.append(fnc.evaluate(p.next()));
+					output.append(fnc.evaluate(p.next()));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, Object[] array, String delim) {
-		StringHelper.join(buffer, array, delim, null);
+	public static<Out extends Appendable> Out join(Out buffer, Object[] array, String delim)
+			throws IOException {
+		return StringHelper.join(buffer, array, delim, null);
 	}
-	public static <T> void join(StringBuilder buffer, T[] array, String delim,
-			Function<? super T, ?> fnc) {
-		Debug.isNotNull(buffer);
+	public static <Out extends Appendable,T> Out join(Out output, T[] array, String delim,
+			Function<? super T, ? extends CharSequence> fnc) throws IOException {
+		Debug.isNotNull(output);
 		Debug.isNotNull(array);
 		if (delim == null) {
 			delim = StringHelper.DEFAULT_SEPARATOR;
@@ -192,86 +232,102 @@ public class StringHelper {
 		if (fnc == null) {
 			for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 				if (i != 0) {
-					buffer.append(delim);
+					output.append(delim);
 				}
-				buffer.append(array[i]);
+				output.append(toString(array[i]));
 			}
 		} else {
 			for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 				if (i != 0) {
-					buffer.append(delim);
+					output.append(delim);
 				}
 				try {
-					buffer.append(fnc.evaluate(array[i]));
+					output.append(fnc.evaluate(array[i]));
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 			}
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, long[] array, String delim) {
-		Debug.isNotNull(buffer);
+	public static Appendable join(Appendable output, long[] array, String delim)
+			throws IOException {
+		Debug.isNotNull(output);
 		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 			if (i != 0) {
-				buffer.append(delim);
+				output.append(delim);
 			}
-			buffer.append(array[i]);
+			output.append(Long.toString(array[i]));
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, int[] array, String delim) {
-		Debug.isNotNull(buffer);
+	public static Appendable join(Appendable output, int[] array, String delim)
+			throws IOException {
+		Debug.isNotNull(output);
 		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 			if (i != 0) {
-				buffer.append(delim);
+				output.append(delim);
 			}
-			buffer.append(array[i]);
+			output.append(Integer.toString(array[i]));
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, short[] array, String delim) {
-		Debug.isNotNull(buffer);
+	public static Appendable join(Appendable output, short[] array, String delim)
+			throws IOException {
+		Debug.isNotNull(output);
 		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 			if (i != 0) {
-				buffer.append(delim);
+				output.append(delim);
 			}
-			buffer.append(array[i]);
+			output.append(Short.toString(array[i]));
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, byte[] array, String delim) {
-		Debug.isNotNull(buffer);
+	public static Appendable join(Appendable output, byte[] array, String delim)
+			throws IOException {
+		Debug.isNotNull(output);
 		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 			if (i != 0) {
-				buffer.append(delim);
+				output.append(delim);
 			}
-			buffer.append(array[i]);
+			output.append(Byte.toString(array[i]));
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, boolean[] array, String delim) {
-		Debug.isNotNull(buffer);
+	public static Appendable join(Appendable output, boolean[] array, String delim)
+			throws IOException {
+		Debug.isNotNull(output);
 		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 			if (i != 0) {
-				buffer.append(delim);
+				output.append(delim);
 			}
-			buffer.append(array[i]);
+			output.append(Boolean.toString(array[i]));
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, double[] array, String delim) {
-		Debug.isNotNull(buffer);
+	public static Appendable join(Appendable output, double[] array, String delim)
+			throws IOException {
+		Debug.isNotNull(output);
 		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 			if (i != 0) {
-				buffer.append(delim);
+				output.append(delim);
 			}
-			buffer.append(array[i]);
+			output.append(Double.toString(array[i]));
 		}
+		return output;
 	}
-	public static void join(StringBuilder buffer, float[] array, String delim) {
-		Debug.isNotNull(buffer);
+	public static Appendable join(Appendable output, float[] array, String delim)
+			throws IOException {
+		Debug.isNotNull(output);
 		for (int i = 0, n = array != null ? array.length : 0; i < n; ++i) {
 			if (i != 0) {
-				buffer.append(delim);
+				output.append(delim);
 			}
-			buffer.append(array[i]);
+			output.append(Float.toString(array[i]));
 		}
+		return output;
 	}
+	
 	public static String repeat(String text, int n) {
 		if (text == null) {
 			String msg = Messages.getNull(text);

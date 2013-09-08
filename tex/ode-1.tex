@@ -1,0 +1,152 @@
+\begingroup %{
+\newcommand{\bou}{{\,|\,}}
+\newcommand{\boug}{{\,\big|\,}}
+\newcommand{\bougg}{{\,\bigg|\,}}
+\newcommand{\qa}[1]{{\blra{#1}}}
+\newcommand{\q}[1]{{\blr{#1}}}
+\newcommand{\qg}[1]{{\blrg{#1}}}
+\newcommand{\qgg}[1]{{\blrgg{#1}}}
+\newcommand{\qggg}[1]{{\blrggg{#1}}}
+\newcommand{\qgggg}[1]{{\blrgggg{#1}}}
+\newcommand{\opN}{{\op{N}}}
+\newcommand{\opL}{{\op{L}}}
+\newcommand{\opR}{{\op{R}}}
+\newcommand{\grow}{{\op{grow}}}
+\newcommand{\code}{{\op{code}}}
+\newcommand{\word}[1]{{|\!\lfloor{#1}\rfloor\!|}}
+\newcommand{\hf}{{\what{f}}}
+{\setlength\arraycolsep{2pt}
+%
+\section{微分方程式と二分木}\label{s1:微分方程式と二分木} %{
+\subsection{通常の微分方程式}\label{s2:通常の微分方程式} %{
+	微分のチェイン則が簡単な$q=1$で考える。
+
+	ある与えられた初期値$x_0\in R$と形式級数$\plr{f\bou x}\in R\bblr{x}$
+	に対して次の常微分方程式を考える。
+	\begin{equation}\label{eq:通常の微分方程式}\begin{split}
+		(x\bou t) = x_0 + \int_0^t\plr{f\circ x\bou s}ds
+	\end{split}\end{equation}
+	ここで、$(f\circ x\bou t)$は形式級数の合成
+	$(f\circ x\bou t):=\plrgg{f\boug(x\bou t)}$を表すとする。
+
+	微分$\plr{\partial^nf\bou x}$と二分木の成長が次のように対応し、
+	\begin{equation*}\begin{split}
+		\plr{f\bou x} \xmapsto{\partial_x} \xymatrix@R=2pt@C=2pt{
+			\bullet \hen[d]\hen[r] & \plr{\partial f\bou x} \\
+			\plr{f\bou x} \\
+		} \xmapsto{\partial_x} \xymatrix@R=2pt@C=2pt{
+			\bullet \hen[d]\hen[r] & \plr{\partial f\bou x} \\
+			\circ \hen[d]\hen[r] & \plr{\partial f\bou x} \\
+			\plr{f\bou x} \\
+		} + \xymatrix@R=2pt@C=2pt{
+			\bullet \hen[d]\hen[r] & \circ \hen[d]\hen[r] 
+			& \plr{\partial^2 f\bou x} \\
+			\plr{f\bou x} & \plr{f\bou x} \\
+		}
+	\end{split}\end{equation*}
+	次のような対応を見ることができる。
+	\begin{equation*}\begin{split}
+		\plr{\partial^{n+1}x\bou t} \sim \grow_1^n\bullet
+	\end{split}\end{equation*}
+	そこで、任意の$g\in R\bblr{x}$に対して代数射
+	$\q{\phi_xg}_1:R\sizen^*\to R\bblr{x}$を次のように定義すると、
+	\begin{equation*}\begin{split}
+		\q{\phi_xg}_1\word{n} := \plr{\partial^ng\bou x}
+		\quad\text{for all } n\in\sizen\end{split}\end{equation*}
+	微分方程式の解$x_t$は次のように書くことがきる。
+	\begin{equation*}\begin{split}
+		x_t &= x_0 + \lim_{x\to x_0} \q{\phi_xf}_1\code_\clD\sum_{n\in\sizen}
+			\frac{t^{n+1}}{\plr{n+1}!}\q{\grow}_1^n\bullet \\
+		&= x_0 + \lim_{x\to x_0} \q{\phi_xf}_1\sum_{n\in\sizen}
+			\frac{t^{n+1}}{\plr{n+1}!}\q{\grow_\sizen}_1^n\word{0} \\
+		&= x_0 + \lim_{x\to x_0} \q{\phi_xf}_1\int_t
+			\qgg{t\q{\grow_\sizen}_1}_1^*\word{0} \\
+	\end{split}\end{equation*}
+	一方、次の式が既知だから、
+	\begin{equation}\label{eq:通常の微分方程式の解}\begin{split}
+		x_t = x_0 + \lim_{x\to x_0}\int_t
+		\qgg{t\plr{f\bou x}\partial_x}^*_1\plr{f\bou x}
+	\end{split}\end{equation}
+	次の式が成り立つはずである。
+	\begin{equation}\label{eq:通常の微分方程式と二分木}\begin{split}
+		\q{\phi_xf}_1\qgg{t\q{\grow_\sizen}_1}_1^*\word{0}
+		= \qgg{t\plr{f\bou x}\partial_x}^*_1\plr{f\bou x}
+	\end{split}\end{equation}
+	次の命題によって示すことができる。
+
+	\begin{proposition}[通常の微分と二分木]\label{prop:通常の微分と二分木} %{
+		任意の$g\in R\bblr{x}$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\q{\phi_xg}_1\q{\grow_\sizen}_1^n\word{k}
+			= \plrgg{\plr{g\bou x}\partial_x}^n\plr{\partial^kg\bou x}
+			\quad\text{for all } k,n\in\sizen
+		\end{split}\end{equation*}
+	\end{proposition} %prop:通常の微分と二分木}
+	\begin{proof} %{
+		$n$についての帰納法で証明する。$n=0$の時は、$\phi_x$の定義より、命題が
+		成り立つ。
+		\begin{equation*}\begin{split}
+			\q{\phi_xg}_1\word{k} = \plr{\partial^kg\bou x} 
+			\quad\text{for all } k\in\sizen
+		\end{split}\end{equation*}
+		ある$n\in\sizen$以下で命題が成り立つとする。一般の$q$で次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			\grow_\sizen\word{k} &= \word{0,k+1}
+			\quad\text{for all } k\in\sizen \\
+			\grow_\sizen m_0 &= m_0\plr{\grow_\sizen\otimes1
+				+ q^{\opN_\sizen}\otimes\grow_\sizen} \\
+		\end{split}\end{equation*}
+		任意の$k\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\grow_\sizen^{n+1}\word{k}
+			&= \grow_\sizen^nm_0\plrgg{\word{0}\otimes\word{k+1}} \\
+			&= \sum_{r=0}^n\qbinom{n}{r}m_0\plrgg{
+				\grow_\sizen^r\word{0}\otimes\grow_\sizen^{n-r}\word{k+1}} \\
+		\end{split}\end{equation*}
+		したがって、変数$x$を省略して、次のように書くと、
+		\begin{equation*}\begin{split}
+			g := \plr{g\bou x},\quad \partial := \partial_x
+		\end{split}\end{equation*}
+		帰納法の仮定から、$\phi_xf$が代数射であることに注意すると、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\q{\phi_xg}_1\q{\grow_\sizen}_1^{n+1}\word{k}
+			= \sum_{r=0}^n\binom{n}{r}m_0\plrgg{
+				\plr{g\partial}^rg\otimes\plr{g\partial}^{n-r}\partial^{k+1}g} \\
+		\end{split}\end{equation*}
+		一方、次の式が成り立つから、
+		\begin{equation*}\begin{split}
+			\plr{g\partial}^{n+1}\partial^kg
+			&= \plr{g\partial}^nm_0\plrgg{
+				\plr{g\partial}g\otimes\plr{g\partial}\partial^kg} \\
+			&= \sum_{r=0}^n\binom{n}{r}m_0\plrgg{
+				\plr{g\partial}^rg\otimes\plr{g\partial}^{n-r}\partial^{k+1}g} \\
+		\end{split}\end{equation*}
+		次の式が成り立ち、$n+1$でも命題が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\q{\phi_xg}_1\q{\grow_\sizen}_1^{n+1}\word{k}
+			= \plr{g\partial}^{n+1}\partial^kg
+		\end{split}\end{equation*}
+	\end{proof} %}
+
+	この命題から次の式が成り立つことがわかり、
+	\begin{equation}\label{eq:通常の微分方程式と二分木その二}\begin{split}
+		\q{\phi_xf}_1\qgg{t\q{\grow_\sizen}_1}_1^*\word{k} 
+		= \qgg{t\plr{f\bou x}\partial_x}^*_1\plr{\partial^kf\bou x}
+		\quad\text{for all } k\in\sizen
+	\end{split}\end{equation}
+	この式で$k=0$としたものが\eqref{eq:通常の微分方程式と二分木}になる。
+%s2:通常の微分方程式}
+\subsection{q-微分方程式}\label{s2:q-微分方程式} %{
+%s2:q-微分方程式}
+	$q=1$の場合の微分方程式での際立った特徴として次の式がある。
+	\begin{equation*}\begin{split}
+		x_t = x_0 + \int_t\plr{f\bou x_t} \implies \plr{f\bou x_t}
+		= \lim_{x\to x_0}\q{t\plr{f\bou x}\partial_x}_1^*\plr{f\bou x}
+	\end{split}\end{equation*}
+	前節では、この式を利用して、微分方程式の解を二分木の成長によって表した。
+	\begin{equation*}\begin{split}
+		x_t = x_0 + \q{\phi_xf}_1\int_t\q{t\grow_\sizen}_1^*\word{0}
+	\end{split}\end{equation*}
+%s1:微分方程式と二分木}
+%
+}\endgroup %}
