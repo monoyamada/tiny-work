@@ -1,411 +1,169 @@
 \begingroup %{
-\newcommand{\bfg}{\mathbf{g}}
-\newcommand{\calT}{\mathcal{T}}
+\newcommand{\bou}{{\,|\,}}
+\newcommand{\boug}{{\,\big|\,}}
+\newcommand{\bougg}{{\,\bigg|\,}}
+\newcommand{\qD}{{\op{D}}}
+\newcommand{\qI}{{\op{I}}}
 {\setlength\arraycolsep{2pt}
 %
-\section{ベキ等半環上の文法}\label{s1:ベキ等半環上の文法} %{
-	\begin{todo}[一般化]\label{todo:一般化} %{
-		$R$を可換環、$V$を$R$-代数とする。$V$に代数の加法と乗法の他に、
-		双線型射$\beta:V\otimes V\to V$が定義されているとする。
-		次の式を満たす$x_t\in V\bblr{t}$を考える。
-		\begin{equation*}\begin{split}
-			x_t = 1 + t\beta\plr{x_t\otimes x_t},\quad x_0 = 1
-		\end{split}\end{equation*}
-	\end{todo} %todo:一般化}
-\subsection{多項式の摂動解}\label{s2:多項式の摂動解} %{
-	$R$を可換環、$\bfg:=\set{g_0,g_1,\dots}$を可算集合とする。
-	$x_t\in R\dlr{\bfg}\bblr{t}$を次の式を満たす形式級数とし、
-	\begin{equation*}\begin{split}
-		x_t = 1 + t(g|x_t)x_t \quad\text{where }
-		(g|x) := \sum_{n\in\sizen} g_nx^n\in R\dlr{\bfg,x}
-	\end{split}\end{equation*}
-	$x_t$の摂動解を求めることを考える。
-	\begin{equation*}\begin{split}
-		x_t = \sum_{n\in\sizen} t^nx_n
-		\quad\text{where } x_n = \epsilon_t\delta_t^nx_t \in R\dlr{\bfg}
-	\end{split}\end{equation*}
-	ここで、$\delta_t$を$t$についてのBrzozowski微分、
-	$\epsilon_t$を$t\to0$の極限をとる代数射とする。
-	係数$x_n$を求めるために、微分を計算すると次のようになる。
-	\begin{equation*}\begin{split}
-		\delta_tx_t &= (g|x_t)x_t \\
-		\delta_t^2x_t &= (\delta_g g|x_t)x_t + (\epsilon_t g|x_t)(g|x_t)x_t \\
-	\end{split}\end{equation*}
-	ここで、$R\dlr{\bfg,x}$の線形二項演算$\delta$を次のように定義する。
-	\begin{equation*}\begin{split}
-		(\delta_\alpha\beta|x) &= \sum_{n\in\sizen} \beta_{n+1}\sum_{k=0}
-		1^{\otimes(n-k)}\otimes (\alpha|x)x\otimes x^{\otimes k}
-		\quad\text{for all } \alpha,\beta\in R\dlr{\bfg,x}
-	\end{split}\end{equation*}
-	一般の多項式に対する$\delta$の作用は後で考えるとして、
-	可換環上の多項式に近い、次の形の多項式に限定すると、
-	\begin{equation*}\begin{split}
-		(f|x) = \sum_{n\in\sizen} f_nx^n
-		\quad\text{where } f_n\in R\dlr{\bfg}
-	\end{split}\end{equation*}
-	$\delta$の作用は次のように、行列の形で書くことができる。
-	\begin{equation*}\begin{split}
-		(\delta_\alpha f|x) = F^T(\alpha|x)SX \quad\text{where } \\
-		F := \begin{pmatrix}
-			f_0 \\ f_1 \\ f_2 \\ f_3 \\ \vdots
-		\end{pmatrix} ,\quad X := \begin{pmatrix}
-			1 \\ x \\ x^2 \\ x^3 \\ \vdots
-		\end{pmatrix},\quad S := \begin{pmatrix}
-			0 & 0 & 0 & 0 & \cdots \\
-			0 & 1 & 0 & 0 & \cdots \\
-			0 & 1 & 1 & 0 & \cdots \\
-			0 & 1 & 1 & 1 & \cdots \\
-			\vdots & \vdots & \vdots & \vdots & \cdots \\
-		\end{pmatrix}
-	\end{split}\end{equation*}
-	したがって、系列$E_n,G,X_t$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		E_n^T := \begin{pmatrix}
-			\cdots & 0 & 1 & 0 & \cdots
-		\end{pmatrix},\quad G := \sum_{n\in\sizen} g_nE_n\quad 
-		X_t := \sum_{n\in\sizen} x_t^nE_n
-	\end{split}\end{equation*}
-	$(g|x_t)=G^TX_t$と書けて、微分は次のようになる。
-	\begin{equation*}\begin{split}
-		\delta_tX_t &= \plr{G^TX_t}SX_t \\
-		\delta_t^2X_t &= \plrg{G^T\plr{G^TX_t}SX_t}SX_t
-		+ \plr{G^T\epsilon_tX_t}S\plr{G^TX_t}SX_t \\
-	\end{split}\end{equation*}
+\section{On Fixed Point Equations over Commutative Semirings}\label{s1:EKL07} %{
+	\cite{EKL07}のノートを書いておく。
+	\cite{EKL07}は\cite{Hopkins99}に触発させて書かれたものと思われる。
 
-	$\delta_t^nX_t$を計算するために、二分木に対応させる。
-	葉でない頂点が$n$個ある二分木の集合を$\calT_n$、
-	$\calT_*:=\cup_{n\in\sizen}\calT_n$とし、写像
-	$\beta:\calT_*\times\calT_*\to\calT_*$を次のように定義する。
-	\begin{equation*}\begin{split}
-		\beta(t_1, t_2) := \vcenter{\xymatrix@R=4pt@C=4pt{
-			& \bullet \hen[ld] \hen[rd] \\
-			t_1 & & t_2
-		}} \quad\text{for all } t_1,t_2\in\calT_*
-	\end{split}\end{equation*}
-	これらを$R$線形に拡張して、線形射$\phi_t:R\calT_*\to R\dlr{\bfg}\bblr{t}$
-	を次のように定義する。
-	\begin{equation*}\begin{split}
-		\phi_t\bullet := X_t,\quad \phi_t\beta\plr{t_1\otimes t_2}
-		:= \plr{G^T\epsilon_t^{\deg t_2}\phi_tt_1}S\plr{\phi_tt_2}
-		\quad\text{for all } t_1,t_2\in\calT_*
-	\end{split}\end{equation*}
-	そして、$\phi_t\calT_n$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		\phi_t\calT_n := \sum_{t\in\calT_n}\phi_tt
-		\quad\text{for all } n\in\sizen
-	\end{split}\end{equation*}
-	$\phi_t\calT_0=X_t$かつ$\delta_t\phi_t\calT_0=\phi_t\calT_1=(G^TX_t)SX_t$
-	が成り立つ。そして、帰納法によって、任意の$n\in\sizen$に対して、
-	次の式が成り立つことが示され、
-	\begin{equation*}\begin{split}
-		\delta_t\phi\calT_{n+1} &= \delta_t\sum_{k=0}^n
-			\plr{G^T\epsilon_t^k\phi_t\calT_{n-k}}S\phi_t\calT_k \\
-		&= \plr{G^T\delta_t\phi_t\calT_n}S\phi_t\calT_0 + \sum_{k=0}^n
-			\plr{G^T\epsilon_t^{k+1}\phi_t\calT_{n-k}}S\delta_t\phi_t\calT_k \\
-		&= \plr{G^T\phi_t\calT_{n+1}}S\phi_t\calT_0 + \sum_{k=0}^n
-			\plr{G^T\epsilon_t^{k+1}\phi_t\calT_{n-k}}S\phi_t\calT_{k+1} \\
-		&= \sum_{k=0}^{n+1} 
-			\plr{G^T\epsilon_t^k\phi_t\calT_{n-k}}S\phi_t\calT_k \\
-	\end{split}\end{equation*}
-	$\delta_t^nX_t=\phi_t\calT_n$となることがわかる。したがって、
-	$X_t$は$X_t=\sum_{n\in\sizen}t^n\epsilon_t\phi_t\calT_n$と書くことができる。
-	$\epsilon_t\phi_t$は二分木を次のように行きがけ順に辿ればよい。
-	\begin{equation}\label{eq:二分木から多項式その一}\begin{split}
-		\xymatrix@R=2ex@C=2ex{
-			& & \bullet \ar[ld]_{G^T} \ar[rd]_S \\
-			& \bullet \ar[ld]_{G^T} \ar[rd]_S & & \mathbf{1} \\
-			\mathbf{1} & & \mathbf{1}
-		} \sim G^TG^T\mathbf{1}S\mathbf{1}S\mathbf{1}
-	\end{split}\end{equation}
-	ここで、$\mathbf{1}:=\epsilon_tX_t=(1\;1\;\cdots)^T$とする。
-	低次の項を見ると次のようになっている。
-	\begin{equation*}\begin{array}{rclclcl}
-		\epsilon_t\phi_t\vcenter{\xymatrix@R=4pt@C=4pt{
-			\bullet
-		}} &=& \mathbf{1} & & &\sim& (0) \\
-		\epsilon_t\phi_t\vcenter{\xymatrix@R=4pt@C=4pt{
-			& \bullet \hen[ld] \hen[rd] \\
-			\bullet & & \bullet
-		}} &=& G^T\mathbf{1}S\mathbf{1}
-			&=& S\mathbf{1}(G^T\mathbf{1}) &\sim& (1,0) \\
-		\epsilon_t\phi_t\vcenter{\xymatrix@R=4pt@C=4pt{
-			& & \bullet \hen[ld] \hen[rd] \\
-			& \bullet \hen[ld] \hen[rd] & & \bullet \\
-			\bullet & & \bullet
-		}} &=& G^TG^T\mathbf{1}S\mathbf{1}S\mathbf{1}
-			&=& S\mathbf{1}(G^TS\mathbf{1})(G^T\mathbf{1}) &\sim& (1,1,0) \\
-		\epsilon_t\phi_t\vcenter{\xymatrix@R=4pt@C=4pt{
-			& \bullet \hen[ld] \hen[rd] \\
-			\bullet & & \bullet \hen[ld] \hen[rd] \\
-			& \bullet & & \bullet
-		}} &=& G^T\mathbf{1}SG^T\mathbf{1}S\mathbf{1}
-			&=& S^2\mathbf{1}(G^T\mathbf{1})(G^T\mathbf{1}) &\sim& (2,0,0) \\
-	\end{array}\end{equation*}
-	この例と図\eqref{eq:二分木から多項式その一}から、二分木を左右反転して、
-	次のように行きがけ順に辿っても良いことがわかる。
-	\begin{equation}\label{eq:二分木から多項式その二}\begin{split}
-		\xymatrix@R=2ex@C=2ex{
-			& \bullet \ar[ld]_S \ar[rd]^{G^T} \\
-			\mathbf{1} & & \bullet \ar[ld]_S \ar[rd]^{G^T} \\
-			& \mathbf{1} & & \mathbf{1}
-		} \sim S\mathbf{1}(G^TS\mathbf{1})(G^T\mathbf{1})
-	\end{split}\end{equation}
-	この写像を$\psi$とすると、$R$を二分木を左右反転する操作として、
-	$\psi$は次のように定義され、
-	\begin{equation*}\begin{split}
-		\psi := \epsilon_t\phi_tR
-	\end{split}\end{equation*}
-	次の漸化式が得られる。
-	\begin{equation*}\begin{split}
-		\psi\bullet = \mathbf{1},\quad 
-		\psi\beta\plr{t_1\otimes t_2} = S\psi t_1\plr{G^T\psi t_2}
-		\quad\text{for all } t_1,t_2\in\calT_*
-	\end{split}\end{equation*}
-	任意の$k\in\sizen$に対して$S_k:=S^k\mathbf{1}$とおくと、
-	任意の$t\in\clT_n$に対して$\psi t$は次の形になる。
-	\begin{equation*}\begin{split}
-		\psi t = S_{k_0}\plr{G^TS_{k_1}}\cdots\plr{G^TS_{k_{n-1}}}\plr{G^TS_0}
-		\quad\text{where } k_0 + k_1 +\cdots+ k_{n-1} = n
-	\end{split}\end{equation*}
-	$\chi:\sizen^+\to R\dlr{\bfg}$を次のように定義すると、
-	\begin{equation*}\begin{split}
-		\chi(k_0,\dots,k_n) := S_{k_0}\plr{G^TS_{k_1}}\cdots\plr{G^TS_{k_n}}
-		\quad\text{for all } k_i\in\sizen
-	\end{split}\end{equation*}
-	任意の$t\in\clT_n$に対して$\psi t=\chi w$となる$w\in\sizen^{n+1}$が唯一つ
-	定まる。これを$\chi^{-1}\psi t$と書くことにする。
-	$\psi$の定義から、次の式が成り立つ。
-	\begin{equation*}\begin{split}
-		\left\{\begin{split}
-			\chi^{-1}\psi u &= (k_0,\dots,k_m) \\
-			\chi^{-1}\psi v &= (l_0,\dots,l_n)
-		\end{split}\right.\implies \chi^{-1}\psi\beta\plr{u\otimes v} 
-		= (k_0+1,k_1,\dots,k_m,l_0,\dots,l_n) \\
-		\quad\text{for all } u\in\clT_m,\; v\in\clT_n
-	\end{split}\end{equation*}
-	文字列を連結して、左端の数字を一つインクリメントすればよい。
-
-	以下、$\psi\clT_n := \sum_{t\in\clT_n}\psi t$と略記する。
-	$X_t = \sum_{n\in\sizen}t^n\psi\clT_n$と書け、特に、
-	$x_t = \sum_{n\in\sizen}t^n E_1^T\psi\clT_n$となる。
-
-	各$\psi\clT_n$は
-	、ある$G^n_k\in R\dlr{\bfg}$があって、次の形になる。
-	\begin{equation*}\begin{split}
-		\psi\clT_n = \sum_{k=0}^n S_{k}G^n_k
-	\end{split}\end{equation*}
-	$G^n_k$は$\chi^{-1}\psi\clT_n$から直ちに求まり、$\chi^{-1}\psi\clT_n$は
-	簡単に計算できて、次のようになる。
-	\begin{equation*}\begin{split}
-		\chi^{-1}\psi\clT_0 &= (0) \\
-		\chi^{-1}\psi\clT_1 &= (1, 0) \\
-		\chi^{-1}\psi\clT_2 &= (1, 1, 0) + (2, 0, 0) \\
-		\chi^{-1}\psi\clT_3 &= (1, 1, 1, 0) + (1, 2, 0, 0) + (2, 0, 1, 0) 
-			+ (2, 1, 0, 0) \\
-			&\, + (3, 0, 0, 0) \\
-		\chi^{-1}\psi\clT_4 &= (1, 1, 1, 1, 0) + (1, 1, 2, 0, 0) 
-			+ (1, 2, 0, 1, 0) + (1, 2, 1, 0, 0) \\
-			&\, + (1, 3, 0, 0, 0) + (2, 0, 1, 1, 0) + (2, 0, 2, 0, 0) 
-			+ (2, 1, 0, 1, 0) \\
-			&\, + (2, 1, 1, 0, 0) + (2, 2, 0, 0, 0) + (3, 0, 0, 1, 0) 
-			+ (3, 0, 1, 0, 0) \\
-			&\,+ (3, 1, 0, 0, 0) + (4, 0, 0, 0, 0)
-	\end{split}\end{equation*}
-	$\bfg$が互いに可換の場合には、数字の文字列の左端の文字以外は可換になり、
-	次のようになる。
-	\begin{equation*}\begin{split}
-		\chi^{-1}\psi\clT_0 &= (0) \\
-		\chi^{-1}\psi\clT_1 &= (1, 0) \\
-		\chi^{-1}\psi\clT_2 &= (1, 1, 0) + (2, 0, 0) \\
-		\chi^{-1}\psi\clT_3 &= (1, 1, 1, 0) + (1, 2, 0, 0) + 2(2, 1, 0, 0) 
-			+ (3, 0, 0, 0) \\
-		\chi^{-1}\psi\clT_4 &= (1, 1, 1, 1, 0) + 3(1, 2, 1, 0, 0) 
-			+ (1, 3, 0, 0, 0) \\
-			&\, + 3(2, 1, 1, 0, 0) + 2(2, 2, 0, 0, 0) + 3(3, 1, 0, 0, 0) 
-			+ (4, 0, 0, 0, 0)
-	\end{split}\end{equation*}
-
-	ここでは、$G^n_k$の満たす漸化式を求めよう。$n<k$で$G^n_k=0$とすると、
-	Dyck分解による次の式から、
-	\begin{equation*}\begin{split}
-		\psi\calT_{n+1} &= \sum_{k=0}^n S\psi\calT_k\plr{G^T\psi\calT_{n-k}}
-		= \sum_{k=0}^n\sum_{r=0}^k S_{r+1}G^k_r 
-			\sum_{s=0}^{n-k}(G^TS_s)G^{n-k}_s \\
-		&= \sum_{k=0}^n\sum_{r=0}^n S_{r+1}G^k_r 
-			\sum_{s=0}^{n-k}(G^TS_s)G^{n-k}_s
-		= \sum_{r=0}^n S_{r+1}\sum_{k=0}^n G^k_r 
-			\sum_{s=0}^{n-k}(G^TS_s)G^{n-k}_s \\
-	\end{split}\end{equation*}
-	次の漸化式が得られる。
-	\begin{equation}\label{eq:Gの漸化式}\begin{split}
-		G^n_0 = \is{n=0},\quad G^{n+1}_{k+1} 
-		= \sum_{r=k}^n G^r_k \sum_{s=0}^{n-r} \plr{G^TS_s}G^{n-r}_s
-		\quad\text{for all } n,k\in\sizen
-	\end{split}\end{equation}
-
-	$S_n$は次のようになっている。
-	\begin{equation*}\begin{split}
-		S_0 = \begin{pmatrix}
-			1 \\ 1 \\ 1 \\ 1 \\ 1 \\ \vdots
-		\end{pmatrix},\quad S_1 = \begin{pmatrix}
-			0 \\ 1 \\ 2 \\ 3 \\ 4 \\ \vdots
-		\end{pmatrix},\quad S_2 = \begin{pmatrix}
-			0 \\ 1 \\ 3 \\ 6 \\ 10 \\ \vdots
-		\end{pmatrix},\quad S_3 = \begin{pmatrix}
-			0 \\ 1 \\ 4 \\ 10 \\ 20 \\ \vdots
-		\end{pmatrix}
-	\end{split}\end{equation*}
-	$S_n=(s^n_0,s^n_1,\dots)^T$とすると、$s^n_k$は次の漸化式を満たし、
-	\begin{equation*}\begin{split}
-		s^0_k = 1,\quad s^{n+1}_k = \sum_{r=1}^k s^n_r
-		\quad\text{for all } n,k\in\sizen
-	\end{split}\end{equation*}
-	次のように二項係数で与えられる。
-	\begin{equation*}\begin{split}
-		s^n_{k+1} = \binom{k+n}{n} \quad\text{for all } n,k\in\sizen
-	\end{split}\end{equation*}
-	\begin{proof} %{
-		二項係数のPascalの公式を繰り返し用いると、
-		\begin{equation*}\begin{split}
-			\binom{n+1}{k+1} = \binom{n}{k} + \binom{n}{k+1}
-		\end{split}\end{equation*}
-		次のようにして$s^n_k$の漸化式が得られる。
-		\begin{equation*}\begin{split}
-			\binom{k+n+1}{n+1} &= \binom{k+n}{n} + \binom{k+n}{n+1}
-			= \binom{k+n}{n} + \binom{k+n-1}{n} + \binom{k+n-1}{n+1} = \cdots \\
-			&= \binom{k+n}{n} + \binom{k+n-1}{n} +\cdots+ \binom{n+1}{n+1} \\
-			&= \binom{k+n}{n} + \binom{k+n-1}{n} +\cdots+ \binom{n}{n} \\
-			&= s^n_{k+1} + s^n_k +\cdots+ s^n_1 \\
-		\end{split}\end{equation*}
-	\end{proof} %}
-	$S_n$の具体的な数値を表\ref{table:低次のS}に挙げておく。
-
-\begin{table}[ht]
-\begin{center}
-\begin{tabular}{r|rrrrrrrrrrr}
-  \hline
-$n\backslash k$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\ 
-  \hline
-	0 & 1 &  1 &   1 &   1 &   1 &   1 &   1 &   1 &   1 &   1 &   1 \\ 
-  1 & 0 &  1 &   2 &   3 &   4 &   5 &   6 &   7 &   8 &   9 &  10 \\ 
-  2 & 0 &  1 &   3 &   6 &  10 &  15 &  21 &  28 &  36 &  45 &  55 \\ 
-  3 & 0 &  1 &   4 &  10 &  20 &  35 &  56 &  84 & 120 & 165 & 220 \\ 
-  4 & 0 &  1 &   5 &  15 &  35 &  70 & 126 & 210 & 330 & 495 & 715 \\ 
-  5 & 0 &  1 &   6 &  21 &  56 & 126 & 252 & 462 & 792 & 1287 & 2002 \\ 
-  6 & 0 &  1 &   7 &  28 &  84 & 210 & 462 & 924 & 1716 & 3003 & 5005 \\ 
-  7 & 0 &  1 &   8 &  36 & 120 & 330 & 792 & 1716 & 3432 & 6435 & 11440 \\ 
-  8 & 0 &  1 &   9 &  45 & 165 & 495 & 1287 & 3003 & 6435 & 12870 & 24310 \\ 
-  9 & 0 &  1 &  10 &  55 & 220 & 715 & 2002 & 5005 & 11440 & 24310 & 48620 \\ 
-   \hline
-\end{tabular}
-\end{center}\caption{$S_n$}\label{table:低次のS}
-\end{table}
-
-	任意の$n\in\sizen$に対して$s^n_1=1$なので、代数式の摂動解は
-	次のようになる。
-	\begin{equation*}\begin{split}
-		x_t = 1 + t(g|x_t)x_t \impliedby x_t = \sum_{n\in\sizen}t^n x_n,\quad
-		x_n = \sum_{k=0}^n G^n_k
-	\end{split}\end{equation*}
-	特に、$N\in\sizen$として、次の代数式を考えよう。
-	\begin{equation*}\begin{split}
-		x_t = 1 + tx_t^{N+1}
-	\end{split}\end{equation*}
-	この代数式の摂動解は$(N+1)$-分木の数を与える。
+\subsubsection{$\omega$-連続}\label{s3:オメガ-連続} %{
 	\begin{itemize}\setlength{\itemsep}{-1mm} %{
-		\item $N=0$の時 \\
-		この時は、$E_0^TS_n=\is{n=0}$より、$G^n_k$の漸化式は次のようになる。
+		\item 自然な順序 \\
+		半環$R$に次の半順序$\le$が定義できるとき、$\le$を自然な順序という。
 		\begin{equation*}\begin{split}
-			G^{n+1}_{k+1} 
-			= \sum_{r=k}^n G^r_k \sum_{s=0}^{n-r} \plr{E_0^TS_s}G^{n-r}_s
-			= G^n_k
+			r_1\le r_2 \iff \text{ there exists } s\in R \text{ such that } 
+			r_1 + s = r_2
 		\end{split}\end{equation*}
-		したがって、$G^n_k=\is{n=k}$となる。
-		%
-		\item $N=1$の時 \\
-		この時は、任意の$n\in\sizen$に対して$E_1^TS_n=1$より、
-		$x_n=\sum_{k=0}^nG^n_k$とすると、$G^n_k$の漸化式は次のようになる。
-		\begin{equation*}\begin{split}
-			G^{n+1}_{k+1} 
-			= \sum_{r=k}^n G^r_k \sum_{s=0}^{n-r} \plr{E_1^TS_s}G^{n-r}_s
-			= \sum_{r=k}^n G^r_k x_{n-r}
-		\end{split}\end{equation*}
-		特に、$k$について和をとってしまうと、Catalan数に満たす漸化式
-		$x_{n+1} = \sum_{r=0}^n x_rx_{n-r}$が導かれる。
-		さらに、表\ref{table:Nが1の場合}から、次の式が成り立っていることが
-		予想される。
-		\begin{equation*}\begin{split}
-			G^{n+1}_{k+1} = \sum_{r=k}^n G^n_r \quad\text{for all } k=0..n
-		\end{split}\end{equation*}
-		%
-		\item $2\le N$の時 \\
-		この時は、任意の$N\in\sizen_+$と$n\in\sizen$に対して
-		$E_N^TS_n=\binom{n+N-1}{n}$より、$G^n_k$の漸化式は次のようになる。
-		\begin{equation*}\begin{split}
-			G^{n+1}_{k+1} 
-			= \sum_{r=k}^n G^r_k \sum_{s=0}^{n-r} \plr{E_N^TS_s}G^{n-r}_s
-			= \sum_{r=k}^n G^r_k \sum_{s=0}^{n-r} \binom{s+N-1}{s}G^{n-r}_s
-		\end{split}\end{equation*}
-		表\ref{table:Nが2の場合}と\ref{table:Nが3の場合}から、
-		次の式が成り立っていることが予想される。
-		\begin{equation*}\begin{split}
-			G^{n+1}_{k+1} = \sum_{r=0}^{n-k} \binom{N-1+r}{r} G^n_{k+r} 
-			\quad\text{for all } k=0..n
-		\end{split}\end{equation*}
+		自然数には自然な順序が定義できるが、整数には自然な順序が定義できない。
+		\item $*$-完備 \\
+		任意の$R$の元に対してKleeneスターが定義できると仮定する。
+		$1^*=\sum_{n\in\sizen}1\not\in\sizen$だから自然数は$*$-完備でないが、
+		自然数に無限大を付け加えたものは$*$-完備になる。
+		\item $\omega$-連続 \\
+		自然な順序が定義され、$*$-完備であり、任意の$n\in\sizen$に対して
+		$r_n\in R$ならば、$\sum_{n\in\sizen}r_n\in R$となる。
+		$*$-完備はKleeneスターが収束することを要求するが、$\omega$-連続は、
+		もっと強く、任意の可算和が収束することを要求する。非常に強い要請で、
+		通常扱う半環では満たされない。
+		自然数に無限大を付け加えたものは$\omega$-連続になる。
+	\end{itemize} %}
+%s3:オメガ-連続}
 
+\subsubsection{根の逐次近似}\label{s3:根の逐次近似} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item Kleeneの逐次近似 \\
+		$\omega$-連続な半環上の任意の形式級数$f$に対して、
+		$x=\plr{f\bou x}$の最小不動点は存在して、
+		$\sup_{n\in\sizen}\plr{f^n\bou 0}$で与えられる。
+		\begin{equation*}\begin{split}
+			x_0 &= \plr{f\bou 0} \\
+			x_1 &= \plr{f\bou x_0} \\
+			\vdots \\
+			x_{n+1} &= \plr{f\bou x_n} \\
+		\end{split}\end{equation*}
+		%
+		\item Hopkins-Kozenの逐次近似 \\
+		ベキ等なcc-半環上の任意の形式級数$f$に対して、
+		$x=\plr{f\bou x}$の最小不動点$x_1$は存在して、
+		次のように与えられる。
+		\begin{equation*}\begin{split}
+			x_0 &= \plr{f\bou 0} \\
+			x_1 &= x_0 + \plr{\partial f\bou x_0}x_1 \\
+		\end{split}\end{equation*}
+		%
+		\item Newtonの逐次近似 \\
+		\begin{equation*}\begin{split}
+			x_0 &= \plr{f\bou 0} \\
+			x_1 &= \plr{f\bou x_0} + \plr{\partial f\bou x_0}\plr{x_1 - x_0} \\
+			\vdots \\
+			x_{n+1} &= \plr{f\bou x_n} + \plr{\partial f\bou x_n}\plr{x_{n+1} - x_n} \\
+		\end{split}\end{equation*}
 	\end{itemize} %}
 
-	\begin{table}[htbp] %{
-		\begin{center}\begin{tabular}{r|r|rrrrrrrrr} \hline
-$n$ & 和 & $G^n_0$ & $G^n_1$ & $G^n_2$ & $G^n_3$ & $G^n_4$ & $G^n_5$ & $G^n_6$ & $G^n_7$ & $G^n_8$ \\\hline
-0 & 1 & 1 \\
-1 & 1 & 0 & 1 \\
-2 & 2 & 0 & 1 & 1 \\
-3 & 5 & 0 & 2 & 2 & 1 \\
-4 & 14 & 0 & 5 & 5 & 3 & 1 \\
-5 & 42 & 0 & 14 & 14 & 9 & 4 & 1 \\
-6 & 132 & 0 & 42 & 42 & 28 & 14 & 5 & 1 \\
-7 & 429 & 0 & 132 & 132 & 90 & 48 & 20 & 6 & 1 \\
-8 & 1430 & 0 & 429 & 429 & 297 & 165 & 75 & 27 & 7 & 1 \\
-\hline
-		\end{tabular}\end{center}
-		\caption{$N=1$}\label{table:Nが1の場合}
-	\end{table} %}
+	ベキ等半環の場合、Newtonの逐次近似からHopkins-Kozenの逐次近似が導かれる。
+	\begin{equation*}\begin{split}
+			x_{n+1} 
+			&= \plr{f\bou x_n} + \plr{\partial f\bou x_n}\plr{x_{n+1} - x_n} \\
+			&= \plr{f\bou x_n} - \plr{\partial f\bou x_n}x_n
+				+ \plr{\partial f\bou x_n}x_{n+1} \\
+			&= \plr{f\bou 0} + \plr{\partial f\bou x_n}x_{n+1} \\
+	\end{split}\end{equation*}
+	最後の式変形で、ベキ等半環の場合、次の式が成り立つことを使っている。
+	\begin{equation*}\begin{split}
+		\plr{f\bou x} - \plr{\partial f\bou x}x = \plr{f\bou 0}
+	\end{split}\end{equation*}
+%s3:根の逐次近似}
 
-	\begin{table}[htbp] %{
-		\begin{center}\begin{tabular}{r|r|rrrrrrrrr} \hline
-$n$ & 和 & $G^n_0$ & $G^n_1$ & $G^n_2$ & $G^n_3$ & $G^n_4$ & $G^n_5$ & $G^n_6$ & $G^n_7$ & $G^n_8$ \\\hline
-0 & 1 & 1 \\
-1 & 1 & 0 & 1 \\
-2 & 3 & 0 & 2 & 1 \\
-3 & 12 & 0 & 7 & 4 & 1 \\
-4 & 55 & 0 & 30 & 18 & 6 & 1 \\
-5 & 273 & 0 & 143 & 88 & 33 & 8 & 1 \\
-6 & 1428 & 0 & 728 & 455 & 182 & 52 & 10 & 1 \\
-7 & 7752 & 0 & 3876 & 2448 & 1020 & 320 & 75 & 12 & 1 \\
-8 & 43263 & 0 & 21318 & 13566 & 5814 & 1938 & 510 & 102 & 14 & 1 \\
-\hline
-		\end{tabular}\end{center}
-		\caption{$N=2$}\label{table:Nが2の場合}
-	\end{table} %}
+	\begin{proposition}[Taylorの定理]\label{prop:Taylorの定理} %{
+		$R$をcc-半環とする。
+		任意の$\plr{f\bou x}\in R\bblr{x}$と$y\in R$に対して次の不等式が
+		成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{f\bou x} + \plr{\partial f\bou x}y \le \plr{f\bou x + y}
+			\le \plr{f\bou x} + \plr{\partial f\bou x + y}y
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Taylorの定理}
+	\begin{proof} %{
+		まず、$R\blr{x}$が$x$で生成されることを用いて、多項式に対して
+		命題の不等式が成り立つことを証明する。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item $\plr{f\bou x}=a\in R$の時
+			\begin{equation*}\begin{split}
+				\plr{f\bou x} + \plr{\partial f\bou x}y = \plr{f\bou x + y}
+				= \plr{f\bou x} + \plr{\partial f\bou x + y}y = a
+			\end{split}\end{equation*}
+			\item $\plr{f\bou x}=x$の時
+			\begin{equation*}\begin{split}
+				\plr{f\bou x} + \plr{\partial f\bou x}y = \plr{f\bou x + y}
+				= \plr{f\bou x} + \plr{\partial f\bou x + y}y = x + y
+			\end{split}\end{equation*}
+			\item $\plr{f\bou x}=\plr{g\bou x} + \plr{h\bou x}$の時 \\
+			多項式の項数についての帰納法で証明する。
+			\begin{equation*}\begin{split}
+				\plr{f\bou x + y} &= \plr{g\bou x + y} + \plr{h\bou x + y} \\
+				&\ge \plr{g\bou x} + \plr{\partial g\bou x}y
+					+ \plr{h\bou x} + \plr{\partial h\bou x}y \\
+				&= \plr{f\bou x} + \plr{\partial f\bou x}y \\
+				%
+				\plr{f\bou x + y} &= \plr{g\bou x + y} + \plr{h\bou x + y} \\
+				&\le \plr{g\bou x} + \plr{\partial g\bou x + y}y
+					+ \plr{h\bou x} + \plr{\partial h\bou x + y}y \\
+				&= \plr{f\bou x} + \plr{\partial f\bou x + y}y \\
+			\end{split}\end{equation*}
+			\item $\plr{f\bou x}=\plr{g\bou x}\plr{h\bou x}$の時 \\
+			多項式の次数についての帰納法で証明する。
+			$y$の二次の項を捨てることで次の式が成り立つことがわかる。
+			\begin{equation*}\begin{split}
+				\plr{f\bou x + y} &= \plr{g\bou x + y}\plr{h\bou x + y} \\
+				&\ge \plrgg{\plr{g\bou x} + \plr{\partial g\bou x}y}
+					\plrgg{\plr{h\bou x} + \plr{\partial h\bou x}y} \\
+				&\ge \plr{g\bou x}\plr{h\bou x}
+					+ \plrgg{\plr{\partial g\bou x}\plr{h\bou x} 
+					+ \plr{g\bou x}\plr{\partial h\bou x}}y \\
+				&= \plr{f\bou x} + \plr{\partial f\bou x}y
+			\end{split}\end{equation*}
+			また、$\plr{g\bou x}\le\plr{g\bou x + y}$により、次の式が成り立つ
+			ことがわかる。
+			\begin{equation*}\begin{split}
+				\plr{f\bou x + y} &= \plr{g\bou x + y}\plr{h\bou x + y} \\
+				&\le \plrgg{\plr{g\bou x} + \plr{\partial g\bou x + y}y}
+					\plr{h\bou x + y} \\
+				&= \plr{g\bou x}\plr{h\bou x + y} 
+					+ \plr{\partial g\bou x + y}\plr{h\bou x + y}y \\
+				&= \plr{g\bou x}\plr{h\bou x} + \plrgg{
+					\plr{g\bou x}\plr{\partial h\bou x + y}
+					+ \plr{\partial g\bou x + y}\plr{h\bou x + y}}y \\
+				&\le \plr{g\bou x}\plr{h\bou x} + \plrgg{
+					\plr{g\bou x + y}\plr{\partial h\bou x + y}
+					+ \plr{\partial g\bou x + y}\plr{h\bou x + y}}y \\
+				&= \plr{f\bou x} + \plr{\partial f\bou x + y}y
+			\end{split}\end{equation*}
+		\end{itemize} %}
+		次に、可算個の多項式の和によって任意の形式級数を書くことが
+		できるとして（$\omega$-連続の定義）、形式級数に対して証明する。
+	\end{proof} %}
 
-	\begin{table}[htbp] %{
-		\begin{center}\begin{tabular}{r|r|rrrrrrrrr} \hline
-$n$ & 和 & $G^n_0$ & $G^n_1$ & $G^n_2$ & $G^n_3$ & $G^n_4$ & $G^n_5$ & $G^n_6$ & $G^n_7$ & $G^n_8$ \\\hline
-0 & 1 & 1 \\
-1 & 1 & 0 & 1 \\
-2 & 4 & 0 & 3 & 1 \\
-3 & 22 & 0 & 15 & 6 & 1 \\
-4 & 140 & 0 & 91 & 39 & 9 & 1 \\
-5 & 969 & 0 & 612 & 272 & 72 & 12 & 1 \\
-6 & 7084 & 0 & 4389 & 1995 & 570 & 114 & 15 & 1 \\
-7 & 53820 & 0 & 32890 & 15180 & 4554 & 1012 & 165 & 18 & 1 \\
-8 & 420732 & 0 & 254475 & 118755 & 36855 & 8775 & 1625 & 225 & 21 & 1 \\
-\hline
-		\end{tabular}\end{center}
-		\caption{$N=3$}\label{table:Nが3の場合}
-	\end{table} %}
-
-%s2:多項式の摂動解}
-%s1:ベキ等半環上の文法}
+	\begin{proposition}[Taylorの定理（ベキ等）]\label{prop:Taylorの定理（ベキ等）} %{
+		$R$をベキ等なcc-半環とする。
+		任意の$\plr{f\bou x}\in R\bblr{x}$と$y\in R$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{f\bou x + y} = \plr{f\bou x} + \plr{\partial f\bou x + y}y
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Taylorの定理（ベキ等）}
+	\begin{proof} %{
+		ベキ等半環では、任意の$n\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{x+y}^{n+1} = \sum_{k=0}^{n+1} x^ky^{n+1-k}
+			= x^{n+1} + y\sum_{k=0}^n x^ky^{n-k}
+			= x^{n+1} + y\plr{x+y}^n
+		\end{split}\end{equation*}
+		したがって、任意の単項式に対して命題が成り立つ。
+		そして、係数環が$\omega$-連続だから、単項式の無限和に対しても命題が
+		成り立つ。
+	\end{proof} %}
+%s1:EKL07}
 }\endgroup %}

@@ -1,25 +1,551 @@
 \begingroup %{
+\newcommand{\q}[1]{{\blr{#1}}}
+\newcommand{\qg}[1]{{\blrg{#1}}}
+\newcommand{\qgg}[1]{{\blrgg{#1}}}
+\newcommand{\qggg}[1]{{\blrggg{#1}}}
+\newcommand{\qgggg}[1]{{\blrgggg{#1}}}
+\newcommand{\qa}[1]{{\blra{#1}}}
+\newcommand{\bou}{{\,|\,}}
+\newcommand{\opN}{{\op{N}}}
+\newcommand{\qD}{{\op{D}}}
+\newcommand{\qI}{{\op{I}}}
 {\setlength\arraycolsep{2pt}
 %
-\section{q-積分}\label{s1:q-積分} %{
-	次の式によって、$q$-微分から$q$-積分を導くことができる。
-	\begin{equation*}\begin{split}
-		\partial_t = \frac{1-q_t}{(1-q)t}
-		\implies 1 = \frac{1-q_t}{(1-q)t}\int_t
-		\implies \int_t = \frac{1-q}{1-q_t}t
-	\end{split}\end{equation*}
-	この式から$q_t$と$\int_t$の次の交換関係を導くことができる。
-	\begin{equation*}\begin{split}
-		q_t\int_t = q\int_tq_t
-	\end{split}\end{equation*}
+	\begin{table}[htbp] %{
+		\begin{center}\begin{tabular}{cl}
+			記号 & 説明 \\\hline
+			$K$ & $K$を体とする。\\
+			$q_t$ & 変数の$q$倍を線形射で$q_t\plr{f\bou t}:=\plr{f\bou qt}$と
+			書く。 \\
+			$\opN_t$ & 変数の次数を線形射で$\opN_tt^n:=nt^n$と書く。\\
+			& $q_t$は$\opN_t$を用いて$q_t=q^{\opN_t}$と書ける。\\
+			$\qD_t$と$\qI_t$ & $q$-微分を$\qD_t\plr{f\bou t}=\plr{\qD f\bou t}$、
+			$q$-積分を$\qI_t\plr{f\bou t}=\plr{\qI f\bou t}$書く。
+		\end{tabular}\end{center}
+	\end{table} %}
 
+\section{二項係数}\label{s1:二項係数} %{
+\subsection{Pascalの公式}\label{s2:Pascalの公式} %{
+	$q=1$の場合と異なり、一般の$q$の場合は二項係数のPascalの公式は二つの
+	バージョンが現れる。
+
+	この節では二項係数を次のように定義する。
+
+	\begin{definition}[二項係数]\label{def:二項係数} %{
+		任意の$k,n\in\sizen$に対して$\qbinom{n}{k}\in K_q$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\qbinom{n}{k} := \begin{cases}
+				\cfrac{\q{n}!}{\q{k}!\q{n-k}!}, &\text{ if } k\le n \\
+				0, &\text{ otherwise } \\
+			\end{cases}
+		\end{split}\end{equation*}
+	\end{definition} %def:二項係数}
+
+	通常の二項係数の表記は上下二段になって、文中やべき乗に書くと見難いので、
+	その場合は、次のように書くことにする。
+	\begin{equation}\label{eq:二項係数の別表記}\begin{split}
+		\q{n:k} := \qbinom{n}{k} \quad\text{for all } k,n\in\sizen
+	\end{split}\end{equation}
+
+	この定義を用いると、次の命題が成り立つ。
+
+	\begin{proposition}[Pascalの公式]\label{prop:Pascalの公式} %{
+		任意の$k,n\in\sizen$に対して次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{k+1} = \qbinom{n}{k} + q^{k+1}\qbinom{n}{k+1}
+			= q^{n-k}\qbinom{n}{k} + \qbinom{n}{k+1}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Pascalの公式}
+	\begin{proof} %{
+		$n\le k$の時は命題が成り立つ。したがって、$k<n$の場合を証明する。
+		次の式が成り立つが、
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{k+1} = \frac{\q{n+1}}{\q{k+1}}\qbinom{n}{k}
+		\end{split}\end{equation*}
+		次の式から、
+		\begin{equation*}\begin{split}
+			\frac{\q{n+1}}{\q{k+1}} = \frac{1 - q^{n+1}}{1 - q^{k+1}}
+			= \frac{1 - q^{k+1} + q^{k+1}\plr{1 - q^{n-k}}}{1 - q^{k+1}}
+			= 1 + q^{k+1}\frac{\q{n-k}}{\q{k+1}}
+		\end{split}\end{equation*}
+		命題の一つ目の式が成り立つことがわかる。
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{k+1} = \qbinom{n}{k} + q^{k+1}\qbinom{n}{k+1}
+		\end{split}\end{equation*}
+		そして、二項係数の対称性により、次の式が成り立ち、
+		\begin{equation*}\begin{split}
+			\qbinom{n+1}{k+1} = \qbinom{n+1}{n-k}
+			= \qbinom{n}{n-k-1} + q^{n-k}\qbinom{n}{n-k}
+			= \qbinom{n}{k+1} + q^{n-k}\qbinom{n}{k}
+		\end{split}\end{equation*}
+		命題の二つ目の式が成り立つことがわかる。
+	\end{proof} %}
+%s2:Pascalの公式}
+%s1:二項係数}
+
+\section{積分}\label{s1:積分} %{
+	次の式によって、代数的に$q$-微分から$q$-積分を導くことができる。
+	\begin{equation*}\begin{split}
+		\qD_x = \frac{1-q_x}{(1-q)t}
+		\implies 1 = \frac{1-q_x}{(1-q)t}\qI_x
+		\implies \qI_x = \frac{1-q}{1-q_x}t
+	\end{split}\end{equation*}
+	この式から$q_x$と$\qD_x,\qI_x$の次の交換関係を導くことができる。
+	\begin{equation*}\begin{split}
+		\qD_xq_x = qq_x\qD_x,\quad q_x\qI_x = q\qI_xq_x
+	\end{split}\end{equation*}
+	また、次の性質より、
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 定数項を持たない形式級数に対しては作用素$\qI_x\qD_x$は単位元
+		として振る舞う。
+		$\plr{f\bou 0} = 0 \implies \qI_x\qD_x\plr{f\bou x} = \plr{f\bou x}$
+		\item 任意の形式級数$f$に対して$\qI_x\plr{f\bou x}$は定数項を持たない。
+	\end{itemize} %}
 	部分積分は次のようにして導くことができる。
 	\begin{equation*}\begin{split}
-		\plr{1 - u_t\epsilon_t}m_0 = \int_t\partial_tm_0
-		= \int_tm_0\plr{\partial_t\otimes1 + q_t\otimes\partial_t} \\
-		\implies \plr{1 - u_t\epsilon_t}m_0\plra{\int_t\otimes1} 
-		= \int_tm_0 + \int_tm_0\plra{q_t\int_t\otimes\partial_t}
+		m_0\plr{\qI_x\otimes\qI_x} = \qI_x\qD_xm_0\plr{\qI_x\otimes\qI_x}
+		= \qI_xm_0\plr{1\otimes\qI_x + q_x\qI_x\otimes1}
 	\end{split}\end{equation*}
-%s1:q-積分}
+%s1:積分}
+
+\section{Taylor展開}\label{s1:Taylor展開} %{
+	\cite{kac:2002}のq-Kleeneスターの積表現の導出が素晴らしいので、
+	そのまま写経する。
+
+	まず、Taylor展開を考える。任意の形式級数$f$は、形式級数の定義より、
+	次のように展開できる。
+	\begin{equation*}\begin{split}
+		\plr{f\bou x} = \sum_{n\in\sizen}\frac{t^n}{n!} f_n
+		\quad\text{where } f_n=\plr{\partial^nf\bou 0}\in R_q 
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この展開を原点以外の一般の点周りで行うのが次の命題である。
+
+	\begin{proposition}[Taylor展開]\label{prop:Taylor展開} %{
+		\citepage{kac:2002}{p.5}
+		線形射$\alpha_x:K_q\bblr{x}\to K_q\bblr{x}$、ある一点$a\in K_q$、
+		多項式の系列$\plr{P_n\bou x}\in K_q\bblr{x}$が、次の性質を満たす時、
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{eq:Taylor展開の初期条件} $\plr{P_n\bou a}=\is{n=0}$
+			\item\label{eq:Taylor展開の線形独立} $\deg_x\plr{P_n\bou x}=n$
+			\item\label{eq:Taylor展開の微分} $\alpha_x\plr{P_n\bou x}=\is{1\le n}\plr{P_{n-1}\bou x}$
+		\end{enumerate} %}
+		任意の$\plr{f\bou x}\in K_q\bblr{x}$は次のように書くことができる。
+		\begin{equation*}\begin{split}
+			\plr{f\bou x} = \sum_{n\in\sizen}\plr{\alpha^nf\bou a}\plr{P_n\bou x}
+		\end{split}\end{equation*}
+	\end{proposition} %prop:Taylor展開}
+	\begin{proof} %{
+		条件\ref{eq:Taylor展開の線形独立}から$\set{P_n\bou n\in\sizen}$は互いに
+		線形独立になる。したがって、ある$\set{f_n\in K_q\bou n\in\sizen}$が
+		あって、$\plr{f\bou x}$は次のように書ける。
+		\begin{equation*}\begin{split}
+			\plr{f\bou x} := \sum_{n\in\sizen} f_n\plr{P_n\bou x}
+		\end{split}\end{equation*}
+		この式の両辺に$\alpha_x^n$を作用させると、条件
+		\ref{eq:Taylor展開の線形独立}と\ref{eq:Taylor展開の微分}から、
+		次の式が得られる。
+		\begin{equation*}\begin{split}
+			\alpha_x^n\plr{f\bou x} = \sum_{k=n}^\infty f_n\plr{P_{k-n}\bou x}
+			= \sum_{k\in\sizen} f_{n+k}\plr{P_k\bou x}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		この式で$t=a$とすると、\ref{eq:Taylor展開の初期条件}から、
+		$\plr{\alpha^nf\bou a}=f_n$が導かれる。
+	\end{proof} %}
+
+	この命題で$\alpha_x$を微分$\qD_x$にした場合に、二変数の多項式
+	$\plr{P_n\bou x,y}\in R_q\blr{x,y}$を考える。
+	命題の条件から、定積分を用いた次の漸化式が得られる。
+	\begin{equation*}\begin{split}
+		\plr{P_0\bou x,y} = 1,\quad
+		\plr{P_{n+1}\bou x,y} = \qI_{z=y}^x\plr{P_n\bou z,y}
+	\end{split}\end{equation*}
+	低次の項を計算すると次のようになる。
+	\begin{equation*}\begin{split}
+		\plr{P_1\bou x,y} &= x - y \\
+		\plr{P_2\bou x,y} &= \frac{x^2 - y^2}{\q{2}} - y\plr{x-y} \\
+		&= \frac{\plr{x - y}\plr{x - qy}}{\q{2}} \\
+		\plr{P_3\bou x,y} &= \frac{1}{\q{2}}\plra{\frac{x^3-y-3}{\q{3}}
+			- \plr{x^2-y^2}y + \plr{x-y}qy^2} \\
+		&= \frac{\plr{x - y}\plr{x - qy}\plr{x - q^2y}}{\q{3}!} \\
+	\end{split}\end{equation*}
+	したがって、次の式が成り立つと予想される。
+	\begin{equation*}\begin{split}
+		\plr{P_{n+1}\bou x,y} = \frac{\plr{P_n\bou x,y}\plr{x-q^ny}}{\q{n+1}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	\begin{proof} %{
+		帰納法で証明する。ある$n\in\sizen$以下で命題の式が成り立つと仮定する。
+		多項式$Q$を次のように定義すると、
+		\begin{equation*}\begin{split}
+			\plr{Q\bou x,y} := \frac{\plr{P_{n+1}\bou x,y}\plr{x-q^{n+1}y}}{\q{n+2}}
+		\end{split}\end{equation*}
+		その微分は次のようになり、
+		\begin{equation*}\begin{split}
+			\plr{\qD Q\bou x,y} &= \frac{\plr{P_n\bou x,y}\plr{x-q^ny}}{\q{n+2}}
+				\plra{\frac{1}{\q{n+1}} - q} \\
+			&= \frac{\plr{P_n\bou x,y}\plr{x-q^ny}}{\q{n+2}}\frac{\q{n+2}}{\q{n+1}} \\
+			&= \plr{P_n\bou x,y}
+		\end{split}\end{equation*}
+		$n+1$でも命題の式が成り立つことがわかる。
+	\end{proof} %}
+
+	$\plr{x-y}^n$の$q$-アナログを次のように定義する。
+
+	\begin{definition}[正ベキのq-アナログ]\label{def:正ベキのq-アナログ} %{
+		\citepage{kac:2002}{p.8}
+		二変数多項式$\plr{x\oplus y}_n\in R_q\blr{x,y}$を次のように定義し、
+		\begin{equation*}\begin{split}
+			\plr{x\oplus y}_n := \plr{x+y}\plr{x+qy}\cdots\plr{x+q^{n-1}y}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		$\plr{x\ominus y}_n := \plr{x\oplus -y}_n$と書く。\EOP
+	\end{definition} %def:正ベキのq-アナログ}
+
+	$\plr{x\ominus y}_n$を用いると、$P_n$は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		\plr{P_n\bou x,y} = \frac{\plr{x\ominus y}_n}{\q{n}!}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	このことを命題の形でまとめておく。
+
+	\begin{proposition}[Talor展開その二]\label{prop:Talor展開その二} %{
+		任意の$\plr{f\bou x}\in K_q\bblr{x}$と$a\in K_q$に対して次の式が
+		成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{f\bou x} = \sum_{n\in\sizen}
+			\frac{\plr{x\ominus a}_n}{\q{n}!}\plr{\qD^nf\bou a}
+		\end{split}\end{equation*}
+		%\EOP
+	\end{proposition} %prop:Talor展開その二}
+	\begin{proof} %{
+		上記。
+	\end{proof} %}
+
+	\begin{comment} %{
+	任意の$\plr{f\bou x}\in K_q\bblr{x}$に対して次の式が成り立ち、
+	\begin{equation*}\begin{split}
+		\sum_{n\in\sizen}\frac{\plr{x - y}^n}{n!}\plr{\partial^nf\bou y}
+		= \plr{f\bou x}
+		= \sum_{n\in\sizen}\frac{\plr{x\ominus y}_n}{\q{n}!}\plr{\qD^nf\bou y}
+	\end{split}\end{equation*}
+	並進の変換がq-微分を用いて次のように書けることがわかる。
+	\begin{equation*}\begin{split}
+		\sum_{n\in\sizen}\frac{\plr{x - y}^n}{n!}\partial_y^n
+		= \sum_{n\in\sizen}\frac{\plr{x\ominus y}_n}{\q{n}!}\qD_y^n
+	\end{split}\end{equation*}
+	並進変換は群なので、並進変換の逆をq-微分を用いて表示できそうである。
+	\end{comment} %}
+
+	$\plr{x\oplus y}_n$の定義から、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\plr{x\oplus y}_{m+n} = \plr{x\oplus y}_m\plr{x\oplus q^my}
+		\quad\text{for all } m,n\in\sizen
+	\end{split}\end{equation*}
+	この式を元に負ベキ$\plr{x\oplus y}_{-n}$を次のように定義する。
+
+	\begin{definition}[負ベキのq-アナログ]\label{def:負ベキのq-アナログ} %{
+		\citepage{kac:2002}{p.8}
+		$q\neq0$の時、二変数多項式$\plr{x\oplus y}_{-n}\in R_q\blr{x,y}$を
+		次のように定義し、
+		\begin{equation*}\begin{split}
+			\plr{x\oplus y}_{-n} := \plr{x\oplus q^{-n}y}_n^{-1}
+			\quad\text{for all } n\in\sizen
+		\end{split}\end{equation*}
+		$\plr{x\ominus y}_{-n} := \plr{x\oplus y}_{-n}$と書く。\EOP
+	\end{definition} %def:負ベキのq-アナログ}
+
+	$q=0$の時は、$\plr{x\oplus y}_{-n}$は定義されないことに注意する。また、
+	$\plr{x\oplus y}_{-n}$は$\plr{x\oplus y}_n$の逆ではないことにも注意する。
+	\begin{equation*}\begin{split}
+		\plr{x\oplus y}_n\plr{x\oplus y}_{-n} = 
+		\frac{\plr{x\oplus y}_n}{\plr{x\oplus q^{-n}y}_n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+
+	$\plr{x\oplus y}_n$は$x=y,qy,\dots,q^{n-1}y$に一次のゼロ点を持つので、
+	$\plr{x\oplus y}_{-n}$は$x=qy,q^2y,\dots,q^ny$に一次の極を持つ。
+
+	$\plr{x\oplus y}_{-n}$を\label{def:負ベキのq-アナログ}によって定義した理由
+	は次の命題による。
+
+	\begin{proposition}[ベキの乗法]\label{prop:ベキの乗法} %{
+		\citepage{kac:2002}{p.9}
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\plr{x\oplus y}_{m+n} = \plr{x\oplus y}_m\plr{x\oplus q^{-m}y}_n
+			\quad\text{for all } m,n\in\sei
+		\end{split}\end{equation*}
+		%\EOP
+	\end{proposition} %prop:ベキの乗法}
+	\begin{proof} %{
+		証明は\citepage{kac:2002}{p.9}を見ること。
+		$m,n$の場合分けによって証明している。
+	\end{proof} %}
+
+	$\plr{x\oplus y}_{-n}$の微分は次のようになる。
+	\begin{equation*}\begin{split}
+		\qD_x\plr{x\oplus y}_{-n} = \is{1\le n}\q{-n}\plr{x\oplus y}_{-\plr{n+1}}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	ここで、$n\in\sei$に対する$\q{n}$は次のように定義される。
+	\begin{equation*}\begin{split}
+		\q{n} := \frac{1 - q^n}{1 - q} \quad\text{for all } n\in\sei
+	\end{split}\end{equation*}
+	\begin{proof} %{
+		$\plr{x\oplus y}_{-n}$の定義から、直接計算すればよい。
+		\begin{equation*}\begin{split}
+			\qD_x\plr{x\oplus y}_{-n} &= - \is{1\le n}\q{n}
+				\frac{\plr{x\oplus q^{-n}y}_{n-1}}
+				{\plr{qx\oplus q^{-n}y}_n\plr{x\oplus q^{-n}y}_n} \\
+			&= \is{1\le n}\q{-n}\frac{1}
+				{\plr{x\oplus q^{-\plr{n+1}}y}_n\plr{x + q^{-1}y}} \\
+			&= \is{1\le n}\q{-n}\frac{1}{\plr{x\oplus q^{-\plr{n+1}}y}_{n+1}} \\
+		\end{split}\end{equation*}
+	\end{proof} %}
+	この結果は次の命題にまとめられる。
+
+	\begin{proposition}[ベキの微分]\label{prop:ベキの微分} %{
+		次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\qD_x\plr{x\oplus y}_n = \is{1\le n}\q{n}\plr{x\oplus y}_{n-1}
+			\quad\text{for all } n\in\sei
+		\end{split}\end{equation*}
+		%\EOP
+	\end{proposition} %prop:ベキの微分}
+	\begin{proof} %{
+		上記。
+	\end{proof} %}
+
+	\begin{todo}[導出の方法]\label{todo:導出の方法} %{
+		式の導出にについて考えてみたいことを書いておく。
+		\begin{itemize}\setlength{\itemsep}{-1mm} %{
+			\item ベキの乗法\ref{prop:ベキの乗法}と微分\ref{prop:ベキの微分}の
+			関係をLeibniz則の観点で見る。
+			%
+			\item $\plr{x\ominus y}_n$の導出を解析的に行いたい。
+			\begin{equation*}\begin{split}
+				\plr{x\ominus y}_n = \qI_{z_1=y}^x\qI_{z_2=y}^{z_1}
+				\cdots\qI_{z_n=y}^{z_{n-1}}1
+			\end{split}\end{equation*}
+		\end{itemize} %}
+	\end{todo} %todo:導出の方法}
+
+\subsection{ベキの展開}\label{s2:ベキの展開} %{
+	前節では、$\plr{x\oplus y}_{\pm n}$を乗法によって定義した。
+	\begin{equation*}\begin{split}
+		\plr{x\oplus y}_n = \prod_{k=0}^{n-1}\plr{x + q^ky}
+		,\quad \plr{x\oplus y}_{-n} = \prod_{k=0}^{n-1}\plr{x + q^{k-n}y}^{-1}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	この節では、ベキを展開した形を調べる。次の変換により、
+	\begin{equation}\label{eq:ベキの簡易化}\begin{split}
+		\plr{x\oplus y}_{\pm n} = x^{\pm n}\plra{1\oplus \frac{y}{x}}_{\pm n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation}
+	$\plr{1\oplus z}_{\pm n}$を調べれば十分である。
+
+
+	\begin{proposition}[ベキの微分その二]\label{prop:ベキの微分その二} %{
+		$\plr{1\oplus z}_n$は次の性質を持つ。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item　次の式が成り立つ。
+			\begin{equation*}\begin{split}
+				\plr{1\oplus z}_{m+n} = \plr{1\oplus z}_m\plr{1\oplus q^mz}_n
+				\quad\text{for all } m,n\in\sei
+			\end{split}\end{equation*}
+			%
+			\item $\plr{1\oplus z}_n$の微分は次の式を満たす。
+			\begin{equation*}\begin{split}
+				\qD_z\plr{1\oplus z}_n = \is{1\le n}\q{n}\plr{1\oplus qz}_{n-1}
+				\quad\text{for all } n\in\sei
+			\end{split}\end{equation*}
+		\end{enumerate} %}
+		%\EOP
+	\end{proposition} %prop:ベキの微分その二}
+	\begin{proof} %{
+		項目毎に証明する。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item \eqref{eq:ベキの簡易化}を使って証明できる。
+			%
+			\item $n$が正と負の場合に分けて証明する。まず、$n$が正の場合を
+			$n$についての帰納法で証明する。$n=1$の時は$\qD_z\plr{1\oplus z}=0$
+			より命題が成り立つ。ある$n\in\sizen$以下で命題が成り立つと仮定すると、
+			次の式から、
+			\begin{equation*}\begin{split}
+				\qD_z\plr{1\oplus z}_{n+1}
+				&= \qD_z\plrgg{\plr{1\oplus z}_n\plr{1 + q^nz}} \\
+				&= \is{1\le n}\q{n}\plr{1\oplus qz}_{n-1}\plr{1 + q^nz}
+					+ \plr{1\oplus qz}_nq^n \\
+				&= \plr{1\oplus qz}_n\plrgg{\is{1\le n}\q{n} + q^n} \\
+				&= \q{n+1}\plr{1\oplus qz}_n \\
+			\end{split}\end{equation*}
+			$n+1$でも命題が成り立つことがわかる。したがって、$n$が正の場合に
+			命題が成り立つことがわかる。$n$が負の場合は、任意の$n\in\sizen$
+			に対して次の式が成り立ち、
+			\begin{equation*}\begin{split}
+				\qD_z\plr{1\oplus z}_{-n} 
+				&= \qD_z\frac{1}{\plr{1\oplus q^{-n}z}_n^{-1}} \\
+				&= \frac{\is{1\le n}q^{-n}\q{n}\plr{1\oplus q^{-\plr{n-1}}z}_{n-1}}
+					{\plr{1\oplus q^{-\plr{n-1}}z}_n\plr{1\oplus q^{-n}z}_n} \\
+				&= \frac{\q{-n}}{\plr{1\oplus z}_n\plr{1\oplus q^{-n}z}_n} \\
+				&= \frac{\q{-n}}{\plr{1\oplus q^{-\plr{n+1}}qz}_{n+1}} \\
+			\end{split}\end{equation*}
+			$n$が負の場合にも命題が成り立つことがわかる。
+		\end{enumerate} %}
+	\end{proof} %}
+
+	この命題とTalor展開\ref{prop:Talor展開その二}から次のベキ展開が得られる。
+
+	\begin{proposition}[ベキ展開]\label{prop:ベキ展開} %{
+		\citepage{kac:2002}{p.14,\,p.28}
+		正負のベキについてそれぞれ次の式が成り立つ。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item\label{eq:Gaussの二項公式} Gaussの二項公式
+			\begin{equation*}\begin{split}
+				\plr{1\oplus z}_n = \sum_{k=0}^n q^{\plr{k:2}}\qbinom{n}{k}z^k
+				\quad\text{for all } n\in\sizen
+			\end{split}\end{equation*}
+			\item\label{eq:Heineの二項公式} Heineの二項公式
+			\begin{equation*}\begin{split}
+				\plr{1\oplus z}_{-n} &= \sum_{k\in\sizen} \qbinom{n-1+k}{k}
+				\plr{-q^nz}^k \quad\text{for all } n\in\sizen_+
+			\end{split}\end{equation*}
+		\end{enumerate} %}
+		ここで、$\plr{r:2}$は$q=1$での二項係数\eqref{eq:二項係数の別表記}とする。
+		\EOP
+	\end{proposition} %prop:ベキ展開}
+	\begin{proof} %{
+		項目毎に証明する。
+		\begin{enumerate}\setlength{\itemsep}{-1mm} %{
+			\item 命題\ref{prop:Talor展開その二}から、$z=0$の周りでTaylor展開
+			すると、任意の$n\in\sizen$に対して次の式が得られる。
+			\begin{equation*}\begin{split}
+				\plr{1\oplus z}_n = \sum_{k=0}^n\frac{z^k}{\q{k}!}
+					\lim_{x=0}\qD_x^k\plr{1\oplus x}_n
+			\end{split}\end{equation*}
+			任意の$k\le n\in\sizen$に対して次の式が成り立ち、
+			\begin{equation*}\begin{split}
+				\qD_x^k\plr{1\oplus x}_n 
+				&= q^{0+\cdots+\plr{k-1}}\q{n}\cdots\q{n-k+1}\plr{1\oplus q^kx}_{n-k} \\
+				&= q^{\plr{k:2}}\frac{\q{n}!}{\q{n-k}!}\plr{1\oplus q^{k+1}x}_{n-k} \\
+			\end{split}\end{equation*}
+			$\lim_{x=0}\plr{1\oplus q^kx}_{n-k} = 1$となるから、
+			命題が成り立つことがわかる。
+			%
+			\item \ref{eq:Gaussの二項公式}の場合と同様にして、次の式が成り立つ
+			ことがわかる。
+			\begin{equation*}\begin{split}
+				\plr{1\oplus z}_n = 1 + \sum_{k=1}^\infty \frac{z^k}{\q{k}!}
+					q^{\plr{k:2}}\q{-n}\q{-n-1}\cdots\q{-n-\plr{k-1}}
+			\end{split}\end{equation*}
+			ただし、和の範囲は有限ではない。次の式から、
+			\begin{equation*}\begin{split}
+				\q{-n}\q{-n-1}\cdots\q{-n-\plr{k-1}} 
+				&= \plr{-q^n}^kq^{-\plr{k:2}}\q{n}\q{n+1}\cdots\q{n+\plr{k-1}} \\
+				&= \plr{-q^n}^kq^{-\plr{k:2}}\frac{\q{n+k-1}!}{\q{n-1}!} \\
+			\end{split}\end{equation*}
+			次の式が成り立ち、
+			\begin{equation*}\begin{split}
+				\plr{1\oplus z}_n = 1 + \sum_{k=1}^\infty 
+				\plr{-q^n}^k\qbinom{n-1+k}{k}
+			\end{split}\end{equation*}
+			命題が成り立つことがわかる。
+		\end{enumerate} %}
+	\end{proof} %}
+
+	\cite{kac:2002}では、Heineの二項公式は次の形で書き表されている。
+	\begin{alignat}{3}\label{eq:ベキ展開その二}
+		\plr{1\oplus z}_n &= \prod_{k=0}^{n-1}\plr{1 + q^kz}
+		&&= \sum_{k=0}^n q^{\plr{k:2}}\qbinom{n}{k}z^k
+		&&\quad\text{for all } n\in\sizen \\
+		\frac{1}{\plr{1\ominus z}_n} &= \prod_{k=0}^{n-1}\frac{1}{\plr{1 - q^kz}}
+		&&= \sum_{k\in\sizen} \qbinom{n-1+k}{k}z^k
+		&&\quad\text{for all } n\in\sizen_+
+	\end{alignat}
+	乗法による定義された関数がうまいこと展開されている。この式は$q=0$でも成り立つ。
+%s2:ベキの展開}
+
+\subsection{極限}\label{s2:極限} %{
+	$\plr{x\oplus y}_n$の$n\to\infty$の極限を考える。\citepage{kac:2002}{p.29}
+	$q=1$では$\plr{x\oplus y}_\infty$は$0$または$\pm\infty$に、
+	$q=0$では$\plr{x\oplus y}_\infty=x+y$となって、極限の値は自明になるが、
+	一般の$q$では異なる状況になる。
+	
+	命題\ref{prop:正ベキの展開}の加法表示を用いて、べきを無限大にした極限を
+	考える。二項係数は次のように書けるから、
+	\begin{equation*}\begin{split}
+		\qbinom{n}{k} = \frac{1-q^n}{1-q^k}\frac{1-q^{n-1}}{1-q^{k-1}}
+			\cdots\frac{1-q^{n+1-k}}{1-q}
+	\end{split}\end{equation*}
+	$k$を有限に留めて$n$を無限大に持って行くと、分子の$q$の項が落ちて、
+	次のようになる。
+	\begin{equation*}\begin{split}
+		\lim_{n\to\infty}\qbinom{n}{k} = \frac{1}{\plr{1-q}\cdots\plr{1-q^k}}
+		= \frac{1}{\plr{1\ominus q}_k}
+	\end{split}\end{equation*}
+	この式を\eqref{eq:ベキ展開その二}に当てはめると次のようになる。
+	\begin{equation*}\begin{split}
+		\plr{1\oplus z}_\infty = \sum_{k\in\sizen} \frac{q^{\plr{k:2}}}{\q{k}!}
+			\plra{\frac{z}{1 - q}}^k,\quad
+		\frac{1}{\plr{1\ominus z}_\infty} = \sum_{k\in\sizen} \frac{1}{\q{k}!}
+			\plra{\frac{z}{1 - q}}^k
+	\end{split}\end{equation*}
+	二つ目の式は$x/(1-q)$のKleeneスターになっている。したがって、Kleeneスター
+	は次のように書くことができる。
+	\begin{equation*}\begin{split}
+		z^* = \plrgg{1\ominus \plr{1 - q}z}_\infty^{-1}
+	\end{split}\end{equation*}
+	また、$q\mapsto q^{-1}$の変換で次の式が成り立つから、
+	\begin{equation*}\begin{split}
+		\q{n}_{q^{-1}}^! 
+		= \frac{1 - q^{-1}}{1 - q^{-1}}\cdots\frac{1 - q^{-n}}{1 - q^{-1}}
+		= \frac{q^n}{q^{\plr{n+1:2}}}\frac{1 - q}{1 - q}\cdots\frac{1 - q^n}{1 - q}
+		= q^{-\plr{n:2}}\q{n}_q^!
+	\end{split}\end{equation*}
+	次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\q{z}_{q^{-1}}^* = \plrgg{1\oplus\plr{1 - q}z}_\infty
+		= \sum_{k\in\sizen} \frac{q^{\plr{k:2}}}{\q{k}!}z^k
+	\end{split}\end{equation*}
+	したがって、Kleeneスターの逆元が次のように求まる。
+	\begin{equation*}\begin{split}
+		\q{z}_q^*\q{-z}_{q^{-1}}^* = 1
+	\end{split}\end{equation*}
+	$\q{z}_{q^{-1}}^*$は$q=0$でも定義されていることに注意する。
+	$0^n=\is{n=0}$というデルタ関数になることに注意すると、次の式が成り立つ。
+	\begin{equation*}\begin{split}
+		\q{z}_{0^{-1}}^* = \sum_{k\in\sizen} \frac{0^{\plr{k:2}}}{\q{k}!}z^k
+		= 1 + z
+	\end{split}\end{equation*}
+
+\begin{comment} %{
+	したがって、命題\ref{prop:正ベキの展開}から、$\plr{1\oplus x}_\infty$は、
+	$k\ll n$の領域で、次のように書ける。
+	\begin{equation}\label{eq:足し算のべき乗の極限}\begin{split}
+		\plr{1\oplus x}_\infty \sim \sum_{k=0}^\infty 
+			\frac{q^{\plr{k:2}}x^k}{\plr{1\ominus q}_k}
+	\end{split}\end{equation}
+	さらに、階乗は$\plr{1\ominus q}$を用いて次のように書けるから、
+	\begin{equation*}\begin{split}
+		\q{n}! = \frac{\plr{1\ominus q}_n}{\plr{1 - q}^n}
+		\quad\text{for all } n\in\sizen
+	\end{split}\end{equation*}
+	\eqref{eq:足し算のべき乗の極限}は次のようにKleeneスターに似た形にまとまる。
+	\begin{equation*}\begin{split}
+		\plrg{1\oplus \plr{1 - q}x}_\infty \sim \sum_{k=0}^\infty
+			\frac{q^{\plr{k:2}}x^k}{\q{k}!}
+	\end{split}\end{equation*}
+
+	\begin{definition}[指数関数]\label{def:指数関数} %{
+		$\plr{E\bou x}\in K_q\bblr{x}$を次のように定義する。
+		\begin{equation*}\begin{split}
+			\plr{E\bou x} := \sum_{n=0}^\infty\frac{q^{\plr{n:2}}x^n}{\q{n}!}
+		\end{split}\end{equation*}
+	\end{definition} %def:指数関数}
+\end{comment} %}
+%s2:極限}
+%s1:Taylor展開}
 %
 }\endgroup %}
