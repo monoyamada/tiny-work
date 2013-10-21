@@ -9,7 +9,6 @@ import tiny.function.Function;
 import tiny.lang.ArrayHelper;
 import tiny.lang.Debug;
 import tiny.lang.StringHelper;
-import tiny.primitive.PrimitiveHelper;
 
 public class ShuffleTest extends TestCase {
 	protected void setUp() throws Exception {
@@ -85,12 +84,18 @@ public class ShuffleTest extends TestCase {
 		}
 		return output;
 	}
-
+	static int[] plus(int[] x0, int i0, int[] x1, int i1, int n, int value) {
+		for (int i = 0; i < n; ++i) {
+			x0[i0 + i] = x1[i0 + i] + value;
+		}
+		return x0;
+	}
+	@SuppressWarnings("unused")
 	public void testShuffle_1() {
 		Function<int[], String> fnc = new Function<int[], String>() {
 			@Override
 			public String evaluate(int[] source) throws Exception {
-				PrimitiveHelper.plus(source, 0, source, 0, source.length, 1);
+				plus(source, 0, source, 0, source.length, 1);
 				return "[" + StringHelper.join(source) + "]";
 			}
 		};
@@ -111,6 +116,7 @@ public class ShuffleTest extends TestCase {
 			Debug.log().debug(StringHelper.join(indices, ", ", fnc));
 		}
 	}
+	@SuppressWarnings("unused")
 	public void _testTraverser() {
 		{
 			Debug.log().debug("------- 2, 2 -------");

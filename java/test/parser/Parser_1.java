@@ -269,7 +269,7 @@ public class Parser_1 extends TextParser {
 	private String toString(ByteArrayList array, Charset charset) {
 		// Charset charset = Charset.forName(FileHelper.UTF_8);
 		if (charset != null) {
-			return new String(array.getArray(), 0, array.getLength(), charset);
+			return new String(array.getArray(), 0, array.size(), charset);
 		}
 		return array.toString();
 	}

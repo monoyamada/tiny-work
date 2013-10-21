@@ -133,9 +133,9 @@ public class NumberTest extends TestCase {
 			long a1 = 109;
 			long gcd = euclid(rs, x0, x1, a0, a1);
 			Debug.log().debug("gcd(" + a0 + ", " + a1 + ")=" + gcd);
-			List<long[]> list = new ArrayList<long[]>(rs.getLength());
+			List<long[]> list = new ArrayList<long[]>(rs.size());
 			System.out.println("r, x0, x1");
-			for (int i = 0, n = rs.getLength(); i < n; ++i) {
+			for (int i = 0, n = rs.size(); i < n; ++i) {
 				list.add(new long[] { rs.get(i), x0.get(i), x1.get(i) });
 				System.out.println(rs.get(i) + ", " + x0.get(i) + ", " + x1.get(i));
 			}
@@ -149,9 +149,9 @@ public class NumberTest extends TestCase {
 			long a1 = 23;
 			long gcd = euclid(rs, x0, x1, a0, a1);
 			Debug.log().debug("gcd(" + a0 + ", " + a1 + ")=" + gcd);
-			List<long[]> list = new ArrayList<long[]>(rs.getLength());
+			List<long[]> list = new ArrayList<long[]>(rs.size());
 			System.out.println("r, x0, x1");
-			for (int i = 0, n = rs.getLength(); i < n; ++i) {
+			for (int i = 0, n = rs.size(); i < n; ++i) {
 				list.add(new long[] { rs.get(i), x0.get(i), x1.get(i) });
 				System.out.println(rs.get(i) + ", " + x0.get(i) + ", " + x1.get(i));
 			}
@@ -165,9 +165,9 @@ public class NumberTest extends TestCase {
 			long a1 = 13566 / 42;
 			long gcd = euclid(rs, x0, x1, a0, a1);
 			Debug.log().debug("gcd(" + a0 + ", " + a1 + ")=" + gcd);
-			List<long[]> list = new ArrayList<long[]>(rs.getLength());
+			List<long[]> list = new ArrayList<long[]>(rs.size());
 			System.out.println("r, x0, x1");
-			for (int i = 0, n = rs.getLength(); i < n; ++i) {
+			for (int i = 0, n = rs.size(); i < n; ++i) {
 				list.add(new long[] { rs.get(i), x0.get(i), x1.get(i) });
 				System.out.println(rs.get(i) + ", " + x0.get(i) + ", " + x1.get(i));
 			}

@@ -12,7 +12,7 @@ public interface ByteArray extends Array<Number> {
 			this.array = array;
 		}
 		public boolean hasNext() {
-			return this.index < this.array.getLength();
+			return this.index < this.array.size();
 		}
 		public byte nextByte() {
 			return this.array.get(this.index++);

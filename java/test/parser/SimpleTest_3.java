@@ -103,7 +103,7 @@ public class SimpleTest_3 extends TestCase {
 		@Override
 		public ByteInput popMark() {
 			IntArrayList list = this.getPositions(false);
-			if (list == null || list.getLength() < 1) {
+			if (list == null || list.size() < 1) {
 				String msg = "there is not stored position";
 				throw new NoSuchElementException(msg);
 			}
@@ -113,7 +113,7 @@ public class SimpleTest_3 extends TestCase {
 		@Override
 		public ByteInput setMark() {
 			IntArrayList list = this.getPositions(false);
-			if (list == null || list.getLength() < 1) {
+			if (list == null || list.size() < 1) {
 				String msg = "there is not stored position";
 				throw new NoSuchElementException(msg);
 			}
@@ -123,7 +123,7 @@ public class SimpleTest_3 extends TestCase {
 		@Override
 		public ByteInput goMark() {
 			IntArrayList list = this.getPositions(false);
-			if (list == null || list.getLength() < 1) {
+			if (list == null || list.size() < 1) {
 				String msg = "there is not stored position";
 				throw new NoSuchElementException(msg);
 			}
@@ -146,7 +146,7 @@ public class SimpleTest_3 extends TestCase {
 		public int get() {
 			if (this.position < this.array.length) {
 				IntArrayList list = this.getPositions(false);
-				if (list != null && 0 < list.getLength()) {
+				if (list != null && 0 < list.size()) {
 					this.maxLookahead = Math.max(this.maxLookahead,
 							this.position - list.get(0));
 				}
@@ -592,9 +592,9 @@ public class SimpleTest_3 extends TestCase {
 		}
 		TagNode parse(int name, ByteInput input) throws IOException {
 			ArrayInput x = (ArrayInput) input;
-			int n = x.getPositions(true).getLength();
+			int n = x.getPositions(true).size();
 			TagNode node = this.getParser().parse(name, input);
-			n = x.getPositions(true).getLength() - n;
+			n = x.getPositions(true).size() - n;
 			if (0 < n) {
 				Debug.log().debug(Tagger.tagName(name) + ":" + n);
 			}
@@ -1674,7 +1674,7 @@ public class SimpleTest_3 extends TestCase {
 
 	private static String toString(ByteArrayList list)
 			throws UnsupportedEncodingException {
-		return toString(list.getArray(), 0, list.getLength());
+		return toString(list.getArray(), 0, list.size());
 	}
 	private static String toString(byte[] array, int begin, int size)
 			throws UnsupportedEncodingException {
@@ -1709,7 +1709,7 @@ public class SimpleTest_3 extends TestCase {
 		if (node != null) {
 			Debug.log().debug(
 					"successed parse until=" + input.position + ", depth=" + depth(node)
-							+ ", input-stack=" + input.positions.getLength()
+							+ ", input-stack=" + input.positions.size()
 							+ ", max-backtrace=" + input.maxBacktrace + ", count-backtrace="
 							+ input.countBacktrace + ", max-lookahead=" + input.maxLookahead);
 			File out = new File("data/dump.txt");
@@ -1732,7 +1732,7 @@ public class SimpleTest_3 extends TestCase {
 		if (node != null) {
 			Debug.log().debug(
 					"successed parse until=" + input.position + ", depth=" + depth(node)
-							+ ", input-stack=" + input.positions.getLength());
+							+ ", input-stack=" + input.positions.size());
 			File out = new File("data/dump.txt");
 			dumpNode(out, input.array, input.position, node);
 			Debug.log().debug("wrote=" + out.getAbsolutePath());
@@ -1753,7 +1753,7 @@ public class SimpleTest_3 extends TestCase {
 		if (node != null) {
 			Debug.log().debug(
 					"successed parse until=" + input.position + ", depth=" + depth(node)
-							+ ", input-stack=" + input.positions.getLength());
+							+ ", input-stack=" + input.positions.size());
 			File out = new File("data/dump.txt");
 			dumpNode(out, input.array, input.position, node);
 			Debug.log().debug("wrote=" + out.getAbsolutePath());
@@ -1895,7 +1895,7 @@ public class SimpleTest_3 extends TestCase {
 					byte ch = array[i];
 					switch (ch) {
 					case AsciiHelper.NEW_LINE:
-						if (0 < line.getLength()) {
+						if (0 < line.size()) {
 							Debug.log().debug(toString(line));
 						}
 						line.removeAll();
@@ -1918,7 +1918,7 @@ public class SimpleTest_3 extends TestCase {
 				buffer.rewind();
 				n = input.read(buffer);
 			}
-			if (0 < line.getLength()) {
+			if (0 < line.size()) {
 				Debug.log().debug(toString(line));
 			}
 		} finally {

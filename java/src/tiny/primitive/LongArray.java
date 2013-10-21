@@ -12,7 +12,7 @@ public interface LongArray extends Array<Number> {
 			this.array = array;
 		}
 		public boolean hasNext() {
-			return this.index < this.array.getLength();
+			return this.index < this.array.size();
 		}
 		public long nextLong() {
 			return this.array.get(this.index++);

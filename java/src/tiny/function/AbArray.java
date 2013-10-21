@@ -12,7 +12,7 @@ public abstract class AbArray<Value> extends AbFunction<Number, Value>
 			return defaultValue;
 		}
 		final int index = key.intValue();
-		if (index < 0 || this.getLength() <= index) {
+		if (index < 0 || this.size() <= index) {
 			return defaultValue;
 		}
 		return this.doGetValue(index);
@@ -24,16 +24,16 @@ public abstract class AbArray<Value> extends AbFunction<Number, Value>
 			throw new NullPointerException(msg);
 		}
 		final int index = key.intValue();
-		if (index < 0 || this.getLength() <= index) {
-			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+		if (index < 0 || this.size() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.size());
 			throw new IndexOutOfBoundsException(msg);
 		}
 		return this.doGetValue(index);
 	}
 	@Override
 	public Value getValue(int index) {
-		if (index < 0 || this.getLength() <= index) {
-			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+		if (index < 0 || this.size() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.size());
 			throw new IndexOutOfBoundsException(msg);
 		}
 		return this.doGetValue(index);

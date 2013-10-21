@@ -344,7 +344,7 @@ public class SimpleTest extends TestCase {
 		}
 		static String getString(ByteArrayList list)
 				throws UnsupportedEncodingException {
-			return new String(list.getArray(), 0, list.getLength(), FileHelper.UTF_8);
+			return new String(list.getArray(), 0, list.size(), FileHelper.UTF_8);
 		}
 	}
 

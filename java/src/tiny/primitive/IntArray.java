@@ -12,7 +12,7 @@ public interface IntArray extends Array<Number> {
 			this.array = array;
 		}
 		public boolean hasNext() {
-			return this.index < this.array.getLength();
+			return this.index < this.array.size();
 		}
 		public int nextInt() {
 			return this.array.get(this.index++);

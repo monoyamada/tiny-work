@@ -361,7 +361,7 @@ public class ParserTest_2 extends TestCase {
 						stack.push(MARK_OPEN);
 						state = B_0;
 					} else if (ch == CH_CLOSE) {
-						if (stack.getLength() < 2) {
+						if (stack.size() < 2) {
 							throw ParserException.nonOpenBraket(row, col, ch);
 						}
 						if (stack.top(-1) != MARK_BINARY) {
@@ -436,7 +436,7 @@ public class ParserTest_2 extends TestCase {
 					throw new ParserException(row, col, "nknown state=" + state);
 				}
 			}
-			if (0 < stack.getLength()) {
+			if (0 < stack.size()) {
 				throw ParserException.mismatchMark(row, col, ch);
 			}
 			return tokens.toArray(Token.EMPTY_ARRAY);

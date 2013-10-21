@@ -35,11 +35,12 @@ public class LongArrayList extends AbLongList implements LongStack {
 		this.array = array;
 	}
 	@Override
-	public int getLength() {
+	public int size() {
 		return this.size;
 	}
-	protected void setSize(int size) {
+	protected LongArrayList setSize(int size) {
 		this.size = size;
+		return this;
 	}
 	@Override
 	protected long doGet(int index) {
@@ -94,7 +95,7 @@ public class LongArrayList extends AbLongList implements LongStack {
 		return Long.valueOf(this.doGet(index));
 	}
 	public boolean isFull() {
-		return Integer.MAX_VALUE <= this.getLength();
+		return Integer.MAX_VALUE <= this.size();
 	}
 	public LongArrayList push(long value) {
 		return (LongArrayList) this.addLast(value);
@@ -162,8 +163,8 @@ public class LongArrayList extends AbLongList implements LongStack {
 		return value != null ? this.isTop(value.byteValue()) : false;
 	}
 	public LongArrayList set(int index, long value) {
-		if (index < 0 || this.getLength() <= index) {
-			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+		if (index < 0 || this.size() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.size());
 			throw new IndexOutOfBoundsException(msg);
 		}
 		return this.doSet(index, value);
@@ -173,6 +174,6 @@ public class LongArrayList extends AbLongList implements LongStack {
 		return this;
 	}
 	public LongArrayList setTop(long value) {
-		return this.set(this.getLength() - 1, value);
+		return this.set(this.size() - 1, value);
 	}
 }

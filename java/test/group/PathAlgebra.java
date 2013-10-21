@@ -192,7 +192,7 @@ public class PathAlgebra {
 				}
 			}
 		}
-		Arrays.sort(output.getArray(), 0, output.getLength());
+		Arrays.sort(output.getArray(), 0, output.size());
 	}
 
 	protected static String toString(long[] code) {

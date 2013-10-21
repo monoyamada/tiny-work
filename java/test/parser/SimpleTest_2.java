@@ -87,13 +87,13 @@ public class SimpleTest_2 extends TestCase {
 		@Override
 		public ByteInput pushMark() {
 			this.getPositions(true).push(this.position);
-			Debug.log().debug(this.getPositions(true).getLength());
+			Debug.log().debug(this.getPositions(true).size());
 			return this;
 		}
 		@Override
 		public ByteInput popMark() {
 			IntArrayList list = this.getPositions(false);
-			if (list == null || list.getLength() < 1) {
+			if (list == null || list.size() < 1) {
 				String msg = "there is not stored position";
 				throw new NoSuchElementException(msg);
 			}
@@ -103,17 +103,17 @@ public class SimpleTest_2 extends TestCase {
 		@Override
 		public ByteInput setMark() {
 			IntArrayList list = this.getPositions(false);
-			if (list == null || list.getLength() < 1) {
+			if (list == null || list.size() < 1) {
 				String msg = "there is not stored position";
 				throw new NoSuchElementException(msg);
 			}
-			list.getArray()[list.getLength() - 1] = this.position;
+			list.getArray()[list.size() - 1] = this.position;
 			return this;
 		}
 		@Override
 		public ByteInput goMark() {
 			IntArrayList list = this.getPositions(false);
-			if (list == null || list.getLength() < 1) {
+			if (list == null || list.size() < 1) {
 				String msg = "there is not stored position";
 				throw new NoSuchElementException(msg);
 			}
@@ -1105,7 +1105,7 @@ public class SimpleTest_2 extends TestCase {
 
 	private static String toString(ByteArrayList list)
 			throws UnsupportedEncodingException {
-		return toString(list.getArray(), 0, list.getLength());
+		return toString(list.getArray(), 0, list.size());
 	}
 	private static String toString(byte[] array, int begin, int size)
 			throws UnsupportedEncodingException {
@@ -1143,7 +1143,7 @@ public class SimpleTest_2 extends TestCase {
 		if (node != null) {
 			Debug.log().debug(
 					"successed parse until=" + input.position + ", depth=" + depth(node)
-							+ ", input-stack=" + input.positions.getLength());
+							+ ", input-stack=" + input.positions.size());
 			File out = new File("data/dump.txt");
 			dumpNode(out, input.array, input.position, node);
 			Debug.log().debug("wrote=" + out.getAbsolutePath());
@@ -1267,7 +1267,7 @@ public class SimpleTest_2 extends TestCase {
 					byte ch = array[i];
 					switch (ch) {
 					case AsciiHelper.NEW_LINE:
-						if (0 < line.getLength()) {
+						if (0 < line.size()) {
 							Debug.log().debug(toString(line));
 						}
 						line.removeAll();
@@ -1290,7 +1290,7 @@ public class SimpleTest_2 extends TestCase {
 				buffer.rewind();
 				n = input.read(buffer);
 			}
-			if (0 < line.getLength()) {
+			if (0 < line.size()) {
 				Debug.log().debug(toString(line));
 			}
 		} finally {

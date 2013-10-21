@@ -67,7 +67,7 @@ public class ByteArrayInput implements ByteInput {
 	@Override
 	public ByteArrayInput popMark() {
 		IntArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			String msg = "there is not stored position";
 			throw new NoSuchElementException(msg);
 		}
@@ -78,7 +78,7 @@ public class ByteArrayInput implements ByteInput {
 	@Override
 	public ByteArrayInput setMark() {
 		IntArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			String msg = "there is not stored position";
 			throw new NoSuchElementException(msg);
 		}
@@ -88,7 +88,7 @@ public class ByteArrayInput implements ByteInput {
 	@Override
 	public ByteInput goMark() {
 		IntArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			String msg = "there is not stored position";
 			throw new NoSuchElementException(msg);
 		}
@@ -98,12 +98,12 @@ public class ByteArrayInput implements ByteInput {
 	@Override
 	public int getMarkSize() {
 		IntArrayList list = this.positions(false);
-		return list != null ? list.getLength() : 0;
+		return list != null ? list.size() : 0;
 	}
 	@Override
 	public long getMinMark() {
 		IntArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			return ByteInput.NO_MARK;
 		}
 		return list.get(0);
@@ -111,7 +111,7 @@ public class ByteArrayInput implements ByteInput {
 	@Override
 	public long getMaxMark() {
 		IntArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			return ByteInput.NO_MARK;
 		}
 		return list.top(ByteInput.NO_MARK);

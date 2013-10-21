@@ -1,7 +1,8 @@
 package tiny.lang;
 
+import tiny.primitive.Euclid;
 
-public class NumberHelper {
+public class NumberHelper extends Euclid {
 	/**
 	 * pairing the specified positive integers.
 	 * 
@@ -60,5 +61,53 @@ public class NumberHelper {
 	}
 	public static int compare(char o1, char o2) {
 		return o1 == o2 ? 0 : o1 < o2 ? -1 : 1;
+	}
+
+	public static long power(long base, int power) {
+		if (power < 0) {
+			String msg = Messages.getUnexpectedValue("power", "ge than 0",
+					Integer.toString(power));
+			throw new IllegalArgumentException(msg);
+		} else if (base == 0) {
+			return power == 0 ? 1 : 0;
+		} else if (base == 1) {
+			return 1;
+		} else if (base == -1) {
+			return (power & 1) == 0 ? 1 : -1;
+		}
+		int out = 1;
+		while (0 < power) {
+			if ((power & 1) == 1) {
+				out *= base;
+			}
+			power >>= 1;
+			base *= base;
+		}
+		return out;
+	}
+	public static int power(int base, int power) {
+		if (power < 0) {
+			String msg = Messages.getUnexpectedValue("power", "ge than 0",
+					Integer.toString(power));
+			throw new IllegalArgumentException(msg);
+		} else if (base == 0) {
+			return power == 0 ? 1 : 0;
+		} else if (base == 1) {
+			return 1;
+		} else if (base == -1) {
+			return (power & 1) == 0 ? 1 : -1;
+		}
+		int out = 1;
+		while (0 < power) {
+			if ((power & 1) == 1) {
+				out *= base;
+			}
+			power >>= 1;
+			base *= base;
+		}
+		return out;
+	}
+	public static int hashCode(long value) {
+		 return (int)(value ^ (value >>> 32));
 	}
 }

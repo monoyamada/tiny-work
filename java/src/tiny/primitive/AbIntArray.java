@@ -8,7 +8,7 @@ public abstract class AbIntArray extends AbArray<Number> implements IntArray {
 	public String toString() {
 		final StringBuilder buffer = new StringBuilder();
 		buffer.append('[');
-		for (int i = 0, n = this.getLength(); i < n; ++i) {
+		for (int i = 0, n = this.size(); i < n; ++i) {
 			if (i != 0) {
 				buffer.append(", ");
 			}
@@ -23,29 +23,29 @@ public abstract class AbIntArray extends AbArray<Number> implements IntArray {
 	}
 	@Override
 	public int get(int index) {
-		if (index < 0 || this.getLength() <= index) {
-			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+		if (index < 0 || this.size() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.size());
 			throw new IndexOutOfBoundsException(msg);
 		}
 		return this.doGet(index);
 	}
 	@Override
 	public int getFirst(int defaultValue) {
-		if (this.getLength() < 1) {
+		if (this.size() < 1) {
 			return defaultValue;
 		}
 		return this.doGet(0);
 	}
 	@Override
 	public int getLast(int defaultValue) {
-		if (this.getLength() < 1) {
+		if (this.size() < 1) {
 			return defaultValue;
 		}
-		return this.doGet(this.getLength() - 1);
+		return this.doGet(this.size() - 1);
 	}
 	@Override
 	public int getFirstIndex(int value) {
-		for (int i = 0, n = this.getLength(); i < n; ++i) {
+		for (int i = 0, n = this.size(); i < n; ++i) {
 			if (this.doGet(i) == value) {
 				return i;
 			}
@@ -54,7 +54,7 @@ public abstract class AbIntArray extends AbArray<Number> implements IntArray {
 	}
 	@Override
 	public int getLastIndex(int value) {
-		for (int i = this.getLength(); 0 < i;) {
+		for (int i = this.size(); 0 < i;) {
 			if (this.doGet(--i) == value) {
 				return i;
 			}
@@ -71,7 +71,7 @@ public abstract class AbIntArray extends AbArray<Number> implements IntArray {
 		if (output == null || output.length < 1) {
 			return 0;
 		}
-		int n = this.getLength();
+		int n = this.size();
 		if (output.length < n) {
 			n = output.length;
 		}
@@ -82,7 +82,7 @@ public abstract class AbIntArray extends AbArray<Number> implements IntArray {
 	}
 	@Override
 	public int[] toArray() {
-		int n = this.getLength();
+		int n = this.size();
 		if (n < 1) {
 			return ArrayHelper.EMPTY_INT_ARRAY;
 		}

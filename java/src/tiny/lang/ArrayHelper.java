@@ -962,4 +962,17 @@ public class ArrayHelper {
 		}
 		return x;
 	}
+
+	public static int max(int[] array) {
+		return ArrayHelper.max(array, 0, array.length);
+	}
+	public static int max(int[] array, int begin, int end) {
+		int x = Integer.MIN_VALUE;
+		for (; begin < end; ++begin) {
+			if (x < array[begin]) {
+				x = array[begin];
+			}
+		}
+		return x;
+	}
 }

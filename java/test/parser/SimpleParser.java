@@ -465,7 +465,7 @@ public class SimpleParser {
 				throw new ParserException(row, col, "unknown state=" + state);
 			}
 		}
-		if (0 < stack.getLength()) {
+		if (0 < stack.size()) {
 			throw ParserException.unexpectedInput(row, col, toString(ch));
 		}
 	}

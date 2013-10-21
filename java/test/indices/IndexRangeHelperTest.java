@@ -59,50 +59,50 @@ public class IndexRangeHelperTest extends TestCase {
 
 			long y = makeRange(0, 1);
 			LongArray xy = and(xs, y);
-			Assert.assertEquals(0, xy.getLength());
+			Assert.assertEquals(0, xy.size());
 
 			y = makeRange(0, 2);
 			xy = and(xs, y);
-			Assert.assertEquals(1, xy.getLength());
+			Assert.assertEquals(1, xy.size());
 			Assert.assertEquals(makeRange(1, 2), xy.get(0));
 
 			y = makeRange(0, 4);
 			xy = and(xs, y);
-			Assert.assertEquals(1, xy.getLength());
+			Assert.assertEquals(1, xy.size());
 			Assert.assertEquals(makeRange(1, 3), xy.get(0));
 
 			y = makeRange(0, 6);
 			xy = and(xs, y);
-			Assert.assertEquals(2, xy.getLength());
+			Assert.assertEquals(2, xy.size());
 			Assert.assertEquals(makeRange(1, 3), xy.get(0));
 			Assert.assertEquals(makeRange(5, 6), xy.get(1));
 
 			y = makeRange(0, 7);
 			xy = and(xs, y);
-			Assert.assertEquals(2, xy.getLength());
+			Assert.assertEquals(2, xy.size());
 			Assert.assertEquals(makeRange(1, 3), xy.get(0));
 			Assert.assertEquals(makeRange(5, 7), xy.get(1));
 
 			y = makeRange(0, 8);
 			xy = and(xs, y);
-			Assert.assertEquals(2, xy.getLength());
+			Assert.assertEquals(2, xy.size());
 			Assert.assertEquals(makeRange(1, 3), xy.get(0));
 			Assert.assertEquals(makeRange(5, 7), xy.get(1));
 
 			y = makeRange(2, 6);
 			xy = and(xs, y);
-			Assert.assertEquals(2, xy.getLength());
+			Assert.assertEquals(2, xy.size());
 			Assert.assertEquals(makeRange(2, 3), xy.get(0));
 			Assert.assertEquals(makeRange(5, 6), xy.get(1));
 
 			y = makeRange(4, 6);
 			xy = and(xs, y);
-			Assert.assertEquals(1, xy.getLength());
+			Assert.assertEquals(1, xy.size());
 			Assert.assertEquals(makeRange(5, 6), xy.get(0));
 
 			y = makeRange(7, 8);
 			xy = and(xs, y);
-			Assert.assertEquals(0, xy.getLength());
+			Assert.assertEquals(0, xy.size());
 		}
 	}
 }

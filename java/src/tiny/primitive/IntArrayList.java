@@ -34,7 +34,7 @@ public class IntArrayList extends AbIntList implements IntStack {
 		this.array = array;
 	}
 	@Override
-	public int getLength() {
+	public int size() {
 		return this.size;
 	}
 	protected void setSize(int size) {
@@ -93,7 +93,7 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return Integer.valueOf(this.doGet(index));
 	}
 	public boolean isFull() {
-		return Integer.MAX_VALUE <= this.getLength();
+		return Integer.MAX_VALUE <= this.size();
 	}
 	public IntArrayList push(int value) {
 		return (IntArrayList) this.addLast(value);
@@ -161,8 +161,8 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return value != null ? this.isTop(value.byteValue()) : false;
 	}
 	public IntArrayList set(int index, int value) {
-		if (index < 0 || this.getLength() <= index) {
-			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+		if (index < 0 || this.size() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.size());
 			throw new IndexOutOfBoundsException(msg);
 		}
 		return this.doSet(index, value);
@@ -172,6 +172,6 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return this;
 	}
 	public IntArrayList setTop(int value) {
-		return this.set(this.getLength() - 1, value);
+		return this.set(this.size() - 1, value);
 	}
 }

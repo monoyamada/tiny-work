@@ -10,7 +10,7 @@ public class Tupple2<Value0, Value1> extends AbArray<Object> {
 		this.value1 = value1;
 	}
 	@Override
-	public int getLength() {
+	public int size() {
 		return 2;
 	}
 	@Override

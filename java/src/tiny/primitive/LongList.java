@@ -17,7 +17,7 @@ public interface LongList extends LongArray {
 			return this;
 		}
 		@Override
-		public int getLength() {
+		public int size() {
 			return 0;
 		}
 		@Override

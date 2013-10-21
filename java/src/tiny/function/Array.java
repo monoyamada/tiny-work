@@ -24,7 +24,7 @@ public interface Array<Value> extends Iterable<Value> {
 		}
 		@Override
 		public boolean hasNext() {
-			return this.index < this.container.getLength();
+			return this.index < this.container.size();
 		}
 		@Override
 		public Value next() {
@@ -32,6 +32,6 @@ public interface Array<Value> extends Iterable<Value> {
 		}
 	}
 	
-	public int getLength();
+	public int size();
 	public Value getValue(int index);
 }

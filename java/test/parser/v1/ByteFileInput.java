@@ -119,7 +119,7 @@ public class ByteFileInput implements ByteInput {
 	@Override
 	public ByteFileInput popMark() {
 		LongArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			String msg = "there is not stored position";
 			throw new NoSuchElementException(msg);
 		}
@@ -129,7 +129,7 @@ public class ByteFileInput implements ByteInput {
 	@Override
 	public ByteFileInput setMark() {
 		LongArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			String msg = "there is not stored position";
 			throw new NoSuchElementException(msg);
 		}
@@ -139,7 +139,7 @@ public class ByteFileInput implements ByteInput {
 	@Override
 	public ByteFileInput goMark() {
 		LongArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			String msg = "there is not stored position";
 			throw new NoSuchElementException(msg);
 		}
@@ -149,12 +149,12 @@ public class ByteFileInput implements ByteInput {
 	@Override
 	public int getMarkSize() {
 		LongArrayList list = this.positions(false);
-		return list != null ? list.getLength() : 0;
+		return list != null ? list.size() : 0;
 	}
 	@Override
 	public long getMinMark() {
 		LongArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			return ByteInput.NO_MARK;
 		}
 		return list.get(0);
@@ -162,7 +162,7 @@ public class ByteFileInput implements ByteInput {
 	@Override
 	public long getMaxMark() {
 		LongArrayList list = this.positions(false);
-		if (list == null || list.getLength() < 1) {
+		if (list == null || list.size() < 1) {
 			return ByteInput.NO_MARK;
 		}
 		return list.top(ByteInput.NO_MARK);

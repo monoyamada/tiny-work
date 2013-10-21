@@ -35,7 +35,7 @@ public class ByteArrayList extends AbByteList implements ByteStack {
 		this.array = array;
 	}
 	@Override
-	public int getLength() {
+	public int size() {
 		return this.size;
 	}
 	protected void setSize(int size) {
@@ -94,7 +94,7 @@ public class ByteArrayList extends AbByteList implements ByteStack {
 		return Byte.valueOf(this.doGet(index));
 	}
 	public boolean isFull() {
-		return Integer.MAX_VALUE <= this.getLength();
+		return Integer.MAX_VALUE <= this.size();
 	}
 	public ByteArrayList push(byte value) {
 		return (ByteArrayList) this.addLast(value);
@@ -162,8 +162,8 @@ public class ByteArrayList extends AbByteList implements ByteStack {
 		return value != null ? this.isTop(value.byteValue()) : false;
 	}
 	public ByteArrayList set(int index, byte value) {
-		if (index < 0 || this.getLength() <= index) {
-			String msg = Messages.getIndexOutOfRange(0, index, this.getLength());
+		if (index < 0 || this.size() <= index) {
+			String msg = Messages.getIndexOutOfRange(0, index, this.size());
 			throw new IndexOutOfBoundsException(msg);
 		}
 		return this.doSet(index, value);
@@ -173,6 +173,6 @@ public class ByteArrayList extends AbByteList implements ByteStack {
 		return this;
 	}
 	public ByteArrayList setTop(byte value) {
-		return this.set(this.getLength() - 1, value);
+		return this.set(this.size() - 1, value);
 	}
 }

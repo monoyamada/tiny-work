@@ -69,7 +69,7 @@ public class RecursionTest extends TestCase {
 				if (n == 2) {
 					sort2(array, begin);
 				}
-				while (0 < left.getLength()) {
+				while (0 < left.size()) {
 					long code = left.getLast(0);
 					if (code < 0) {
 						code = encode(begin, end);

@@ -17,7 +17,9 @@
 \newcommand{\grow}{{\op{grow}}}
 \newcommand{\code}{{\op{code}}}
 \newcommand{\sumw}{{\op{sum}}}
+\newcommand{\sym}{{\op{sym}}}
 \newcommand{\word}[1]{{|\!\lfloor{#1}\rfloor\!|}}
+\newcommand{\sword}[1]{{\{\!\lfloor{#1}\rfloor\!\}}}
 \newcommand{\hf}{{\what{f}}}
 {\setlength\arraycolsep{2pt}
 %
@@ -52,9 +54,9 @@
 \subsection{q-微分方程式}\label{s2:q-微分方程式} %{
 	$\plr{f\bou x}\in R_q\bblr{x}$とし、$x_t\in R_q\bblr{t,x}$を次の
 	微分方程式の解とする。
-	\begin{equation*}\begin{split}
+	\begin{equation}\label{eq:微分方程式そのゼロ}\begin{split}
 		x_t = x + \qI_t\plr{f\bou x_t}
-	\end{split}\end{equation*}
+	\end{split}\end{equation}
 	$y_t := \plr{f\bou x_t}$とおくと、$x_t = x + \qI_ty_t$となり、
 	$y_t$は次のように書ける。
 	\begin{equation}\label{eq:微分方程式その一}\begin{split}
@@ -77,9 +79,9 @@
 		\grow_\sizen m_0 &:= m_0\plr{\grow_\sizen\otimes1 + q^{\opN_\sizen}\otimes\grow_\sizen}
 	\end{split}\end{equation*}
 	そして、$Y_t\in R_q\sizen^+\bblr{t}$を次のように定義すると、
-	\begin{equation*}\begin{split}
+	\begin{equation}\label{eq:Y_tの定義}\begin{split}
 		Y_t := \plr{t\,\grow_\sizen}^*\word{0}
-	\end{split}\end{equation*}
+	\end{split}\end{equation}
 	$Y_t$は次のように書ける。
 	\begin{equation}\label{eq:木の成長その一}\begin{split}
 		Y_t &= \sum_{n\in\sizen}\plr{\hqI_t Y_t}^n\word{n}
@@ -87,7 +89,7 @@
 	ここで、$\hqI_t$は多重積分を表すとする。
 	\begin{equation*}\begin{split}
 		\plr{\hqI_t Y_t}^n
-		:= \underbrace{\qI_t Y_t\cdots\qI_t Y_t}_{n \text{times}}
+		:= \underbrace{\qI_t Y_t\cdots\qI_t Y_t}_{n\text{ times}}
 	\end{split}\end{equation*}
 	\begin{proof} %{
 		節\ref{s2:Leibniz則とKleeneスター}を使う。
@@ -151,31 +153,32 @@
 	\end{split}\end{equation*}
 
 	一般の$q$に戻って、任意の$\plr{g\bou x}\in R_q\bblr{x}$に対して、
-	代数射$g^x:R_q\sizen^+\to R_q\bblr{x}$を次のように定義すると、
+	代数射$(g)_x:R_q\sizen^+\to R_q\bblr{x}$を次のように定義すると、
 	\begin{equation*}\begin{split}
-		g^x\word{n} := \frac{\q{n}!}{n!}\plr{\partial^ng\bou x}
+		(g)_x\word{n} := \frac{\q{n}!}{n!}\plr{\partial^ng\bou x}
 		\quad\text{for all } n\in\sizen
 	\end{split}\end{equation*}
 	次の式が成り立つ。
 	\begin{equation*}\begin{split}
-		f^xY_t = \sum_{n\in\sizen}\frac{\q{n}!\plr{\hqI_tf^xY_t}^n}{n!}
+		(f)_xY_t = \sum_{n\in\sizen}\frac{\q{n}!\plr{\hqI_t(f)_xY_t}^n}{n!}
 			\plr{\partial^nf\bou x}
 	\end{split}\end{equation*}
 	そして、$q=0$と$q=1$の時に限り、多重積分を次のように書き換えることができる。
 	\begin{equation*}\begin{split}
-		f^xY_t = \sum_{n\in\sizen}\frac{\plr{\qI_tf^xY_t}^n}{n!}
+		(f)_xY_t = \sum_{n\in\sizen}\frac{\plr{\qI_t(f)_xY_t}^n}{n!}
 			\plr{\partial^nf\bou x}
-		= \plr{f\bou x + \qI_tf^xY_t}
-		\quad\text{at } q = 0 \text{ or } q = 1
+		= \plr{f\bou x + \qI_t(f)_xY_t} \quad\text{at } \left\{\begin{split}
+				q &= 0 \\ q &= 1
+			\end{split}\right.
 	\end{split}\end{equation*}
 	この式は\eqref{eq:微分方程式その一}に等しい。このことを命題の形にまとめて
 	おく。
 
 	\begin{proposition}[微分方程式と二分木]\label{prop:微分方程式と二分木} %{
 		任意の$\plr{f\bou x}\in R_q\bblr{x}$に対して、
-		代数射$f^x:R_q\sizen^+\to R_q\bblr{x}$を次のように定義し、
+		代数射$(f)_x:R_q\sizen^+\to R_q\bblr{x}$を次のように定義し、
 		\begin{equation*}\begin{split}
-			f^x\word{n} := \frac{\q{n}!}{n!}\plr{\partial^nf\bou x}
+			(f)_x\word{n} := \frac{\q{n}!}{n!}\plr{\partial^nf\bou x}
 			\quad\text{for all } n\in\sizen
 		\end{split}\end{equation*}
 		$Y_t\in R_q\sizen^+\bblr{t}$を次のように定義すると、
@@ -184,13 +187,92 @@
 		\end{split}\end{equation*}
 		$q=0$または$q=1$の時、次の微分方程式が成り立つ。
 		\begin{equation*}\begin{split}
-			f^xY_t = \plr{f\bou x + \qI_tf^xY_t} 
-			\quad\text{at } q = 0 \text{ or } q = 1
+			(f)_xY_t = \plr{f\bou x + \qI_t(f)_xY_t} 
+			\quad\text{at } \left\{\begin{split}
+				q &= 0 \\ q &= 1
+			\end{split}\right.
 		\end{split}\end{equation*}
 	\end{proposition} %prop:微分方程式と二分木}
 	\begin{proof} %{
 		上記。
 	\end{proof} %}
+
+\begin{note}[保留]\label{note:保留} %{
+	\begin{itemize}\setlength{\itemsep}{-1mm} %{
+		\item 一般の$q$の場合の多重積分 \\
+		$R_q$上のテンソル積$\otimes$を考えると、一般には次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\hqI_tf\hqI_tg = \frac{1}{\q{N_t}}m_0\plrg{\q{N_t}\otimes1}\plrg{\qI_tf\otimes\qI_tg}
+			\quad\text{for all } f,g\in R_q\bblr{t}
+		\end{split}\end{equation*}
+		特に、次の式が成り立つ。
+		\begin{equation*}\begin{split}
+			\hqI_tf\hqI_tf = \frac{1}{2\q{N_t}}m_0
+				\plrg{\q{N_t}\otimes1 + 1\otimes\q{N_t}}\plrg{\qI_tf\otimes\qI_tf}
+			\quad\text{for all } f\in R_q\bblr{t}
+		\end{split}\end{equation*}
+		%
+		\item 計算の高速化 \\
+		最終的には体へ写像してしまうので、非可換な文字列のまま計算するより、
+		可換な文字列を計算した方が効率的になる。
+		次の可換図を満たす?があれば都合が良いのだが、多分ないだろう\footnote{
+			$q=1$の時は通常の微分$\sword{n}^{k+1}\mapsto(k+1)\sword{n}^k\sword{n+1}$
+			が？になるが、一般の$q$ではわからない。
+		}。
+		\begin{equation*}\begin{split}
+			\xymatrix{
+				R_q\dlr{\sizen} \ar[d]^{\grow_\sizen} \ar[r]^\sym 
+				& R_q\blr{\sizen} \ar@{.>}[d]^? \\
+				R_q\dlr{\sizen} \ar[r]^\sym & R\blr{\sizen} \\
+			}
+		\end{split}\end{equation*}
+	\end{itemize} %}
+\end{note} %note:保留}
+\begin{landscape}
+	\begin{note}[符号の計算]\label{note:符号の計算} %{
+		命題\ref{prop:微分方程式と二分木}を使って微分方程式
+		\ref{eq:微分方程式そのゼロ}の解を書いてみる。
+		$Y_n:=\grow_\sizen^n\word{0}$とおき、$4$次まで計算すると次のようになる。
+		\begin{equation}\label{eq:符号の計算}\begin{split}
+			Y_0 &= \word{0} \\
+			Y_1 &= \word{0}\word{1} \\
+			Y_2 &= \word{0}\word{1}^2 + \word{0}^2\word{2} \\
+			Y_3 &= \word{0}\word{1}^3 + (3 + q)\word{0}^2\word{1}\word{2} 
+				+ \word{0}^3\word{3}\\
+			Y_4 &= \word{0}\word{1}^4 + (6 + 3q + 2q^2)\word{0}^2\word{1}^2\word{2}
+				+ (2 + q + q^2)\word{0}^3\word{2}^2
+				+ (4 + 2q + q^2)\word{0}^3\word{1}\word{3} + \word{0}^4\word{4}		
+		\end{split}\end{equation}
+		微分方程式\ref{eq:微分方程式そのゼロ}の解を
+		$x_t = \sum_{n\in\sizen}\frac{t^n}{\q{n}!} x_n$とTaylor展開すると、
+		$x_{n+1} = f^xY_n$となる。そして、$(f\bou x)=x^2$とすると、
+		任意の$n\in\sizen$に対して$(\partial^nf\bou x)$は$\sizen$係数となる。
+		初期値$x=1$として$7$次まで計算した結果は次のようになる。
+		\begin{equation*}\begin{split}
+			x_1 &= 1 \\
+			x_2 &= 2 \\
+			x_3 &= 5 + q \\
+			x_4 &= 14 + 8q + 2q^2 \\
+			x_5 &= 42 + 41q + 25q^2 + 11q^3 + q^4 \\
+			x_6 &= 132 + 184q + 164q^2 + 132q^3 + 76q^4 + 28q^5 + 4q^6 \\
+			x_7 &= 429 + 780q + 893q^2 + 923q^3 + 830q^4 + 606q^5 + 351q^6
+				+ 173q^7 + 49q^8 + 6q^9 \\
+			x_8 &= 1430 + 3212q + 4450q^2 + 5422q^3 + 5962q^4 + 5838q^5 
+				+ 5034q^6 + 3840q^7 + 2558q^8 + 1526q^9 + 736q^{10} + 254q^{11} 
+				+ 54q^12 + 4q^{13}
+		\end{split}\end{equation*}
+		$x_n$は$q=0$でCatalan数$C_n$、$q=1$で階乗$n!$になっていることがわかる。
+		図\ref{fig:q-Catalan係数の分布}は、$x_{10}$まで計算して、
+		横軸に$n$縦軸に$q^n$の係数をプロットしている。\EOP
+	\end{note} %note:符号の計算}
+\end{landscape}
+
+	\begin{figure}[htbp] %{
+		\begin{center}
+			\includegraphics[width=100mm]{fig/x-10.png}
+		\end{center}
+		\caption{q-Catalan係数の分布}\label{fig:q-Catalan係数の分布}
+	\end{figure} %}
 %s2:q-微分方程式}
 \subsection{Leibniz則とKleeneスター}\label{s2:Leibniz則とKleeneスター} %{
 	$R$を可換環、$V=(V,\mu)$を$R_q$上の代数とする。
