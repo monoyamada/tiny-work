@@ -96,9 +96,60 @@ public class IntWordTest extends TestBase {
 			}
 			return output;
 		}
-		public Appendable toDerivative(Appendable output, String name) {
-			// TODO Auto-generated method stub
-			
+		public Appendable toDerivativeTex(Appendable output, String name)
+				throws IOException {
+			int[] word = this.word;
+			if (this.coef == 0) {
+				return output.append("0");
+			} else if (this.coef == 1) {
+				if (isAll(word, 0)) {
+					output.append("1");
+				}
+			} else if (this.coef == -1) {
+				if (isAll(word, 0)) {
+					output.append("-1");
+				} else {
+					output.append('-');
+				}
+			} else {
+				output.append(Long.toString(this.coef));
+			}
+			for (int i = 0, n = word.length; i < n; ++i) {
+				int k = word[i];
+				if (k == 0) {
+					continue;
+				}
+				switch (i) {
+				case 0:
+					output.append(name);
+					if (k != 1) {
+						output.append("^").append(Integer.toString(k));
+					}
+				break;
+				case 1:
+					output.append("(\\partial ").append(name).append(')');
+					if (k != 1) {
+						output.append("^").append(Integer.toString(k));
+					}
+				break;
+				default:
+					output.append("(\\partial^").append(Integer.toString(i)).append(' ')
+							.append(name).append(')');
+					if (k != 1) {
+						output.append("^").append(Integer.toString(k));
+					}
+				break;
+				}
+			}
+			return output;
+		}
+		private static boolean isAll(int[] word, int value) {
+			for (int n = word.length; 0 < n--;) {
+				if (word[n] != value) {
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 
@@ -361,10 +412,45 @@ public class IntWordTest extends TestBase {
 		// dumpPrimaryWiki(codeSet);
 		dumpPrimary(codeSet);
 		// dumpShiftedCatalan (codeSet);
-		dumpLagrange(codeSet);
+		// dumpLagrangeTex(codeSet);
+		dumpLagrangeTex_1(codeSet);
 	}
 
-	private static void dumpLagrange(CodeSet codeSet) throws IOException {
+	private static void dumpLagrangeTex_1(CodeSet codeSet) throws IOException {
+		Writer writer = new PrintWriter(System.out);
+		Code[][] primary = codeSet.primary;
+		int degree = primary.length - 1;
+		if (10 < degree) {
+			return;
+		}
+		long fac = 1;
+		for (int deg = 0; deg <= degree; ++deg) {
+			if (deg != 0) {
+				fac *= deg;
+			}
+			Code[][] codeList = codeSet.secondary[deg];
+			for (int k = 0; k <= deg; ++k) {
+				Code[] codes = codeList[k];
+				if (codes == null) {
+					continue;
+				}
+				Lagrange.toDerivs(codes = codes.clone(), fac * (deg + 1));
+				Arrays.sort(codes);
+				writer.append((deg + 1) + "!\\hat{f}_xD_{" + deg + "," + k + "} &= ");
+				for (int i = 0, n = codes.length; i < n; ++i) {
+					CmCode code = (CmCode) codes[i];
+					if (i != 0) {
+						writer.append(" + ");
+					}
+					code.toDerivativeTex(writer, "f");
+				}
+				writer.append("　\\\\\n").flush();
+			}
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private static void dumpLagrangeTex(CodeSet codeSet) throws IOException {
 		Writer writer = new PrintWriter(System.out);
 		Code[][] primary = codeSet.primary;
 		int degree = primary.length - 1;
@@ -379,27 +465,27 @@ public class IntWordTest extends TestBase {
 			Code[] codes = codeSet.primary[deg].clone();
 			Lagrange.toDerivs(codes, fac * (deg + 1));
 			Arrays.sort(codes);
-			writer.append((deg + 1) + "!\\hat{f}_xD_" + deg + " = ");
+			writer.append((deg + 1) + "!\\hat{f}_xD_" + deg + " &= ");
 			for (int i = 0, n = codes.length; i < n; ++i) {
 				CmCode code = (CmCode) codes[i];
 				if (i != 0) {
 					writer.append(" + ");
 				}
-				code.toDerivative(writer, "f");
+				code.toDerivativeTex(writer, "f");
 			}
-			writer.append("\n").flush();
+			writer.append("　\\\\\n").flush();
 
 			CmCode[] xs = Lagrange.derivs(deg);
 			Arrays.sort(xs);
-			writer.append("\\partial^" + deg + "f^" + (deg + 1) + " = ");
+			writer.append("\\partial^" + deg + "f^" + (deg + 1) + " &= ");
 			for (int i = 0, n = codes.length; i < n; ++i) {
 				CmCode code = xs[i];
 				if (i != 0) {
 					writer.append(" + ");
 				}
-				code.toDerivative(writer, "f");
+				code.toDerivativeTex(writer, "f");
 			}
-			writer.append("\n").flush();
+			writer.append("　\\\\\n").flush();
 		}
 	}
 

@@ -1,0 +1,13 @@
+class AdvancedUserRecipe1383056230(BasicNewsRecipe):
+	title = u'arxiv'
+	oldest_article = 7
+	max_articles_per_feed = 100
+	auto_cleanup = True
+	no_stylesheets = True
+	use_embedded_content = True
+	feeds = [
+		(u'Combinatorics', u'http://arxiv.org/rss/math.CO')
+		, (u'Representation Theory', u'http://arxiv.org/rss/math.RT')
+		, (u'Computation and Language', u'http://arxiv.org/rss/cs.CL')
+		, (u'Computer Vision and Pattern Recognition', u'http://arxiv.org/rss/cs.CV')
+	]
