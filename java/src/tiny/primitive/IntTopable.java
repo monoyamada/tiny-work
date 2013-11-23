@@ -1,8 +1,6 @@
 package tiny.primitive;
 
-import tiny.function.Topable;
-
-public interface IntTopable extends Topable<Number> {
-	int top(int def);
+public interface IntTopable {
+	int top(int none);
 	boolean isTop(int value);
 }

@@ -340,7 +340,8 @@ public class SimpleTest extends TestCase {
 			} else if (stack.top(END_OF_INPUT) != value) {
 				return false;
 			}
-			return stack.pop();
+			stack.removeLast();
+			return true;
 		}
 		static String getString(ByteArrayList list)
 				throws UnsupportedEncodingException {

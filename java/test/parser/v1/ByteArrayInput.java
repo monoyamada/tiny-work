@@ -72,7 +72,7 @@ public class ByteArrayInput implements ByteInput {
 			throw new NoSuchElementException(msg);
 		}
 		this.position = list.top(this.position);
-		list.pop();
+		list.removeLast();
 		return this;
 	}
 	@Override

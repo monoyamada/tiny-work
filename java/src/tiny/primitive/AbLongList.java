@@ -43,6 +43,12 @@ public abstract class AbLongList extends AbLongArray implements LongList {
 		}
 		return this.doRemove(this.size() - 1);
 	}
+	public AbLongList addLastAll(long[] values) {
+		for (int i = 0, n = values != null ? values.length : 0; i < n; ++i) {
+			this.addLast(values[i]);
+		}
+		return this;
+	}
 	protected abstract AbLongList doAdd(int index, long value);
 	protected abstract AbLongList doRemove(int index);
 }

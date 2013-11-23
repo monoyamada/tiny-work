@@ -77,7 +77,7 @@ public class Parser_1 extends TextParser {
 		if (stack.isEmpty()) {
 			return false;
 		} else if (stack.isTop(mark)) {
-			stack.pop();
+			stack.removeLast();
 			return true;
 		}
 		return false;

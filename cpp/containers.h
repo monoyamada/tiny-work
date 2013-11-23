@@ -3,6 +3,7 @@
 
 #include "debug.h"
 #include "common.h"
+#include <stdlib.h>
 #include <sstream>
 #include <cstring>
 
@@ -38,6 +39,9 @@ namespace fatvm {
 		const value_type& operator[] (size_t index) const {
 			return *(this->_array + index);
 		}
+		/**
+		 * abbreviation of {@link #get(size_t)}
+		 */
 		const value_type& at (size_t index) const throw (fatvm_error) {
 			return this->get (index);
 		}
@@ -140,6 +144,9 @@ namespace fatvm {
 		const value_type& operator[] (size_t index) const {
 			return *(this->_array + index);
 		}
+		/**
+		 * abbreviation of {@link #get(size_t)}
+		 */
 		const value_type& at (size_t index) const throw (fatvm_error) {
 			return this->get (index);
 		}

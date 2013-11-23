@@ -61,6 +61,9 @@ public abstract class AbIntArray extends AbArray<Number> implements IntArray {
 		}
 		return -1;
 	}
+	public boolean contains(int value) {
+		return 0 <= this.getFirstIndex(value);
+	}
 	@Override
 	protected Number doGetValue(int index) {
 		return Integer.valueOf(this.doGet(index));

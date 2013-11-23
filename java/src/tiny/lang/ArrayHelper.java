@@ -262,6 +262,28 @@ public class ArrayHelper {
 		System.arraycopy(array, begin, newArray, 0, n);
 		return newArray;
 	}
+	public static short[] sub(short[] array, int begin, int end) {
+		final int n = end - begin;
+		if (n < 1) {
+			return ArrayHelper.EMPTY_SHORT_ARRAY;
+		} else if (n == array.length) {
+			return array.clone();
+		}
+		final short[] newArray = new short[n];
+		System.arraycopy(array, begin, newArray, 0, n);
+		return newArray;
+	}
+	public static byte[] sub(byte[] array, int begin, int end) {
+		final int n = end - begin;
+		if (n < 1) {
+			return ArrayHelper.EMPTY_BYTE_ARRAY;
+		} else if (n == array.length) {
+			return array.clone();
+		}
+		final byte[] newArray = new byte[n];
+		System.arraycopy(array, begin, newArray, 0, n);
+		return newArray;
+	}
 	@SuppressWarnings("unchecked")
 	public static <T> T[] sub(T[] array, int begin, int end) {
 		final int n = end - begin;
@@ -274,50 +296,86 @@ public class ArrayHelper {
 		return newArray;
 	}
 
-	public static void swap(Object[] array, int i, int k) {
-		final Object tmp = array[k];
+	public static<T> T[] swap(T[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
+		final T tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(long[] array, int i, int k) {
+	public static long[] swap(long[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final long tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(int[] array, int i, int k) {
+	public static int[] swap(int[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final int tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(short[] array, int i, int k) {
+	public static short[] swap(short[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final short tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(char[] array, int i, int k) {
+	public static char[] swap(char[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final char tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(byte[] array, int i, int k) {
+	public static byte[] swap(byte[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final byte tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(boolean[] array, int i, int k) {
+	public static boolean[] swap(boolean[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final boolean tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(double[] array, int i, int k) {
+	public static double[] swap(double[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final double tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
-	public static void swap(float[] array, int i, int k) {
+	public static float[] swap(float[] array, int i, int k) {
+		if (i == k) {
+			return array;
+		}
 		final float tmp = array[k];
 		array[k] = array[i];
 		array[i] = tmp;
+		return array;
 	}
 
 	public static void reverse(Object[] array) {

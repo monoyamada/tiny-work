@@ -26,13 +26,6 @@ public class IntArrayList extends AbIntList implements IntStack {
 	public int[] getArray() {
 		return this.array;
 	}
-	/**
-	 * @param array
-	 *          the array to set
-	 */
-	protected void setArray(int[] array) {
-		this.array = array;
-	}
 	@Override
 	public int size() {
 		return this.size;
@@ -56,32 +49,53 @@ public class IntArrayList extends AbIntList implements IntStack {
 		this.size += 1;
 		return this;
 	}
-	public void ensureCapacity(int size) {
+	public IntArrayList ensureCapacity(int size) {
 		int[] array = this.array;
-		if (array.length <= size) {
-			int capacity = (size * 3) / 2 + 1;
-			if (capacity < size) {
-				capacity = size;
-			}
-			if (capacity < size + 1) {
-				capacity = size + 1;
-			}
-			if (capacity < 4) {
-				capacity = 4;
-			}
-			array = ArrayHelper.ensureSize(array, capacity);
-			this.setArray(array);
+		if (size < array.length) {
+			return this;
 		}
+		int capacity = (size * 3) / 2 + 1;
+		if (capacity < size) {
+			capacity = size;
+		}
+		if (capacity < size + 1) {
+			capacity = size + 1;
+		}
+		if (capacity < 4) {
+			capacity = 4;
+		}
+		array = ArrayHelper.ensureSize(array, capacity);
+		this.array = array;
+		return this;
+	}
+	@Override
+	public IntArrayList removeLast() {
+		return this.removeLast(1);
+	}
+	public IntArrayList removeLast(int size) {
+		if (size < 0 || this.size < size) {
+			String msg = Messages.getIndexOutOfRange(0, size, this.size);
+			throw new IndexOutOfBoundsException(msg);
+		}
+		return this.doRemoveLast(size);
 	}
 	@Override
 	protected IntArrayList doRemove(int index) {
 		final int size = this.size;
-		if (index + 1 < size) {
-			final int[] array = this.array;
-			System.arraycopy(array, index + 1, array, index, size - index - 1);
+		if (index + 1 == size) {
+			return this.doRemoveLast(1);
 		}
+		final int[] array = this.array;
+		System.arraycopy(array, index + 1, array, index, size - index - 1);
 		this.size -= 1;
 		return this;
+	}
+	protected IntArrayList doRemoveLast(int size) {
+		this.size -= size;
+		return this;
+	}
+	public IntArrayList clear() {
+		return this.removeAll();
 	}
 	@Override
 	public IntArrayList removeAll() {
@@ -92,14 +106,23 @@ public class IntArrayList extends AbIntList implements IntStack {
 	protected Number doGetValue(int index) {
 		return Integer.valueOf(this.doGet(index));
 	}
+	@Override
 	public boolean isFull() {
 		return Integer.MAX_VALUE <= this.size();
 	}
+	@Override
 	public IntArrayList push(int value) {
 		return (IntArrayList) this.addLast(value);
 	}
-	public IntArrayList pushValue(Number value) {
-		return this.push(value.intValue());
+	@Override
+	public IntArrayList addLastAll(int[] values) {
+		if (values == null) {
+			return this;
+		}
+		this.ensureCapacity(this.size + values.length);
+		System.arraycopy(values, 0, this.size, this.size, values.length);
+		this.size += values.length;
+		return this;
 	}
 	@Override
 	public int toArray(int[] output) {
@@ -124,13 +147,12 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return this.size < 1;
 	}
 	@Override
-	public boolean pop() {
-		int n = this.size;
-		if (n < 1) {
-			return false;
+	public int pop(int none) {
+		if (0 < this.size) {
+			none = this.doGet(this.size - 1);
+			this.doRemoveLast(1);
 		}
-		this.remove(n - 1);
-		return true;
+		return none;
 	}
 	@Override
 	public int top(int def) {
@@ -141,24 +163,12 @@ public class IntArrayList extends AbIntList implements IntStack {
 		return this.doGet(n - 1);
 	}
 	@Override
-	public Number topValue(Number def) {
-		int n = this.size;
-		if (n < 1) {
-			return def;
-		}
-		return this.doGetValue(n - 1);
-	}
-	@Override
 	public boolean isTop(int value) {
 		int n = this.size;
 		if (n < 1) {
 			return false;
 		}
 		return this.doGet(n - 1) == value;
-	}
-	@Override
-	public boolean isTopValue(Number value) {
-		return value != null ? this.isTop(value.byteValue()) : false;
 	}
 	public IntArrayList set(int index, int value) {
 		if (index < 0 || this.size() <= index) {

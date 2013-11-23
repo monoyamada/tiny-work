@@ -107,7 +107,7 @@ public class SimpleTest_3 extends TestCase {
 				String msg = "there is not stored position";
 				throw new NoSuchElementException(msg);
 			}
-			list.pop();
+			list.removeLast();
 			return this;
 		}
 		@Override

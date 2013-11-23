@@ -307,7 +307,7 @@ public class ParserTest_2 extends TestCase {
 						} else if (stack.top(-1) != MARK_OPEN) {
 							throw ParserException.mismatchMark(row, col, ch, MARK_OPEN);
 						}
-						stack.pop();
+						stack.removeLast();
 						tokens.add(Token.RPAREN);
 						state = U_1;
 					} else {
@@ -343,11 +343,11 @@ public class ParserTest_2 extends TestCase {
 				break;
 				case U_1:
 					while (stack.top(-1) == MARK_PREFIX_OUTER) {
-						stack.pop();
+						stack.removeLast();
 					}
 					if (ch == CH_EOF) {
 						if (stack.top(-1) == MARK_BINARY) {
-							stack.pop();
+							stack.removeLast();
 							state = B_1;
 							next = false;
 						} else {
@@ -368,11 +368,11 @@ public class ParserTest_2 extends TestCase {
 							throw ParserException.mismatchMark(row, col, stack.top(-1),
 									MARK_BINARY);
 						}
-						stack.pop();
+						stack.removeLast();
 						if (stack.top(-1) != MARK_OPEN) {
 							throw ParserException.mismatchMark(row, col, ch, MARK_OPEN);
 						}
-						stack.pop();
+						stack.removeLast();
 						tokens.add(Token.RPAREN);
 						state = state;
 					} else if (Parser_1.isOperatorFirst(ch)) {
@@ -381,7 +381,7 @@ public class ParserTest_2 extends TestCase {
 						} else if (stack.top(-1) != MARK_BINARY) {
 							throw ParserException.mismatchMark(row, col, ch, MARK_BINARY);
 						}
-						stack.pop();
+						stack.removeLast();
 						buffer.setLength(0);
 						buffer.append((char) ch);
 						stack.push(MARK_INFIX);
@@ -409,12 +409,12 @@ public class ParserTest_2 extends TestCase {
 						throw ParserException.mismatchMark(row, col, ch, MARK_PREFIX_INNER,
 								MARK_INFIX);
 					} else if (stack.top(-1) == MARK_PREFIX_INNER) {
-						stack.pop();
+						stack.removeLast();
 						tokens.add(Token.newPrefix(buffer.toString()));
 						state = U_0;
 						next = false;
 					} else if (stack.top(-1) == MARK_INFIX) {
-						stack.pop();
+						stack.removeLast();
 						tokens.add(Token.newInfix(buffer.toString()));
 						state = B_0;
 						next = false;

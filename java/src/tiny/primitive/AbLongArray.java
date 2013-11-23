@@ -61,6 +61,9 @@ public abstract class AbLongArray extends AbArray<Number> implements LongArray {
 		}
 		return -1;
 	}
+	public boolean contains(long value) {
+		return 0 <= this.getFirstIndex(value);
+	}
 	@Override
 	protected Number doGetValue(int index) {
 		return Long.valueOf(this.doGet(index));

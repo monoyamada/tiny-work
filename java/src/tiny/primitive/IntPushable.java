@@ -1,7 +1,6 @@
 package tiny.primitive;
 
-import tiny.function.Pushable;
-
-public interface IntPushable extends Pushable<Number> {
-	public Pushable<Number> push(int value);
+public interface IntPushable {
+	public boolean isFull ();
+	public IntPushable push(int value);
 }

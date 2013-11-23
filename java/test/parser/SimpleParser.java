@@ -205,7 +205,7 @@ public class SimpleParser {
 		if (stack.isEmpty()) {
 			return false;
 		} else if (stack.isTop(mark)) {
-			stack.pop();
+			stack.removeLast();
 			return true;
 		}
 		return false;

@@ -10,10 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import parser.v3.IntWordTest.CmCode;
-import parser.v3.IntWordTest.Code;
-
-import tiny.function.Function;
 import tiny.lang.ArrayHelper;
 import tiny.lang.Debug;
 import tiny.lang.NumberHelper;

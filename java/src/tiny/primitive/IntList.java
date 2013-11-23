@@ -1,6 +1,6 @@
 package tiny.primitive;
 
-public interface IntList extends IntArray {
+public interface IntList extends IntStack, IntArray {
 	public static final IntList EMPTY_LIST = new EmptyIntList();
 
 	public IntList add(int index, int value);
@@ -12,6 +12,18 @@ public interface IntList extends IntArray {
 	public IntList removeAll();
 
 	static class EmptyIntList extends AbIntList {
+		@Override
+		public AbIntList push(int value) {
+			return this.addLast(value);
+		}
+		@Override
+		public int pop(int none) {
+			if (0 < this.size()) {
+				none = this.getLast(none);
+				this.removeLast();
+			}
+			return none;
+		}
 		@Override
 		public IntList removeAll() {
 			return this;
@@ -31,6 +43,22 @@ public interface IntList extends IntArray {
 		@Override
 		protected int doGet(int index) {
 			throw new IndexOutOfBoundsException("empty but " + index);
+		}
+		@Override
+		public boolean isFull() {
+			return true;
+		}
+		@Override
+		public boolean isEmpty() {
+			return true;
+		}
+		@Override
+		public int top(int none) {
+			return none;
+		}
+		@Override
+		public boolean isTop(int value) {
+			return false;
 		}
 	}
 }

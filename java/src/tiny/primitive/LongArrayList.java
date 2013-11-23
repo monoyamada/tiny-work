@@ -27,13 +27,6 @@ public class LongArrayList extends AbLongList implements LongStack {
 	public long[] getArray() {
 		return this.array;
 	}
-	/**
-	 * @param array
-	 *          the array to set
-	 */
-	protected void setArray(long[] array) {
-		this.array = array;
-	}
 	@Override
 	public int size() {
 		return this.size;
@@ -58,22 +51,24 @@ public class LongArrayList extends AbLongList implements LongStack {
 		this.size += 1;
 		return this;
 	}
-	public void ensureCapacity(int size) {
+	public LongArrayList ensureCapacity(int size) {
 		long[] array = this.array;
-		if (array.length <= size) {
-			int capacity = (size * 3) / 2 + 1;
-			if (capacity < size) {
-				capacity = size;
-			}
-			if (capacity < size + 1) {
-				capacity = size + 1;
-			}
-			if (capacity < 4) {
-				capacity = 4;
-			}
-			array = ArrayHelper.ensureSize(array, capacity);
-			this.setArray(array);
+		if (size < array.length) {
+			return this;
 		}
+		int capacity = (size * 3) / 2 + 1;
+		if (capacity < size) {
+			capacity = size;
+		}
+		if (capacity < size + 1) {
+			capacity = size + 1;
+		}
+		if (capacity < 4) {
+			capacity = 4;
+		}
+		array = ArrayHelper.ensureSize(array, capacity);
+		this.array = array;
+		return this;
 	}
 	@Override
 	protected LongArrayList doRemove(int index) {
@@ -94,14 +89,27 @@ public class LongArrayList extends AbLongList implements LongStack {
 	protected Number doGetValue(int index) {
 		return Long.valueOf(this.doGet(index));
 	}
+	@Override
 	public boolean isFull() {
 		return Integer.MAX_VALUE <= this.size();
 	}
+	@Override
 	public LongArrayList push(long value) {
 		return (LongArrayList) this.addLast(value);
 	}
+	@Override
 	public LongArrayList pushValue(Number value) {
 		return this.push(value.longValue());
+	}
+	@Override
+	public LongArrayList addLastAll(long[] values) {
+		if (values == null) {
+			return this;
+		}
+		this.ensureCapacity(this.size + values.length);
+		System.arraycopy(values, 0, this.size, this.size, values.length);
+		this.size += values.length;
+		return this;
 	}
 	@Override
 	public int toArray(long[] output) {

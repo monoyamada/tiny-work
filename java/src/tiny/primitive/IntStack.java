@@ -1,6 +1,4 @@
 package tiny.primitive;
 
-import tiny.function.Popable;
-
-public interface IntStack extends IntPushable, Popable, IntTopable {
+public interface IntStack extends IntPushable, IntPopable, IntTopable {
 }

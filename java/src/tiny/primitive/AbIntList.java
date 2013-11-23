@@ -43,6 +43,12 @@ public abstract class AbIntList extends AbIntArray implements IntList {
 		}
 		return this.doRemove(this.size() - 1);
 	}
+	public AbIntList addLastAll(int[] values) {
+		for (int i = 0, n = values != null ? values.length : 0; i < n; ++i) {
+			this.addLast(values[i]);
+		}
+		return this;
+	}
 	protected abstract AbIntList doAdd(int index, int value);
 	protected abstract AbIntList doRemove(int index);
 }
