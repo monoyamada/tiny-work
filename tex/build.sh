@@ -20,6 +20,6 @@ platex $opts $1
 if [ $# -gt 1 ]; then
 	if [ $2 = "pdf" ]; then
 		dvipdfmx -o $out_dir/$1.pdf $out_dir/$1.dvi
-		scp -i ~/.ssh/id_rsa.netwalker output/note.pdf shirak@netwalker:Documents/share/.
+		#scp -i ~/.ssh/id_rsa.netwalker output/note.pdf shirak@netwalker:Documents/share/.
 	fi
 fi

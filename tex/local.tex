@@ -1,0 +1,66 @@
+\usepackage{amsmath,amssymb,amscd}
+\usepackage[obeyspaces]{url}
+\usepackage[all]{xy}
+% installed in the system by hand
+\usepackage{shuffle}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{sty/simplewick}
+\usepackage[enableskew]{sty/youngtab}
+\usepackage{sty/jumoline}
+\usepackage{sty/boxedminipage}
+\usepackage{stmaryrd}
+\usepackage{fancybox}
+\usepackage{lscape}
+%{
+\usepackage[dvipdfm,dvips]{color}
+\usepackage[dvipdfm,dvips]{graphicx}
+\usepackage[dvipdfm %
+  , hypertex %
+  , colorlinks=true %
+  , bookmarks=true %
+  , bookmarksnumbered=false %
+  , bookmarkstype=toc %
+  , pdfkeywords={TeX; dvipdfmx; hyperref; color;} %
+	]{hyperref}
+\ifnum 42146=\euc"A4A2
+  \AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}% platex-utf8 でも OK
+\else
+  \AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}}%"
+\fi
+\usepackage{verbatim}
+\usepackage{sty/myarrow}
+\usepackage{sty/mybraket}
+%}
+\usepackage[amsmath,hyperref]{sty/ntheorem}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{definition}{定義}[section]
+\newtheorem{proposition}{命題}[section]
+\newtheorem{procedure}{手続き}[section]
+\newtheorem{todo}{課題}[section]
+\newtheorem{note}{ノート}[section]
+\newtheorem{example}{例}[section]
+\newtheorem{observation}{観察}[section]
+\newtheorem{problem}{問題}[section]
+%
+\def\proof{\rm \trivlist \item[\hskip \labelsep{証明}] }
+\def\endproof{{\large$\Box$}\endtrivlist}
+%
+\newcommand{\bool}{\ensuremath{\mathbf{B}}}
+\newcommand{\sizen}{\ensuremath{\mathbf{N}}}
+\newcommand{\sei}{\ensuremath{\mathbf{Z}}}
+\newcommand{\jitu}{\ensuremath{\mathbf{R}}}
+\newcommand{\fukuso}{\ensuremath{\mathbf{C}}}
+\newcommand{\bun}{\ensuremath{\mathbf{Q}}}
+\newcommand{\is}[1]{{\mathinner{[\![#1]\!]}}}
+\newcommand{\op}[1]{{\mathinner{\operatorname{#1}}}}
+\newcommand{\id}{\op{id}}
+\newcommand{\dfn}{\op{def}}
+\newcommand{\onto}{\op{onto}}
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\bou}{\mathinner{|}}
+\newcommand{\xiff}[2][]{\xLongleftrightarrow[#1]{#2}}
+\newcommand{\ximplies}[2][]{\xRightarrow[#1]{#2}}
+\newcommand{\ximpliedby}[2][]{\xLeftarrow[#1]{#2}}
+\newcommand{\here}{{\ensuremath{\mathchar`-}}}
+\newcommand{\EOP}{\hspace{\fill}\P}
