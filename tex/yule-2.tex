@@ -1,0 +1,471 @@
+\section{消滅付きのYule過程}\label{s1:消滅付きのYule過程} %{
+
+\begin{todo}[パラメータの変更]\label{todo:パラメータの変更} %{
+	$p_\del$から$p_\dup$に変更する。
+\begin{procedure}\label{pro:消滅付きのYule過程その二}
+	任意の時刻$t\in\sizen_+$で、
+	\begin{enumerate} %{
+		\item 確率$p_\new(t)$で新規ジーナスを作り、そのジーナスに新規スピシーズ
+		を追加する。
+		\item 確率$p_\new(t)^c$で既存のスピシーズからランダムに一つ選びだし、
+		\begin{enumerate} %{
+			\item 確率$p_\dup(t)$で、そのスピシーズの属するジーナスに
+			新規スピシーズを追加し、
+			\item 確率$p_\dup(t)^c$で、そのスピシーズを削除する。
+		\end{enumerate} %}
+	\end{enumerate} %}
+	ここで、任意の確率$p$に対して$p^c:=1-p$と定義する。
+	\EOP
+\end{procedure}
+
+\end{todo} %todo:パラメータの変更}
+
+\begin{procedure}\label{pro:消滅付きのYule過程}
+	任意の時刻$t\in\sizen_+$で、
+	\begin{enumerate} %{
+		\item 確率$p_\del(t)$で既存のスピシーズからランダムに一つ選びだし、
+		そのスピシーズを削除する。
+		\item 確率$p_\del(t)^cp_\new(t)$で新規ジーナスを作り、そのジーナスに
+		新規スピシーズを追加する。
+		\item 確率$p_\del(t)^cp_\new(t)^c$で既存のスピシーズをランダムに選び、
+		そのスピシーズの属するジーナスに新規スピシーズを追加する。
+	\end{enumerate} %}
+	ここで、任意の確率$p$に対して$p^c:=1-p$と定義する。
+	\EOP
+\end{procedure}
+
+時刻$t$での関数$\nu_n(t),\;\nu(t),\;\mu(t)$を次のように定義する。
+\begin{itemize} %{
+	\item 任意の$n\in\sizen$に対して$\nu_n(t)$をスピシーズを$n$個持つジーナス
+	の数とする。
+	\item $\nu(t)$をジーナスの総数とする。任意の時刻$t$で
+	$\nu(t)=\sum_{n\in\sizen}\nu_n(t)$が成り立つ。
+	\item $\mu(t)$をスピシーズの総数とする。任意の時刻$t$で
+	$\mu(t)=\sum_{n\in\sizen}n\nu_n(t)$が成り立つ。
+\end{itemize} %}
+
+保持するスピシーズの数をジーナスの状態とみなすと、ジーナスの状態変化は
+次の状態遷移図で表すことができる。
+\begin{equation*}\xymatrix@C=12ex{
+	& \ar[d]_{p_\del^cp_\new} \\
+	0
+	& 1 \ar[r]^{p_\del^cp_\new^c\cfrac{1}{\mu}} 
+		\ar@<1ex>[l]^{p_\del\cfrac{1}{\mu}}
+	& 2 \ar[r]^{p_\del^cp_\new^c\cfrac{2}{\mu}} 
+		\ar@<1ex>[l]^{p_\del\cfrac{2}{\mu}} 
+	& 3 \ar[r]^{p_\del^cp_\new^c\cfrac{3}{\mu}} 
+		\ar@<1ex>[l]^{p_\del\cfrac{3}{\mu}} 
+	& \cdots \ar@<1ex>[l]^{p_\del\cfrac{4}{\mu}}
+}\end{equation*}
+$\nu_n(t)$は次の漸化式を満たす。
+\begin{equation}\label{eq:delta-nud}\begin{split}
+	\delta\nu_0(t+1) &= p_\del(t)\cfrac{1}{\mu(t)}\nu_1(t) \\
+	\delta\nu_1(t+1) &= p_\new(t)
+	- \plrgg{p_\del(t) + q(t)}\cfrac{1}{\mu(t)}\nu_1(t)
+	+ p_\del(t)\cfrac{2}{\mu(t)}\nu_2(t) \\
+	\delta\nu_{n+1}(t+1)
+	&= q(t)\cfrac{n}{t}\nu_n(t) 
+	- \plrgg{p_\del(t) + q(t)}\cfrac{n+1}{\mu(t)}\nu_{n+1}(t) 
+	+ p_\del(t)\cfrac{n+2}{\mu(t)}\nu_{n+2}(t)
+\end{split}\end{equation}
+ここで、$q(t)$は次のように定義する。
+\begin{equation*}
+	q(t) := p_\del(t)^cp_\new(t)^c
+\end{equation*}
+ここで、$\nu_n(t)$の生成関数$\nu(t,x)$を次のように定義すると、
+\begin{equation}\begin{split}\label{eq:def-nu-1}
+	\nu(t,x) := \sum_{n\in\sizen_+}\nu_n(t)x^n
+\end{split}\end{equation}
+漸化式\eqref{eq:delta-nud}は次の微分方程式で書き直すことができる。
+\begin{equation}\label{eq:delta-nud-x}
+	\delta\nu(t, x) = p_\new(t)x + \frac{q(t)}{\mu(t)}
+	\plra{x - \frac{p_\del(t)}{q(t)}}\plra{x - 1}\partial_x\nu(t, x)
+\end{equation}
+$\nu(t)$と$\mu(t)$は、$\nu(t,x)$を用いて次のように書け、
+\begin{equation}\label{eq:nud-delta}
+	\nu(t) = \nu(t,1),\quad \mu(t) = \partial_x\nu(t, x = 1)
+\end{equation}
+それらの時間変化は次のようになる。
+\begin{equation*}
+	\delta\nu(t) = p_\new(t),\quad \delta\mu(t) = \begin{cases}
+		0, &\text{ if } p_\del(t) = q(t) \\
+		p_\new(t) + q(t) - p_\del(t), &\text{ otherwise } \\
+	\end{cases}
+\end{equation*}
+時刻$t$でのジーナスの確率分布$\rho(t,x)$を次のように定義すると、
+\begin{equation}\label{eq:def-rhod-1}
+	\rho(t,x) := \frac{\nu(t,x)}{\nu(t)}
+\end{equation}
+\eqref{eq:nud-delta}を使って、\eqref{eq:delta-nud-x}は次のように書ける。
+\begin{equation}\label{eq:exact-rhod}
+	\rho(t+1,x) + \frac{\nu(t)}{p_\new(t)}\delta\rho(t,x) 
+	= x + \frac{\nu(t)}{p_\new(t)}\frac{q(t)}{\mu(t)}
+	\plra{x - \frac{p_\del(t)}{q(t)}}(x - 1)\partial_x\rho(t,x)
+\end{equation}
+ここで、時刻が無限大の極限で次の条件が成り立つと仮定する。
+\begin{enumerate}\label{item:d-stable} %{
+	\item\label{item:d-lhs} 次の式が成り立つ。
+	\begin{equation*}
+		\lim_{t\to\infty}\frac{\nu(t)}{p_\new(t)}\delta\rho(t,x) = 0
+	\end{equation*}
+	%
+	\item\label{item:d-beta} ある$0<\beta\in\jitu\cup\set{\infty}$があって、
+	次の式が成り立つ。
+	\begin{equation*}\label{eq:d-beta}
+		\lim_{t\to\infty}\frac{\nu(t)}{p_\new(t)}\frac{q(t)}{\mu(t)} 
+		= \frac{1}{\beta}
+	\end{equation*}
+	%
+	\item\label{item:d-gamma} ある$0\le\gamma\in\jitu$があって、
+	次の式が成り立つ。
+	\begin{equation*}\label{eq:d-gamma}
+		\lim_{t\to\infty}\frac{p_\del(t)}{q(t)} = \gamma
+	\end{equation*}
+\end{enumerate} %}
+条件\ref{item:d-lhs}は、次のように、ジーナスの確率分布が定常状態に収束する
+ための十分条件になっている。
+\begin{equation*}
+	\delta\rho(t,x) = \frac{p_\new(t)}{\nu(t)}\frac{\nu(t)}{p_\new(t)}\delta\rho(t,x)
+	\le \frac{\nu(t)}{p_\new(t)}\delta\rho(t,x)
+	\quad\because\; \frac{p_\new(t)}{\nu(t)}\le 1 \quad\text{for all } 1\le t
+\end{equation*}
+これらの条件が成り立つと仮定し、時刻無限大の極限値を次のようにおくと、
+\begin{equation*}
+	\rho(x) := \lim_{t\to\infty}\rho(t,x)
+\end{equation*}
+微分方程式\eqref{eq:delta-nud-x}の時刻が無限大の極限は次のようになる。
+\begin{equation}\label{eq:diff-rhod}
+	\rho(x) = x + \frac{1}{\beta}(x - \gamma)(x - 1)\partial_x\rho(x)
+\end{equation}
+$(\gamma,1,\infty)$を$(0,\infty,-1)$に移すM\"obius変換$\sigma(\gamma|-)$
+を次のように定義すると、
+\begin{equation}\label{eq:rhod-mobius}
+	\sigma(\gamma|x) := \frac{x - \gamma}{1 - x}
+\end{equation}
+\eqref{eq:diff-rhod}は次のように書ける\eqref{eq:rhod-mobius-diff}。
+\begin{equation*}
+	\plra{\partial_x 
+		+ \frac{\beta}{1 - \gamma}\partial_x\ln\sigma(\gamma|x)}\rho(x)
+	= \frac{\beta x}{1 - \gamma}\partial_x\ln\sigma(\gamma|x)
+\end{equation*}
+左辺の微分演算子は、$x=\gamma,\,1$のみに確定特異点を持ち、右辺の関数も
+$x=\gamma,\,1$のみに$1$次の極を持つ。
+この微分方程式の一般解$\rho(\beta,\gamma|-,-)$は次のように書くことができる。
+\begin{equation}\label{eq:rhod-y}
+	\rho(\beta,\gamma|x,y) = \int_{z=y}^x d \plra{\frac{\sigma(\gamma|z)}
+		{\sigma(\gamma|x)}}^{\frac{\beta}{1 - \gamma}}z
+\end{equation}
+この式で、積分定数$y$を決めると、解$\rho(\beta,\gamma|x)$が定まる。
+$\rho(\beta,\gamma|x)$が$x\in(0,1)$で正則になるように、次のようにして$y$を
+定める。
+\begin{description} %{
+	\item[$0\le\gamma<1$の時] $\sigma(\gamma|x)^{\frac{\beta}{1 - \gamma}}$
+	は$x=\gamma$で$0$、$x=1$で$\infty$となるので、$y=\gamma$と定める。
+	\begin{equation*}
+		\lim_{x\to x_*}\rho(\beta,\gamma|x,0) = \lim_{x\to x_*}\frac
+			{x\partial_x\sigma(\beta,\gamma|x)^{\frac{\beta}{1 - \gamma}}}
+			{\partial_x\sigma(\beta,\gamma|x)^{\frac{\beta}{1 - \gamma}}}
+		= x_* \quad\text{for } x_* = 0,1
+	\end{equation*}
+	\item[$1<\gamma$の時] $\sigma(\gamma|x)^{\frac{\beta}{1 - \gamma}}$
+	は$x=\gamma$で$\infty$、$x=1$で$0$となるので、$y=1$と定める。
+	\begin{equation*}
+		\lim_{x\to 1}\rho(\beta,\gamma|x,1) = \lim_{x\to 1}\frac
+			{x\partial_x\sigma(\beta,\gamma|x)^{\frac{\beta}{1 - \gamma}}}
+			{\partial_x\sigma(\beta,\gamma|x)^{\frac{\beta}{1 - \gamma}}}
+		= 1
+	\end{equation*}
+\end{description} %}
+まとめると、次のようになるが、
+\begin{equation*}
+		\rho(\beta,\gamma|x) = \begin{cases}
+			\rho(\beta,\gamma|x,\gamma), &\text{ if } 0\le\gamma<1 \\
+			\rho(\beta,\gamma|x,1), &\text{ if } 1<\gamma \\
+		\end{cases}
+\end{equation*}
+次の式\eqref{eq:rhod-rec}を使って、計算しやすい方で計算すれば良い。
+\begin{equation}\label{eq:rhod-1}
+	\rho(\beta,\gamma|x) = \gamma\rho\plra{
+		\frac{\beta}{\gamma},\frac{1}{\gamma} | \frac{x}{\gamma}}
+	\quad\text{for all } 1 < \gamma
+\end{equation}
+また、解\eqref{eq:rhod-1}の$\gamma=1$の極限は、上からと下からの極限が一致し
+\eqref{eq:rhod-one}、次のようになる。
+\begin{equation*}
+	\rho(\beta,1|x) = \int_{z=1}^x d\plra{
+		\exp\plra{- \beta\plra{\frac{1}{1 - z} - \frac{1}{1 - x}}}}z
+\end{equation*}
+\subsection{計算のメモ}\label{s2:計算のメモ} %{
+\subsubsection{ゲージ場のM\"obius変換}\label{s3:ゲージ場のMobius変換} %{
+M\"obius変換\eqref{eq:rhod-mobius}の性質を書いておく。
+\begin{description} %{
+	\item[微分]	\eqref{eq:rhod-mobius}の微分は次のようになり、
+	\begin{equation*}
+		\partial_x\sigma(\gamma|x) = \frac{1 - \gamma}{(1 - x)^2}
+	\end{equation*}
+	次の式が成り立つ。
+	\begin{equation}\label{eq:rhod-mobius-diff}
+		\partial_x\ln\sigma(\gamma|x) = \frac{1 - \gamma}{(x - \gamma)(1 - x)}
+	\end{equation}
+	%
+	\item[逆数] 次の式が成り立つ。
+	\begin{equation}\label{eq:rhod-mobius-rec}
+		\sigma(\gamma|\gamma x) = \sigma(\frac{1}{\gamma}|x)^{-1}
+	\end{equation}
+	%
+	\item[逆変換] \eqref{eq:rhod-mobius}を行列で表すと次のようになり、
+	\begin{equation*}
+		\sigma(\gamma|x) = \begin{pmatrix}
+			1 & -\gamma \\ -1 & 1
+		\end{pmatrix}\begin{pmatrix}
+			x \\\hline 1
+		\end{pmatrix} = \frac{x - \gamma}{1 - x}
+	\end{equation*}
+	逆行列をとることで、逆変換$\sigma^{-1}(\gamma|-)$が次のように求まる。
+	\begin{equation*}
+		\sigma^{-1}(\gamma|x) = \plra{\frac{1}{1 - \gamma}\begin{pmatrix}
+			1 & \gamma \\ 1 & 1
+		\end{pmatrix}}\begin{pmatrix}
+			x \\\hline 1
+		\end{pmatrix} = \begin{pmatrix}
+			1 & \gamma \\ 1 & 1
+		\end{pmatrix}\begin{pmatrix}
+			x \\\hline 1
+		\end{pmatrix} = \frac{x + \gamma}{x + 1}
+	\end{equation*}
+	ここで、逆行列の行列式による因子$1 / (1 - \gamma)$は、M\"obius変換には
+	効かないことに注意する。
+\end{description} %}
+%s3:ゲージ場のMobius変換}
+\subsubsection{$\rho$の$\gamma$反転}\label{s3:rhoのgamma反転} %{
+M\"obius変換の逆数について成り立つ式\eqref{eq:rhod-mobius-rec}を使うと、
+次の式が得られる。
+\begin{alignat*}{2}
+	\rho(\beta,\gamma|x,1) 
+	&= \int_{z=1}^x d\plra{\frac{\sigma(\gamma|z)}{\sigma(\gamma|x)}}
+		^{\frac{\beta}{1 - \gamma}}z \\
+	&= \int_{z=1}^x d\plra{\frac
+		{\sigma\plra{\frac{1}{\gamma}|\frac{z}{\gamma}}}
+		{\sigma\plra{\frac{1}{\gamma}|\frac{x}{\gamma}}}}
+		^{\frac{\beta}{\gamma}\frac{1}{1 - \frac{1}{\gamma}}}z 
+		&\quad&\text{// } \eqref{eq:rhod-mobius-rec} \\
+ &= \gamma \int_{w=\frac{1}{\gamma}}^{\frac{x}{\gamma}} d\plra{\frac
+		{\sigma\plra{\frac{1}{\gamma}|w}}
+		{\sigma\plra{\frac{1}{\gamma}|\frac{x}{\gamma}}}}
+		^{\frac{\beta}{\gamma}\frac{1}{1 - \frac{1}{\gamma}}}w
+		&\quad&\text{// } w = \frac{z}{\gamma} \\
+ &= \gamma \rho\plra{\frac{\beta}{\gamma},\frac{1}{\gamma}
+		| \frac{x}{\gamma},\frac{1}{\gamma}}
+\end{alignat*}
+したがって、次の式が成り立つ。
+\begin{equation}\label{eq:rhod-rec}
+	\rho(\beta,\gamma|x) = \gamma\rho\plra{
+		\frac{\beta}{\gamma},\frac{1}{\gamma} | \frac{x}{\gamma}}
+	\quad\text{for all } 1 < \gamma
+\end{equation}
+%s3:s3:rhoのgamma反転}
+\subsubsection{$\gamma\to1$の極限}\label{s3:gamma=1の極限} %{
+解\eqref{eq:rhod-1}の$\gamma=1$の上からと下からの極限は、それぞれ次のように
+なり、
+\begin{equation}\label{eq:rhod-one}\begin{split}
+	\lim_{\epsilon\to0}\rho(\beta, 1 - \epsilon | x)
+	&= \lim_{\epsilon\to0}\rho(\beta, 1 - \epsilon|x, 1 - \epsilon) \\
+	&= \lim_{\epsilon\to0}\int_{z = 1 - \epsilon}^x \plra{
+		\frac{1 - \frac{\epsilon}{1 - z}}{1 - \frac{\epsilon}{1 - x}}}
+		^ {\frac{\beta}{\epsilon}}z
+	= \int_{z = 1}^x \plra{
+		\frac{\exp\plra{- \frac{1}{1 - z}}}
+		{\exp\plra{ - \frac{\epsilon}{1 - x}}}}^ \beta z \\
+	\lim_{\epsilon\to0}\rho(\beta, 1 + \epsilon | x)
+	&= \lim_{\epsilon\to0}\rho(\beta, 1 + \epsilon|x, 1) \\
+	&= \lim_{\epsilon\to0}\int_{z = 1}^x \plra{
+		\frac{1 + \frac{\epsilon}{1 - z}}{1 + \frac{\epsilon}{1 - x}}}
+		^ {- \frac{\beta}{\epsilon}} z
+	= \int_{z = 1}^x \plra{
+		\frac{\exp\plra{- \frac{1}{1 - z}}}
+		{\exp\plra{ - \frac{\epsilon}{1 - x}}}}^\beta z
+\end{split}\end{equation}
+両者が一致する。$0<\beta$として、この式を$x=0$近傍で展開すると、
+次のようになる。
+\begin{alignat*}{2}
+	\rho(\beta,1|x) &= \int_{z=1}^x d\plra{
+		\exp\plra{- \beta\plra{\frac{1}{1 - z} - \frac{1}{1 - x}}}} z \\
+	&= \int_{w=\infty}^0 de^{- \beta w}
+		\plra{1 - \frac{1}{w + \frac{1}{1 - x}}}
+		&\quad&\text{// } w = \frac{1}{1 - z} - \frac{1}{1 - x} \\
+ &= 1 - \beta\int_0^\infty dw e^{- \beta w}\frac{1 - x}{(1 - x)w + 1} \\
+ &= 1 - \beta\sum_{n\in\sizen}\int_0^\infty dw e^{- \beta w}
+		\frac{1 - x}{w + 1}\plra{\frac{wx}{w + 1}}^n 
+		&\quad&\text{// } wx < w + 1 \\
+ &= 1 - \beta\int_0^\infty \frac{dw}{w + 1}e^{- \beta w}
+		+ \beta \sum_{n\in\sizen}x^{n + 1} \int_0^\infty
+		\frac{dw w^n}{(w + 1)^{n + 2}} e^{- \beta w} \\
+	&= \int_0^\infty \frac{dw}{(w + 1)^2}e^{- \beta w}
+		+ \beta \sum_{n\in\sizen}x^{n + 1} \int_0^\infty
+		\frac{dw}{(w + 1)^2} e^{- \beta w}\plra{\frac{w}{w + 1}}^n
+\end{alignat*}
+%s3:gamma=1の極限}
+\subsubsection{原点近傍のTaylor展開}\label{s3:原点近傍のTaylor展開} %{
+この節では、特に断らない限り$0<\gamma<1$とする。
+
+$0\le b\in\jitu$を次のように定義すると、
+\begin{equation*}
+	b := \frac{\beta}{1 - \gamma}
+\end{equation*}
+\eqref{eq:rhod-y}から、解$\rho(\beta,\gamma|x)$は次のようになり、
+\begin{alignat*}{2}
+	\rho(\beta,\gamma|x) &= \int_{z=\gamma}^x 
+		d\plra{\frac{\sigma(\gamma|z)}{\sigma(\gamma|x)}}^b z \\
+	&= \int_{w=0}^1 dw^b\sigma^{-1}\plra{\gamma|\sigma(\gamma|x)w}
+	&\quad&\text{// } w = \frac{\sigma(\gamma|z)}{\sigma(\gamma|x)} \\
+	&= \int_{w=0}^1 dw^b
+		\plra{1 - \frac{1 - \gamma}{\sigma(\gamma|x)w + 1}} \\
+	&= 1 - (1 - \gamma)\int_{w=0}^1 \frac{dw^b}{\sigma(\gamma|x)w + 1}
+\end{alignat*}
+任意の$0<w,x,\gamma<1$に対して次のべき展開が成り立つから、
+\begin{alignat*}{2}
+	\frac{1}{\sigma(\gamma|x)w + 1} 
+	&= \frac{1 - x}{(1 - \gamma w) - (1 - w)x} \\
+	&= \frac{1 - x}{1 - \gamma w}\sum_{n\in\sizen}
+		\plra{\frac{1 - w}{1 - \gamma w}x}^n 
+	&\quad&\text{// } \frac{1 - w} {1 - \gamma w} x < 1 \\
+	&= \frac{1}{1 - \gamma w}
+		- \frac{(1 - \gamma)w}{(1 - \gamma w)^2}\sum_{n\in\sizen} x^{n + 1}
+		\plra{\frac{1 - w}{1 - \gamma w}}^n
+\end{alignat*}
+次の式が得られる。
+\begin{equation*}\begin{split}
+	\rho(\beta,\gamma|x) 
+	&= 1 - (1 - \gamma)\int_{w=0}^1 \frac{dw^b}{1 - \gamma w}
+		+ (1 - \gamma)^2\sum_{n\in\sizen} x^{n + 1} \int_0^1 
+		\frac{dw^b w}{(1 - \gamma w)^2}\plra{\frac{1 - w}{1 - \gamma w}}^n \\
+	&= \gamma(1 - \gamma)\int_0^1 dw \frac{w^b}{(1 - \gamma w)^2}
+		+ \beta(1 - \gamma)\sum_{n\in\sizen}x^{n + 1}\int_0^1 dw 
+		\frac{w^b}{(1 - \gamma w)^2} \plra{\frac{1 - w}{1 - \gamma w}}^n \\
+\end{split}\end{equation*}
+べき展開の係数$\rho_n(\beta,\gamma)$を次のように定義し、
+\begin{equation*}
+	\rho(\beta,\gamma|x) = \sum_{n\in\sizen}x^n\rho_n(\beta,\gamma)
+\end{equation*}
+関数$R_n(\beta,\gamma)$を次のように定義すると、
+\begin{equation*}
+	R_n(\beta,\gamma) := (1 - \gamma)\int_0^1dz\frac{z^b}
+		{(1 - \gamma z)^2}\plra{\frac{1 - z}{1 - \gamma z}}^n
+\end{equation*}
+係数は次のように書ける。
+\begin{equation}\label{eq:rhod-taylor}
+	\rho_0(\beta, \gamma) = \gamma R_0(\beta, \gamma)
+	,\quad \rho_{n + 1}(\beta, \gamma) = \beta R_n(\beta, \gamma)
+	\quad\text{for all } 0 < \gamma < 1
+\end{equation}
+$\gamma=0,\infty,1$の場合を計算すると、次のようになる。
+\begin{description} %{
+	\item[$\gamma=0$の時] $\rho_n(\beta,0)$は次のようになるが、
+	\begin{equation*}
+		\rho_0(\beta,0) = \lim_{\epsilon\to0}\epsilon R_0(\beta,\epsilon)
+		,\quad \rho_{n+1}(\beta,0) = \beta\lim_{\epsilon\to0}R_n(\beta,\epsilon)
+	\end{equation*}
+	$R_n(\beta,0)$は次のようにベータ関数になり、
+	\begin{equation*}
+		R_n(\beta,0) = \int_0^1dzz^\beta(1 - z)^n = B(n + 1, \beta + 1)
+	\end{equation*}
+	$\rho_n(\beta,0)$は次のようになる。
+	\begin{equation*}
+		\rho_0(\beta,0) = 0
+		,\quad \rho_{n+1}(\beta,0) = \beta B(n + 1, \beta + 1)
+	\end{equation*}
+	特に、$n=1$と大きな$n$に対しては次のようになる。
+	\begin{equation*}
+		\rho_1(\beta,0) = \frac{\beta}{\beta + 1}
+		,\quad \rho_n(\beta,0) \sim \beta\Gamma(\beta + 1)n^{- (\beta + 1)}
+		\quad\text{for } n\sim \infty
+	\end{equation*}
+	%
+	\item[$\gamma=\infty$の時] $\rho_n(\beta,\infty)$は、
+	\eqref{eq:rhod-1}から、次のようになるが、
+	\begin{alignat*}{3}
+		\rho_0(\beta,\infty|x)
+		&= \lim_{\epsilon\to0}\frac{\rho_0(\epsilon\beta,\epsilon)}{\epsilon}
+		&&= \lim_{\epsilon\to0}R_0(\epsilon\beta,\epsilon) \\
+		\rho_{n+1}(\beta,\infty|x)
+		&= \lim_{\epsilon\to0}\frac{\epsilon^{n+1}\rho_{n+1}(\epsilon\beta,\epsilon)}{\epsilon}
+		&&= \beta\lim_{\epsilon\to0}\epsilon^{n+1}R_n(\epsilon\beta,\epsilon)
+	\end{alignat*}
+	$R_n(0,0)$は次のようになり、
+	\begin{equation*}
+		R_n(0,0) = \int_0^1dz(1 - z)^n = \frac{1}{n + 1}
+	\end{equation*}
+	$\rho_n(\beta,\infty)$は次のようになる。
+	\begin{equation*}
+		\rho_0(\beta,\infty) = 1 ,\quad \rho_{n+1}(\beta,\infty) = 0
+	\end{equation*}
+	%
+	\item[$\gamma=1$の時] $\rho_n(\beta,1)$は次のようになるが、
+	\begin{equation*}
+		\rho_0(\beta,1) = \lim_{\epsilon\to0}(1 - \epsilon)R_0(\beta,1 - \epsilon)
+		,\quad \rho_{n+1}(\beta,1) = \beta\lim_{\epsilon\to0}R_n(\beta, 1 - \epsilon)
+	\end{equation*}
+	$R_n(\beta,1-\epsilon)$は次のようになる。
+	\begin{alignat*}{2}
+		R_n(\beta,1-\epsilon) &= \epsilon\int_0^1 dz
+			\frac{z^{\frac{\beta}{\epsilon}}}{\plrg{1 - (1 - \epsilon)z}^2}
+			\plra{\frac{1 - z}{1 - (1 - \epsilon)z}}^n \\
+		&= \epsilon^2\int_0^\infty dt \frac{e^{- (\beta + \epsilon)t}}
+			{\plrg{1 - (1 - \epsilon)e^{- \epsilon t}}^2}
+			\plra{\frac{1 - e^{- \epsilon t}}
+			{1 - (1 - \epsilon)e^{- \epsilon t}}}^n
+			&\quad&\text{// } t = - \frac{\ln z}{\epsilon}
+	\end{alignat*}
+	ここで、$A(\epsilon|t)$と$B(\epsilon|t)$を次のようにおくと、
+	\begin{alignat*}{2}
+		1 - (1 - \epsilon)e^{- \epsilon t} &= \epsilon A(\epsilon|t)
+		,&\quad A(\epsilon|t) &:= \sum_{n\in\sizen}
+			\frac{(- \epsilon t)^n}{n!}\plra{1 + \frac{t}{n + 1}} \\
+		1 - e^{- \epsilon t} &= \epsilon tB(\epsilon|t) 
+		,&\quad B(\epsilon|t)	&:= \sum_{n\in\sizen}
+			\frac{(- \epsilon t)^n}{(n + 1)!}
+	\end{alignat*}
+	$R_n(\beta,1-\epsilon)$は次のように書ける。
+	\begin{equation*}
+		R_n(\beta,1-\epsilon) = \int_0^\infty dt 
+		\frac{e^{- (\beta + \epsilon)t}}{A(\epsilon|t)^2}
+		\plra{\frac{tB(\epsilon|t)}{A(\epsilon|t)}}^n
+	\end{equation*}
+	ここで、次の極限を成り立つと仮定すると、
+	\begin{equation*}
+		\lim_{\epsilon\to0} R_n(\beta,1-\epsilon) = \int_0^\infty dt 
+			\frac{e^{- \beta t}}{A(0|t)^2}\plra{\frac{tB(0|t)}{A(0|t)}}^n
+		= \int_0^\infty dt 
+			\frac{e^{- \beta t}}{(t + 1)^2}\plra{\frac{t}{t + 1}}^n
+	\end{equation*}
+	$\rho_n(\beta,1)$は次のようになり、前節\ref{s3:gamma=1の極限}の結果が再現
+	される。
+	\begin{equation*}
+		\rho_0(\beta,1) = \int_0^\infty dt \frac{e^{- \beta t}}{(t + 1)^2}
+		,\quad \rho_{n+1}(\beta,1) = \beta\int_0^\infty dt 
+			\frac{e^{- \beta t}}{(t + 1)^2}\plra{\frac{t}{t + 1}}^n
+	\end{equation*}
+	$\rho_0(\beta,1)$は次のように書き直せるが、
+	\begin{equation*}\begin{split}
+		\rho_0(\beta,1)
+		= - \int_0^\infty dt e^{- \beta t}\partial_t\frac{1}{t + 1}
+		= 1 - \beta\int_0^\infty \frac{dt}{t + 1}e^{- \beta t}
+		= 1 - \beta e^\beta\int_1^\infty \frac{ds}{s}e^{- \beta s}
+	\end{split}\end{equation*}
+	最後の式の二項目は指数積分と呼ばれる関数\cite{Expon0:online}で、次の評価
+	が成り立つ。
+	\begin{equation*}
+		\frac{1}{2}e^{- \beta}\ln\plra{1 + \frac{2}{\beta}}
+		< \int_1^\infty \frac{ds}{s}e^{- \beta s}
+		< e^{- \beta}\ln\plra{1 + \frac{1}{\beta}}
+	\end{equation*}
+	したがって、$\rho_0(\beta,1)$は次のように評価することができる。
+	\begin{equation*}
+		1 - \beta\ln\plra{1 + \frac{1}{\beta}}
+		< \rho_0(\beta,1)
+		< 1 - \frac{\beta}{2}\ln\plra{1 + \frac{2}{\beta}}
+	\end{equation*}
+\end{description} %}
+%s3:原点近傍のTaylor展開}
+%s2:計算のメモ}
+%s1:消滅付きのYule過程}
