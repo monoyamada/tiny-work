@@ -1,2 +1,0 @@
-"
-autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]://" | silent! lcd %:p:h | endif
